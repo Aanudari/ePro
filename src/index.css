@@ -211,3 +211,17 @@ form button:hover {
             transform: translateY(-700px) rotate(600deg);
   }
 }
+
+.slice-top {
+  animation: slice-top;
+  animation-duration: 0.5s;
+}
+
+@keyframes slice-top {
+  from {top: 50px}
+  to {top: 10px;}
+}
+
+#border-red {
+  border: 2px solid red;
+}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
@@ -7,12 +7,21 @@ function Login() {
     e.preventDefault();
     navigate("/card");
   };
+  const [username, setusername] = useState("");
+  const [password, setpassword] = useState("");
+  console.log(username);
   return (
     <div class="wrapper">
       <div class="container">
         <h1 className="text-white">Сургалт үнэлгээний программ</h1>
         <form class="form">
-          <input type="text" placeholder="Нэвтрэх нэр" />
+          <input
+            type="text"
+            placeholder="Нэвтрэх нэр"
+            onChange={(e) => {
+              setusername(e.target.value);
+            }}
+          />
           <input type="password" placeholder="Нууц үг" />
           <button
             onClick={navigateToTest}

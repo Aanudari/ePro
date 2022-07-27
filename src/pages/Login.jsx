@@ -20,7 +20,7 @@ function Login() {
             id="login-button"
             className="bg-white"
           >
-            Нэвтрэх
+            Нэвтрэхx
           </button>
         </form>
       </div>

@@ -5,7 +5,7 @@ function Login() {
   const navigate = useNavigate();
   const navigateToTest = (e) => {
     e.preventDefault();
-    navigate("/test");
+    navigate("/card");
   };
   return (
     <div class="wrapper">

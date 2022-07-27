@@ -10,7 +10,7 @@ function Login() {
   return (
     <div class="wrapper">
       <div class="container">
-        <h1 className="text-white">Сургалт хөгжлийн программ</h1>
+        <h1 className="text-white">Сургалт үнэлгээний программ</h1>
         <form class="form">
           <input type="text" placeholder="Нэвтрэх нэр" />
           <input type="password" placeholder="Нууц үг" />

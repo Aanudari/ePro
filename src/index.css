@@ -1,10 +1,9 @@
-
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300);
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300);
 * {
   box-sizing: border-box;
   margin: 0;
@@ -44,8 +43,8 @@ body :-ms-input-placeholder {
 }
 .wrapper {
   background: #50a3a2;
-  background: linear-gradient(top left, #50a3a2 0%, #53e3a6 100%);
-  background: linear-gradient(to bottom right, #50a3a2 0%, #53e3a6 100%);
+  background: linear-gradient(top left, #0056ff 0%, blue 100%);
+  background: linear-gradient(to bottom right, #50a3a2 0%, #0056ff 100%);
   position: absolute;
   top: 28%;
   left: 0;
@@ -100,7 +99,7 @@ form input:hover {
 form input:focus {
   background-color: white;
   width: 300px;
-  color: #53e3a6;
+  color: black;
 }
 form button {
           appearance: none;
@@ -108,13 +107,12 @@ form button {
   background-color: white;
   border: 0;
   padding: 10px 15px;
-  color: #53e3a6;
+  color: black;
   border-radius: 3px;
   width: 250px;
   cursor: pointer;
   font-size: 18px;
   transition-duration: 0.25s;
-
 }
 form button:hover {
   background-color: #f5f7f9;
@@ -135,7 +133,7 @@ form button:hover {
   height: 40px;
   background-color: rgba(255, 255, 255, 0.15);
   bottom: -160px;
-  animation: square 25s infinite; 
+  animation: square 25s infinite;
   transition-timing-function: linear;
 }
 .bg-bubbles li:nth-child(1) {
@@ -151,7 +149,7 @@ form button:hover {
 .bg-bubbles li:nth-child(3) {
   left: 25%;
   animation-delay: 4s;
-  
+
 }
 .bg-bubbles li:nth-child(4) {
   left: 40%;
@@ -195,7 +193,7 @@ form button:hover {
   left: 90%;
   width: 160px;
   height: 160px;
-  animation-delay: 11s;        
+  animation-delay: 11s;
 }
 @keyframes square {
   0% {

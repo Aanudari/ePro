@@ -1,7 +1,44 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
-  return <div>login page</div>;
+  const navigate = useNavigate();
+  const navigateToTest = (e) => {
+    e.preventDefault();
+    navigate("/test");
+  };
+  return (
+    <div class="wrapper">
+      <div class="container">
+        <h1 className="text-white">Сургалт хөгжлийн программ</h1>
+        <form class="form">
+          <input type="text" placeholder="Нэвтрэх нэр" />
+          <input type="password" placeholder="Нууц үг" />
+          <button
+            onClick={navigateToTest}
+            type="submit"
+            id="login-button"
+            className="bg-white"
+          >
+            Нэвтрэх
+          </button>
+        </form>
+      </div>
+
+      <ul class="bg-bubbles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+    </div>
+  );
 }
 
 export default Login;

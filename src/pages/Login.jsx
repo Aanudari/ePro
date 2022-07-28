@@ -45,7 +45,7 @@ function Login() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setalert(false);
-    }, 3000);
+    }, 2000);
     return () => clearTimeout(timer);
   }, [alert]);
   return (

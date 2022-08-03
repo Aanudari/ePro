@@ -19,6 +19,7 @@ import Mistake from "./pages/valuation/Mistake";
 import Online from "./pages/valuation/Online";
 import ReTre from "./pages/valuation/ReTre";
 import Telesales from "./pages/valuation/Telesales";
+import NotFound from "./pages/404";
 
 function App() {
   const { activeMenu } = useStateContext();
@@ -145,6 +146,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Telesales />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="*"
+            element={
+              <ProtectedRoute>
+                <NotFound />
               </ProtectedRoute>
             }
           />

@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useStateContext } from "../contexts/ContextProvider";
 
 function Login() {
+  const { setUser } = useStateContext();
   const navigate = useNavigate();
-  const redirect = () => {
+  const redirect = (data) => {
     navigate("/home");
+    setUser(data);
   };
   const [username, setusername] = useState("");
   const [password, setpassword] = useState("");
@@ -33,8 +36,7 @@ function Login() {
       })
         .then((res) => {
           if (res.data.result === "true") {
-            localStorage.setItem("token", res.data.token);
-            redirect();
+            redirect(res.data.token);
           } else {
             setalert(true);
           }
@@ -79,10 +81,10 @@ function Login() {
           >
             Нэвтрэх
           </button>
-          <div className="relative bg-red-100 w-[1px]">
+          <div className="relative bg-red-100 w-[300px] flex justify-center bg-red-100">
             {""}
             {alert ? (
-              <p className="absolute slice-top top-[10px] w-[250px] rounded text-[18px] text-white">
+              <p className="absolute slice-top top-[10px] w-full rounded text-[15px] text-white h-full">
                 Нэвтрэх нэр эсвэл нууц үг буруу байна.
               </p>
             ) : null}

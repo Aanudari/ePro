@@ -6,7 +6,7 @@ function SideNavigation() {
   return (
 
     <div className="h-screen w-[300px] relative pl-4 pt-4">
-        <div className={"flex "}>
+        <div className={"flex"}>
             <img src={"logo.png"} alt={"ДДЭШТВ"} className={'sidenavimg'}/>
             <h5 className="h-10">Сургалт үнэлгээний программ</h5>
         </div>

@@ -224,3 +224,7 @@ form button:hover {
 #border-red {
   border: 2px solid red;
 }
+
+.shadow-cus {
+  box-shadow: 0 0 5px silver;
+}

@@ -1,8 +1,20 @@
 import React, { useState } from "react";
 import { useStateContext } from "../contexts/ContextProvider";
+import { useNavigate } from "react-router-dom";
 
 function Navigation() {
+  const navigate = useNavigate();
   const { activeMenu, setActiveMenu } = useStateContext();
+  const [show, setshow] = useState(false);
+  const handleProfile = () => {
+    setshow(!show);
+  };
+
+  const logout = () => {
+    localStorage.clear();
+    navigate("/");
+    window.location.reload();
+  };
   return (
     <div className="h-14 flex w-full justify-between">
       <div className="p-2 flex items-center hover:bg-gray-100 hover:shadow rounded-full m-2">
@@ -40,12 +52,18 @@ function Navigation() {
           <div className="h-10 w-10">
             <img src="avatar2.jpg" alt="" className="w-full rounded-full" />
           </div>
-          <div className="flex justify-between gap-3 cursor-pointer">
+          <div className="flex justify-between gap-3 cursor-pointer relative">
             <div className="flex items-center">
-              <p className="text-[13px] m-0 font-bold">Хэрэглэгчийн нэр</p>
+              <button
+                onClick={handleProfile}
+                className="text-[13px] m-0 font-bold"
+              >
+                Хэрэглэгчийн нэр
+              </button>
             </div>
             <div className="flex items-center">
               <svg
+                onClick={handleProfile}
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
                 height="16"
@@ -59,6 +77,47 @@ function Navigation() {
                 />
               </svg>
             </div>
+            {show ? (
+              <div className="fixed w-[300px] h-[230px] bg-white top-[50px] rounded right-[30px] shadow-cus p-3 flex flex-col justify-between">
+                <div className="flex justify-between">
+                  <h6 className="mt-2">Хэрэглэгчийн хэсэг</h6>
+                  <button
+                    onClick={handleProfile}
+                    className="hover:bg-gray-200  p-2 rounded-full text-gray-500"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="16"
+                      height="16"
+                      fill="currentColor"
+                      className="bi bi-x-circle"
+                      viewBox="0 0 16 16"
+                    >
+                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                      <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                    </svg>
+                  </button>
+                </div>
+                <div className="flex items-center">
+                  <img
+                    src="avatar2.jpg"
+                    alt="propic"
+                    className="rounded-full w-[100px]"
+                  />
+                  <div className="flex flex-col">
+                    <span className="ml-2 font-bold">Username</span>
+                    <span className="ml-2 ">role</span>
+                    <span className="ml-2 ">email хаяг</span>
+                  </div>
+                </div>
+                <button
+                  onClick={logout}
+                  className="w-full rounded font-bold bg-[#fb923c] hover:shadow-md text-white h-10"
+                >
+                  Гараx
+                </button>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

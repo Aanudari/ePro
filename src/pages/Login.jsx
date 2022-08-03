@@ -5,7 +5,7 @@ import axios from "axios";
 function Login() {
   const navigate = useNavigate();
   const redirect = () => {
-    navigate("/card");
+    navigate("/home");
   };
   const [username, setusername] = useState("");
   const [password, setpassword] = useState("");

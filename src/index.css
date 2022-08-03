@@ -45,12 +45,13 @@ body :-ms-input-placeholder {
   background: #50a3a2;
   background: linear-gradient(top left, #0056ff 0%, blue 100%);
   background: linear-gradient(to bottom right, #50a3a2 0%, #0056ff 100%);
+  position: fixed;
+  top: 0%;
   position: absolute;
-  top: 28%;
+  top: 27.5%;
   left: 0;
   width: 100%;
   height: 100vh;
-  margin-top: -200px;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -210,4 +211,18 @@ form button:hover {
   100% {
             transform: translateY(-700px) rotate(600deg);
   }
+}
+
+.slice-top {
+  animation: slice-top;
+  animation-duration: 0.5s;
+}
+
+@keyframes slice-top {
+  from {top: 50px}
+  to {top: 10px;}
+}
+
+#border-red {
+  border: 2px solid red;
 }

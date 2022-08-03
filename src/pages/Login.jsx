@@ -82,7 +82,7 @@ function Login() {
           <div className="relative bg-red-100 w-[1px]">
             {""}
             {alert ? (
-              <p className="absolute slice-top top-[10px] w-[250px] rounded text-[14px] text-white">
+              <p className="absolute slice-top top-[10px] w-[250px] rounded text-[18px] text-white">
                 Нэвтрэх нэр эсвэл нууц үг буруу байна.
               </p>
             ) : null}

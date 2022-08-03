@@ -8,7 +8,7 @@ function SideNavigation() {
       <h5 className="text-[16px] h-6 uppercase text-gray-500">Шалгалт</h5>
       <div
         onClick={() => {
-          navigate("/");
+          navigate("/exam-form");
         }}
         className="w-full h-12 cursor-pointer pl-4 hover:bg-[#fb923c] flex items-center rounded-md hover:text-white"
       >
@@ -29,7 +29,7 @@ function SideNavigation() {
       </div>
       <div
         onClick={() => {
-          navigate("/");
+          navigate("/take-exam");
         }}
         className="w-full h-12 cursor-pointer pl-4 hover:bg-[#fb923c] flex items-center rounded-md hover:text-white"
       >
@@ -54,7 +54,7 @@ function SideNavigation() {
       </div>
       <div
         onClick={() => {
-          navigate("/");
+          navigate("/exam-result");
         }}
         className="w-full h-12 cursor-pointer pl-4 hover:bg-[#fb923c]  flex items-center hover:text-white rounded-md"
       >
@@ -76,7 +76,7 @@ function SideNavigation() {
       <h5 className="text-[16px] h-6 uppercase text-gray-500 mt-2">Үнэлгээ</h5>
       <div
         onClick={() => {
-          navigate("/");
+          navigate("/level-one");
         }}
         className="w-full h-12 cursor-pointer pl-4 hover:bg-[#0ea5e9] flex items-center rounded-md hover:text-white"
       >
@@ -97,7 +97,7 @@ function SideNavigation() {
       </div>
       <div
         onClick={() => {
-          navigate("/");
+          navigate("/level-two");
         }}
         className="w-full h-12 cursor-pointer pl-4 hover:bg-[#0ea5e9] flex items-center rounded-md hover:text-white"
       >
@@ -121,7 +121,7 @@ function SideNavigation() {
       </div>
       <div
         onClick={() => {
-          navigate("/");
+          navigate("/telesales");
         }}
         className="w-full h-12 cursor-pointer pl-4 hover:bg-[#0ea5e9]  flex items-center hover:text-white rounded-md"
       >
@@ -142,7 +142,7 @@ function SideNavigation() {
       </div>
       <div
         onClick={() => {
-          navigate("/");
+          navigate("/online");
         }}
         className="w-full h-12 cursor-pointer pl-4 hover:bg-[#0ea5e9]  flex items-center hover:text-white rounded-md"
       >
@@ -163,7 +163,7 @@ function SideNavigation() {
       </div>
       <div
         onClick={() => {
-          navigate("/");
+          navigate("/branch");
         }}
         className="w-full h-12 cursor-pointer pl-4 hover:bg-[#0ea5e9]  flex items-center hover:text-white rounded-md"
       >
@@ -184,7 +184,7 @@ function SideNavigation() {
       </div>
       <div
         onClick={() => {
-          navigate("/");
+          navigate("/installer");
         }}
         className="w-full h-12 cursor-pointer pl-4 hover:bg-[#0ea5e9]  flex items-center hover:text-white rounded-md"
       >
@@ -205,7 +205,7 @@ function SideNavigation() {
       </div>
       <div
         onClick={() => {
-          navigate("/");
+          navigate("/re-tre");
         }}
         className="w-full h-12 cursor-pointer pl-4 hover:bg-[#0ea5e9]  flex items-center hover:text-white rounded-md"
       >
@@ -226,7 +226,7 @@ function SideNavigation() {
       </div>
       <div
         onClick={() => {
-          navigate("/");
+          navigate("/mistake");
         }}
         className="w-full h-12 cursor-pointer pl-4 hover:bg-[#0ea5e9]  flex items-center hover:text-white rounded-md"
       >
@@ -248,7 +248,7 @@ function SideNavigation() {
       <h5 className="text-[16px] h-6 uppercase text-gray-500 mt-2">Сургалт</h5>
       <div
         onClick={() => {
-          navigate("/");
+          navigate("/create-training");
         }}
         className="w-full h-12 cursor-pointer pl-4 hover:bg-[#22c55e] flex items-center rounded-md hover:text-white"
       >
@@ -269,7 +269,7 @@ function SideNavigation() {
       </div>
       <div
         onClick={() => {
-          navigate("/");
+          navigate("/took-training");
         }}
         className="w-full h-12 cursor-pointer pl-4 hover:bg-[#22c55e] flex items-center rounded-md hover:text-white"
       >
@@ -294,7 +294,7 @@ function SideNavigation() {
       </div>
       <div
         onClick={() => {
-          navigate("/");
+          navigate("/trainings");
         }}
         className="w-full h-12 cursor-pointer pl-4 hover:bg-[#22c55e]  flex items-center hover:text-white rounded-md"
       >

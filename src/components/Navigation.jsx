@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useStateContext } from "../contexts/ContextProvider";
+
 function Navigation() {
   const { activeMenu, setActiveMenu } = useStateContext();
   return (

@@ -3,9 +3,9 @@ import Navigation from "../../components/Navigation";
 
 function Level1() {
   return (
-    <div className="w-full">
+    <div className="w-full h-screen bg-gray-100">
       <Navigation />
-      level one page!
+      <div></div>
     </div>
   );
 }

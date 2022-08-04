@@ -36,7 +36,7 @@ function Login() {
       })
         .then((res) => {
           if (res.data.result === "true") {
-            redirect(res.data.token);
+            redirect(res.data);
           } else {
             setalert(true);
           }

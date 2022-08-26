@@ -20,7 +20,8 @@ import Online from "./pages/valuation/Online";
 import ReTre from "./pages/valuation/ReTre";
 import Telesales from "./pages/valuation/Telesales";
 import NotFound from "./pages/404";
-
+import { CheckLogin } from "./components/BackToHome";
+import AdminLayout from "./layout/AdminLayout";
 function App() {
   const { activeMenu } = useStateContext();
   return (
@@ -28,7 +29,11 @@ function App() {
       <div className="flex">
         {activeMenu ? <SideNavigation /> : null}
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={
+            <CheckLogin>
+              <Login />
+            </CheckLogin>
+          } /> 
           <Route
             path="/home"
             element={

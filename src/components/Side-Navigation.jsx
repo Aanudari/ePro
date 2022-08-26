@@ -4,13 +4,13 @@ import { useNavigate } from "react-router-dom";
 function SideNavigation() {
   const navigate = useNavigate();
   return (
-    <div className="h-screen w-[300px] relative pl-4 pt-4">
-      <h5 className="text-[16px] h-6 uppercase text-gray-500">Шалгалт</h5>
+    <div className="h-screen w-[320px] relative pl-4 pt-4 pr-4 shadow">
+      <h5 className="text-[16px] mt-4 h-6 uppercase text-gray-500">Шалгалт</h5>
       <div
         onClick={() => {
           navigate("/exam-form");
         }}
-        className="w-full h-12 cursor-pointer pl-4 hover:bg-[#fb923c] flex items-center rounded-md hover:text-white"
+        className="w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
       >
         <div className="w-[15px]">
           <svg
@@ -31,7 +31,7 @@ function SideNavigation() {
         onClick={() => {
           navigate("/take-exam");
         }}
-        className="w-full h-12 cursor-pointer pl-4 hover:bg-[#fb923c] flex items-center rounded-md hover:text-white"
+        className="w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
       >
         <div className="w-[15px]">
           <svg
@@ -56,7 +56,7 @@ function SideNavigation() {
         onClick={() => {
           navigate("/exam-result");
         }}
-        className="w-full h-12 cursor-pointer pl-4 hover:bg-[#fb923c]  flex items-center hover:text-white rounded-md"
+        className="w-full h-12 cursor-pointer pl-4 hover:bg-gray-100  flex items-center  rounded-md"
       >
         <div className="w-[15px]">
           <svg
@@ -78,7 +78,7 @@ function SideNavigation() {
         onClick={() => {
           navigate("/level-one");
         }}
-        className="w-full h-12 cursor-pointer pl-4 hover:bg-[#0ea5e9] flex items-center rounded-md hover:text-white"
+        className="w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
       >
         <div className="w-[15px]">
           <svg
@@ -99,7 +99,7 @@ function SideNavigation() {
         onClick={() => {
           navigate("/level-two");
         }}
-        className="w-full h-12 cursor-pointer pl-4 hover:bg-[#0ea5e9] flex items-center rounded-md hover:text-white"
+        className="w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
       >
         <div className="w-[15px]">
           <svg
@@ -123,7 +123,7 @@ function SideNavigation() {
         onClick={() => {
           navigate("/telesales");
         }}
-        className="w-full h-12 cursor-pointer pl-4 hover:bg-[#0ea5e9]  flex items-center hover:text-white rounded-md"
+        className="w-full h-12 cursor-pointer pl-4 hover:bg-gray-100  flex items-center  rounded-md"
       >
         <div className="w-[15px]">
           <svg
@@ -144,7 +144,7 @@ function SideNavigation() {
         onClick={() => {
           navigate("/online");
         }}
-        className="w-full h-12 cursor-pointer pl-4 hover:bg-[#0ea5e9]  flex items-center hover:text-white rounded-md"
+        className="w-full h-12 cursor-pointer pl-4 hover:bg-gray-100  flex items-center  rounded-md"
       >
         <div className="w-[15px]">
           <svg
@@ -165,7 +165,7 @@ function SideNavigation() {
         onClick={() => {
           navigate("/branch");
         }}
-        className="w-full h-12 cursor-pointer pl-4 hover:bg-[#0ea5e9]  flex items-center hover:text-white rounded-md"
+        className="w-full h-12 cursor-pointer pl-4 hover:bg-gray-100  flex items-center  rounded-md"
       >
         <div className="w-[15px]">
           <svg
@@ -186,7 +186,7 @@ function SideNavigation() {
         onClick={() => {
           navigate("/installer");
         }}
-        className="w-full h-12 cursor-pointer pl-4 hover:bg-[#0ea5e9]  flex items-center hover:text-white rounded-md"
+        className="w-full h-12 cursor-pointer pl-4 hover:bg-gray-100  flex items-center  rounded-md"
       >
         <div className="w-[15px]">
           <svg
@@ -207,7 +207,7 @@ function SideNavigation() {
         onClick={() => {
           navigate("/re-tre");
         }}
-        className="w-full h-12 cursor-pointer pl-4 hover:bg-[#0ea5e9]  flex items-center hover:text-white rounded-md"
+        className="w-full h-12 cursor-pointer pl-4 hover:bg-gray-100  flex items-center  rounded-md"
       >
         <div className="w-[15px]">
           <svg
@@ -228,7 +228,7 @@ function SideNavigation() {
         onClick={() => {
           navigate("/mistake");
         }}
-        className="w-full h-12 cursor-pointer pl-4 hover:bg-[#0ea5e9]  flex items-center hover:text-white rounded-md"
+        className="w-full h-12 cursor-pointer pl-4 hover:bg-gray-100  flex items-center  rounded-md"
       >
         <div className="w-[15px]">
           <svg
@@ -250,7 +250,7 @@ function SideNavigation() {
         onClick={() => {
           navigate("/create-training");
         }}
-        className="w-full h-12 cursor-pointer pl-4 hover:bg-[#22c55e] flex items-center rounded-md hover:text-white"
+        className="w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
       >
         <div className="w-[15px]">
           <svg
@@ -271,7 +271,7 @@ function SideNavigation() {
         onClick={() => {
           navigate("/took-training");
         }}
-        className="w-full h-12 cursor-pointer pl-4 hover:bg-[#22c55e] flex items-center rounded-md hover:text-white"
+        className="w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
       >
         <div className="w-[15px]">
           <svg
@@ -296,7 +296,7 @@ function SideNavigation() {
         onClick={() => {
           navigate("/trainings");
         }}
-        className="w-full h-12 cursor-pointer pl-4 hover:bg-[#22c55e]  flex items-center hover:text-white rounded-md"
+        className="w-full h-12 cursor-pointer pl-4 hover:bg-gray-100  flex items-center  rounded-md"
       >
         <div className="w-[15px]">
           <svg

@@ -16,7 +16,7 @@ function Navigation() {
     window.location.reload();
   };
   return (
-    <div className="h-14 flex w-full justify-between">
+    <div className="h-14 flex w-full justify-between px-4">
       <div className="p-2 flex items-center hover:bg-gray-100 hover:shadow rounded-full m-2">
         <svg
           onClick={() => {

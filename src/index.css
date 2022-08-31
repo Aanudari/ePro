@@ -229,3 +229,30 @@ form button:hover {
 .shadow-cus {
   box-shadow: 0 0 5px silver;
 }
+.shadow-cus-2 {
+  box-shadow: 0 0 2px silver;
+}
+
+.custom-input{
+  outline: 0;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.2);
+  width: 100%;
+  border-radius: 3px;
+  padding: 6px 15px;
+  display: block;
+  font-size: 14px;
+  color: black;
+  border: 1px solid rgba(255, 255, 255, 0.4);;
+}
+.custom-input:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+.custom-input:focus {
+  background-color: white;
+  width: 100%;
+  color: black;
+}
+.rounded-cus {
+  border-radius: 3px;
+}

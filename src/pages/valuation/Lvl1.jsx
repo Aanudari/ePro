@@ -26,9 +26,6 @@ function Level1() {
       <Navigation />
       <div className="h-full px-5 py-3">
         <div className="w-full h-full bg-white rounded-lg p-5">
-          <div className="w-full rounded-md my-1 flex gap-2 justify-between items-center py-2 px-3">
-            <span>Нэр</span>
-          </div>
           {
             data ? data.map((user, index) =>
               <UserCell key={index} data={user} />

@@ -109,7 +109,7 @@ function App() {
           <Route
             path="/level-one"
             element={
-              <ProtectedRoute allowedRoles={[199]}>
+              <ProtectedRoute allowedRoles={[199, 1]}>
                 <Level1 />
               </ProtectedRoute>
             }

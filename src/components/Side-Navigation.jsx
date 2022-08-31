@@ -8,7 +8,7 @@ function SideNavigation() {
   let location = useLocation();
   let path = location.pathname
   return (
-    <div className="w-[370px] relative h-full shadow-cus content">
+    <div className="w-[375px] relative h-full shadow-cus content">
       <div className="h-full w-[300px] fixed pl-4 pt-4 pr-4 md:overflow-hidden overflow-auto md:hover:overflow-auto">
         <h5 className="cursor-pointer" onClick={() => {
           navigate("/home");

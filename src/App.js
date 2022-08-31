@@ -23,7 +23,6 @@ import NotFound from "./pages/404";
 import { CheckLogin } from "./components/BackToHome";
 function App() {
   const { activeMenu } = useStateContext();
-  
   return (
     <BrowserRouter>
       <div className="flex">

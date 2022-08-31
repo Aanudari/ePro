@@ -33,7 +33,7 @@ function Navigation() {
   return (
     <div>
       <div className="h-14"></div>
-      <div className={ activeMenu ? "h-14 bg-gray-50 w-5/6 fixed top-0 flex w-full justify-between px-4 shadow-sm" : " shadow-cus h-14 bg-gray-50 fixed top-0 flex w-full justify-between px-4"}>
+      <div className={activeMenu ? "h-14 bg-gray-50 w-cus fixed top-0 flex w-full justify-between px-4 shadow-sm" : " shadow-cus h-14 bg-gray-50 fixed top-0 flex w-full justify-between px-4"}>
         <div className="p-2 flex items-center rounded-full m-2">
           <svg
             onClick={() => {

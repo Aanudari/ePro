@@ -10,6 +10,7 @@ function Login() {
     navigate("/home");
     setUser(data);
   };
+
   const [username, setusername] = useState("");
   const [password, setpassword] = useState("");
   const [checkEmpty, setcheckEmpty] = useState(false);

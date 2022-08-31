@@ -35,7 +35,7 @@ function Navigation() {
           />
         </svg>
       </div>
-      <div className="p-2 w-[280px] flex justify-around">
+      <div onClick={handleProfile} className="w-[260px] flex justify-around hover:bg-gray-200 rounded-md cursor-pointer m-2">
         <div className=" flex items-center cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -49,13 +49,13 @@ function Navigation() {
           </svg>
         </div>
         <div className="flex gap-3">
-          <div className="h-10 w-10">
-            <img src="avatar2.jpg" alt="" className="w-full rounded-full" />
+          <div className="h-10 w-10 flex items-center">
+            <img src="avatar2.jpg" alt="profile" className="w-[35px] h-[35px] rounded-full" />
           </div>
           <div className="flex justify-between gap-3 cursor-pointer relative">
-            <div className="flex items-center">
+            <div className="flex items-center w-[120px]">
               <button
-                onClick={handleProfile}
+                
                 className="text-[13px] m-0 font-bold"
               >
                 Хэрэглэгчийн нэр
@@ -112,7 +112,7 @@ function Navigation() {
                 </div>
                 <button
                   onClick={logout}
-                  className="w-full rounded font-bold bg-[#fb923c] hover:shadow-md text-white h-10"
+                  className="w-full rounded font-bold bg-sky-600 hover:shadow-md text-white h-10"
                 >
                   Гараx
                 </button>

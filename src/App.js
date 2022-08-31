@@ -20,19 +20,24 @@ import Online from "./pages/valuation/Online";
 import ReTre from "./pages/valuation/ReTre";
 import Telesales from "./pages/valuation/Telesales";
 import NotFound from "./pages/404";
-
+import { CheckLogin } from "./components/BackToHome";
 function App() {
   const { activeMenu } = useStateContext();
+  
   return (
     <BrowserRouter>
       <div className="flex">
         {activeMenu ? <SideNavigation /> : null}
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={
+            <CheckLogin>
+              <Login />
+            </CheckLogin>
+          } /> 
           <Route
             path="/home"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={[199]}>
                 <Home />
               </ProtectedRoute>
             }
@@ -40,7 +45,7 @@ function App() {
           <Route
             path="/exam-form"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={[199]}>
                 <ExamForm />
               </ProtectedRoute>
             }
@@ -48,7 +53,7 @@ function App() {
           <Route
             path="/exam-result"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={[199]}>
                 <ExamResult />
               </ProtectedRoute>
             }
@@ -56,7 +61,7 @@ function App() {
           <Route
             path="/take-exam"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={[199]}>
                 <TakeExam />
               </ProtectedRoute>
             }
@@ -64,7 +69,7 @@ function App() {
           <Route
             path="/trainings"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={[199]}>
                 <Traingings />
               </ProtectedRoute>
             }
@@ -72,7 +77,7 @@ function App() {
           <Route
             path="/took-training"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={[199]}>
                 <TookTraining />
               </ProtectedRoute>
             }
@@ -80,7 +85,7 @@ function App() {
           <Route
             path="/create-training"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={[199]}>
                 <CreateTraining />
               </ProtectedRoute>
             }
@@ -88,7 +93,7 @@ function App() {
           <Route
             path="/branch"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={[199]}>
                 <Branch />
               </ProtectedRoute>
             }
@@ -96,7 +101,7 @@ function App() {
           <Route
             path="/installer"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={[199]}>
                 <Installer />
               </ProtectedRoute>
             }
@@ -104,7 +109,7 @@ function App() {
           <Route
             path="/level-one"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={[199]}>
                 <Level1 />
               </ProtectedRoute>
             }
@@ -112,7 +117,7 @@ function App() {
           <Route
             path="/level-two"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={[199]}>
                 <Level2 />
               </ProtectedRoute>
             }
@@ -120,7 +125,7 @@ function App() {
           <Route
             path="/mistake"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={[199]}>
                 <Mistake />
               </ProtectedRoute>
             }
@@ -128,7 +133,7 @@ function App() {
           <Route
             path="/online"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={[199]}>
                 <Online />
               </ProtectedRoute>
             }
@@ -136,7 +141,7 @@ function App() {
           <Route
             path="/re-tre"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={[199]}>
                 <ReTre />
               </ProtectedRoute>
             }
@@ -144,7 +149,7 @@ function App() {
           <Route
             path="/telesales"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={[199]}>
                 <Telesales />
               </ProtectedRoute>
             }
@@ -152,7 +157,7 @@ function App() {
           <Route
             path="*"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={[199]}>
                 <NotFound />
               </ProtectedRoute>
             }

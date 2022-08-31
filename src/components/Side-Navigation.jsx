@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 function SideNavigation() {
   const navigate = useNavigate();
   return (
-    <div className="h-screen w-[320px] relative pl-4 pt-4 pr-4 shadow">
+    <div className="h-full w-[320px] relative pl-4 pt-4 pr-4 shadow-sm">
       <h5 className="text-[16px] mt-4 h-6 uppercase text-gray-500">Шалгалт</h5>
       <div
         onClick={() => {

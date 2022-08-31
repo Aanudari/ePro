@@ -17,6 +17,9 @@ function UserCell(data) {
                 <span>{data.data.roleName}</span>
             </div>
             <div>
+                <div className='w-[15px] h-[15px] bg-red-400 rounded-full'></div>
+            </div>
+            <div>
                 <div className='flex items-center'>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"

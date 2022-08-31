@@ -30,7 +30,6 @@ function Navigation() {
         )
         .catch(err => console.log(err))
   }, [])
-  console.log(data)
   return (
     <div>
       <div className="h-14"></div>

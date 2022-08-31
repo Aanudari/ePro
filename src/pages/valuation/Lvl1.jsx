@@ -7,8 +7,8 @@ function Level1() {
     <AdminLayout>
       <div className="w-full h-screen bg-gray-100">
         <Navigation />
-        <div></div>
-      </div>
+        <div>level1</div>
+        </div>
     </AdminLayout>
   );
 }

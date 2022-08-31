@@ -7,6 +7,7 @@ function Home() {
       <Navigation />
       <div className="px-2">
         <p>
+          HOME!
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio facilis
           repudiandae fugiat minus non quae iste, ipsum dolores reiciendis quos
           cupiditate iusto laborum temporibus quo perferendis. Dignissimos iste

@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from "react-router-dom";
 
 function UserCell(data) {
+    // data дотор тухайн нэг ажилтан ий мэдээлэл дамжуулагдав
     let navi = useNavigate()
     let lastName = data.data.lastName.slice(0, 1)
     const handleEdit = () => {

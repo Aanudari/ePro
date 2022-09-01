@@ -6,8 +6,9 @@ import axios from "axios";
 import UserCell from "../../components/sub-components/userCell";
 
 function Level1() {
-  const { user } = useStateContext();
+  // API аас ирж буй data г хадгалах state
   const [data, setData] = useState([]);
+  // level 1 operator уудын жагсаалтыг авах API
   useEffect(() => {
     axios({
       method: "get",
@@ -26,8 +27,24 @@ function Level1() {
       <Navigation />
       <div className="h-full px-5 py-3">
         <div className="w-full h-full bg-white rounded-lg p-5">
+          <div className="w-full bg-gray-100 p-3 rounded flex">
+            <div className="w-1/2 flex">
+              <span className="mr-2 mt-2 font-[400]">Нэрээр хайх:</span>
+              <input type="text" className="custom-input-2 h-10" />
+            </div>
+            <div className="w-1/2 bg-gray-200">
+              <select className="w-full h-full">
+                <option selected  value="grapefruit">Бүгд</option>
+                <option value="lime">Үнэлгээ хийгдсэн</option>
+                <option value="coconut">Үнэлгээ дутуу</option>
+                <option value="coconut">Огт хийгдээгүй</option>
+                <option value="mango">Тодорхойгүй</option>
+              </select>
+            </div>
+          </div>
           {
             data ? data.map((user, index) =>
+              // Ажилтан тус бүрийг UserCell conponent д хувиарлах замаар мэдээллүүдийг харуулав 
               <UserCell key={index} data={user} />
             ) : null
           }

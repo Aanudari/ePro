@@ -30,7 +30,9 @@ function App() {
       <div className="flex">
         {activeMenu ? <SideNavigation /> : null}
         <Routes>
+          {/*Sidebar аас үсрэх боломжтой үндсэн хуудаснууд */}
           <Route path="/" element={
+            // CheckLogin = нэвтэрсэн хэрэглэгч дахин login page рүү үсрэх боломжгүй буюу, тухайн замыг хаах component
             <CheckLogin>
               <Login />
             </CheckLogin>
@@ -38,6 +40,7 @@ function App() {
           <Route
             path="/home"
             element={
+              // ProtectedRoute = Системрүү нэврээгүй хэрэглэгчийг тухайн path руу хандхад block лох үүрэгтэй component
               <ProtectedRoute allowedRoles={[199]}>
                 <Home />
               </ProtectedRoute>
@@ -46,6 +49,8 @@ function App() {
           <Route
             path="/exam-form"
             element={
+              // AllowedRoles = Нэвтэрсэн хэрэглэгч бүхэн өөрийн roleid тай байх ба өөрийн roleid ийг зөвшөөрсөн хуудасруу л хандах 
+              // эрхтэйгээр шийдхийн тулд allowedRoles parameter ийг дамжуулж өгөв.
               <ProtectedRoute allowedRoles={[199]}>
                 <ExamForm />
               </ProtectedRoute>

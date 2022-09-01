@@ -284,3 +284,41 @@ form button:hover {
 .w-cus {
   width: 81%;
 }
+
+.custom-input-2{
+  outline: 0;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background-color: white;
+  width: 200px;
+  border-radius: 3px;
+  padding: 6px 15px;
+  display: block;
+  font-size: 14px;
+  color: black;
+  border: 1px solid rgba(255, 255, 255, 0.4);;
+  -webkit-transition-duration: 0.25s;
+  transition-duration: 0.25s;
+}
+select {
+  outline: 0;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background-color: white;
+  width: 200px;
+  border-radius: 3px;
+  padding: 6px 15px;
+  display: block;
+  font-size: 14px;
+  color: black;
+  border: 1px solid rgba(255, 255, 255, 0.4);;
+  -webkit-transition-duration: 0.25s;
+  transition-duration: 0.25s;
+}
+
+.custom-input-2:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+.custom-input-2:focus {
+  background-color: white;
+  width: 300px;
+  color: black;
+}

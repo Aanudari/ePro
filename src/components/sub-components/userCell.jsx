@@ -1,9 +1,14 @@
 import React from 'react';
+import { useNavigate } from "react-router-dom";
 
 function UserCell(data) {
+    let navi = useNavigate()
     let lastName = data.data.lastName.slice(0, 1)
+    const handleEdit = () => {
+        navi("/level-one-edit", { state: { deviceId: data.data.deviceId, firstName: data.data.firstName } })
+    }
     return (
-        <div className='w-full hover:cursor-pointer h-20 hover:bg-gray-100 border rounded-md my-1 flex gap-2 justify-between items-center py-2 px-3'>
+        <div onClick={handleEdit} className='w-full hover:cursor-pointer h-20 hover:bg-gray-100 border rounded-md my-1 flex gap-2 justify-between items-center py-2 px-3'>
             <div className='w-1/3 flex items-center gap-2'>
                 <div className='w-16 h-16 bg-red-100 rounded-full overflow-hidden'>
                     <img src="avatar2.jpg" alt="" className='w-16' />

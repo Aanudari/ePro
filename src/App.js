@@ -21,6 +21,7 @@ import ReTre from "./pages/valuation/ReTre";
 import Telesales from "./pages/valuation/Telesales";
 import NotFound from "./pages/404";
 import { CheckLogin } from "./components/BackToHome";
+import LeveloneEdit from "./pages/valuation-edit/Lvl1-edit";
 function App() {
   const { activeMenu } = useStateContext();
 
@@ -159,6 +160,16 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199]}>
                 <NotFound />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Үнэлгээ хийгдэх Page-нүүд */}
+          <Route
+            path="/level-one-edit"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <LeveloneEdit />
               </ProtectedRoute>
             }
           />

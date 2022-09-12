@@ -22,6 +22,13 @@ import Telesales from "./pages/valuation/Telesales";
 import NotFound from "./pages/404";
 import { CheckLogin } from "./components/BackToHome";
 import LeveloneEdit from "./pages/valuation-edit/Lvl1-edit";
+import ComplainEdit from "./pages/valuation-edit/Complain-edit";
+import TelesalesEdit from "./pages/valuation-edit/Telesales-edit";
+import OnlineEdit from "./pages/valuation-edit/OnlineEdit";
+import BranchEdit from "./pages/valuation-edit/BranchEdit";
+import InstallerEdit from "./pages/valuation-edit/InstallerEdit";
+import CareEdit from "./pages/valuation-edit/CareEdit";
+import BankEdit from "./pages/valuation-edit/Bank";
 function App() {
   const { activeMenu } = useStateContext();
 
@@ -175,6 +182,70 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199]}>
                 <LeveloneEdit />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/complain-edit"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <ComplainEdit />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/telesales-edit"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <TelesalesEdit />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/telesales-edit"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <TelesalesEdit />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/online-edit"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <OnlineEdit />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/branch-edit"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <BranchEdit />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/installer-edit"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <InstallerEdit />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/care-edit"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <CareEdit />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/bank-edit"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <BankEdit />
               </ProtectedRoute>
             }
           />

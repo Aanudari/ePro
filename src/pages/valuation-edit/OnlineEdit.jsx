@@ -3,7 +3,7 @@ import Navigation from '../../components/Navigation';
 import { useLocation } from "react-router-dom"
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-function LeveloneEdit() {
+function OnlineEdit() {
     const location = useLocation();
     const [data, setdata] = useState();
     useEffect(() => {
@@ -238,4 +238,4 @@ function LeveloneEdit() {
     );
 }
 
-export default LeveloneEdit;
+export default OnlineEdit;

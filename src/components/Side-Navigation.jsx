@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
 import Footer from "./Footer";
@@ -21,7 +21,7 @@ function SideNavigation() {
           }}
           className={
             path == "/exam-form" ?
-              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-300" :
+              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
               "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
           }
         >
@@ -46,7 +46,7 @@ function SideNavigation() {
           }}
           className={
             path == "/take-exam" ?
-              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-300" :
+              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
               "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
           }
         >
@@ -75,7 +75,7 @@ function SideNavigation() {
           }}
           className={
             path == "/exam-result" ?
-              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-300" :
+              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
               "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
           }
         >
@@ -101,7 +101,7 @@ function SideNavigation() {
           }}
           className={
             path == "/level-one" ?
-              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-300" :
+              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
               "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
           }
         >
@@ -120,13 +120,14 @@ function SideNavigation() {
 
           <span className="ml-1">LEVEL 1</span>
         </div>
+        {/* HERE */}
         <div
           onClick={() => {
-            navigate("/level-two");
+            navigate("/complain");
           }}
           className={
-            path == "/level-two" ?
-              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-300" :
+            path == "/complain" ?
+              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
               "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
           }
         >
@@ -146,15 +147,16 @@ function SideNavigation() {
             </svg>{" "}
           </div>
 
-          <span className="ml-1">LEVEL 2</span>
+          <span className="ml-1">COMPLAIN</span>
         </div>
+        {/* HERE */}
         <div
           onClick={() => {
             navigate("/telesales");
           }}
           className={
             path == "/telesales" ?
-              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-300" :
+              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
               "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
           }
         >
@@ -179,7 +181,7 @@ function SideNavigation() {
           }}
           className={
             path == "/online" ?
-              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-300" :
+              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
               "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
           }
         >
@@ -204,7 +206,7 @@ function SideNavigation() {
           }}
           className={
             path == "/branch" ?
-              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-300" :
+              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
               "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
           }
         >
@@ -229,7 +231,7 @@ function SideNavigation() {
           }}
           className={
             path == "/installer" ?
-              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-300" :
+              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
               "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
           }
         >
@@ -250,11 +252,11 @@ function SideNavigation() {
         </div>
         <div
           onClick={() => {
-            navigate("/re-tre");
+            navigate("/care");
           }}
           className={
-            path == "/re-tre" ?
-              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-300" :
+            path == "/care" ?
+              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
               "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
           }
         >
@@ -271,15 +273,15 @@ function SideNavigation() {
             </svg>{" "}
           </div>
 
-          <span className="ml-1">RE.TRE</span>
+          <span className="ml-1">CARE</span>
         </div>
         <div
           onClick={() => {
-            navigate("/mistake");
+            navigate("/bank");
           }}
           className={
-            path == "/mistake" ?
-              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-300" :
+            path == "/bank" ?
+              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
               "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
           }
         >
@@ -296,7 +298,7 @@ function SideNavigation() {
             </svg>
           </div>
 
-          <span className="ml-1">АЛДАА</span>
+          <span className="ml-1">BANK</span>
         </div>
         <h5 className="text-[16px] h-6 uppercase text-gray-500 mt-2">Сургалт</h5>
         <div
@@ -305,7 +307,7 @@ function SideNavigation() {
           }}
           className={
             path == "/create-training" ?
-              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-300" :
+              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
               "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
           }
         >
@@ -330,7 +332,7 @@ function SideNavigation() {
           }}
           className={
             path == "/took-training" ?
-              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-300" :
+              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
               "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
           }
         >
@@ -359,7 +361,7 @@ function SideNavigation() {
           }}
           className={
             path == "/trainings" ?
-              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-300" :
+              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
               "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
           }
         >

@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
-import Footer from "./Footer";
 
 function SideNavigation() {
   const navigate = useNavigate();

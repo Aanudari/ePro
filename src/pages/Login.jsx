@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useStateContext } from "../contexts/ContextProvider";
-import { ToastContainer, toast, Flip } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
 
 function Login() {
   const { setUser } = useStateContext();
@@ -39,33 +37,12 @@ function Login() {
       })
         .then((res) => {
           if (res.data.result === "true") {
-            toast.success("Амжилттай нэвтэрлээ.", {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: false,
-              progress: 0,
-              toastId: "my_toast",
-            });
-            setTimeout(() => {
-              redirect(res.data);
-            },3000);
+            redirect(res.data);
           } else {
-             // setalert(true);
-            toast.error("Хэрэглэгчийн нэвтрэх нэр эсвэл нууц үг буруу байна.", {
-              position: "top-right",
-              autoClose: 3000,
-              hideProgressBar: true,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: false,
-              progress: 0,
-              toastId: "my_toast",
-            });
+            setalert(true);
           }
         })
+        .catch((err) => console.log(err));
     }
   };
   useEffect(() => {
@@ -115,18 +92,7 @@ function Login() {
           </div>
         </form>
       </div>
-      <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss={false}
-          draggable={false}
-          pauseOnHover
-          limit={1}
-          transition={Flip}
-      />
+
       <ul className="bg-bubbles">
         <li></li>
         <li></li>

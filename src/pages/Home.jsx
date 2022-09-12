@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import Navigation from "../components/Navigation";
-import Footer from "../components/Footer";
 
 function Home() {
   const [showSettings, setshowSettings] = useState(false);
@@ -43,7 +42,7 @@ function Home() {
                 <div className="w-[100px] h-[60px] px-2 py-3 bg-sky-400 text-white rounded-lg flex justify-center font-[400] cursor-pointer">Cараар</div>
               </div>
               <div className="flex justify-around">
-              <div className="w-[100px] h-[60px] px-2 py-3 bg-cyan-400 text-white rounded-lg flex justify-center font-[400] cursor-pointer">Хэлтэс</div>
+                <div className="w-[100px] h-[60px] px-2 py-3 bg-cyan-400 text-white rounded-lg flex justify-center font-[400] cursor-pointer">Хэлтэс</div>
                 <div className="w-[100px] h-[60px] px-2 py-3 bg-cyan-400 text-white rounded-lg flex justify-center font-[400] cursor-pointer">Алба нэгж</div>
                 <div onClick={() => {
                   setShowIndividual(true);
@@ -54,23 +53,22 @@ function Home() {
         }
         {
           showIndividual ?
-          <div className="flex flex-col w-[350px] h-[200px] bg-gray-200 rounded-lg py-3 px-3 justify-around">
-          <div className=" flex justify-around gap-2">
+            <div className="flex flex-col w-[350px] h-[200px] bg-gray-200 rounded-lg py-3 px-3 justify-around">
+              <div className=" flex justify-around gap-2">
                 {/* <div className="">Жилээр</div> */}
                 <input type="text" className="custom-input" />
-            <div className="w-[100px] h-[60px] px-2 py-3 bg-sky-400 text-white rounded-lg flex justify-center font-[400] cursor-pointer">Хайх</div>
-          </div>
-          <div className="flex justify-start gap-2">
-          <div className="w-[100px] h-[60px] px-2 py-3 bg-cyan-400 text-white rounded-lg flex justify-center font-[400] cursor-pointer">Жагсаалт</div>
+                <div className="w-[100px] h-[60px] px-2 py-3 bg-sky-400 text-white rounded-lg flex justify-center font-[400] cursor-pointer">Хайх</div>
+              </div>
+              <div className="flex justify-start gap-2">
+                <div className="w-[100px] h-[60px] px-2 py-3 bg-cyan-400 text-white rounded-lg flex justify-center font-[400] cursor-pointer">Жагсаалт</div>
                 <div onClick={() => {
                   setShowIndividual(false);
                   setshowSettings(false);
-            }} className="w-[100px] h-[60px] px-2 py-3 bg-red-400 text-white rounded-lg flex justify-center font-[400] cursor-pointer">Хаах</div>
-          </div>
-        </div> : null
+                }} className="w-[100px] h-[60px] px-2 py-3 bg-red-400 text-white rounded-lg flex justify-center font-[400] cursor-pointer">Хаах</div>
+              </div>
+            </div> : null
         }
       </div>
-      <Footer />
     </div>
   );
 }

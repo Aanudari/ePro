@@ -30,7 +30,7 @@ function ExamForm() {
                 showForm ? <span>Шалгалтын нэр: {examName}</span> : <span>Шалгалтын нэр оруулна уу...</span>
               }
               {showForm == false ?
-                <form onSubmit={handleSubmit} action="" className="bg-green-300 mt-2">
+                <form onSubmit={handleSubmit} action="" className="bg-green-300 mt-2 form">
                   <input onChange={(e) => {
                     setExamName(e.target.value)
                   }} type="text" className="text-[14px] bg-white" autoFocus />

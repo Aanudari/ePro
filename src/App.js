@@ -121,7 +121,7 @@ function App() {
             }
           />
           <Route
-            path="/level-two"
+            path="/complain"
             element={
               <ProtectedRoute allowedRoles={[199]}>
                 <Level2 />
@@ -129,7 +129,7 @@ function App() {
             }
           />
           <Route
-            path="/mistake"
+            path="/bank"
             element={
               <ProtectedRoute allowedRoles={[199]}>
                 <Mistake />
@@ -145,7 +145,7 @@ function App() {
             }
           />
           <Route
-            path="/re-tre"
+            path="/care"
             element={
               <ProtectedRoute allowedRoles={[199]}>
                 <ReTre />

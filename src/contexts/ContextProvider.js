@@ -9,6 +9,7 @@ export const ContextProvider = ({ children }) => {
   const allRoles = [192, 194, 169, 193, 197, 192, 188, 189, 195, 190, 208, 196, 1, 2, 3, 4, 5, 6, 7, 168, 199]
   const roleId = user ? user.role_id : null
   const TOKEN = user ? user.token : null
+  console.log(TOKEN)
   const deviceId = user ? user.device_id : null
   const [sideBarTrack, setsideBarTrack] = useState(0);
   return (

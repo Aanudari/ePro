@@ -18,48 +18,66 @@ function Navigation() {
   };
   const [data, setData] = useState();
   useEffect(() => {
-      axios({
-        method: "get",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        url: `http://192.168.10.248:9000/api/User/${deviceId}`,
-      })
-        .then(
-          res => setData(res.data.result)
-        )
-        .catch(err => console.log(err))
+    axios({
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      url: `http://192.168.10.248:9000/api/User/${deviceId}`,
+    })
+      .then(
+        res => setData(res.data.result)
+      )
+      .catch(err => console.log(err))
   }, [])
+  const [value, setValue] = useState('');
   return (
-    <div>
+    <div className="relative cus-index">
       <div className="h-14"></div>
       <div className={activeMenu ? "h-14 bg-gray-50 w-cus fixed top-0 flex w-full justify-between px-4 shadow-sm" : " shadow-cus h-14 bg-gray-50 fixed top-0 flex w-full justify-between px-4"}>
-        <div className="p-2 flex items-center rounded-full m-2">
-          <svg
-            onClick={() => {
-              setActiveMenu(!activeMenu);
-            }}
-            xmlns="http://www.w3.org/2000/svg"
-            width="30"
-            height="30"
-            fill="currentColor"
-            className="bi bi-list cursor-pointer text-sky-600"
-            viewBox="0 0 16 16"
-          >
-            <path
-              fillRule="evenodd"
-              d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
-            />
-          </svg>
+        <div className="flex items-center gap-4">
+          <div className="p-2 flex items-center rounded-full m-2 bg-gray-100">
+            <svg
+              onClick={() => {
+                setActiveMenu(!activeMenu);
+              }}
+              xmlns="http://www.w3.org/2000/svg"
+              width="30"
+              height="30"
+              fill="currentColor"
+              className="bi bi-list cursor-pointer text-sky-600"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fillRule="evenodd"
+                d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
+              />
+            </svg>
+          </div>
+          {/* search */}
+          <div className="flex nav">
+            <form action="" onSubmit={() => {
+              navigate("/search-result", { state: { value: value } })
+            }}>
+              <input onChange={(e) => {
+                setValue(e.target.value)
+              }} type="text" placeholder="Хайх" className="custom-input-2 h-10" />
+            </form>
+          </div>
         </div>
+
         <div className="w-[260px] flex justify-around  rounded-md cursor-pointer m-2">
-          <div className=" flex items-center cursor-pointer">
+          {/* Notification */}
+          <div onClick={() => {
+            navigate("/notification");
+          }} className=" flex items-center cursor-pointer relative">
+            <div className="w-[15px] h-[15px] absolute rounded-full bg-red-500 text-white text-[11.5px] z-10 flex justify-center items-center top-[5px] right-[20px]">3</div>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="30"
               height="30"
               fill="currentColor"
-              className="bi bi-bell text-sky-600"
+              className="bi bi-bell text-sky-700 active:scale-105"
               viewBox="0 0 16 16"
             >
               <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z" />
@@ -98,8 +116,8 @@ function Navigation() {
                 </svg>
               </div>
               {show ? (
-                <div className="fixed w-[300px] h-[230px] bg-white top-[50px] rounded right-[30px] shadow-cus p-3 flex flex-col justify-between">
-                  <div className="flex justify-between">
+                <div className="fixed w-[300px] h-[230px] bg-white top-[50px] rounded right-[30px] shadow-cus p-3 flex flex-col justify-between cus-index">
+                  <div className="flex justify-between ">
                     <h6 className="mt-2">Хэрэглэгчийн хэсэг</h6>
                     <button
                       onClick={handleProfile}

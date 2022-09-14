@@ -6,6 +6,7 @@ import axios from 'axios';
 function LeveloneEdit() {
     const location = useLocation();
     const [data, setdata] = useState();
+    const [show, setshow] = useState(false);
     useEffect(() => {
         axios({
             method: "get",
@@ -48,7 +49,11 @@ function LeveloneEdit() {
                     </table>
                 </div>
                 <div className='w-full h-full bg-white rounded-lg p-5 mt-3'>
-                    <div className='w-full h-14 flex items-center bg-[#0563af] rounded-t px-3 font-[400] text-white'>Харилцаа </div>
+                    <div className='w-full h-14 flex items-center justify-between bg-[#0563af] rounded-t px-3'>
+                        <span className='font-[400] text-white'>
+                            Харилцаа
+                        </span>
+                    </div>
                     <div className='w-full flex flex-col'>
                         <div className='border w-full flex justify-between pl-3 box items-center'>
                             <span className=''>Зөв мэндчилгээ, үдэлт.</span>

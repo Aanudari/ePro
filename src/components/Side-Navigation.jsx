@@ -37,7 +37,7 @@ function SideNavigation() {
             </svg>{" "}
           </div>
 
-          <span className="ml-1">Шалгалтын форм бэлдэх</span>
+          <span className="ml-1 font-[400]">Шалгалтын форм бэлдэх</span>
         </div>
         <div
           onClick={() => {
@@ -66,7 +66,7 @@ function SideNavigation() {
             </svg>
           </div>
 
-          <span className="ml-1">Шалгалт өгөх</span>
+          <span className="ml-1 font-[400]">Шалгалт өгөх</span>
         </div>
         <div
           onClick={() => {
@@ -91,7 +91,7 @@ function SideNavigation() {
             </svg>{" "}
           </div>
 
-          <span className="ml-1">Шалгалтын дүн харах</span>
+          <span className="ml-1 font-[400]">Шалгалтын дүн харах</span>
         </div>
         <h5 className="text-[16px] h-6 uppercase text-gray-500 mt-2">Үнэлгээ</h5>
         <div
@@ -117,7 +117,7 @@ function SideNavigation() {
             </svg>{" "}
           </div>
 
-          <span className="ml-1">LEVEL 1</span>
+          <span className="ml-1 font-[400]">LEVEL 1</span>
         </div>
         {/* HERE */}
         <div
@@ -146,7 +146,7 @@ function SideNavigation() {
             </svg>{" "}
           </div>
 
-          <span className="ml-1">COMPLAIN</span>
+          <span className="ml-1 font-[400]">COMPLAIN</span>
         </div>
         {/* HERE */}
         <div
@@ -172,7 +172,7 @@ function SideNavigation() {
             </svg>{" "}
           </div>
 
-          <span className="ml-1">TELESALES</span>
+          <span className="ml-1 font-[400]">TELESALES</span>
         </div>
         <div
           onClick={() => {
@@ -197,7 +197,7 @@ function SideNavigation() {
             </svg>{" "}
           </div>
 
-          <span className="ml-1">ONLINE</span>
+          <span className="ml-1 font-[400]">ONLINE</span>
         </div>
         <div
           onClick={() => {
@@ -222,7 +222,7 @@ function SideNavigation() {
             </svg>{" "}
           </div>
 
-          <span className="ml-1">BRANCH</span>
+          <span className="ml-1 font-[400]">BRANCH</span>
         </div>
         <div
           onClick={() => {
@@ -247,7 +247,7 @@ function SideNavigation() {
             </svg>{" "}
           </div>
 
-          <span className="ml-1">INSTALLER</span>
+          <span className="ml-1 font-[400]">INSTALLER</span>
         </div>
         <div
           onClick={() => {
@@ -272,7 +272,7 @@ function SideNavigation() {
             </svg>{" "}
           </div>
 
-          <span className="ml-1">CARE</span>
+          <span className="ml-1 font-[400]">CARE</span>
         </div>
         <div
           onClick={() => {
@@ -297,7 +297,7 @@ function SideNavigation() {
             </svg>
           </div>
 
-          <span className="ml-1">BANK</span>
+          <span className="ml-1 font-[400]">BANK</span>
         </div>
         <h5 className="text-[16px] h-6 uppercase text-gray-500 mt-2">Сургалт</h5>
         <div
@@ -323,7 +323,7 @@ function SideNavigation() {
             </svg>{" "}
           </div>
 
-          <span className="ml-1">Сургалт төлөвлөх</span>
+          <span className="ml-1 font-[400]">Сургалт төлөвлөх</span>
         </div>
         <div
           onClick={() => {
@@ -352,7 +352,7 @@ function SideNavigation() {
             </svg>
           </div>
 
-          <span className="ml-1">Сургалтан хамрагдсан</span>
+          <span className="ml-1 font-[400]">Сургалтан хамрагдсан</span>
         </div>
         <div
           onClick={() => {
@@ -377,7 +377,7 @@ function SideNavigation() {
             </svg>{" "}
           </div>
 
-          <span className="ml-1">Сургалтууд</span>
+          <span className="ml-1 font-[400]">Сургалтууд</span>
         </div>
       </div>
     </div>

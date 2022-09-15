@@ -69,3 +69,52 @@ table, th, td {
   outline: none;
   border-radius: 0;
 }
+
+
+.cellx {
+  background-color: #f4511e;
+  border: none;
+  color: white;
+  margin: 4px 2px;
+  opacity: 0.6;
+  transition: 0.3s;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.cellx:hover {opacity: 1}
+
+
+.cellt {
+  background-color: #237823;
+  border: none;
+  color: white;
+  margin: 4px 2px;
+  opacity: 0.7;
+  transition: 0.3s;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.cellt:hover {opacity: 1}
+
+.cus-index {
+  z-index: 1000;
+}
+
+.nav input::placeholder {
+  color: gray;
+  font-size: 15px;
+}
+.celly {
+  background-color: #bd3a73;
+  border: none;
+  color: white;
+  margin: 4px 2px;
+  opacity: 0.7;
+  transition: 0.3s;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.celly:hover {opacity: 1}

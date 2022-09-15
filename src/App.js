@@ -29,6 +29,9 @@ import BranchEdit from "./pages/valuation-edit/BranchEdit";
 import InstallerEdit from "./pages/valuation-edit/InstallerEdit";
 import CareEdit from "./pages/valuation-edit/CareEdit";
 import BankEdit from "./pages/valuation-edit/Bank";
+import Notification from "./pages/Notification";
+import SearchResult from "./components/Result";
+import Dashboard from "./pages/Dashboard";
 function App() {
   const { activeMenu } = useStateContext();
 
@@ -246,6 +249,30 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199]}>
                 <BankEdit />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/notification"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <Notification />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/search-result"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <SearchResult />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <Dashboard />
               </ProtectedRoute>
             }
           />

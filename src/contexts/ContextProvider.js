@@ -10,9 +10,10 @@ export const ContextProvider = ({ children }) => {
   const roleId = user ? user.role_id : null
   const TOKEN = user ? user.token : null
   const deviceId = user ? user.device_id : null
+  const [inputValue, setInputValue] = useState("");
   const [sideBarTrack, setsideBarTrack] = useState(0);
   return (
-    <StateContext.Provider value={{ activeMenu, setActiveMenu, user, setUser, roleId, allRoles, sideBarTrack, setsideBarTrack, deviceId }}>
+    <StateContext.Provider value={{ activeMenu, setActiveMenu, user, setUser, roleId, allRoles, sideBarTrack, setsideBarTrack, deviceId, TOKEN, inputValue, setInputValue }}>
       {children}
     </StateContext.Provider>
   );

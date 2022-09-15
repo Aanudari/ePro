@@ -4,7 +4,8 @@ import { useStateContext } from "../contexts/ContextProvider";
 
 function SideNavigation() {
   const navigate = useNavigate();
-  const { sideBarTrack, setSideBarTrack } = useStateContext();
+  const { roleId } = useStateContext();
+  console.log(roleId)
   let location = useLocation();
   let path = location.pathname
   return (
@@ -14,31 +15,34 @@ function SideNavigation() {
           navigate("/home");
         }}>DDISH</h5>
         <h5 className="text-[16px] mt-4 h-6 uppercase text-gray-500">Шалгалт</h5>
-        <div
-          onClick={() => {
-            navigate("/exam-form");
-          }}
-          className={
-            path == "/exam-form" ?
-              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
-              "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
-          }
-        >
-          <div className="w-[15px]">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              className="bi bi-ui-checks"
-              viewBox="0 0 16 16"
+        {
+          roleId === "199" ?
+            <div
+              onClick={() => {
+                navigate("/exam-form");
+              }}
+              className={
+                path == "/exam-form" ?
+                  "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
+                  "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
+              }
             >
-              <path d="M7 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1zM2 1a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2zm0 8a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2H2zm.854-3.646a.5.5 0 0 1-.708 0l-1-1a.5.5 0 1 1 .708-.708l.646.647 1.646-1.647a.5.5 0 1 1 .708.708l-2 2zm0 8a.5.5 0 0 1-.708 0l-1-1a.5.5 0 0 1 .708-.708l.646.647 1.646-1.647a.5.5 0 0 1 .708.708l-2 2zM7 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1zm0-5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z" />
-            </svg>{" "}
-          </div>
+              <div className="w-[15px]">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  className="bi bi-ui-checks"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M7 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1zM2 1a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2zm0 8a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2H2zm.854-3.646a.5.5 0 0 1-.708 0l-1-1a.5.5 0 1 1 .708-.708l.646.647 1.646-1.647a.5.5 0 1 1 .708.708l-2 2zm0 8a.5.5 0 0 1-.708 0l-1-1a.5.5 0 0 1 .708-.708l.646.647 1.646-1.647a.5.5 0 0 1 .708.708l-2 2zM7 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1zm0-5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z" />
+                </svg>{" "}
+              </div>
 
-          <span className="ml-1">Шалгалтын форм бэлдэх</span>
-        </div>
+              <span className="ml-1 font-[400]">Шалгалтын форм үүсгэх</span>
+            </div> : null
+        }
         <div
           onClick={() => {
             navigate("/take-exam");
@@ -66,7 +70,7 @@ function SideNavigation() {
             </svg>
           </div>
 
-          <span className="ml-1">Шалгалт өгөх</span>
+          <span className="ml-1 font-[400]">Шалгалт өгөх</span>
         </div>
         <div
           onClick={() => {
@@ -91,9 +95,34 @@ function SideNavigation() {
             </svg>{" "}
           </div>
 
-          <span className="ml-1">Шалгалтын дүн харах</span>
+          <span className="ml-1 font-[400]">Шалгалтын дүн харах</span>
         </div>
         <h5 className="text-[16px] h-6 uppercase text-gray-500 mt-2">Үнэлгээ</h5>
+        <div
+          onClick={() => {
+            navigate("/dashboard");
+          }}
+          className={
+            path == "/dashboard" ?
+              "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
+              "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
+          }
+        >
+          <div className="w-[15px]">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              className="bi bi-ui-checks"
+              viewBox="0 0 16 16"
+            >
+              <path d="M7 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1zM2 1a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2zm0 8a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2H2zm.854-3.646a.5.5 0 0 1-.708 0l-1-1a.5.5 0 1 1 .708-.708l.646.647 1.646-1.647a.5.5 0 1 1 .708.708l-2 2zm0 8a.5.5 0 0 1-.708 0l-1-1a.5.5 0 0 1 .708-.708l.646.647 1.646-1.647a.5.5 0 0 1 .708.708l-2 2zM7 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5v-1zm0-5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z" />
+            </svg>{" "}
+          </div>
+
+          <span className="ml-1 font-[400]">Хянах самбар</span>
+        </div>
         <div
           onClick={() => {
             navigate("/level-one");
@@ -117,7 +146,7 @@ function SideNavigation() {
             </svg>{" "}
           </div>
 
-          <span className="ml-1">LEVEL 1</span>
+          <span className="ml-1 font-[400]">LEVEL 1</span>
         </div>
         {/* HERE */}
         <div
@@ -146,7 +175,7 @@ function SideNavigation() {
             </svg>{" "}
           </div>
 
-          <span className="ml-1">COMPLAIN</span>
+          <span className="ml-1 font-[400]">COMPLAIN</span>
         </div>
         {/* HERE */}
         <div
@@ -172,7 +201,7 @@ function SideNavigation() {
             </svg>{" "}
           </div>
 
-          <span className="ml-1">TELESALES</span>
+          <span className="ml-1 font-[400]">TELESALES</span>
         </div>
         <div
           onClick={() => {
@@ -197,7 +226,7 @@ function SideNavigation() {
             </svg>{" "}
           </div>
 
-          <span className="ml-1">ONLINE</span>
+          <span className="ml-1 font-[400]">ONLINE</span>
         </div>
         <div
           onClick={() => {
@@ -222,7 +251,7 @@ function SideNavigation() {
             </svg>{" "}
           </div>
 
-          <span className="ml-1">BRANCH</span>
+          <span className="ml-1 font-[400]">BRANCH</span>
         </div>
         <div
           onClick={() => {
@@ -247,7 +276,7 @@ function SideNavigation() {
             </svg>{" "}
           </div>
 
-          <span className="ml-1">INSTALLER</span>
+          <span className="ml-1 font-[400]">INSTALLER</span>
         </div>
         <div
           onClick={() => {
@@ -272,7 +301,7 @@ function SideNavigation() {
             </svg>{" "}
           </div>
 
-          <span className="ml-1">CARE</span>
+          <span className="ml-1 font-[400]">CARE</span>
         </div>
         <div
           onClick={() => {
@@ -297,7 +326,7 @@ function SideNavigation() {
             </svg>
           </div>
 
-          <span className="ml-1">BANK</span>
+          <span className="ml-1 font-[400]">BANK</span>
         </div>
         <h5 className="text-[16px] h-6 uppercase text-gray-500 mt-2">Сургалт</h5>
         <div
@@ -323,7 +352,7 @@ function SideNavigation() {
             </svg>{" "}
           </div>
 
-          <span className="ml-1">Сургалт төлөвлөх</span>
+          <span className="ml-1 font-[400]">Сургалт төлөвлөх</span>
         </div>
         <div
           onClick={() => {
@@ -352,7 +381,7 @@ function SideNavigation() {
             </svg>
           </div>
 
-          <span className="ml-1">Сургалтан хамрагдсан</span>
+          <span className="ml-1 font-[400]">Сургалтан хамрагдсан</span>
         </div>
         <div
           onClick={() => {
@@ -377,8 +406,9 @@ function SideNavigation() {
             </svg>{" "}
           </div>
 
-          <span className="ml-1">Сургалтууд</span>
+          <span className="ml-1 font-[400]">Сургалтууд</span>
         </div>
+        <div className="h-10"></div>
       </div>
     </div>
   );

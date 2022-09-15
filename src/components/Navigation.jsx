@@ -6,7 +6,7 @@ import axios from "axios";
 
 function Navigation() {
   const navigate = useNavigate();
-  const { activeMenu, setActiveMenu, user, deviceId } = useStateContext();
+  const { activeMenu, setActiveMenu, user, deviceId, setInputValue } = useStateContext();
   const [show, setshow] = useState(false);
   const handleProfile = () => {
     setshow(!show);
@@ -30,13 +30,15 @@ function Navigation() {
       )
       .catch(err => console.log(err))
   }, [])
-  const [value, setValue] = useState('');
+  const handleSubmit = () => {
+    navigate("/search-result")
+  }
   return (
     <div className="relative cus-index">
       <div className="h-14"></div>
-      <div className={activeMenu ? "h-14 bg-gray-50 w-cus fixed top-0 flex w-full justify-between px-4 shadow-sm" : " shadow-cus h-14 bg-gray-50 fixed top-0 flex w-full justify-between px-4"}>
+      <div className={activeMenu ? "h-14 bg-gray-100 w-cus fixed top-0 flex w-full justify-between px-4 shadow-sm" : " shadow-cus h-14 bg-gray-100 fixed top-0 flex w-full justify-between px-4"}>
         <div className="flex items-center gap-4">
-          <div className="p-2 flex items-center rounded-full m-2 bg-gray-100">
+          <div className="p-2 flex items-center rounded-full m-2 hover:bg-gray-100">
             <svg
               onClick={() => {
                 setActiveMenu(!activeMenu);
@@ -56,11 +58,9 @@ function Navigation() {
           </div>
           {/* search */}
           <div className="flex nav">
-            <form action="" onSubmit={() => {
-              navigate("/search-result", { state: { value: value } })
-            }}>
+            <form action="" onSubmit={handleSubmit}>
               <input onChange={(e) => {
-                setValue(e.target.value)
+                setInputValue(e.target.value)
               }} type="text" placeholder="Хайх" className="custom-input-2 h-10" />
             </form>
           </div>

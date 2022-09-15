@@ -5,7 +5,6 @@ import { useStateContext } from "../contexts/ContextProvider";
 function SideNavigation() {
   const navigate = useNavigate();
   const { roleId } = useStateContext();
-  console.log(roleId)
   let location = useLocation();
   let path = location.pathname
   return (

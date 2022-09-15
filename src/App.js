@@ -32,12 +32,17 @@ import BankEdit from "./pages/valuation-edit/Bank";
 import Notification from "./pages/Notification";
 import SearchResult from "./components/Result";
 import Dashboard from "./pages/Dashboard";
+import PrepareQuestions from "./components/PrepareQuestions";
 function App() {
-  const { activeMenu } = useStateContext();
+  const { activeMenu, showTop } = useStateContext();
 
   return (
     <BrowserRouter>
       <div className="flex">
+        {
+          showTop ? 
+          <div className='fixed w-full h-screen bg-black top-z right-0'></div> : null
+        }
         {activeMenu ? <SideNavigation /> : null}
         <Routes>
           {/*Sidebar аас үсрэх боломжтой үндсэн хуудаснууд */}
@@ -273,6 +278,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199]}>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/prepare-questions"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <PrepareQuestions />
               </ProtectedRoute>
             }
           />

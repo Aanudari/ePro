@@ -118,3 +118,46 @@ table, th, td {
 }
 
 .celly:hover {opacity: 1}
+
+.borderx {
+  border: 1px solid silver;
+}
+.borderx:hover {
+  /* background-color: white; */
+  border: .5px solid silver;
+  opacity: 0.9;
+  box-shadow: 0 0 2px silver;
+}
+
+.certain-item:hover {
+  background-color: f0f8ff;
+  box-shadow: 0 0 2px silver;
+}
+.no-underlinex {
+  text-decoration: none;
+}
+
+.top-z {
+  z-index: 10000;
+  opacity: 0.4;
+}
+
+
+.z-cus {
+  z-index: 100100
+  ;
+}
+
+.side-commend {
+  animation-name: appear;
+  animation-duration: .4s;
+}
+
+@keyframes appear {
+  from {
+    right: -1000px;
+  }
+  to {
+    right: 0px;
+  }
+}

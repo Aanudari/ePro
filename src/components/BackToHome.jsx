@@ -3,9 +3,9 @@ import { Navigate } from "react-router-dom";
 
 export const CheckLogin = ({ children }) => {
   const { user } = useStateContext();
-  console.log(user)
-  if (user) {
+  if (user ? user.role_id === "199" : null) {
     return <Navigate to="/home" />;
-  }
-  return children;
+  } else if (user ? user.role_id === '1' : null) {
+    return <Navigate to="/levelone-ui" />
+  } else return children;
 };

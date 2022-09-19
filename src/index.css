@@ -329,7 +329,7 @@ select {
 .navbar-mainbg{
 	background-color: #123477;
 	padding: 0px !important;
-  height: 62px;
+  height: 62.5px;
 }
 #navbarSupportedContent{
 	overflow: hidden;
@@ -390,7 +390,7 @@ select {
 	left: 0px;
 	transition-duration:0.6s;
 	transition-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
-	background-color: #fff;
+	background-color: #f3f6fd;
 	border-top-left-radius: 15px;
 	border-top-right-radius: 15px;
 	margin-top: 10px;
@@ -400,7 +400,7 @@ select {
 	position: absolute;
 	width: 25px;
 	height: 25px;
-	background-color: #fff;
+	background-color: #f3f6fd;
 	bottom: 10px;
 }
 .hori-selector .right{
@@ -481,4 +481,8 @@ select {
 		bottom: -25px;
 		left: -25px;
 	}
+}
+
+.rounded-cus {
+  border-radius: 30px;
 }

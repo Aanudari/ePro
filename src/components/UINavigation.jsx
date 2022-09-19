@@ -1,10 +1,11 @@
 import React from 'react';
 import $ from 'jquery';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useStateContext } from '../contexts/ContextProvider';
 
 function UINavigation() {
     const navigate = useNavigate();
+    const { setUiStatus } = useStateContext();
     function test() {
         var tabsNewAnim = $('#navbarSupportedContent');
         var selectorNewAnim = $('#navbarSupportedContent').find('li').length;
@@ -51,7 +52,7 @@ function UINavigation() {
     };
     return (
         <div className='fixed w-full'>
-            <nav className=" navbar navbar-expand-custom navbar-mainbg px-5 ">
+            <nav className=" navbar navbar-expand-custom navbar-mainbg px-5">
                 <button className="navbar-toggler" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <i className="fas fa-bars text-white"></i>
                 </button>
@@ -59,16 +60,34 @@ function UINavigation() {
                     <ul className="navbar-nav ml-auto">
                         <div className="hori-selector"><div className="left"></div><div className="right"></div></div>
                         <li className="nav-item active">
-                            <a className="nav-link " id="javascript:void(0);"><i className="far fa-address-book"></i>Үнэлгээ</a>
+                            <a onClick={() => {
+                                setUiStatus('1')
+                                navigate('/levelone-ui')
+                            }} className="nav-link " id="javascript:void(0);"><i className="far fa-address-book"></i>Үнэлгээ</a>
                         </li>
                         <li className="nav-item ">
-                            <a className="nav-link" id="javascript:void(0);"><i className="far fa-clone"></i>Шалгалт өгөх</a>
+                            <a onClick={() => {
+                                setUiStatus('2')
+                                navigate('/levelone-ui-take-exam')
+                            }} className="nav-link" id="javascript:void(0);"><i className="far fa-clone"></i>Шалгалт өгөх</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" id="javascript:void(0);"><i className="far fa-calendar-alt"></i>Шалгалтын дүн</a>
+                            <a onClick={() => {
+                                setUiStatus('3')
+                                navigate('/levelone-ui-exam-result')
+                            }} className="nav-link" id="javascript:void(0);"><i className="far fa-calendar-alt"></i>Шалгалтын дүн</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" id="javascript:void(0);"><i className="far fa-copy"></i>Мэдэгдэл</a>
+                            <a onClick={() => {
+                                setUiStatus('3')
+                                navigate('/ui-training')
+                            }} className="nav-link" id="javascript:void(0);"><i className="far fa-calendar-alt"></i>Сургалт</a>
+                        </li>
+                        <li className="nav-item">
+                            <a onClick={() => {
+                                setUiStatus('4')
+                                navigate('/levelone-ui-notification')
+                            }} className="nav-link" id="javascript:void(0);"><i className="far fa-copy"></i>Мэдэгдэл</a>
                         </li>
                     </ul>
                 </div>

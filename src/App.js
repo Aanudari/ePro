@@ -1,4 +1,5 @@
 import "./App.css";
+import './styles.scss';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
@@ -33,7 +34,12 @@ import Notification from "./pages/Notification";
 import SearchResult from "./components/Result";
 import Dashboard from "./pages/Dashboard";
 import PrepareQuestions from "./components/PrepareQuestions";
-import LevelOneUI from "./pages/userUI/LevelOneUI";
+import LevelOneUI from "./pages/userUI/LevelOne/LevelOneUI";
+import UINavigation from "./components/UINavigation";
+import LevelOneUITakeExam from "./pages/userUI/LevelOne/LevelOneUITakeExam";
+import LevelOneUIExamResult from "./pages/userUI/LevelOne/LevelOneUIExamResult";
+import LevelOneUINotification from "./pages/userUI/LevelOne/LevelOneUINotification";
+import UITraining from "./pages/userUI/UITraining";
 function App() {
   const { activeMenu, showTop, roleId } = useStateContext();
   return (
@@ -44,6 +50,7 @@ function App() {
           <div className='fixed w-full h-screen bg-black top-z right-0'></div> : null
         }
         {activeMenu && roleId === "199" ? <SideNavigation /> : null}
+        { roleId === '1' || roleId === "2" ? <UINavigation/> : null}
         <Routes>
           {/*Sidebar аас үсрэх боломжтой үндсэн хуудаснууд */}
           <Route path="/" element={
@@ -292,6 +299,38 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199, 1]}>
                 <LevelOneUI />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/levelone-ui-take-exam"
+            element={
+              <ProtectedRoute allowedRoles={[199, 1]}>
+                <LevelOneUITakeExam />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/levelone-ui-exam-result"
+            element={
+              <ProtectedRoute allowedRoles={[199, 1]}>
+                <LevelOneUIExamResult />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/levelone-ui-notification"
+            element={
+              <ProtectedRoute allowedRoles={[199, 1]}>
+                <LevelOneUINotification />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/ui-training"
+            element={
+              <ProtectedRoute allowedRoles={[199, 1]}>
+                <UITraining />
               </ProtectedRoute>
             }
           />

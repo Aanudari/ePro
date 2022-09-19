@@ -7,5 +7,5 @@ export const ProtectedRoute = ({ children, allowedRoles }) => {
   if (!user) {
     return <Navigate to="/" />;
   }
-  return allowedRoles.includes(Number(roleId)) ? children : <div className="w-full"><Navigation /><span className="p-10">Танд энэ хуудас руу хандах эрх олгогдоогүй байна!</span></div>
+  return allowedRoles.includes(Number(roleId)) ? children : <div className="w-full pt-3"><Navigation /><span className="p-10">Танд энэ хуудас руу хандах эрх олгогдоогүй байна!</span></div>
 };

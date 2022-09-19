@@ -161,3 +161,17 @@ table, th, td {
     right: 0px;
   }
 }
+
+.cellu {
+  background-color: #bd3a73;
+  border: none;
+  color: white;
+  margin: 4px 2px;
+  opacity: 0.7;
+  transition: 0.3s;
+  cursor: pointer;
+  z-index: 1;
+  height: 80px;
+}
+
+.cellu:hover {opacity: 1}

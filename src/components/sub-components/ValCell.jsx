@@ -3,7 +3,6 @@ import { useStateContext } from '../../contexts/ContextProvider';
 
 function ValCell() {
     const { showTop, setShowTop } = useStateContext();
-    console.log(showTop)
     return (
         <div className='borderx h-10 flex cursor-pointer'>
             <div className='h-full w-[170px] border-r font-[400] flex items-center justify-center certain-item hover:bg-[#f0f8ff] text-[14px]'>Нармандах</div>

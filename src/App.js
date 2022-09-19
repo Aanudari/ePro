@@ -33,9 +33,9 @@ import Notification from "./pages/Notification";
 import SearchResult from "./components/Result";
 import Dashboard from "./pages/Dashboard";
 import PrepareQuestions from "./components/PrepareQuestions";
+import LevelOneUI from "./pages/userUI/LevelOneUI";
 function App() {
-  const { activeMenu, showTop } = useStateContext();
-
+  const { activeMenu, showTop, roleId } = useStateContext();
   return (
     <BrowserRouter>
       <div className="flex">
@@ -43,7 +43,7 @@ function App() {
           showTop ? 
           <div className='fixed w-full h-screen bg-black top-z right-0'></div> : null
         }
-        {activeMenu ? <SideNavigation /> : null}
+        {activeMenu && roleId === "199" ? <SideNavigation /> : null}
         <Routes>
           {/*Sidebar аас үсрэх боломжтой үндсэн хуудаснууд */}
           <Route path="/" element={
@@ -178,9 +178,7 @@ function App() {
           <Route
             path="*"
             element={
-              <ProtectedRoute allowedRoles={[199]}>
                 <NotFound />
-              </ProtectedRoute>
             }
           />
 
@@ -286,6 +284,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199]}>
                 <PrepareQuestions />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/levelone-ui"
+            element={
+              <ProtectedRoute allowedRoles={[199, 1]}>
+                <LevelOneUI />
               </ProtectedRoute>
             }
           />

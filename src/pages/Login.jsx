@@ -4,10 +4,18 @@ import axios from "axios";
 import { useStateContext } from "../contexts/ContextProvider";
 
 function Login() {
-  const { setUser } = useStateContext();
+  const { setUser, roleId } = useStateContext();
   const navigate = useNavigate();
   const redirect = (data) => {
-    navigate("/home");
+    switch (data.role_id) {
+      case '1':
+        navigate("/levelone-ui")
+        break;
+      case '199':
+        navigate("/home")
+        break;
+
+    }
     setUser(data);
   };
 

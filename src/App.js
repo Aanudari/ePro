@@ -1,5 +1,6 @@
 import "./App.css";
 import './styles.scss';
+import 'devextreme/dist/css/dx.light.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
@@ -40,6 +41,8 @@ import LevelOneUITakeExam from "./pages/userUI/LevelOne/LevelOneUITakeExam";
 import LevelOneUIExamResult from "./pages/userUI/LevelOne/LevelOneUIExamResult";
 import LevelOneUINotification from "./pages/userUI/LevelOne/LevelOneUINotification";
 import UITraining from "./pages/userUI/UITraining";
+
+
 function App() {
   const { activeMenu, showTop, roleId } = useStateContext();
   return (

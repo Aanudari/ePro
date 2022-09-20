@@ -3,9 +3,12 @@ import Navigation from "../../components/Navigation";
 
 function TookTraining() {
   return (
-    <div className="w-full">
+    <div className="w-full h-screen bg-gray-50">
       <Navigation />
-      Total number of workers who took trainings
+      <div className="h-screen px-5 py-3">
+        <div className="w-full h-full bg-white rounded-lg p-5">
+        </div>
+      </div>
     </div>
   );
 }

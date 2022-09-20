@@ -4,7 +4,6 @@ import {
 } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import TableCell from '@mui/material/TableCell';
-import Typography from '@mui/material/Typography';
 import { ViewState, EditingState } from '@devexpress/dx-react-scheduler';
 import classNames from 'clsx';
 import {
@@ -22,7 +21,7 @@ import {
 import WbSunny from '@mui/icons-material/WbSunny';
 import FilterDrama from '@mui/icons-material/FilterDrama';
 import Opacity from '@mui/icons-material/Opacity';
-import ColorLens from '@mui/icons-material/ColorLens';
+
 import { owners } from './demo-data/tasks';
 
 const PREFIX = 'Demo';
@@ -110,13 +109,13 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     },
   },
   [`&.${classes.sunBack}`]: {
-    backgroundColor: '#FFFDE7',
+    backgroundColor: '#ECEFF1',
   },
   [`&.${classes.cloudBack}`]: {
     backgroundColor: '#ECEFF1',
   },
   [`&.${classes.rainBack}`]: {
-    backgroundColor: '#E1F5FE',
+    backgroundColor: '#ECEFF1',
   },
   [`&.${classes.opacity}`]: {
     opacity: '0.5',
@@ -174,63 +173,63 @@ const StyledAppointmentsAppointmentContent = styled(Appointments.AppointmentCont
 const appointments = [
   {
     id: 0,
-    title: 'Watercolor Landscape',
-    startDate: new Date(2018, 6, 23, 9, 30),
-    endDate: new Date(2018, 6, 23, 11, 30),
+    title: 'Нэмэлт сургалт',
+    startDate: new Date(2022, 6, 23, 9, 30),
+    endDate: new Date(2022, 6, 23, 11, 30),
     ownerId: 1,
   }, {
     id: 1,
-    title: 'Monthly Planning',
-    startDate: new Date(2018, 5, 28, 9, 30),
-    endDate: new Date(2018, 5, 28, 11, 30),
+    title: 'Хэрэгтэй сургалт',
+    startDate: new Date(2022, 5, 28, 9, 30),
+    endDate: new Date(2022, 5, 28, 11, 30),
     ownerId: 1,
   }, {
     id: 2,
     title: 'Recruiting students',
-    startDate: new Date(2018, 6, 9, 12, 0),
-    endDate: new Date(2018, 6, 9, 13, 0),
+    startDate: new Date(2022, 6, 9, 12, 0),
+    endDate: new Date(2022, 6, 9, 13, 0),
     ownerId: 2,
   }, {
     id: 3,
-    title: 'Oil Painting',
-    startDate: new Date(2018, 6, 18, 14, 30),
-    endDate: new Date(2018, 6, 18, 15, 30),
+    title: 'Төлөвлөгөө',
+    startDate: new Date(2022, 6, 18, 14, 30),
+    endDate: new Date(2022, 6, 18, 15, 30),
     ownerId: 2,
   }, {
     id: 4,
-    title: 'Open Day',
-    startDate: new Date(2018, 6, 20, 12, 0),
-    endDate: new Date(2018, 6, 20, 13, 35),
+    title: 'Нээлттэй өдөр',
+    startDate: new Date(2022, 6, 20, 12, 0),
+    endDate: new Date(2022, 6, 20, 13, 35),
     ownerId: 6,
   }, {
     id: 5,
-    title: 'Watercolor Landscape',
-    startDate: new Date(2018, 6, 6, 13, 0),
-    endDate: new Date(2018, 6, 6, 14, 0),
-    rRule: 'FREQ=WEEKLY;BYDAY=FR;UNTIL=20180816',
-    exDate: '20180713T100000Z,20180727T100000Z',
+    title: 'Нэмэлт сургалт',
+    startDate: new Date(2022, 6, 6, 13, 0),
+    endDate: new Date(2022, 6, 6, 14, 0),
+    rRule: 'FREQ=WEEKLY;BYDAY=FR;UNTIL=20220816',
+    exDate: '20220713T100000Z,20220727T100000Z',
     ownerId: 2,
   }, {
     id: 6,
-    title: 'Meeting of Instructors',
-    startDate: new Date(2018, 5, 28, 12, 0),
-    endDate: new Date(2018, 5, 28, 12, 30),
-    rRule: 'FREQ=WEEKLY;BYDAY=TH;UNTIL=20180727',
-    exDate: '20180705T090000Z,20180719T090000Z',
+    title: 'Сургалт level 1',
+    startDate: new Date(2022, 5, 28, 12, 0),
+    endDate: new Date(2022, 5, 28, 12, 30),
+    rRule: 'FREQ=WEEKLY;BYDAY=TH;UNTIL=20220727',
+    exDate: '20220705T090000Z,20220719T090000Z',
     ownerId: 5,
   }, {
     id: 7,
-    title: 'Oil Painting for Beginners',
-    startDate: new Date(2018, 6, 3, 11, 0),
-    endDate: new Date(2018, 6, 3, 12, 0),
-    rRule: 'FREQ=WEEKLY;BYDAY=TU;UNTIL=20180801',
-    exDate: '20180710T080000Z,20180724T080000Z',
+    title: 'Сургалт 2',
+    startDate: new Date(2022, 6, 3, 11, 0),
+    endDate: new Date(2022, 6, 3, 12, 0),
+    rRule: 'FREQ=WEEKLY;BYDAY=TU;UNTIL=20220801',
+    exDate: '20220710T080000Z,20220724T080000Z',
     ownerId: 3,
   }, {
     id: 8,
     title: 'Watercolor Workshop',
-    startDate: new Date(2018, 6, 9, 11, 0),
-    endDate: new Date(2018, 6, 9, 12, 0),
+    startDate: new Date(2022, 6, 9, 11, 0),
+    endDate: new Date(2022, 6, 9, 12, 0),
     ownerId: 3,
   },
 ];
@@ -244,11 +243,11 @@ const resources = [{
 const WeatherIcon = ({ id }) => {
   switch (id) {
     case 0:
-      return <StyledOpacity className={classes.rain} fontSize="large" />;
+        return null;
     case 1:
-      return <StyledWbSunny className={classes.sun} fontSize="large" />;
+        return null
     case 2:
-      return <StyledFilterDrama className={classes.cloud} fontSize="large" />;
+      return null
     default:
       return null;
   }
@@ -303,8 +302,6 @@ const AppointmentContent = (({ ...restProps }) => (
 const FlexibleSpace = (({ ...restProps }) => (
   <StyledToolbarFlexibleSpace {...restProps} className={classes.flexibleSpace}>
     <div className={classes.flexContainer}>
-      <ColorLens fontSize="large" htmlColor="#FF7043" />
-      <Typography variant="h5" style={{ marginLeft: '10px' }}>Art School</Typography>
     </div>
   </StyledToolbarFlexibleSpace>
 ));
@@ -352,7 +349,7 @@ export default class Demo extends React.PureComponent {
             onCommitChanges={this.commitChanges}
           />
           <ViewState
-            defaultCurrentDate="2018-07-17"
+            defaultCurrentDate="2022-07-17"
           />
 
           <MonthView

@@ -63,7 +63,10 @@ function UINavigation() {
                             <a onClick={() => {
                                 setUiStatus('1')
                                 navigate('/levelone-ui')
-                            }} className="nav-link " id="javascript:void(0);"><i className="far fa-address-book"></i>Үнэлгээ</a>
+                            }} className="nav-link" id="javascript:void(0);">
+                                <i class="bi bi-activity"></i>
+                                Үнэлгээ
+                            </a>
                         </li>
                         <li className="nav-item ">
                             <a onClick={() => {

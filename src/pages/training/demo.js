@@ -236,7 +236,7 @@ const appointments = [
 
 const resources = [{
   fieldName: 'ownerId',
-  title: 'Owners',
+  title: 'Багшийн нэр',
   instances: owners,
 }];
 

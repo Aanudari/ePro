@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import HomeChart from "../charts/HomeChart";
 import Navigation from "../components/Navigation";
 
 function Home() {
@@ -68,6 +69,9 @@ function Home() {
               </div>
             </div> : null
         }
+      </div>
+      <div className="p-2">
+        <HomeChart />
       </div>
     </div>
   );

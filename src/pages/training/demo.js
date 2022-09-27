@@ -4,7 +4,7 @@ import {
 } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import TableCell from '@mui/material/TableCell';
-import { ViewState, EditingState } from '@devexpress/dx-react-scheduler';
+import { ViewState, EditingState, IntegratedEditing } from '@devexpress/dx-react-scheduler';
 import classNames from 'clsx';
 import {
   Scheduler,
@@ -347,11 +347,12 @@ export default class Demo extends React.PureComponent {
         >
           <EditingState
             onCommitChanges={this.commitChanges}
+            addedAppointment={this.commitChanges}
           />
           <ViewState
             defaultCurrentDate="2022-07-17"
           />
-
+<IntegratedEditing />
           <MonthView
             timeTableCellComponent={TimeTableCell}
             dayScaleCellComponent={DayScaleCell}

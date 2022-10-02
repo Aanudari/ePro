@@ -16,7 +16,11 @@ export const ContextProvider = ({ children }) => {
   const [showModal, setShowModal] = useState(false);
   const [uiStatus, setUiStatus] = useState('1');
   return (
-    <StateContext.Provider value={{ activeMenu, setActiveMenu, user, setUser, roleId, allRoles, sideBarTrack, setsideBarTrack, deviceId, TOKEN, inputValue, setInputValue, showTop, setShowTop, uiStatus, setUiStatus, showModal, setShowModal }}>
+    <StateContext.Provider value={{
+      activeMenu, setActiveMenu, user, setUser, roleId, allRoles, sideBarTrack,
+      setsideBarTrack, deviceId, TOKEN, inputValue, setInputValue, showTop, setShowTop,
+      uiStatus, setUiStatus, showModal, setShowModal
+    }}>
       {children}
     </StateContext.Provider>
   );

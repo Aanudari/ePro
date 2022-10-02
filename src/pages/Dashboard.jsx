@@ -5,7 +5,6 @@ import { useStateContext } from '../contexts/ContextProvider';
 
 function Dashboard() {
     const { showTop, setShowTop } = useStateContext();
-    // console.log(showTop)
     return (
         <div className="w-full h-screen bg-gray-50 relative">
             <Navigation />

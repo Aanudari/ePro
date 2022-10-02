@@ -3,13 +3,9 @@ import { useEffect, useState } from "react";
 import Navigation from "../../components/Navigation";
 import axios from "axios";
 import UserCell from "../../components/sub-components/userCell";
-import SearchCell from "../../components/sub-components/SearchCell";
 function Level1() {
   // API аас ирж буй data г хадгалах state
   const [data, setData] = useState([]);
-  const [certainUser, setcertainUser] = useState();
-  const [userName, setUserName] = useState('');
-  const [error, setError] = useState(false);
   // level 1 operator уудын жагсаалтыг авах API
   useEffect(() => {
     axios({
@@ -17,7 +13,7 @@ function Level1() {
       headers: {
         "Content-Type": "application/json",
       },
-      url: "http://192.168.10.248:9000/api/User/role/1",
+      url: `${process.env.REACT_APP_URL}/api/User/role/1`,
     })
       .then(
         res => {

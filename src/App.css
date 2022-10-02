@@ -127,3 +127,21 @@ table, th, td {
 }
 
 .cellu:hover {opacity: 1}
+
+.front-eth {
+  z-index: 100100100;
+}
+
+.glass {
+  background: rgba( 255, 255, 255, 0.25 );
+  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
+  backdrop-filter: blur( 20px );
+  -webkit-backdrop-filter: blur( 10.5px );
+  border: 1px solid rgba( 255, 255, 255, 0.18 );
+
+}
+* {
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}

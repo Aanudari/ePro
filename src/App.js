@@ -41,16 +41,22 @@ import LevelOneUITakeExam from "./pages/userUI/LevelOne/LevelOneUITakeExam";
 import LevelOneUIExamResult from "./pages/userUI/LevelOne/LevelOneUIExamResult";
 import LevelOneUINotification from "./pages/userUI/LevelOne/LevelOneUINotification";
 import UITraining from "./pages/userUI/UITraining";
+import getWindowDimensions from "./components/SizeDetector";
+import NotValid from "./pages/NotValid";
 
 
 function App() {
   const { activeMenu, showTop, roleId } = useStateContext();
+  const { width } = getWindowDimensions()
   return (
     <BrowserRouter>
       <div className="flex">
         {
           showTop ? 
           <div className='fixed w-full h-screen bg-black top-z right-0'></div> : null
+        }
+        {
+          width < 1300 ?  <NotValid/> : null
         }
         {activeMenu && roleId === "199" ? <SideNavigation /> : null}
         { roleId === '1' || roleId === "2" ? <UINavigation/> : null}

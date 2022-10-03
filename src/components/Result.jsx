@@ -9,7 +9,6 @@ function SearchResult() {
     let location = useLocation();
     const { TOKEN, inputValue } = useStateContext();
     const [data, setdata] = useState();
-    console.log(data)
     useEffect(() => {
         axios({
             method: "post",
@@ -17,7 +16,7 @@ function SearchResult() {
                 "Content-Type": "application/json",
                 "Authorization": TOKEN
             },
-            url: "http://192.168.10.248:9000/api/User/search",
+            url: `${process.env.REACT_APP_URL}/api/User/search`,
             data: JSON.stringify({ firstName: inputValue }),
         })
             .then((res) => {

@@ -12,7 +12,7 @@ function Online() {
       headers: {
         "Content-Type": "application/json",
       },
-      url: "http://192.168.10.248:9000/api/User/role/5",
+      url: `${process.env.REACT_APP_URL}/api/User/role/5`,
     })
       .then(
         res => setData(res.data.result)

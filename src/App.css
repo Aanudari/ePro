@@ -132,6 +132,10 @@ table, th, td {
   z-index: 100100100;
 }
 
+.front-et {
+  z-index: 10010010;
+}
+
 .glass {
   background: rgba( 255, 255, 255, 0.25 );
   box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
@@ -144,4 +148,8 @@ table, th, td {
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
+}
+
+.linear {
+  background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12);
 }

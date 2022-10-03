@@ -43,6 +43,7 @@ import LevelOneUINotification from "./pages/userUI/LevelOne/LevelOneUINotificati
 import UITraining from "./pages/userUI/UITraining";
 import getWindowDimensions from "./components/SizeDetector";
 import NotValid from "./pages/NotValid";
+import SessionTimeout from "./components/SessionTimeout";
 
 
 function App() {
@@ -56,7 +57,7 @@ function App() {
           <div className='fixed w-full h-screen bg-black top-z right-0'></div> : null
         }
         {
-          width < 1300 ?  <NotValid/> : null
+          width < 1200 ?  <NotValid/> : null
         }
         {activeMenu && roleId === "199" ? <SideNavigation /> : null}
         { roleId === '1' || roleId === "2" ? <UINavigation/> : null}
@@ -345,6 +346,7 @@ function App() {
           />
         </Routes>
       </div>
+      <SessionTimeout/>
     </BrowserRouter>
   );
 }

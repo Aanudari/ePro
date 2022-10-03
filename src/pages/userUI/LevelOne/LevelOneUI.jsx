@@ -16,7 +16,7 @@ function LevelOneUI() {
                     <div className='w-full h-[150px] py-4 px-10 border-b'>
                         <div className='flex justify-between'>
                             <h4 className='text-[20px] font-[600]'>Үнэлгээнүүд</h4>
-                            <h4 className='text-[20px] font-[600]'>{d.getFullYear()}, {d.getMonth() + 1}, {d.getDate()}</h4>
+                            <h4 className='text-[20px] font-[600]'>{d.getFullYear()}.{d.getMonth() + 1}.{d.getDate()}</h4>
                         </div>
                         <div className='w-full flex gap-4 mt-2'>
                             <div className=''>

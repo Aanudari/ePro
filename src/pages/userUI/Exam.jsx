@@ -126,7 +126,7 @@ function Exam() {
                     </div>
                 </div>
 
-                <div className='bg-white rounded-cus h-[600px] w-4/12 h-full shadow-sm '>
+                <div className='bg-white rounded-cus h-[600px] w-4/12 h-full shadow-sm px-2'>
                     <div className='h-[80px] w-full px-4 py-4 border-b'>
                         <h4 className='text-[20px] font-[600]'>Нийт асуултууд</h4>
                     </div>
@@ -146,7 +146,7 @@ function Exam() {
                         </li>
                     </ol>
                         <br/>
-                        <div>
+                        <div className={"flex justify-end"}>
                             <button type="button" className="btn btn-danger">Илгээх</button>
                         </div>
                     </div>

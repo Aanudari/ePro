@@ -4,7 +4,7 @@ import axios from "axios";
 import { useStateContext } from "../contexts/ContextProvider";
 
 function Login() {
-  const { setUser, roleId } = useStateContext();
+  const { setUser, setisAuthenticated } = useStateContext();
   const navigate = useNavigate();
   const redirect = (data) => {
     switch (data.role_id) {
@@ -16,6 +16,7 @@ function Login() {
         break;
     }
     setUser(data);
+
   };
 
   const [username, setusername] = useState("");
@@ -39,12 +40,13 @@ function Login() {
         headers: {
           "Content-Type": "application/json",
         },
-        url: "http://192.168.10.237:8000/api/Login",
+        url: `${process.env.REACT_APP_URL}/api/Auth/Login`,
         data: JSON.stringify(data),
       })
         .then((res) => {
           if (res.data.result === "true") {
             redirect(res.data);
+            setisAuthenticated(true);
           } else {
             setalert(true);
           }

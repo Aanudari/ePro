@@ -5,12 +5,12 @@ import { useEffect } from "react";
 import axios from "axios";
 
 function Navigation() {
-  const navigate = useNavigate();
   const { activeMenu, setActiveMenu, user, deviceId, setInputValue } = useStateContext();
   const [show, setshow] = useState(false);
   const handleProfile = () => {
     setshow(!show);
   };
+  const navigate = useNavigate();
   const logout = () => {
     localStorage.clear();
     navigate("/");

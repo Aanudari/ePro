@@ -64,7 +64,7 @@ function UINavigation() {
                                 setUiStatus('1')
                                 navigate('/levelone-ui')
                             }} className="nav-link" id="javascript:void(0);">
-                                <i class="bi bi-activity"></i>
+                                <i className="bi bi-activity"></i>
                                 Үнэлгээ
                             </a>
                         </li>

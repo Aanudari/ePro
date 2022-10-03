@@ -282,7 +282,7 @@ body :-ms-input-placeholder {
 }
 
 .w-cus {
-  width: 81%;
+  width: 83.5%;
 }
 
 .custom-input-2{
@@ -485,4 +485,25 @@ select {
 
 .rounded-cus {
   border-radius: 30px;
+}
+
+.expanded-menu {
+  animation-name: left-right;
+  animation-duration: .3s;
+  z-index: 1;
+}
+
+.case-1 {
+  transform: translateX(0);
+}
+
+.case-2 {
+  transform: translateX(-100vw);
+}
+
+.glass2 {
+background: rgba(255, 255, 255, 0.2);
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(5px);
+-webkit-backdrop-filter: blur(5px);
 }

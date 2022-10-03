@@ -52,7 +52,7 @@ function App() {
   const { width } = getWindowDimensions()
   return (
     <BrowserRouter>
-      <div className="flex">
+      <div className="flex w-full relative">
         {
           showTop ? 
           <div className='fixed w-full h-screen bg-black top-z right-0'></div> : null

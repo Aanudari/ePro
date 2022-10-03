@@ -36,7 +36,7 @@ function Navigation() {
   return (
     <div className="relative cus-index">
       <div className="h-14"></div>
-      <div className={activeMenu ? "h-14 bg-gray-100 w-cus fixed top-0 flex w-full justify-between px-4 shadow-sm" : " shadow-cus h-14 bg-gray-100 fixed top-0 flex w-full justify-between px-4"}>
+      <div className={activeMenu ? "h-14 bg-gray-100 w-cus fixed top-0 flex justify-between px-4 shadow-sm" : " shadow-cus h-14 bg-gray-100 fixed top-0 flex w-full justify-between px-4"}>
         <div className="flex items-center gap-4">
           <div className="p-2 flex items-center rounded-full m-2 hover:bg-gray-100">
             <svg

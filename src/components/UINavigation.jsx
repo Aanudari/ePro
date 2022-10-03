@@ -15,10 +15,10 @@ function UINavigation() {
         var itemPosNewAnimTop = activeItemNewAnim.position();
         var itemPosNewAnimLeft = activeItemNewAnim.position();
         $(".hori-selector").css({
-            // "top": itemPosNewAnimTop.top + "px",
-            // "left": itemPosNewAnimLeft.left + "px",
-            // "height": activeWidthNewAnimHeight + "px",
-            // "width": activeWidthNewAnimWidth + "px"
+            "top": itemPosNewAnimTop.top + "px",
+            "left": itemPosNewAnimLeft.left + "px",
+            "height": activeWidthNewAnimHeight + "px",
+            "width": activeWidthNewAnimWidth + "px"
         });
         $("#navbarSupportedContent").on("click", "li", function (e) {
             $('#navbarSupportedContent ul li').removeClass("active");
@@ -72,25 +72,25 @@ function UINavigation() {
                             <a onClick={() => {
                                 setUiStatus('2')
                                 navigate('/levelone-ui-take-exam')
-                            }} className="nav-link" id="javascript:void(0);"> <i className="bi bi-activity"></i>Шалгалт өгөх</a>
+                            }} className="nav-link" id="javascript:void(0);"><i className="far fa-clone"></i>Шалгалт өгөх</a>
                         </li>
                         <li className="nav-item">
                             <a onClick={() => {
                                 setUiStatus('3')
                                 navigate('/levelone-ui-exam-result')
-                            }} className="nav-link" id="javascript:void(0);"> <i className="bi bi-activity"></i>Шалгалтын дүн</a>
+                            }} className="nav-link" id="javascript:void(0);"><i className="far fa-calendar-alt"></i>Шалгалтын дүн</a>
                         </li>
                         <li className="nav-item">
                             <a onClick={() => {
                                 setUiStatus('3')
                                 navigate('/ui-training')
-                            }} className="nav-link" id="javascript:void(0);"> <i className="bi bi-activity"></i>Сургалт</a>
+                            }} className="nav-link" id="javascript:void(0);"><i className="far fa-calendar-alt"></i>Сургалт</a>
                         </li>
                         <li className="nav-item">
                             <a onClick={() => {
                                 setUiStatus('4')
                                 navigate('/levelone-ui-notification')
-                            }} className="nav-link" id="javascript:void(0);"> <i className="bi bi-activity"></i>Мэдэгдэл</a>
+                            }} className="nav-link" id="javascript:void(0);"><i className="far fa-copy"></i>Мэдэгдэл</a>
                         </li>
                     </ul>
                 </div>

@@ -1,8 +1,12 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function TakeExamCell(data) {
+    const navigate = useNavigate()
     return (
-        <div className='relative w-full shadow py-3 px-3 cellt font-[400] flex justify-between'>
+        <div onClick={() => {
+            navigate('/exam')
+        }} className='relative w-full shadow py-3 px-3 cellt font-[400] flex justify-between'>
             <div className='font-[400] flex flex-col'>
                 <div>
                     <span className='font-[500]'>Шалгалтын нэр:</span> {data.data.name}

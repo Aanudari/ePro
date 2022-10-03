@@ -193,8 +193,8 @@ function SideNavigation() {
                         }}
                         className={
                             path == "/create-training" ?
-                                "w-full h-12 cursor-pointer pl-2 flex items-center rounded-md bg-sky-500 text-white font-bold" :
-                                "w-full h-12 cursor-pointer pl-2 hover:bg-gray-100 flex items-center rounded-md "
+                                "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
+                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
                         }
                     >
                         <i className="bi bi-folder2-open"></i>
@@ -206,8 +206,8 @@ function SideNavigation() {
                         }}
                         className={
                             path == "/took-training" ?
-                                "w-full h-12 cursor-pointer pl-2 flex items-center rounded-md bg-sky-500 text-white font-bold" :
-                                "w-full h-12 cursor-pointer pl-2 hover:bg-gray-100 flex items-center rounded-md "
+                                "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
+                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
                         }
                     >
                         <i className="bi bi-hand-thumbs-up"></i>
@@ -219,8 +219,8 @@ function SideNavigation() {
                         }}
                         className={
                             path == "/trainings" ?
-                                "w-full h-12 cursor-pointer pl-2 flex items-center rounded-md bg-sky-500 text-white font-bold " :
-                                "w-full h-12 cursor-pointer pl-2 hover:bg-gray-100 flex items-center rounded-md "
+                                "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
+                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
                         }
                     >
                         <i className="bi bi-card-list"></i>

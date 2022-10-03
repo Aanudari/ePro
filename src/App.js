@@ -44,6 +44,7 @@ import UITraining from "./pages/userUI/UITraining";
 import getWindowDimensions from "./components/SizeDetector";
 import NotValid from "./pages/NotValid";
 import SessionTimeout from "./components/SessionTimeout";
+import Exam from "./pages/userUI/Exam";
 
 
 function App() {
@@ -341,6 +342,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199, 1]}>
                 <UITraining />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/exam"
+            element={
+              <ProtectedRoute allowedRoles={[199, 1]}>
+                <Exam/>
               </ProtectedRoute>
             }
           />

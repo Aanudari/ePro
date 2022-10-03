@@ -3,14 +3,14 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
 import "bootstrap-icons/font/bootstrap-icons.css";
 function SideNavigation() {
-    const { activeMenu, setActiveMenu, user, deviceId, setInputValue } = useStateContext();
+    const { user } = useStateContext();
     const navigate = useNavigate();
     const { roleId } = useStateContext();
     let location = useLocation();
     let path = location.pathname
     return (
-        <div className="w-[375px] relative h-full shadow-cus content">
-            <div className="h-full w-[280px] fixed pl-4 pt-4 pr-4 md:overflow-hidden overflow-auto md:hover:overflow-auto">
+        <div className="w-[345px] h-full shadow-cus content relative ">
+            <div className="h-full w-[280px] fixed pl-4 pt-4 pr-4 md:overflow-hidden overflow-auto md:hover:overflow-auto cus-index">
                 {/*<img onClick={() => {navigate("/home");}} alt="ДДЭШТВ ХХК" className="w-50 rounded mx-auto d-block" src="./ddish_logo.png"/>*/}
                 <div className="card border-primary mb-3">
                     <div className="card-header font-monospace">Hello 👋🏻</div>
@@ -18,8 +18,6 @@ function SideNavigation() {
                         <h6 className="card-title font-monospace">{user.last_name} {user.first_name}</h6>
                     </div>
                 </div>
-
-
                 <div>
                     <h5 className="text-[16px] mt-6 h-6 uppercase text-gray-500 mt-2">Шалгалт</h5>
                     {

@@ -1,7 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import Navigation from "../../components/Navigation";
-import { useStateContext } from "../../contexts/ContextProvider";
 import axios from "axios";
 import UserCell from "../../components/sub-components/userCell";
 
@@ -24,7 +23,7 @@ function ReTre() {
     <div className="w-full h-full bg-gray-50">
       <Navigation />
       <div className="h-full px-5 py-3">
-      <div className="w-full h-full bg-white rounded-lg p-5">
+        <div className="w-full h-full bg-white rounded-lg p-5">
           <div className="w-full bg-gray-100 p-3 rounded flex">
             <div className="w-2/3 flex">
               <span className="mr-2 mt-2 font-[400]">Нэрээр хайх:</span>

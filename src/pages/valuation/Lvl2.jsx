@@ -3,13 +3,9 @@ import { useEffect, useState } from "react";
 import Navigation from "../../components/Navigation";
 import axios from "axios";
 import UserCell from "../../components/sub-components/userCell";
-import SearchCell from "../../components/sub-components/SearchCell";
 function Level2() {
   // API аас ирж буй data г хадгалах state
   const [data, setData] = useState([]);
-  const [certainUser, setcertainUser] = useState();
-  const [userName, setUserName] = useState('');
-  const [error, setError] = useState(false);
   // level 1 operator уудын жагсаалтыг авах API
   useEffect(() => {
     axios({

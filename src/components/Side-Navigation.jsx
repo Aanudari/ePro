@@ -11,12 +11,9 @@ function SideNavigation() {
     return (
         <div className="w-[345px] h-full shadow-cus content relative ">
             <div className="h-full w-[280px] fixed pl-4 pt-4 pr-4 md:overflow-hidden overflow-auto md:hover:overflow-auto cus-index">
-                {/*<img onClick={() => {navigate("/home");}} alt="ДДЭШТВ ХХК" className="w-50 rounded mx-auto d-block" src="./ddish_logo.png"/>*/}
-                <div className="card border-primary mb-3">
-                    <div className="card-header font-monospace">Hello 👋🏻</div>
-                    <div className="card-body text-primary">
-                        <h6 className="card-title font-monospace">{user.last_name} {user.first_name}</h6>
-                    </div>
+                <div className="w-full flex justify-start mb-3">
+
+                    <img onClick={() => { navigate("/home"); }} alt="ДДЭШТВ ХХК" className="w-[120px] ml-1 hover:scale-105 transition" src="./ddish_logo.png" />
                 </div>
                 <div>
                     <h5 className="text-[16px] mt-6 h-6 uppercase text-gray-500 mt-2">Шалгалт</h5>

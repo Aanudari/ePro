@@ -3,7 +3,6 @@ import { useStateContext } from '../contexts/ContextProvider';
 
 function ExpandedMenu() {
     const { expandedMenu, setExpandedMenu } = useStateContext();
-    console.log(expandedMenu)
     return (
         <div className={`w-5/12 h-full fixed transition duration-300 glass2 ${expandedMenu ? `case-1` : `case-2`}`}>
             <div className='h-14'>

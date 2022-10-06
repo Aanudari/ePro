@@ -5,6 +5,7 @@ import axios from "axios";
 import UserCell from "../../components/sub-components/userCell";
 import ExpandedMenu from "../../components/ExpandedMenu";
 import { useStateContext } from "../../contexts/ContextProvider";
+import { getRequest } from "../../auth/api"
 function Level1() {
   // API аас ирж буй data г хадгалах state
   const [data, setData] = useState([]);
@@ -52,7 +53,7 @@ function Level1() {
             <div onClick={() => {
               setExpandedMenu(!expandedMenu)
             }} className="px-2 rounded-full bg-gray-200 transition cursor-pointer active:scale-105">
-              <i class="bi bi-arrow-bar-left text-[25px]"></i>
+              <i className="bi bi-arrow-bar-left text-[25px]"></i>
             </div>
           </div>
           {

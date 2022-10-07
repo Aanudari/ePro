@@ -45,6 +45,8 @@ import getWindowDimensions from "./components/SizeDetector";
 import NotValid from "./pages/NotValid";
 import SessionTimeout from "./components/SessionTimeout";
 import Exam from "./pages/userUI/Exam";
+import { Calendar } from "react-calendar";
+import CalendarX from "./pages/training/Calendar/calendar";
 
 
 function App() {
@@ -350,6 +352,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199, 1]}>
                 <Exam/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/calendar"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <CalendarX/>
               </ProtectedRoute>
             }
           />

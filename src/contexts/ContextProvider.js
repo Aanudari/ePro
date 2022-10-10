@@ -17,12 +17,13 @@ export const ContextProvider = ({ children }) => {
   const [uiStatus, setUiStatus] = useState('1');
   const [isAuthenticated, setisAuthenticated] = useState(false);
   const [expandedMenu, setExpandedMenu] = useState(false);
+  const [mobileBar, setMobileBar] = useState(false)
   return (
     <StateContext.Provider value={{
       activeMenu, setActiveMenu, user, setUser, roleId, allRoles, sideBarTrack,
       setsideBarTrack, deviceId, TOKEN, inputValue, setInputValue, showTop, setShowTop,
       uiStatus, setUiStatus, showModal, setShowModal, isAuthenticated, setisAuthenticated,
-      expandedMenu, setExpandedMenu
+      expandedMenu, setExpandedMenu, mobileBar, setMobileBar
     }}>
       {children}
     </StateContext.Provider>

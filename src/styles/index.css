@@ -93,6 +93,10 @@ body :-ms-input-placeholder {
   font-weight: 300;
   
 }
+input:focus :active {
+  outline: none;
+  border: none;
+}
 .form input:hover {
   background-color: rgba(255, 255, 255, 0.4);
 }

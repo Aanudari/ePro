@@ -3,9 +3,12 @@ import { useStateContext } from "../contexts/ContextProvider";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
+import getWindowDimensions from "./SizeDetector"
+import MobileBar from "./MobileBar";
 
 function Navigation() {
-  const { activeMenu, setActiveMenu, user, deviceId, setInputValue } = useStateContext();
+  const {width} = getWindowDimensions();
+  const { activeMenu, setActiveMenu, user, deviceId, setInputValue, mobileBar, setMobileBar } = useStateContext();
   const [show, setshow] = useState(false);
   const handleProfile = () => {
     setshow(!show);
@@ -36,10 +39,13 @@ function Navigation() {
   return (
     <div className="relative cus-index">
       <div className="h-14"></div>
-      <div className={activeMenu ? "h-14 bg-gray-100 w-cus fixed top-0 flex justify-between px-4 shadow-sm" : " shadow-cus h-14 bg-gray-100 fixed top-0 flex w-full justify-between px-4"}>
-        <div className="flex items-center gap-4">
+      <div className={activeMenu ? "h-14 bg-gray-100 w-full md:w-cus fixed top-0 flex justify-between md:px-4 shadow-sm" 
+      : " shadow-cus h-14 bg-gray-100 fixed top-0 flex w-full justify-between md:px-4"}>
+        <div className="flex items-center md:gap-4">
           <div className="p-2 flex items-center rounded-full m-2 hover:bg-gray-100">
-            <svg
+            {
+              width > 768 ?
+              <svg
               onClick={() => {
                 setActiveMenu(!activeMenu);
               }}
@@ -55,6 +61,27 @@ function Navigation() {
                 d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
               />
             </svg>
+            : 
+            <svg
+              onClick={() => {
+                setMobileBar(!mobileBar);
+              }}
+              xmlns="http://www.w3.org/2000/svg"
+              width="30"
+              height="30"
+              fill="currentColor"
+              className="bi bi-list cursor-pointer text-sky-600"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fillRule="evenodd"
+                d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
+              />
+            </svg>
+            }
+            {
+              mobileBar && <MobileBar/>
+            }
           </div>
           {/* search */}
           <div className="flex nav">
@@ -88,7 +115,7 @@ function Navigation() {
               <img src="avatar2.jpg" alt="profile" className="w-[35px] h-[35px] rounded-full" />
             </div>
             <div className="flex justify-between gap-3 cursor-pointer relative">
-              <div className="flex items-center w-[80px]">
+              <div className="hidden md:flex items-center w-[80px]">
                 <button
 
                   className="text-[13px] m-0 font-bold"
@@ -99,7 +126,7 @@ function Navigation() {
                   </span>
                 </button>
               </div>
-              <div className="flex items-center">
+              <div className="hidden md:flex items-center">
                 <svg
                   onClick={handleProfile}
                   xmlns="http://www.w3.org/2000/svg"

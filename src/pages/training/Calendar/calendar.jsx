@@ -15,8 +15,8 @@ function CalendarX() {
 
     return (
         <div className="w-full">
-            <Navigation />
-            <div className="h-[calc(100%+192px)] relative flex flex-col oveflow-hidden">
+            {/* <Navigation /> */}
+            <div className="h-screen relative flex flex-col oveflow-hidden">
                 {showEventModal && <EventModal />}
                 <CalendarHeader />
                 <div className="flex flex-1 ">

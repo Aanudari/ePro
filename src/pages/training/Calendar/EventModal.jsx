@@ -89,7 +89,6 @@ export default function EventModal() {
         e.role === '1'
     ))
     const [isShown, setIsShown] = useState(false);
-    console.log(isShown)
     return (
         <div style={{ background: "rgba(0,0,0,0.3)" }} className="h-full w-full absolute left-0 top-0 overflow-hidden">
             {
@@ -106,14 +105,14 @@ export default function EventModal() {
                                 onMouseLeave={() => setIsShown(false)} key={index} className='px-3 py-2 bg-gray-100 hover:bg-gray-400 hover:text-white'>
                                 <span className="ml-2">{item}</span>
                                 {
-                                    isShown && <div className="w-[250px] h-full absolute bg-gray-200 px-3 py-2 left-[250px] top-0">
+                                    isShown && index == 0 ? <div className="w-[250px] h-full absolute bg-gray-200 px-3 py-2 left-[250px] top-0">
                                         1
                                         {/* {
                                             levelOne.map((user, index) => (
                                                 <div key={index} className="h-12">{user}</div>
                                             ))
                                         } */}
-                                    </div>
+                                    </div> : null
                                 }
                             </div>
                         ))}

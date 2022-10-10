@@ -25,10 +25,10 @@ export default function CalendarHeader() {
                 Өнөөдөр
             </button>
             <button onClick={handlePrevMonth} className={'active:bg-gray-300 rounded-full'}>
-                <i className="py-2 px-1 bi bi-caret-left-fill"></i>
+                <i className="py-2 px-1 bi bi-caret-left-fill"/>
             </button>
             <button onClick={handleNextMonth} className={'active:bg-gray-300 rounded-full ml-2'}>
-                <i className="py-2 px-1 bi bi-caret-right-fill"></i>
+                <i className="py-2 px-1 bi bi-caret-right-fill"/>
             </button>
             <h2 className="ml-4 text-xl text-gray-500 font-bold">
                 {dayjs(new Date(dayjs().year(), monthIndex)).format(

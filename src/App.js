@@ -45,7 +45,6 @@ import getWindowDimensions from "./components/SizeDetector";
 import NotValid from "./pages/NotValid";
 import SessionTimeout from "./components/SessionTimeout";
 import Exam from "./pages/userUI/Exam";
-import { Calendar } from "react-calendar";
 import CalendarX from "./pages/training/Calendar/calendar";
 
 
@@ -56,7 +55,7 @@ function App() {
     <BrowserRouter>
       <div className="flex w-full relative">
         {
-          showTop ? 
+          showTop ?
           <div className='fixed w-full h-screen bg-black top-z right-0'></div> : null
         }
         {
@@ -71,7 +70,7 @@ function App() {
             <CheckLogin>
               <Login />
             </CheckLogin>
-          } /> 
+          } />
           <Route
             path="/home"
             element={
@@ -84,7 +83,7 @@ function App() {
           <Route
             path="/exam-form"
             element={
-              // AllowedRoles = Нэвтэрсэн хэрэглэгч бүхэн өөрийн roleid тай байх ба өөрийн roleid ийг зөвшөөрсөн хуудасруу л хандах 
+              // AllowedRoles = Нэвтэрсэн хэрэглэгч бүхэн өөрийн roleid тай байх ба өөрийн roleid ийг зөвшөөрсөн хуудасруу л хандах
               // эрхтэйгээр шийдхийн тулд allowedRoles parameter ийг дамжуулж өгөв.
               <ProtectedRoute allowedRoles={[199]}>
                 <ExamForm />

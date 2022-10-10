@@ -61,7 +61,7 @@ function App() {
         {/* {
           width < 1200 ?  <NotValid/> : null
         } */}
-        {activeMenu && roleId === "199" ? <SideNavigation /> : null}
+        {activeMenu && roleId === "199" && width > 768 ? <SideNavigation /> : null}
         { roleId === '1' || roleId === "2" ? <UINavigation/> : null}
         <Routes>
           {/*Sidebar аас үсрэх боломжтой үндсэн хуудаснууд */}

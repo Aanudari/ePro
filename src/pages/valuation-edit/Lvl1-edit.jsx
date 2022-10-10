@@ -13,7 +13,7 @@ function LeveloneEdit() {
             headers: {
                 "Content-Type": "application/json",
             },
-            url: `http://192.168.10.248:9000/api/User/${location.state.deviceId}`,
+            url: `http://192.168.10.248:9000/v1/User/${location.state.deviceId}`,
         })
             .then(
                 res => {

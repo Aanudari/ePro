@@ -13,7 +13,7 @@ function Notification() {
             headers: {
                 "Content-Type": "application/json",
             },
-            url: `http://192.168.10.248:9000/api/User`,
+            url: `http://192.168.10.248:9000/v1/User`,
         })
             .then(
                 res => setUsers(res.data.result)

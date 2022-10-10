@@ -13,7 +13,7 @@ function PrepareQuestions() {
             headers: {
                 "Content-Type": "application/json",
             },
-            url: "http://192.168.10.248:9000/api/Question",
+            url: "http://192.168.10.248:9000/v1/Question",
         })
             .then(
                 res => {

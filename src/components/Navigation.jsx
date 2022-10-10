@@ -23,7 +23,7 @@ function Navigation() {
       headers: {
         "Content-Type": "application/json",
       },
-      url: `http://192.168.10.248:9000/api/User/${deviceId}`,
+      url: `http://192.168.10.248:9000/v1/User/${deviceId}`,
     })
       .then(
         res => setData(res.data.result)

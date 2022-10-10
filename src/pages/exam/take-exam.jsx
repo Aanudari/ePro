@@ -11,7 +11,7 @@ function TakeExam() {
       headers: {
         "Content-Type": "application/json",
       },
-      url: "http://192.168.10.248:9000/api/Exam",
+      url: "http://192.168.10.248:9000/v1/Exam",
     })
       .then(
         res => {

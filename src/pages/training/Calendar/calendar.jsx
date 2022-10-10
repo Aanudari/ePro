@@ -14,15 +14,17 @@ function CalendarX() {
     }, [monthIndex]);
 
     return (
-        <div className="w-full">
-            {/* <Navigation /> */}
-            <div className="h-screen relative flex flex-col oveflow-hidden">
+        <div className="w-full h-screen bg-gray-50">
+             <Navigation />
+            <div className="h-full px-5 py-3">
+                <div className="w-full h-full bg-white rounded-lg p-4 flex flex-col h-screen relative flex flex-col flex flex-col oveflow-hidden">
                 {showEventModal && <EventModal />}
                 <CalendarHeader />
                 <div className="flex flex-1 ">
                     {/* <Sidebar /> */}
                     <Month month={currenMonth} />
                 </div>
+            </div>
             </div>
         </div>
     );

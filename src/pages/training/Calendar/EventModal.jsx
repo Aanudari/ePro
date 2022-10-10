@@ -128,12 +128,12 @@ export default function EventModal() {
                         <div>
                             {selectedEvent && (
                                 <i onClick={() => {
-                                    dispatchCalEvent({
-                                        type: "delete",
-                                        payload: selectedEvent,
-                                    });
-                                    setShowEventModal(false);
-                                }} className="bi bi-trash-fill text-gray-500 cursor-pointer"></i>
+                        dispatchCalEvent({
+                            type: "delete",
+                            payload: selectedEvent,
+                        });
+                        setShowEventModal(false);
+                    }} className="bi bi-trash-fill text-gray-500 cursor-pointer"/>
 
                             )}
                             <button onClick={() => setShowEventModal(false)}>

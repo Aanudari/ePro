@@ -62,7 +62,7 @@ function Login() {
   }, [alert]);
   return (
     <div className="wrapper">
-      <div className="container flex flex-col items-center">
+      <div className="container flex flex-col items-center justify-end md:justify-start">
         <h1 className="text-white">Сургалт үнэлгээний программ</h1>
         <form className="form">
           <input

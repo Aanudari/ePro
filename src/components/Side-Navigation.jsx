@@ -184,6 +184,19 @@ function SideNavigation() {
                     <h5 className="text-[16px] mt-6 h-6 uppercase text-gray-500 mt-2">Сургалт</h5>
                     <div
                         onClick={() => {
+                            navigate("/calendar");
+                        }}
+                        className={
+                            path == "/dashboard" ?
+                                "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
+                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
+                        }
+                    >
+                        <i className="bi bi-card-checklist"></i>
+                        <span className="ml-1 font-[400]">Календар</span>
+                    </div>
+                    <div
+                        onClick={() => {
                             navigate("/create-training");
                         }}
                         className={
@@ -221,6 +234,7 @@ function SideNavigation() {
                         <i className="bi bi-card-list"></i>
                         <span className="ml-1 font-[400]">Сургалтууд</span>
                     </div>
+
                 </div>
 
                 <div className="card border-primary mb-3 mt-2">

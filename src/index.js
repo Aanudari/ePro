@@ -5,11 +5,15 @@ import reportWebVitals from './reportWebVitals';
 import './styles/index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ContextProvider } from './contexts/ContextProvider';
+import ContextWrapper from './contexts/ContextWrapper';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+    <ContextWrapper>
     <ContextProvider>
         <App />
     </ContextProvider>
+
+    </ContextWrapper>
 );
 reportWebVitals();

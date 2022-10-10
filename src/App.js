@@ -58,9 +58,9 @@ function App() {
           showTop ?
           <div className='fixed w-full h-screen bg-black top-z right-0'></div> : null
         }
-        {
+        {/* {
           width < 1200 ?  <NotValid/> : null
-        }
+        } */}
         {activeMenu && roleId === "199" ? <SideNavigation /> : null}
         { roleId === '1' || roleId === "2" ? <UINavigation/> : null}
         <Routes>

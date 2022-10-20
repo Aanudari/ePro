@@ -13,7 +13,6 @@ root.render(
     <ContextProvider>
         <App />
     </ContextProvider>
-
     </ContextWrapper>
 );
 reportWebVitals();

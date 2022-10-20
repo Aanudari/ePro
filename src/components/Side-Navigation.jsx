@@ -9,7 +9,7 @@ function SideNavigation() {
     let location = useLocation();
     let path = location.pathname
     return (
-        <div className="w-[345px] h-full shadow-cus content relative ">
+        <div id='side' className="h-full shadow-cus content relative ">
             <div className="h-full w-[280px] fixed pl-4 pt-4 pr-4 md:overflow-hidden overflow-auto md:hover:overflow-auto cus-index">
                 <div className="w-full flex justify-start mb-3">
 

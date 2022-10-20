@@ -556,3 +556,8 @@ backdrop-filter: blur(5px);
 #border2:focus {
   border-bottom: 2px solid blue !important;
 }
+
+#side {
+  width: 280px !important;
+  min-width: 280px !important;
+}

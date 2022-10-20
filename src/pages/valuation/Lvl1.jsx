@@ -16,7 +16,7 @@ function Level1() {
       headers: {
         "Content-Type": "application/json",
       },
-      url: `${process.env.REACT_APP_URL}/api/User/role/1`,
+      url: `http://192.168.10.248:9000/v1/User/role/1`,
     })
       .then(
         res => {

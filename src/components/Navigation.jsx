@@ -39,7 +39,7 @@ function Navigation() {
   return (
     <div className="relative cus-index">
       <div className="h-14"></div>
-      <div className={activeMenu ? "h-14 bg-gray-100 w-full md:w-cus fixed top-0 flex justify-between md:px-4 shadow-sm" 
+      <div className={activeMenu ? "h-14 w-full md:w-[calc(100%-250px)] bg-gray-100 fixed top-0 flex justify-between md:px-4 shadow-sm" 
       : " shadow-cus h-14 bg-gray-100 fixed top-0 flex w-full justify-between md:px-4"}>
         <div className="flex items-center md:gap-4">
           <div className="p-2 flex items-center rounded-full m-2 hover:bg-gray-100">

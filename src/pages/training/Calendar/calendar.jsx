@@ -5,6 +5,7 @@ import Month from "./Month";
 import GlobalContext from "../../../contexts/GlobalContext";
 import EventModal from "./EventModal";
 import Navigation from "../../../components/Navigation";
+
 function CalendarX() {
     const [currenMonth, setCurrentMonth] = useState(getMonth());
     const { monthIndex, showEventModal } = useContext(GlobalContext);
@@ -14,18 +15,16 @@ function CalendarX() {
     }, [monthIndex]);
 
     return (
-        <div className="w-full h-screen bg-gray-50">
-             <Navigation />
-            <div className="h-full px-5 py-3">
-                <div className="w-full h-full bg-white rounded-lg p-4 flex flex-col h-screen relative flex flex-col flex flex-col oveflow-hidden">
-                {showEventModal && <EventModal />}
-                <CalendarHeader />
-                <div className="flex flex-1 ">
-                    {/* <Sidebar /> */}
-                    <Month month={currenMonth} />
-                </div>
+        <div className="w-full">
+            <Navigation/>
+        <div className="w-full h-screen bg-white rounded-lg p-4 flex flex-col h-screen relative flex flex-col flex flex-col oveflow-hidden">
+            {showEventModal && <EventModal />}
+            <CalendarHeader />
+            <div className="flex flex-1 ">
+                {/* <Sidebar /> */}
+                <Month month={currenMonth} />
             </div>
-            </div>
+        </div>
         </div>
     );
 }

@@ -7,6 +7,9 @@ table, th, td {
   overflow: hidden;
 }
 
+a {
+  text-decoration: none !important;
+}
 
 .box select {
   background-color: #0563af;

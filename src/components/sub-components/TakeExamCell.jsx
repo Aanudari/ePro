@@ -1,38 +1,42 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import { useStateContext } from '../../contexts/ContextProvider';
 function TakeExamCell(data) {
     const navigate = useNavigate()
+    const { readyCheck, setReadyCheck, setExamID } = useStateContext();
     return (
-        <div onClick={() => {
-            navigate('/exam')
-        }} className='relative w-full shadow py-3 px-3 cellt font-[400] flex justify-between'>
-            <div className='font-[400] flex flex-col'>
-                <div>
-                    <span className='font-[500]'>Шалгалтын нэр:</span> {data.data.name}
-                </div>
-                <div>
-                    <span className='font-[500]'>Огноо:</span> {data.data.createdDate}
-                </div>
-            </div>
-            <div className='font-[400] flex flex-col gap-2'>
-                <div>
-                    <span className='font-[500]'>Эхлэх цаг:</span> 	{data.data.openDate}
-                </div>
-                <div>
-                    <span className='font-[500]'>Хаах цаг:</span> {data.data.closedDate}
-                </div>
+        <tbody className="divide-y divide-gray-200 hover:bg-gray-200">
+            <tr>
+                <td className="px-6 py-4 text-sm font-medium text-gray-800 whitespace-nowrap">
+                    {data.data.id}
+                </td>
+                <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
+                    {data.data.name}
+                </td>
+                <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
+                    {data.data.startDate}
+                </td>
+                <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
+                    {data.data.expireDate}
+                </td>
+                <td className="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
+                    {data.data.duration} мин
+                </td>
+                <td  className="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
+                    <span
+                    onClick={() => {
+                        setReadyCheck(!readyCheck)
+                        setExamID(data.data.id)
+                    }}
+                        className="text-green-500 hover:text-green-700"
+                        href="#"
+                    >
+                        Эхлэх
+                    </span>
+                </td>
+            </tr>
 
-            </div>
-            <div className='font-[400] flex flex-col justify-start gap-2'>
-                <div>
-                    <span className='font-[500]'>Үргэлжлэх хугацаа:</span> {data.data.duration}
-                </div>
-                <div>
-                    <span className='font-[500]'>Үүсгэсэн ажилтан:</span> 	Чулуунцэцэг Нямдорж
-                </div>
-            </div>
-        </div>
+        </tbody>
     );
 }
 

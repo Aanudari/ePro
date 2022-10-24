@@ -237,12 +237,12 @@ export default function EventModal() {
                         ))}
                     </div>
                     <button
-                        // type="submit"
-                        // onClick={handleSubmit}
-                        onClick={(e) => {
-                            e.preventDefault()
-                            setShowUserMenu(!showUserMenu)
-                        }}
+                        type="submit"
+                        onClick={handleSubmit}
+                        // onClick={(e) => {
+                        //     e.preventDefault()
+                        //     setShowUserMenu(!showUserMenu)
+                        // }}
                         className="bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded text-white"
                     >
                         Мэдэгдэл илгээх

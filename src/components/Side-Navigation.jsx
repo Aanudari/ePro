@@ -21,7 +21,7 @@ function SideNavigation() {
                         roleId === "199" ?
                             <div onClick={() => { navigate("/exam-form"); }} className={path == "/exam-form" ?
                                 "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
-                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "}>
+                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "}>
                                 <i className="bi bi-book"></i>
                                 <span className="ml-1 font-[400]">  Шалгалтын форм үүсгэх</span>
                             </div> : null
@@ -34,7 +34,7 @@ function SideNavigation() {
                         className={
                             path == "/take-exam" ?
                                 "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
-                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
+                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
                         }
                     >
                         <i className="bi bi-bookmark-check"></i>
@@ -47,7 +47,7 @@ function SideNavigation() {
                         className={
                             path == "/exam-result" ?
                                 "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
-                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
+                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md  transition"
                         }
                     >
                         <i className="bi bi-bookmark-star"></i>
@@ -65,7 +65,7 @@ function SideNavigation() {
                         className={
                             path == "/dashboard" ?
                                 "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
-                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
+                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
                         }
                     >
                         <i className="bi bi-card-checklist"></i>
@@ -78,7 +78,7 @@ function SideNavigation() {
                         className={
                             path == "/level-one" ?
                                 "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
-                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
+                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
                         }
                     >
                         <i className="bi bi-1-square"></i>
@@ -92,7 +92,7 @@ function SideNavigation() {
                         className={
                             path == "/complain" ?
                                 "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
-                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
+                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
                         }
                     >
                         <i className="bi bi-bag"></i>
@@ -106,7 +106,7 @@ function SideNavigation() {
                         className={
                             path == "/telesales" ?
                                 "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
-                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
+                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
                         }
                     >
                         <i className="bi bi-bag"></i>
@@ -119,7 +119,7 @@ function SideNavigation() {
                         className={
                             path == "/online" ?
                                 "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
-                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
+                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
                         }
                     >
                         <i className="bi bi-bag"></i>
@@ -132,7 +132,7 @@ function SideNavigation() {
                         className={
                             path == "/branch" ?
                                 "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
-                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
+                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
                         }
                     >
                         <i className="bi bi-bag"></i>
@@ -145,7 +145,7 @@ function SideNavigation() {
                         className={
                             path == "/installer" ?
                                 "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
-                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
+                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
                         }
                     >
                         <i className="bi bi-bag"></i>
@@ -158,7 +158,7 @@ function SideNavigation() {
                         className={
                             path == "/care" ?
                                 "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
-                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
+                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
                         }
                     >
                         <i className="bi bi-bag"></i>
@@ -171,7 +171,7 @@ function SideNavigation() {
                         className={
                             path == "/bank" ?
                                 "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
-                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
+                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
                         }
                     >
                         <i className="bi bi-bank"></i>
@@ -189,7 +189,7 @@ function SideNavigation() {
                         className={
                             path == "/dashboard" ?
                                 "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
-                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
+                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
                         }
                     >
                         <i className="bi bi-card-checklist"></i>
@@ -202,7 +202,7 @@ function SideNavigation() {
                         className={
                             path == "/create-training" ?
                                 "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
-                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
+                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
                         }
                     >
                         <i className="bi bi-folder2-open"></i>
@@ -215,7 +215,7 @@ function SideNavigation() {
                         className={
                             path == "/took-training" ?
                                 "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
-                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
+                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
                         }
                     >
                         <i className="bi bi-hand-thumbs-up"></i>
@@ -228,7 +228,7 @@ function SideNavigation() {
                         className={
                             path == "/trainings" ?
                                 "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold" :
-                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md "
+                                "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
                         }
                     >
                         <i className="bi bi-card-list"></i>

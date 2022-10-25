@@ -12,8 +12,8 @@ export default function MyTimer({ expiryTimestamp }) {
 
   return (
     <div>
-      <div style={{fontSize: '16px'}}>
-        <span>{days}</span>:<span>{hours}</span>:<span>{minutes}</span>:<span>{seconds}</span>
+      <div style={{fontSize: '45px', color: "white"}}>
+        <span>{minutes}</span>:<span>{seconds}</span>
       </div>
     </div>
   );

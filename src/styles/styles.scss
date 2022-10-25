@@ -3,6 +3,22 @@
 $font: "Be Vietnam Pro", sans-serif;
 $color: #1f8197;
 
+.bg-cus {
+  background: linear-gradient(
+    62deg,
+    rgb(43, 54, 71),
+    rgb(23, 92, 101) 41%,
+    rgba(11, 38, 50, 1) 85%
+  );
+}
+
+.btn-cus {
+  background: linear-gradient(
+    251deg,
+    #00b8ff52 -53%,
+    rgba(255, 255, 255, 0) 65%
+  );
+}
 
 .body {
   padding: 0 10vh;

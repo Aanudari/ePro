@@ -3,24 +3,11 @@ import React, {
   useState,
   useEffect
 } from "react";
-import { useLocation } from "react-router-dom";
+import MyTimer from "../../components/Timer";
 import gsap from "gsap";
 import axios from "axios";
 import { useStateContext } from "../../contexts/ContextProvider";
-// const questions = [
-//   {
-//     id: 0,
-//     text: "What does CSS stand for?",
-//     answers: [
-//       "Computer Style Sheets",
-//       "Cascading Style Sheets",
-//       "Creative Style Sheets",
-//       "Colorful Style Sheets"
-//     ],
-//     correct: 1,
-//     selection: null
-//   },
-
+import getWindowDimensions from "../../components/SizeDetector";
 
 function useCounter(initialState) {
   const [value, setValue] = useState(initialState);
@@ -31,18 +18,14 @@ function useCounter(initialState) {
   return { value, add, reset };
 }
 
+
 function Question({
   data,
-  buttonText,
-  hasButton = true,
-  onQuestionButtonClick,
-  showAnswer = false,
-  markSelection = null
 }) {
   const [answer, setAnswer] = useState(null);
+  console.log(answer)
   const parseValue = (value) => (value ? parseInt(value.split("-")[1]) : null);
   const questionRef = useRef(null);
-
   useEffect(() => {
     gsap.fromTo(
       questionRef.current.querySelector(".question-text"),
@@ -70,7 +53,6 @@ function Question({
       }
     );
   }, [data]);
-  console.log(data)
   return (
     <div className="question" ref={questionRef}>
       <div className="question-inner">
@@ -80,24 +62,18 @@ function Question({
             const value = `q${data.id}-${index}`;
             return (
               <li
-              key={index}
-                // className={
-                //   index === data.correct && showAnswer ? "is-true" : ""
-                // }
-                data-selected={markSelection === index ? true : null}
-                
+                key={index}
               >
                 <input
                   type="radio"
-                  name={`q_${data.id}`}
-                  value={text.isTrue}
+                  name={text.id}
+                  value={value}
                   id={value}
-                  onChange={(e) => setAnswer(e.target.value)}
-                  // onClick={(e) => {
-                  //   console.log(e.target.value)
-                  // }}
+                  onChange={(e) => {
+                    setAnswer(e.target.value)
+                  }}
                   checked={
-                    !showAnswer ? answer === value : markSelection === index
+                    value === answer
                   }
                 />
                 <label className="question-answer" htmlFor={value}>
@@ -105,18 +81,9 @@ function Question({
                 </label>
               </li>
             );
-})}
+          })}
         </ul>
       </div>
-      {hasButton && (
-        <button
-          className="question-button"
-          onClick={() => onQuestionButtonClick(parseValue(answer), data)}
-        >
-          {buttonText}
-        </button>
-      )}
-
     </div>
   );
 }
@@ -189,7 +156,7 @@ function Results({ wrong, correct, empty }) {
   );
 }
 
-function QuestionCorrection() {
+function QuestionCorrection({gameFinished, setGameFinished}) {
   var data = sessionStorage.getItem("exam_data");
   var obj = JSON.parse(data)
   return (
@@ -198,19 +165,30 @@ function QuestionCorrection() {
         return (
           <Question
             key={index}
-            hasButton={false}
+            hasButton={true}
             showAnswer={true}
             data={question}
           />
         );
       })}
+      <div className="w-full">
+        <button
+          className="question-button w-full shadow"
+          onClick={() => {
+            setGameFinished(!gameFinished)
+          }}
+        >
+          Дуусгах
+        </button>
+      </div>
+
     </div>
   );
 }
 
 export default function ExamInit() {
-  // const [questions, setquestions] = useState([]);
-  const { TOKEN, examID, qlength, setQlength } = useStateContext();
+  const { TOKEN, examID, qlength, setQlength, error, setError } = useStateContext();
+  const examId = sessionStorage.getItem("exam_id")
   useEffect(() => {
     axios({
       method: "get",
@@ -218,7 +196,7 @@ export default function ExamInit() {
         "Content-Type": "application/json",
         'Authorization': `${TOKEN}`
       },
-      url: `http://192.168.10.248:9000/v1/Exam/Question/${examID}`,
+      url: `http://192.168.10.248:9000/v1/Exam/Question/${examId}`,
     })
       .then(
         res => {
@@ -226,63 +204,21 @@ export default function ExamInit() {
           setQlength(res.data.variantInfo.questionList.length)
         }
       )
-      .catch(err => console.log('err'))
-  }, [examID])
+      .catch(err => setError(true))
+  }, [examId])
+  const { width } = getWindowDimensions();
   var data = sessionStorage.getItem("exam_data");
   var questions = JSON.parse(data)
   const [gameStarted, setGameStarted] = useState(false);
   const [gameFinished, setGameFinished] = useState(false);
-  const [gameSize, setGameSize] = useState({});
-  const totalQuestion = questions.questionList.length ;
+  const totalQuestion = questions ? questions.questionList.length : 0;
   const gameRef = useRef(null);
-  const gameOverlayRef = useRef(null);
-  const location = useLocation();
   const question = useCounter(0);
   const correct = useCounter(0);
   const wrong = useCounter(0);
   const empty = useCounter(0);
-
-  const handleNewQuestionClick = (selectedValue, currQuestion) => {
-    console.log("cell clicked")
-    if (totalQuestion >= question.value) {
-      if (selectedValue === currQuestion.correct) {
-        correct.add();
-      } else if (
-        selectedValue !== null &&
-        selectedValue !== currQuestion.correct
-      ) {
-        wrong.add();
-      } else {
-        empty.add();
-      }
-      questions[currQuestion.id].selection = selectedValue;
-      question.add();
-    }
-  };
-
-  const resetSelection = () => {
-    questions.forEach((q) => (q.selection = null));
-  };
-
-  const handleRestartClick = () => {
-    setGameFinished(false);
-    setGameStarted(false);
-    resetSelection();
-    question.reset();
-    correct.reset();
-    wrong.reset();
-    empty.reset();
-  };
-
-  const indicatorBg = (index) => {
-    if (question.value > index) {
-      return "#fff";
-    } else if (question.value === index) {
-      return "#29b5d5";
-    } else {
-      return "rgba(255,255,255,.2)";
-    }
-  };
+  const time = new Date();
+  time.setMinutes(time.getMinutes() + 10);
 
   useEffect(() => {
     if (gameStarted) {
@@ -298,21 +234,55 @@ export default function ExamInit() {
     }
   }, [question.value]);
 
+  const handleNewQuestionClick = (selectedValue, currQuestion) => {
+    console.log(selectedValue)
+    // if (totalQuestion >= question.value) {
+    //   if (selectedValue === currQuestion.correct) {
+    //     correct.add();
+    //   } else if (
+    //     selectedValue !== null &&
+    //     selectedValue !== currQuestion.correct
+    //   ) {
+    //     wrong.add();
+    //   } else {
+    //     empty.add();
+    //   }
+    //   questions[currQuestion.id].selection = selectedValue;
+    //   question.add();
+    // }
+  };
+
   return (
-    <div className="body">
+    <div className="body flex-col">
+      {
+        width < 765 && gameStarted ?
+          <div className="w-full flex justify-center mb-2">
+            <MyTimer expiryTimestamp={time} />
+          </div> : null
+      }
       <div
         className="game"
         ref={gameRef}
         data-game-started={gameStarted ? true : null}
         data-game-finished={question.value > totalQuestion ? true : null}
       >
+
+
         <div className="intro">
           <div className="intro-inner">
-            <h1 className="intro-title">Шалгалт</h1>
+            <h1 className="intro-title">
+
+              {
+                width > 765 && gameStarted ?
+                  <div className="w-full flex justify-center mb-2">
+                    <MyTimer expiryTimestamp={time} />
+                  </div> : null
+              }
+            </h1>
             {!gameStarted && (
               <>
                 <p className="intro-desc">
-                  {`Нийт ${qlength} асуулт мөн цагын хязгаар байхгүй.`}
+                  {`Нийт асуулт: ${qlength} , Хугацаа: ${10} мин`}
                 </p>
                 <button
                   className="intro-button"
@@ -322,53 +292,13 @@ export default function ExamInit() {
                 </button>
               </>
             )}
-            {gameStarted && (
-              <div className="indicator">
-                {questions.questionList.map((q, index) => {
-                  return (
-                    <span
-                    key={index}
-                      className="indicator-item"
-                      style={{
-                        backgroundColor: indicatorBg(index)
-                      }}
-                    />
-                  );
-                })}
-              </div>
-            )}
-
-              <div>
-                <Results
-                  wrong={wrong.value}
-                  correct={correct.value}
-                  empty={empty.value}
-                />
-                <button
-                  className="restart-button"
-                  onClick={() => handleRestartClick()}
-                >
-                  Шинээр эхлүүлэх
-                </button>
-              </div>
-            
-
           </div>
         </div>
+
         <div className="game-area">
-          {questions[question.value] && (
-            <Question
-              data={questions[question.value]}
-              buttonText={
-                question.value !== totalQuestion ? "Дараагын асуулт" : "Дуусгах"
-              }
-              onQuestionButtonClick={handleNewQuestionClick}
-              // onClick={handleNewQuestionClick}
-            />
-          )}
-          {!questions[question.value] && (
+          {questions && (
             <>
-              <QuestionCorrection data={questions} />
+              <QuestionCorrection func={[gameFinished, setGameFinished]} data={questions} onQuestionButtonClick={handleNewQuestionClick} />
             </>
           )}
         </div>

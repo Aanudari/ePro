@@ -51,11 +51,15 @@ import ExamInit from "./pages/userUI/ExamInit";
 
 
 function App() {
-  const { activeMenu, showTop, roleId } = useStateContext();
+  const { activeMenu, showTop, roleId, error, setError } = useStateContext();
   const { width } = getWindowDimensions()
   return (
     <BrowserRouter>
       <div className="flex w-full relative">
+        {
+          error && 
+          <NotValid/>
+        }
         {
           showTop ?
           <div className='fixed w-full h-screen bg-black top-z right-0'></div> : null

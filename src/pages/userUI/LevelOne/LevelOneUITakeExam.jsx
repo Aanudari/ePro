@@ -27,22 +27,6 @@ function LevelOneUITakeExam() {
             )
             .catch(err => console.log(err))
     }, [])
-    // useEffect(() => {
-    //     axios({
-    //         method: "get",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //             'Authorization': `${TOKEN}`
-    //         },
-    //         url: `http://192.168.10.248:9000/v1/Exam/Question/${examID}`,
-    //     })
-    //         .then(
-    //             res => {
-    //                 setquestions(res.data.variantInfo)
-    //             }
-    //         )
-    //         .catch(err => console.log(err))
-    // }, [examID])
     return (
         <UserLayout>
             <div className='flex h-screen '>

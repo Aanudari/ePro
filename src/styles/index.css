@@ -561,3 +561,69 @@ backdrop-filter: blur(5px);
   width: 280px !important;
   min-width: 280px !important;
 }
+
+.hover {
+  --c: 16 149 193; /* the color using the RGB format */
+
+  color: rgb(255 255 255 / var(--_i, 0));
+  background:
+    /* Gradient #1 */
+    linear-gradient(90deg, #fff 50%, rgb(var(--c)) 0) calc(100% - var(--_i, 0) * 100%) / 200%,
+    /* Gradient #2 */
+    linear-gradient(rgb(var(--c)) 0 0) 0% 100% / calc(var(--_i, 0) * 100%) no-repeat,
+    /* Background Color */
+    rgb(var(--c)/ var(--_i, 0));
+  -webkit-background-clip: text, padding-box, padding-box;
+          background-clip: text, padding-box, padding-box;
+  --_t: calc(var(--_i,0)*.5s);
+  transition: 
+    var(--_t),
+    color calc(.2s - var(--_t)) var(--_t),
+    background-color calc(.2s - var(--_t)) var(--_t);
+}
+.hover:hover {
+  --_i: 1;
+}
+
+@import 'https://fonts.googleapis.com/css?family=Roboto';
+.side-menu {
+  font-family: 'Roboto', sans-serif;
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 60px;
+  list-style-type: none;
+  background: #f32c52;
+  overflow: hidden;
+  transition: width .3s;
+}
+
+.side-menu:hover {
+  width: 300px;
+}
+
+.side-menu li {
+  width: 300px;
+}
+
+.side-menu li span {
+  font-size: 1rem;
+  margin: 20px 30px 0 22px;
+}
+
+.side-menu li a {
+  display: block;
+  font-size: .9rem;
+  text-decoration: none;
+  color: #FFF;
+  height: 60px;
+}
+
+.side-menu li a:hover,
+.side-menu li:first-child a {
+  background: #14081d;
+  display: block;
+}

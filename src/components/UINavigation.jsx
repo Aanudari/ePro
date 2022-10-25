@@ -1,110 +1,168 @@
-import React from 'react';
-import $ from 'jquery';
-import { useNavigate } from 'react-router-dom';
-import { useStateContext } from '../contexts/ContextProvider';
+import { Fragment, useState } from 'react'
+import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { useNavigate, useLocation } from 'react-router-dom'
 
-function UINavigation() {
-    const navigate = useNavigate();
-    const { setUiStatus } = useStateContext();
-    function test() {
-        var tabsNewAnim = $('#navbarSupportedContent');
-        var selectorNewAnim = $('#navbarSupportedContent').find('li').length;
-        var activeItemNewAnim = tabsNewAnim.find('.active');
-        var activeWidthNewAnimHeight = activeItemNewAnim.innerHeight();
-        var activeWidthNewAnimWidth = activeItemNewAnim.innerWidth();
-        var itemPosNewAnimTop = activeItemNewAnim.position();
-        var itemPosNewAnimLeft = activeItemNewAnim.position();
-        $(".hori-selector").css({
-            "top": itemPosNewAnimTop.top + "px",
-            "left": itemPosNewAnimLeft.left + "px",
-            "height": activeWidthNewAnimHeight + "px",
-            "width": activeWidthNewAnimWidth + "px"
-        });
-        $("#navbarSupportedContent").on("click", "li", function (e) {
-            $('#navbarSupportedContent ul li').removeClass("active");
-            $(this).addClass('active');
-            var activeWidthNewAnimHeight = $(this).innerHeight();
-            var activeWidthNewAnimWidth = $(this).innerWidth();
-            var itemPosNewAnimTop = $(this).position();
-            var itemPosNewAnimLeft = $(this).position();
-            $(".hori-selector").css({
-                "top": itemPosNewAnimTop.top + "px",
-                "left": itemPosNewAnimLeft.left + "px",
-                "height": activeWidthNewAnimHeight + "px",
-                "width": activeWidthNewAnimWidth + "px"
-            });
-        });
-    }
-    $(document).ready(function () {
-        setTimeout(function () { test(); });
-    });
-    $(window).on('resize', function () {
-        setTimeout(function () { test(); }, 500);
-    });
-    $(".navbar-toggler").click(function () {
-        $(".navbar-collapse").slideToggle(300);
-        setTimeout(function () { test(); });
-    });
-    const logout = () => {
-        localStorage.clear();
-        navigate("/");
-        window.location.reload();
-    };
-    return (
-        <div className='fixed w-full'>
-            <nav className=" navbar navbar-expand-custom navbar-mainbg px-5">
-                <button className="navbar-toggler" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <i className="fas fa-bars text-white"></i>
-                </button>
-                <div className="collapse navbar-collapse px-10" id="navbarSupportedContent">
-                    <ul className="navbar-nav ml-auto">
-                        <div className="hori-selector"><div className="left"></div><div className="right"></div></div>
-                        <li className="nav-item active">
-                            <a onClick={() => {
-                                setUiStatus('1')
-                                navigate('/levelone-ui')
-                            }} className="nav-link" id="javascript:void(0);">
-                                <i className="bi bi-activity"></i>
-                                Үнэлгээ
-                            </a>
-                        </li>
-                        <li className="nav-item ">
-                            <a onClick={() => {
-                                setUiStatus('2')
-                                navigate('/levelone-ui-take-exam')
-                            }} className="nav-link" id="javascript:void(0);"><i className="far fa-clone"></i>Шалгалт өгөх</a>
-                        </li>
-                        <li className="nav-item">
-                            <a onClick={() => {
-                                setUiStatus('3')
-                                navigate('/levelone-ui-exam-result')
-                            }} className="nav-link" id="javascript:void(0);"><i className="far fa-calendar-alt"></i>Шалгалтын дүн</a>
-                        </li>
-                        <li className="nav-item">
-                            <a onClick={() => {
-                                setUiStatus('3')
-                                navigate('/ui-training')
-                            }} className="nav-link" id="javascript:void(0);"><i className="far fa-calendar-alt"></i>Сургалт</a>
-                        </li>
-                        <li className="nav-item">
-                            <a onClick={() => {
-                                setUiStatus('4')
-                                navigate('/levelone-ui-notification')
-                            }} className="nav-link" id="javascript:void(0);"><i className="far fa-copy"></i>Мэдэгдэл</a>
-                        </li>
-                    </ul>
-                </div>
+const navigation = [
+  { name: 'Dashboard', href: '/'},
+  { name: 'Шалгалт', href: '/levelone-ui-take-exam' },
+  { name: 'Сургалт', href: '/' },
+  { name: 'Календар', href: '/' },
+]
 
-                <div onClick={logout} className='font-[500] text-white cursor-pointer hover:border-b-[2px] flex items-center gap-1'>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-box-arrow-left" viewBox="0 0 16 16">
-                        <path fillRule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z" />
-                        <path fillRule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z" />
-                    </svg>
-                    Гарах</div>
-            </nav>
-        </div>
-
-    );
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ')
 }
 
-export default UINavigation;
+export default function UINavigation() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const logout = () => {
+    localStorage.clear();
+    navigate("/");
+    window.location.reload();
+  };
+  return (
+    <Disclosure as="nav" className="bg-gray-800">
+      {({ open }) => (
+        <>
+          <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+            <div className="relative flex h-16 items-center justify-between">
+              <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
+                {/* Mobile menu button*/}
+                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                  <span className="sr-only">Open main menu</span>
+                  {open ? (
+                    // <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
+                    <i className="bi bi-box-arrow-up-left"></i>
+                  ) : (
+                    <i className="bi bi-list"></i>
+                  )}
+                </Disclosure.Button>
+              </div>
+              <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+                <div className="flex flex-shrink-0 items-center">
+                  <img
+                    className="block h-8 w-auto lg:hidden"
+                    src="ddish_logo.631bd794.svg"
+                    alt="Your Company"
+                  />
+                  <img
+                    className="hidden h-8 w-auto lg:block"
+                    src="ddish_logo.631bd794.svg"
+                    alt="Your Company"
+                  />
+                </div>
+                <div className="hidden sm:ml-6 sm:block">
+                  <div className="flex space-x-4">
+                    {navigation.map((item, index) => (
+                      <a
+                        key={item.name}
+                        onClick={()=>{
+                          navigate(`${item.href}`)
+                        }}
+                        className={classNames(
+                          location.pathname === item.href ? 'bg-gray-900 text-white cursor-pointer' : 'text-gray-300 hover:bg-gray-700 hover:text-white cursor-pointer',
+                          'px-3 py-2 rounded-md text-sm font-medium cursor-pointer'
+                        )}
+                        aria-current={item.current ? 'page' : undefined}
+                      >
+                        {item.name}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                <button
+                  type="button"
+                  className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                >
+                  <span className="sr-only">View notifications</span>
+                  <i className="bi bi-bell text-white"></i>
+                </button>
+
+                {/* Profile dropdown */}
+                <Menu as="div" className="relative ml-3">
+                  <div>
+                    <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                      <span className="sr-only">Open user menu</span>
+                      <img
+                        className="h-10 w-10 rounded-full"
+                        src="user2.png"
+                        alt=""
+                      />
+                    </Menu.Button>
+                  </div>
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
+                            href="#"
+                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                          >
+                            Цэс 1
+                          </a>
+                        )}
+                      </Menu.Item>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
+                            href="#"
+                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                          >
+                            Цэс 2
+                          </a>
+                        )}
+                      </Menu.Item>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
+                          onClick={() => {
+                            logout()
+                        }}
+                            href="#"
+                            className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
+                          >
+                            Гарах
+                          </a>
+                        )}
+                      </Menu.Item>
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
+              </div>
+            </div>
+          </div>
+
+          <Disclosure.Panel className="sm:hidden">
+            <div className="space-y-1 px-2 pt-2 pb-3">
+              {navigation.map((item) => (
+                <Disclosure.Button
+                  key={item.name}
+                  as="a"
+                  href={item.href}
+                  className={classNames(
+                    item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                    'block px-3 py-2 rounded-md text-base font-medium'
+                  )}
+                  aria-current={item.current ? 'page' : undefined}
+                >
+                  {item.name}
+                </Disclosure.Button>
+              ))}
+            </div>
+          </Disclosure.Panel>
+        </>
+      )}
+    </Disclosure>
+  )
+}

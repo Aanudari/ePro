@@ -46,6 +46,8 @@ import NotValid from "./pages/NotValid";
 import SessionTimeout from "./components/SessionTimeout";
 import Exam from "./pages/userUI/Exam";
 import CalendarX from "./pages/training/Calendar/calendar";
+import InterActiveMenu from "./components/InterActiveMenu";
+import ExamInit from "./pages/userUI/ExamInit";
 
 
 function App() {
@@ -58,11 +60,7 @@ function App() {
           showTop ?
           <div className='fixed w-full h-screen bg-black top-z right-0'></div> : null
         }
-        {/* {
-          width < 1200 ?  <NotValid/> : null
-        } */}
         {activeMenu && roleId === "199" && width > 768 ? <SideNavigation /> : null}
-        { roleId === '1' || roleId === "2" ? <UINavigation/> : null}
         <Routes>
           {/*Sidebar аас үсрэх боломжтой үндсэн хуудаснууд */}
           <Route path="/" element={
@@ -359,6 +357,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199]}>
                 <CalendarX/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/exam-init"
+            element={
+              <ProtectedRoute allowedRoles={[199, 1]}>
+                <ExamInit/>
               </ProtectedRoute>
             }
           />

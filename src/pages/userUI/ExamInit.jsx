@@ -20,78 +20,7 @@ import { useStateContext } from "../../contexts/ContextProvider";
 //     correct: 1,
 //     selection: null
 //   },
-//   {
-//     id: 1,
-//     text:
-//       "The property in CSS used to change the background color of an element is?",
-//     answers: ["bgcolor", "color", "background-color", "All of the above"],
-//     correct: 2,
-//     selection: null
-//   },
-//   {
-//     id: 2,
-//     text: "The property in CSS used to change the text color of an element is?",
-//     answers: ["bgcolor", "color", "background-color", "All of the above"],
-//     correct: 1,
-//     selection: null
-//   },
-//   {
-//     id: 3,
-//     text: "The CSS property used to control the element's font size is?",
-//     answers: ["text-style", "font-style", "text-size", "font-size"],
-//     correct: 3,
-//     selection: null
-//   },
-//   {
-//     id: 4,
-//     text: "The HTML attribute used to define the inline styles is?",
-//     answers: ["style", "inline", "class", "None of the above"],
-//     correct: 0,
-//     selection: null
-//   },
-//   {
-//     id: 5,
-//     text: "Are the negative values allowed in padding property?",
-//     answers: ["Yes", "No", "It depends on HTML", "None of the above"],
-//     correct: 1,
-//     selection: null
-//   },
-//   {
-//     id: 6,
-//     text:
-//       "The CSS property used to specify whether the text is written in the horizontal or vertical direction?",
-//     answers: ["word-break", "text-transform", "writing-mode", "text-direction"],
-//     correct: 2,
-//     selection: null
-//   },
-//   {
-//     id: 7,
-//     text: "Which selector is used to specify a style for one unique element?",
-//     answers: ["class", "attribute", "text", "id"],
-//     correct: 3,
-//     selection: null
-//   },
-//   {
-//     id: 8,
-//     text:
-//       "Which of the following is the correct syntax to select the p siblings of a div element?",
-//     answers: ["p", "div + p", "div p", "div ~ p"],
-//     correct: 3,
-//     selection: null
-//   },
-//   {
-//     id: 9,
-//     text: "How can you add a comment in a CSS file?",
-//     answers: [
-//       "/* this is a comment */",
-//       "// this is a comment",
-//       "<!-- this is a comment -->",
-//       "** this is a comment **"
-//     ],
-//     correct: 0,
-//     selection: null
-//   }
-// ];
+
 
 function useCounter(initialState) {
   const [value, setValue] = useState(initialState);
@@ -141,38 +70,42 @@ function Question({
       }
     );
   }, [data]);
-console.log(data);
+  console.log(data)
   return (
     <div className="question" ref={questionRef}>
       <div className="question-inner">
         <h2 className="question-text">{data.question}</h2>
         <ul className="question-answers">
-          {/* {data.answerList.map((text, index) => {
+          {data && data.answerList.map((text, index) => {
             const value = `q${data.id}-${index}`;
             return (
               <li
               key={index}
-                className={
-                  index === data.correct && showAnswer ? "is-true" : ""
-                }
+                // className={
+                //   index === data.correct && showAnswer ? "is-true" : ""
+                // }
                 data-selected={markSelection === index ? true : null}
+                
               >
                 <input
                   type="radio"
                   name={`q_${data.id}`}
-                  value={value}
+                  value={text.isTrue}
                   id={value}
                   onChange={(e) => setAnswer(e.target.value)}
+                  // onClick={(e) => {
+                  //   console.log(e.target.value)
+                  // }}
                   checked={
                     !showAnswer ? answer === value : markSelection === index
                   }
                 />
                 <label className="question-answer" htmlFor={value}>
-                  {text}
+                  {text.answer}
                 </label>
               </li>
             );
-          })} */}
+})}
         </ul>
       </div>
       {hasButton && (
@@ -208,7 +141,7 @@ function Results({ wrong, correct, empty }) {
             <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
             <path d="M22 4L12 14.01 9 11.01"></path>
           </svg>
-          CORRECT
+          ЗӨВ
         </span>
       </div>
       <div className="result-item is-wrong">
@@ -229,7 +162,7 @@ function Results({ wrong, correct, empty }) {
             <path d="M15 9L9 15"></path>
             <path d="M9 9L15 15"></path>
           </svg>
-          WRONG
+          БУРУУ
         </span>
       </div>
       <div className="result-item is-empty">
@@ -249,7 +182,7 @@ function Results({ wrong, correct, empty }) {
             <circle cx="12" cy="12" r="10"></circle>
             <path d="M8 12L16 12"></path>
           </svg>
-          EMPTY
+          ХООСОН
         </span>
       </div>
     </div>
@@ -261,10 +194,10 @@ function QuestionCorrection() {
   var obj = JSON.parse(data)
   return (
     <div className="correction">
-      {obj.questionList.map((question, index) => {
+      {obj && obj.questionList.map((question, index) => {
         return (
           <Question
-          key={index}
+            key={index}
             hasButton={false}
             showAnswer={true}
             data={question}
@@ -276,28 +209,31 @@ function QuestionCorrection() {
 }
 
 export default function ExamInit() {
-  const [questions, setquestions] = useState([]);
-  const {TOKEN, examID} = useStateContext();
+  // const [questions, setquestions] = useState([]);
+  const { TOKEN, examID, qlength, setQlength } = useStateContext();
   useEffect(() => {
     axios({
-        method: "get",
-        headers: {
-            "Content-Type": "application/json",
-            'Authorization': `${TOKEN}`
-        },
-        url: `http://192.168.10.248:9000/v1/Exam/Question/${examID}`,
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': `${TOKEN}`
+      },
+      url: `http://192.168.10.248:9000/v1/Exam/Question/${examID}`,
     })
-        .then(
-            res => {
-              sessionStorage.setItem("exam_data", JSON.stringify(res.data.variantInfo)); 
-            }
-        )
-        .catch(err => console.log(err))
-}, [examID])
+      .then(
+        res => {
+          sessionStorage.setItem("exam_data", JSON.stringify(res.data.variantInfo));
+          setQlength(res.data.variantInfo.questionList.length)
+        }
+      )
+      .catch(err => console.log('err'))
+  }, [examID])
+  var data = sessionStorage.getItem("exam_data");
+  var questions = JSON.parse(data)
   const [gameStarted, setGameStarted] = useState(false);
   const [gameFinished, setGameFinished] = useState(false);
   const [gameSize, setGameSize] = useState({});
-  const totalQuestion = questions.length - 1;
+  const totalQuestion = questions.questionList.length ;
   const gameRef = useRef(null);
   const gameOverlayRef = useRef(null);
   const location = useLocation();
@@ -307,6 +243,7 @@ export default function ExamInit() {
   const empty = useCounter(0);
 
   const handleNewQuestionClick = (selectedValue, currQuestion) => {
+    console.log("cell clicked")
     if (totalQuestion >= question.value) {
       if (selectedValue === currQuestion.correct) {
         correct.add();
@@ -371,26 +308,26 @@ export default function ExamInit() {
       >
         <div className="intro">
           <div className="intro-inner">
-            <h1 className="intro-title">CSS Quiz</h1>
+            <h1 className="intro-title">Шалгалт</h1>
             {!gameStarted && (
               <>
                 <p className="intro-desc">
-                  {`The test contains ${questions.length} questions and there is no time limit.`}
+                  {`Нийт ${qlength} асуулт мөн цагын хязгаар байхгүй.`}
                 </p>
-
                 <button
                   className="intro-button"
                   onClick={() => setGameStarted(true)}
                 >
-                  Start Quiz
+                  Эхлэх
                 </button>
               </>
             )}
             {gameStarted && (
               <div className="indicator">
-                {questions.map((q, index) => {
+                {questions.questionList.map((q, index) => {
                   return (
                     <span
+                    key={index}
                       className="indicator-item"
                       style={{
                         backgroundColor: indicatorBg(index)
@@ -400,17 +337,22 @@ export default function ExamInit() {
                 })}
               </div>
             )}
-            <Results
-              wrong={wrong.value}
-              correct={correct.value}
-              empty={empty.value}
-            />
-            <button
-              className="restart-button"
-              onClick={() => handleRestartClick()}
-            >
-              Restart Quiz
-            </button>
+
+              <div>
+                <Results
+                  wrong={wrong.value}
+                  correct={correct.value}
+                  empty={empty.value}
+                />
+                <button
+                  className="restart-button"
+                  onClick={() => handleRestartClick()}
+                >
+                  Шинээр эхлүүлэх
+                </button>
+              </div>
+            
+
           </div>
         </div>
         <div className="game-area">
@@ -418,12 +360,12 @@ export default function ExamInit() {
             <Question
               data={questions[question.value]}
               buttonText={
-                question.value !== totalQuestion ? "Next Question" : "Finish Quiz"
+                question.value !== totalQuestion ? "Дараагын асуулт" : "Дуусгах"
               }
               onQuestionButtonClick={handleNewQuestionClick}
+              // onClick={handleNewQuestionClick}
             />
           )}
-
           {!questions[question.value] && (
             <>
               <QuestionCorrection data={questions} />
@@ -432,6 +374,5 @@ export default function ExamInit() {
         </div>
       </div>
     </div>
-
   );
 }

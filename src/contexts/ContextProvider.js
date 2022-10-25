@@ -22,13 +22,16 @@ export const ContextProvider = ({ children }) => {
   const [examID, setExamID] = useState('');
   const [qlength, setQlength] = useState(0);
   const [error, setError] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
+  const [gameFinished, setGameFinished] = useState(false);
   return (
     <StateContext.Provider value={{
       activeMenu, setActiveMenu, user, setUser, roleId, allRoles, sideBarTrack,
       setsideBarTrack, deviceId, TOKEN, inputValue, setInputValue, showTop, setShowTop,
       uiStatus, setUiStatus, showModal, setShowModal, isAuthenticated, setisAuthenticated,
       expandedMenu, setExpandedMenu, mobileBar, setMobileBar, readyCheck, setReadyCheck,
-      examID, setExamID, qlength, setQlength, error, setError
+      examID, setExamID, qlength, setQlength, error, setError, gameStarted, setGameStarted,
+      gameFinished, setGameFinished
     }}>
       {children}
     </StateContext.Provider>

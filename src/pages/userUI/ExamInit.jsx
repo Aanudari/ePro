@@ -21,7 +21,7 @@ function useCounter(initialState) {
 }
 
 export default function ExamInit() {
-  const { TOKEN, qlength, setQlength, error, setError, gameStarted, setGameStarted, gameFinished, setGameFinished } = useStateContext();
+  const { TOKEN, qlength, setQlength, error, setError, gameStarted, setGameStarted, gameFinished, setGameFinished, uniqueRightAnswer } = useStateContext();
   const examId = sessionStorage.getItem("exam_id")
   const navigate = useNavigate();
   useEffect(() => {
@@ -90,6 +90,9 @@ export default function ExamInit() {
                 <p className="intro-desc">
                   {`Нийт асуулт: ${qlength} , Хугацаа: ${10} мин`}
                 </p>
+                <p className="intro-desc">
+                  {`Хариулт сонгоогүй тохиолдолд буруу хариулсанд тооцогдохыг анхаарна уу !`}
+                </p>
                 <button
                   className="intro-button"
                   onClick={() => setGameStarted(true)}
@@ -102,19 +105,24 @@ export default function ExamInit() {
             {!gameStarted && gameFinished ? (
               <>
               <div className="flex flex-col justify-start w-full">
+              <span className="">
+                {`Нийт асуулт : ${qlength}`}
+              </span>
               <span className="text-green-500">
-                {`Зөв : ${qlength}`}
+                {`Зөв : ${uniqueRightAnswer.size}`}
               </span>
               <span className="text-red-500">
-                {`Буруу : ${qlength}`}
-              </span>
-              <span className="">
-                {`Оноо : ${70}%`}
+                {`Буруу : ${qlength - uniqueRightAnswer.size}`}
               </span>
               </div>
               <button
                 className="intro-button"
-                onClick={() => navigate("/levelone-ui-take-exam")}
+                onClick={() => 
+                  {
+                    navigate("/levelone-ui-take-exam")
+                    setGameFinished(false)
+                  }
+                }
               >
                 Хаах
               </button>

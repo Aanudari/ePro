@@ -6,9 +6,10 @@ import React, {
 import gsap from "gsap";
 
 export default function Question({
-    data,
+    data, indexQ, handleScore
 }) {
     const [answer, setAnswer] = useState(null);
+    const [kotai, setKotai] = useState(false);
     const questionRef = useRef(null);
     useEffect(() => {
         gsap.fromTo(
@@ -37,13 +38,30 @@ export default function Question({
             }
         );
     }, [data]);
+    const correct = data.answerList.filter((answer) => {
+        return answer.isTrue === '1'
+    })
+    const handleCheck = (check, value, id) => {
+        if(check === value) {
+            // setKotai(true)
+            handleScore(value)
+        } else {
+            setKotai(false)
+        }
+    }
     return (
-        <div className="question" ref={questionRef}>
+        <div className="question " ref={questionRef}>
             <div className="question-inner">
-                <h2 className="question-text">{data.question}</h2>
+                <h4 className="question-text">{indexQ + 1}. {data.question}</h4>
+                {
+                    data.imgUrl && 
+                    <img src={`${data.imgUrl}`} alt="" className="mb-4"/>
+                }
                 <ul className="question-answers">
                     {data && data.answerList.map((text, index) => {
-                        const value = `q${data.id}-${index}`;
+                        const value = `q${text.id}-${index}`;
+                        const check = `q${correct[0].id}-${index}`;
+                        const actualIndex = `q${data.id}-${index}`;
                         return (
                             <li
                                 key={index}
@@ -55,6 +73,7 @@ export default function Question({
                                     id={value}
                                     onChange={(e) => {
                                         setAnswer(e.target.value)
+                                        handleCheck(check, value, actualIndex)
                                     }}
                                     checked={
                                         value === answer

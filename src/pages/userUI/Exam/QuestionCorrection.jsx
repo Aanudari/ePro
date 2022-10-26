@@ -1,10 +1,15 @@
+import { useState, useRef } from "react";
 import Question from "./Question";
 import { useStateContext } from "../../../contexts/ContextProvider";
 
 export default function QuestionCorrection() {
-    const {gameStarted, setGameStarted, gameFinished, setGameFinished} = useStateContext();
+    const {gameStarted, setGameStarted, gameFinished, setGameFinished, uniqueRightAnswer, qlength, someValue} = useStateContext();
     var data = sessionStorage.getItem("exam_data");
     var obj = JSON.parse(data)
+
+    const handleScore = (value) => {
+      someValue.current.push(value)
+    }
     return (
       <div className="correction">
         {obj && obj.questionList.map((question, index) => {
@@ -12,6 +17,8 @@ export default function QuestionCorrection() {
             <Question
               key={index}
               data={question}
+              indexQ={index}
+              handleScore={handleScore}
             />
           );
         })}

@@ -41,6 +41,7 @@ body :-ms-input-placeholder {
   color: white;
   font-weight: 300;
 }
+
 .wrapper {
   background: #50a3a2;
   background: linear-gradient(top left, #0056ff 0%, blue 100%);

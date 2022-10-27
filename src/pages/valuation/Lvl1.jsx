@@ -33,7 +33,6 @@ function Level1() {
       <div className="h-full px-5 py-3">
         <div className="w-full h-full bg-white rounded-lg p-5">
           <div className="w-full bg-gray-100 p-3 rounded flex justify-between">
-
             <div className="w-1/6 bg-gray-200">
               <select className="w-full h-full">
                 <option value="season-one">1-р улирал</option>
@@ -58,7 +57,7 @@ function Level1() {
           </div>
           {
             data ? data.map((user, index) =>
-              // Ажилтан тус бүрийг UserCell conponent д хувиарлах замаар мэдээллүүдийг харуулав 
+              // Ажилтан тус бүрийг UserCell conponent д хувиарлах замаар мэдээллүүдийг харуулав
               <UserCell key={index} data={user} />
             ) : null
           }

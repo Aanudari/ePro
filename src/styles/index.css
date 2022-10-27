@@ -91,7 +91,7 @@ body :-ms-input-placeholder {
   -webkit-transition-duration: 0.25s;
           transition-duration: 0.25s;
   font-weight: 300;
-  
+
 }
 input:focus :active {
   outline: none;
@@ -267,7 +267,7 @@ input:focus :active {
 }
 
 .content ::-webkit-scrollbar-thumb {
-  background: #c0c0c0; 
+  background: #c0c0c0;
   border-radius: 1px;
 }
 ::-webkit-scrollbar {
@@ -276,7 +276,7 @@ input:focus :active {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c0c0c0; 
+  background: #c0c0c0;
   border-radius: 1px;
 }
 
@@ -576,7 +576,7 @@ backdrop-filter: blur(5px);
   -webkit-background-clip: text, padding-box, padding-box;
           background-clip: text, padding-box, padding-box;
   --_t: calc(var(--_i,0)*.5s);
-  transition: 
+  transition:
     var(--_t),
     color calc(.2s - var(--_t)) var(--_t),
     background-color calc(.2s - var(--_t)) var(--_t);

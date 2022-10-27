@@ -46,7 +46,6 @@ import NotValid from "./pages/NotValid";
 import SessionTimeout from "./components/SessionTimeout";
 import Exam from "./pages/userUI/Exam";
 import CalendarX from "./pages/training/Calendar/calendar";
-import InterActiveMenu from "./components/InterActiveMenu";
 import ExamInit from "./pages/userUI/ExamInit";
 
 

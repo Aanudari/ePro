@@ -1,5 +1,6 @@
 import "./styles/App.css";
 import './styles/styles.scss';
+import './styles/core.scss';
 import 'devextreme/dist/css/dx.light.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
@@ -47,19 +48,26 @@ import SessionTimeout from "./components/SessionTimeout";
 import Exam from "./pages/userUI/Exam";
 import CalendarX from "./pages/training/Calendar/calendar";
 import ExamInit from "./pages/userUI/ExamInit";
+import MainNavigation from "./components/MainNavigation";
 
 
 function App() {
-  const { activeMenu, showTop, roleId } = useStateContext();
+  const { activeMenu, showTop, roleId, error, setError } = useStateContext();
   const { width } = getWindowDimensions()
   return (
     <BrowserRouter>
       <div className="flex w-full relative">
         {
+          error && 
+          <NotValid/>
+        }
+        {
           showTop ?
           <div className='fixed w-full h-screen bg-black top-z right-0'></div> : null
         }
-        {activeMenu && roleId === "199" && width > 768 ? <SideNavigation /> : null}
+        {/* {activeMenu && roleId === "199" && width > 768 ? <SideNavigation /> : null} */}
+        {activeMenu && roleId === "199" && width > 768 ? <MainNavigation/> : null}
+
         <Routes>
           {/*Sidebar аас үсрэх боломжтой үндсэн хуудаснууд */}
           <Route path="/" element={

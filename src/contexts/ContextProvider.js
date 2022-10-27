@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useRef } from "react";
 import { useLocalStorage } from "../components/useLocalStorage";
 
 const StateContext = createContext("");
@@ -21,13 +21,19 @@ export const ContextProvider = ({ children }) => {
   const [readyCheck, setReadyCheck] = useState(false);
   const [examID, setExamID] = useState('');
   const [qlength, setQlength] = useState(0);
+  const [error, setError] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
+  const [gameFinished, setGameFinished] = useState(false);
+  const someValue = useRef([])
+  const uniqueRightAnswer = new Set(someValue.current.map(e => e))
   return (
     <StateContext.Provider value={{
       activeMenu, setActiveMenu, user, setUser, roleId, allRoles, sideBarTrack,
       setsideBarTrack, deviceId, TOKEN, inputValue, setInputValue, showTop, setShowTop,
       uiStatus, setUiStatus, showModal, setShowModal, isAuthenticated, setisAuthenticated,
       expandedMenu, setExpandedMenu, mobileBar, setMobileBar, readyCheck, setReadyCheck,
-      examID, setExamID, qlength, setQlength
+      examID, setExamID, qlength, setQlength, error, setError, gameStarted, setGameStarted,
+      gameFinished, setGameFinished, someValue, uniqueRightAnswer
     }}>
       {children}
     </StateContext.Provider>

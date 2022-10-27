@@ -27,6 +27,7 @@ function TakeExamCell(data) {
                     onClick={() => {
                         setReadyCheck(!readyCheck)
                         setExamID(data.data.id)
+                        sessionStorage.setItem("exam_id", data.data.id)
                     }}
                         className="text-green-500 hover:text-green-700"
                         href="#"

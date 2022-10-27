@@ -20,7 +20,7 @@ const labelsClasses = [
 
 module.exports = {
 
-  purge: {
+  content: {
 
     content: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
     safelist: [

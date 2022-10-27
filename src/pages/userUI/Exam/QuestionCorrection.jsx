@@ -3,12 +3,15 @@ import Question from "./Question";
 import { useStateContext } from "../../../contexts/ContextProvider";
 
 export default function QuestionCorrection() {
-    const {gameStarted, setGameStarted, gameFinished, setGameFinished, uniqueRightAnswer, qlength, someValue} = useStateContext();
+    const {wrongValue, someValue, showAnswer, setShowAnswer} = useStateContext();
     var data = sessionStorage.getItem("exam_data");
     var obj = JSON.parse(data)
 
     const handleScore = (value) => {
       someValue.current.push(value)
+    }
+    const handleWrong = (value) => {
+      wrongValue.current.push(value)
     }
     return (
       <div className="correction">
@@ -19,14 +22,16 @@ export default function QuestionCorrection() {
               data={question}
               indexQ={index}
               handleScore={handleScore}
+              handleWrong={handleWrong}
             />
           );
         })}
         <div className="w-full">
           <button
           onClick={() => {
-            setGameStarted(!gameStarted)
-            setGameFinished(!gameFinished)
+            // setGameStarted(!gameStarted)
+            // setGameFinished(!gameFinished)
+            setShowAnswer(!showAnswer)
           }}
             className="question-button w-full shadow"
           >

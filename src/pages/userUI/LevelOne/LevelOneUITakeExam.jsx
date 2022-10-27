@@ -5,6 +5,7 @@ import { useStateContext } from '../../../contexts/ContextProvider';
 import ReadyCheck from '../../../components/sub-components/ReadyCheck';
 import UserLayout from '../../../layout/UserLayout';
 import { useNavigate } from 'react-router-dom';
+import ExamCard from '../Exam/ExamCard';
 function LevelOneUITakeExam() {
     const [data, setData] = useState();
     const [questions, setquestions] = useState();
@@ -37,91 +38,51 @@ function LevelOneUITakeExam() {
                         }}><a href="#">Шалгалт өгөх</a></li>
                         <li onClick={() => {
                             setKey("2")
-                        }}><a href="#">Суваг нэмэх</a></li>
+                        }}><a href="#">Өөрчлөлт оруулах</a></li>
                         <li onClick={() => {
                             setKey("3")
-                        }}><a href="#">Өөрчлөлт оруулах</a></li>
+                        }}><a href="#">Цэс</a></li>
                         <li onClick={() => {
                             setKey("4")
                         }}><a href="#">Цэс</a></li>
                     </ul>
                 </div>
                 <div className='px-5 py-3'>
-
-                    <div className="flex flex-col">
+                    <div className="">
                         <div className="">
                             <div className=" w-full inline-block align-middle">
-                                <div className="overflow-hidden border rounded-lg">
-                                    <table className="min-w-full divide-y divide-gray-200">
-                                        <thead className="bg-gray-50">
-                                            <tr>
-                                                <th
-                                                    scope="col"
-                                                    className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                                                >
-                                                    ID
-                                                </th>
-                                                <th
-                                                    scope="col"
-                                                    className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                                                >
-                                                    Нэр
-                                                </th>
-                                                <th
-                                                    scope="col"
-                                                    className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                                                >
-                                                    Нээх цаг
-                                                </th>
-                                                <th
-                                                    scope="col"
-                                                    className="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase "
-                                                >
-                                                    Хаах Цаг
-                                                </th>
-                                                <th
-                                                    scope="col"
-                                                    className="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase "
-                                                >
-                                                    Хугацаа
-                                                </th>
-                                                <th
-                                                    scope="col"
-                                                    className="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase "
-                                                >
-                                                    Статус
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        {
-                                            data ? data.map((item, index) => (
-                                                <TakeExamCell key={index} data={item} />
-                                            )) : <tbody>
-                                                <tr>
-                                                    <td>
-                                                        Идэвхитэй шалгалт байхгүй байна.
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        }
-                                    </table>
+                                <div className='flex gap-3 flex-wrap md:pl-10'>
+
+                                    {
+                                        data ? data.map((item, index) => (
+                                            <ExamCard key={index} data={item} />
+                                        )) : <div>
+
+                                            Идэвхитэй шалгалт байхгүй байна.
+
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 {
-                    readyCheck && <div className='h-screen flex justify-center items-center w-full top-0 left-0 fixed z-10 bg-black bg-opacity-50'>
-                        <div className='w-1/3  bg-white rounded px-3 py-2'><span>Та "<strong>{examID}</strong>" ID дугаартай шалгалт эхлүүлэхдээ итгэлтэй байна уу. ?</span>
-                            <div className='flex justify-end mt-2'>
-                                <button onClick={() => {
-                                    navigate('/exam-init', {state : examID})
-                                    setReadyCheck(false)
-                                }} className='bg-green-500 px-3 py-1 rounded text-white font-[400] text-[12px]'>Тийм</button>
-                                <button onClick={() => {
-                                    setReadyCheck(false)
-                                }} className='bg-red-500 px-3 py-1 rounded text-white font-[400] ml-2 text-[12px]'>Үгүй</button>
-                            </div></div>
+                    readyCheck &&
+                    <div className='h-screen flex justify-center items-center w-full top-0 left-0 fixed z-10 bg-black bg-opacity-50'>
+                        <div className='p-3 body-bg-cus2 rounded-lg'>
+                            <div className='body-bg-cus rounded-lg px-10 py-4'><span className='text-white text-[18px] font-bold'>Та "<strong>{examID}</strong>" ID дугаартай шалгалт эхлүүлэхдээ итгэлтэй байна уу. ?</span>
+                                <div className='flex justify-end'>
+                                    <button onClick={() => {
+                                        navigate('/exam-init', { state: examID })
+                                        setReadyCheck(false)
+                                    }} className='intro-button'>Тийм</button>
+                                    <button onClick={() => {
+                                        setReadyCheck(false)
+                                    }} id={"intro-bg"} className='intro-button ml-2'><i className="bi bi-x-lg"></i></button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 }
             </div>

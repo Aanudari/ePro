@@ -9,7 +9,7 @@ function Login() {
   const redirect = (data) => {
     switch (data.role_id) {
       case '1':
-        navigate("/levelone-ui")
+        navigate("/levelone-ui-take-exam")
         break;
       case '199':
         navigate("/home")

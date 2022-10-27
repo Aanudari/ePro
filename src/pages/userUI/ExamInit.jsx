@@ -8,9 +8,11 @@ import axios from "axios";
 import { useStateContext } from "../../contexts/ContextProvider";
 import getWindowDimensions from "../../components/SizeDetector";
 import QuestionCorrection from "./Exam/QuestionCorrection";
+import QuestionCorrectionShow from "./Exam/QuestionCorrectionShow";
 import { useNavigate } from "react-router-dom";
 
 function useCounter(initialState) {
+  
   const [value, setValue] = useState(initialState);
 
   const reset = () => setValue(0);
@@ -21,7 +23,8 @@ function useCounter(initialState) {
 }
 
 export default function ExamInit() {
-  const { TOKEN, qlength, setQlength, error, setError, gameStarted, setGameStarted, gameFinished, setGameFinished, uniqueRightAnswer } = useStateContext();
+  const { TOKEN, qlength, setQlength, error, setError, gameStarted, setGameStarted, gameFinished, 
+    setGameFinished, uniqueRightAnswer, showAnswer, setShowAnswer } = useStateContext();
   const examId = sessionStorage.getItem("exam_id")
   const navigate = useNavigate();
   useEffect(() => {
@@ -42,10 +45,11 @@ export default function ExamInit() {
       .catch(err => setError(true))
   }, [examId])
 
+
   //display width tootsooloh
   const { width } = getWindowDimensions();
   //display width tootsooloh
-  
+
   // session storage dotor baih exam iin medeelel awah
   var data = sessionStorage.getItem("exam_data");
   var questions = JSON.parse(data)
@@ -58,14 +62,25 @@ export default function ExamInit() {
   time.setMinutes(time.getMinutes() + 10);
   //time generate hiih
 
+  let score = uniqueRightAnswer.size * 100 / qlength
+  let roundedScore = Math.round(score, -1)
 
+  const indicatorBg = (index) => {
+    if (qlength > index) {
+      return "#fff";
+    } else if (qlength === index) {
+      return "#29b5d5";
+    } else {
+      return "rgba(255,255,255,.2)";
+    }
+  };
   return (
     <div className="body flex-col">
       {
-        width < 765 && gameStarted ?
-          <div className="w-full flex justify-center mb-2">
+        gameStarted &&
+          <div className="flex justify-center md:absolute mt-[-50px] mb-4 md:m-0 top-[20px] md:left-1/2">
             <MyTimer expiryTimestamp={time} />
-          </div> : null
+          </div>
       }
       <div
         className="game"
@@ -73,18 +88,23 @@ export default function ExamInit() {
         data-game-started={gameStarted ? true : null}
       >
 
-
         <div className="intro">
           <div className="intro-inner">
-            <h1 className="intro-title">
-
-              {
-                width > 765 && gameStarted ?
-                  <div className="w-full flex justify-center mb-2">
-                    <MyTimer expiryTimestamp={time} />
-                  </div> : null
-              }
-            </h1>
+          {gameStarted && (
+            <div className="indicator">
+              {questions && questions.questionList.map((q, index) => {
+                return (
+                  <span
+                  key={index}
+                    className="indicator-item"
+                    style={{
+                      backgroundColor: indicatorBg(index)
+                    }}
+                  />
+                );
+              })}
+            </div>
+          )}
             {!gameStarted && !gameFinished ? (
               <>
                 <p className="intro-desc">
@@ -95,7 +115,12 @@ export default function ExamInit() {
                 </p>
                 <button
                   className="intro-button"
-                  onClick={() => setGameStarted(true)}
+                  onClick={() => 
+                    {
+                      setGameStarted(true)
+                    setShowAnswer(false)
+                    }
+                  }
                 >
                   Эхлэх
                 </button>
@@ -111,8 +136,8 @@ export default function ExamInit() {
               <span className="text-green-500">
                 {`Зөв : ${uniqueRightAnswer.size}`}
               </span>
-              <span className="text-red-500">
-                {`Буруу : ${qlength - uniqueRightAnswer.size}`}
+              <span className="text-green-500">
+                {`Оноо : ${roundedScore}%`}
               </span>
               </div>
               <button
@@ -132,11 +157,17 @@ export default function ExamInit() {
           </div>
         </div>
         <div className="game-area">
-          {gameStarted && (
+          {gameStarted && !showAnswer ?(
             <>
-              <QuestionCorrection data={questions} />
+              <QuestionCorrection data={questions}/>
             </>
-          )
+          ) : null
+          }
+          {gameStarted && showAnswer ?(
+            <>
+              <QuestionCorrectionShow data={questions}/>
+            </>
+          ) : null
           }
         </div>
       </div>

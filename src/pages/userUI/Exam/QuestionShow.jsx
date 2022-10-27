@@ -4,11 +4,13 @@ import React, {
     useEffect
 } from "react";
 import gsap from "gsap";
+import { useStateContext } from "../../../contexts/ContextProvider";
 
-export default function Question({
-    data, indexQ, handleScore, handleWrong
+export default function QuestionShow({
+    data, indexQ, handleScore
 }) {
     const [answer, setAnswer] = useState(null);
+    const {wrongValue, someValue} = useStateContext();
     const questionRef = useRef(null);
     useEffect(() => {
         gsap.fromTo(
@@ -37,17 +39,6 @@ export default function Question({
             }
         );
     }, [data]);
-    const correct = data.answerList.filter((answer) => {
-        return answer.isTrue === '1'
-    })
-    const handleCheck = (check, value, id) => {
-        if(check === value) {
-            handleScore(value)
-        } else {
-            handleWrong(value)
-        }
-    }
-
     return (
         <div className="question " ref={questionRef}>
             <div className="question-inner">
@@ -59,26 +50,22 @@ export default function Question({
                 <ul className="question-answers">
                     {data && data.answerList.map((text, index) => {
                         const value = `q${text.id}-${index}`;
-                        const check = `q${correct[0].id}-${index}`;
-                        const actualIndex = `q${data.id}-${index}`;
                         return (
                             <li
-                            
                                 key={index}
+                                className={wrongValue.current.includes(value) ? "bg-red-400 rounded" :
+                            someValue.current.includes(value) ? "bg-green-400" : null
+                            }
                             >
                                 <input
                                     type="radio"
                                     name={text.id}
-           
                                     value={value}
                                     id={value}
-                                    onChange={(e) => {
-                                        setAnswer(e.target.value)
-                                        handleCheck(check, value, actualIndex)
-                                    }}
                                     checked={
                                         value === answer
                                     }
+                                    disabled
                                 />
                                 <label className="question-answer" htmlFor={value}>
                                     {text.answer}

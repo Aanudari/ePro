@@ -13,7 +13,7 @@ function LeveloneEdit() {
     const {TOKEN} = useStateContext();
     const [data, setdata] = useState();
     const [template, setTemplate] = useState();
-
+    console.log(data && data.deviceId)
     const [show, setshow] = useState(false);
     const navigation = [
         { name: 'Категори нэмэх', path: '/add-category', icon: true },
@@ -80,9 +80,9 @@ function LeveloneEdit() {
                             {
                                 navigation.map((e, i) => (
                                     <div
-                                        // onClick={() => {
-                                        //     navigate(`${e.path}`)
-                                        // }}
+                                        onClick={() => {
+                                            navigate(`${e.path}`)
+                                        }}
                                         key={i}
                                         className="w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center "
                                     >

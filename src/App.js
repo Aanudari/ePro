@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import SideNavigation from "./components/Side-Navigation";
+import AddCategory from "../src/components/sub-components/category/AddCategory";
 import { useStateContext } from "./contexts/ContextProvider";
 import ExamForm from "./pages/exam/exam-form";
 import ExamResult from "./pages/exam/exam-result";
@@ -58,7 +59,7 @@ function App() {
     <BrowserRouter>
       <div className="flex w-full relative">
         {
-          error && 
+          error &&
           <NotValid/>
         }
         {
@@ -223,6 +224,14 @@ function App() {
               </ProtectedRoute>
             }
           />
+            <Route
+                path="/add-category"
+                element={
+                    <ProtectedRoute allowedRoles={[199]}>
+                        <AddCategory />
+                    </ProtectedRoute>
+                }
+            />
           <Route
             path="/telesales-edit"
             element={

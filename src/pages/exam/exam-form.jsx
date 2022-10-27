@@ -25,7 +25,7 @@ function ExamForm() {
       )
       .catch(err => console.log(err))
   }, [])
-  console.log(data)
+  // console.log(data)
   return (
     <div className="w-full h-screen bg-[#23b499]">
       <Navigation />

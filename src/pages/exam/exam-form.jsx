@@ -27,7 +27,7 @@ function ExamForm() {
   }, [])
   // console.log(data)
   return (
-    <div className="w-full h-screen bg-[#23b499]">
+    <div className="w-full h-full min-h-screen bg-[#23b499]">
       <Navigation />
       <div className="h-full">
         <div className="bg-gray-700 h-14 flex">

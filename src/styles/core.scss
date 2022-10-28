@@ -150,8 +150,17 @@ a {
     }
   }
 }
-
-
+.cus-btn {
+  background-color: #50a3a2;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  width: 100%;
+  font-weight: 500;
+}
+.cus-btn:hover {
+  background-color: #499a99;
+}
       
 #toggle{
   display: block;

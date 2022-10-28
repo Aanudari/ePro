@@ -29,9 +29,6 @@ export const ContextProvider = ({ children }) => {
   const uniqueRightAnswer = new Set(someValue.current.map(e => e))
   const uniqueWrongAnswer = new Set(wrongValue.current.map(e => e))
   const [showAnswer, setShowAnswer] = useState(false);
-  console.log(gameStarted)
-  console.log(gameFinished)
-  console.log(showAnswer)
   return (
     <StateContext.Provider value={{
       activeMenu, setActiveMenu, user, setUser, roleId, allRoles, sideBarTrack,

@@ -9,6 +9,7 @@ const navigation = [
   { name: 'Календар', href: '/' },
 ]
 
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }

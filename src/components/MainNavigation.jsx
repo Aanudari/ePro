@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 function MainNavigation() {
     const navigate = useNavigate();
     return (
-        <div className="core">
+        <div className="relative w-[335px]">
+                    <div className="core fixed">
             <nav id="side-nav">
                 <div onClick={() => { navigate("/home"); }} className="h-14 bg-gray-700 shadow">
                     {/* <i className="fa fa-codepen"></i> */}1
@@ -96,6 +97,8 @@ function MainNavigation() {
                     <i className="fa fa-chevron-circle-left"></i></a>
             </nav>
         </div>
+        </div>
+
 
     );
 }

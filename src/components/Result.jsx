@@ -16,7 +16,7 @@ function SearchResult() {
                 "Content-Type": "application/json",
                 "Authorization": TOKEN
             },
-            url: `${process.env.REACT_APP_URL}/api/User/search`,
+            url: `${process.env.REACT_APP_URL}/v1/User/search`,
             data: JSON.stringify({ firstName: inputValue }),
         })
             .then((res) => {

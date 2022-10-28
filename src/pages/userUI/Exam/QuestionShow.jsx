@@ -53,8 +53,8 @@ export default function QuestionShow({
                         return (
                             <li
                                 key={index}
-                                className={wrongValue.current.includes(value) ? "bg-red-400 rounded" :
-                            someValue.current.includes(value) ? "bg-green-400" : null
+                                className={wrongValue.current.includes(value) ? "bg-red-500 rounded" :
+                            someValue.current.includes(value) ? "bg-green-500 rounded" : null
                             }
                             >
                                 <input

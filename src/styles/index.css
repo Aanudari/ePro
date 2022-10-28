@@ -44,8 +44,8 @@ body :-ms-input-placeholder {
 
 .wrapper {
   background: #50a3a2;
-  background: linear-gradient(top left, #0056ff 0%, blue 100%);
-  background: linear-gradient(to bottom right, #50a3a2 0%, #0056ff 100%);
+  /* background: linear-gradient(top left, #0056ff 0%, blue 100%);
+  background: linear-gradient(to bottom right, #50a3a2 0%, #0056ff 100%); */
   position: fixed;
   top: 0%;
   left: 0;
@@ -320,7 +320,7 @@ select {
 }
 
 .custom-input-2:hover {
-  background-color: rgba(255, 255, 255, 0.4);
+  border: 1px solid green;
 }
 .custom-input-2:focus {
   background-color: white;

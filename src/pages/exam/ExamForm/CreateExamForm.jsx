@@ -3,11 +3,15 @@ import DateTimePicker from 'react-datetime-picker';
 
 
 function CreateExamForm() {
-    const [selectV, setSelectV] = useState()
-    const [value, onChange] = useState(new Date());
+    const [selectV, setSelectV] = useState(new Date())
+    const [value, setValue] = useState(new Date());
+    var datestring = value.getFullYear()  + "-" + (value.getMonth()+1) + "-" + value.getDate() + " " +
+value.getHours() + ":" + value.getMinutes() + ":" + value.getSeconds();
+    var datestring2 = selectV.getFullYear()  + "-" + (selectV.getMonth()+1) + "-" + selectV.getDate() + " " +
+selectV.getHours() + ":" + selectV.getMinutes() + ":" + selectV.getSeconds();
     return (
-        <div className="container-po ">
-            <form className="form-form p-2 flex gap-5">
+        <div className="container-po pl-2 pr-2 pt-2 pb-10">
+            <form className="form-form p-2 flex flex-col md:flex-row gap-5 mt-2">
 
                 <div>
                     <div className="group">
@@ -23,7 +27,7 @@ function CreateExamForm() {
                         <span className="bar"></span>
                         <label>Үргэлжлэх хугацаа</label>
                     </div>
-                    <div className="p-3"></div>
+                    <div className="p-0 md:p-3"></div>
                     <div className="select-con">
                         <div className="select">
                             <select name="format" id="format" required>
@@ -40,10 +44,16 @@ function CreateExamForm() {
                         </div>
                     </div>
                 </div>
-                <div className="">
+                <div className="h-full">
                     <div className="flex flex-col ">
-                        <span>Нээх цаг</span>
-                        <DateTimePicker value={value} onChange={date => onChange(date)} timeFormat="HH:mm" />
+                        <span className="font-[500] text-gray-500">Нээх цаг :</span>
+                        <DateTimePicker value={value} onChange={date => setValue(date)} timeFormat="HH:mm" />
+                        {/* <TimePicker/> */}
+                    </div>
+                    <div className="flex flex-col mt-5">
+                        <span className="font-[500] text-gray-500">Хаах цаг :</span>
+                        <DateTimePicker value={value} onChange={date => setSelectV(date)} timeFormat="HH:mm" />
+                        {/* <TimePicker/> */}
                     </div>
                 </div>
 

@@ -65,16 +65,6 @@ export default function ExamInit() {
 
   let score = uniqueRightAnswer.size * 100 / qlength
   let roundedScore = Math.round(score, -1)
-
-  const indicatorBg = (index) => {
-    if (qlength > index) {
-      return "#fff";
-    } else if (qlength === index) {
-      return "#29b5d5";
-    } else {
-      return "rgba(255,255,255,.2)";
-    }
-  };
   return (
     <div className="body flex-col">
       {
@@ -175,33 +165,6 @@ export default function ExamInit() {
               </>
             ) : null
             }
-            {/* {!gameStarted && gameFinished ? (
-              <>
-              <div className="flex flex-col justify-start w-full">
-              <span className="">
-                {`Нийт асуулт : ${qlength}`}
-              </span>
-              <span className="text-green-500">
-                {`Зөв : ${uniqueRightAnswer.size}`}
-              </span>
-              <span className="text-green-500">
-                {`Оноо : ${roundedScore}%`}
-              </span>
-              </div>
-              <button
-                className="intro-button"
-                onClick={() => 
-                  {
-                    navigate("/levelone-ui-take-exam")
-                    setGameFinished(false)
-                  }
-                }
-              >
-                Хаах
-              </button>
-            </>
-            ) : null
-            } */}
           </div>
         </div>
         <div className="game-area">

@@ -20,6 +20,7 @@ export const ContextProvider = ({ children }) => {
   const [mobileBar, setMobileBar] = useState(false)
   const [readyCheck, setReadyCheck] = useState(false);
   const [examID, setExamID] = useState('');
+  const [examName, setExamName] = useState('');
   const [qlength, setQlength] = useState(0);
   const [error, setError] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
@@ -38,7 +39,7 @@ export const ContextProvider = ({ children }) => {
       expandedMenu, setExpandedMenu, mobileBar, setMobileBar, readyCheck, setReadyCheck,
       examID, setExamID, qlength, setQlength, error, setError, gameStarted, setGameStarted,
       gameFinished, setGameFinished, someValue, uniqueRightAnswer, uniqueWrongAnswer, showAnswer, setShowAnswer,
-      wrongValue, reminder, setReminder
+      wrongValue, reminder, setReminder, examName, setExamName
     }}>
       {children}
     </StateContext.Provider>

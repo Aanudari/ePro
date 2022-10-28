@@ -34,23 +34,32 @@ function ExamForm() {
           <div onClick={() => {
             setKey("0")
           }} className="h-full w-1/6 md:w-[180px] hover:bg-gray-600 flex justify-center items-center text-white text-[14px]">
-            <a>
+            <span className="font-[500] hidden md:block">
               Идэвхитэй шалгалт
-            </a>
+            </span>
+            <span className="font-[500] block md:hidden">
+            <i className="bi bi-calendar-check"></i>
+            </span>
           </div>
           <div onClick={() => {
             setKey("1")
           }} className="h-full w-1/6 md:w-[180px] hover:bg-gray-600 flex justify-center items-center text-white text-[14px]">
-            <a>
+            <span className="font-[500] hidden md:block">
               Шалгалт үүсгэх
-            </a>
+            </span>
+            <span className="font-[500] block md:hidden">
+            <i className="bi bi-pencil"></i>
+            </span>
           </div>
           <div onClick={() => {
             setKey("2")
           }} className="h-full w-1/6 md:w-[180px] hover:bg-gray-600 flex justify-center items-center text-white text-[14px]">
-            <a>
-              Идэвхитэй шалгалт
-            </a>
+            <span className="font-[500] hidden md:block">
+              Цэс
+            </span>
+            <span className="font-[500] block md:hidden">
+            <i className="bi bi-alarm"></i>
+            </span>
           </div>
           
         </div>

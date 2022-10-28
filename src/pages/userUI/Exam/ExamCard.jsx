@@ -1,11 +1,12 @@
 import { useStateContext } from "../../../contexts/ContextProvider";
 
 function ExamCard( {data}) {
-    const { readyCheck, setReadyCheck, setExamID } = useStateContext();
+    const { readyCheck, setReadyCheck, setExamID, examName, setExamName } = useStateContext();
     return (
         <div className="cursor-pointer hover:shadow-lg hover:scale-105 transition" onClick={() => {
             setReadyCheck(!readyCheck)
             setExamID(data.id)
+            setExamName(data.name)
             sessionStorage.setItem("exam_id", data.id)
         }}>
             <div className="w-[280px] h-[320px] rounded overflow-hidden shadow bg-gray-100">

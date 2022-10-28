@@ -152,7 +152,7 @@ main {
 
   .sidebar {
     list-style-type:none;
-    background-color:rgb(43, 54, 71);
+    background: rgb(42, 89, 109);
     width:215px;
     height:100%;
     top:0;
@@ -164,6 +164,7 @@ main {
     padding: 0;
     list-style: none;
     transition:1s ease;
+    box-shadow: 0 0 5px black;
   }
   
   .sidebar a {
@@ -179,7 +180,7 @@ main {
   }
   
   .sidebar li:hover {
-    background-color:#777;
+    background: rgb(38, 78, 95);
     cursor:pointer;
     text-indent: 30px;
   }

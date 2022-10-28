@@ -5,7 +5,6 @@ import DateTimePicker from 'react-datetime-picker';
 function CreateExamForm() {
     const [selectV, setSelectV] = useState()
     const [value, onChange] = useState(new Date());
-    console.log(value)
     return (
         <div className="container-po ">
             <form className="form-form p-2 flex gap-5">
@@ -42,7 +41,7 @@ function CreateExamForm() {
                     </div>
                 </div>
                 <div className="">
-                    <div className="flex flex-col">
+                    <div className="flex flex-col ">
                         <span>Нээх цаг</span>
                         <DateTimePicker value={value} onChange={date => onChange(date)} timeFormat="HH:mm" />
                     </div>

@@ -6,7 +6,7 @@ function Home() {
   const [showSettings, setshowSettings] = useState(false);
   const [showIndividual, setShowIndividual] = useState(false);
   return (
-    <div className="w-full h-full bg-gray-50">
+    <div className="w-full h-screen bg-[#50a3a2]">
       <Navigation />
       <div className="h-full px-5 py-3 flex gap-2">
         <div style={{
@@ -71,7 +71,7 @@ function Home() {
         }
       </div>
       <div className="p-2">
-        <HomeChart />
+        {/* <HomeChart /> */}
       </div>
     </div>
   );

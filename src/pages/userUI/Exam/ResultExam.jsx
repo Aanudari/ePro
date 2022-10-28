@@ -1,7 +1,7 @@
 
 export default function ResultExam({ wrong, correct, empty }) {
     return (
-      <div className="result">
+      <div className="result absolute top-0 left-0">
         <div className="result-item is-correct">
           <span className="result-count">2</span>
           <span className="result-text">

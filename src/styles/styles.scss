@@ -465,9 +465,9 @@ $color: #1f8197;
   transition: 0.3s;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   width: 100%;
   max-width: 80%;
-  margin: auto;
   height: 0;
   overflow: hidden;
 
@@ -489,13 +489,14 @@ $color: #1f8197;
   }
 
   &-text {
-    font-size: 12px;
+    font-size: 14px;
     letter-spacing: 2px;
     opacity: 0.8;
     display: flex;
     font-weight: 500;
     align-items: center;
     line-height: 1;
+    margin-top: 10px;
 
     svg {
       margin-right: 8px;

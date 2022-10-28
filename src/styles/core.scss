@@ -13,6 +13,18 @@ background: #50a3a2;
   -webkit-font-smoothing: antialiased;
   z-index: 10010001000100010;
 }
+.core-index {
+  z-index: 10010001000100010;
+}
+.core-bg {
+  background : rgb(32, 73, 90) !important;
+}
+.core-bg-g {
+  background: #50a3a2 !important;
+}
+.core-bg-b {
+  background:#23b499 !important;
+}
 .bg-core {
   background:  linear-gradient(to bottom, #dd879f 0%,#4e337e 100%);
 }

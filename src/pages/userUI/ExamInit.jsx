@@ -10,6 +10,7 @@ import getWindowDimensions from "../../components/SizeDetector";
 import QuestionCorrection from "./Exam/QuestionCorrection";
 import QuestionCorrectionShow from "./Exam/QuestionCorrectionShow";
 import { useNavigate } from "react-router-dom";
+import ResultExam from "./Exam/ResultExam";
 
 function useCounter(initialState) {
   
@@ -24,7 +25,7 @@ function useCounter(initialState) {
 
 export default function ExamInit() {
   const { TOKEN, qlength, setQlength, error, setError, gameStarted, setGameStarted, gameFinished, 
-    setGameFinished, uniqueRightAnswer, showAnswer, setShowAnswer } = useStateContext();
+    setGameFinished, uniqueRightAnswer, uniqueWrongAnswer, showAnswer, setShowAnswer } = useStateContext();
   const examId = sessionStorage.getItem("exam_id")
   const navigate = useNavigate();
   useEffect(() => {
@@ -42,7 +43,7 @@ export default function ExamInit() {
           setQlength(res.data.variantInfo.questionList.length)
         }
       )
-      .catch(err => setError(true))
+      .catch(err => console.log("message"))
   }, [examId])
 
 
@@ -87,31 +88,78 @@ export default function ExamInit() {
         ref={gameRef}
         data-game-started={gameStarted ? true : null}
       >
-
-        <div className="intro">
-          <div className="intro-inner">
-          {gameStarted && (
-            <div className="indicator">
-              {questions && questions.questionList.map((q, index) => {
-                return (
-                  <span
-                  key={index}
-                    className="indicator-item"
-                    style={{
-                      backgroundColor: indicatorBg(index)
-                    }}
-                  />
-                );
-              })}
+        <div className={gameStarted && !showAnswer ? 'hidden' : "intro"}>
+          <div className="intro-inner relative">
+          {gameStarted && !gameFinished && showAnswer ? (
+            <div className="flex flex-col justify-center items-center">
+              <div>
+              <span className="result-text text-green-500">
+            <svg
+              width="16"
+              height="16"
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              className="css-i6dzq1"
+              viewBox="0 0 24 24"
+            >
+              <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+              <path d="M22 4L12 14.01 9 11.01"></path>
+            </svg>
+            ЗӨВ : {uniqueRightAnswer.size}
+          </span>
+          <span className="result-text text-red-500 ">
+            <svg
+              width="16"
+              height="16"
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              className="css-i6dzq1"
+              viewBox="0 0 24 24"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M15 9L9 15"></path>
+              <path d="M9 9L15 15"></path>
+            </svg>
+            БУРУУ : {uniqueWrongAnswer.size}
+          </span>
+          <span className="result-text">
+            <svg
+              width="16"
+              height="16"
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              className="css-i6dzq1"
+              viewBox="0 0 24 24"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M8 12L16 12"></path>
+            </svg>
+            ОНОО : {roundedScore}%
+          </span>
+              </div>
             </div>
-          )}
+          )
+          : null
+          }
             {!gameStarted && !gameFinished ? (
               <>
-                <p className="intro-desc">
+                <p className="intro-desc mb-1 font-bold ">
                   {`Нийт асуулт: ${qlength} , Хугацаа: ${10} мин`}
                 </p>
-                <p className="intro-desc">
-                  {`Хариулт сонгоогүй тохиолдолд буруу хариулсанд тооцогдохыг анхаарна уу !`}
+                <p className="intro-desc mb-1">
+                  {`Хариулт сонгоогүй тохиолдолд буруу хариулсанд тооцогдох ба`}
+                </p>
+                <p className="intro-desc m-0">
+                  {`Тухайн шалгалтыг нэг удаа өгөх эрхтэйг анхаарна уу !`}
                 </p>
                 <button
                   className="intro-button"

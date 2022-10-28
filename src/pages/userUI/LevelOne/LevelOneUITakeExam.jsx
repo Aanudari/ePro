@@ -30,8 +30,8 @@ function LevelOneUITakeExam() {
     }, [])
     return (
         <UserLayout>
-            <div className='flex h-screen '>
-                <div className="relative h-full w-[230px] hidden md:block">
+            <div className='flex h-full core-bg-b'>
+                <div className="relative h-full w-[230px] hidden md:block ">
                     <ul className="sidebar">
                         <li onClick={() => {
                             setKey("1")
@@ -51,7 +51,7 @@ function LevelOneUITakeExam() {
                     <div className="">
                         <div className="">
                             <div className=" w-full inline-block align-middle">
-                                <div className='flex gap-3 flex-wrap md:pl-10'>
+                                <div className='flex gap-4 flex-wrap md:pl-10'>
 
                                     {
                                         data ? data.map((item, index) => (

@@ -24,7 +24,8 @@ export default function UINavigation() {
     window.location.reload();
   };
   return (
-    <Disclosure as="nav" className="bg-gray-800">
+    <div className=''>
+    <Disclosure as="nav" className="core-bg fixed top-0 w-full core-index shadow-md">
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -166,5 +167,7 @@ export default function UINavigation() {
         </>
       )}
     </Disclosure>
+    </div>
+
   )
 }

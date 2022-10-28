@@ -54,9 +54,9 @@ export default function Question({
                 <h4 className="question-text">{indexQ + 1}. {data.question}</h4>
                 {
                     data.imgUrl && 
-                    <img src={`${data.imgUrl}`} alt="" className="mb-4"/>
+                    <img src={`${data.imgUrl}`} alt="" className="mb-4 w-full h-[150px] md:h-[280px] mb-4 rounded"/>
                 }
-                <ul className="question-answers">
+                <ul className="question-answers ">
                     {data && data.answerList.map((text, index) => {
                         const value = `q${text.id}-${index}`;
                         const check = `q${correct[0].id}-${index}`;

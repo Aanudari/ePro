@@ -84,7 +84,7 @@ export default function ExamInit() {
           </div>
       }
       <div
-        className="game"
+        className="game "
         ref={gameRef}
         data-game-started={gameStarted ? true : null}
       >
@@ -175,7 +175,7 @@ export default function ExamInit() {
               </>
             ) : null
             }
-            {!gameStarted && gameFinished ? (
+            {/* {!gameStarted && gameFinished ? (
               <>
               <div className="flex flex-col justify-start w-full">
               <span className="">
@@ -201,7 +201,7 @@ export default function ExamInit() {
               </button>
             </>
             ) : null
-            }
+            } */}
           </div>
         </div>
         <div className="game-area">

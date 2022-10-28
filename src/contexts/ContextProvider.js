@@ -29,6 +29,7 @@ export const ContextProvider = ({ children }) => {
   const uniqueRightAnswer = new Set(someValue.current.map(e => e))
   const uniqueWrongAnswer = new Set(wrongValue.current.map(e => e))
   const [showAnswer, setShowAnswer] = useState(false);
+  const [reminder, setReminder] = useState(false);
   return (
     <StateContext.Provider value={{
       activeMenu, setActiveMenu, user, setUser, roleId, allRoles, sideBarTrack,
@@ -37,7 +38,7 @@ export const ContextProvider = ({ children }) => {
       expandedMenu, setExpandedMenu, mobileBar, setMobileBar, readyCheck, setReadyCheck,
       examID, setExamID, qlength, setQlength, error, setError, gameStarted, setGameStarted,
       gameFinished, setGameFinished, someValue, uniqueRightAnswer, uniqueWrongAnswer, showAnswer, setShowAnswer,
-      wrongValue
+      wrongValue, reminder, setReminder
     }}>
       {children}
     </StateContext.Provider>

@@ -44,16 +44,19 @@ export default function UINavigation() {
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex flex-shrink-0 items-center">
-                  <img
+                  {/* <img
                     className="block h-8 w-auto lg:hidden"
                     src="ddish_logo.631bd794.svg"
                     alt="Your Company"
                   />
+                  
                   <img
                     className="hidden h-8 w-auto lg:block"
                     src="ddish_logo.631bd794.svg"
                     alt="Your Company"
-                  />
+                  /> */}
+                  <h4 className='text-white m-0 hidden md:block pl-10 '>E-Pro систем</h4>
+                  <h4 className='text-white m-0 md:hidden pl-5'>E-Pro </h4>
                 </div>
                 <div className="hidden sm:ml-6 sm:block">
                   <div className="flex space-x-4">

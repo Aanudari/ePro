@@ -63,7 +63,7 @@ function Login() {
   return (
     <div className="wrapper">
       <div className="container flex flex-col items-center justify-end md:justify-start">
-        <h1 className="text-white">Сургалт үнэлгээний программ</h1>
+        <h1 className="text-white !font-bold !text-[45px]">E-Pro систем</h1>
         <form className="form">
           <input
             type="text"

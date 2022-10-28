@@ -45,7 +45,7 @@ export default function QuestionShow({
                 <h4 className="question-text">{indexQ + 1}. {data.question}</h4>
                 {
                     data.imgUrl && 
-                    <img src={`${data.imgUrl}`} alt="" className="mb-4"/>
+                    <img src={`${data.imgUrl}`} alt="" className="mb-4 w-full rounded h-[150px] md:h-[250px]"/>
                 }
                 <ul className="question-answers">
                     {data && data.answerList.map((text, index) => {

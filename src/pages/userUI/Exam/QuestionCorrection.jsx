@@ -3,7 +3,7 @@ import Question from "./Question";
 import { useStateContext } from "../../../contexts/ContextProvider";
 
 export default function QuestionCorrection() {
-    const {wrongValue, someValue, showAnswer, setShowAnswer} = useStateContext();
+    const {wrongValue, someValue, showAnswer, setShowAnswer, gameStarted} = useStateContext();
     var data = sessionStorage.getItem("exam_data");
     var obj = JSON.parse(data)
 
@@ -14,7 +14,9 @@ export default function QuestionCorrection() {
       wrongValue.current.push(value)
     }
     return (
-      <div className="correction">
+      <div className="flex w-full justify-center">
+        <div className={gameStarted && !showAnswer ? 'w-full md:w-10/12  ' : null}>
+        <div className="correction">
         {obj && obj.questionList.map((question, index) => {
           return (
             <Question
@@ -38,6 +40,8 @@ export default function QuestionCorrection() {
             Дуусгах
           </button>
         </div>
+      </div>
+      </div>
       </div>
     );
   }

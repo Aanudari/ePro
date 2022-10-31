@@ -1,54 +1,19 @@
-
-.table-cus .container {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
+.radio-input {
+	position: absolute !important;
+	top: 15px;
+	left: -20px;
+	width: 20px !important;
+	cursor: pointer;
 }
 
-.table-cus table {
-	width: 800px;
-	border-collapse: collapse;
-	overflow: hidden;
-	box-shadow: 0 0 20px rgba(0,0,0,0.1);
-}
-
-.table-cus th,
-td {
-	padding: 15px;
-	background-color: rgba(255,255,255,0.2);
-	color: #fff;
-}
-
-.table-cus th {
-	text-align: left;
-}
-
-.table-cus thead {
-	th {
-		background-color: #55608f;
-	}
-}
-
-.table-cus tbody {
-	tr {
-		&:hover {
-			background-color: rgba(255,255,255,0.3);
-		}
-	}
-	td {
-		position: relative;
-		&:hover {
-			&:before {
-				content: "";
-				position: absolute;
-				left: 0;
-				right: 0;
-				top: -9999px;
-				bottom: -9999px;
-				background-color: rgba(255,255,255,0.2);
-				z-index: -1;
-			}
-		}
-	}
+.radio-input:checked::before,
+:checked::before {
+  content: "";
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background-color: #50a3a2;
+  position: absolute;
+  top: -3px;
+  left: 2px;
 }

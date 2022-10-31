@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import CreateAnswer from './CreateAnswer';
 function CreateQuestion({ index, valid, handleChange }) {
+    
     const [answerSchema, setAnswerSchema] = useState({
-        "answer": "ngoean",
+        "answer": "",
         "answerImgUrl": "",
         "isTrue": ""
     });
@@ -16,6 +17,25 @@ function CreateQuestion({ index, valid, handleChange }) {
             arr.push(answerSchema)
         }
         setStore(arr)
+    }
+    const [status, setStatus] = useState(0);
+    const [value, setValue] = useState(0);
+    // console.log(value)
+    // console.log(store)
+    const handleRadio = (someKey) => {
+        // console.log(someKey)
+        setStatus(someKey)
+    }
+    const handleStore = (inputValue, indexZ, radioSelected) => {
+        let arr = store
+        let newStore = arr?.map((item, index) => 
+            (index === indexZ) ? ({...item, answer : inputValue, isTrue : '0'}) : item
+        )
+        let itemChecked = newStore.map((e,i) => 
+            (radioSelected === i) ? ({...e, isTrue : '1'}) : e
+        )
+        // console.log(itemChecked)
+        setStore(itemChecked)
     }
 
     return (
@@ -42,12 +62,15 @@ function CreateQuestion({ index, valid, handleChange }) {
                 </div>
                     {
                         store?.map((element, index) => (
-                            <CreateAnswer key={index} index={index} data={element}/>
+                            <CreateAnswer key={index} index={index} data={element}
+                            value={value} setValue={setValue} handleStore={handleStore}
+                            handleRadio={handleRadio}
+                            />
                         ))
                     }
                 <button onClick={(e) => {
                     e.preventDefault()
-                    handleChange(answer, index - 1)
+                    handleChange(answer, index - 1, store)
                 }} className="cus-btn hover:shadow mt-2">
                     Хадгалах
                 </button>

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 function MainNavigation() {
     const navigate = useNavigate();
     return (
-        <div className="relative w-[335px]">
+        <div className="relative w-[350px]">
                     <div className="core fixed">
             <nav id="side-nav">
                 <div onClick={() => { navigate("/home"); }} className="h-14 bg-gray-700 shadow">

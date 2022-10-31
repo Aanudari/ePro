@@ -4,6 +4,7 @@ import axios from "axios";
 import TakeExamCellAdmin from "../../components/sub-components/TakeExamCellAdmin";
 import { useStateContext } from "../../contexts/ContextProvider";
 import CreateExamForm from "./ExamForm/CreateExamForm";
+import ExamFormControll from "./ExamForm/ExamFormControll";
 
 function ExamForm() {
   const [data, setData] = useState();
@@ -25,7 +26,6 @@ function ExamForm() {
       )
       .catch(err => console.log(err))
   }, [])
-  // console.log(data)
   return (
     <div className="w-full h-full min-h-screen bg-[#23b499]">
       <Navigation />
@@ -66,6 +66,9 @@ function ExamForm() {
         <div className="p-2">
             {
               key === "1" && <CreateExamForm/>
+            }
+            {
+              key === "0" && <ExamFormControll/>
             }
           </div>
 

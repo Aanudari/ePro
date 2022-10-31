@@ -7,7 +7,7 @@ import gsap from "gsap";
 import { useStateContext } from "../../../contexts/ContextProvider";
 
 export default function QuestionShow({
-    data, indexQ, handleScore
+    data, indexQ
 }) {
     const [answer, setAnswer] = useState(null);
     const {wrongValue, someValue} = useStateContext();
@@ -39,6 +39,14 @@ export default function QuestionShow({
             }
         );
     }, [data]);
+    var correct =  [... new Set(someValue.current)]
+    var wrong = [... new Set(wrongValue.current)]
+    let FinalAnswer = wrong !== [] ? [wrong[0]] : correct;
+
+    console.log(correct) 
+    console.log(wrong) 
+    console.log(FinalAnswer)
+    // console.log(correct)
     return (
         <div className="question " ref={questionRef}>
             <div className="question-inner">

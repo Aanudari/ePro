@@ -11,7 +11,7 @@ function LevelOneUITakeExam() {
     const [questions, setquestions] = useState();
     const [key, setKey] = useState('1');
     const navigate = useNavigate();
-    const { TOKEN, readyCheck, setReadyCheck, examID } = useStateContext();
+    const { TOKEN, readyCheck, setReadyCheck, examID, examName } = useStateContext();
     useEffect(() => {
         axios({
             method: "get",
@@ -30,7 +30,7 @@ function LevelOneUITakeExam() {
     }, [])
     return (
         <UserLayout>
-            <div className='flex h-full core-bg-b'>
+            <div className='flex min-h-screen h-full core-bg-b'>
                 <div className="relative h-full w-[230px] hidden md:block ">
                     <ul className="sidebar">
                         <li onClick={() => {
@@ -70,8 +70,14 @@ function LevelOneUITakeExam() {
                 {
                     readyCheck &&
                     <div className='h-screen flex justify-center items-center w-full top-0 left-0 fixed z-10 bg-black bg-opacity-50'>
-                        <div className='p-3 body-bg-cus2 rounded-lg'>
-                            <div className='body-bg-cus rounded-lg px-10 py-4'><span className='text-white text-[18px] font-bold'>Та "<strong>{examID}</strong>" ID дугаартай шалгалт эхлүүлэхдээ итгэлтэй байна уу. ?</span>
+                        <div className='p-3 body-bg-cus2 rounded-lg w-3/4 md:w-1/3'>
+                            <div className='body-bg-cus rounded-lg px-2 md:px-10 py-4'>
+                                <div className='flex flex-col items-center justify-center'>
+                                <span className='text-white text-[18px] font-[500]'>
+                                {examName}</span>
+                                <p className='text-white text-[18px] font-[500] m-0'>
+                                    Та энэ шалгалтыг өгөх дөө итгэлтэй байна уу. ?</p>
+                                </div>
                                 <div className='flex justify-end'>
                                     <button onClick={() => {
                                         navigate('/exam-init', { state: examID })

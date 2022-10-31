@@ -55,6 +55,7 @@ import MainNavigation from "./components/MainNavigation";
 function App() {
   const { activeMenu, showTop, roleId, error, setError } = useStateContext();
   const { width } = getWindowDimensions()
+
   return (
     <BrowserRouter>
       <div className="flex w-full relative">

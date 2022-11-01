@@ -66,23 +66,20 @@ hr.style18{
 }
 ::-webkit-scrollbar {
     width: 2px;
-
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px #fff;
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
+    background: inset 0 0 6px #23b499 ;
+    width: 2px !important;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
-    background: steelblue;
-    -webkit-box-shadow: inset 0 0 6px #fff;
+    background: rgb(32, 73, 90) !important;
+    width: 2px !important;
 }
 ::-webkit-scrollbar-thumb:window-inactive {
-    background: rgba(255,0,0,0.4);
+    width: 2px !important;
+    background: rgb(32, 73, 90) !important;
 }

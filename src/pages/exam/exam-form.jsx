@@ -63,7 +63,7 @@ function ExamForm() {
           </div>
           
         </div>
-        <div className="p-2">
+        <div className="">
             {
               key === "1" && <CreateExamForm/>
             }

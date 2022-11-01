@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Navigation from "../../components/Navigation";
 import axios from "axios";
-import TakeExamCellAdmin from "../../components/sub-components/TakeExamCellAdmin";
 import { useStateContext } from "../../contexts/ContextProvider";
 import CreateExamForm from "./ExamForm/CreateExamForm";
 import ExamFormControll from "./ExamForm/ExamFormControll";
@@ -45,7 +44,7 @@ function ExamForm() {
             setKey("1")
           }} className="h-full w-1/6 md:w-[180px] hover:bg-gray-600 flex justify-center items-center text-white text-[14px]">
             <span className="font-[500] hidden md:block">
-              Шалгалт үүсгэх
+              Ажлын байраар
             </span>
             <span className="font-[500] block md:hidden">
             <i className="bi bi-pencil"></i>
@@ -55,17 +54,16 @@ function ExamForm() {
             setKey("2")
           }} className="h-full w-1/6 md:w-[180px] hover:bg-gray-600 flex justify-center items-center text-white text-[14px]">
             <span className="font-[500] hidden md:block">
-              Цэс
+              Хувь хэрэглэгчээр
             </span>
             <span className="font-[500] block md:hidden">
             <i className="bi bi-alarm"></i>
             </span>
           </div>
-          
         </div>
         <div className="">
             {
-              key === "1" && <CreateExamForm/>
+              key === "1" && <CreateExamForm setKeyMain={setKey}/>
             }
             {
               key === "0" && <ExamFormControll/>

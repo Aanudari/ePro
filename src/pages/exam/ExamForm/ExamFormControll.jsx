@@ -22,7 +22,6 @@ function ExamFormControll() {
             )
             .catch(err => console.log(err))
     }, [])
-    // console.log(data)
     return ( 
         <div className="w-full flex flex-wrap gap-4 px-4 justify-center md:justify-start "> 
             {

@@ -2,9 +2,12 @@ import { useEffect } from "react";
 import { useState, useRef } from "react";
 import DateTimePicker from 'react-datetime-picker';
 import CreateQuestion from "./CreateQuestion";
+import { useStateContext } from "../../../contexts/ContextProvider";
+import axios from "axios";
 
 
 function CreateExamForm() {
+    const {TOKEN} = useStateContext();
     const [selectV, setSelectV] = useState(new Date())
     const [value, setValue] = useState(new Date());
     var datestring = value.getFullYear() + "-" + (value.getMonth() + 1) + "-" + value.getDate() + " " +
@@ -36,10 +39,10 @@ function CreateExamForm() {
         "roleId": `${role_id}`,
         "variants": []
       });
-    const handleChange = (value, indexX ) => {
+    const handleChange = (value, indexX, answerList ) => {
         let arr = variants
         let newQuestions = arr.questionList?.map((item, index) => 
-        (index === indexX) ? ({...item, question: value}) : item
+        (index === indexX) ? ({...item, question: value, answerList}) : item
         )
         setVariants({
             "name": `${varSelect}`,
@@ -57,13 +60,33 @@ function CreateExamForm() {
     useEffect(() => {
         setExam((prev) => ({...prev, variants : variants}))
     }, [variants])
-    // console.log(exam)
-    // console.log(exam_name)
-    // console.log(duration)
-    // console.log(role_id)
-    // console.log(count)
-    // console.log(datestring)
-    // console.log(datestring2)
+    let final = {
+        "examName": `${exam_name}`,
+        "startDate": `${datestring}`,
+        "expireDate": `${datestring2}`,
+        "duration": `${duration}`,
+        "roleId": `${role_id}`,
+        "variants": [variants]
+      }
+    
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        sessionStorage.setItem("test", JSON.stringify(final))
+        axios({
+            method: "post",
+            headers: {
+              "Content-Type": "application/json",
+              'Authorization': `${TOKEN}`
+            },
+            url: `http://192.168.10.248:9000/v1/Exam/add`,
+            data: JSON.stringify(final),
+          })
+            .then((res) => {
+                console.log(res)
+            })
+            .catch((err) => console.log(err));
+    }
+    console.log(final)
     return (
         <div className="container-po px-2 pt-2 pb-10 md:p-20">
             <form className="form-form p-2 flex flex-col md:flex-row gap-5 mt-4 w-full justify-around">
@@ -86,13 +109,12 @@ function CreateExamForm() {
                                 variants?.questionList?.map((item, index) =>(
                                     <CreateQuestion key={index} index={index + 1}
                                     handleChange={handleChange}
-                                    
                                      valid={key} />
                                 ))
                             }
-                            {/* <div className="w-full mt-10">
-                                    
-                                </div> */}
+                            <div className="w-full mt-10">
+                                <button>send result</button>
+                                </div>
                             
                         </div> :
                         <div className="form-form p-2 flex flex-col md:flex-row gap-5 mt-4 w-full items-center">
@@ -165,14 +187,16 @@ function CreateExamForm() {
                                         setshowQuestionMenu(true)
                                         handleCreateExam()
                                     }} className="cus-btn hover:shadow mt-5">
-                                        Үүсгэх
+                                        Асуулт нэмэх
                                     </button>
                                 </div>
                             </div>
-
+                            <div>
+                            </div>
                         </div>
                 }
             </form>
+                <button onClick={handleSubmit} className="p-2 border">feaf</button>
         </div>
     );
 }

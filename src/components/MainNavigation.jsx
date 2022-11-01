@@ -11,8 +11,8 @@ function MainNavigation() {
                     </div>
                     <ul className="h-full">
                         <li>
-                            <a>
-                                <i className="bi bi-clock"></i>
+                            <a className="relative">
+                                <i className="bi bi-clock absolute top-[17px] left-[17px]"></i>
                                 <span >Шалгалт</span></a>
                             <ul>
                                 <li><a onClick={() => { navigate("/exam-form"); }}>Шалгалтын форм </a></li>
@@ -26,7 +26,7 @@ function MainNavigation() {
                         </li>
                         <li>
                             <a>
-                                <i className="bi bi-bar-chart-line"></i>
+                                <i className="bi bi-bar-chart-line absolute top-[17px] left-[17px]"></i>
                                 <span>Үнэлгээ</span></a>
                             <ul>
                                 <li><a onClick={() => {
@@ -60,7 +60,7 @@ function MainNavigation() {
                         </li>
                         <li>
                             <a>
-                                <i className="bi bi-book"></i>
+                                <i className="bi bi-book absolute top-[17px] left-[17px]"></i>
                                 <span>Сургалт</span></a>
                             <ul>
                                 <li><a onClick={() => {
@@ -79,7 +79,7 @@ function MainNavigation() {
                             <a onClick={() => {
                                 navigate("/calendar");
                             }}>
-                                <i className="bi bi-calendar-check"></i>
+                                <i className="bi bi-calendar-check absolute top-[17px] left-[17px]"></i>
                                 <span>Calendar</span></a>
                         </li>
                         {/* <li>

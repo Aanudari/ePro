@@ -50,6 +50,7 @@ import Exam from "./pages/userUI/Exam";
 import CalendarX from "./pages/training/Calendar/calendar";
 import ExamInit from "./pages/userUI/ExamInit";
 import MainNavigation from "./components/MainNavigation";
+import RatingPage from "./pages/valuation/unelgee_uusgeh/RatingPage";
 
 
 function App() {
@@ -97,6 +98,14 @@ function App() {
               </ProtectedRoute>
             }
           />
+            <Route
+                path="/rating"
+                element={
+                    <ProtectedRoute allowedRoles={[199]}>
+                        <RatingPage />
+                    </ProtectedRoute>
+                }
+            />
           <Route
             path="/exam-result"
             element={

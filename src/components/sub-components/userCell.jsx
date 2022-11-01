@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 function UserCell(data) {
     // data дотор тухайн нэг ажилтан ий мэдээлэл дамжуулагдав
+    console.log(data)
     let navi = useNavigate()
     let location = useLocation();
     let lastName = data.data.lastName.slice(0, 1)

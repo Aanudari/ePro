@@ -3,6 +3,7 @@ import SubCategoryCell from "./subCategory/SubCategoryCell";
 import {useStateContext} from "../../../contexts/ContextProvider";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
+
 function CategoryCell(category) {
     const navigate = useNavigate();
     const {TOKEN} = useStateContext();

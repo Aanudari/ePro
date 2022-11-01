@@ -7,7 +7,7 @@ function MainNavigation() {
             <div className="core fixed">
                 <nav id="side-nav">
                     <div onClick={() => { navigate("/home"); }} className="h-14 bg-gray-700 shadow text-gray-100
-                    flex items-center text-2xl font-[700] cursor-pointer 
+                    flex items-center text-2xl font-[700] cursor-pointer
                     ">
                         <span className="hover:scale-105 transition w-full h-full flex
                         items-center
@@ -38,6 +38,9 @@ function MainNavigation() {
                                 <li><a onClick={() => {
                                     navigate("/dashboard");
                                 }}>Хянах самбар</a></li>
+                                <li><a onClick={() => {
+                                    navigate("/rating");
+                                }}>Үнэлгээ үүсгэх</a></li>
                                 <li><a onClick={() => {
                                     navigate("/level-one");
                                 }}>level 1</a></li>

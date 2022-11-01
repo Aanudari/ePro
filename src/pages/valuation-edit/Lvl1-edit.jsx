@@ -22,6 +22,7 @@ function LeveloneEdit() {
     const [data, setdata] = useState();
     const [template, setTemplate] = useState();
     const [show, setshow] = useState(false);
+    const [msg, setMsg] = useState(false);
     // const navigation = [
     //     {name: 'Үнэлгээ нэмэх', path: '/add-category', icon: true},
     //     {name: 'Үнэлгээ өөрчлөх', path: '/channel', icon: true},
@@ -54,7 +55,7 @@ function LeveloneEdit() {
             .then(
                 res => {
                     setTemplate(res.data.result);
-                    // console.log(res.data.result);
+                    setMsg(res.data.resultMessage);
                 }
             )
             .catch(err => console.log(err))
@@ -66,6 +67,7 @@ function LeveloneEdit() {
             <div className="h-full flex">
                 <div className='w-5/6 p-3 bg-gray-100'>
                     <div className='w-full rounded-lg bg-white p-2 fw-bold'>
+                        <h6>{msg}</h6>
                         <h5> {template && template.name} {template && template.id}</h5>
                         <div>
                             {
@@ -79,7 +81,7 @@ function LeveloneEdit() {
                 <div className='hidden md:block h-screen relative w-[280px]'>
                     <div className='fixed top-0 h-full w-full shadow-sm'>
                         <div className='h-14'/>
-                        <div >
+                        <div>
                             {vocToShow && (
                                 <AddCategory template_id={template} show={vocToShow} voc={vocToShow} onClose={hideModal} />
                             )}

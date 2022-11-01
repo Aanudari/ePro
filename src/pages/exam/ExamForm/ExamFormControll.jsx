@@ -75,7 +75,7 @@ function ExamFormControll() {
                             onClick={() => {
                                 setShowModal(false)
                             }}
-                            className="px-3 py-2 bg-sky-400 text-white font-[500] rounded">Буцах</button>
+                            className="px-3 py-2 bg-sky-400 text-white font-[500] rounded"><i className="bi bi-x-lg font-bold"></i></button>
                             </div>
                         </div>
                     </div>

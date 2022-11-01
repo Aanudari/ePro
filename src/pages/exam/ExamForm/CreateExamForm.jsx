@@ -7,13 +7,17 @@ import axios from "axios";
 
 
 function CreateExamForm() {
+    function addZero(i) {
+        if (i < 10) {i = "0" + i}
+        return i;
+      }
     const {TOKEN} = useStateContext();
     const [selectV, setSelectV] = useState(new Date())
     const [value, setValue] = useState(new Date());
-    var datestring = value.getFullYear() + "-" + (value.getMonth() + 1) + "-" + value.getDate() + " " +
-        value.getHours() + ":" + value.getMinutes() + ":" + value.getSeconds();
-    var datestring2 = selectV.getFullYear() + "-" + (selectV.getMonth() + 1) + "-" + selectV.getDate() + " " +
-        selectV.getHours() + ":" + selectV.getMinutes() + ":" + selectV.getSeconds();
+    var datestring = value.getFullYear() + "" + addZero((value.getMonth() + 1)) + addZero(value.getDate()) +
+        addZero(value.getHours()) + addZero(value.getMinutes()) + addZero(value.getSeconds());
+    var datestring2 = selectV.getFullYear() + "" + addZero((selectV.getMonth() + 1)) + addZero(selectV.getDate()) +
+        addZero(selectV.getHours()) + addZero(selectV.getMinutes()) + addZero(selectV.getSeconds());
     const [duration, setDuration] = useState(0);
     const [role_id, setRole_id] = useState(0);
     const [exam_name, setExam_name] = useState('');
@@ -35,7 +39,7 @@ function CreateExamForm() {
         "examName": `${exam_name}`,
         "startDate": `${datestring}`,
         "expireDate": `${datestring2}`,
-        "duration": `${duration}`,
+        "duration": duration,
         "roleId": `${role_id}`,
         "variants": []
       });
@@ -64,8 +68,8 @@ function CreateExamForm() {
         "examName": `${exam_name}`,
         "startDate": `${datestring}`,
         "expireDate": `${datestring2}`,
-        "duration": `${duration}`,
-        "roleId": `${role_id}`,
+        "duration": duration,
+        "roleId": role_id,
         "variants": [variants]
       }
     
@@ -79,14 +83,13 @@ function CreateExamForm() {
               'Authorization': `${TOKEN}`
             },
             url: `http://192.168.10.248:9000/v1/Exam/add`,
-            data: JSON.stringify(final),
+            data : final,
           })
             .then((res) => {
                 console.log(res)
             })
-            .catch((err) => console.log(err));
+            .catch((err) => alert(JSON.stringify(err)));
     }
-    console.log(final)
     return (
         <div className="container-po px-2 pt-2 pb-10 md:p-20">
             <form className="form-form p-2 flex flex-col md:flex-row gap-5 mt-4 w-full justify-around">
@@ -130,7 +133,7 @@ function CreateExamForm() {
 
                                 <div className="group">
                                     <input onChange={(e) => {
-                                        setDuration(e.target.value)
+                                        setDuration(parseInt(e.target.value))
                                     }} type="number" required />
                                     <span className="highlight"></span>
                                     <span className="bar"></span>
@@ -156,7 +159,7 @@ function CreateExamForm() {
                                 <div className="select-con">
                                     <div className="select">
                                         <select onChange={(e) => {
-                                            setRole_id(e.target.value)
+                                            setRole_id(parseInt(e.target.value))
                                         }} name="format" id="format" required>
                                             <option >Категори</option>
                                             <option value="188">Branch</option>
@@ -179,7 +182,7 @@ function CreateExamForm() {
                                 </div>
                                 <div className="flex flex-col mt-5">
                                     <span className="font-[500] text-gray-500">Хаах цаг :</span>
-                                    <DateTimePicker value={value} onChange={date => setSelectV(date)} timeFormat="HH:mm" />
+                                    <DateTimePicker value={selectV} onChange={date => setSelectV(date)} timeFormat="HH:mm" />
                                     {/* <TimePicker/> */}
                                 </div>
                                 <div className="w-full mt-10">

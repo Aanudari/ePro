@@ -6,8 +6,14 @@ function MainNavigation() {
         <div className="relative width-nav">
             <div className="core fixed">
                 <nav id="side-nav">
-                    <div onClick={() => { navigate("/home"); }} className="h-14 bg-gray-700 shadow">
-                        {/* <i className="fa fa-codepen"></i> */}1
+                    <div onClick={() => { navigate("/home"); }} className="h-14 bg-gray-700 shadow text-gray-100
+                    flex items-center text-2xl font-[700] cursor-pointer 
+                    ">
+                        <span className="hover:scale-105 transition w-full h-full flex
+                        items-center
+                        font-bold ml-12">
+                        E-PRO
+                        </span>
                     </div>
                     <ul className="h-full">
                         <li>

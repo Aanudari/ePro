@@ -6,6 +6,13 @@ import TakeExamCellAdmin from "../../../components/sub-components/TakeExamCellAd
 function ExamFormControll() {
     const {TOKEN} = useStateContext();
     const [data, setData] = useState();
+    const [showModal, setShowModal] = useState(false);
+    const [modalData, setModalData] = useState();
+    const [trigger, setTrigger] = useState(false);
+    const handleModal = (data) => {
+        setShowModal(!showModal)
+        setModalData(data)
+    }
     useEffect(() => {
         axios({
             method: "get",
@@ -21,14 +28,57 @@ function ExamFormControll() {
                 }
             )
             .catch(err => console.log(err))
-    }, [])
+    }, [trigger])
+    // console.log(modalData)
+    const handleDeleteExam = (id) => {
+        console.log(id)
+        axios({
+            method: "delete",
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `${TOKEN}`
+            },
+            url: `http://192.168.10.248:9000/v1/Exam/${id}`,
+        })
+            .then(
+                res => {
+                    setShowModal(false)
+                    setTrigger(!trigger)
+                }
+            )
+            .catch(err => console.log(err))
+    }
     return ( 
-        <div className="w-full flex flex-wrap gap-4 px-4 justify-center md:justify-start "> 
+        <div className="w-full relative flex flex-wrap gap-4 p-4 justify-center md:justify-start "> 
             {
                 data && 
                 data.map((item, index) => (
-                    <TakeExamCellAdmin data={item} key={index} index={index}/>
+                    <TakeExamCellAdmin handleModal={handleModal} data={item} 
+                    showModal={showModal} key={index} index={index} 
+                   />
                 ))
+            }
+            {
+                showModal &&
+                    <div className="fixed w-full h-screen top-0 left-0 bg-black 
+                    bg-opacity-50 flex justify-center items-center">
+                        <div className="w-5/6 md:w-1/3 h-1/2 bg-white md:rounded p-3 flex flex-col">
+                            <div className="h-full">
+                                <p>Нэр : {modalData.name}</p>
+                                <p>id :{modalData.id}</p>
+                            </div>
+                            <div className="flex gap-2 justify-end">
+                            <button onClick={() => {
+                                handleDeleteExam(modalData.id)
+                            }} className="px-3 py-2 bg-red-400 text-white font-[500] rounded">Устгах</button>
+                            <button
+                            onClick={() => {
+                                setShowModal(false)
+                            }}
+                            className="px-3 py-2 bg-sky-400 text-white font-[500] rounded">Буцах</button>
+                            </div>
+                        </div>
+                    </div>
             }
 </div>
 

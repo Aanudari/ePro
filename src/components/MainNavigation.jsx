@@ -12,10 +12,17 @@ function MainNavigation() {
                         <span className="hover:scale-105 transition w-full h-full flex
                         items-center
                         font-bold ml-12">
-                        E-PRO
+                            E-PRO
                         </span>
                     </div>
                     <ul className="h-full">
+                        <li>
+                            <a onClick={() => {
+                                navigate("/dashboard");
+                            }}>
+                                <i className="bi bi-calendar-check absolute top-[17px] left-[17px]"></i>
+                                <span>Хянах самбар</span></a>
+                        </li>
                         <li>
                             <a className="relative">
                                 <i className="bi bi-clock absolute top-[17px] left-[17px]"></i>
@@ -35,9 +42,7 @@ function MainNavigation() {
                                 <i className="bi bi-bar-chart-line absolute top-[17px] left-[17px]"></i>
                                 <span>Үнэлгээ</span></a>
                             <ul>
-                                <li><a onClick={() => {
-                                    navigate("/dashboard");
-                                }}>Хянах самбар</a></li>
+
                                 <li><a onClick={() => {
                                     navigate("/level-one");
                                 }}>level 1</a></li>

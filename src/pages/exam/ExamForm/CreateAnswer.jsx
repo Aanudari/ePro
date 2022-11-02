@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function CreateAnswer({ index, value, setValue, handleStore, handleRadio }) {
+function CreateAnswer({ index, value, setValue, handleStore, handleRadio, setnoti_store }) {
     const [radioSelected, setRadioSelected] = useState(0);
     // console.log(radioSelected)
     return (

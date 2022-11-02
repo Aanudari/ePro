@@ -6,7 +6,7 @@ import { useStateContext } from "../../../contexts/ContextProvider";
 import axios from "axios";
 import CheckModal from "../../../components/exam-comp/CheckModal";
 
-function CreateExamForm({setKeyMain}) {
+function CreateExamForm({ setKeyMain }) {
     function addZero(i) {
         if (i < 10) { i = "0" + i }
         return i;
@@ -22,7 +22,7 @@ function CreateExamForm({setKeyMain}) {
     const [role_id, setRole_id] = useState(0);
     const [exam_name, setExam_name] = useState('');
     const [varSelect, setVarSelect] = useState('');
-    const [count, setCount] = useState(0);
+    const [count, setCount] = useState();
     const [showQuestionMenu, setshowQuestionMenu] = useState(false);
     const [key, setKey] = useState(1);
 
@@ -43,11 +43,14 @@ function CreateExamForm({setKeyMain}) {
         "roleId": `${role_id}`,
         "variants": []
     });
+    const [doneList, setDoneList] = useState([]);
+    let uniqueList = [...new Set(doneList)]
     const handleChange = (value, indexX, answerList) => {
         let arr = variants
         let newQuestions = arr.questionList?.map((item, index) =>
             (index === indexX) ? ({ ...item, question: value, answerList }) : item
         )
+        setDoneList((prev) => [...prev, indexX])
         setVariants({
             "name": `${varSelect}`,
             "questionList": [...newQuestions]
@@ -55,7 +58,6 @@ function CreateExamForm({setKeyMain}) {
     }
     const handleCreateExam = () => {
         let arr = []
-
         for (let index = 0; index < count; index++) {
             arr.push(question)
         }
@@ -73,8 +75,7 @@ function CreateExamForm({setKeyMain}) {
         "variants": [variants]
     }
     const [showSuccess, setShowSuccess] = useState(false);
-    const handleSubmit = (e) => {
-        e.preventDefault()
+    const handleSubmit = () => {
         sessionStorage.setItem("test", JSON.stringify(final))
         axios({
             method: "post",
@@ -87,7 +88,8 @@ function CreateExamForm({setKeyMain}) {
         })
             .then((res) => {
                 console.log(res.data.isSuccess)
-                if(res.data.isSuccess) {
+                console.log(res.data)
+                if (res.data.isSuccess) {
                     setKeyMain('0')
                     setShowSuccess(true)
                 }
@@ -102,8 +104,6 @@ function CreateExamForm({setKeyMain}) {
     const [noti_role, setNoti_role] = useState(false);
     const handleCreateQuestions = (event) => {
         event.preventDefault()
-        // setshowQuestionMenu(true)
-        // handleCreateExam()
         if (exam_name === '') {
             setNoti_examName(true)
         }
@@ -119,35 +119,52 @@ function CreateExamForm({setKeyMain}) {
         if (role_id === 0) {
             setNoti_role(true)
         }
-        if (exam_name == '', duration !== 0, count !== 0,
-            varSelect !== '', role_id !== 0
+        if (exam_name !== '' && duration !== 0 && count !== 0 &&
+            varSelect !== '' && role_id !== 0
         ) {
             setCheckTime(true)
         }
     }
     return (
         <div className="w-full min-h-[calc(100vh-112px)] relative p-2">
-            <div className="container-po px-2 pt-2 pb-10 md:p-20">
-                <form className="form-form p-2 flex flex-col md:flex-row gap-5 mt-4 w-full justify-around">
+            <div className="container-po px-0 md:px-4 pt-2 pb-10">
+                <form className="form-form p-2 flex flex-col md:flex-row gap-5 w-full justify-around">
                     {
                         showQuestionMenu ?
                             <div className="w-full">
-                                {
-                                    variants && variants.questionList &&
-                                    variants?.questionList?.map((element, index) => (
-                                        <button onClick={(e) => {
-                                            e.preventDefault()
-                                            setKey(index + 1)
-                                        }} key={index} className="bg-[#50a3a2] text-white px-4 py-3 rounded 
-                                    hover:scale-105 
-                                transition ml-1 mt-1">{index + 1}</button>
-                                    ))
-                                }
+                                <div className="flex flex-wrap">
+                                    {
+                                        variants && variants.questionList &&
+                                        variants?.questionList?.map((element, index) => (
+                                            <div key={index} className="cus-buttons ">
+                                                <div className="">
+                                                    <button onClick={(e) => {
+                                                        e.preventDefault()
+                                                        setKey(index + 1)
+                                                    }} key={index} id={doneList.includes(index) ? "done" : ''} className="transition raise flex px-2">
+                                                        {
+                                                            doneList.includes(index) &&
+                                                        <i className="bi bi-check-lg"></i>
+                                                        }
+                                                        <span className="mt-0 hidden md:flex mr-1">
+                                                        Асуулт
+                                                        <span className="mb-0 ml-1">
+                                                        {index + 1}
+                                                        </span>
+                                                        </span>
+                                                        <span className="p-2 m-0 block md:hidden">{index + 1}</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                        ))
+                                    }
+                                </div>
                                 {
                                     variants && variants.questionList &&
                                     variants?.questionList?.map((item, index) => (
                                         <CreateQuestion key={index} index={index + 1}
-                                            handleChange={handleChange}
+                                            handleChange={handleChange} countNum={count} listNum={uniqueList.length}
                                             valid={key} />
                                     ))
                                 }
@@ -191,7 +208,7 @@ function CreateExamForm({setKeyMain}) {
                                         <input
                                             className={noti_count ? 'custom-validation ' : ""}
                                             onChange={(e) => {
-                                                setCount(e.target.value)
+                                                setCount(parseInt(e.target.value))
                                                 setNoti_count(false)
                                             }} type="number" required />
                                         {
@@ -226,6 +243,7 @@ function CreateExamForm({setKeyMain}) {
                                             <i className="bi bi-exclamation-lg text-2xl text-red-500 
                                     animate-bounce absolute left-[-20px] top-[10px]"></i>
                                         }
+                                            <h6 className="text-gray-500/80 text-[18px] ml-2">Категори сонгох</h6>
                                         <div className={noti_role ? 'custom-validation select select2 ' : "select"}>
                                             <select onChange={(e) => {
                                                 setRole_id(parseInt(e.target.value))
@@ -270,14 +288,28 @@ function CreateExamForm({setKeyMain}) {
                     }
                     {
                         checkTime &&
-                        <CheckModal setCheckTime={setCheckTime} datestring={datestring} 
-                        datestring2={datestring2} setshowQuestionMenu={setshowQuestionMenu}
-                        handleCreateExam={handleCreateExam}
+                        <CheckModal setCheckTime={setCheckTime} datestring={datestring}
+                            datestring2={datestring2} setshowQuestionMenu={setshowQuestionMenu}
+                            handleCreateExam={handleCreateExam}
                         />
 
                     }
                 </form>
-                <button onClick={handleSubmit} className="p-2 border">feaf</button>
+                {
+                    count === uniqueList.length && 
+                <div className='w-full flex justify-center'>
+                    <div className="cus-buttons">
+                        <div className="buttons">
+                            <button
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    handleSubmit()
+                                }}
+                                className="raise">Шалгалт үүсгэх</button>
+                        </div>
+                    </div>
+                </div>
+                }
             </div>
         </div>
     );

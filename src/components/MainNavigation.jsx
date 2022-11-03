@@ -28,7 +28,7 @@ function MainNavigation() {
                                 <i className="bi bi-clock absolute top-[17px] left-[17px]"></i>
                                 <span >Шалгалт</span></a>
                             <ul>
-                                <li><a onClick={() => { navigate("/exam-form"); }}>Шалгалтын форм </a></li>
+                                <li><a onClick={() => { navigate("/exam-form"); }}>Шалгалт үүсгэх</a></li>
                                 <li><a onClick={() => {
                                     navigate("/take-exam");
                                 }}>Шалгалт өгөх</a></li>
@@ -48,30 +48,30 @@ function MainNavigation() {
                                 <li><a onClick={() => {
                                     navigate("/rate-users");
                                 }}>Үнэлгээ өгөх</a></li>
-                                {/*<li><a onClick={() => {*/}
-                                {/*    navigate("/level-one");*/}
-                                {/*}}>level 1</a></li>*/}
-                                {/*<li><a onClick={() => {*/}
-                                {/*    navigate("/complain");*/}
-                                {/*}}>Complain</a></li>*/}
-                                {/*<li><a onClick={() => {*/}
-                                {/*    navigate("/telesales");*/}
-                                {/*}}>Telesales</a></li>*/}
-                                {/*<li><a onClick={() => {*/}
-                                {/*    navigate("/online");*/}
-                                {/*}}>Online</a></li>*/}
-                                {/*<li><a onClick={() => {*/}
-                                {/*    navigate("/branch");*/}
-                                {/*}}>Branch</a></li>*/}
-                                {/*<li><a onClick={() => {*/}
-                                {/*    navigate("/installer");*/}
-                                {/*}}>Installer</a></li>*/}
-                                {/*<li><a onClick={() => {*/}
-                                {/*    navigate("/care");*/}
-                                {/*}}>Care</a></li>*/}
-                                {/*<li><a onClick={() => {*/}
-                                {/*    navigate("/bank");*/}
-                                {/*}}>Bank</a></li>*/}
+                                <li><a onClick={() => {
+                                   navigate("/level-one");
+                                }}>level 1</a></li>
+                                <li><a onClick={() => {
+                                   navigate("/complain");
+                                }}>Complain</a></li>
+                                <li><a onClick={() => {
+                                   navigate("/telesales");
+                                }}>Telesales</a></li>
+                                <li><a onClick={() => {
+                                   navigate("/online");
+                                }}>Online</a></li>
+                                <li><a onClick={() => {
+                                   navigate("/branch");
+                                }}>Branch</a></li>
+                                <li><a onClick={() => {
+                                   navigate("/installer");
+                                }}>Installer</a></li>
+                                <li><a onClick={() => {
+                                   navigate("/care");
+                                }}>Care</a></li>
+                                <li><a onClick={() => {
+                                   navigate("/bank");
+                                }}>Bank</a></li>
                             </ul>
                         </li>
                         <li>

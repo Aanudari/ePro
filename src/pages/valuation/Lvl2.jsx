@@ -1,65 +1,32 @@
 import React from "react";
-import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import Navigation from "../../components/Navigation";
-import axios from "axios";
 import UserCell from "../../components/sub-components/userCell";
+import { fetchComplain } from "../../service/users";
+import Loading from "../../components/Loading";
 function Level2() {
-  // API аас ирж буй data г хадгалах state
-  const [data, setData] = useState([]);
-  // level 1 operator уудын жагсаалтыг авах API
-  useEffect(() => {
-    axios({
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      url: `${process.env.REACT_APP_URL}/api/User/role/4`,
-    })
-      .then(
-        res => {
-          setData(res.data.result)
-        }
-      )
-      .catch(err => console.log(err))
-  }, [])
+  const { isError, isSuccess, isLoading, data, error } = useQuery(
+    ["complainOperators"],
+    fetchComplain,
+    { staleTime: 3000 }
+  );
+  if (isLoading) {
+    return <Loading/>;
+  }
   return (
-    <div className="w-full h-full bg-gray-50">
-      <Navigation />
-      <div className="h-full px-5 py-3">
-        <div className="w-full h-full bg-white rounded-lg p-5">
-          <div className="w-full bg-gray-100 p-3 rounded flex justify-between">
-            <div className="w-1/6 bg-gray-200">
-              <select className="w-full h-full">
-                <option value="2022">2022</option>
-                <option value="2021">2021</option>
-              </select>
-            </div>
-            <div className="w-1/6 bg-gray-200">
-              <select className="w-full h-full">
-                <option value="season-one">1-р улирал</option>
-                <option value="season-two">2-р улирал</option>
-                <option value="season-three">3-р улирал</option>
-                <option value="season-four">4-р улирал</option>
-              </select>
-            </div>
-            <div className="w-1/3 bg-gray-200">
-              <select className="w-full h-full">
-                <option value="all">Бүгд</option>
-                <option value="done">Үнэлгээ хийгдсэн</option>
-                <option value="yet">Үнэлгээ дутуу</option>
-                <option value="uncertain">Тодорхойгүй</option>
-              </select>
-            </div>
+    <div className="w-full min-h-screen relative bg-[#23b499]">
+    <Navigation />
+          <div className="p-2 flex flex-wrap gap-3 justify-around md:justify-start">
+        {
+          data ? data.result.map((user, index) =>
+            // Ажилтан тус бүрийг UserCell conponent д хувиарлах замаар мэдээллүүдийг харуулав
+            <UserCell key={index} data={user} />
+          ) : 
+          <div>
           </div>
-          {
-            data ? data.map((user, index) =>
-              // Ажилтан тус бүрийг UserCell conponent д хувиарлах замаар мэдээллүүдийг харуулав 
-              <UserCell key={index} data={user} />
-            ) : null
-          }
-        </div>
-      </div>
-    </div>
+        }
+          </div>
+  </div>
   );
 }
 

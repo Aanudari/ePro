@@ -15,9 +15,9 @@ function CalendarX() {
     }, [monthIndex]);
 
     return (
-        <div className="w-full">
+        <div className="w-full h-[calc(100vh-56px)]">
             <Navigation/>
-        <div className="w-full h-screen bg-white rounded-lg p-4 flex flex-col h-screen relative flex flex-col flex flex-col oveflow-hidden">
+        <div className="w-full h-full bg-white rounded-lg p-2 flex flex-col relative">
             {showEventModal && <EventModal />}
             <CalendarHeader />
             <div className="flex flex-1 ">

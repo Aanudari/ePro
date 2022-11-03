@@ -22,7 +22,7 @@ function UserCell(data) {
                 </div>
                     <p className='text-white m-0 text-[13px] flex justify-between'>
                         <span className='m-0'>
-                        Role name: 
+                        Role name:
                         </span>
                         <span className='m-0'>
                         {data.data.roleName}
@@ -30,7 +30,7 @@ function UserCell(data) {
                     </p>
                     <p className='text-white m-0 text-[13px] flex justify-between'>
                         <span className='m-0'>
-                        Worker Level: 
+                        Worker Level:
                         </span>
                         <span className='m-0'>
                         {data.data.workerLevel}
@@ -38,7 +38,7 @@ function UserCell(data) {
                     </p>
                     <p className='text-white m-0 text-[13px] flex justify-between'>
                         <span className='m-0'>
-                        Organization: 
+                        Organization:
                         </span>
                         <span className='m-0'>
                         {data.data.organizationUnitId}
@@ -46,7 +46,7 @@ function UserCell(data) {
                     </p>
                     <p className='text-white m-0 text-[13px] flex justify-between'>
                         <span className='m-0'>
-                        Эхлэл огноо: 
+                        Эхлэл огноо:
                         </span>
                         <span className='m-0 '>
                         2022/10/10
@@ -54,7 +54,7 @@ function UserCell(data) {
                     </p>
                     <p className='text-white m-0 text-[13px] flex justify-between'>
                         <span className='m-0'>
-                        Дуусах огноо: 
+                        Дуусах огноо:
                         </span>
                         <span className='m-0 '>
                         2022/12/01
@@ -62,7 +62,7 @@ function UserCell(data) {
                     </p>
                     <p className='text-white m-0 text-[13px] flex justify-between'>
                         <span className='m-0'>
-                        Үнэлгээний нэр: 
+                        Үнэлгээний нэр:
                         </span>
                         <span className='m-0 '>
                         not yet
@@ -70,7 +70,7 @@ function UserCell(data) {
                     </p>
                     <p className='text-white m-0 text-[13px] flex justify-between'>
                         <span className='m-0'>
-                        Статус: 
+                        Статус:
                         </span>
                         <span className='m-0 bg-red-400 px-2 rounded text-black'>
                         not yet

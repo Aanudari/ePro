@@ -4,9 +4,9 @@ import DateTimePicker from 'react-datetime-picker';
 import CreateQuestion from "./CreateQuestion";
 import { useStateContext } from "../../../contexts/ContextProvider";
 import axios from "axios";
+import CheckModal from "../../../components/exam-comp/CheckModal";
 
-
-function CreateExamForm() {
+function CreateExamForm({ setKeyMain }) {
     function addZero(i) {
         if (i < 10) { i = "0" + i }
         return i;
@@ -22,7 +22,7 @@ function CreateExamForm() {
     const [role_id, setRole_id] = useState(0);
     const [exam_name, setExam_name] = useState('');
     const [varSelect, setVarSelect] = useState('');
-    const [count, setCount] = useState(0);
+    const [count, setCount] = useState();
     const [showQuestionMenu, setshowQuestionMenu] = useState(false);
     const [key, setKey] = useState(1);
 
@@ -43,11 +43,14 @@ function CreateExamForm() {
         "roleId": `${role_id}`,
         "variants": []
     });
+    const [doneList, setDoneList] = useState([]);
+    let uniqueList = [...new Set(doneList)]
     const handleChange = (value, indexX, answerList) => {
         let arr = variants
         let newQuestions = arr.questionList?.map((item, index) =>
             (index === indexX) ? ({ ...item, question: value, answerList }) : item
         )
+        setDoneList((prev) => [...prev, indexX])
         setVariants({
             "name": `${varSelect}`,
             "questionList": [...newQuestions]
@@ -55,7 +58,6 @@ function CreateExamForm() {
     }
     const handleCreateExam = () => {
         let arr = []
-
         for (let index = 0; index < count; index++) {
             arr.push(question)
         }
@@ -72,9 +74,8 @@ function CreateExamForm() {
         "roleId": role_id,
         "variants": [variants]
     }
-
-    const handleSubmit = (e) => {
-        e.preventDefault()
+    const [showSuccess, setShowSuccess] = useState(false);
+    const handleSubmit = () => {
         sessionStorage.setItem("test", JSON.stringify(final))
         axios({
             method: "post",
@@ -86,7 +87,12 @@ function CreateExamForm() {
             data: final,
         })
             .then((res) => {
-                console.log(res)
+                console.log(res.data.isSuccess)
+                console.log(res.data)
+                if (res.data.isSuccess) {
+                    setKeyMain('0')
+                    setShowSuccess(true)
+                }
             })
             .catch((err) => alert(JSON.stringify(err)));
     }
@@ -95,10 +101,9 @@ function CreateExamForm() {
     const [noti_count, setNoti_count] = useState(false);
     const [noti_variant, setNoti_variant] = useState(false);
     const [checkTime, setCheckTime] = useState(false);
+    const [noti_role, setNoti_role] = useState(false);
     const handleCreateQuestions = (event) => {
         event.preventDefault()
-        // setshowQuestionMenu(true)
-        // handleCreateExam()
         if (exam_name === '') {
             setNoti_examName(true)
         }
@@ -111,162 +116,201 @@ function CreateExamForm() {
         if (varSelect === '') {
             setNoti_variant(true)
         }
-        else {
+        if (role_id === 0) {
+            setNoti_role(true)
+        }
+        if (exam_name !== '' && duration !== 0 && count !== 0 &&
+            varSelect !== '' && role_id !== 0
+        ) {
             setCheckTime(true)
         }
     }
-    console.log(checkTime)
     return (
-        <div className="container-po px-2 pt-2 pb-10 md:p-20 m-2">
-            <form className="form-form p-2 flex flex-col md:flex-row gap-5 mt-4 w-full justify-around">
-                {
-                    showQuestionMenu ?
-                        <div className="w-full">
-                            {
-                                variants && variants.questionList &&
-                                variants?.questionList?.map((element, index) => (
-                                    <button onClick={(e) => {
-                                        e.preventDefault()
-                                        setKey(index + 1)
-                                    }} key={index} className="bg-[#50a3a2] text-white px-4 py-3 rounded 
-                                    hover:scale-105 
-                                transition ml-1 mt-1">{index + 1}</button>
-                                ))
-                            }
-                            {
-                                variants && variants.questionList &&
-                                variants?.questionList?.map((item, index) => (
-                                    <CreateQuestion key={index} index={index + 1}
-                                        handleChange={handleChange}
-                                        valid={key} />
-                                ))
-                            }
-                        </div> :
-                        <div className="form-form p-2 flex flex-col md:flex-row gap-5 mt-4 w-full items-center">
-                            <div className="w-full md:w-1/2 pl-0 md:pl-20">
-                                <div className="group">
+        <div className="w-full min-h-[calc(100vh-112px)] relative p-2">
+            <div className="container-po px-0 md:px-4 pt-2 pb-10">
+                <form className="form-form p-2 flex flex-col md:flex-row gap-5 w-full justify-around">
+                    {
+                        showQuestionMenu ?
+                            <div className="w-full">
+                                <div className="flex flex-wrap">
+                                    {
+                                        variants && variants.questionList &&
+                                        variants?.questionList?.map((element, index) => (
+                                            <div key={index} className="cus-buttons ">
+                                                <div className="">
+                                                    <button onClick={(e) => {
+                                                        e.preventDefault()
+                                                        setKey(index + 1)
+                                                    }} key={index} id={doneList.includes(index) ? "done" : ''} className="transition raise flex px-2">
+                                                        {
+                                                            doneList.includes(index) &&
+                                                        <i className="bi bi-check-lg"></i>
+                                                        }
+                                                        <span className="mt-0 hidden md:flex mr-1">
+                                                        Асуулт
+                                                        <span className="mb-0 ml-1">
+                                                        {index + 1}
+                                                        </span>
+                                                        </span>
+                                                        <span className="p-2 m-0 block md:hidden">{index + 1}</span>
+                                                    </button>
+                                                </div>
+                                            </div>
 
-                                    <input className={noti_examName ? 'custom-validation' : ""}
-                                        onChange={(e) => {
-                                            setExam_name(e.target.value)
-                                            setNoti_examName(false)
-                                        }} type="text" required />
-                                    {
-                                        noti_examName &&
-                                        <i className="bi bi-exclamation-lg text-2xl text-red-500 
-                                    animate-bounce absolute top-[10px] left-[-15px]"></i>
+                                        ))
                                     }
-                                    <span className="highlight"></span>
-                                    <span className="bar "></span>
-                                    <label className="">Шалгалтын нэр</label>
                                 </div>
+                                {
+                                    variants && variants.questionList &&
+                                    variants?.questionList?.map((item, index) => (
+                                        <CreateQuestion key={index} index={index + 1}
+                                            handleChange={handleChange} countNum={count} listNum={uniqueList.length}
+                                            valid={key} />
+                                    ))
+                                }
+                            </div> :
+                            <div className="form-form p-2 flex flex-col md:flex-row gap-5 mt-4 w-full items-center">
+                                <div className="w-full md:w-1/2 pl-0 md:pl-20">
+                                    <div className="group">
 
-                                <div className="group">
-                                    <input
-                                        className={noti_diration ? 'custom-validation ' : ""}
-                                        onChange={(e) => {
-                                            setDuration(parseInt(e.target.value))
-                                            setNoti_diration(false)
-                                        }} type="number" required />
-                                    {
-                                        noti_diration &&
-                                        <i className="bi bi-exclamation-lg text-2xl text-red-500 
+                                        <input className={noti_examName ? 'custom-validation' : ""}
+                                            onChange={(e) => {
+                                                setExam_name(e.target.value)
+                                                setNoti_examName(false)
+                                            }} type="text" required />
+                                        {
+                                            noti_examName &&
+                                            <i className="bi bi-exclamation-lg text-2xl text-red-500 
                                     animate-bounce absolute top-[10px] left-[-15px]"></i>
-                                    }
-                                    <span className="highlight"></span>
-                                    <span className="bar"></span>
-                                    <label>Үргэлжлэх хугацаа</label>
-                                </div>
-                                <div className="group">
-                                    <input
-                                        className={noti_count ? 'custom-validation ' : ""}
-                                        onChange={(e) => {
-                                            setCount(e.target.value)
-                                            setNoti_count(false)
-                                        }} type="number" required />
-                                    {
-                                        noti_count &&
-                                        <i className="bi bi-exclamation-lg text-2xl text-red-500 
+                                        }
+                                        <span className="highlight"></span>
+                                        <span className="bar "></span>
+                                        <label className="">Шалгалтын нэр</label>
+                                    </div>
+
+                                    <div className="group">
+                                        <input
+                                            className={noti_diration ? 'custom-validation ' : ""}
+                                            onChange={(e) => {
+                                                setDuration(parseInt(e.target.value))
+                                                setNoti_diration(false)
+                                            }} type="number" required />
+                                        {
+                                            noti_diration &&
+                                            <i className="bi bi-exclamation-lg text-2xl text-red-500 
                                     animate-bounce absolute top-[10px] left-[-15px]"></i>
-                                    }
-                                    <span className="highlight"></span>
-                                    <span className="bar"></span>
-                                    <label>Асуултын тоо</label>
-                                </div>
-                                <div className="group">
-                                    <input
-                                        className={noti_variant ? 'custom-validation ' : ""}
-                                        onChange={(e) => {
-                                            setVarSelect(e.target.value)
-                                            setNoti_variant(false)
-                                        }} type="text" required />
-                                    {
-                                        noti_variant &&
-                                        <i className="bi bi-exclamation-lg text-2xl text-red-500 
+                                        }
+                                        <span className="highlight"></span>
+                                        <span className="bar"></span>
+                                        <label>Үргэлжлэх хугацаа</label>
+                                    </div>
+                                    <div className="group">
+                                        <input
+                                            className={noti_count ? 'custom-validation ' : ""}
+                                            onChange={(e) => {
+                                                setCount(parseInt(e.target.value))
+                                                setNoti_count(false)
+                                            }} type="number" required />
+                                        {
+                                            noti_count &&
+                                            <i className="bi bi-exclamation-lg text-2xl text-red-500 
                                     animate-bounce absolute top-[10px] left-[-15px]"></i>
-                                    }
-                                    <span className="highlight"></span>
-                                    <span className="bar"></span>
-                                    <label>Вариант </label>
-                                </div>
-                                <div className="p-0 md:p-3"></div>
-                                <div className="select-con">
-                                    <div className="select">
-                                        <select onChange={(e) => {
-                                            setRole_id(parseInt(e.target.value))
-                                        }} name="format" id="format" required>
-                                            <option >Категори</option>
-                                            <option value="188">Branch</option>
-                                            <option value="208">Installer</option>
-                                            <option value="1">Level1</option>
-                                            <option value="3">Care</option>
-                                            <option value="7">Bank</option>
-                                            <option value="168">Telesales</option>
-                                            <option value="4">Complain</option>
-                                            <option value="5">Online</option>
-                                        </select>
+                                        }
+                                        <span className="highlight"></span>
+                                        <span className="bar"></span>
+                                        <label>Асуултын тоо</label>
+                                    </div>
+                                    <div className="group">
+                                        <input
+                                            className={noti_variant ? 'custom-validation ' : ""}
+                                            onChange={(e) => {
+                                                setVarSelect(e.target.value)
+                                                setNoti_variant(false)
+                                            }} type="text" required />
+                                        {
+                                            noti_variant &&
+                                            <i className="bi bi-exclamation-lg text-2xl text-red-500 
+                                    animate-bounce absolute top-[10px] left-[-15px]"></i>
+                                        }
+                                        <span className="highlight"></span>
+                                        <span className="bar"></span>
+                                        <label>Вариант </label>
+                                    </div>
+                                    <div className="p-0 md:p-3"></div>
+                                    <div className="select-con relative">
+                                        {
+                                            noti_role &&
+                                            <i className="bi bi-exclamation-lg text-2xl text-red-500 
+                                    animate-bounce absolute left-[-20px] top-[10px]"></i>
+                                        }
+                                            <h6 className="text-gray-500/80 text-[18px] ml-2">Категори сонгох</h6>
+                                        <div className={noti_role ? 'custom-validation select select2 ' : "select"}>
+                                            <select onChange={(e) => {
+                                                setRole_id(parseInt(e.target.value))
+                                                setNoti_role(false)
+                                            }} name="format" id="format" required>
+                                                <option >Категори</option>
+                                                <option value="188">Branch</option>
+                                                <option value="208">Installer</option>
+                                                <option value="1">Level1</option>
+                                                <option value="3">Care</option>
+                                                <option value="7">Bank</option>
+                                                <option value="168">Telesales</option>
+                                                <option value="4">Complain</option>
+                                                <option value="5">Online</option>
+                                            </select>
+
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="h-full w-full md:w-1/2 pr-0 md:pr-20">
-                                <div className="flex flex-col ">
-                                    <span className="font-[500] text-gray-500">Нээх цаг :</span>
-                                    <DateTimePicker className={''} value={value} onChange={date => setValue(date)} timeFormat="HH:mm" />
-                                    {/* <TimePicker/> */}
+                                <div className="h-full w-full md:w-1/2 pr-0 md:pr-20">
+                                    <div className="flex flex-col ">
+                                        <span className="font-[500] text-gray-500">Нээх цаг :</span>
+                                        <DateTimePicker className={''} value={value} onChange={date => setValue(date)} timeFormat="HH:mm" />
+                                        {/* <TimePicker/> */}
+                                    </div>
+                                    <div className="flex flex-col mt-5">
+                                        <span className="font-[500] text-gray-500">Хаах цаг :</span>
+                                        <DateTimePicker value={selectV} onChange={date => setSelectV(date)} timeFormat="HH:mm" />
+                                        {/* <TimePicker/> */}
+                                    </div>
+                                    <div className="w-full mt-10">
+                                        <button onClick={(e) => {
+                                            handleCreateQuestions(e)
+                                        }} className="cus-btn hover:shadow mt-5">
+                                            Асуулт нэмэх
+                                        </button>
+                                    </div>
                                 </div>
-                                <div className="flex flex-col mt-5">
-                                    <span className="font-[500] text-gray-500">Хаах цаг :</span>
-                                    <DateTimePicker value={selectV} onChange={date => setSelectV(date)} timeFormat="HH:mm" />
-                                    {/* <TimePicker/> */}
-                                </div>
-                                <div className="w-full mt-10">
-                                    <button onClick={(e) => {
-                                        handleCreateQuestions(e)
-                                    }} className="cus-btn hover:shadow mt-5">
-                                        Асуулт нэмэх
-                                    </button>
+                                <div>
                                 </div>
                             </div>
-                            <div>
-                            </div>
-                        </div>
-                }
+                    }
+                    {
+                        checkTime &&
+                        <CheckModal setCheckTime={setCheckTime} datestring={datestring}
+                            datestring2={datestring2} setshowQuestionMenu={setshowQuestionMenu}
+                            handleCreateExam={handleCreateExam}
+                        />
+
+                    }
+                </form>
                 {
-                    checkTime &&
-                    <div className="absolute w-full h-full bg-black top-0 left-0
-                     bg-opacity-50 flex justify-center items-center
-                    ">
-                        <div onClick={() => {
-                            setCheckTime(false)
-                        }} className="w-2/3 h-2/3 bg-white p-4">
-                            <button className="cus-btn w-1/3">Буцах</button>
+                    count === uniqueList.length && 
+                <div className='w-full flex justify-center'>
+                    <div className="cus-buttons">
+                        <div className="buttons">
+                            <button
+                                onClick={(e) => {
+                                    e.preventDefault()
+                                    handleSubmit()
+                                }}
+                                className="raise">Шалгалт үүсгэх</button>
                         </div>
                     </div>
-
-
+                </div>
                 }
-            </form>
-            <button onClick={handleSubmit} className="p-2 border">feaf</button>
+            </div>
         </div>
     );
 }

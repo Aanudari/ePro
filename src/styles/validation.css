@@ -1,3 +1,7 @@
 .custom-validation {
     border-bottom: 1px solid red !important;
 }
+.custom-validation2 {
+    border-bottom: 1px solid red !important;
+    color: red;
+}

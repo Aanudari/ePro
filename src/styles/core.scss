@@ -360,13 +360,16 @@ select::-ms-expand {
   top: 0;
   right: 0;
   padding: 0 1em;
-  background: #2b2e2e;
+  background: rgb(32, 73, 90) ;
   cursor:pointer;
   pointer-events:none;
   transition:.25s all ease;
 }
 .select {
   color: #23b499;
+}
+.select2 {
+  color: red !important;
 }
 .select option {
   height: 50px !important;

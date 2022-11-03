@@ -1,6 +1,7 @@
 import "./styles/App.css";
 import './styles/styles.scss';
 import './styles/core.scss';
+import './styles/modal.scss';
 import './styles/validation.css';
 import 'devextreme/dist/css/dx.light.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";

@@ -4,9 +4,9 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { useStateContext } from "../contexts/ContextProvider";
 import UserCell from "./sub-components/userCell";
+import Loading from "./Loading";
 
 function SearchResult() {
-    let location = useLocation();
     const { TOKEN, inputValue } = useStateContext();
     const [data, setdata] = useState();
     useEffect(() => {
@@ -27,18 +27,21 @@ function SearchResult() {
             })
     }, [inputValue])
     return (
-        <div className="w-full h-screen bg-gray-50">
-            <Navigation />
-            <div className="h-screen px-5 py-3">
-                <div className="w-full h-full bg-white rounded-lg p-5">
-                    {
-                        data ? data.map((user, index) =>
-                            <UserCell key={index} data={user} />
-                        ) : <div>Илэрц олдсонгүй !</div>
-                    }
-                </div>
-            </div>
-        </div>
+        <div className="w-full min-h-screen relative bg-[#23b499]">
+        <Navigation />
+              <div className="p-2 flex flex-wrap gap-3 justify-around md:justify-start">
+            {
+              data ? data.map((user, index) =>
+                // Ажилтан тус бүрийг UserCell conponent д хувиарлах замаар мэдээллүүдийг харуулав
+                <UserCell key={index} data={user} />
+              ) : 
+              <div>
+                {/* <p className="text-white">Илэрц олдсонгүй</p> */}
+                <Loading/>
+              </div>
+            }
+              </div>
+      </div>
     );
 }
 

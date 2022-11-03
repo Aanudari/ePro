@@ -5,8 +5,9 @@ import { useStateContext } from "../../../contexts/ContextProvider";
 import axios from "axios";
 import CheckModal from "../../../components/exam-comp/CheckModal";
 import DatePicker from "react-datepicker";
-
+import OptionSelect from "./OptionSelect";
 import "react-datepicker/dist/react-datepicker.css";
+import PointSelect from "./PointSelect";
 
 function CreateExamForm({ setKeyMain }) {
     function addZero(i) {
@@ -20,8 +21,12 @@ function CreateExamForm({ setKeyMain }) {
         addZero(value.getHours()) + addZero(value.getMinutes()) + addZero(value.getSeconds());
     var datestring2 = selectV.getFullYear() + "" + addZero((selectV.getMonth() + 1)) + addZero(selectV.getDate()) +
         addZero(selectV.getHours()) + addZero(selectV.getMinutes()) + addZero(selectV.getSeconds());
+    var showstring = value.getFullYear() + "-" + addZero((value.getMonth() + 1)) + "-" + addZero(value.getDate())+ " " +
+    addZero(value.getHours()) + ":" + addZero(value.getMinutes()) + ":" + addZero(value.getSeconds());
+    var showstring2 = selectV.getFullYear() + "-" + addZero((selectV.getMonth() + 1)) + "-" + addZero(selectV.getDate()) + " " +
+        addZero(selectV.getHours())+ ":" + addZero(selectV.getMinutes())+ ":" + addZero(selectV.getSeconds());
     const [duration, setDuration] = useState(0);
-    const [role_id, setRole_id] = useState(0);
+    const [role_id, setRole_id] = useState(1);
     const [exam_name, setExam_name] = useState('');
     const [varSelect, setVarSelect] = useState('');
     const [count, setCount] = useState();
@@ -112,17 +117,18 @@ function CreateExamForm({ setKeyMain }) {
         if (duration === 0) {
             setNoti_diration(true)
         }
-        if (count === 0) {
+        if (count === undefined) {
             setNoti_count(true)
         }
         if (varSelect === '') {
             setNoti_variant(true)
         }
-        if (role_id === 0) {
-            setNoti_role(true)
-        }
+        // if (role_id === 0) {
+        //     setNoti_role(true)
+        // }
         if (exam_name !== '' && duration !== 0 && count !== 0 &&
-            varSelect !== '' && role_id !== 0
+            varSelect !== '' 
+            // && role_id !== 0
         ) {
             setCheckTime(true)
         }
@@ -146,7 +152,10 @@ function CreateExamForm({ setKeyMain }) {
                                                     }} key={index} id={doneList.includes(index) ? "done" : ''} className="transition raise flex px-2">
                                                         {
                                                             doneList.includes(index) &&
-                                                            <i className="bi bi-check-lg"></i>
+                                                            <div>
+                                                                <i className="bi bi-check-lg mt-2 block md:hidden"></i>
+                                                                <i className="bi bi-check-lg md:block hidden"></i>
+                                                            </div>
                                                         }
                                                         <span className="mt-0 hidden md:flex mr-1">
                                                             Асуулт
@@ -171,7 +180,7 @@ function CreateExamForm({ setKeyMain }) {
                                     ))
                                 }
                             </div> :
-                            <div className="form-form p-2 flex flex-col md:flex-row gap-5 mt-4 w-full items-center">
+                            <div className="form-form p-2 flex flex-col md:flex-row gap-5 mt-4 w-full">
                                 <div className="w-full md:w-1/2 pl-0 md:pl-20">
                                     <div className="group">
 
@@ -201,10 +210,10 @@ function CreateExamForm({ setKeyMain }) {
                                             noti_diration &&
                                             <i className="bi bi-exclamation-lg text-2xl text-red-500 
                                     animate-bounce absolute top-[10px] left-[-15px]"></i>
-                                        }
+                                }
                                         <span className="highlight"></span>
                                         <span className="bar"></span>
-                                        <label>Үргэлжлэх хугацаа</label>
+                                        <label>Үргэлжлэх хугацаа (мин)</label>
                                     </div>
                                     <div className="group">
                                         <input
@@ -238,20 +247,23 @@ function CreateExamForm({ setKeyMain }) {
                                         <span className="bar"></span>
                                         <label>Вариант </label>
                                     </div>
+                                    {/* // here ! */}
+                                    
+                                    {/* // here ! */}
                                     <div className="p-0 md:p-3"></div>
-                                    <div className="select-con relative">
+                                    <div className="select-con relative hidden">
                                         {
                                             noti_role &&
                                             <i className="bi bi-exclamation-lg text-2xl text-red-500 
                                     animate-bounce absolute left-[-20px] top-[10px]"></i>
                                         }
-                                        <h6 className="text-gray-500/80 text-[18px] ml-2">Категори сонгох</h6>
+                                        <h6 className="text-gray-500/80 text-[17.5px]">Ажлын байр сонгох:</h6>
                                         <div className={noti_role ? 'custom-validation select select2 ' : "select"}>
                                             <select onChange={(e) => {
                                                 setRole_id(parseInt(e.target.value))
                                                 setNoti_role(false)
                                             }} name="format" id="format" required>
-                                                <option >Категори</option>
+                                                <option >Ажлын байр</option>
                                                 <option value="188">Branch</option>
                                                 <option value="208">Installer</option>
                                                 <option value="1">Level1</option>
@@ -265,10 +277,10 @@ function CreateExamForm({ setKeyMain }) {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="h-full w-full md:w-1/2 pr-0 md:pr-20 flex flex-col justify-between">
+                                <div className="h-full w-full md:w-1/2 pr-0 md:mt-3 md:pr-20 flex flex-col justify-between">
                                     <div>
                                     <div className="flex flex-col ">
-                                        <span className="font-[500] text-gray-500">Нээх цаг :</span>
+                                        <span className="font-[500] text-gray-500/80  text-[17.5px]">Нээх цаг :</span>
                                         <DatePicker
                                             selected={value}
                                             value={value} 
@@ -283,7 +295,7 @@ function CreateExamForm({ setKeyMain }) {
                                         />
                                     </div>
                                     <div className="flex flex-col mt-3">
-                                        <span className="font-[500] text-gray-500">Хаах цаг :</span>
+                                        <span className="font-[500] text-gray-500/80 text-[17.5px]">Хаах цаг :</span>
                                         <DatePicker
                                             selected={selectV}
                                             value={selectV} 
@@ -298,6 +310,15 @@ function CreateExamForm({ setKeyMain }) {
                                         />
                                     </div>
                                     </div>
+                                    <div className="mt-2">
+                                        <h6 className="text-gray-500/80 text-[17.5px] mt-[10px]">Ажлын байр сонгох :</h6>
+                                        <OptionSelect/>
+                                    </div>
+                                    <div className="">
+                                        <h6 className="text-gray-500/80 text-[17.5px] mt-3">Онооны тохиргоо :</h6>
+                                        <PointSelect/>
+                                    </div>
+
                                     <div className="w-full mt-10">
                                         <button onClick={(e) => {
                                             handleCreateQuestions(e)
@@ -312,8 +333,8 @@ function CreateExamForm({ setKeyMain }) {
                     }
                     {
                         checkTime &&
-                        <CheckModal setCheckTime={setCheckTime} datestring={datestring}
-                            datestring2={datestring2} setshowQuestionMenu={setshowQuestionMenu}
+                        <CheckModal setCheckTime={setCheckTime} datestring={showstring}
+                            datestring2={showstring2} setshowQuestionMenu={setshowQuestionMenu}
                             handleCreateExam={handleCreateExam}
                         />
 

@@ -32,7 +32,8 @@ function ExamForm() {
         <div className="bg-gray-700 h-14 flex">
           <div onClick={() => {
             setKey("0")
-          }} className="h-full w-1/6 md:w-[180px] hover:bg-gray-600 flex justify-center items-center text-white text-[14px]">
+          }} className={`h-full w-1/6 md:w-[180px] hover:bg-gray-600 flex
+          justify-center items-center text-white text-[14px] ${key === "0" && 'border-b shadow pt-[1px]'}`}>
             <span className="font-[500] hidden md:block">
               Идэвхитэй шалгалт
             </span>
@@ -42,7 +43,8 @@ function ExamForm() {
           </div>
           <div onClick={() => {
             setKey("1")
-          }} className="h-full w-1/6 md:w-[180px] hover:bg-gray-600 flex justify-center items-center text-white text-[14px]">
+          }} className={`h-full w-1/6 md:w-[180px] hover:bg-gray-600 flex
+          justify-center items-center text-white text-[14px] ${key === "1" && 'border-b shadow pt-[1px]'}`}>
             <span className="font-[500] hidden md:block">
               Ажлын байраар
             </span>
@@ -52,7 +54,8 @@ function ExamForm() {
           </div>
           <div onClick={() => {
             setKey("2")
-          }} className="h-full w-1/6 md:w-[180px] hover:bg-gray-600 flex justify-center items-center text-white text-[14px]">
+          }} className={`h-full w-1/6 md:w-[180px] hover:bg-gray-600 flex
+          justify-center items-center text-white text-[14px] ${key === "2" && 'border-b shadow pt-[1px]'}`}>
             <span className="font-[500] hidden md:block">
               Хувь хэрэглэгчээр
             </span>

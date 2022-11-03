@@ -53,28 +53,25 @@ import CalendarX from "./pages/training/Calendar/calendar";
 import ExamInit from "./pages/userUI/ExamInit";
 import MainNavigation from "./components/MainNavigation";
 import RatingIndexPage from "../src/pages/rating/rating/RatingIndexPage";
-
-function RatingIndex() {
-    return null;
-}
+import { QueryClient, QueryClientProvider } from "react-query";
 
 function App() {
   const { activeMenu, showTop, roleId, error, setError } = useStateContext();
   const { width } = getWindowDimensions()
-
+  const queryClient = new QueryClient()
   return (
     <BrowserRouter>
       <div className="flex w-full relative">
         {
           error &&
-          <NotValid/>
+          <NotValid />
         }
         {
           showTop ?
-          <div className='fixed w-full h-screen bg-black top-z right-0'></div> : null
+            <div className='fixed w-full h-screen bg-black top-z right-0'></div> : null
         }
         {/* {activeMenu && roleId === "199" && width > 768 ? <SideNavigation /> : null} */}
-        {activeMenu && roleId === "199" && width > 768 ? <MainNavigation/> : null}
+        {activeMenu && roleId === "199" && width > 768 ? <MainNavigation /> : null}
 
         <Routes>
           {/*Sidebar аас үсрэх боломжтой үндсэн хуудаснууд */}
@@ -103,14 +100,14 @@ function App() {
               </ProtectedRoute>
             }
           />
-            <Route
-                path="/rating"
-                element={
-                    <ProtectedRoute allowedRoles={[199]}>
-                        <RatingIndexPage />
-                    </ProtectedRoute>
-                }
-            />
+          <Route
+            path="/rating"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <RatingIndexPage />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/exam-result"
             element={
@@ -170,17 +167,22 @@ function App() {
           <Route
             path="/level-one"
             element={
+              <QueryClientProvider client={queryClient}>
+                
               <ProtectedRoute allowedRoles={[199, 1]}>
                 <Level1 />
               </ProtectedRoute>
+              </QueryClientProvider>
             }
           />
           <Route
             path="/complain"
             element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <Level2 />
-              </ProtectedRoute>
+              <QueryClientProvider client={queryClient}>
+                <ProtectedRoute allowedRoles={[199]}>
+                  <Level2 />
+                </ProtectedRoute>
+              </QueryClientProvider>
             }
           />
           <Route
@@ -218,7 +220,7 @@ function App() {
           <Route
             path="*"
             element={
-                <NotFound />
+              <NotFound />
             }
           />
 
@@ -239,14 +241,14 @@ function App() {
               </ProtectedRoute>
             }
           />
-            <Route
-                path="/add-category"
-                element={
-                    <ProtectedRoute allowedRoles={[199]}>
-                        <AddCategory />
-                    </ProtectedRoute>
-                }
-            />
+          <Route
+            path="/add-category"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <AddCategory />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/telesales-edit"
             element={
@@ -379,7 +381,7 @@ function App() {
             path="/exam"
             element={
               <ProtectedRoute allowedRoles={[199, 1]}>
-                <Exam/>
+                <Exam />
               </ProtectedRoute>
             }
           />
@@ -387,7 +389,7 @@ function App() {
             path="/calendar"
             element={
               <ProtectedRoute allowedRoles={[199]}>
-                <CalendarX/>
+                <CalendarX />
               </ProtectedRoute>
             }
           />
@@ -395,13 +397,13 @@ function App() {
             path="/exam-init"
             element={
               <ProtectedRoute allowedRoles={[199, 1]}>
-                <ExamInit/>
+                <ExamInit />
               </ProtectedRoute>
             }
           />
         </Routes>
       </div>
-      <SessionTimeout/>
+      <SessionTimeout />
     </BrowserRouter>
   );
 }

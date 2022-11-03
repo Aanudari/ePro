@@ -5,26 +5,19 @@ import axios from "axios";
 import UserCell from "../../components/sub-components/userCell";
 import ExpandedMenu from "../../components/ExpandedMenu";
 import { useStateContext } from "../../contexts/ContextProvider";
+import { fetchLevelOne } from "../../service/users";
+import Loading from "../../components/Loading";
+import { useQuery } from "react-query";
 function Level1() {
-  // API аас ирж буй data г хадгалах state
-  const [data, setData] = useState([]);
-  // level 1 operator уудын жагсаалтыг авах API
-  useEffect(() => {
-    axios({
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      url: `http://192.168.10.248:9000/v1/User/role/1`,
-    })
-      .then(
-        res => {
-          setData(res.data.result)
-        }
-      )
-      .catch(err => console.log(err))
-  }, [])
   const { expandedMenu, setExpandedMenu } = useStateContext()
+  const { isError, isSuccess, isLoading, data, error } = useQuery(
+    ["levelOneOperators"],
+    fetchLevelOne,
+    { staleTime: 3000 }
+  );
+  if (isLoading) {
+    return <Loading/>;
+  }
   return (
     <div className="w-full min-h-screen relative bg-[#23b499]">
       <ExpandedMenu />
@@ -36,7 +29,7 @@ function Level1() {
             </div>
             <div className="p-2 flex flex-wrap gap-3 justify-around md:justify-start">
           {
-            data ? data.map((user, index) =>
+            data ? data.result.map((user, index) =>
               // Ажилтан тус бүрийг UserCell conponent д хувиарлах замаар мэдээллүүдийг харуулав
               <UserCell key={index} data={user} />
             ) : null

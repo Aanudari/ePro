@@ -56,6 +56,8 @@ function AddCategory({ show, voc, onClose, template_id }) {
                 .catch((err) => console.log(err));
         }
     }
+
+
     useEffect(() => {
         const timer = setTimeout(() => {
             setalert(false);
@@ -80,8 +82,6 @@ function AddCategory({ show, voc, onClose, template_id }) {
     // let addSubCategory = (event) => {
     //     event.preventDefault();
     // }
-
-
 
     return (
         <div>

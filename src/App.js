@@ -51,8 +51,11 @@ import Exam from "./pages/userUI/Exam";
 import CalendarX from "./pages/training/Calendar/calendar";
 import ExamInit from "./pages/userUI/ExamInit";
 import MainNavigation from "./components/MainNavigation";
-import RatingPage from "./pages/valuation/unelgee_uusgeh/RatingPage";
+import RatingIndexPage from "../src/pages/rating/rating/RatingIndexPage";
 
+function RatingIndex() {
+    return null;
+}
 
 function App() {
   const { activeMenu, showTop, roleId, error, setError } = useStateContext();
@@ -103,7 +106,7 @@ function App() {
                 path="/rating"
                 element={
                     <ProtectedRoute allowedRoles={[199]}>
-                        <RatingPage />
+                        <RatingIndexPage />
                     </ProtectedRoute>
                 }
             />

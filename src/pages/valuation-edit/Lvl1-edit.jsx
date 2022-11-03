@@ -10,7 +10,7 @@ import AddCategory from "../../components/sub-components/category/AddCategory";
 
 function LeveloneEdit() {
     const vocData = {
-        voc1: { title: "Үнэлгээ нэмэх"},
+        voc1: { title: "Template нэмэх"},
         // voc2: { title: "Үнэлгээ засварлах", href: "#", content: "voc2-content" },
     };
     const [vocToShow, setVocToShow] = useState(null);
@@ -43,6 +43,7 @@ function LeveloneEdit() {
             )
             .catch(err => console.log(err))
     }, []);
+
     useEffect(() => {
         axios({
             method: "get",

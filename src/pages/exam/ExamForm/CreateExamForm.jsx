@@ -1,10 +1,12 @@
 import { useEffect } from "react";
-import { useState, useRef } from "react";
-import DateTimePicker from 'react-datetime-picker';
+import { useState } from "react";
 import CreateQuestion from "./CreateQuestion";
 import { useStateContext } from "../../../contexts/ContextProvider";
 import axios from "axios";
 import CheckModal from "../../../components/exam-comp/CheckModal";
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
 
 function CreateExamForm({ setKeyMain }) {
     function addZero(i) {
@@ -144,13 +146,13 @@ function CreateExamForm({ setKeyMain }) {
                                                     }} key={index} id={doneList.includes(index) ? "done" : ''} className="transition raise flex px-2">
                                                         {
                                                             doneList.includes(index) &&
-                                                        <i className="bi bi-check-lg"></i>
+                                                            <i className="bi bi-check-lg"></i>
                                                         }
                                                         <span className="mt-0 hidden md:flex mr-1">
-                                                        Асуулт
-                                                        <span className="mb-0 ml-1">
-                                                        {index + 1}
-                                                        </span>
+                                                            Асуулт
+                                                            <span className="mb-0 ml-1">
+                                                                {index + 1}
+                                                            </span>
                                                         </span>
                                                         <span className="p-2 m-0 block md:hidden">{index + 1}</span>
                                                     </button>
@@ -243,7 +245,7 @@ function CreateExamForm({ setKeyMain }) {
                                             <i className="bi bi-exclamation-lg text-2xl text-red-500 
                                     animate-bounce absolute left-[-20px] top-[10px]"></i>
                                         }
-                                            <h6 className="text-gray-500/80 text-[18px] ml-2">Категори сонгох</h6>
+                                        <h6 className="text-gray-500/80 text-[18px] ml-2">Категори сонгох</h6>
                                         <div className={noti_role ? 'custom-validation select select2 ' : "select"}>
                                             <select onChange={(e) => {
                                                 setRole_id(parseInt(e.target.value))
@@ -263,21 +265,43 @@ function CreateExamForm({ setKeyMain }) {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="h-full w-full md:w-1/2 pr-0 md:pr-20">
+                                <div className="h-full w-full md:w-1/2 pr-0 md:pr-20 flex flex-col justify-between">
+                                    <div>
                                     <div className="flex flex-col ">
                                         <span className="font-[500] text-gray-500">Нээх цаг :</span>
-                                        <DateTimePicker className={''} value={value} onChange={date => setValue(date)} timeFormat="HH:mm" />
-                                        {/* <TimePicker/> */}
+                                        <DatePicker
+                                            selected={value}
+                                            value={value} 
+                                            onChange={date => setValue(date)}
+                                            className='form-control form-control-sm 
+                                            py-2 mt-2 ml-0 border border-dark'
+                                            showTimeSelect
+                                            timeFormat='HH:mm'
+                                            timeIntervals={15}
+                                            timeCaption='time'
+                                            dateFormat='yyyy-MM-dd h:mm aa'
+                                        />
                                     </div>
-                                    <div className="flex flex-col mt-5">
+                                    <div className="flex flex-col mt-3">
                                         <span className="font-[500] text-gray-500">Хаах цаг :</span>
-                                        <DateTimePicker value={selectV} onChange={date => setSelectV(date)} timeFormat="HH:mm" />
-                                        {/* <TimePicker/> */}
+                                        <DatePicker
+                                            selected={selectV}
+                                            value={selectV} 
+                                            onChange={date => setSelectV(date)}
+                                            className='form-control form-control-sm
+                                            py-2 mt-2 ml-0 border border-dark'
+                                            showTimeSelect
+                                            timeFormat='HH:mm'
+                                            timeIntervals={15}
+                                            timeCaption='time'
+                                            dateFormat='yyyy-MM-dd h:mm aa'
+                                        />
+                                    </div>
                                     </div>
                                     <div className="w-full mt-10">
                                         <button onClick={(e) => {
                                             handleCreateQuestions(e)
-                                        }} className="cus-btn hover:shadow mt-5">
+                                        }} className="cus-btn hover:shadow h-[48px]">
                                             Асуулт нэмэх
                                         </button>
                                     </div>
@@ -296,19 +320,19 @@ function CreateExamForm({ setKeyMain }) {
                     }
                 </form>
                 {
-                    count === uniqueList.length && 
-                <div className='w-full flex justify-center'>
-                    <div className="cus-buttons">
-                        <div className="buttons">
-                            <button
-                                onClick={(e) => {
-                                    e.preventDefault()
-                                    handleSubmit()
-                                }}
-                                className="raise">Шалгалт үүсгэх</button>
+                    count === uniqueList.length &&
+                    <div className='w-full flex justify-center'>
+                        <div className="cus-buttons">
+                            <div className="buttons">
+                                <button
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        handleSubmit()
+                                    }}
+                                    className="raise">Шалгалт үүсгэх</button>
+                            </div>
                         </div>
                     </div>
-                </div>
                 }
             </div>
         </div>

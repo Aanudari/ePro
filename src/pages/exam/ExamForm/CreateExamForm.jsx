@@ -57,6 +57,7 @@ function CreateExamForm({ setKeyMain }) {
         let newQuestions = arr.questionList?.map((item, index) =>
             (index === indexX) ? ({ ...item, question: value, answerList }) : item
         )
+        setKey(key + 1)
         setDoneList((prev) => [...prev, indexX])
         setVariants({
             "name": `${varSelect}`,
@@ -94,8 +95,6 @@ function CreateExamForm({ setKeyMain }) {
             data: final,
         })
             .then((res) => {
-                console.log(res.data.isSuccess)
-                console.log(res.data)
                 if (res.data.isSuccess) {
                     setKeyMain('0')
                     setShowSuccess(true)

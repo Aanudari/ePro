@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import CreateAnswer from './CreateAnswer';
-
-
-function CreateQuestion({ index, valid, handleChange, countNum, listNum }) {
+import ImageOption from './ImageOptions';
+import ImageUploader from './ImageUploader';
+function CreateQuestion({ index, valid, handleChange, countNum, listNum, pointStatus }) {
     const [answerSchema, setAnswerSchema] = useState({
         "answer": "",
         "answerImgUrl": "",
         "isTrue": ''
     });
+
     const [store, setStore] = useState([]);
     const [answer, setAnswer] = useState('');
+    const [point, setPoint] = useState(0);
     const [count, setcount] = useState(0);
     const [showAnswerMenu, setShowAnswerMenu] = useState(false);
+    const [imageMenu, setImageMenu] = useState(false);
+    const [imageValue, setImageValue] = useState();
     const generateAnswers = (key) => {
         let arr = []
         for (let index = 0; index < key; index++) {
@@ -21,10 +25,7 @@ function CreateQuestion({ index, valid, handleChange, countNum, listNum }) {
     }
     const [status, setStatus] = useState(0);
     const [value, setValue] = useState(0);
-    // console.log(value)
-    // console.log(store)
     const handleRadio = (someKey) => {
-        // console.log(someKey)
         setStatus(someKey)
     }
     const [checkEmpty, setcheckEmpty] = useState([]);
@@ -45,10 +46,10 @@ function CreateQuestion({ index, valid, handleChange, countNum, listNum }) {
     const [noti_store, setnoti_store] = useState(false);
     useEffect(() => {
         const timer = setTimeout(() => {
-          setnoti_store(false);
+            setnoti_store(false);
         }, 2000);
         return () => clearTimeout(timer);
-      }, [noti_store]);
+    }, [noti_store]);
     const handleValidation = (event) => {
         event.preventDefault();
         if (answer === "") {
@@ -57,10 +58,10 @@ function CreateQuestion({ index, valid, handleChange, countNum, listNum }) {
         if (count === 0) {
             setNoti_count(true)
         }
-        if(!uniqueList.includes(0 && 1 && 2 && 3)) {
+        if (!uniqueList.includes(0 && 1 && 2 && 3)) {
             setnoti_store(true)
         }
-        if(count !== "" && answer !== 0 && uniqueList.includes(0 && 1 && 2 && 3)) {
+        if (count !== "" && answer !== 0 && uniqueList.includes(0 && 1 && 2 && 3)) {
             handleChange(answer, index - 1, store)
         }
     }
@@ -80,6 +81,8 @@ function CreateQuestion({ index, valid, handleChange, countNum, listNum }) {
                     </div>
                 </div>
             }
+                
+
             <div className="mt-10 px-4">
                 <div className="group2 w-full">
                     <input
@@ -88,7 +91,7 @@ function CreateQuestion({ index, valid, handleChange, countNum, listNum }) {
                             setAnswer(e.target.value)
                             setNoti_answer(false)
                         }}
-                        type="text" />
+                        type="text" required/>
                     {
                         noti_answer &&
                         <i className="bi bi-exclamation-lg text-2xl text-red-500 
@@ -96,15 +99,41 @@ function CreateQuestion({ index, valid, handleChange, countNum, listNum }) {
                     }
                     <span className="highlight"></span>
                     <span className="bar"></span>
-                    <label>Асуулт {index}</label>
+                    <label className=''>Асуулт {index}</label>
                 </div>
+                <ImageOption setImageValue={setImageValue}/>
+                {
+                    imageValue?.value == "image" &&
+            <ImageUploader/>
+                }
+
+                {
+                    pointStatus.value === "fixed" &&
+                <div className="group">
+                    <input className={noti_answer ? 'custom-validation' : ""}
+                        // onChange={(e) => {
+                        //     setExam_name(e.target.value)
+                        //     setNoti_examName(false)
+                        // }} 
+                        type="number" required/>
+                    {
+                        noti_answer &&
+                        <i className="bi bi-exclamation-lg text-2xl text-red-500 
+                                    animate-bounce absolute top-[10px] left-[-15px]"></i>
+                    }
+                    <span className="highlight"></span>
+                    <span className="bar "></span>
+                    <label className="">Оноо (%)</label>
+                </div>
+                }
+
                 <div className="group">
                     <input onChange={(e) => {
                         setcount(e.target.value)
                         setNoti_count(false)
                         generateAnswers(e.target.value)
-                    }} type="number" required 
-                    className={noti_count ? 'custom-validation' : ""}
+                    }} type="number" required
+                        className={noti_count ? 'custom-validation' : ""}
                     />
                     {
                         noti_count &&
@@ -125,18 +154,18 @@ function CreateQuestion({ index, valid, handleChange, countNum, listNum }) {
                 }
                 {
                     countNum != listNum ?
-                <div className='w-full flex justify-center'>
-                    <div className="cus-buttons">
-                        <div className="buttons">
-                            <button
-                                onClick={(e) => {
-                                    handleValidation(e)
-                                }}
-                                className="raise">Хадгалах</button>
+                        <div className='w-full flex justify-center'>
+                            <div className="cus-buttons">
+                                <div className="buttons">
+                                    <button
+                                        onClick={(e) => {
+                                            handleValidation(e)
+                                        }}
+                                        className="raise">Хадгалах</button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                : null
+                        : null
                 }
             </div>
         </div>

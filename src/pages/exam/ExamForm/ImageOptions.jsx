@@ -2,18 +2,19 @@ import React, { useState } from 'react';
 import Select from 'react-select';
 
 const options = [
-  { value: 'auto', label: 'Автоматаар үүсгэх' },
-  { value: 'fixed', label: 'Тохируулах' },
+  { value: 'noImage', label: 'Зураггүй' },
+  { value: 'image', label: 'Зурагтай' },
 ];
 
 
-export default function PointSelect({setPointStatus}) {
+export default function ImageOption({ setImageValue}) {
   const [selectedOption, setSelectedOption] = useState(null);
   return (
-    <div className="App">
+    <div className="mb-5 w-full md:w-1/3">
       <Select
+        placeholder="Зурагны цэс"
         defaultValue={options[0]}
-        onChange={setPointStatus}
+        onChange={setImageValue}
         options={options}
         className="outline-none"
         classNamePrefix="!outline-none !hover:bg-red-100"

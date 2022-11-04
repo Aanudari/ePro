@@ -31,7 +31,6 @@ function ExamFormControll() {
     }, [trigger])
     // console.log(modalData)
     const handleDeleteExam = (id) => {
-        console.log(id)
         axios({
             method: "delete",
             headers: {

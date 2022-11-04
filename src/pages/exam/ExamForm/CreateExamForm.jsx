@@ -133,6 +133,7 @@ function CreateExamForm({ setKeyMain }) {
             setCheckTime(true)
         }
     }
+    const [pointStatus, setPointStatus] = useState({ value: 'auto', label: 'Автоматаар үүсгэх' });
     return (
         <div className="w-full min-h-[calc(100vh-112px)] relative p-2">
             <div className="container-po px-0 md:px-4 pt-2 pb-10">
@@ -140,7 +141,7 @@ function CreateExamForm({ setKeyMain }) {
                     {
                         showQuestionMenu ?
                             <div className="w-full">
-                                <div className="flex flex-wrap">
+                                <div className="flex flex-wrap px-4 pt-3">
                                     {
                                         variants && variants.questionList &&
                                         variants?.questionList?.map((element, index) => (
@@ -176,7 +177,8 @@ function CreateExamForm({ setKeyMain }) {
                                     variants?.questionList?.map((item, index) => (
                                         <CreateQuestion key={index} index={index + 1}
                                             handleChange={handleChange} countNum={count} listNum={uniqueList.length}
-                                            valid={key} />
+                                            valid={key} pointStatus={pointStatus} 
+                                            />
                                     ))
                                 }
                             </div> :
@@ -247,9 +249,6 @@ function CreateExamForm({ setKeyMain }) {
                                         <span className="bar"></span>
                                         <label>Вариант </label>
                                     </div>
-                                    {/* // here ! */}
-                                    
-                                    {/* // here ! */}
                                     <div className="p-0 md:p-3"></div>
                                     <div className="select-con relative hidden">
                                         {
@@ -316,7 +315,7 @@ function CreateExamForm({ setKeyMain }) {
                                     </div>
                                     <div className="">
                                         <h6 className="text-gray-500/80 text-[17.5px] mt-3">Онооны тохиргоо :</h6>
-                                        <PointSelect/>
+                                        <PointSelect setPointStatus={setPointStatus}/>
                                     </div>
 
                                     <div className="w-full mt-10">

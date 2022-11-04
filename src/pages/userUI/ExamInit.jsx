@@ -41,6 +41,7 @@ export default function ExamInit() {
         res => {
           sessionStorage.setItem("exam_data", JSON.stringify(res.data.variantInfo));
           setQlength(res.data.variantInfo.questionList.length)
+          console.log(res.data.variantInfo)
         }
       )
       .catch(err => console.log("message"))
@@ -53,6 +54,7 @@ export default function ExamInit() {
 
   // session storage dotor baih exam iin medeelel awah
   var data = sessionStorage.getItem("exam_data");
+  // var questions = JSON.parse(data)
   var questions = JSON.parse(data)
   // session storage dotor baih exam iin medeelel awah
   const totalQuestion = questions ? questions.questionList.length : 0;

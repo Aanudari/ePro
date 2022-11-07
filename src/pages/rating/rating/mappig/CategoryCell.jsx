@@ -20,7 +20,11 @@ function CategoryCell(category) {
         })
             .then(
                 res => {
-                    navigate(0);
+                    if (res.data.isSuccess === true) {
+                        navigate(0);
+                    } else {
+                        console.log(res.data.resultMessage)
+                    }
                 }
             )
             .catch(err => console.log(err))

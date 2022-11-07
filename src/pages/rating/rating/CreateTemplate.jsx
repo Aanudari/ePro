@@ -3,31 +3,29 @@ import React, {useState} from "react";
 import axios from "axios";
 import {useStateContext} from "../../../contexts/ContextProvider";
 import {useNavigate} from "react-router-dom";
-import AddCategory from "./AddCategory";
+
 
 function CreateTemplate ({ show, voc, onClose }) {
     const navigate = useNavigate();
     const {TOKEN} = useStateContext();
     const [templateName, setTemplateName] = useState("");
     const [tempNameEmpty, checkTemplateNameEmpty] = useState(false);
-    const [categoryName, setCategoryName] = useState("");
-    const [categoryMaxpoint, setCategoryMaxpoint] = useState("");
-    const [categoryDesc, setCategoryDesc] = useState("");
-    const [formValuesSub, setFormValuesSub] = useState([{ name: "", description : "", points : "",}])
-    const [formValuesCat, setFormValuesCat] = useState([{name: "", description: "" , maxPoints: "", subCategories: [formValuesSub]}])
-    const [catNameEmpty, checkCatNameEmpty] = useState(false);
-    const [catPointEmpty, checkCatPointEmpty] = useState(false);
-    const [catDescEmpty, checkCatDescEmpty] = useState(false);
-    const post_template_date = {
+    const [templateRoleID, setTemplateRoleID] = useState("");
+    const [tempRoleIDEmpty, checkTemplateRoleIDEmpty] = useState(false);
+
+    const post_template_data = {
         name: templateName,
-        roleID: voc.content,
-        categories: [formValuesCat],
+        roleID: templateRoleID,
+        categories: []
     };
-    console.log(post_template_date);
+    console.log(post_template_data);
     const submitCreateTemplate = (e) => {
         e.preventDefault();
         if (templateName.length === 0) {
             checkTemplateNameEmpty(true);
+        } else
+        if (templateRoleID.length === 0) {
+            checkTemplateRoleIDEmpty(true);
         } else
         {
             axios({
@@ -37,47 +35,19 @@ function CreateTemplate ({ show, voc, onClose }) {
                     "Content-Type": "application/json",
                 },
                 url: `http://192.168.10.248:9000/v1/RatingTemplate/add`,
-                data: JSON.stringify(post_template_date),
+                data: JSON.stringify(post_template_data),
             })
                 .then((res) => {
-                    if (res.data.isSuccess === "true") {
+                    if (res.data.isSuccess === true) {
                         navigate(0);
                     } else {
-                        navigate(0);
-                        console.log(res.data)
+                        console.log(res.data.resultMessage)
                     }
                 })
                 .catch((err) => console.log(err));
         }
     }
-    let handleChangeSubCategory = (i, e) => {
-        let newFormValues = [...formValuesSub];
-        newFormValues[i][e.target.name] = e.target.value;
-        setFormValuesSub(newFormValues);
-    }
-    let addSubCategory = () => {
-        setFormValuesSub([...formValuesSub, { name: "", description: "" , points: ""}])
-    }
 
-    let removeSubCategory = (i) => {
-        let newFormValues = [...formValuesSub];
-        newFormValues.splice(i, 1);
-        setFormValuesSub(newFormValues)
-    }
-
-    let handleChangeCategory = (i, e) => {
-        let newFormValues = [...formValuesCat];
-        newFormValues[i][e.target.name] = e.target.value;
-        setFormValuesCat(newFormValues);
-    }
-    let addCategory = () => {
-        setFormValuesCat([...formValuesCat, { name: "", description: "" , maxPoints: "", subCategories: [formValuesSub]}])
-    }
-    let removeCategory = (i) => {
-        let newFormValues = [...formValuesCat];
-        newFormValues.splice(i, 1);
-        setFormValuesCat(newFormValues)
-    }
     return (
         <div>
             <Modal
@@ -85,8 +55,9 @@ function CreateTemplate ({ show, voc, onClose }) {
                 show={show}
                 onHide={onClose}
                 backdrop="static"
-                keyboard={false}
-                aria-labelledby={`contained-modal-title-${voc.href}`}
+                // keyboard={false}
+                dialogClassName="modal-90w"
+                // aria-labelledby={`contained-modal-title-${voc.href}`}
                 centered
             >
                 <Modal.Header closeButton>
@@ -95,26 +66,59 @@ function CreateTemplate ({ show, voc, onClose }) {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    {voc.content}
-                    <form  onSubmit={submitCreateTemplate}>
-                        {formValuesCat.map((element, index) => (
-                            <div className="form-inline" key={index}>
-                                <label>Name</label>
-                                <input type="text" name="name" value={element.name || ""} onChange={e => handleChangeCategory(index, e)} />
-                                <label>Email</label>
-                                <input type="text" name="email" value={element.email || ""} onChange={e => handleChangeCategory(index, e)} />
-                                {
-                                    index ?
-                                        <button type="button"  className="button remove" onClick={() => removeCategory(index)}>Remove</button>
-                                        : null
-                                }
+                    <div className="mt-2">
+                        <form  onSubmit={submitCreateTemplate}>
+                            <a className="block mt-2 rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                                <h6 className="p-2">Template үүсгэх</h6>
+                                <div className="flex flex-col justify-between p-4 leading-normal">
+                                    <div className="grid gap-6 mb-6 md:grid-cols-2">
+                                        <div>
+                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Template нэр</label>
+                                            <input type="text"
+                                                   onChange={(e) => {
+                                                       setTemplateName(e.target.value);
+                                                       checkTemplateNameEmpty(false);
+                                                   }}
+                                                   id={tempNameEmpty === true ? "border-red" : null}
+                                                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                   required=""/>
+                                        </div>
+                                        <div>
+                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Template user</label>
+                                            <div className="relative">
+                                                <select className="block w-full text-white py-2.5 px-3 pr-6 rounded leading-tight focus:outline-none"
+                                                        onChange={(e) => {
+                                                            setTemplateRoleID(e.target.value);
+                                                            checkTemplateRoleIDEmpty(false);
+                                                        }}
+                                                        id={tempRoleIDEmpty === true ? "border-red" : null}>
+                                                    <option>Ажлын байр</option>
+                                                    <option value="1">Level 1</option>
+                                                    <option value="2">Level 2</option>
+                                                    <option>Online</option>
+                                                    <option>Branch</option>
+                                                    <option>Засвар, нярав</option>
+                                                    <option>Telesales</option>
+                                                    <option>Installer</option>
+                                                </select>
+                                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                                    <i className="bi bi-caret-down-fill"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <div className="button-section">
+                                <div className="float-right">
+                                    <button type="submit"
+                                            className="mt-2 inline-block px-6 py-2.5 bg-green-500 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-green-600 hover:shadow-lg focus:bg-green-600 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-700 active:shadow-lg transition duration-150 ease-in-out">
+                                        Template үүсгэх
+                                    </button>
+                                </div>
                             </div>
-                        ))}
-                        <div className="button-section">
-                            <button className="button add" type="button" onClick={() => addCategory()}>Add</button>
-                            <button className="button submit" type="submit">Submit</button>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </Modal.Body>
             </Modal>
         </div>

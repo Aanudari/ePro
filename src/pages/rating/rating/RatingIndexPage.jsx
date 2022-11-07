@@ -56,7 +56,7 @@ function RatingIndexPage() {
                         <div className='h-14'/>
                         <div>
                             {vocToShow && (
-                                <CreateTemplate template_id={getTemplate} show={vocToShow} voc={vocToShow} onClose={hideModal} />
+                                <CreateTemplate template_id={getTemplate} show={vocToShow} voc={vocToShow} onClose={hideModal}  />
                             )}
                             <ul className="p-3">
                                 {Object.keys(vocData).map((voc, key) => {

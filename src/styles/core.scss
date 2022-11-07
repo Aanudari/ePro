@@ -18,6 +18,7 @@ background: #50a3a2;
 }
 .core-bg {
   background : rgb(32, 73, 90) !important;
+  // #20495A 
 }
 .core-bg-g {
   background: #50a3a2 !important;
@@ -161,6 +162,17 @@ a {
 .cus-btn:hover {
   background-color: #499a99;
 }
+.cus-btn2 {
+  background-color: #50a3a2;
+  color: white;
+  padding: 10px;
+  width: 100%;
+  font-weight: 500;
+}
+.cus-btn2:hover {
+  background-color: #499a99;
+}
+   
       
 #toggle{
   display: block;

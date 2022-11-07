@@ -1,10 +1,13 @@
 import { useEffect } from "react";
-import { useState, useRef } from "react";
-import DateTimePicker from 'react-datetime-picker';
+import { useState } from "react";
 import CreateQuestion from "./CreateQuestion";
 import { useStateContext } from "../../../contexts/ContextProvider";
 import axios from "axios";
 import CheckModal from "../../../components/exam-comp/CheckModal";
+import DatePicker from "react-datepicker";
+import OptionSelect from "./OptionSelect";
+import "react-datepicker/dist/react-datepicker.css";
+import PointSelect from "./PointSelect";
 
 function CreateExamForm({ setKeyMain }) {
     function addZero(i) {
@@ -18,8 +21,12 @@ function CreateExamForm({ setKeyMain }) {
         addZero(value.getHours()) + addZero(value.getMinutes()) + addZero(value.getSeconds());
     var datestring2 = selectV.getFullYear() + "" + addZero((selectV.getMonth() + 1)) + addZero(selectV.getDate()) +
         addZero(selectV.getHours()) + addZero(selectV.getMinutes()) + addZero(selectV.getSeconds());
+    var showstring = value.getFullYear() + "-" + addZero((value.getMonth() + 1)) + "-" + addZero(value.getDate())+ " " +
+    addZero(value.getHours()) + ":" + addZero(value.getMinutes()) + ":" + addZero(value.getSeconds());
+    var showstring2 = selectV.getFullYear() + "-" + addZero((selectV.getMonth() + 1)) + "-" + addZero(selectV.getDate()) + " " +
+        addZero(selectV.getHours())+ ":" + addZero(selectV.getMinutes())+ ":" + addZero(selectV.getSeconds());
     const [duration, setDuration] = useState(0);
-    const [role_id, setRole_id] = useState(0);
+    const [role_id, setRole_id] = useState(1);
     const [exam_name, setExam_name] = useState('');
     const [varSelect, setVarSelect] = useState('');
     const [count, setCount] = useState();
@@ -50,6 +57,7 @@ function CreateExamForm({ setKeyMain }) {
         let newQuestions = arr.questionList?.map((item, index) =>
             (index === indexX) ? ({ ...item, question: value, answerList }) : item
         )
+        setKey(key + 1)
         setDoneList((prev) => [...prev, indexX])
         setVariants({
             "name": `${varSelect}`,
@@ -87,8 +95,6 @@ function CreateExamForm({ setKeyMain }) {
             data: final,
         })
             .then((res) => {
-                console.log(res.data.isSuccess)
-                console.log(res.data)
                 if (res.data.isSuccess) {
                     setKeyMain('0')
                     setShowSuccess(true)
@@ -110,21 +116,23 @@ function CreateExamForm({ setKeyMain }) {
         if (duration === 0) {
             setNoti_diration(true)
         }
-        if (count === 0) {
+        if (count === undefined) {
             setNoti_count(true)
         }
         if (varSelect === '') {
             setNoti_variant(true)
         }
-        if (role_id === 0) {
-            setNoti_role(true)
-        }
+        // if (role_id === 0) {
+        //     setNoti_role(true)
+        // }
         if (exam_name !== '' && duration !== 0 && count !== 0 &&
-            varSelect !== '' && role_id !== 0
+            varSelect !== '' 
+            // && role_id !== 0
         ) {
             setCheckTime(true)
         }
     }
+    const [pointStatus, setPointStatus] = useState({ value: 'auto', label: 'Автоматаар үүсгэх' });
     return (
         <div className="w-full min-h-[calc(100vh-112px)] relative p-2">
             <div className="container-po px-0 md:px-4 pt-2 pb-10">
@@ -132,7 +140,7 @@ function CreateExamForm({ setKeyMain }) {
                     {
                         showQuestionMenu ?
                             <div className="w-full">
-                                <div className="flex flex-wrap">
+                                <div className="flex flex-wrap px-4 pt-3">
                                     {
                                         variants && variants.questionList &&
                                         variants?.questionList?.map((element, index) => (
@@ -144,13 +152,16 @@ function CreateExamForm({ setKeyMain }) {
                                                     }} key={index} id={doneList.includes(index) ? "done" : ''} className="transition raise flex px-2">
                                                         {
                                                             doneList.includes(index) &&
-                                                        <i className="bi bi-check-lg"></i>
+                                                            <div>
+                                                                <i className="bi bi-check-lg mt-2 block md:hidden"></i>
+                                                                <i className="bi bi-check-lg md:block hidden"></i>
+                                                            </div>
                                                         }
                                                         <span className="mt-0 hidden md:flex mr-1">
-                                                        Асуулт
-                                                        <span className="mb-0 ml-1">
-                                                        {index + 1}
-                                                        </span>
+                                                            Асуулт
+                                                            <span className="mb-0 ml-1">
+                                                                {index + 1}
+                                                            </span>
                                                         </span>
                                                         <span className="p-2 m-0 block md:hidden">{index + 1}</span>
                                                     </button>
@@ -165,11 +176,12 @@ function CreateExamForm({ setKeyMain }) {
                                     variants?.questionList?.map((item, index) => (
                                         <CreateQuestion key={index} index={index + 1}
                                             handleChange={handleChange} countNum={count} listNum={uniqueList.length}
-                                            valid={key} />
+                                            valid={key} pointStatus={pointStatus} 
+                                            />
                                     ))
                                 }
                             </div> :
-                            <div className="form-form p-2 flex flex-col md:flex-row gap-5 mt-4 w-full items-center">
+                            <div className="form-form p-2 flex flex-col md:flex-row gap-5 mt-4 w-full">
                                 <div className="w-full md:w-1/2 pl-0 md:pl-20">
                                     <div className="group">
 
@@ -199,10 +211,10 @@ function CreateExamForm({ setKeyMain }) {
                                             noti_diration &&
                                             <i className="bi bi-exclamation-lg text-2xl text-red-500 
                                     animate-bounce absolute top-[10px] left-[-15px]"></i>
-                                        }
+                                }
                                         <span className="highlight"></span>
                                         <span className="bar"></span>
-                                        <label>Үргэлжлэх хугацаа</label>
+                                        <label>Үргэлжлэх хугацаа (мин)</label>
                                     </div>
                                     <div className="group">
                                         <input
@@ -237,19 +249,19 @@ function CreateExamForm({ setKeyMain }) {
                                         <label>Вариант </label>
                                     </div>
                                     <div className="p-0 md:p-3"></div>
-                                    <div className="select-con relative">
+                                    <div className="select-con relative hidden">
                                         {
                                             noti_role &&
                                             <i className="bi bi-exclamation-lg text-2xl text-red-500 
                                     animate-bounce absolute left-[-20px] top-[10px]"></i>
                                         }
-                                            <h6 className="text-gray-500/80 text-[18px] ml-2">Категори сонгох</h6>
+                                        <h6 className="text-gray-500/80 text-[17.5px]">Ажлын байр сонгох:</h6>
                                         <div className={noti_role ? 'custom-validation select select2 ' : "select"}>
                                             <select onChange={(e) => {
                                                 setRole_id(parseInt(e.target.value))
                                                 setNoti_role(false)
                                             }} name="format" id="format" required>
-                                                <option >Категори</option>
+                                                <option >Ажлын байр</option>
                                                 <option value="188">Branch</option>
                                                 <option value="208">Installer</option>
                                                 <option value="1">Level1</option>
@@ -263,21 +275,52 @@ function CreateExamForm({ setKeyMain }) {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="h-full w-full md:w-1/2 pr-0 md:pr-20">
+                                <div className="h-full w-full md:w-1/2 pr-0 md:mt-3 md:pr-20 flex flex-col justify-between">
+                                    <div>
                                     <div className="flex flex-col ">
-                                        <span className="font-[500] text-gray-500">Нээх цаг :</span>
-                                        <DateTimePicker className={''} value={value} onChange={date => setValue(date)} timeFormat="HH:mm" />
-                                        {/* <TimePicker/> */}
+                                        <span className="font-[500] text-gray-500/80  text-[17.5px]">Нээх цаг :</span>
+                                        <DatePicker
+                                            selected={value}
+                                            value={value} 
+                                            onChange={date => setValue(date)}
+                                            className='form-control form-control-sm 
+                                            py-2 mt-2 ml-0 border border-dark'
+                                            showTimeSelect
+                                            timeFormat='HH:mm'
+                                            timeIntervals={15}
+                                            timeCaption='time'
+                                            dateFormat='yyyy-MM-dd h:mm aa'
+                                        />
                                     </div>
-                                    <div className="flex flex-col mt-5">
-                                        <span className="font-[500] text-gray-500">Хаах цаг :</span>
-                                        <DateTimePicker value={selectV} onChange={date => setSelectV(date)} timeFormat="HH:mm" />
-                                        {/* <TimePicker/> */}
+                                    <div className="flex flex-col mt-3">
+                                        <span className="font-[500] text-gray-500/80 text-[17.5px]">Хаах цаг :</span>
+                                        <DatePicker
+                                            selected={selectV}
+                                            value={selectV} 
+                                            onChange={date => setSelectV(date)}
+                                            className='form-control form-control-sm
+                                            py-2 mt-2 ml-0 border border-dark'
+                                            showTimeSelect
+                                            timeFormat='HH:mm'
+                                            timeIntervals={15}
+                                            timeCaption='time'
+                                            dateFormat='yyyy-MM-dd h:mm aa'
+                                        />
                                     </div>
+                                    </div>
+                                    <div className="mt-2">
+                                        <h6 className="text-gray-500/80 text-[17.5px] mt-[10px]">Ажлын байр сонгох :</h6>
+                                        <OptionSelect/>
+                                    </div>
+                                    <div className="">
+                                        <h6 className="text-gray-500/80 text-[17.5px] mt-3">Онооны тохиргоо :</h6>
+                                        <PointSelect setPointStatus={setPointStatus}/>
+                                    </div>
+
                                     <div className="w-full mt-10">
                                         <button onClick={(e) => {
                                             handleCreateQuestions(e)
-                                        }} className="cus-btn hover:shadow mt-5">
+                                        }} className="cus-btn hover:shadow h-[48px]">
                                             Асуулт нэмэх
                                         </button>
                                     </div>
@@ -288,27 +331,27 @@ function CreateExamForm({ setKeyMain }) {
                     }
                     {
                         checkTime &&
-                        <CheckModal setCheckTime={setCheckTime} datestring={datestring}
-                            datestring2={datestring2} setshowQuestionMenu={setshowQuestionMenu}
+                        <CheckModal setCheckTime={setCheckTime} datestring={showstring}
+                            datestring2={showstring2} setshowQuestionMenu={setshowQuestionMenu}
                             handleCreateExam={handleCreateExam}
                         />
 
                     }
                 </form>
                 {
-                    count === uniqueList.length && 
-                <div className='w-full flex justify-center'>
-                    <div className="cus-buttons">
-                        <div className="buttons">
-                            <button
-                                onClick={(e) => {
-                                    e.preventDefault()
-                                    handleSubmit()
-                                }}
-                                className="raise">Шалгалт үүсгэх</button>
+                    count === uniqueList.length &&
+                    <div className='w-full flex justify-center'>
+                        <div className="cus-buttons">
+                            <div className="buttons">
+                                <button
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        handleSubmit()
+                                    }}
+                                    className="raise">Шалгалт үүсгэх</button>
+                            </div>
                         </div>
                     </div>
-                </div>
                 }
             </div>
         </div>

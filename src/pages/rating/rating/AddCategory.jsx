@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import Navigation from "../../Navigation";
+import Navigation from "../../../components/Navigation";
 import axios from "axios";
 import {Modal} from "react-bootstrap";
 import {useStateContext} from "../../../contexts/ContextProvider";

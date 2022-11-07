@@ -8,7 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import SideNavigation from "./components/Side-Navigation";
-import AddCategory from "../src/components/sub-components/category/AddCategory";
+import AddCategory from "./pages/rating/rating/AddCategory";
 import { useStateContext } from "./contexts/ContextProvider";
 import ExamForm from "./pages/exam/exam-form";
 import ExamResult from "./pages/exam/exam-result";

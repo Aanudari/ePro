@@ -3,7 +3,7 @@ import React, {useState} from "react";
 import axios from "axios";
 import {useStateContext} from "../../../contexts/ContextProvider";
 import {useNavigate} from "react-router-dom";
-
+import {Logout} from "../../../auth/api";
 
 function CreateTemplate ({ show, voc, onClose }) {
     const navigate = useNavigate();
@@ -41,7 +41,9 @@ function CreateTemplate ({ show, voc, onClose }) {
                     if (res.data.isSuccess === true) {
                         navigate(0);
                     } else {
-                        console.log(res.data.resultMessage)
+                        if (res.data.resultMessage === "Unauthorized"){
+                            Logout();
+                        }
                     }
                 })
                 .catch((err) => console.log(err));

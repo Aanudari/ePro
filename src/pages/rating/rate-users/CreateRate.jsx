@@ -6,6 +6,7 @@ import {Modal} from "react-bootstrap";
 function CreateRate ({ show, voc, onClose, deviceId }) {
     const navigate = useNavigate();
     const {TOKEN} = useStateContext();
+
     return (
         <div>
             <Modal

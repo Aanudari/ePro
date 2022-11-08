@@ -44,7 +44,6 @@ function SubCategoryCell (subcategory) {
                     <span className='text-[14px]'>{subcategory.subcategory.maxPoints}%</span>
                 </div>
             </div>
-            <button className="btn btn-warning btn-sm"><i className="bi bi-hand-index-thumb"/></button>
             <button onClick={deleteSubCategory} className="btn btn-danger btn-sm"><i className="bi bi-trash"/></button>
         </div>
     );

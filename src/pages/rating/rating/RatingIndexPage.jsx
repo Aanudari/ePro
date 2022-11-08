@@ -28,7 +28,7 @@ function RatingIndexPage() {
                 "Authorization": `${TOKEN}`,
                 "accept": "text/plain",
             },
-            url: `http://192.168.10.248:9000/v1/RatingTemplate/user/7862`,
+            url: `http://192.168.10.248:9000/v1/RatingTemplate`,
         })
             .then(
                 res => {

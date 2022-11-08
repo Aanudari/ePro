@@ -40,23 +40,20 @@ function TemplateCell (template){
     }
 return (
         <div className="bg-gray-200 p-2 mt-2">
-            <h5 className="text-black">{template.template && template.template.name}</h5>
+            <h6 className="text-black">Template нэр: {template.template && template.template.name}</h6>
             <button onClick={() => deleteTemplate()} className="btn btn-danger btn-sm">Delete template</button>
-            <div>
+            <div className="mt-2">
                 {vocToShow && (
                     <AddCategory template_id={template.template.id} show={vocToShow} voc={vocToShow} onClose={hideModal}  />
                 )}
-                <ul className="p-3">
                     {Object.keys(vocData).map((voc, key) => {
-                        // console.log(vocData[voc]);
                         return (
                                 <button onClick={() => showModal(vocData[voc])}
-                                className="btn btn-warning btn-sm">
+                                className="btn btn-primary btn-sm">
                                     {vocData[voc].title}
                                 </button>
                         );
                     })}
-                </ul>
             </div>
             <div className='w-5/6 p-3 bg-gray-100' >
                 {

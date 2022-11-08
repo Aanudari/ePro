@@ -3,9 +3,15 @@ import React, {useState} from "react";
 import axios from "axios";
 import {useStateContext} from "../../../contexts/ContextProvider";
 import {useNavigate} from "react-router-dom";
-import {Logout} from "../../../auth/api";
+
 
 function CreateTemplate ({ show, voc, onClose }) {
+    const logout = () => {
+        localStorage.clear();
+        sessionStorage.clear()
+        navigate("/");
+        window.location.reload();
+    };
     const navigate = useNavigate();
     const {TOKEN} = useStateContext();
     const [templateName, setTemplateName] = useState("");
@@ -42,7 +48,7 @@ function CreateTemplate ({ show, voc, onClose }) {
                         navigate(0);
                     } else {
                         if (res.data.resultMessage === "Unauthorized"){
-                            Logout();
+                            logout();
                         }
                     }
                 })

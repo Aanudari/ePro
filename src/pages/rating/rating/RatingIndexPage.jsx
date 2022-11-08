@@ -7,10 +7,15 @@ import CategoryCell from "./mappig/CategoryCell";
 import AddCategory from "./AddCategory";
 import CreateTemplate from "./CreateTemplate";
 import TemplateCell from "./mappig/TemplateCell";
-import {Logout} from "../../../auth/api";
 
 
 function RatingIndexPage() {
+    const logout = () => {
+        localStorage.clear();
+        sessionStorage.clear()
+        navigate("/");
+        window.location.reload();
+    };
     const vocData = {
         voc1: { title: "Template үүсгэх"},
     };
@@ -35,7 +40,7 @@ function RatingIndexPage() {
                 res => {
                     setGetTemplate(res.data.result);
                     if (res.data.resultMessage === "Unauthorized"){
-                        Logout();
+                        logout();
                     }
                 }
             )

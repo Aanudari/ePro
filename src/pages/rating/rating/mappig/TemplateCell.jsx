@@ -7,6 +7,7 @@ import CreateTemplate from "../CreateTemplate";
 import AddCategory from "../AddCategory";
 
 function TemplateCell (template){
+
     const vocData = {
         voc1: { title: "Add category"},
     };

@@ -9,7 +9,7 @@ import EditCategory from "../EditCategory";
 
 function CategoryCell(category) {
     const vocData = {
-        voc1: { title: "Edit category"},
+        voc1: {title: "Edit category"},
     };
     const [vocToShow, setVocToShow] = useState(null);
     const showModal = (voc) => setVocToShow(voc);
@@ -38,36 +38,37 @@ function CategoryCell(category) {
     }
 
     return (
-        <div>
-            <div className="overflow-x-auto relative shadow-md sm:rounded-lg">
-                <h6>Category нэр: {category && category.category.name} ({category && category.category.maxPoints}%)</h6>
-                <button onClick={() => deleteCategory()} className="btn btn-danger btn-sm">Delete category</button>
-                <div className="mt-2">
-                    {vocToShow && (
-                        <EditCategory category={category} show={vocToShow} voc={vocToShow} onClose={hideModal}  />
-                    )}
-                        {Object.keys(vocData).map((voc, key) => {
-                            // console.log(vocData[voc]);
-                            return (
-                                <button onClick={() => showModal(vocData[voc])}
-                                        className="btn btn-warning btn-sm">
-                                    {vocData[voc].title}
-                                </button>
-                            );
-                        })}
+        <div className="text-black flex flex-col">
+            <div className="p-4 flex items-center border border-gray-600">
+                <div className="mr-auto">
+                    <h1 className="text-xl leading-none mb-1">Category name: {category.category && category.category.name}</h1>
+                    <h2 className="text-sm">Category maxpoints: {category.category && category.category.maxPoints}%</h2>
                 </div>
-                <div>
-                    <h6>Үнэлгээг бүрдүүлэх ур чадварын жагсаалтууд</h6>
-                    {
-                        category ? category.category.subCategory.map((data, index) =>
-                            <SubCategoryCell key={index} subcategory={data} />
-                        ) : null
-                    }
-                </div>
+                <button onClick={() => deleteCategory()}
+                        className="inline-block px-2 py-2 border-2 font-medium text-sm leading-tight uppercase rounded transition duration-150 ease-in-out">
+                    <i className="bi bi-trash"/> Delete category
+                </button>
+                {vocToShow && (
+                    <EditCategory category={category} show={vocToShow} voc={vocToShow} onClose={hideModal}/>
+                )}
+                {Object.keys(vocData).map((voc, key) => {
+                    // console.log(vocData[voc]);
+                    return (
+                        <button onClick={() => showModal(vocData[voc])}
+                                className="ml-2 inline-block px-2 py-2 border-2 font-medium text-sm leading-tight uppercase rounded transition duration-150 ease-in-out">
+                            <i className="bi bi-pencil"/> {vocData[voc].title}
+                        </button>
+                    );
+                })}
             </div>
+              <div className="border-gray-600 items-center">
+                  {
+                      category ? category.category.subCategory.map((data, index) =>
+                          <SubCategoryCell key={index} subcategory={data}/>
+                      ) : null
+                  }
+              </div>
         </div>
-
     )
 }
-
 export default CategoryCell;

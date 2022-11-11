@@ -34,21 +34,87 @@ function LeveloneEdit() {
                 res => {
                     if(res.data.isSuccess === true){
                         setGetRate(res.data.result);
-                    }
-                    else if (res.data.ratings === null){
-                        setMsg("Үнэлгээ хийгдээгүй байна.")
+                        // console.log(res.data.result)
                     }
                 }
             )
             .catch(err => console.log(err))
     }, []);
+
+
+
     return (
         <div className="w-full h-full bg-gray-50">
             <Navigation/>
             <div className="h-full flex">
                 <div className='w-5/6 p-3 bg-gray-100'>
+
                     <div className='w-full rounded-lg bg-white p-2 fw-bold'>
-                        <h6>{msg}</h6>
+                        <h6>TOTAL </h6>
+                    </div>
+                    <div className='mt-3 w-full rounded-lg bg-white p-2 fw-bold'>
+                        <h6>TOTAL 1/2</h6>
+                        <div className="grid gap-6 mb-6 md:grid-cols-3" >
+                        <a className="border-2">Дуудлага бүртгэл: </a>
+                        <a className="border-2">Огноо: </a>
+                        <a className="border-2">Утасны дугаар: </a>
+                        </div>
+                        <table id="example" className="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Үзүүлэлт</th>
+                                <th>Ур чадвар</th>
+                                <th>Дуудлагын үнэлгээ 1/2</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>2</td>
+                                <td>15</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>2</td>
+                                <td>15</td>
+                                <td></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className='mt-3 w-full rounded-lg bg-white p-2 fw-bold'>
+                        <h6>TOTAL 2/2</h6>
+                        <div className="grid gap-6 mb-6 md:grid-cols-3" >
+                            <a className="border-2">Дуудлага бүртгэл: </a>
+                            <a className="border-2">Огноо: </a>
+                            <a className="border-2">Утасны дугаар: </a>
+                        </div>
+                        <table id="example" className="table table-striped table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Үзүүлэлт</th>
+                                <th>Ур чадвар</th>
+                                <th>Дуудлагын үнэлгээ 1/2</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>2</td>
+                                <td>15</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>2</td>
+                                <td>15</td>
+                                <td></td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 <div className='hidden md:block h-screen relative w-[280px]'>

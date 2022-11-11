@@ -53,7 +53,7 @@ function RatingIndexPage() {
         <div className="w-full h-full bg-gray-50">
             <Navigation/>
             <div className="h-full flex">
-                <div className='w-5/6 p-3 bg-gray-100' >
+                <div className='w-5/6 p-3 bg-gray-100'>
                              {
                                 getTemplate ? getTemplate.map((data, index) =>
                                     <TemplateCell key={index} template={data}/>

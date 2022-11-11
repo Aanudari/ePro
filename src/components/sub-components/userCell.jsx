@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 function UserCell(data) {
     let navi = useNavigate()
     let location = useLocation();
-    let lastName = data.data.lastName.slice(0, 1)
+    let lastName = data.data.lastName.slice(0, 1);
     const handleEdit = () => {
         navi(`${location.pathname}-edit`, { state: { deviceId: data.data.deviceId, firstName: data.data.firstName } })
     }

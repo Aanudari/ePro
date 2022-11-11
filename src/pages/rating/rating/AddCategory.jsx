@@ -13,11 +13,10 @@ function AddCategory({ show, voc, onClose, template_id }) {
     const [alert, setalert] = useState(false);
     const [categoryName, setCategoryName] = useState("");
     const [categoryMaxpoint, setCategoryMaxpoint] = useState("");
-    const [categoryDesc, setCategoryDesc] = useState("");
     const [formValues, setFormValues] = useState([{ name: "", maxPoints : "",}])
     const [catNameEmpty, checkCatNameEmpty] = useState(false);
     const [catPointEmpty, checkCatPointEmpty] = useState(false);
-    const [catDescEmpty, checkCatDescEmpty] = useState(false);
+
 
     const add_cat_data = {
         name: categoryName,
@@ -84,17 +83,17 @@ function AddCategory({ show, voc, onClose, template_id }) {
             >
                 <Modal.Header closeButton>
                     <Modal.Title id={`contained-modal-title-${voc.href}`}>
-                        {voc.title}
+                       Ур чавдар үүсгэх
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div>
-                        <h6>Үнэлгээгээ оруулна уу.</h6>
+                        <h6>Ур чавдар оруулна уу.</h6>
                         <a className="block mt-2 rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
                             <div className="flex flex-col justify-between p-4 leading-normal">
                                 <div className="grid gap-6 mb-6 md:grid-cols-2">
                                 <div>
-                                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Үнэлгээний нэр</label>
+                                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Ур чавдарын нэр</label>
                                     <input type="text"
                                            onChange={(e) => {
                                                setCategoryName(e.target.value);
@@ -105,7 +104,7 @@ function AddCategory({ show, voc, onClose, template_id }) {
                                            required=""/>
                                 </div>
                                 <div>
-                                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Үнэлгээний нийт оноо</label>
+                                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Ур чавдарын хувь %</label>
                                     <input type="number"
                                            name="maxPoints"
                                            onChange={(e) => {
@@ -119,20 +118,21 @@ function AddCategory({ show, voc, onClose, template_id }) {
                             </div>
                             </div>
                         </a>
-                        <h6 className="py-2">Үнэлгээнд харгалзах ур чавдарын жагсаалтыг оруулна уу.</h6>
+                        <h6 className="py-2">Ур чавдарт харгалзах үзүүлэлт оруулна уу.</h6>
                         {formValues.map((element, index) => (
                             <a key={index} className="block mt-2 rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
                                             <div className="flex flex-col justify-between p-4 leading-normal">
                                                 <div className="grid gap-6 mb-6 md:grid-cols-2" >
                                                     <div>
-                                                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Ур чадварын нэр</label>
-                                                        <input type="text" name="name" value={element.name || ""} onChange={e => handleChange(index, e)}
+                                                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Үзүүлэлтийн нэр</label>
+                                                        <input type="text" name="name" value={element.name || ""}
+                                                               onChange={e => handleChange(index, e)}
                                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                                required=""
                                                         />
                                                     </div>
                                                     <div>
-                                                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Ур чадварын оноо</label>
+                                                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Үзүүлэлтийн хувь %</label>
                                                         <input type="number" name="maxPoints" value={element.maxPoints || ""} onChange={e => handleChange(index, e)}
                                                                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                                required=""
@@ -155,13 +155,13 @@ function AddCategory({ show, voc, onClose, template_id }) {
                         <div className="float-right">
                             <button onClick={submitAddCategory}
                                     className="mt-2 inline-block px-6 py-2.5 bg-green-500 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-green-600 hover:shadow-lg focus:bg-green-600 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-700 active:shadow-lg transition duration-150 ease-in-out">
-                                Үнэлгээг үүсгэх
+                                Ур чадвар үүсгэх
                             </button>
                         </div>
                         <div className="button-section float-right px-2">
                             <button type="button"
                                     className="mt-2 inline-block px-6 py-2 border-2 border-green-500 text-green-500 font-medium text-xs leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
-                                    onClick={() => addFormFields()}> Ур чадвар нэмэх
+                                    onClick={() => addFormFields()}>Үзүүлэлт нэмэх
                             </button>
                         </div>
                         <div className="relative bg-red-500 w-[300px] flex justify-center bg-red-100">

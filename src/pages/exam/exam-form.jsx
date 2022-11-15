@@ -1,30 +1,35 @@
 import React, { useState, useEffect } from "react";
 import Navigation from "../../components/Navigation";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useQuery } from "react-query";
+import Loading from "../../components/Loading";
 import { useStateContext } from "../../contexts/ContextProvider";
 import CreateExamForm from "./ExamForm/CreateExamForm";
 import ExamFormControll from "./ExamForm/ExamFormControll";
-
+import EditExamPool from "./Exam-Pool/EditExamPool";
+import { QueryClient, QueryClientProvider } from "react-query";
+import {examList} from "../../service/examService"
 function ExamForm() {
-  const [data, setData] = useState();
+  const queryClient = new QueryClient()
   const { TOKEN } = useStateContext();
   const [key, setKey] = useState('0');
-  useEffect(() => {
-    axios({
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-        'Authorization': `${TOKEN}`
-      },
-      url: "http://192.168.10.248:9000/v1/Exam",
-    })
-      .then(
-        res => {
-          setData(res.data.examList)
-        }
-      )
-      .catch(err => console.log(err))
-  }, [])
+  const navigate = useNavigate()
+    const { isError, isSuccess, isLoading, data, error } = useQuery(
+        ["examList"],
+        examList,
+        { staleTime: 3000 }
+    );
+    const logout = () => {
+        localStorage.clear();
+        navigate("/");
+        window.location.reload();
+    }
+    if (data && data.errorCode == 401) {
+        logout()
+    }
+    if (isLoading) {
+        return <Loading />;
+    }
   return (
     <div className="w-full h-full min-h-screen bg-[#23b499]">
       <Navigation />
@@ -38,7 +43,7 @@ function ExamForm() {
               Идэвхитэй шалгалт
             </span>
             <span className="font-[500] block md:hidden">
-            <i className="bi bi-calendar-check"></i>
+              <i className="bi bi-calendar-check"></i>
             </span>
           </div>
           <div onClick={() => {
@@ -49,7 +54,7 @@ function ExamForm() {
               Ажлын байраар
             </span>
             <span className="font-[500] block md:hidden">
-            <i className="bi bi-pencil"></i>
+              <i className="bi bi-pencil"></i>
             </span>
           </div>
           <div onClick={() => {
@@ -60,19 +65,23 @@ function ExamForm() {
               Хувь хэрэглэгчээр
             </span>
             <span className="font-[500] block md:hidden">
-            <i className="bi bi-alarm"></i>
+              <i className="bi bi-alarm"></i>
             </span>
           </div>
         </div>
         <div className="">
-            {
-              key === "1" && <CreateExamForm setKeyMain={setKey}/>
-            }
-            {
-              key === "0" && <ExamFormControll/>
-            }
-          </div>
-
+          {
+            key === "1" && <CreateExamForm setKeyMain={setKey} />
+          }
+          {
+            key === "0" && <ExamFormControll setKeyX={setKey} />
+          }
+          {
+            key === "1.1" && <QueryClientProvider client={queryClient}>
+              <EditExamPool />
+            </QueryClientProvider>
+          }
+        </div>
       </div>
     </div >
   );

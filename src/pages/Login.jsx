@@ -16,7 +16,6 @@ function Login() {
         break;
     }
     setUser(data);
-
   };
 
   const [username, setusername] = useState("");
@@ -47,6 +46,7 @@ function Login() {
           if (res.data.result === "true") {
             redirect(res.data);
             setisAuthenticated(true);
+            localStorage.setItem("token", res.data.token)
           } else {
             setalert(true);
           }

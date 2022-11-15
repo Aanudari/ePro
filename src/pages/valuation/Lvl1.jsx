@@ -1,7 +1,5 @@
 import React from "react";
-import { useEffect, useState } from "react";
 import Navigation from "../../components/Navigation";
-import axios from "axios";
 import UserCell from "../../components/sub-components/userCell";
 import ExpandedMenu from "../../components/ExpandedMenu";
 import { useStateContext } from "../../contexts/ContextProvider";

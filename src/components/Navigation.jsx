@@ -48,7 +48,7 @@ function Navigation() {
       <div className={activeMenu ? "h-14 transition w-full md:w-[calc(100%-250px)] bg-gray-700 fixed top-0 flex justify-between md:px-4 shadow-sm" 
       : " shadow-sm h-14 bg-gray-700 fixed top-0 flex w-full justify-between md:px-4"}>
         <div className="flex items-center md:gap-4">
-          <div className="p-2 flex items-center rounded-full m-2 hover:bg-gray-100">
+          <div className="p-2 flex items-center rounded-full m-2 ">
             {
               width > 768 ?
               <svg

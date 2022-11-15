@@ -30,8 +30,8 @@ function MainNavigation() {
                             <ul>
                                 <li><a onClick={() => { navigate("/exam-form"); }}>Шалгалт үүсгэх</a></li>
                                 <li><a onClick={() => {
-                                    navigate("/take-exam");
-                                }}>Шалгалт өгөх</a></li>
+                                    navigate("/exam-pool");
+                                }}>Шалгалтын сан</a></li>
                                 <li><a onClick={() => {
                                     navigate("/exam-result");
                                 }}>Шалгалтын дүн харах</a></li>

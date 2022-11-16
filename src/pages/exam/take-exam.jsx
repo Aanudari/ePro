@@ -1,38 +1,60 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Navigation from "../../components/Navigation";
-import TakeExamCell from "../../components/sub-components/TakeExamCell";
-import axios from "axios";
+import CategoryPool from "./Exam-Pool/CategoryPool";
 
 function TakeExam() {
-  const [data, setData] = useState();
-  useEffect(() => {
-    axios({
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      url: "http://192.168.10.248:9000/v1/Exam",
-    })
-      .then(
-        res => {
-          setData(res.data.result)
-        }
-      )
-      .catch(err => console.log(err))
-  }, [])
+  const [key, setKey] = useState('0');
+  
   return (
-    <div className="w-full h-screen bg-gray-50">
+    <div className="w-full h-full min-h-screen bg-[#23b499]">
       <Navigation />
-      <div className="h-screen px-5 py-3">
-        <div className="w-full h-full bg-white rounded-lg p-5 flex flex-col gap-2">
-          {
-            data ? data.map((item, index) => (
-              <TakeExamCell key={index} data={item} />
-            )) : <div>Идэвхитэй шалгалт байхгүй байна.</div>
-          }
+      <div className="h-full">
+        <div className="bg-gray-700 h-14 flex">
+          <div onClick={() => {
+            setKey("0")
+          }} className={`h-full w-1/6 md:w-[180px] hover:bg-gray-600 flex
+          justify-center items-center text-white text-[14px] ${key === "0" && 'border-b shadow pt-[1px]'}`}>
+            <span className="font-[500] hidden md:block">
+              Асуултын сан
+            </span>
+            <span className="font-[500] block md:hidden">
+            <i className="bi bi-calendar-check"></i>
+            </span>
+          </div>
+          <div onClick={() => {
+            setKey("1")
+          }} className={`h-full w-1/6 md:w-[180px] hover:bg-gray-600 flex
+          justify-center items-center text-white text-[14px] ${key === "1" && 'border-b shadow pt-[1px]'}`}>
+            <span className="font-[500] hidden md:block">
+              Асуулт үүсгэх
+            </span>
+            <span className="font-[500] block md:hidden">
+            <i className="bi bi-pencil"></i>
+            </span>
+          </div>
+          <div onClick={() => {
+            setKey("2")
+          }} className={`h-full w-1/6 md:w-[180px] hover:bg-gray-600 flex
+          justify-center items-center text-white text-[14px] ${key === "2" && 'border-b shadow pt-[1px]'}`}>
+            <span className="font-[500] hidden md:block">
+              Цэс нэмэх
+            </span>
+            <span className="font-[500] block md:hidden">
+            <i className="bi bi-alarm"></i>
+            </span>
+          </div>
         </div>
+        <div className="">
+            {
+              key === "0" && <CategoryPool/>
+            }
+            {
+              key === "1" && <div>2222222222222</div>
+            }
+          </div>
+
       </div>
-    </div>
+    </div >
   );
 }
 

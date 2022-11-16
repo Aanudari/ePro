@@ -96,9 +96,11 @@ function App() {
             element={
               // AllowedRoles = Нэвтэрсэн хэрэглэгч бүхэн өөрийн roleid тай байх ба өөрийн roleid ийг зөвшөөрсөн хуудасруу л хандах
               // эрхтэйгээр шийдхийн тулд allowedRoles parameter ийг дамжуулж өгөв.
-              <ProtectedRoute allowedRoles={[199]}>
-                <ExamForm />
-              </ProtectedRoute>
+              <QueryClientProvider client={queryClient}>
+                <ProtectedRoute allowedRoles={[199]}>
+                  <ExamForm />
+                </ProtectedRoute>
+              </QueryClientProvider>
             }
           />
           <Route
@@ -118,11 +120,13 @@ function App() {
             }
           />
           <Route
-            path="/take-exam"
+            path="/exam-pool"
             element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <TakeExam />
-              </ProtectedRoute>
+              <QueryClientProvider client={queryClient}>
+                <ProtectedRoute allowedRoles={[199]}>
+                  <TakeExam />
+                </ProtectedRoute>
+              </QueryClientProvider>
             }
           />
           <Route
@@ -169,10 +173,12 @@ function App() {
             path="/level-one"
             element={
               <QueryClientProvider client={queryClient}>
-
               <ProtectedRoute allowedRoles={[199, 1]}>
                 <Level1 />
               </ProtectedRoute>
+                <ProtectedRoute allowedRoles={[199, 1]}>
+                  <Level1 />
+                </ProtectedRoute>
               </QueryClientProvider>
             }
           />

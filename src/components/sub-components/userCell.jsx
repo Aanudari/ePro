@@ -6,7 +6,7 @@ function UserCell(data) {
     let location = useLocation();
     let lastName = data.data.lastName.slice(0, 1);
     const handleEdit = () => {
-        navi(`${location.pathname}-edit`, { state: { deviceId: data.data.deviceId, firstName: data.data.firstName } })
+        navi(`${location.pathname}-edit`, { state: { data: data.data, firstName: data.data.firstName } })
     }
     return (
         <div onClick={handleEdit} className="cus-buttons2 ">

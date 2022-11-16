@@ -7,7 +7,6 @@ import {useStateContext} from "../../../contexts/ContextProvider";
 import { useLocation, useNavigate } from "react-router-dom"
 
 function AddCategory({ show, voc, onClose, template_id }) {
-
     const navigate = useNavigate();
     const {TOKEN} = useStateContext();
     const [alert, setalert] = useState(false);
@@ -17,14 +16,14 @@ function AddCategory({ show, voc, onClose, template_id }) {
     const [catNameEmpty, checkCatNameEmpty] = useState(false);
     const [catPointEmpty, checkCatPointEmpty] = useState(false);
 
-
     const add_cat_data = {
         name: categoryName,
         maxPoints: categoryMaxpoint,
-        subCategories: formValues,
+        subCategories: formValues.length === 1 ? formValues : [],
         templateId: template_id
     };
 
+    console.log(add_cat_data);
     const submitAddCategory = (e) => {
         e.preventDefault();
         axios({
@@ -88,6 +87,7 @@ function AddCategory({ show, voc, onClose, template_id }) {
                 </Modal.Header>
                 <Modal.Body>
                     <div>
+
                         <h6>Ур чавдар оруулна уу.</h6>
                         <a className="block mt-2 rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
                             <div className="flex flex-col justify-between p-4 leading-normal">
@@ -158,6 +158,7 @@ function AddCategory({ show, voc, onClose, template_id }) {
                                 Ур чадвар үүсгэх
                             </button>
                         </div>
+
                         <div className="button-section float-right px-2">
                             <button type="button"
                                     className="mt-2 inline-block px-6 py-2 border-2 border-green-500 text-green-500 font-medium text-xs leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"

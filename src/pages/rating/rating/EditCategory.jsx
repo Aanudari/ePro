@@ -4,25 +4,31 @@ import {useStateContext} from "../../../contexts/ContextProvider";
 import {Modal} from "react-bootstrap";
 import axios from "axios";
 
+
 function EditCategory ({ show, voc, onClose, category}) {
     const navigate = useNavigate();
     const {TOKEN} = useStateContext();
     const [catName, setCatName] = useState("");
     const [catMaxPoints, setCatMaxPoints] = useState("");
-    const [formValues, setFormValues] = useState([{id: "", name: "", maxPoints : "",}])
-
+    const [sub, setSub] = useState(category.category.subCategory);
+    console.log(category.category);
+    const updateState = (index) => (e) => {
+        const newArray = sub.map((item, i) => {
+            if (index === i) {
+                return {...item, [e.target.name]: e.target.value};
+            } else {
+                return item;
+            }
+        });
+        setSub(newArray);
+    };
     const put_category = {
         id: category.category.id,
         name: catName === "" ? category.category.name : catName,
         maxPoints: catMaxPoints === "" ? category.category.maxPoints : catMaxPoints,
-        subCategory: formValues
+        subCategories: sub
     }
-    console.log(put_category);
-    let handleChange = (i, e) => {
-        let newFormValues = [...formValues];
-        newFormValues[i][e.target.name] = e.target.value;
-        setFormValues(newFormValues);
-    }
+
     const editCategory = () => {
         axios({
             method: "put",
@@ -45,6 +51,7 @@ function EditCategory ({ show, voc, onClose, category}) {
             )
             .catch(err => console.log(err))
     }
+
     return (
         <div>
             <Modal
@@ -64,7 +71,10 @@ function EditCategory ({ show, voc, onClose, category}) {
                 <Modal.Body>
                     <div className="max-w-auto mx-auto bg-white p-4">
                         <form>
-                            <div className="grid gap-6 mb-6 lg:grid-cols-2">
+                            <a className="block mt-2 rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                                <h6 className="ml-2 mt-2">Category solih</h6>
+                                <div className="flex flex-col justify-between p-4 leading-normal">
+                                <div className="grid gap-6 mb-6 lg:grid-cols-2">
                                 <div>
                                     <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
                                         Category нэр</label>
@@ -88,45 +98,49 @@ function EditCategory ({ show, voc, onClose, category}) {
                                            required/>
                                 </div>
                             </div>
-                            <div className="grid gap-6 mb-6 lg:grid-cols-2">
-                                {formValues.map((element, index) => (
-                                    <div key={index} className="grid gap-6 mb-6 lg:grid-cols-2">
-                                        {
-                                            category.category ? category.category.subCategory.map((data, index) =>
-                                                <input key={index}
-                                                       type="hidden" name="id" value={element.id || data.id}
-                                                       onChange={e => handleChange(index, e)}
-                                                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                       required/>
-                                            ) : null
-                                        }
-                                        <div>
-                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Ур чадварын нэр</label>
-                                            {
-                                                category.category ? category.category.subCategory.map((data, index) =>
-                                                    <input key={index}
-                                                           type="text" name="name" value={element.name || data.name}
-                                                           onChange={e => handleChange(index, e)}
-                                                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                           required/>
-                                                ) : null
-                                            }
+                                </div>
+                            </a>
+                            <a className="block mt-2 rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                                <h6 className="ml-2 mt-2">Sub cat solih</h6>
+                                <div className="flex flex-col justify-between p-4 leading-normal">
+                                <div className="grid gap-6 mb-6 lg:grid-cols-2">
+                                {category.category.subCategory.map((datum, index) => (
+                                    <div>
+                                        <div key={datum.id}>
+                                            <input type='hidden'
+                                                   name="id"
+                                                   defaultValue={datum.id}
+                                                   onChange={updateState(index)}
+                                                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                   required/>
                                         </div>
-                                        <div>
-                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Ур чадварын оноо</label>
-                                            {
-                                                category.category ? category.category.subCategory.map((data, index) =>
-                                                    <input key={index}
-                                                           type="number" name="maxPoints" value={element.maxPoints || data.maxPoints}
-                                                           onChange={e => handleChange(index, e)}
-                                                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                           required/>
-                                                ) : null
-                                            }
+                                        <label
+                                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                            Name</label>
+                                        <div key={datum.name}>
+                                            <input type='text'
+                                                   name="name"
+                                                   defaultValue={datum.name}
+                                                   onChange={updateState(index)}
+                                                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                   required/>
+                                        </div>
+                                        <label
+                                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+                                            Maxpoints</label>
+                                        <div key={datum.maxPoints}>
+                                            <input type='number'
+                                                   name="maxPoints"
+                                                   defaultValue={datum.maxPoints}
+                                                   onChange={updateState(index)}
+                                                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                   required/>
                                         </div>
                                     </div>
                                 ))}
                             </div>
+                                </div>
+                            </a>
                             <div className="float-right">
                                 <button type="submit"
                                         onClick={editCategory}

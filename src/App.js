@@ -54,6 +54,7 @@ import ExamInit from "./pages/userUI/ExamInit";
 import MainNavigation from "./components/MainNavigation";
 import RatingIndexPage from "../src/pages/rating/rating/RatingIndexPage";
 import { QueryClient, QueryClientProvider } from "react-query";
+import CreateRate from "./pages/rating/rate-users/CreateRate";
 
 function App() {
   const { activeMenu, showTop, roleId, error, setError } = useStateContext();
@@ -168,7 +169,7 @@ function App() {
             path="/level-one"
             element={
               <QueryClientProvider client={queryClient}>
-                
+
               <ProtectedRoute allowedRoles={[199, 1]}>
                 <Level1 />
               </ProtectedRoute>
@@ -233,6 +234,15 @@ function App() {
               </ProtectedRoute>
             }
           />
+            <Route
+                path="/create-rate-user"
+                element={
+                    <ProtectedRoute allowedRoles={[199]}>
+                        <CreateRate />
+                    </ProtectedRoute>
+                }
+            />create-rate-user
+
           <Route
             path="/complain-edit"
             element={

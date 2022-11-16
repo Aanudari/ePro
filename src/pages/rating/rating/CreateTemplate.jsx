@@ -18,13 +18,28 @@ function CreateTemplate ({ show, voc, onClose }) {
     const [tempNameEmpty, checkTemplateNameEmpty] = useState(false);
     const [templateRoleID, setTemplateRoleID] = useState("");
     const [tempRoleIDEmpty, checkTemplateRoleIDEmpty] = useState(false);
+    const [extraValues, setextraValues] = useState([{ name: "",}])
 
     const post_template_data = {
         name: templateName,
         roleID: templateRoleID,
-        categories: []
+        categories: [],
+        extras: extraValues
     };
-    console.log(post_template_data);
+
+    let handleChangeExtra = (i, e) => {
+        let newFormValues = [...extraValues];
+        newFormValues[i][e.target.name] = e.target.value;
+        setextraValues(newFormValues);
+    }
+    let addExtraFormFields = () => {
+        setextraValues([...extraValues, { name: "",}])
+    }
+    let removeExtraFormFields = (i) => {
+        let newFormValues = [...extraValues];
+        newFormValues.splice(i, 1);
+        setextraValues(newFormValues)
+    }
     const submitCreateTemplate = (e) => {
         e.preventDefault();
         if (templateName.length === 0) {
@@ -117,11 +132,44 @@ function CreateTemplate ({ show, voc, onClose }) {
                                     </div>
                                 </div>
                             </a>
+
+                            <h6 className="py-2">Бүртгэх утгаа оруулна уу.</h6>
+                            {extraValues.map((element, index) => (
+                                <a key={index} className="block mt-2 rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                                    <div className="flex flex-col justify-between p-4 leading-normal">
+                                        <div className="grid gap-6 mb-6 md:grid-cols-2" >
+                                            <div>
+                                                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Extra нэр</label>
+                                                <input type="text" name="name" value={element.name || ""}
+                                                       onChange={e => handleChangeExtra(index, e)}
+                                                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                       required=""
+                                                />
+                                            </div>
+                                            {
+                                                index ?
+                                                    <div className="button-section float-right px-2">
+                                                        <button type="button"  onClick={() => removeExtraFormFields(index)}
+                                                                className="block mt-2 inline-block px-6 py-2 border-2 border-red-600 text-red-600 font-medium text-xs leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+                                                        >Delete</button>
+                                                    </div>
+                                                    : null
+                                            }
+                                        </div>
+                                    </div>
+                                </a>
+                            ))}
                             <div className="button-section">
                                 <div className="float-right">
                                     <button type="submit"
                                             className="mt-2 inline-block px-6 py-2.5 bg-green-500 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-green-600 hover:shadow-lg focus:bg-green-600 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-700 active:shadow-lg transition duration-150 ease-in-out">
                                         Template үүсгэх
+                                    </button>
+                                </div>
+                                <div className="button-section float-right px-2">
+                                    <button type="button"
+                                            className="mt-2 inline-block px-6 py-2 border-2 border-green-500 text-green-500 font-medium text-xs leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+                                            onClick={() => addExtraFormFields()}>Бүртгэл нэмэх
                                     </button>
                                 </div>
                             </div>

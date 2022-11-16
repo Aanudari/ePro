@@ -48,7 +48,6 @@ function RatingIndexPage() {
     }, []);
 
 
-
     return (
         <div className="w-full h-full bg-gray-50">
             <Navigation/>

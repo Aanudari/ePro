@@ -38,6 +38,7 @@ function TemplateCell (template) {
             )
             .catch(err => console.log(err))
     }
+
     return (
             <div className="mt-2 text-white flex flex-col border rounded border-gray-600">
                 <div className="p-4 bg-[#50A3A2] flex items-center">
@@ -61,6 +62,17 @@ function TemplateCell (template) {
                             </button>
                         );
                     })}
+                </div>
+                <div className="text-black flex flex-col">
+                    <div className="p-4 flex items-center border border-gray-600">
+                            {
+                                template.template ? template.template.extras.map((data, index) =>
+                                    <div className="mr-auto">
+                                    <h1 className="text-xl leading-none mb-1" key={index}>Extra name: {data.name}</h1>
+                                    </div>
+                                ) : null
+                            }
+                    </div>
                 </div>
                     {
                         template.template ? template.template.categories.map((data, index) =>

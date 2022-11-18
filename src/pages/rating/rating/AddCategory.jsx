@@ -16,6 +16,7 @@ function AddCategory({ show, voc, onClose, template_id }) {
     const [catNameEmpty, checkCatNameEmpty] = useState(false);
     const [catPointEmpty, checkCatPointEmpty] = useState(false);
 
+
     const add_cat_data = {
         name: categoryName,
         maxPoints: categoryMaxpoint,
@@ -23,7 +24,6 @@ function AddCategory({ show, voc, onClose, template_id }) {
         templateId: template_id
     };
 
-    console.log(add_cat_data);
     const submitAddCategory = (e) => {
         e.preventDefault();
         axios({

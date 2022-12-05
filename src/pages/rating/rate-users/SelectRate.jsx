@@ -5,7 +5,7 @@ import {useNavigate} from "react-router-dom";
 import {useStateContext} from "../../../contexts/ContextProvider";
 import Select from "react-select";
 
-function SelectRate ({ show, voc, onClose, userdata }) {
+const SelectRate = ( props ) => {
     const navigate = useNavigate();
     const {TOKEN} = useStateContext();
     const logout = () => {
@@ -16,6 +16,8 @@ function SelectRate ({ show, voc, onClose, userdata }) {
     };
     const [getRateTemplate, setGetRateTemplate] = useState("");
     const [selectedOption, setSelectedOption] = useState(null);
+    const {show, handleClose, handleShow, userdata} = props
+
     useEffect(() => {
         axios({
             method: "get",
@@ -42,18 +44,19 @@ function SelectRate ({ show, voc, onClose, userdata }) {
     }
     return (
         <div>
+            <button onClick={handleShow}>Үнэлгээ өгөх</button>
             <Modal
-                // size="lg"
                 show={show}
-                onHide={onClose}
+                onHide={handleClose}
+                size="ml"
                 backdrop="static"
                 keyboard={false}
+                aria-labelledby="contained-modal-title-vcenter"
                 dialogClassName="modal-100w"
-                aria-labelledby="example-modal-sizes-title-sm"
                 centered
             >
                 <Modal.Header closeButton>
-                    <Modal.Title id={`contained-modal-title-${voc.href}`}>
+                    <Modal.Title>
                         Template сонгох
                     </Modal.Title>
                 </Modal.Header>

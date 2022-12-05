@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import ResultExam from "./Exam/ResultExam";
 
 function useCounter(initialState) {
-  
+
   const [value, setValue] = useState(initialState);
 
   const reset = () => setValue(0);
@@ -24,7 +24,7 @@ function useCounter(initialState) {
 }
 
 export default function ExamInit() {
-  const { TOKEN, qlength, setQlength, error, setError, gameStarted, setGameStarted, gameFinished, 
+  const { TOKEN, qlength, setQlength, error, setError, gameStarted, setGameStarted, gameFinished,
     setGameFinished, uniqueRightAnswer, uniqueWrongAnswer, showAnswer, setShowAnswer } = useStateContext();
   const examId = sessionStorage.getItem("exam_id")
   const navigate = useNavigate();
@@ -155,7 +155,7 @@ export default function ExamInit() {
                 </p>
                 <button
                   className="intro-button"
-                  onClick={() => 
+                  onClick={() =>
                     {
                       setGameStarted(true)
                     setShowAnswer(false)

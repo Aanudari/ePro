@@ -31,57 +31,61 @@ function CreateRate () {
     const extras = location.state.template.extras;
     const category = location.state.template.categories;
     const ratingtotal = 100;
-    const categorytotal = 100;
+    const categorytotal = 90;
     const [extraID, setextraID] = useState("");
     const [extraval, setextraval] = useState("");
-    const [extraValue, setExtraValue] = useState([
-        {id: extraID, value: extraval}
-    ]);
-
-    const [subcategoryID, setsubcategoryID] = useState("");
-    const [subPoints, setsubPoints] = useState("");
-    const [subValue, setSubValue] = useState([
-        {
-            id: subcategoryID,
-            points: subPoints,
-        }
-    ]);
-    const [categoryID, setcategoryID] = useState("")
+    const [subcategoryID, setsubcategoryID] = useState('');
+    const [subPoints, setsubPoints] = useState('');
+    const [categoryID, setcategoryID] = useState('')
+    const [extraValue, setExtraValue] = useState({
+        "id": `${extraID}`,
+        "value": `${extraval}`
+    });
     const [catValue, setCatValue] = useState([
         {
-            id: categoryID,
-            points: categorytotal,
-            subCategory: subValue
+            "id": `${categoryID}`,
+            "points": `${categorytotal}`,
+            "subCategory": []
         }
     ]);
+    const [subValue, setSubValue] = useState({
+        "id": `${subcategoryID}`,
+        "points": `${subPoints}`,
+    });
+
     const create_rate_data = {
-        userId: location.state.userinfo.deviceId,
-        startDate: dateTime1,
-        endDate: dateTime2,
-        rating: ratingtotal,
-        categories: catValue,
-        extras: extraValue
+        "userId": `${location.state.userinfo.deviceId}`,
+        "startDate": `${dateTime1}`,
+        "endDate": `${dateTime2}`,
+        "rating": `${ratingtotal}`,
+        "categories": [],
+        "extras": []
     }
+
     const onSub = (e) => {
         e.preventDefault();
-        axios({
-            method: "post",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `${TOKEN}`
-            },
-            url: `http://192.168.10.248:9000/v1/Rating`,
-            data: JSON.stringify(create_rate_data),
-        })
-            .then((res) => {
-                console.log(res)
-                // if (res.data.result === "true") {
-                //
-                // } else {
-                //
-                // }
-            })
-            .catch((err) => console.log(err));
+        let arr = [];
+        arr.push(subValue);
+        setCatValue((prev) => ({ ...prev, subCategory: arr }))
+
+        // axios({
+        //     method: "post",
+        //     headers: {
+        //         "Content-Type": "application/json",
+        //         "Authorization": `${TOKEN}`
+        //     },
+        //     url: `http://192.168.10.248:9000/v1/Rating`,
+        //     data: JSON.stringify(create_rate_data),
+        // })
+        //     .then((res) => {
+        //         console.log(res)
+        //         // if (res.data.result === "true") {
+        //         //
+        //         // } else {
+        //         //
+        //         // }
+        //     })
+        //     .catch((err) => console.log(err));
     }
 
     return (
@@ -177,23 +181,17 @@ function CreateRate () {
                                     extras ? extras.map((data, index) =>
                                         <div key={index} className="grid gap-6 mb-6 md:grid-cols-2">
                                             <input type="hidden"
-                                                   name="id"
-                                                   // onChange={(e) => console.log(e)}
+                                                   value={data.id}
                                                    onChange={(e) => {
                                                        setextraID(e.target.value);
                                                    }}
-
-                                                   // onChange={e => handleChangeExtra(index, e)}
                                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                    required=""/>
                                             <label>{data.name}</label>
                                             <input type="text"
-                                                   name="value"
-                                                   // onChange={(e) => console.log(e.target.value)}
                                                    onChange={(e) => {
                                                        setextraval(e.target.value);
                                                    }}
-                                                   // onChange={e => handleChangeExtra(index, e)}
                                                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                    required=""/>
                                         </div>
@@ -211,6 +209,7 @@ function CreateRate () {
                                                     </h6>
                                                     <input type="hidden"
                                                            name="id"
+                                                           value={data.id}
                                                            onChange={(e) => {
                                                                setcategoryID(e.target.value);
                                                            }}
@@ -230,6 +229,7 @@ function CreateRate () {
 
                                                                 <div className="md:w-1/3">
                                                                     <input type="hidden"
+                                                                           value={data.id}
                                                                            name="id" onChange={(e) => {
                                                                         setsubcategoryID(e.target.value);
                                                                     }}

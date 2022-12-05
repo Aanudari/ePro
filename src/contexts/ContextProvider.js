@@ -31,6 +31,8 @@ export const ContextProvider = ({ children }) => {
   const uniqueWrongAnswer = new Set(wrongValue.current.map(e => e))
   const [showAnswer, setShowAnswer] = useState(false);
   const [reminder, setReminder] = useState(false);
+  // const user = JSON.parse(localStorage.getItem("user"));
+
   return (
     <StateContext.Provider value={{
       activeMenu, setActiveMenu, user, setUser, roleId, allRoles, sideBarTrack,

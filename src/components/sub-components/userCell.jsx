@@ -4,22 +4,20 @@ import { useNavigate, useLocation } from "react-router-dom";
 function UserCell(data) {
     let navi = useNavigate()
     let location = useLocation();
-    let lastName = data.data.lastName.slice(0, 1)
+    let lastName = data.data.lastName.slice(0, 1);
     const handleEdit = () => {
-        navi(`${location.pathname}-edit`, { state: { deviceId: data.data.deviceId, firstName: data.data.firstName } })
+        navi(`${location.pathname}-edit`, {state: {data: data.data, firstName: data.data.firstName}})
     }
     return (
         <div onClick={handleEdit} className="cus-buttons2 ">
             <div className="">
-                <div className=' w-[170px] md:w-[303px] h-[200px] hover:shadow-lg raise2
-                p-2 shadow
-            '>
-                <div className='h-[50px] w-full flex'>
-                    <img src="user2.png"  className='h-[50px]' alt="" />
-                    <div className='w-full flex items-center justify-end '>
-                        <h6 className='mb-0 ml-[2px] md:ml-5 text-white'> {lastName}. {data.data.firstName}</h6>
+                <div className=' w-[170px] md:w-[303px] h-[200px] hover:shadow-lg raise2 p-2 shadow'>
+                    <div className='h-[50px] w-full flex'>
+                        <img src="user2.png" className='h-[50px]' alt=""/>
+                        <div className='w-full flex items-center justify-end '>
+                            <h6 className='mb-0 ml-[2px] md:ml-5 text-white'> {lastName}. {data.data.firstName}</h6>
+                        </div>
                     </div>
-                </div>
                     <p className='text-white m-0 text-[13px] flex justify-between'>
                         <span className='m-0'>
                         Role name:
@@ -79,7 +77,6 @@ function UserCell(data) {
                 </div>
             </div>
         </div>
-        // </div>
     );
 }
 

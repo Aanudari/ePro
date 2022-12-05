@@ -8,7 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import SideNavigation from "./components/Side-Navigation";
-import AddCategory from "../src/components/sub-components/category/AddCategory";
+import AddCategory from "./pages/rating/rating/AddCategory";
 import { useStateContext } from "./contexts/ContextProvider";
 import ExamForm from "./pages/exam/exam-form";
 import ExamResult from "./pages/exam/exam-result";
@@ -54,6 +54,7 @@ import ExamInit from "./pages/userUI/ExamInit";
 import MainNavigation from "./components/MainNavigation";
 import RatingIndexPage from "../src/pages/rating/rating/RatingIndexPage";
 import { QueryClient, QueryClientProvider } from "react-query";
+import CreateRate from "./pages/rating/rate-users/CreateRate";
 
 function App() {
   const { activeMenu, showTop, roleId, error, setError } = useStateContext();
@@ -172,7 +173,9 @@ function App() {
             path="/level-one"
             element={
               <QueryClientProvider client={queryClient}>
-
+              <ProtectedRoute allowedRoles={[199, 1]}>
+                <Level1 />
+              </ProtectedRoute>
                 <ProtectedRoute allowedRoles={[199, 1]}>
                   <Level1 />
                 </ProtectedRoute>
@@ -237,6 +240,15 @@ function App() {
               </ProtectedRoute>
             }
           />
+            <Route
+                path="/create-rate-user"
+                element={
+                    <ProtectedRoute allowedRoles={[199]}>
+                        <CreateRate />
+                    </ProtectedRoute>
+                }
+            />create-rate-user
+
           <Route
             path="/complain-edit"
             element={

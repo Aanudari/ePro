@@ -1,7 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import Navigation from "../../components/Navigation";
-import { useStateContext } from "../../contexts/ContextProvider";
 import axios from "axios";
 import UserCell from "../../components/sub-components/userCell";
 
@@ -42,7 +41,7 @@ function Branch() {
           </div>
           {
             data ? data.map((user, index) =>
-              // Ажилтан тус бүрийг UserCell conponent д хувиарлах замаар мэдээллүүдийг харуулав 
+              // Ажилтан тус бүрийг UserCell conponent д хувиарлах замаар мэдээллүүдийг харуулав
               <UserCell key={index} data={user} />
             ) : null
           }

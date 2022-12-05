@@ -126,7 +126,7 @@ function CreateExamForm({ setKeyMain }) {
         //     setNoti_role(true)
         // }
         if (exam_name !== '' && duration !== 0 && count !== 0 &&
-            varSelect !== '' 
+            varSelect !== ''
             // && role_id !== 0
         ) {
             setCheckTime(true)
@@ -176,7 +176,7 @@ function CreateExamForm({ setKeyMain }) {
                                     variants?.questionList?.map((item, index) => (
                                         <CreateQuestion key={index} index={index + 1}
                                             handleChange={handleChange} countNum={count} listNum={uniqueList.length}
-                                            valid={key} pointStatus={pointStatus} 
+                                            valid={key} pointStatus={pointStatus}
                                             />
                                     ))
                                 }
@@ -184,7 +184,6 @@ function CreateExamForm({ setKeyMain }) {
                             <div className="form-form p-2 flex flex-col md:flex-row gap-5 mt-4 w-full">
                                 <div className="w-full md:w-1/2 pl-0 md:pl-20">
                                     <div className="group">
-
                                         <input className={noti_examName ? 'custom-validation' : ""}
                                             onChange={(e) => {
                                                 setExam_name(e.target.value)
@@ -192,7 +191,7 @@ function CreateExamForm({ setKeyMain }) {
                                             }} type="text" required />
                                         {
                                             noti_examName &&
-                                            <i className="bi bi-exclamation-lg text-2xl text-red-500 
+                                            <i className="bi bi-exclamation-lg text-2xl text-red-500
                                     animate-bounce absolute top-[10px] left-[-15px]"></i>
                                         }
                                         <span className="highlight"></span>
@@ -209,7 +208,7 @@ function CreateExamForm({ setKeyMain }) {
                                             }} type="number" required />
                                         {
                                             noti_diration &&
-                                            <i className="bi bi-exclamation-lg text-2xl text-red-500 
+                                            <i className="bi bi-exclamation-lg text-2xl text-red-500
                                     animate-bounce absolute top-[10px] left-[-15px]"></i>
                                 }
                                         <span className="highlight"></span>
@@ -225,7 +224,7 @@ function CreateExamForm({ setKeyMain }) {
                                             }} type="number" required />
                                         {
                                             noti_count &&
-                                            <i className="bi bi-exclamation-lg text-2xl text-red-500 
+                                            <i className="bi bi-exclamation-lg text-2xl text-red-500
                                     animate-bounce absolute top-[10px] left-[-15px]"></i>
                                         }
                                         <span className="highlight"></span>
@@ -241,7 +240,7 @@ function CreateExamForm({ setKeyMain }) {
                                             }} type="text" required />
                                         {
                                             noti_variant &&
-                                            <i className="bi bi-exclamation-lg text-2xl text-red-500 
+                                            <i className="bi bi-exclamation-lg text-2xl text-red-500
                                     animate-bounce absolute top-[10px] left-[-15px]"></i>
                                         }
                                         <span className="highlight"></span>
@@ -252,7 +251,7 @@ function CreateExamForm({ setKeyMain }) {
                                     <div className="select-con relative hidden">
                                         {
                                             noti_role &&
-                                            <i className="bi bi-exclamation-lg text-2xl text-red-500 
+                                            <i className="bi bi-exclamation-lg text-2xl text-red-500
                                     animate-bounce absolute left-[-20px] top-[10px]"></i>
                                         }
                                         <h6 className="text-gray-500/80 text-[17.5px]">Ажлын байр сонгох:</h6>
@@ -281,9 +280,9 @@ function CreateExamForm({ setKeyMain }) {
                                         <span className="font-[500] text-gray-500/80  text-[17.5px]">Нээх цаг :</span>
                                         <DatePicker
                                             selected={value}
-                                            value={value} 
+                                            value={value}
                                             onChange={date => setValue(date)}
-                                            className='form-control form-control-sm 
+                                            className='form-control form-control-sm
                                             py-2 mt-2 ml-0 border border-dark'
                                             showTimeSelect
                                             timeFormat='HH:mm'
@@ -296,7 +295,7 @@ function CreateExamForm({ setKeyMain }) {
                                         <span className="font-[500] text-gray-500/80 text-[17.5px]">Хаах цаг :</span>
                                         <DatePicker
                                             selected={selectV}
-                                            value={selectV} 
+                                            value={selectV}
                                             onChange={date => setSelectV(date)}
                                             className='form-control form-control-sm
                                             py-2 mt-2 ml-0 border border-dark'

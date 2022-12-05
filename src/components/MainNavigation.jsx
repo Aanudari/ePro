@@ -46,9 +46,6 @@ function MainNavigation() {
                                     navigate("/rating");
                                 }}>Үнэлгээ үүсгэх</a></li>
                                 <li><a onClick={() => {
-                                    navigate("/rate-users");
-                                }}>Үнэлгээ өгөх</a></li>
-                                <li><a onClick={() => {
                                    navigate("/level-one");
                                 }}>level 1</a></li>
                                 <li><a onClick={() => {

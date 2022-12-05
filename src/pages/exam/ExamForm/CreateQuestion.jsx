@@ -41,6 +41,7 @@ function CreateQuestion({ index, valid, handleChange, countNum, listNum, pointSt
         setcheckEmpty(prev => [...prev, indexZ])
         setStore(itemChecked)
     }
+
     const [noti_answer, setNoti_answer] = useState(false);
     const [noti_count, setNoti_count] = useState(false);
     const [noti_store, setnoti_store] = useState(false);
@@ -65,11 +66,12 @@ function CreateQuestion({ index, valid, handleChange, countNum, listNum, pointSt
             handleChange(answer, index - 1, store)
         }
     }
+
     return (
         <div className={valid === index ? "block" : "hidden"}>
             {
                 noti_store &&
-                <div className='fixed md:absolute w-full h-screen md:h-[calc(100vh-112px)] 
+                <div className='fixed md:absolute w-full h-screen md:h-[calc(100vh-112px)]
                 bg-black bg-opacity-50 top-0 left-0 z-10'>
                     <div className='w-full h-full flex justify-center items-center'>
                         <div className='w-2/3 md:w-1/3 h-1/3 flex flex-col justify-center
@@ -81,7 +83,7 @@ function CreateQuestion({ index, valid, handleChange, countNum, listNum, pointSt
                     </div>
                 </div>
             }
-                
+
 
             <div className="mt-10 px-4">
                 <div className="group2 w-full">
@@ -94,7 +96,7 @@ function CreateQuestion({ index, valid, handleChange, countNum, listNum, pointSt
                         type="text" required/>
                     {
                         noti_answer &&
-                        <i className="bi bi-exclamation-lg text-2xl text-red-500 
+                        <i className="bi bi-exclamation-lg text-2xl text-red-500
                                     animate-bounce absolute top-[10px] left-[-15px]"></i>
                     }
                     <span className="highlight"></span>
@@ -114,11 +116,11 @@ function CreateQuestion({ index, valid, handleChange, countNum, listNum, pointSt
                         // onChange={(e) => {
                         //     setExam_name(e.target.value)
                         //     setNoti_examName(false)
-                        // }} 
+                        // }}
                         type="number" required/>
                     {
                         noti_answer &&
-                        <i className="bi bi-exclamation-lg text-2xl text-red-500 
+                        <i className="bi bi-exclamation-lg text-2xl text-red-500
                                     animate-bounce absolute top-[10px] left-[-15px]"></i>
                     }
                     <span className="highlight"></span>
@@ -137,7 +139,7 @@ function CreateQuestion({ index, valid, handleChange, countNum, listNum, pointSt
                     />
                     {
                         noti_count &&
-                        <i className="bi bi-exclamation-lg text-2xl text-red-500 
+                        <i className="bi bi-exclamation-lg text-2xl text-red-500
                                     animate-bounce absolute top-[10px] left-[-15px]"></i>
                     }
                     <span className="highlight"></span>

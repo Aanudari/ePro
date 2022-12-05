@@ -4,22 +4,49 @@ import axios from "axios";
 import {useStateContext} from "../../../contexts/ContextProvider";
 import {useNavigate} from "react-router-dom";
 
+
 function CreateTemplate ({ show, voc, onClose }) {
+    const logout = () => {
+        localStorage.clear();
+        sessionStorage.clear()
+        navigate("/");
+        window.location.reload();
+    };
     const navigate = useNavigate();
     const {TOKEN} = useStateContext();
     const [templateName, setTemplateName] = useState("");
     const [tempNameEmpty, checkTemplateNameEmpty] = useState(false);
+    const [templateRoleID, setTemplateRoleID] = useState("");
+    const [tempRoleIDEmpty, checkTemplateRoleIDEmpty] = useState(false);
+    const [extraValues, setextraValues] = useState([{ name: "",}])
 
-    const post_template_date = {
+    const post_template_data = {
         name: templateName,
-        roleID: voc.content,
+        roleID: templateRoleID,
         categories: [],
+        extras: extraValues
     };
-    console.log(post_template_date);
+
+    let handleChangeExtra = (i, e) => {
+        let newFormValues = [...extraValues];
+        newFormValues[i][e.target.name] = e.target.value;
+        setextraValues(newFormValues);
+    }
+    let addExtraFormFields = () => {
+        setextraValues([...extraValues, { name: "",}])
+    }
+    let removeExtraFormFields = (i) => {
+        let newFormValues = [...extraValues];
+        newFormValues.splice(i, 1);
+        setextraValues(newFormValues)
+    }
     const submitCreateTemplate = (e) => {
         e.preventDefault();
         if (templateName.length === 0) {
             checkTemplateNameEmpty(true);
+        } else
+        if (templateRoleID.length === 0) {
+            checkTemplateRoleIDEmpty(true);
         } else
         {
             axios({
@@ -29,19 +56,21 @@ function CreateTemplate ({ show, voc, onClose }) {
                     "Content-Type": "application/json",
                 },
                 url: `http://192.168.10.248:9000/v1/RatingTemplate/add`,
-                data: JSON.stringify(post_template_date),
+                data: JSON.stringify(post_template_data),
             })
                 .then((res) => {
-                    if (res.data.isSuccess === "true") {
+                    if (res.data.isSuccess === true) {
                         navigate(0);
                     } else {
-                        navigate(0);
-                        console.log(res.data)
+                        if (res.data.resultMessage === "Unauthorized"){
+                            logout();
+                        }
                     }
                 })
                 .catch((err) => console.log(err));
         }
     }
+
     return (
         <div>
             <Modal
@@ -49,8 +78,9 @@ function CreateTemplate ({ show, voc, onClose }) {
                 show={show}
                 onHide={onClose}
                 backdrop="static"
-                keyboard={false}
-                aria-labelledby={`contained-modal-title-${voc.href}`}
+                // keyboard={false}
+                dialogClassName="modal-90w"
+                // aria-labelledby={`contained-modal-title-${voc.href}`}
                 centered
             >
                 <Modal.Header closeButton>
@@ -59,33 +89,92 @@ function CreateTemplate ({ show, voc, onClose }) {
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <form>
-                        <h6>Template үүсгэх нэрээ оруулна уу.</h6>
-                        <a className="block mt-2 rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                            <div className="flex flex-col justify-between p-4 leading-normal">
-                                <div className="grid gap-6 mb-6 md:grid-cols-2">
-                                    <div>
-                                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Template нэр</label>
-                                        <input type="text"
-                                               onChange={(e) => {
-                                                   setTemplateName(e.target.value);
-                                                   checkTemplateNameEmpty(false);
-                                               }}
-                                               id={tempNameEmpty === true ? "border-red" : null}
-                                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                               required=""/>
+                    <div className="mt-2">
+                        <form  onSubmit={submitCreateTemplate}>
+                            <a className="block mt-2 rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                                <h6 className="p-2">Template үүсгэх</h6>
+                                <div className="flex flex-col justify-between p-4 leading-normal">
+                                    <div className="grid gap-6 mb-6 md:grid-cols-2">
+                                        <div>
+                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Template нэр</label>
+                                            <input type="text"
+                                                   onChange={(e) => {
+                                                       setTemplateName(e.target.value);
+                                                       checkTemplateNameEmpty(false);
+                                                   }}
+                                                   id={tempNameEmpty === true ? "border-red" : null}
+                                                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                   required=""/>
+                                        </div>
+                                        <div>
+                                            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Template user</label>
+                                            <div className="relative">
+                                                <select className="block w-full text-white py-2.5 px-3 pr-6 rounded leading-tight focus:outline-none"
+                                                        onChange={(e) => {
+                                                            setTemplateRoleID(e.target.value);
+                                                            checkTemplateRoleIDEmpty(false);
+                                                        }}
+                                                        id={tempRoleIDEmpty === true ? "border-red" : null}>
+                                                    <option>Ажлын байр</option>
+                                                    <option value="1">Level 1</option>
+                                                    <option value="2">Level 2</option>
+                                                    <option>Online</option>
+                                                    <option>Branch</option>
+                                                    <option>Засвар, нярав</option>
+                                                    <option>Telesales</option>
+                                                    <option>Installer</option>
+                                                </select>
+                                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                                    <i className="bi bi-caret-down-fill"/>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
+                            </a>
+
+                            <h6 className="py-2">Бүртгэх утгаа оруулна уу.</h6>
+                            {extraValues.map((element, index) => (
+                                <a key={index} className="block mt-2 rounded-lg border border-gray-200 shadow-md hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                                    <div className="flex flex-col justify-between p-4 leading-normal">
+                                        <div className="grid gap-6 mb-6 md:grid-cols-2" >
+                                            <div>
+                                                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Extra нэр</label>
+                                                <input type="text" name="name" value={element.name || ""}
+                                                       onChange={e => handleChangeExtra(index, e)}
+                                                       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                       required=""
+                                                />
+                                            </div>
+                                            {
+                                                index ?
+                                                    <div className="button-section float-right px-2">
+                                                        <button type="button"  onClick={() => removeExtraFormFields(index)}
+                                                                className="block mt-2 inline-block px-6 py-2 border-2 border-red-600 text-red-600 font-medium text-xs leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+                                                        >Delete</button>
+                                                    </div>
+                                                    : null
+                                            }
+                                        </div>
+                                    </div>
+                                </a>
+                            ))}
+                            <div className="button-section">
+                                <div className="float-right">
+                                    <button type="submit"
+                                            className="mt-2 inline-block px-6 py-2.5 bg-green-500 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-green-600 hover:shadow-lg focus:bg-green-600 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-700 active:shadow-lg transition duration-150 ease-in-out">
+                                        Template үүсгэх
+                                    </button>
+                                </div>
+                                <div className="button-section float-right px-2">
+                                    <button type="button"
+                                            className="mt-2 inline-block px-6 py-2 border-2 border-green-500 text-green-500 font-medium text-xs leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+                                            onClick={() => addExtraFormFields()}>Бүртгэл нэмэх
+                                    </button>
+                                </div>
                             </div>
-                        </a>
-                        <div className="float-right">
-                            <button type="submit"
-                                    onClick={submitCreateTemplate}
-                                    className="mt-2 inline-block px-6 py-2.5 bg-green-500 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-green-600 hover:shadow-lg focus:bg-green-600 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-700 active:shadow-lg transition duration-150 ease-in-out">
-                                Үнэлгээг үүсгэх
-                            </button>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </Modal.Body>
             </Modal>
         </div>

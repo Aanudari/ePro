@@ -78,9 +78,7 @@ function CreateTemplate ({ show, voc, onClose }) {
                 show={show}
                 onHide={onClose}
                 backdrop="static"
-                // keyboard={false}
                 dialogClassName="modal-90w"
-                // aria-labelledby={`contained-modal-title-${voc.href}`}
                 centered
             >
                 <Modal.Header closeButton>
@@ -168,7 +166,8 @@ function CreateTemplate ({ show, voc, onClose }) {
                                 </div>
                                 <div className="button-section float-right px-2">
                                     <button type="button"
-                                            className="mt-2 inline-block px-6 py-2 border-2 border-green-500 text-green-500 font-medium text-xs leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
+                                            className="mt-2 inline-block px-6 py-2 border-2 border-green-500 text-green-500 
+                                            font-medium text-xs leading-tight uppercase rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
                                             onClick={() => addExtraFormFields()}>Бүртгэл нэмэх
                                     </button>
                                 </div>

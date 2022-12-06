@@ -3,8 +3,6 @@ import Navigation from "../../../components/Navigation";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useStateContext} from "../../../contexts/ContextProvider";
 import axios from "axios";
-import CategoryCell from "./mappig/CategoryCell";
-import AddCategory from "./AddCategory";
 import CreateTemplate from "./CreateTemplate";
 import TemplateCell from "./mappig/TemplateCell";
 

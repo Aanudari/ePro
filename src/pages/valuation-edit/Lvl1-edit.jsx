@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useStateContext } from "../../contexts/ContextProvider";
 import moment from "moment";
-import Accordion from "./Accordion";
 import CreateComment from "../rating/comment/CreateComment";
 import SelectRate from "../rating/rate-users/SelectRate";
 import IndexComment from "../rating/comment/IndexComment";
@@ -244,25 +243,6 @@ function LeveloneEdit() {
                         </div>
                     </div>
                 </div>
-                {/*<aside className="flex h-screen w-[300px] flex-col border-l border-gray-200 bg-white">*/}
-                {/*    <div className="flex flex-1 flex-col overflow-y-scroll">*/}
-                {/*        <div className="border-b border-gray-200 py-4 px-6">*/}
-                {/*            <button className="flex w-full items-center justify-between rounded-xl border border-gray-200 bg-gray-50 px-3 py-1.5">*/}
-
-                {/*            </button>*/}
-                {/*            <button className="mt-2 flex w-full items-center justify-between rounded-xl border border-gray-200 bg-gray-50 px-3 py-1.5">*/}
-
-                {/*            </button>*/}
-                {/*        </div>*/}
-                {/*        <Accordion title="layout">*/}
-                {/*            <div className="flex items-center justify-between">*/}
-                {/*                <button className="rounded-lg border border-gray-200 p-2 hover:bg-gray-100">*/}
-                {/*                    <i className="bi bi-calendar h-5 w-5 stroke-current text-gray-400" /> User list*/}
-                {/*                </button>*/}
-                {/*            </div>*/}
-                {/*        </Accordion>*/}
-                {/*    </div>*/}
-                {/*</aside>*/}
             </div>
         </div>
     );

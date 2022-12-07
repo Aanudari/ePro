@@ -39,6 +39,7 @@ import Dashboard from "./pages/Dashboard";
 import PrepareQuestions from "./components/PrepareQuestions";
 import LevelOneUI from "./pages/userUI/LevelOne/LevelOneUI";
 import ErrorThanks from "./pages/error-thanks/ErrorThanks";
+import CreateErrorThanks from "./pages/error-thanks/CreateErrorThanks";
 import UINavigation from "./components/UINavigation";
 import LevelOneUITakeExam from "./pages/userUI/LevelOne/LevelOneUITakeExam";
 import LevelOneUIExamResult from "./pages/userUI/LevelOne/LevelOneUIExamResult";
@@ -421,6 +422,7 @@ function App() {
             }
           />
           <Route
+<<<<<<< HEAD
             path="/exam-dash"
             element={
               <QueryClientProvider client={queryClient}>
@@ -428,6 +430,13 @@ function App() {
                 <ExamDash />
               </ProtectedRoute>
               </QueryClientProvider>
+=======
+            path="/create-error-thanks"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <CreateErrorThanks />
+              </ProtectedRoute>
+>>>>>>> 9d92e4ef9df964a9c60629cb3a674cf7a102a786
             }
           />
         </Routes>

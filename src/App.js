@@ -1,9 +1,9 @@
 import "./styles/App.css";
-import './styles/styles.scss';
-import './styles/core.scss';
-import './styles/modal.scss';
-import './styles/validation.css';
-import 'devextreme/dist/css/dx.light.css';
+import "./styles/styles.scss";
+import "./styles/core.scss";
+import "./styles/modal.scss";
+import "./styles/validation.css";
+import "devextreme/dist/css/dx.light.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
@@ -40,6 +40,7 @@ import SearchResult from "./components/Result";
 import Dashboard from "./pages/Dashboard";
 import PrepareQuestions from "./components/PrepareQuestions";
 import LevelOneUI from "./pages/userUI/LevelOne/LevelOneUI";
+import ErrorThanks from "./pages/error-thanks/ErrorThanks";
 import UINavigation from "./components/UINavigation";
 import LevelOneUITakeExam from "./pages/userUI/LevelOne/LevelOneUITakeExam";
 import LevelOneUIExamResult from "./pages/userUI/LevelOne/LevelOneUIExamResult";
@@ -58,30 +59,31 @@ import CreateRate from "./pages/rating/rate-users/CreateRate";
 
 function App() {
   const { activeMenu, showTop, roleId, error, setError } = useStateContext();
-  const { width } = getWindowDimensions()
-  const queryClient = new QueryClient()
+  const { width } = getWindowDimensions();
+  const queryClient = new QueryClient();
   return (
     <BrowserRouter>
       <div className="flex w-full relative">
-        {
-          error &&
-          <NotValid />
-        }
-        {
-          showTop ?
-            <div className='fixed w-full h-screen bg-black top-z right-0'></div> : null
-        }
+        {error && <NotValid />}
+        {showTop ? (
+          <div className="fixed w-full h-screen bg-black top-z right-0"></div>
+        ) : null}
         {/* {activeMenu && roleId === "199" && width > 768 ? <SideNavigation /> : null} */}
-        {activeMenu && roleId === "199" && width > 768 ? <MainNavigation /> : null}
+        {activeMenu && roleId === "199" && width > 768 ? (
+          <MainNavigation />
+        ) : null}
 
         <Routes>
           {/*Sidebar аас үсрэх боломжтой үндсэн хуудаснууд */}
-          <Route path="/" element={
-            // CheckLogin = нэвтэрсэн хэрэглэгч дахин login page рүү үсрэх боломжгүй буюу, тухайн замыг хаах component
-            <CheckLogin>
-              <Login />
-            </CheckLogin>
-          } />
+          <Route
+            path="/"
+            element={
+              // CheckLogin = нэвтэрсэн хэрэглэгч дахин login page рүү үсрэх боломжгүй буюу, тухайн замыг хаах component
+              <CheckLogin>
+                <Login />
+              </CheckLogin>
+            }
+          />
           <Route
             path="/home"
             element={
@@ -104,14 +106,6 @@ function App() {
             }
           />
           <Route
-            path="/rating"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <RatingIndexPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
             path="/exam-result"
             element={
               <ProtectedRoute allowedRoles={[199]}>
@@ -127,6 +121,14 @@ function App() {
                   <TakeExam />
                 </ProtectedRoute>
               </QueryClientProvider>
+            }
+          />
+          <Route
+            path="/rating"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <RatingIndexPage />
+              </ProtectedRoute>
             }
           />
           <Route
@@ -173,9 +175,9 @@ function App() {
             path="/level-one"
             element={
               <QueryClientProvider client={queryClient}>
-              <ProtectedRoute allowedRoles={[199, 1]}>
-                <Level1 />
-              </ProtectedRoute>
+                <ProtectedRoute allowedRoles={[199, 1]}>
+                  <Level1 />
+                </ProtectedRoute>
                 <ProtectedRoute allowedRoles={[199, 1]}>
                   <Level1 />
                 </ProtectedRoute>
@@ -224,13 +226,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="*"
-            element={
-              <NotFound />
-            }
-          />
-
+          <Route path="*" element={<NotFound />} />
           {/* Үнэлгээ хийгдэх Page-нүүд */}
           <Route
             path="/level-one-edit"
@@ -240,15 +236,15 @@ function App() {
               </ProtectedRoute>
             }
           />
-            <Route
-                path="/create-rate-user"
-                element={
-                    <ProtectedRoute allowedRoles={[199]}>
-                        <CreateRate />
-                    </ProtectedRoute>
-                }
-            />create-rate-user
-
+          <Route
+            path="/create-rate-user"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <CreateRate />
+              </ProtectedRoute>
+            }
+          />
+          create-rate-user
           <Route
             path="/complain-edit"
             element={
@@ -414,6 +410,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199, 1]}>
                 <ExamInit />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/error-thanks"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <ErrorThanks />
               </ProtectedRoute>
             }
           />

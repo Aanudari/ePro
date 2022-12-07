@@ -12,6 +12,7 @@ export const getCategoryPool = async () => {
   return getCategoryPool;
 };
 
+
 export const getQuestionDetail = async () => {
   const response = await axios.get(`${process.env.REACT_APP_URL}/v1/Exam/Variants/${localStorage.getItem("exam_id")}`,
     {

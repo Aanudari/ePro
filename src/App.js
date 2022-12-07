@@ -422,22 +422,23 @@ function App() {
             }
           />
           <Route
-<<<<<<< HEAD
             path="/exam-dash"
             element={
               <QueryClientProvider client={queryClient}>
-              <ProtectedRoute allowedRoles={[199]}>
-                <ExamDash />
-              </ProtectedRoute>
+                <ProtectedRoute allowedRoles={[199]}>
+                  <ExamDash />
+                </ProtectedRoute>
               </QueryClientProvider>
-=======
+            }
+          />
+          <Route
             path="/create-error-thanks"
             element={
               <ProtectedRoute allowedRoles={[199]}>
                 <CreateErrorThanks />
               </ProtectedRoute>
->>>>>>> 9d92e4ef9df964a9c60629cb3a674cf7a102a786
             }
+
           />
         </Routes>
       </div>

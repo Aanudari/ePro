@@ -14,12 +14,14 @@ function ExamForm() {
   const { TOKEN } = useStateContext();
   const [key, setKey] = useState('0');
   const navigate = useNavigate()
-    const { isError, isSuccess, isLoading, data, error } = useQuery(
-        ["examList"],
-        examList,
-        { staleTime: 3000 }
-    );
-    console.log(data)
+  const data = {}
+  const isLoading = false
+    // const { isError, isSuccess, isLoading, data, error } = useQuery(
+    //     ["examList"],
+    //     examList,
+    //     { staleTime: 3000 }
+    // );
+    // console.log(data)
     const logout = () => {
         localStorage.clear();
         navigate("/");

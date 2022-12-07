@@ -8,7 +8,6 @@ function CreateQuestion({ index, valid, handleChange, countNum, listNum, pointSt
         "answerImgUrl": "",
         "isTrue": ''
     });
-
     const [store, setStore] = useState([]);
     const [answer, setAnswer] = useState('');
     const [point, setPoint] = useState(0);

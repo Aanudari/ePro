@@ -215,7 +215,7 @@ function ErrorThanks() {
           <div className="sm:flex items-center justify-between">
             <div className="flex items-center">
               {complainInfo
-                ? complainInfo.map((tab, i) => (
+                ? complainInfo?.map((tab, i) => (
                     <button
                       key={i}
                       id={tab.id}

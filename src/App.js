@@ -3,11 +3,9 @@ import "./styles/styles.scss";
 import "./styles/core.scss";
 import "./styles/modal.scss";
 import "./styles/validation.css";
-import "devextreme/dist/css/dx.light.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
-import SideNavigation from "./components/Side-Navigation";
 import AddCategory from "./pages/rating/rating/AddCategory";
 import { useStateContext } from "./contexts/ContextProvider";
 import ExamForm from "./pages/exam/exam-form";
@@ -57,6 +55,7 @@ import MainNavigation from "./components/MainNavigation";
 import RatingIndexPage from "../src/pages/rating/rating/RatingIndexPage";
 import { QueryClient, QueryClientProvider } from "react-query";
 import CreateRate from "./pages/rating/rate-users/CreateRate";
+import ExamDash from "./pages/main-exam/examDashboard";
 
 function App() {
   const { activeMenu, showTop, roleId, error, setError } = useStateContext();
@@ -423,12 +422,23 @@ function App() {
             }
           />
           <Route
+            path="/exam-dash"
+            element={
+              <QueryClientProvider client={queryClient}>
+                <ProtectedRoute allowedRoles={[199]}>
+                  <ExamDash />
+                </ProtectedRoute>
+              </QueryClientProvider>
+            }
+          />
+          <Route
             path="/create-error-thanks"
             element={
               <ProtectedRoute allowedRoles={[199]}>
                 <CreateErrorThanks />
               </ProtectedRoute>
             }
+
           />
         </Routes>
       </div>

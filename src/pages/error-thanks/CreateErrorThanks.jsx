@@ -20,9 +20,7 @@ function CreateErrorThanks() {
   const [department, setDepartment] = useState();
   const [org, setOrg] = useState();
   const [workers, setWorkers] = useState([]);
-  const [selectedOptiondepartment, setSelectedOptiondepartment] =
-    useState(null);
-
+  const [selectedOptiondepartment, setSelectedOptiondepartment] = useState(null);
   const [selectedOptionorg, setSelectedOptionorg] = useState(null);
   const [selectedOptionWorkers, setSelectedOptionWorkers] = useState(null);
   const [departmentID, setDepartmentID] = useState();
@@ -44,24 +42,7 @@ function CreateErrorThanks() {
       })
       .catch((err) => console.log(err));
   }, []);
-  if (selectedOptiondepartment) {
-    axios({
-      method: "get",
-      headers: {
-        Authorization: `${TOKEN}`,
-      },
-      url: `http://192.168.10.248:9000/v1/User/org/${selectedOptiondepartment.id}`,
-    })
-      .then((res) => {
-        if (res.data.resultMessage === "Unauthorized") {
-          logout();
-        } else {
-          setOrg(res.data.organizations);
-          setDepartmentID(selectedOptiondepartment.id);
-        }
-      })
-      .catch((err) => console.log(err));
-  }
+
   if (selectedOptionorg) {
     axios({
       method: "get",
@@ -94,6 +75,25 @@ function CreateErrorThanks() {
     too: "1-5",
     createdBy: deviceId,
   });
+  const handleOrg = (item) => {
+    axios({
+      method: "get",
+      headers: {
+        Authorization: `${TOKEN}`,
+      },
+      url: `http://192.168.10.248:9000/v1/User/org/${item.id}`,
+    })
+      .then((res) => {
+        if (res.data.resultMessage === "Unauthorized") {
+          logout();
+        } else {
+          setOrg(res.data.organizations);
+          setDepartmentID(selectedOptiondepartment.id);
+        }
+      })
+      .catch((err) => console.log(err));
+  }
+  console.log(org)
   return (
     <div className="w-full h-screen bg-gray-50">
       <Navigation />
@@ -129,10 +129,9 @@ function CreateErrorThanks() {
                       className="outline-none  w-full"
                       options={department}
                       defaultValue={selectedOptiondepartment}
-                      onChange={setSelectedOptiondepartment}
-                      onSelectChange={(item) =>
-                        console.log("use your custom handler here", item)
-                      }
+                      onChange={(item) => {
+                      handleOrg(item)
+                      }}
                       noOptionsMessage={({ inputValue }) =>
                         !inputValue && "Сонголт хоосон байна"
                       }

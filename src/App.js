@@ -41,6 +41,7 @@ import Dashboard from "./pages/Dashboard";
 import PrepareQuestions from "./components/PrepareQuestions";
 import LevelOneUI from "./pages/userUI/LevelOne/LevelOneUI";
 import ErrorThanks from "./pages/error-thanks/ErrorThanks";
+import CreateErrorThanks from "./pages/error-thanks/CreateErrorThanks";
 import UINavigation from "./components/UINavigation";
 import LevelOneUITakeExam from "./pages/userUI/LevelOne/LevelOneUITakeExam";
 import LevelOneUIExamResult from "./pages/userUI/LevelOne/LevelOneUIExamResult";
@@ -418,6 +419,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199]}>
                 <ErrorThanks />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/create-error-thanks"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <CreateErrorThanks />
               </ProtectedRoute>
             }
           />

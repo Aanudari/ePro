@@ -45,7 +45,7 @@ function MainNavigation() {
                       navigate("/exam-form");
                     }}
                   >
-                    Шалгалт үүсгэх
+                    Шалгалтын форм
                   </a>
                 </li>
                 <li>
@@ -64,6 +64,15 @@ function MainNavigation() {
                     }}
                   >
                     Шалгалтын дүн харах
+                  </a>
+                </li>
+                <li>
+                  <a
+                    onClick={() => {
+                      navigate("/exam-dash");
+                    }}
+                  >
+                    Exam new 
                   </a>
                 </li>
               </ul>
@@ -212,16 +221,6 @@ function MainNavigation() {
                 <span>Алдаа / талархал</span>
               </a>
             </li>
-            {/* <li>
-                        <a>
-                            <i className="fa fa-paper-plane-o"></i>
-                            <span>Share</span></a>
-                    </li>
-                    <li>
-                        <a>
-                            <i className="fa fa-star-o"></i>
-                            <span>Favorite</span></a>
-                    </li> */}
           </ul>
           <a id="toggle">
             <i className="fa fa-chevron-circle-left"></i>

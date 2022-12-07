@@ -98,8 +98,7 @@ function Navigation() {
             </form>
           </div>
         </div>
-
-        <div className="w-[260px] flex justify-center  rounded-md cursor-pointer m-2 call-call">
+        <div className="w-[260px] flex justify-center rounded-md cursor-pointer m-2 call-call">
           {/* Notification */}
           <button
           onClick={() => {
@@ -108,9 +107,8 @@ function Navigation() {
                   type="button"
                   className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                 >
-                  <span className="sr-only">View notifications</span>
                   <i className="bi bi-bell text-white"></i>
-                </button>
+          </button>
           <Menu as="div" className="relative ml-3">
                   <div>
                     <Menu.Button className="flex rounded-full !bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">

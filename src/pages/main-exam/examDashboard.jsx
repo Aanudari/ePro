@@ -7,6 +7,7 @@ import ExamBoardController from './ExamBoardController';
 import { useNavigate } from 'react-router-dom';
 import ExamCategory from './ExamCategory';
 import CategoryModal from './CategoryModal';
+import ExamModalMain from './ExamModalMain';
 function ExamDash() {
     const {TOKEN} = useStateContext();
     const [data, setData] = useState();
@@ -62,6 +63,11 @@ function ExamDash() {
     const handleCategoryModal = (id) => {
         setCModalId(id)
     }
+    const [examModal, setExamModal] = useState(false);
+    const [examModalId, setexamModalId] = useState();
+    const handleExamModal = (id) => {
+        setexamModalId(id)
+    }
     return ( 
     <div className="w-full min-h-screen bg-gray-200 relative">
       <Navigation />
@@ -69,12 +75,18 @@ function ExamDash() {
         <div className='h-full flex flex-col justify-between'>
             <ExamCategory categories={categories && categories} categoryModal={categoryModal} 
             setCategoryModal={setCategoryModal} handleCategoryModal={handleCategoryModal}/>
-            <ExamBoard exams={data && data}/>
+            <ExamBoard examModal={examModal} setExamModal={setExamModal} exams={data && data}
+            handleExamModal={handleExamModal}
+            />
         </div>
-                <ExamBoardController/>
+            <ExamBoardController/>
       </div>
       {
         categoryModal && <CategoryModal id={cModalId} setCategoryModal={setCategoryModal}/>
+      }
+      {
+        examModal && 
+        <ExamModalMain id={examModalId} setExamModal={setExamModal}/>
       }
     </div>
      );

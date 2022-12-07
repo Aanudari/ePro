@@ -34,7 +34,26 @@ function CategoryModal({ setCategoryModal, id }) {
     }, [])
     const [answers, setAnswers] = useState(false);
     const [addAnswer, setAddAnswer] = useState(false);
-    console.log(addAnswer)
+    const [question, setQuestion] = useState('');
+    const [point, setPoint] = useState('');
+    const [qImgUrl, setQImgUrl] = useState('');
+    const [answerSchema, setAnswerSchema] = useState({
+        "id": id,
+        "newQuestions": [
+          {
+            "question": question,
+            "points": point,
+            "qimgUrl": qImgUrl,
+            "addAnswers": [
+              {
+                "answer": "string",
+                "aImgUrl": "string",
+                "isTrue": "string"
+              }
+            ]
+          }
+        ]
+      });
     return (
         <div className="fixed top-[56px] left-[250px] w-[calc(100%-250px)] h-[calc(100%-56px)] 
         bg-black bg-opacity-50 flex justify-center items-center
@@ -62,7 +81,7 @@ function CategoryModal({ setCategoryModal, id }) {
                 {
                     addAnswer ? 
                 <div className="w-full h-full px-4">
-                    <CreateQuestionMain/>
+                    <CreateQuestionMain setQuestion={setQuestion} setPoint={setPoint} setQImgUrl={setQImgUrl}/>
                 </div>
                 : 
                 <div className="w-full h-full px-3">
@@ -85,6 +104,12 @@ function CategoryModal({ setCategoryModal, id }) {
                         }
                     </div>
                 </div>
+                }
+                {
+                    addAnswer && 
+                <div className="w-full h-14 bg-gray-600 hover:bg-gray-700 cursor-pointer flex 
+                justify-center items-center font-[500] text-white
+                ">Асуулт үүсгэх</div>
                 }
             </div>
         </div>

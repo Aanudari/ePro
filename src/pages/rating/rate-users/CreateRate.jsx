@@ -1,14 +1,8 @@
-import React, {useEffect, useState} from "react";
+import React, { useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useStateContext} from "../../../contexts/ContextProvider";
-import {Modal} from "react-bootstrap";
-import axios from "axios";
 import moment from "moment";
 import Navigation from "../../../components/Navigation";
-import TemplateCell from "../rating/mappig/TemplateCell";
-import Extras from "./mapRate/Extras";
-import Category from "./mapRate/Category";
-import SubCat from "./mapRate/SubCat";
 
 function CreateRate () {
     const navigate = useNavigate();
@@ -67,25 +61,6 @@ function CreateRate () {
         let arr = [];
         arr.push(subValue);
         setCatValue((prev) => ({ ...prev, subCategory: arr }))
-
-        // axios({
-        //     method: "post",
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //         "Authorization": `${TOKEN}`
-        //     },
-        //     url: `http://192.168.10.248:9000/v1/Rating`,
-        //     data: JSON.stringify(create_rate_data),
-        // })
-        //     .then((res) => {
-        //         console.log(res)
-        //         // if (res.data.result === "true") {
-        //         //
-        //         // } else {
-        //         //
-        //         // }
-        //     })
-        //     .catch((err) => console.log(err));
     }
 
     return (

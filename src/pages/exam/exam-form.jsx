@@ -19,6 +19,7 @@ function ExamForm() {
         examList,
         { staleTime: 3000 }
     );
+    console.log(data)
     const logout = () => {
         localStorage.clear();
         navigate("/");
@@ -62,7 +63,7 @@ function ExamForm() {
           }} className={`h-full w-1/6 md:w-[180px] hover:bg-gray-600 flex
           justify-center items-center text-white text-[14px] ${key === "2" && 'border-b shadow pt-[1px]'}`}>
             <span className="font-[500] hidden md:block">
-              Хувь хэрэглэгчээр
+              Ажилтангаар
             </span>
             <span className="font-[500] block md:hidden">
               <i className="bi bi-alarm"></i>

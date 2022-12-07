@@ -41,7 +41,6 @@ export default function ExamInit() {
         res => {
           sessionStorage.setItem("exam_data", JSON.stringify(res.data.variantInfo));
           setQlength(res.data.variantInfo.questionList.length)
-          console.log(res.data.variantInfo)
         }
       )
       .catch(err => console.log("message"))

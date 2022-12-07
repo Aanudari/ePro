@@ -9,13 +9,16 @@ import './styles/button.scss'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ContextProvider } from './contexts/ContextProvider';
 import ContextWrapper from './contexts/ContextWrapper';
-
+import { QueryClient, QueryClientProvider } from "react-query";
+const queryClient = new QueryClient();
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <ContextWrapper>
-    <ContextProvider>
-        <App />
-    </ContextProvider>
+        <ContextProvider>
+            <QueryClientProvider client={queryClient}>
+                <App />
+            </QueryClientProvider>
+        </ContextProvider>
     </ContextWrapper>
 );
 reportWebVitals();

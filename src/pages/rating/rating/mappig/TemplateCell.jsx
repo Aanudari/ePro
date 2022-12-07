@@ -56,7 +56,7 @@ function TemplateCell (template) {
                     )}
                     {Object.keys(vocData).map((voc, key) => {
                         return (
-                            <button onClick={() => showModal(vocData[voc])}
+                            <button key={key} onClick={() => showModal(vocData[voc])}
                                     className="ml-2 inline-block px-2 py-2 border-2 font-medium text-sm leading-tight uppercase rounded transition duration-150 ease-in-out">
                                 <i className="bi bi-plus-circle-fill"/> Add category
                             </button>
@@ -67,7 +67,7 @@ function TemplateCell (template) {
                     <div className="p-4 flex items-center border border-gray-600">
                             {
                                 template.template ? template.template.extras.map((data, index) =>
-                                    <div className="mr-auto">
+                                    <div key={index} className="mr-auto">
                                     <h1 className="text-xl leading-none mb-1" key={index}>Extra name: {data.name}</h1>
                                     </div>
                                 ) : null

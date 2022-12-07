@@ -19,6 +19,7 @@ function ExamForm() {
         examList,
         { staleTime: 3000 }
     );
+    console.log(data)
     const logout = () => {
         localStorage.clear();
         navigate("/");

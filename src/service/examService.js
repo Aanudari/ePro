@@ -25,7 +25,7 @@ export const getQuestionDetail = async () => {
 };
 
 export const examList = async () => {
-  const response = await axios.get(`${process.env.REACT_APP_URL}/v1/Exam`,
+  const response = await axios.get(`${process.env.REACT_APP_URL}/v1/ExamNew`,
     {
       headers: {
         "Authorization": `${localStorage.getItem("token")}`,

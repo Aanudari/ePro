@@ -17,6 +17,7 @@ function ErrorThanks() {
 
   const [currentTab, setCurrentTab] = useState("1");
   const [complainInfo, setComplainInfo] = useState();
+  const [complain, setComplain] = useState();
   const [selectedOption, setSelectedOption] = useState(null);
   const [showCreate, setShowCreate] = useState(null);
   const showModalCreate = () => setShowCreate(true);
@@ -40,7 +41,22 @@ function ErrorThanks() {
       })
       .catch((err) => console.log(err));
   }, []);
-
+  useEffect(() => {
+    axios({
+      method: "get",
+      headers: {
+        Authorization: `${TOKEN}`,
+      },
+      url: `http://192.168.10.248:9000/v1/Complain`,
+    })
+      .then((res) => {
+        setComplain(res.data.complains);
+        if (res.data.resultMessage === "Unauthorized") {
+          logout();
+        }
+      })
+      .catch((err) => console.log(err));
+  }, []);
   const handleTabClick = (e) => {
     setCurrentTab(e.target.id);
   };
@@ -49,6 +65,8 @@ function ErrorThanks() {
       state: { type: selectedOption },
     });
   };
+  console.log(complainInfo);
+  console.log(complain);
 
   return (
     <div className="w-full h-screen bg-gray-50">

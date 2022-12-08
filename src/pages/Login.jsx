@@ -8,11 +8,11 @@ function Login() {
   const navigate = useNavigate();
   const redirect = (data) => {
     switch (data.role_id) {
-      case '1':
-        navigate("/levelone-ui-take-exam")
+      case "1":
+        navigate("/levelone-ui-take-exam");
         break;
-      case '199':
-        navigate("/home")
+      case "199":
+        navigate("/home");
         break;
     }
     setUser(data);
@@ -46,7 +46,7 @@ function Login() {
           if (res.data.result === "true") {
             redirect(res.data);
             setisAuthenticated(true);
-            localStorage.setItem("token", res.data.token)
+            localStorage.setItem("token", res.data.token);
           } else {
             setalert(true);
           }

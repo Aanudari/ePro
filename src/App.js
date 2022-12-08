@@ -438,7 +438,6 @@ function App() {
                 <CreateErrorThanks />
               </ProtectedRoute>
             }
-
           />
         </Routes>
       </div>

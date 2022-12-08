@@ -93,7 +93,6 @@ function CreateErrorThanks() {
       })
       .catch((err) => console.log(err));
   }
-  console.log(org)
   return (
     <div className="w-full h-screen bg-gray-50">
       <Navigation />

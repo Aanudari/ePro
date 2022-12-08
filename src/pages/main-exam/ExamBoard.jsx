@@ -1,6 +1,6 @@
 function ExamBoard({exams, examModal, setExamModal, handleExamModal}) {
     return ( 
-        <div className="min-w-[850px] min-h-[500px] max-h-[500px] bg-white py-3 px-4 shadow-sm">
+        <div className="min-w-[850px] min-h-full max-h-full bg-white py-3 px-4 shadow-sm">
             <h6 className="text-gray-500 font-[400]">Шалгалтууд</h6>
             <div className="w-full h-8 flex gap-1">
                 <div className="w-1/4 h-full flex justify-center items-center bg-gray-200 text-[11px] uppercase font-[400]">Нэр</div>
@@ -8,7 +8,7 @@ function ExamBoard({exams, examModal, setExamModal, handleExamModal}) {
                 <div className="w-1/4 h-full flex justify-center items-center bg-gray-200 text-[11px] uppercase font-[400]">дуусах</div>
                 <div className="w-1/4 h-full flex justify-center items-center bg-gray-200 text-[11px] uppercase font-[400]">Хугацаа</div>
             </div>
-            <div className="w-full h-full h-[400px] overflow-scroll mt-2">
+            <div className="w-full h-full h-[570px]  overflow-scroll mt-2">
             {
                 exams?.map((exam, index) => (
                 <div onClick={() => {

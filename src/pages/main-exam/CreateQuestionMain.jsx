@@ -17,8 +17,9 @@ function CreateQuestionMain({ setQuestion, question, point, setPoint, setQImgUrl
                     <label className=''>Асуулт </label>
                 </div>
                 <div className='flex'>
-                    <div className='h-full flex flex-col justify-end'>
-                        <div className="group w-full">
+                    <div className='h-full mt-auto'>
+                        <div className='m-auto'>
+                        <div className="group w-full !bg-red-200">
                             <input onChange={(e) => {
                                 handleSchema(question, e.target.value, qImgUrl)
                             }}
@@ -37,6 +38,7 @@ function CreateQuestionMain({ setQuestion, question, point, setPoint, setQImgUrl
                             <span className="highlight"></span>
                             <span className="bar"></span>
                             <label className=''>Хариултын тоо </label>
+                        </div>
                         </div>
                     </div>
                     <div className="group w-full ml-5 mt-[20px]">

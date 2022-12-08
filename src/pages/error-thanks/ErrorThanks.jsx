@@ -65,7 +65,7 @@ function ErrorThanks() {
       state: { type: selectedOption },
     });
   };
-  console.log(complainInfo);
+  let color = "blue";
   console.log(complain);
 
   return (
@@ -143,38 +143,7 @@ function ErrorThanks() {
           </Modal.Body>
         </Modal>
       </div>
-
       <Navigation />
-      {/* <div className="container">
-        <div className="tabs">
-          {complainInfo
-            ? complainInfo.map((tab, i) => (
-                <button
-                  key={i}
-                  id={tab.id}
-                  disabled={currentTab === `${tab.id}`}
-                  onClick={handleTabClick}
-                >
-                  {tab.category}
-                </button>
-              ))
-            : null}
-        </div>
-        <div className="content">
-          {complainInfo
-            ? complainInfo.map((tab, i) => (
-                <div key={i}>
-                  {currentTab === `${tab.id}` && (
-                    <div>
-                      <p className="title">{tab.id}</p>
-                      <p>{tab.category}</p>
-                    </div>
-                  )}
-                </div>
-              ))
-            : null}
-        </div>
-      </div> */}
       <div className="sm:px-6 w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
@@ -232,21 +201,31 @@ function ErrorThanks() {
         <div className="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10">
           <div className="sm:flex items-center justify-between">
             <div className="flex items-center">
-              {complainInfo
-                ? complainInfo?.map((tab, i) => (
-                    <button
-                      key={i}
-                      id={tab.id}
-                      disabled={currentTab === `${tab.id}`}
-                      onClick={handleTabClick}
-                      className=" rounded-full focus:outline-none focus:ring-2  focus:bg-indigo-50 focus:ring-indigo-800 pr-2"
-                    >
-                      <div className="py-2 px-8 bg-indigo-100 text-indigo-700 rounded-full">
-                        <p>{tab.category}</p>
-                      </div>
-                    </button>
-                  ))
-                : null}
+              <ul
+                className="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row"
+                role="tablist"
+              >
+                {complainInfo
+                  ? complainInfo.map((tab, i) => (
+                      <li className="-mb-px mr-2 last:mr-0 flex-auto text-center">
+                        <a
+                          className={
+                            "text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " +
+                            (currentTab === `${tab.id}`
+                              ? "text-white bg-" + color + "-600"
+                              : "text-" + color + "-600 bg-white")
+                          }
+                          key={i}
+                          id={tab.id}
+                          disabled={currentTab === `${tab.id}`}
+                          onClick={handleTabClick}
+                        >
+                          {tab.category}
+                        </a>
+                      </li>
+                    ))
+                  : null}
+              </ul>
             </div>
 
             <button
@@ -262,7 +241,7 @@ function ErrorThanks() {
           <div className="mt-7 overflow-x-auto">
             <table className="items-center w-full bg-transparent border-collapse">
               <thead>
-                <tr className="focus:outline-none h-16 border border-gray-100 rounded">
+                <tr className="focus:outline-none h-16 border border-gray-100 rounded text-black">
                   <th className="p-3">Огноо </th>
                   <th className="p-3 text-left">Харьяалагдах хэлтэс </th>
                   <th className="p-3 text-left">Ажлын байр </th>
@@ -274,34 +253,42 @@ function ErrorThanks() {
                   <th className="p-3 text-left">Action </th>
                 </tr>
               </thead>
-
               <tbody>
-                <tr className="focus:outline-none h-16 border border-gray-100 rounded">
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td>
-                    <a
-                      href="#"
-                      className="text-yellow-400 hover:text-black mx-2"
-                    >
-                      <i className="bi bi-pencil-square"></i>
-                    </a>
-                    <a
-                      onClick={showModalDelete}
-                      className="text-rose-400 hover:text-black ml-2"
-                    >
-                      <i className="bi bi-trash-fill"></i>
-                    </a>
-                  </td>
-                </tr>
+                {complain
+                  ? complain.map((tab, i) => (
+                      <tr
+                        key={i}
+                        className={
+                          currentTab === `${tab.complain}`
+                            ? "focus:outline-none h-16 border border-gray-100 rounded"
+                            : "hidden"
+                        }
+                      >
+                        <td>{tab.createdAt}</td>
+                        <td>{tab.departmentName}</td>
+                        <td>{tab.unitName}</td>
+                        <td>{tab.firstName}</td>
+                        <td>{tab.complainType}</td>
+                        <td>{tab.description}</td>
+                        <td>{tab.rule}</td>
+                        <td>{tab.too}</td>
+                        <td>
+                          <a className="text-yellow-400 hover:text-black mx-2">
+                            <i className="bi bi-pencil-square"></i>
+                          </a>
+                          <a
+                            onClick={showModalDelete}
+                            className="text-rose-400 hover:text-black ml-2"
+                          >
+                            <i className="bi bi-trash-fill"></i>
+                          </a>
+                        </td>
+                      </tr>
+                    ))
+                  : null}
               </tbody>
             </table>
+
             <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">
               <div className="inline-flex mt-2 xs:mt-0">
                 <button className="text-sm bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-l">

@@ -64,6 +64,30 @@ function CategoryModal({ setCategoryModal, id }) {
             setChecked((prev) => [...prev, id])
         }
     }
+    const handleSchema = (question, point, qImgUrl) => {
+        
+        setQuestion(question)
+        setPoint(point)
+        setQImgUrl(qImgUrl)
+        let arr = {
+            "id": id,
+            "newQuestions": [
+                {
+                    "question": question,
+                    "points": point,
+                    "qimgUrl": qImgUrl,
+                    "addAnswers": [
+                        {
+                            "answer": "string",
+                            "aImgUrl": "string",
+                            "isTrue": "string"
+                        }
+                    ]
+                }
+            ]
+        }
+        setAnswerSchema(arr)
+    }
     const [createExam, setCreateExam] = useState(false);
     return (
         <div className="fixed  top-[56px] left-[250px] w-[calc(100%-250px)] h-[calc(100%-56px)] 
@@ -112,7 +136,13 @@ function CategoryModal({ setCategoryModal, id }) {
                 {
                     addAnswer ?
                         <div className="w-full h-full px-4">
-                            <CreateQuestionMain setQuestion={setQuestion} setPoint={setPoint} setQImgUrl={setQImgUrl} />
+                            {/* CREATE QUESTION !!!
+                            CREATE QUESTION !!!
+                            CREATE QUESTION !!!
+                            CREATE QUESTION !!! */}
+                            <CreateQuestionMain question={question} handleSchema={handleSchema} 
+                            setQuestion={setQuestion} setPoint={setPoint} point={point} setQImgUrl={setQImgUrl} 
+                            qImgUrl={qImgUrl}/>
                         </div>
                         :
                         <div className="w-full h-full px-3">

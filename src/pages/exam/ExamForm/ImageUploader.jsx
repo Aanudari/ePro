@@ -5,11 +5,11 @@ export default function ImageUploader() {
   const [images, setImages] = React.useState([]);
   const maxNumber = 69;
   const onChange = (imageList, addUpdateIndex) => {
-    // console.log(imageList, addUpdateIndex);
     setImages(imageList);
   };
+  console.log(images[0]?.file.name)
   return (
-    <div className="border-b border-gray-500 !mb-[35px]">
+    <div className="border-b border-gray-500">
       <ImageUploading
         multiple
         value={images}

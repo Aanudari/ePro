@@ -229,7 +229,7 @@ function ErrorThanks() {
             </div>
 
             <button
-              className="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 mt-2 sm:mt-0 inline-flex items-start justify-start px-6 py-3 bg-indigo-700 hover:bg-indigo-600 focus:outline-none rounded 
+              className="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 sm:mt-0 inline-flex items-start justify-start px-6 py-3 bg-indigo-700 hover:bg-indigo-600 focus:outline-none rounded 
                text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
               type="button"
               onClick={showModalCreate}
@@ -239,21 +239,21 @@ function ErrorThanks() {
             </button>
           </div>
           <div className="mt-7 overflow-x-auto">
-            <table className="items-center w-full bg-transparent border-collapse">
+            <table className="items-center w-full bg-transparent border-collapse ">
               <thead>
-                <tr className="focus:outline-none h-16 border border-gray-100 rounded text-black">
-                  <th className="p-3">Огноо </th>
-                  <th className="p-3 text-left">Харьяалагдах хэлтэс </th>
-                  <th className="p-3 text-left">Ажлын байр </th>
-                  <th className="p-3 text-left">Ажилтны нэр </th>
-                  <th className="p-3 text-left">Гомдлын төрөл </th>
-                  <th className="p-3 text-left">Гомдлын дэлгэрэнгүй </th>
-                  <th className="p-3 text-left">Журам </th>
-                  <th className="p-3 text-left">Алдаа </th>
-                  <th className="p-3 text-left">Action </th>
+                <tr class="text-sm font-normal md:font-bold font-semibold tracking-wide text-left  bg-gray-100 uppercase border-b border-gray-600">
+                  <th class="px-4 py-3">Огноо </th>
+                  <th class="px-4 py-3">Харьяалагдах хэлтэс </th>
+                  <th class="px-4 py-3">Ажлын байр </th>
+                  <th class="px-4 py-3">Ажилтны нэр </th>
+                  <th class="px-4 py-3">Гомдлын төрөл </th>
+                  <th class="px-4 py-3">Гомдлын дэлгэрэнгүй </th>
+                  <th class="px-4 py-3">Журам </th>
+                  <th class="px-4 py-3">Алдаа </th>
+                  <th class="px-4 py-3">Action </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody class="bg-white text-sm">
                 {complain
                   ? complain.map((tab, i) => (
                       <tr
@@ -264,15 +264,15 @@ function ErrorThanks() {
                             : "hidden"
                         }
                       >
-                        <td>{tab.createdAt}</td>
-                        <td>{tab.departmentName}</td>
-                        <td>{tab.unitName}</td>
-                        <td>{tab.firstName}</td>
-                        <td>{tab.complainType}</td>
-                        <td>{tab.description}</td>
-                        <td>{tab.rule}</td>
-                        <td>{tab.too}</td>
-                        <td>
+                        <td class="px-1 py-1 border">{tab.createdAt}</td>
+                        <td class="px-1 py-1 border">{tab.departmentName}</td>
+                        <td class="px-1 py-1 border">{tab.unitName}</td>
+                        <td class="px-1 py-1 border">{tab.firstName}</td>
+                        <td class="px-1 py-1 border">{tab.complainType}</td>
+                        <td class="px-1 py-1 border">{tab.description}</td>
+                        <td class="px-1 py-1 border">{tab.rule}</td>
+                        <td class="px-1 py-1 border">{tab.too}</td>
+                        <td class="px-1 py-1 border">
                           <a className="text-yellow-400 hover:text-black mx-2">
                             <i className="bi bi-pencil-square"></i>
                           </a>

@@ -76,3 +76,31 @@
   background-color: #50a3a2;
   color: white;
 }
+
+.drop-down {
+  animation: dropdown;
+  animation-duration: .5s;
+}
+
+@keyframes dropdown {
+  from {
+    top: -1000px
+  }
+  to {
+    top: 56px
+  }
+}
+
+.shrink {
+  animation: shrink;
+  animation-duration: .5s;
+}
+
+@keyframes shrink {
+  from {
+    width: 0
+  }
+  to {
+    width: 85%;
+  }
+}

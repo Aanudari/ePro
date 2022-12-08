@@ -56,6 +56,7 @@ import RatingIndexPage from "../src/pages/rating/rating/RatingIndexPage";
 import { QueryClient, QueryClientProvider } from "react-query";
 import CreateRate from "./pages/rating/rate-users/CreateRate";
 import ExamDash from "./pages/main-exam/examDashboard";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const { activeMenu, showTop, roleId, error, setError } = useStateContext();

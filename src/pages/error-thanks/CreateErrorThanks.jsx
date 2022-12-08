@@ -3,6 +3,9 @@ import DatePicker from "react-datepicker";
 import Navigation from "../../components/Navigation";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { useNavigate, useLocation } from "react-router-dom";
+import { notification } from "../../service/toast";
+import { ToastContainer } from "react-toastify";
+
 import axios from "axios";
 import Select from "react-select";
 import moment from "moment";
@@ -108,6 +111,7 @@ function CreateErrorThanks() {
   const handleToo = (item) => {
     setTooVal(item.value);
   };
+
   const data = {
     department: `${departmentID}`,
     unit: `${orgID}`,
@@ -124,20 +128,25 @@ function CreateErrorThanks() {
     e.preventDefault();
     if (departmentID.length === 0) {
       setcheckEmpty1(true);
-    } else if (orgID.length === 0) {
+    }
+    if (orgID.length === 0) {
       setcheckEmpty2(true);
-    } else if (workersID.length === 0) {
+    }
+    if (workersID.length === 0) {
       setcheckEmpty3(true);
-    } else if (complainType.length === 0) {
+    }
+    if (complainType.length === 0) {
       setcheckEmpty4(true);
-    } else if (desc.length === 0) {
+    }
+    if (desc.length === 0) {
       setcheckEmpty5(true);
-    } else if (rule.length === 0) {
+    }
+    if (rule.length === 0) {
       setcheckEmpty6(true);
-    } else if (tooVAl.length === 0) {
+    }
+    if (tooVAl.length === 0) {
       setcheckEmpty7(true);
     } else {
-      console.log(data);
       axios({
         method: "post",
         headers: {
@@ -149,11 +158,15 @@ function CreateErrorThanks() {
         data: JSON.stringify(data),
       })
         .then((res) => {
-          console.log(res.data);
+          if (res.data.isSuccess === true) {
+            notification.success(`${res.data.resultMessage}`);
+            navigate("/error-thanks");
+          }
         })
         .catch((err) => console.log(err));
     }
   };
+
   return (
     <div className="w-full h-screen bg-gray-50">
       <Navigation />
@@ -345,6 +358,7 @@ function CreateErrorThanks() {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

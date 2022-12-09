@@ -26,6 +26,7 @@
     "react-datetime-picker": "^4.0.1",
     "react-dom": "^18.2.0",
     "react-images-uploading": "^3.1.7",
+    "react-paginate": "^8.1.4",
     "react-query": "^3.39.2",
     "react-scripts": "5.0.1",
     "react-select": "^5.6.0",

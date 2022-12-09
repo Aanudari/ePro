@@ -7,9 +7,9 @@ export default function ImageUploader() {
   const onChange = (imageList, addUpdateIndex) => {
     setImages(imageList);
   };
-  console.log(images[0]?.file.name)
+  // console.log(images[0]?.file.name)
   return (
-    <div className="border-b border-gray-500">
+    <div className="border-b-[2px] border-[#50a3a2]">
       <ImageUploading
         multiple
         value={images}

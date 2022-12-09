@@ -54,6 +54,7 @@ function CategoryModal({ setCategoryModal, id }) {
             }
         ]
     });
+    const [answerArr, setAnswerArr] = useState();
     const [checked, setChecked] = useState([]);
     const handleCheck = (id) => {
         if(checked.includes(id)) {
@@ -65,7 +66,6 @@ function CategoryModal({ setCategoryModal, id }) {
         }
     }
     const handleSchema = (question, point, qImgUrl) => {
-        
         setQuestion(question)
         setPoint(point)
         setQImgUrl(qImgUrl)
@@ -76,19 +76,38 @@ function CategoryModal({ setCategoryModal, id }) {
                     "question": question,
                     "points": point,
                     "qimgUrl": qImgUrl,
-                    "addAnswers": [
-                        {
-                            "answer": "string",
-                            "aImgUrl": "string",
-                            "isTrue": "string"
-                        }
-                    ]
+                    "addAnswers": answerArr
                 }
             ]
         }
         setAnswerSchema(arr)
     }
     const [createExam, setCreateExam] = useState(false);
+    const [finalArr, setFinalArr] = useState([]);
+    // console.log(answerSchema)
+    const handleCreateQuesiton = (object, correct) => {
+        let arr = []
+        arr.push(object)
+        let newArr = arr[0].map((answer, index) => {
+             return index == correct ? ({...answer, isTrue : "1"}) : ({...answer, isTrue: "0"})
+        })
+        setFinalArr(newArr)
+    }
+    const submitQuestion = () => {
+        console.log('submit quesiton !')
+    }
+    const collector = () => {
+        let arr = []
+        arr.push(answerSchema)
+        let final = ({...arr[0]?.newQuestions, addAnswer : finalArr})
+        console.log(final)
+        // setAnswerSchema(final)
+        // console.log(answerSchema.newQuestions[0].addAnswers)
+    }
+    useEffect(() => {
+        collector()
+    }, [finalArr])
+    // console.log(answerSchema)
     return (
         <div className="fixed top-[56px] left-[250px] w-[calc(100%-250px)] h-[calc(100%-56px)] 
         bg-black bg-opacity-50 flex justify-center items-center
@@ -131,18 +150,17 @@ function CategoryModal({ setCategoryModal, id }) {
                             <i className="bi bi-x-lg text-red-500 text-2xl font-[500]"></i>
                         </button>
                     </div>
-
                 </div>
                 {
                     addAnswer ?
-                        <div className="w-full h-full px-4">
+                        <div className="w-full h-full">
                             {/* CREATE QUESTION !!!
                             CREATE QUESTION !!!
                             CREATE QUESTION !!!
                             CREATE QUESTION !!! */}
                             <CreateQuestionMain question={question} handleSchema={handleSchema} 
                             setQuestion={setQuestion} setPoint={setPoint} point={point} setQImgUrl={setQImgUrl} 
-                            qImgUrl={qImgUrl}/>
+                            qImgUrl={qImgUrl} handleCreateQuesiton={handleCreateQuesiton}/>
                         </div>
                         :
                         <div className="w-full h-full px-3">
@@ -182,7 +200,7 @@ function CategoryModal({ setCategoryModal, id }) {
                 }
                 {
                     addAnswer &&
-                    <div className="w-full h-14 bg-gray-600 hover:bg-gray-700 cursor-pointer flex 
+                    <div onClick={submitQuestion} className="w-full h-14 bg-gray-600 hover:bg-gray-700 cursor-pointer flex 
                 justify-center items-center font-[500] text-sky-500
                 ">Асуулт үүсгэх</div>
                 }

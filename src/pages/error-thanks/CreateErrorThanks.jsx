@@ -45,7 +45,7 @@ function CreateErrorThanks() {
   const [checkEmpty5, setcheckEmpty5] = useState(false);
   const [checkEmpty6, setcheckEmpty6] = useState(false);
   const [checkEmpty7, setcheckEmpty7] = useState(false);
-
+  console.log(selectedOptionorg)
   const [departmentID, setDepartmentID] = useState("");
   const [orgID, setOrgID] = useState("");
   const [workersID, setWorkersID] = useState("");

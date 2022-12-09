@@ -77,7 +77,8 @@ function ExamDash() {
             {
                 showCategoryMenu && 
             <ExamCategory categories={categories && categories} categoryModal={categoryModal} 
-            setCategoryModal={setCategoryModal} setShowCategoryMenu={setShowCategoryMenu} handleCategoryModal={handleCategoryModal}/> 
+            setCategoryModal={setCategoryModal} setShowCategoryMenu={setShowCategoryMenu} 
+            handleCategoryModal={handleCategoryModal}/> 
             }
             <ExamBoard examModal={examModal} setExamModal={setExamModal} exams={data && data}
             handleExamModal={handleExamModal}

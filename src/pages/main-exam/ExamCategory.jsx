@@ -10,12 +10,17 @@ function ExamCategory({ categories, categoryModal, setCategoryModal, handleCateg
                             handleCategoryModal(category.id)
                         }} className="w-full mt-1 h-16 cursor-pointer shadow-sm bg-white hover:text-sky-500 flex 
                     justify-between px-3 py-2 hover:shadow-cus" key={index}>
-                            <div className="flex flex-col">
+                            <div className="flex flex-col w-[100px] justify-center">
                                 <h6 className="font-[500] text-[12px] uppercase">{category.name}</h6>
                             </div>
-                            <div className="h-8 w-[100px] bg-gray-200 rounded-full flex 
+                            <div className="flex flex-col justify-center">
+                                <h6 className="font-[500] text-[12px] uppercase">{category.departmentName}</h6>
+                            </div>
+                            <div className="flex flex-col justify-center">
+                                <div className="h-8 w-[100px] bg-gray-200 rounded-full flex 
                         justify-center items-center">
-                                <h6 className="m-0 text-[13px] text-black">16</h6>
+                                    <h6 className="m-0 text-[13px]">{category.id}</h6>
+                                </div>
                             </div>
                         </div>
                     ))

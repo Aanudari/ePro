@@ -90,13 +90,33 @@ function ErrorThanks() {
       .catch((err) => console.log(err));
   };
   const [page, setPage] = useState(0);
-  const dataPerPage = 5;
+  const dataPerPage = 1;
   const numberOfdataVistited = page * dataPerPage;
-  const totalPages = Math.ceil(complain.length / dataPerPage);
 
+  const totalPages = Math.floor(complain.length / dataPerPage);
   const changePage = ({ selected }) => {
     setPage(selected);
   };
+  const [totalPagess, setTotalPages] = useState();
+
+  let output1 = [];
+  let output2 = [];
+  let output3 = [];
+  useEffect(() => {
+    let ids = [...new Set(complain.map((i) => i.complain))];
+    ids.forEach((currentTab) => {
+      let res = complain.filter((name) => name.complain == currentTab);
+      output1.push(res);
+      console.log(res);
+    });
+    if (currentTab == 1) {
+      setTotalPages(output1.length);
+    } else if (currentTab == 2) {
+      setTotalPages(output2.length);
+    } else if (currentTab == 3) {
+      setTotalPages(output3.length);
+    }
+  }, [totalPagess]);
 
   return (
     <div className="w-full h-screen bg-gray-50">
@@ -264,6 +284,9 @@ function ErrorThanks() {
                               ? "focus:outline-none h-16 border border-gray-100 rounded"
                               : "hidden"
                           }
+                          // onChange={() => {
+                          //   setTotalPages(tab.complain);
+                          // }}
                         >
                           <td className="px-1 py-1 border">{tab.createdAt}</td>
                           <td className="px-1 py-1 border">

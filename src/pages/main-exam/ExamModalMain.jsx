@@ -35,7 +35,7 @@ function ExamModalMain({ setExamModal, id }) {
         <div className="fixed top-[56px] left-[250px] w-[calc(100%-250px)] h-[calc(100%-56px)] 
         bg-black bg-opacity-50 flex justify-center items-center
         ">
-            <div className="w-[calc(85%)] h-[600px] bg-white flex flex-col ">
+            <div className="shrink w-[calc(85%)] h-[600px] bg-white flex flex-col ">
                 <div className="w-full h-14 bg-gray-700 flex justify-end px-3">
                     <button onClick={() => {
                         setExamModal(false)

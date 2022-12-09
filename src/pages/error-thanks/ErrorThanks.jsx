@@ -90,14 +90,45 @@ function ErrorThanks() {
       .catch((err) => console.log(err));
   };
   const [page, setPage] = useState(0);
-  const dataPerPage = 5;
+  const dataPerPage = 3;
   const numberOfdataVistited = page * dataPerPage;
+  console.log(numberOfdataVistited)
   const totalPages = Math.ceil(complain.length / dataPerPage);
-
+  let one = []
+  let two = []
+  let three = []
+  const [status, setStatus] = useState('1');
+  for (let index = 0; index < complain.length; index++) {
+    const element = complain[index];
+    if(element.complain === "1") {
+      one.push(element.complain)
+    }
+    if(element.complain === "2") {
+      two.push(element.complain)
+    }
+    if(element.complain === "3") {
+      three.push(element.complain)
+    }
+  }
   const changePage = ({ selected }) => {
     setPage(selected);
   };
-
+  let final
+  const handlePageCount = () => {
+    if(status == "1") {
+      final = one.length
+    }
+    if(status == "2") {
+      final = two.length
+    }
+    if(status == "3") {
+      final = three.length
+    }
+  }
+  // useEffect(() => {
+    handlePageCount()
+  // }, [status])
+  // console.log(final)
   return (
     <div className="w-full h-screen bg-gray-50">
       <div>
@@ -207,7 +238,9 @@ function ErrorThanks() {
               >
                 {complainInfo
                   ? complainInfo.map((tab, i) => (
-                      <li className="-mb-px mr-2 last:mr-2 mt-2 flex-auto text-center">
+                      <li onClick={() => {
+                        setStatus(tab.id)
+                      }} key={i} className="-mb-px mr-2 last:mr-2 mt-2 flex-auto text-center">
                         <a
                           className={
                             "text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " +
@@ -305,7 +338,7 @@ function ErrorThanks() {
               <ReactPaginate
                 previousLabel={"Өмнө"}
                 nextLabel={"Дараах"}
-                pageCount={totalPages}
+                pageCount={parseInt(final) / dataPerPage}
                 onPageChange={changePage}
                 containerClassName={"navigationButtons"}
                 previousLinkClassName={"previousButton"}

@@ -9,6 +9,8 @@ import ExamCategory from './ExamCategory';
 import CategoryModal from './CategoryModal';
 import ExamModalMain from './ExamModalMain';
 function ExamDash() {
+    const [examModalId, setexamModalId] = useState();
+    const [categoryModal, setCategoryModal] = useState(false);
     const {TOKEN} = useStateContext();
     const [data, setData] = useState();
     const [categories, setCategories] = useState();
@@ -37,7 +39,7 @@ function ExamDash() {
                 }
             )
             .catch(err => console.log(err))
-    }, [])
+    }, [categoryModal])
     useEffect(() => {
         axios({
             method: "get",
@@ -58,13 +60,16 @@ function ExamDash() {
             )
             .catch(err => console.log(err))
     }, [])
-    const [categoryModal, setCategoryModal] = useState(false);
+    const [depId, setDepId] = useState();
+
     const [cModalId, setCModalId] = useState();
-    const handleCategoryModal = (id) => {
+    const handleCategoryModal = (id, Did) => {
         setCModalId(id)
+        setDepId(Did)
     }
+    // console.log(depId)
     const [examModal, setExamModal] = useState(false);
-    const [examModalId, setexamModalId] = useState();
+
     const handleExamModal = (id) => {
         setexamModalId(id)
     }
@@ -87,7 +92,7 @@ function ExamDash() {
             <ExamBoardController showCategoryMenu={showCategoryMenu} setShowCategoryMenu={setShowCategoryMenu}/>
       </div>
       {
-        categoryModal && <CategoryModal id={cModalId} setCategoryModal={setCategoryModal}/>
+        categoryModal && <CategoryModal setShowCategoryMenu={setShowCategoryMenu} depId={depId} id={cModalId} setCategoryModal={setCategoryModal}/>
       }
       {
         examModal && 

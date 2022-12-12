@@ -31,12 +31,13 @@ function ExamModalMain({ setExamModal, id }) {
             )
             .catch(err => console.log(err))
     }, [])
+    // console.log(data)
     return (
         <div className="fixed top-[56px] left-[250px] w-[calc(100%-250px)] h-[calc(100%-56px)] 
         bg-black bg-opacity-50 flex justify-center items-center
         ">
             <div className="shrink w-[calc(85%)] h-[600px] bg-white flex flex-col ">
-                <div className="w-full h-14 bg-gray-700 flex justify-end px-3">
+                <div className="w-full min-h-[50px] bg-gray-700 flex justify-end px-3">
                     <button onClick={() => {
                         setExamModal(false)
                     }}
@@ -44,15 +45,21 @@ function ExamModalMain({ setExamModal, id }) {
                         <i className="bi bi-x-lg text-red-500 text-2xl font-[500]"></i>
                     </button>
                 </div>
-                <div className="w-full h-full px-3 py-2">
+                <div className="w-full h-full px-3 py-2 overflow-scroll">
                     <h6 className="h-6 text-gray-500 font-[400]">Вариантууд</h6>
                     <div className="h-[calc(100%-34px)]">
                         {
                             data && 
                             data[0]?.questionList?.map((question, index) => (
                                 <div key={index} className="w-full h-14 font-[400] border-b flex items-center hover:text-sky-500 
-                                cursor-pointer px-2"
-                                        >{question.question}
+                                cursor-pointer px-2 flex justify-between"
+                                        >
+                                            <span className="m-0 hover:text-sky-500 font-[400]">
+                                            {question.question}
+                                            </span>
+                                            <span className="m-0 font-[400]">
+                                            {question.points}%
+                                            </span>
                                 </div>
                             ))
                         }

@@ -1,9 +1,13 @@
-function AnswerCellMain({ item, index, handleChecked,checked, handleCreateQuesiton }) {
-    // console.log(index)
+import { useState } from "react";
+
+function AnswerCellMain({ arr,item, index, handleChecked,checked, handleCreateQuesiton, handleValues }) {
     return (
         <div className="w-full relative pl-10">
             <div className="group !w-full pr-4">
                 <input
+                onChange={(e) => {
+                    handleValues(e.target.value, index)
+                }}
                     className={'custom-validation !w-[calc(70%)] !border-b-[2px] !border-[#50a3a2] font-[400]'}
                     type="text" required />
                 <span className="highlight"></span>

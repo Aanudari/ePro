@@ -580,3 +580,21 @@ $color: #1f8197;
   }
 }
 
+.drop-smooth {
+  animation: drop-smooth;
+  animation-duration: .5s;
+}
+@keyframes drop-smooth {
+  from {
+    height: 0;
+  }
+}
+.appear-smooth {
+  animation: appear-smooth;
+  animation-duration: 1s;
+}
+@keyframes appear-smooth {
+  from {
+    display: none;
+  }
+}

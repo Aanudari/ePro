@@ -626,5 +626,5 @@ backdrop-filter: blur(5px);
 .side-menu li a:hover,
 .side-menu li:first-child a {
   background: #14081d;
-  display: block;
+  display: flex;
 }

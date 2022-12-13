@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import ImageUploader from './../exam/ExamForm/ImageUploader';
 import AnswerCellMain from './AnswerCellMain';
-function CreateQuestionMain({ setQuestion, question, point, setPoint, setQImgUrl, handleSchema, qImgUrl
-, handleCreateQuesiton }) {
+function CreateQuestionMain({ setQuestion, question, point, setPoint, setQImgUrl, handleSchema, 
+    qImgUrl, handleCreateQuesiton }) {
     const [imageValue, setImageValue] = useState();
     const [length, setLength] = useState();
     const [checked, setChecked] = useState([]);
@@ -19,13 +19,31 @@ function CreateQuestionMain({ setQuestion, question, point, setPoint, setQImgUrl
     for (let index = 0; index < length; index++) {
         arr.push(obj)
     }
+    const [object, setObject] = useState();
     const handleChecked = (value) => {
         checked.length > 0 ? 
             setChecked([value]) : setChecked((prev) => [...prev, value])
     }
+    const handleValues = (value, index) => {
+        let newObj = {
+            value : value,
+            index : index
+        }
+        let final = object?.map((item, index) => {
+            return index == newObj.index ? ({...item, answer : newObj.value}) : item
+        })
+        setObject(final)
+    }
+    const handleObject = () => {
+        setObject(arr)
+        // console.log(object)
+    }
     useEffect(() => {
-        handleCreateQuesiton(arr, checked[0])
-    }, [checked])
+        handleCreateQuesiton(object, checked[0])
+    }, [checked, object])
+    useEffect(() => {
+        handleObject()
+    }, [length])
     return (
         <div className="w-full h-full pt-4 overflow-scroll px-4">
             <div className="w-full h-full">
@@ -81,8 +99,8 @@ function CreateQuestionMain({ setQuestion, question, point, setPoint, setQImgUrl
                 <div className='h-[100px]'>
                     {
                         arr?.map((item, index) => (
-                            <AnswerCellMain checked={checked} handleChecked={handleChecked} item={item} 
-                            handleCreateQuesiton={handleCreateQuesiton} key={index} index={index} />
+                            <AnswerCellMain arr={arr[index]} checked={checked} handleChecked={handleChecked} item={item} 
+                            handleValues={handleValues} handleCreateQuesiton={handleCreateQuesiton} key={index} index={index} />
                         ))
                     }
                 </div>

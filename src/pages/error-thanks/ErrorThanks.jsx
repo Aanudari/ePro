@@ -4,9 +4,14 @@ import { useStateContext } from "../../contexts/ContextProvider";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Modal } from "react-bootstrap";
+import { arraySearch } from "../../service/searchArray";
 import Select from "react-select";
 import ReactPaginate from "react-paginate";
-import "./pg.css";
+
+import { notification } from "../../service/toast";
+import { ToastContainer } from "react-toastify";
+
+// import "./pg.css";
 function ErrorThanks() {
   const { TOKEN } = useStateContext();
   const navigate = useNavigate();
@@ -67,9 +72,13 @@ function ErrorThanks() {
     setCurrentTab(e.target.id);
   };
   const handleCreate = () => {
-    navigate("/create-error-thanks", {
-      state: { type: selectedOption },
-    });
+    if (selectedOption === null) {
+      notification.error(`Сонголт хоосон байна!`);
+    } else {
+      navigate("/create-error-thanks", {
+        state: { type: selectedOption },
+      });
+    }
   };
   const handleDelete = () => {
     axios({
@@ -82,84 +91,71 @@ function ErrorThanks() {
     })
       .then((res) => {
         if (res.data.isSuccess === true) {
-          navigate(0);
+          notification.success(`${res.data.resultMessage}`);
+          const timer = setTimeout(() => navigate(0), 1000);
+          return () => clearTimeout(timer);
         } else {
           console.log(res.data.resultMessage);
         }
       })
       .catch((err) => console.log(err));
   };
-  const [page, setPage] = useState(0);
-<<<<<<< HEAD
-  const dataPerPage = 1;
-  const numberOfdataVistited = page * dataPerPage;
-
-  const totalPages = Math.floor(complain.length / dataPerPage);
-  const changePage = ({ selected }) => {
-    setPage(selected);
-  };
-  const [totalPagess, setTotalPages] = useState();
-
-  let output1 = [];
-  let output2 = [];
-  let output3 = [];
-  useEffect(() => {
-    let ids = [...new Set(complain.map((i) => i.complain))];
-    ids.forEach((currentTab) => {
-      let res = complain.filter((name) => name.complain == currentTab);
-      output1.push(res);
-      console.log(res);
+  const handleEdit = (tab) => {
+    navigate("/edit-error-thanks", {
+      state: { data: tab },
     });
-    if (currentTab == 1) {
-      setTotalPages(output1.length);
-    } else if (currentTab == 2) {
-      setTotalPages(output2.length);
-    } else if (currentTab == 3) {
-      setTotalPages(output3.length);
-    }
-  }, [totalPagess]);
-
-=======
+  };
+  const [page, setPage] = useState(0);
   const dataPerPage = 3;
   const numberOfdataVistited = page * dataPerPage;
-  console.log(numberOfdataVistited)
-  const totalPages = Math.ceil(complain.length / dataPerPage);
-  let one = []
-  let two = []
-  let three = []
-  const [status, setStatus] = useState('1');
+
+  let one = [];
+  let two = [];
+  let three = [];
+  const [status, setStatus] = useState("1");
   for (let index = 0; index < complain.length; index++) {
     const element = complain[index];
-    if(element.complain === "1") {
-      one.push(element.complain)
+    if (element.complain === "1") {
+      one.push(element.complain);
     }
-    if(element.complain === "2") {
-      two.push(element.complain)
+    if (element.complain === "2") {
+      two.push(element.complain);
     }
-    if(element.complain === "3") {
-      three.push(element.complain)
+    if (element.complain === "3") {
+      three.push(element.complain);
     }
   }
   const changePage = ({ selected }) => {
     setPage(selected);
   };
-  let final
+  let final;
   const handlePageCount = () => {
-    if(status == "1") {
-      final = one.length
+    if (status == "1") {
+      final = one.length;
     }
-    if(status == "2") {
-      final = two.length
+    if (status == "2") {
+      final = two.length;
     }
-    if(status == "3") {
-      final = three.length
+    if (status == "3") {
+      final = three.length;
     }
-  }
-  // useEffect(() => {
-    handlePageCount()
-  // }, [status])
-  // console.log(final)
->>>>>>> 5289579c1fa168f49f118b7a59e6b322b6a6439c
+  };
+  const [count, setCount] = useState();
+  handlePageCount();
+  const totalPages = Math.ceil(parseInt(final) / dataPerPage);
+
+  const handleOnChange = async (e) => {
+    let value = e.target.value;
+    if (value.length > 2) {
+      let search = await arraySearch(complain, value);
+      setComplain(search);
+      setCount(search.length);
+    } else {
+      setComplainInfo(complainInfo);
+      setComplain(complain);
+      // setCount(complain.length);
+    }
+  };
   return (
     <div className="w-full h-screen bg-gray-50">
       <div>
@@ -198,10 +194,11 @@ function ErrorThanks() {
                     Бүртгэл үүсгэх төрлөө сонгоно уу. ✍
                   </span>
                   <button
+                    type="button"
                     onClick={handleCreate}
-                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-2 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                    className="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm inline-flex items-center px-3 py-2 text-center ml-4"
                   >
-                    NEXT
+                    Next
                   </button>
                 </div>
               </div>
@@ -222,22 +219,29 @@ function ErrorThanks() {
             <Modal.Title>Бүртгэл устгах</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <div className="mt-2">
-              <div className="px-5 pb-5">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-bold">Бүртгэл устгах уу?</span>
-                  <button
-                    onClick={handleDelete}
-                    className="text-white bg-rose-700 hover:bg-rose-600 focus:ring-4 focus:outline-none focus:ring-rose-300 font-medium rounded-lg text-sm px-2 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                  >
-                    YES
-                  </button>
-                </div>
-              </div>
+            <div className="p-6 text-center">
+              <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                Are you sure you want to delete?
+              </h3>
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
+              >
+                Yes, I'm sure
+              </button>
+              <button
+                onClick={hideModalDelete}
+                type="button"
+                className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+              >
+                No, cancel
+              </button>
             </div>
           </Modal.Body>
         </Modal>
       </div>
+
       <Navigation />
 
       <div className="sm:px-6 w-full">
@@ -247,11 +251,17 @@ function ErrorThanks() {
               Алдаа талархал
             </p>
             <div className="my-2 flex sm:flex-row flex-col">
+              <div className="mr-2">
+                <p>Count: {count}</p>
+              </div>
+
               <div className="block relative">
                 <span className="h-full absolute inset-y-0 left-0 flex items-center pl-2">
                   <i className="bi bi-search" />
                 </span>
                 <input
+                  name="search"
+                  onChange={handleOnChange}
                   placeholder="Хайлт"
                   className="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-black focus:outline-none"
                 />
@@ -269,9 +279,13 @@ function ErrorThanks() {
               >
                 {complainInfo
                   ? complainInfo.map((tab, i) => (
-                      <li onClick={() => {
-                        setStatus(tab.id)
-                      }} key={i} className="-mb-px mr-2 last:mr-2 mt-2 flex-auto text-center">
+                      <li
+                        // onClick={() => {
+                        //   setStatus(tab.id);
+                        // }}
+                        key={i}
+                        className="-mb-px mr-2 last:mr-2 mt-2 flex-auto text-center"
+                      >
                         <a
                           className={
                             "text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " +
@@ -319,60 +333,61 @@ function ErrorThanks() {
               </thead>
               <tbody className="bg-white text-sm">
                 {complain
-                  ? complain
-                      .map((tab, i) => (
-                        <tr
-                          key={i}
-                          className={
-                            currentTab === `${tab.complain}`
-                              ? "focus:outline-none h-16 border border-gray-100 rounded"
-                              : "hidden"
-                          }
-                          // onChange={() => {
-                          //   setTotalPages(tab.complain);
-                          // }}
-                        >
-                          <td className="px-1 py-1 border">{tab.createdAt}</td>
-                          <td className="px-1 py-1 border">
-                            {tab.departmentName}
-                          </td>
-                          <td className="px-1 py-1 border">{tab.unitName}</td>
-                          <td className="px-1 py-1 border">{tab.firstName}</td>
-                          <td className="px-1 py-1 border">
-                            {tab.complainType}
-                          </td>
-                          <td className="px-1 py-1 border">
-                            {tab.description}
-                          </td>
-                          <td className="px-1 py-1 border">{tab.rule}</td>
-                          <td className="px-1 py-1 border">{tab.too}</td>
-                          <td className="px-1 py-1 border">
-                            <a className="text-yellow-400 hover:text-black mx-2">
-                              <i className="bi bi-pencil-square"></i>
-                            </a>
-                            <a
-                              data-id={tab.id}
-                              onClick={showModalDelete}
-                              className="text-rose-400 hover:text-black ml-2"
-                            >
-                              <i className="bi bi-trash-fill"></i>
-                            </a>
-                          </td>
-                        </tr>
-                      ))
-                      .slice(
-                        numberOfdataVistited,
-                        numberOfdataVistited + dataPerPage
-                      )
-                  : null}
+                  ? complain.map((tab, i) => (
+                      <tr
+                        key={i}
+                        className={
+                          currentTab === `${tab.complain}`
+                            ? "focus:outline-none h-16 border border-gray-100 rounded"
+                            : "hidden"
+                        }
+                        // onChange={() => {
+                        //   setTotalPages(tab.complain);
+                        // }}
+                      >
+                        <td className="px-1 py-1 border">{tab.createdAt}</td>
+                        <td className="px-1 py-1 border">
+                          {tab.departmentName}
+                        </td>
+                        <td className="px-1 py-1 border">{tab.unitName}</td>
+                        <td className="px-1 py-1 border">{tab.firstName}</td>
+                        <td className="px-1 py-1 border">{tab.complainType}</td>
+                        <td className="px-1 py-1 border">{tab.description}</td>
+                        <td className="px-1 py-1 border">{tab.rule}</td>
+                        <td className="px-1 py-1 border">{tab.too}</td>
+                        <td className="px-1 py-1 border">
+                          <a
+                            className="text-yellow-400 hover:text-black mx-2"
+                            data-id={tab}
+                            onClick={() => {
+                              handleEdit(tab);
+                            }}
+                          >
+                            <i className="bi bi-pencil-square"></i>
+                          </a>
+                          <a
+                            data-id={tab.id}
+                            onClick={showModalDelete}
+                            className="text-rose-400 hover:text-black ml-2"
+                          >
+                            <i className="bi bi-trash-fill"></i>
+                          </a>
+                        </td>
+                      </tr>
+                    ))
+                  : // .slice(
+                    //   numberOfdataVistited,
+                    //   numberOfdataVistited + dataPerPage
+                    // )
+                    null}
               </tbody>
             </table>
 
             <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">
-              <ReactPaginate
+              {/* <ReactPaginate
                 previousLabel={"Өмнө"}
                 nextLabel={"Дараах"}
-                pageCount={parseInt(final) / dataPerPage}
+                pageCount={totalPages}
                 onPageChange={changePage}
                 containerClassName={"navigationButtons"}
                 previousLinkClassName={"previousButton"}
@@ -384,11 +399,12 @@ function ErrorThanks() {
                 marginPagesDisplayed={2}
                 pageRangeDisplayed={5}
                 subContainerClassName={"pages pagination"}
-              />
+              /> */}
             </div>
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import ExamCategory from './ExamCategory';
 import CategoryModal from './CategoryModal';
 import ExamModalMain from './ExamModalMain';
+import ImageBoard from './ImageBoard';
 function ExamDash() {
     const [examModalId, setexamModalId] = useState();
     const [categoryModal, setCategoryModal] = useState(false);
@@ -70,14 +71,10 @@ function ExamDash() {
         setCModalId(id)
         setDepId(Did)
     }
-    // console.log(depId)
-
-
     const handleExamModal = (id) => {
         setexamModalId(id)
     }
     const [showCategoryMenu, setShowCategoryMenu] = useState(false);
-    console.log(imgStatus)
     return ( 
     <div className="w-full min-h-screen bg-gray-200 relative">
       <Navigation />
@@ -87,11 +84,15 @@ function ExamDash() {
                 showCategoryMenu && 
             <ExamCategory categories={categories && categories} categoryModal={categoryModal} 
             setCategoryModal={setCategoryModal} setShowCategoryMenu={setShowCategoryMenu} 
-            handleCategoryModal={handleCategoryModal}/> 
+            handleCategoryModal={handleCategoryModal} trigger={trigger} setTrigger={setTrigger}/> 
             }
             <ExamBoard examModal={examModal} setExamModal={setExamModal} exams={data && data}
             handleExamModal={handleExamModal}
             />
+            {
+                imgStatus && 
+                <ImageBoard imgStatus={imgStatus} setImgStatus={setImgStatus}/>
+            }
         </div>
             <ExamBoardController imgStatus={imgStatus} setImgStatus={setImgStatus} showCategoryMenu={showCategoryMenu}
              setShowCategoryMenu={setShowCategoryMenu}/>

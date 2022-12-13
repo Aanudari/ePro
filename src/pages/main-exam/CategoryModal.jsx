@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import CreateQuestionMain from "./CreateQuestionMain";
 import EditQuestionMain from "./EditQuestionMain";
 import CreateExamMain from "./CreateExamMain";
-function CategoryModal({ setCategoryModal, id, depId, setShowCategoryMenu }) {
-    const { TOKEN } = useStateContext();
+function CategoryModal({ setCategoryModal, id, depId, setShowCategoryMenu, setTriggerCat, triggerCat }) {
+    const { TOKEN, activeMenu } = useStateContext();
     const navigate = useNavigate();
     const logout = () => {
         localStorage.clear();
@@ -110,6 +110,7 @@ function CategoryModal({ setCategoryModal, id, depId, setShowCategoryMenu }) {
         })
             .then((res) => {
                 setAddAnswer(!addAnswer)
+                setTriggerCat(triggerCat)
             })
             .catch((err) => {
                 console.log(err)
@@ -165,9 +166,11 @@ function CategoryModal({ setCategoryModal, id, depId, setShowCategoryMenu }) {
     }
     // console.log(checked)
     return (
-        <div className="fixed top-[56px] left-[250px] w-[calc(100%-250px)] h-[calc(100%-56px)] 
-        bg-black bg-opacity-50 flex justify-center items-center
-        ">
+        <div className={`fixed ${activeMenu ? "top-[56px] left-[250px] w-[calc(100%-250px)] h-[calc(100%-56px)]"
+        : "w-full h-full top-[25px] left-0"
+        } 
+            bg-black bg-opacity-50 flex justify-center items-center
+            `}>
             {
                 examState ?
                     <div className="w-[calc(85%)] shrink h-[600px] bg-white flex flex-col ">
@@ -262,7 +265,7 @@ function CategoryModal({ setCategoryModal, id, depId, setShowCategoryMenu }) {
                                                                             :
                                                                             <i onClick={() => {
                                                                                 editQuestion(question.id)
-                                                                            }} className="bi bi-pencil-fill cursor-pointer text-green-500"></i>
+                                                                            }} className="bi bi-arrow-bar-down cursor-pointer text-black"></i>
                                                                     }
                                                                     <i onClick={() => {
                                                                         deleteQuestion(question.id)
@@ -272,7 +275,7 @@ function CategoryModal({ setCategoryModal, id, depId, setShowCategoryMenu }) {
                                                     </div>
                                                     {
                                                         answers && answerContainer.includes(question.id) &&
-                                                        <EditQuestionMain />
+                                                        <EditQuestionMain question={question}/>
                                                     }
                                                 </div>
                                             ))
@@ -287,10 +290,11 @@ function CategoryModal({ setCategoryModal, id, depId, setShowCategoryMenu }) {
                 ">Асуулт үүсгэх</div>
                         }
                         {
-                            createExam && !addAnswer && data?.length !== undefined ?
+                            createExam && !addAnswer && data?.length !== undefined && checked.length > 0 ?
                                 <div onClick={handleExamHalf} className="w-full h-14 bg-gray-600 hover:bg-gray-700 cursor-pointer flex 
                 justify-center items-center font-[500] text-sky-500
-                ">{checked.length}</div> : null
+                ">Шалгалт үүсгэх {checked.length}/10
+                </div> : null
                         }
 
                     </div> :
@@ -343,7 +347,8 @@ function CategoryModal({ setCategoryModal, id, depId, setShowCategoryMenu }) {
                                 </button>
                             </div>
                         </div>
-                        <CreateExamMain setShowCategoryMenu={setShowCategoryMenu} setCategoryModal={setCategoryModal} setExamState={setExamState} depId={depId} checked={checked}/>
+                        <CreateExamMain setTriggerCat={setTriggerCat} triggerCat={triggerCat} setShowCategoryMenu={setShowCategoryMenu} 
+                        setCategoryModal={setCategoryModal} setExamState={setExamState} depId={depId} checked={checked}/>
                         {
                             addAnswer &&
                             <div onClick={submitQuestion} className="w-full h-14 bg-gray-600 hover:bg-gray-700 cursor-pointer flex 

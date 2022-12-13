@@ -15,6 +15,9 @@ function ExamDash() {
     const [data, setData] = useState();
     const [categories, setCategories] = useState();
     const navigate = useNavigate();
+    const [examModal, setExamModal] = useState(false);
+    const [trigger, setTrigger] = useState(false);
+    const [imgStatus, setImgStatus] = useState(false);
     const logout = () => {
       localStorage.clear();
       navigate("/");
@@ -39,7 +42,7 @@ function ExamDash() {
                 }
             )
             .catch(err => console.log(err))
-    }, [categoryModal])
+    }, [categoryModal, examModal])
     useEffect(() => {
         axios({
             method: "get",
@@ -59,21 +62,22 @@ function ExamDash() {
                 }
             )
             .catch(err => console.log(err))
-    }, [])
+    }, [trigger])
     const [depId, setDepId] = useState();
-
     const [cModalId, setCModalId] = useState();
+
     const handleCategoryModal = (id, Did) => {
         setCModalId(id)
         setDepId(Did)
     }
     // console.log(depId)
-    const [examModal, setExamModal] = useState(false);
+
 
     const handleExamModal = (id) => {
         setexamModalId(id)
     }
     const [showCategoryMenu, setShowCategoryMenu] = useState(false);
+    console.log(imgStatus)
     return ( 
     <div className="w-full min-h-screen bg-gray-200 relative">
       <Navigation />
@@ -89,10 +93,12 @@ function ExamDash() {
             handleExamModal={handleExamModal}
             />
         </div>
-            <ExamBoardController showCategoryMenu={showCategoryMenu} setShowCategoryMenu={setShowCategoryMenu}/>
+            <ExamBoardController imgStatus={imgStatus} setImgStatus={setImgStatus} showCategoryMenu={showCategoryMenu}
+             setShowCategoryMenu={setShowCategoryMenu}/>
       </div>
       {
-        categoryModal && <CategoryModal setShowCategoryMenu={setShowCategoryMenu} depId={depId} id={cModalId} setCategoryModal={setCategoryModal}/>
+        categoryModal && <CategoryModal setTriggerCat={setTrigger} triggerCat={trigger}
+         setShowCategoryMenu={setShowCategoryMenu} depId={depId} id={cModalId} setCategoryModal={setCategoryModal}/>
       }
       {
         examModal && 

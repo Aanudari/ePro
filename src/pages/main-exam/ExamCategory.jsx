@@ -1,7 +1,7 @@
 function ExamCategory({ categories, categoryModal, setCategoryModal, handleCategoryModal, setShowCategoryMenu }) {
     return (
-        <div className="absolute top-[56px] w-[calc(100%-15px)] shadow bg core-bg-g h-[calc(100%-68px)] mb-2 h-full flex  px-3 
-        py-3 gap-2 drop-down">
+        <div className={`absolute top-[56px] w-[calc(100%-15px)] shadow bg core-bg-g h-[calc(100%-68px)] mb-2 h-full flex  px-3 
+        py-3 gap-2 drop-down`}>
             <div className="w-full">
                 {
                     categories?.map((category, index) => (

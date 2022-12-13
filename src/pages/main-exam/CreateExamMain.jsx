@@ -7,7 +7,7 @@ import PointSelect from "../exam/ExamForm/PointSelect";
 import CheckModal from "../../components/exam-comp/CheckModal";
 import { useNavigate } from "react-router-dom";
 
-function CreateExamMain({checked, depId, setCategoryModal, setShowCategoryMenu}) {
+function CreateExamMain({checked, depId, setCategoryModal, setShowCategoryMenu, setTriggerCat, triggerCat}) {
 
     const navigate = useNavigate();
     const logout = () => {
@@ -100,8 +100,8 @@ function CreateExamMain({checked, depId, setCategoryModal, setShowCategoryMenu})
         "devices": [
           {
             "department": `${depId}`,
-            "unitId": `${unit}`,
-            "deviceId": `${deviceId}`
+            "unitId": unit ? `${unit}` : null,
+            "deviceId": deviceId ? `${deviceId}` : null
           }
         ],
         "variants": [
@@ -207,6 +207,7 @@ function CreateExamMain({checked, depId, setCategoryModal, setShowCategoryMenu})
             .then((res) => {
                 setCategoryModal(false)
                 setShowCategoryMenu(false)
+                setTriggerCat(triggerCat)
             })
             .catch((err) => {
                 console.log(err)

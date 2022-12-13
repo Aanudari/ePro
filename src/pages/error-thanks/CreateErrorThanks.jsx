@@ -45,7 +45,7 @@ function CreateErrorThanks() {
   const [checkEmpty5, setcheckEmpty5] = useState(false);
   const [checkEmpty6, setcheckEmpty6] = useState(false);
   const [checkEmpty7, setcheckEmpty7] = useState(false);
-  console.log(selectedOptionorg)
+
   const [departmentID, setDepartmentID] = useState("");
   const [orgID, setOrgID] = useState("");
   const [workersID, setWorkersID] = useState("");
@@ -160,7 +160,8 @@ function CreateErrorThanks() {
         .then((res) => {
           if (res.data.isSuccess === true) {
             notification.success(`${res.data.resultMessage}`);
-            navigate("/error-thanks");
+            const timer = setTimeout(() => navigate("/error-thanks"), 1000);
+            return () => clearTimeout(timer);
           }
         })
         .catch((err) => console.log(err));
@@ -270,7 +271,6 @@ function CreateErrorThanks() {
                   <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
                     <input
                       type="text"
-                      placeholder="Нэвтрэх нэр"
                       className="outline-none  w-full rounded bg-gray-50 h-10 block p-2"
                       onChange={(e) => {
                         setComplainType(e.target.value);
@@ -287,13 +287,12 @@ function CreateErrorThanks() {
                   <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
                     <input
                       className="outline-none  w-full rounded bg-gray-50 h-10 block p-2"
-                      placeholder="rule"
                       type="text"
                       onChange={(e) => {
                         setRule(e.target.value);
-                        setcheckEmpty5(false);
+                        setcheckEmpty6(false);
                       }}
-                      id={checkEmpty5 === true ? "border-red" : null}
+                      id={checkEmpty6 === true ? "border-red" : null}
                     />
                   </div>
                 </div>
@@ -308,9 +307,9 @@ function CreateErrorThanks() {
                     defaultValue={selectedOption}
                     onChange={(item) => {
                       handleToo(item);
-                      setcheckEmpty6(false);
+                      setcheckEmpty7(false);
                     }}
-                    id={checkEmpty6 === true ? "border-red" : null}
+                    id={checkEmpty7 === true ? "border-red" : null}
                     className="outline-none  w-full rounded bg-gray-50"
                     noOptionsMessage={({ inputValue }) =>
                       !inputValue && "Сонголт хоосон байна"
@@ -331,13 +330,12 @@ function CreateErrorThanks() {
                       rows="4"
                       className="outline-none block p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg  focus:ring-blue-500 
                       focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="description"
                       type="text"
                       onChange={(e) => {
                         setDescription(e.target.value);
-                        setcheckEmpty7(false);
+                        setcheckEmpty5(false);
                       }}
-                      id={checkEmpty7 === true ? "border-red" : null}
+                      id={checkEmpty5 === true ? "border-red" : null}
                     />
                   </div>
                 </div>
@@ -345,9 +343,15 @@ function CreateErrorThanks() {
                 <div className="col-span-5 text-right">
                   <div className="inline-flex items-end">
                     <button
+                      onClick={() => navigate("/error-thanks")}
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+                    >
+                      Exit
+                    </button>
+                    <button
                       onClick={navigateIndex}
                       type="submit"
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                      className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
                     >
                       Submit
                     </button>

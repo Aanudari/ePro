@@ -40,6 +40,7 @@ import PrepareQuestions from "./components/PrepareQuestions";
 import LevelOneUI from "./pages/userUI/LevelOne/LevelOneUI";
 import ErrorThanks from "./pages/error-thanks/ErrorThanks";
 import CreateErrorThanks from "./pages/error-thanks/CreateErrorThanks";
+import EditErrorThanks from "./pages/error-thanks/EditErrorThanks";
 import UINavigation from "./components/UINavigation";
 import LevelOneUITakeExam from "./pages/userUI/LevelOne/LevelOneUITakeExam";
 import LevelOneUIExamResult from "./pages/userUI/LevelOne/LevelOneUIExamResult";
@@ -57,7 +58,6 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import CreateRate from "./pages/rating/rate-users/CreateRate";
 import ExamDash from "./pages/main-exam/examDashboard";
 import "react-toastify/dist/ReactToastify.css";
-
 function App() {
   const { activeMenu, showTop, roleId, error, setError } = useStateContext();
   const { width } = getWindowDimensions();
@@ -437,6 +437,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199]}>
                 <CreateErrorThanks />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/edit-error-thanks"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <EditErrorThanks />
               </ProtectedRoute>
             }
           />

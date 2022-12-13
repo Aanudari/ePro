@@ -11,7 +11,7 @@ import { useStateContext } from "./contexts/ContextProvider";
 import ExamForm from "./pages/exam/exam-form";
 import ExamResult from "./pages/exam/exam-result";
 import TakeExam from "./pages/exam/take-exam";
-import Traingings from "./pages/training/trainings";
+import Traingings from "./pages/training/Training";
 import TookTraining from "./pages/training/took-training";
 import CreateTraining from "./pages/training/create-training";
 import { ProtectedRoute } from "./components/ProtectedRoute";
@@ -41,6 +41,8 @@ import LevelOneUI from "./pages/userUI/LevelOne/LevelOneUI";
 import ErrorThanks from "./pages/error-thanks/ErrorThanks";
 import CreateErrorThanks from "./pages/error-thanks/CreateErrorThanks";
 import EditErrorThanks from "./pages/error-thanks/EditErrorThanks";
+import UserErrorThanks from "./pages/error-thanks/UserErrorThanks";
+
 import UINavigation from "./components/UINavigation";
 import LevelOneUITakeExam from "./pages/userUI/LevelOne/LevelOneUITakeExam";
 import LevelOneUIExamResult from "./pages/userUI/LevelOne/LevelOneUIExamResult";
@@ -415,14 +417,6 @@ function App() {
             }
           />
           <Route
-            path="/error-thanks"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <ErrorThanks />
-              </ProtectedRoute>
-            }
-          />
-          <Route
             path="/exam-dash"
             element={
               <QueryClientProvider client={queryClient}>
@@ -430,6 +424,14 @@ function App() {
                   <ExamDash />
                 </ProtectedRoute>
               </QueryClientProvider>
+            }
+          />
+          <Route
+            path="/error-thanks"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <ErrorThanks />
+              </ProtectedRoute>
             }
           />
           <Route
@@ -445,6 +447,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199]}>
                 <EditErrorThanks />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/user-error-thanks"
+            element={
+              <ProtectedRoute allowedRoles={[199, 1]}>
+                <UserErrorThanks />
               </ProtectedRoute>
             }
           />

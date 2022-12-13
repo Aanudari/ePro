@@ -5,10 +5,8 @@ import SessionExpired from "../../components/SessionExpired";
 function CreateTraining() {
   return (
     <div className="w-full h-full bg-gray-50">
-      <SessionExpired />
       <Navigation />
-      <div className="h-full">
-      </div>
+      <div className="h-full"></div>
     </div>
   );
 }

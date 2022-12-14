@@ -2,7 +2,7 @@ import axios from "axios"
 import { useStateContext } from "../../contexts/ContextProvider"
 
 function ExamCategory({ categories, categoryModal, setCategoryModal, handleCategoryModal, setShowCategoryMenu,
-    trigger, setTrigger }) {
+    trigger, setTrigger, showAddCategory, setShowAddCategory }) {
     const {TOKEN} = useStateContext();
     const deleteCategory = (value) => {
         axios({
@@ -24,7 +24,9 @@ function ExamCategory({ categories, categoryModal, setCategoryModal, handleCateg
         <div className={`absolute top-[56px] w-[calc(100%-15px)] shadow bg core-bg-g h-[calc(100%-68px)] mb-2 h-full flex  px-3 
         py-3 gap-2 drop-down`}>
             <div className="w-full">
-                <button className="px-3 py-2 text-white uppercare bg-teal-300 hover:shadow-white">
+                <button onClick={() => {
+                    setShowAddCategory(!showAddCategory)
+                }} className="px-3 py-2 text-white uppercare bg-teal-300 hover:shadow-white">
                     <i className="bi bi-plus-circle"></i>
                 </button>
                 {

@@ -97,7 +97,7 @@ function AddCategoryMenu({ showAddCategory, setShowAddCategory }) {
                     </div>
                 </div>
                 {
-                    name !== undefined && department !== undefined &&
+                    name !== "" && department !== undefined &&
                     <div onClick={submitCategory} className="h-20 bg-gray-700 flex justify-center 
                     cursor-pointer hover:bg-gray-600 items-center text-white font-[500]">Категори үүсгэх</div>
                 }

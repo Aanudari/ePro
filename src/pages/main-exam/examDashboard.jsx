@@ -59,7 +59,6 @@ function ExamDash() {
                     if(res.data.errorCode == 401) {
                         logout()
                     } else {
-                        console.log(res.data)
                         setCategories(res.data.categoryList)
                     }
                 }

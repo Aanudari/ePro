@@ -11,7 +11,9 @@ import { useStateContext } from "./contexts/ContextProvider";
 import ExamForm from "./pages/exam/exam-form";
 import ExamResult from "./pages/exam/exam-result";
 import TakeExam from "./pages/exam/take-exam";
-import Traingings from "./pages/training/Training";
+import Training from "./pages/training/Training";
+import TrainingFiles from "./pages/training/TrainingFiles";
+import TrainingCategory from "./pages/training/TrainingCategory";
 import TookTraining from "./pages/training/took-training";
 import CreateTraining from "./pages/training/create-training";
 import { ProtectedRoute } from "./components/ProtectedRoute";
@@ -39,10 +41,12 @@ import Dashboard from "./pages/Dashboard";
 import PrepareQuestions from "./components/PrepareQuestions";
 import LevelOneUI from "./pages/userUI/LevelOne/LevelOneUI";
 import ErrorThanks from "./pages/error-thanks/ErrorThanks";
+import Thanks from "./pages/error-thanks/Thanks";
 import CreateErrorThanks from "./pages/error-thanks/CreateErrorThanks";
+import CreateThanks from "./pages/error-thanks/CreateThanks";
 import EditErrorThanks from "./pages/error-thanks/EditErrorThanks";
 import UserErrorThanks from "./pages/error-thanks/UserErrorThanks";
-
+import UserThanks from "./pages/error-thanks/UserThanks";
 import UINavigation from "./components/UINavigation";
 import LevelOneUITakeExam from "./pages/userUI/LevelOne/LevelOneUITakeExam";
 import LevelOneUIExamResult from "./pages/userUI/LevelOne/LevelOneUIExamResult";
@@ -138,7 +142,23 @@ function App() {
             path="/trainings"
             element={
               <ProtectedRoute allowedRoles={[199]}>
-                <Traingings />
+                <Training />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/training-files"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <TrainingFiles />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/training-category"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <TrainingCategory />
               </ProtectedRoute>
             }
           />
@@ -435,10 +455,26 @@ function App() {
             }
           />
           <Route
+            path="/thanks"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <Thanks />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/create-error-thanks"
             element={
               <ProtectedRoute allowedRoles={[199]}>
                 <CreateErrorThanks />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/create-thanks"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <CreateThanks />
               </ProtectedRoute>
             }
           />
@@ -453,8 +489,16 @@ function App() {
           <Route
             path="/user-error-thanks"
             element={
-              <ProtectedRoute allowedRoles={[199, 1]}>
+              <ProtectedRoute allowedRoles={[199, 1, 4]}>
                 <UserErrorThanks />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/user-thanks"
+            element={
+              <ProtectedRoute allowedRoles={[199, 1, 4]}>
+                <UserThanks />
               </ProtectedRoute>
             }
           />

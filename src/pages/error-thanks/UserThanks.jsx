@@ -7,17 +7,19 @@ import axios from "axios";
 import { Modal } from "react-bootstrap";
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
-function UserErrorThanks() {
-  const location = useLocation();
+function UserThanks() {
   const { TOKEN, deviceId } = useStateContext();
   const navigate = useNavigate();
+
+  const location = useLocation();
   const logout = () => {
     localStorage.clear();
     sessionStorage.clear();
     navigate("/");
     window.location.reload();
   };
-  const [currentTab, setCurrentTab] = useState("3");
+
+  const [currentTab, setCurrentTab] = useState(`${location.state.type}`);
   const [complainInfo, setComplainInfo] = useState();
   const [complain, setComplain] = useState([]);
   useEffect(() => {
@@ -63,18 +65,12 @@ function UserErrorThanks() {
   }, []);
 
   let color = "blue";
+  console.log(deviceId);
   const handleTabClick = (e) => {
-    if (e.target.id == 3) {
-      navigate("/user-thanks", {
+    if (e.target.id == 2 || e.target.id == 1) {
+      navigate("/user-error-thanks", {
         state: { type: e.target.id },
       });
-    }
-
-    if (e.target.id == 2) {
-      setCurrentTab(e.target.id);
-    }
-    if (e.target.id == 1) {
-      setCurrentTab(e.target.id);
     }
   };
   return (
@@ -133,12 +129,10 @@ function UserErrorThanks() {
                     </th>
                     <th className="px-4 py-3 font-bold">Ажлын байр </th>
                     <th className="px-4 py-3 font-bold">Ажилтны нэр </th>
-                    <th className="px-4 py-3 font-bold">Гомдлын төрөл </th>
-                    <th className="px-4 py-3 font-bold">
-                      Гомдлын дэлгэрэнгүй{" "}
-                    </th>
-                    <th className="px-4 py-3 font-bold">Журам </th>
-                    <th className="px-4 py-3 font-bold">Алдаа </th>
+                    <th className="px-4 py-3 font-bold">Төрөл </th>
+                    <th className="px-4 py-3 font-bold">Дэлгэрэнгүй </th>
+                    <th className="px-4 py-3 font-bold">Бүртгэгдсэн суваг </th>
+                    <th className="px-4 py-3 font-bold">Тоогоор </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white text-sm">
@@ -181,4 +175,4 @@ function UserErrorThanks() {
   );
 }
 
-export default UserErrorThanks;
+export default UserThanks;

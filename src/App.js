@@ -8,7 +8,9 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import AddCategory from "./pages/rating/rating/AddCategory";
 import { useStateContext } from "./contexts/ContextProvider";
-import Traingings from "./pages/training/trainings";
+import Training from "./pages/training/Training";
+import TrainingFiles from "./pages/training/TrainingFiles"
+import TrainingCategory from "./pages/training/TrainingCategory"
 import TookTraining from "./pages/training/took-training";
 import CreateTraining from "./pages/training/create-training";
 import { ProtectedRoute } from "./components/ProtectedRoute";

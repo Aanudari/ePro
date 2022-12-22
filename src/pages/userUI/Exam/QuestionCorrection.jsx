@@ -1,17 +1,78 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import Question from "./Question";
 import { useStateContext } from "../../../contexts/ContextProvider";
+import { useEffect } from "react";
+import axios from "axios";
 
-export default function QuestionCorrection() {
-  const { wrongValue, someValue, showAnswer, setShowAnswer, gameStarted, reminder, setReminder } = useStateContext();
+export default function QuestionCorrection({roundedScore}) {
+  const { showAnswer, gameStarted, reminder, setReminder, setRightAnswer, rightAnswer} = useStateContext();
   var data = sessionStorage.getItem("exam_data");
+  let user = localStorage.getItem("user")
+  let userParsed = JSON.parse(user)
   var obj = JSON.parse(data)
-
-  const handleScore = (value) => {
-    someValue.current.push(value)
-  }
-  const handleWrong = (value) => {
-    wrongValue.current.push(value)
+  const {TOKEN} = useStateContext();
+  console.log(obj)
+  const [container, setContainer] = useState([]);
+  let answer = [[],[]]
+  useEffect(() => {
+    const sorted = container.sort((a,b) => b.count - a.count)
+    for (let index = 0; index < sorted.length; index++) {
+      const element = sorted[index];
+      if(!answer[0].includes(sorted[index].AquestionId)) {
+              answer[0].push(element.AquestionId)
+              answer[1].push(element.answerId)
+            }
+        }
+  }, [container])
+  function addZero(i) {
+    if (i < 10) { i = "0" + i }
+    return i;
+}
+const [value, setValue] = useState(new Date());
+var datestring = value.getFullYear() + "" + addZero((value.getMonth() + 1)) + addZero(value.getDate()) +
+    addZero(value.getHours()) + addZero(value.getMinutes()) + addZero(value.getSeconds());
+  const handleSubmit = () => {
+    let main  = []
+    for (let index = 0; index < rightAnswer[1].length; index++) {
+      const questionId = rightAnswer[1][index];
+      const answerId = rightAnswer[1][index];
+      let small = {
+        "questionId": `${questionId}`,
+        "onlyAnswerId": [
+          {
+            "answerId": `${answerId}`,
+            "isTrue": "string"
+          }
+        ]
+      }
+      main.push(small)
+    }
+    let schema = {
+      "examId": `${obj.id}`,
+      "variantId": "string",
+      "devId": `${userParsed.device_id}`,
+      "score": `${roundedScore}`,
+      "endAt": `${datestring}`,
+      "onlyQuestionId": main
+    }
+    console.log(schema)
+    // console.log(userParsed)
+    // console.log(obj)
+  // console.log(bluePrint)
+  // console.log("submiting exam result !")
+  //   axios({
+  //     method: "post",
+  //     headers: {
+  //         "Content-Type": "application/json",
+  //         'Authorization': `${TOKEN}`
+  //     },
+  //     url: `${process.env.REACT_APP_URL}/v1/ExamNew/end`,
+  //     data: bluePrint,
+  // })
+  //     .then((res) => {
+  //         console.log(res)
+  //     })
+  //     .catch((err) => console.log(err));
   }
   return (
     <div className="flex w-full justify-center">
@@ -23,8 +84,8 @@ export default function QuestionCorrection() {
                 key={index}
                 data={question}
                 indexQ={index}
-                handleScore={handleScore}
-                handleWrong={handleWrong}
+                container={container}
+                setContainer={setContainer}
               />
             );
           })}
@@ -33,6 +94,7 @@ export default function QuestionCorrection() {
               onClick={() => {
                 // setShowAnswer(!showAnswer)
                 setReminder(true)
+                setRightAnswer(answer)
               }}
               className="question-button w-full shadow"
             >
@@ -47,7 +109,8 @@ export default function QuestionCorrection() {
                   <p className="font-bold text-white">Та шалгалтаа дуусгахдаа итгэлтэй байна уу ?</p>
                     <div className='flex justify-end'>
                         <button onClick={() => {
-                setShowAnswer(!showAnswer)
+                // setShowAnswer(!showAnswer)
+                handleSubmit()
               }} className='intro-button'>Тийм</button>
                         <button onClick={() => {
                 setReminder(false)

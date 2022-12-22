@@ -7,10 +7,10 @@ import gsap from "gsap";
 import { useStateContext } from "../../../contexts/ContextProvider";
 
 export default function QuestionShow({
-    data, indexQ
+    data, indexQ,
 }) {
     const [answer, setAnswer] = useState(null);
-    const {wrongValue, someValue} = useStateContext();
+    const {wrongValue, someValue, rightAnswer, rightAnswerCount, setRightAnswerCount} = useStateContext();
     const questionRef = useRef(null);
     useEffect(() => {
         gsap.fromTo(
@@ -39,14 +39,10 @@ export default function QuestionShow({
             }
         );
     }, [data]);
-    var correct =  [... new Set(someValue.current)]
-    var wrong = [... new Set(wrongValue.current)]
-    let FinalAnswer = wrong !== [] ? [wrong[0]] : correct;
-
-    console.log(correct) 
-    console.log(wrong) 
-    console.log(FinalAnswer)
-    // console.log(correct)
+    // useEffect(()=> {
+    //     rightAnswer[1].includes(text.id) && text.isTrue == "1" ? 
+    //     setRightAnswerCount(rightAnswerCount + 1) : null
+    // }, [])
     return (
         <div className="question " ref={questionRef}>
             <div className="question-inner">
@@ -61,8 +57,11 @@ export default function QuestionShow({
                         return (
                             <li
                                 key={index}
-                                className={wrongValue.current.includes(value) ? "bg-red-500 rounded" :
-                            someValue.current.includes(value) ? "bg-green-500 rounded" : null
+                                className={rightAnswer[1].includes(text.id) && text.isTrue == "0" ? 
+                                "bg-red-500 rounded" :
+                                // returnCss() :
+                                rightAnswer[1].includes(text.id) && text.isTrue == "1" ? 
+                                "bg-green-500 rounded" : null
                             }
                             >
                                 <input
@@ -75,7 +74,10 @@ export default function QuestionShow({
                                     }
                                     disabled
                                 />
-                                <label className="question-answer" htmlFor={value}>
+                                <label className={rightAnswer[1].includes(text.id) && text.isTrue == "0" ? " text-white" :
+                                rightAnswer[1].includes(text.id) && text.isTrue == "1" ? 
+                                "!text-white" : null
+                            } htmlFor={value}>
                                     {text.answer}
                                 </label>
                             </li>

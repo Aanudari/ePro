@@ -386,3 +386,26 @@ select::-ms-expand {
 .select option {
   height: 50px !important;
 }
+
+.from-left {
+  animation: from-left;
+  animation-duration: .5s;
+}
+
+@keyframes from-left {
+  from {
+    width: 0;
+  }
+}
+
+.appear-smooth {
+  animation: appear-smooth;
+  animation-duration: .5s;
+}
+
+@keyframes appear-smooth {
+  from {
+    width: 0;
+    height: 0;
+  }
+}

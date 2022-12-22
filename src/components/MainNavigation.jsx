@@ -86,6 +86,15 @@ function MainNavigation() {
                 <li>
                   <a
                     onClick={() => {
+                      navigate("/rating-main");
+                    }}
+                  >
+                    rating new !
+                  </a>
+                </li>
+                <li>
+                  <a
+                    onClick={() => {
                       navigate("/rating");
                     }}
                   >

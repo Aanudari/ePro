@@ -6,7 +6,7 @@ import React, {
 import gsap from "gsap";
 
 export default function Question({
-    data, indexQ, handleScore, handleWrong
+    data, indexQ, setContainer
 }) {
     const [answer, setAnswer] = useState(null);
     const questionRef = useRef(null);
@@ -36,22 +36,21 @@ export default function Question({
                 stagger: 0.1
             }
         );
-    }, [data]);
-    const correct = data.answerList.filter((answer) => {
-        return answer.isTrue === '1'
-    })
-    const handleCheck = (check, value, id) => {
-        if(check === value) {
-            handleScore(value)
-        } else {
-            handleWrong(value)
+    }, []);
+    const [count, setCount] = useState(0);
+    const handleCheck = (answerId, questionId) => {
+        setCount(count + 1)
+        let arr = {
+            AquestionId : questionId,
+            answerId : answerId,
+            count : count
         }
+            setContainer((prev) => [...prev, arr])
     }
-
     return (
         <div className="question " ref={questionRef}>
             <div className="question-inner">
-                <h4 className="question-text">{indexQ + 1}. {data.question}</h4>
+                <h4 className="question-text mb-10">{indexQ + 1}. {data.question}</h4>
                 {
                     data.imgUrl && 
                     <img src={`${data.imgUrl}`} alt="" className="mb-4 w-full h-[150px] md:h-[280px] mb-4 rounded"/>
@@ -59,25 +58,21 @@ export default function Question({
                 <ul className="question-answers ">
                     {data && data.answerList.map((text, index) => {
                         const value = `q${text.id}-${index}`;
-                        const check = `q${correct[0].id}-${index}`;
-                        const actualIndex = `q${data.id}-${index}`;
                         return (
                             <li
-                            
                                 key={index}
                             >
                                 <input
                                     type="radio"
                                     name={text.id}
-           
                                     value={value}
                                     id={value}
                                     onChange={(e) => {
-                                        setAnswer(e.target.value)
-                                        handleCheck(check, value, actualIndex)
+                                        setAnswer(text.id)
+                                        handleCheck(text.id, data.id)
                                     }}
                                     checked={
-                                        value === answer
+                                        text.id === answer
                                     }
                                 />
                                 <label className="question-answer" htmlFor={value}>

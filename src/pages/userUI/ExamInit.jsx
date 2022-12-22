@@ -13,19 +13,15 @@ import { useNavigate } from "react-router-dom";
 import ResultExam from "./Exam/ResultExam";
 
 function useCounter(initialState) {
-
   const [value, setValue] = useState(initialState);
-
   const reset = () => setValue(0);
-
   const add = () => setValue((value) => (value += 1));
-
   return { value, add, reset };
 }
 
 export default function ExamInit() {
   const { TOKEN, qlength, setQlength, error, setError, gameStarted, setGameStarted, gameFinished,
-    setGameFinished, uniqueRightAnswer, uniqueWrongAnswer, showAnswer, setShowAnswer } = useStateContext();
+    setGameFinished, uniqueRightAnswer, uniqueWrongAnswer, showAnswer, setShowAnswer, rightAnswer } = useStateContext();
   const examId = sessionStorage.getItem("exam_id")
   const navigate = useNavigate();
   useEffect(() => {
@@ -35,10 +31,12 @@ export default function ExamInit() {
         "Content-Type": "application/json",
         'Authorization': `${TOKEN}`
       },
-      url: `http://192.168.10.248:9000/v1/Exam/Question/${examId}`,
+      url: `http://192.168.10.248:9000/v1/ExamNew/start?examId=${examId}`,
+      
     })
       .then(
         res => {
+          console.log(res)
           sessionStorage.setItem("exam_data", JSON.stringify(res.data.variantInfo));
           setQlength(res.data.variantInfo.questionList.length)
         }
@@ -63,8 +61,25 @@ export default function ExamInit() {
   const time = new Date();
   time.setMinutes(time.getMinutes() + 10);
   //time generate hiih
+  // console.log(rightAnswer)
 
-  let score = uniqueRightAnswer.size * 100 / qlength
+  // console.log(questions.questionList)
+  let correct = []
+  for (let index = 0; index < questions?.questionList.length; index++) {
+    const element = questions?.questionList[index];
+    for (let i = 0; i < element.answerList.length; i++) {
+      const el = element.answerList[i];
+      if(el.isTrue == "1") {
+        correct.push(el.id)
+      }
+    }
+  }
+  let length = questions?.questionList.length
+  // console.log(correct + " correct ALL")
+  // console.log(rightAnswer && rightAnswer[1] + " chosen")
+  const intersection = rightAnswer && correct.filter(element => rightAnswer[1].includes(element));
+  const outsection = rightAnswer && correct.filter(element => !rightAnswer[1].includes(element));
+  let score = intersection?.length * 100 / length
   let roundedScore = Math.round(score, -1)
   return (
     <div className="body flex-col">
@@ -99,7 +114,7 @@ export default function ExamInit() {
               <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
               <path d="M22 4L12 14.01 9 11.01"></path>
             </svg>
-            ЗӨВ : {uniqueRightAnswer.size}
+            ЗӨВ : {intersection.length}
           </span>
           <span className="result-text text-red-500 ">
             <svg
@@ -117,7 +132,7 @@ export default function ExamInit() {
               <path d="M15 9L9 15"></path>
               <path d="M9 9L15 15"></path>
             </svg>
-            БУРУУ : {uniqueWrongAnswer.size}
+            БУРУУ : {length - intersection.length}
           </span>
           <span className="result-text">
             <svg
@@ -171,7 +186,7 @@ export default function ExamInit() {
         <div className="game-area">
           {gameStarted && !showAnswer ?(
             <>
-              <QuestionCorrection data={questions}/>
+              <QuestionCorrection data={questions} roundedScore={roundedScore}/>
             </>
           ) : null
           }

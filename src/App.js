@@ -8,21 +8,10 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 import AddCategory from "./pages/rating/rating/AddCategory";
 import { useStateContext } from "./contexts/ContextProvider";
-import ExamForm from "./pages/exam/exam-form";
-import ExamResult from "./pages/exam/exam-result";
-import TakeExam from "./pages/exam/take-exam";
 import Traingings from "./pages/training/trainings";
 import TookTraining from "./pages/training/took-training";
 import CreateTraining from "./pages/training/create-training";
 import { ProtectedRoute } from "./components/ProtectedRoute";
-import Branch from "./pages/valuation/Branch";
-import Installer from "./pages/valuation/Installer";
-import Level1 from "./pages/valuation/Lvl1";
-import Level2 from "./pages/valuation/Lvl2";
-import Mistake from "./pages/valuation/Mistake";
-import Online from "./pages/valuation/Online";
-import ReTre from "./pages/valuation/ReTre";
-import Telesales from "./pages/valuation/Telesales";
 import NotFound from "./pages/404";
 import { CheckLogin } from "./components/BackToHome";
 import LeveloneEdit from "./pages/valuation-edit/Lvl1-edit";
@@ -96,36 +85,6 @@ function App() {
             }
           />
           <Route
-            path="/exam-form"
-            element={
-              // AllowedRoles = Нэвтэрсэн хэрэглэгч бүхэн өөрийн roleid тай байх ба өөрийн roleid ийг зөвшөөрсөн хуудасруу л хандах
-              // эрхтэйгээр шийдхийн тулд allowedRoles parameter ийг дамжуулж өгөв.
-              <QueryClientProvider client={queryClient}>
-                <ProtectedRoute allowedRoles={[199]}>
-                  <ExamForm />
-                </ProtectedRoute>
-              </QueryClientProvider>
-            }
-          />
-          <Route
-            path="/exam-result"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <ExamResult />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/exam-pool"
-            element={
-              <QueryClientProvider client={queryClient}>
-                <ProtectedRoute allowedRoles={[199]}>
-                  <TakeExam />
-                </ProtectedRoute>
-              </QueryClientProvider>
-            }
-          />
-          <Route
             path="/rating"
             element={
               <ProtectedRoute allowedRoles={[199]}>
@@ -157,77 +116,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/branch"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <Branch />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/installer"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <Installer />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/level-one"
-            element={
-              <QueryClientProvider client={queryClient}>
-                <ProtectedRoute allowedRoles={[199, 1]}>
-                  <Level1 />
-                </ProtectedRoute>
-                <ProtectedRoute allowedRoles={[199, 1]}>
-                  <Level1 />
-                </ProtectedRoute>
-              </QueryClientProvider>
-            }
-          />
-          <Route
-            path="/complain"
-            element={
-              <QueryClientProvider client={queryClient}>
-                <ProtectedRoute allowedRoles={[199]}>
-                  <Level2 />
-                </ProtectedRoute>
-              </QueryClientProvider>
-            }
-          />
-          <Route
-            path="/bank"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <Mistake />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/online"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <Online />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/care"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <ReTre />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/telesales"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <Telesales />
-              </ProtectedRoute>
-            }
-          />
           <Route path="*" element={<NotFound />} />
           {/* Үнэлгээ хийгдэх Page-нүүд */}
           <Route
@@ -246,7 +134,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-          create-rate-user
           <Route
             path="/complain-edit"
             element={

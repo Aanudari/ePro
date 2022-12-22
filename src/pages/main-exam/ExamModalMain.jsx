@@ -10,6 +10,7 @@ function ExamModalMain({ setExamModal, id }) {
     const navigate = useNavigate();
     const logout = () => {
         localStorage.clear();
+        sessionStorage.clear();
         navigate("/");
         window.location.reload();
     };
@@ -228,7 +229,7 @@ function ExamModalMain({ setExamModal, id }) {
                                                                     <div className="h-[42px] mt-1 relative parent">
                                                                         {
                                                                             answer.isTrue == "1" ?
-                                                                                <i class="bi bi-check-circle text-xl px-1 text-teal-500"></i>
+                                                                                <i className="bi bi-check-circle text-xl px-1 text-teal-500"></i>
                                                                                 :
                                                                                 <i className={`bi bi-circle text-xl px-1 outline-none text-gray-400`}></i>
                                                                         }

@@ -10,6 +10,7 @@ function CategoryModal({ setCategoryModal, id, depId, setShowCategoryMenu, setTr
     const navigate = useNavigate();
     const logout = () => {
         localStorage.clear();
+        sessionStorage.clear();
         navigate("/");
         window.location.reload();
     };

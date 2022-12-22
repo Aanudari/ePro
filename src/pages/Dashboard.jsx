@@ -6,10 +6,10 @@ import { useStateContext } from '../contexts/ContextProvider';
 function Dashboard() {
     const { showTop, setShowTop } = useStateContext();
     return (
-        <div className="w-full h-screen bg-gray-50 relative">
+        <div className="w-full min-h-[calc(100%-54px)] bg-gray-50 relative">
             <Navigation />
-            <div className="h-screen px-5 py-3">
-                <div className="w-full h-full bg-white rounded-lg p-5">
+            <div className="h-[calc(100%-54px)] px-5 py-3">
+                <div className="w-full h-[calc(100%-54px)] bg-white rounded-lg p-5">
                     Dashboard page
                     <div className='borderx h-10 flex'>
                         <div className='h-full w-[170px] border-r font-[400] flex items-center justify-center certain-item'>Хэрэглэгчийн нэр</div>

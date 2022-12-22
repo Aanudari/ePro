@@ -34,7 +34,7 @@ export const ContextProvider = ({ children }) => {
   const [time, setTime] = useState('');
   const [rightAnswer, setRightAnswer] = useState();
   const [rightAnswerCount, setRightAnswerCount] = useState(0);
-  // console.log(rightAnswerCount)
+  const [varientID, setVarientID] = useState();
   return (
     <StateContext.Provider value={{
       activeMenu, setActiveMenu, user, setUser, roleId, allRoles, sideBarTrack,
@@ -44,7 +44,7 @@ export const ContextProvider = ({ children }) => {
       examID, setExamID, qlength, setQlength, error, setError, gameStarted, setGameStarted,
       gameFinished, setGameFinished, someValue, uniqueRightAnswer, uniqueWrongAnswer, showAnswer, setShowAnswer,
       wrongValue, reminder, setReminder, examName, setExamName, time, setTime, rightAnswer, setRightAnswer,
-      rightAnswerCount, setRightAnswerCount
+      rightAnswerCount, setRightAnswerCount, varientID, setVarientID
     }}>
       {children}
     </StateContext.Provider>

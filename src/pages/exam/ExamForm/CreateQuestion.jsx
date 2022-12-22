@@ -76,7 +76,7 @@ function CreateQuestion({ index, valid, handleChange, countNum, listNum, pointSt
                         <div className='w-2/3 md:w-1/3 h-1/3 flex flex-col justify-center
                         items-center bg-[#50a3a2] text-white p-4 md:p-10
                         '>
-                            <i class="bi bi-exclamation-circle text-[40px]"></i>
+                            <i className="bi bi-exclamation-circle text-[40px]"></i>
                             <h6 className='font-bold'>Асуулт, хариултын утгыг бүрэн оруулна уу!</h6>
                         </div>
                     </div>

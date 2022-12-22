@@ -4,23 +4,25 @@ import { useStateContext } from "../../../contexts/ContextProvider";
 import { useEffect } from "react";
 import axios from "axios";
 
-export default function QuestionCorrection({roundedScore}) {
-  const { showAnswer, gameStarted, reminder, setReminder, setRightAnswer, rightAnswer} = useStateContext();
+export default function QuestionCorrection({roundedScore, Exam_chosen}) {
+  const { showAnswer, gameStarted, reminder, setReminder, setRightAnswer, rightAnswer, varientID, setShowAnswer} = useStateContext();
   var data = sessionStorage.getItem("exam_data");
+  var obj = JSON.parse(data)
   let user = localStorage.getItem("user")
   let userParsed = JSON.parse(user)
-  var obj = JSON.parse(data)
   const {TOKEN} = useStateContext();
-  console.log(obj)
   const [container, setContainer] = useState([]);
-  let answer = [[],[]]
+  let answer = [[],[],[]]
   useEffect(() => {
+    Exam_chosen(obj.id)
     const sorted = container.sort((a,b) => b.count - a.count)
     for (let index = 0; index < sorted.length; index++) {
       const element = sorted[index];
+      // console.log(element)
       if(!answer[0].includes(sorted[index].AquestionId)) {
               answer[0].push(element.AquestionId)
               answer[1].push(element.answerId)
+              answer[2].push(element.count)
             }
         }
   }, [container])
@@ -36,12 +38,13 @@ var datestring = value.getFullYear() + "" + addZero((value.getMonth() + 1)) + ad
     for (let index = 0; index < rightAnswer[1].length; index++) {
       const questionId = rightAnswer[1][index];
       const answerId = rightAnswer[1][index];
+      const isTrue = rightAnswer[2][index]
       let small = {
         "questionId": `${questionId}`,
         "onlyAnswerId": [
           {
             "answerId": `${answerId}`,
-            "isTrue": "string"
+            "isTrue": `${isTrue}`
           }
         ]
       }
@@ -49,31 +52,30 @@ var datestring = value.getFullYear() + "" + addZero((value.getMonth() + 1)) + ad
     }
     let schema = {
       "examId": `${obj.id}`,
-      "variantId": "string",
+      "variantId": `${varientID}`,
       "devId": `${userParsed.device_id}`,
       "score": `${roundedScore}`,
       "endAt": `${datestring}`,
       "onlyQuestionId": main
     }
-    console.log(schema)
-    // console.log(userParsed)
-    // console.log(obj)
-  // console.log(bluePrint)
-  // console.log("submiting exam result !")
-  //   axios({
-  //     method: "post",
-  //     headers: {
-  //         "Content-Type": "application/json",
-  //         'Authorization': `${TOKEN}`
-  //     },
-  //     url: `${process.env.REACT_APP_URL}/v1/ExamNew/end`,
-  //     data: bluePrint,
-  // })
-  //     .then((res) => {
-  //         console.log(res)
-  //     })
-  //     .catch((err) => console.log(err));
+    // console.log(JSON.stringify(schema))
+    axios({
+      method: "post",
+      headers: {
+          "Content-Type": "application/json",
+          "Authorization": TOKEN
+      },
+      url: `${process.env.REACT_APP_URL}/v1/ExamNew/end`,
+      data: schema,
+  })
+      .then((res) => {
+          console.log(res)
+      })
+      .catch((err) => {
+          console.log(err)
+      })
   }
+  
   return (
     <div className="flex w-full justify-center">
       <div className={gameStarted && !showAnswer ? 'w-full md:w-10/12  ' : null}>
@@ -109,7 +111,7 @@ var datestring = value.getFullYear() + "" + addZero((value.getMonth() + 1)) + ad
                   <p className="font-bold text-white">Та шалгалтаа дуусгахдаа итгэлтэй байна уу ?</p>
                     <div className='flex justify-end'>
                         <button onClick={() => {
-                // setShowAnswer(!showAnswer)
+                setShowAnswer(!showAnswer)
                 handleSubmit()
               }} className='intro-button'>Тийм</button>
                         <button onClick={() => {

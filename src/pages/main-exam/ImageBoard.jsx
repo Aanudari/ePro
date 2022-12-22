@@ -10,6 +10,7 @@ function ImageBoard({imgStatus, setImgStatus}) {
     const [fileId, setFileId] = useState(false);
     const logout = () => {
         localStorage.clear();
+        sessionStorage.clear();
         navigate("/");
         window.location.reload();
       };

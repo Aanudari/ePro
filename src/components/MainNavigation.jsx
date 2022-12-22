@@ -72,7 +72,7 @@ function MainNavigation() {
                       navigate("/exam-dash");
                     }}
                   >
-                    Exam new 
+                    Exam new
                   </a>
                 </li>
               </ul>
@@ -176,19 +176,17 @@ function MainNavigation() {
               </ul>
             </li>
             <li>
-              <a>
+              <a
+                onClick={() => {
+                  navigate("/trainings");
+                }}
+              >
                 <i className="bi bi-book absolute top-[17px] left-[17px]"></i>
                 <span>Сургалт</span>
               </a>
-              <ul>
+              {/* <ul>
                 <li>
-                  <a
-                    onClick={() => {
-                      navigate("/create-training");
-                    }}
-                  >
-                    Сургалт төлөвлөх
-                  </a>
+                  <a>Сургалт төлөвлөх</a>
                 </li>
                 <li>
                   <a
@@ -208,9 +206,9 @@ function MainNavigation() {
                     Сургалтууд
                   </a>
                 </li>
-              </ul>
+              </ul> */}
             </li>
-            <li>
+            {/* <li>
               <a
                 onClick={() => {
                   navigate("/calendar");
@@ -219,7 +217,7 @@ function MainNavigation() {
                 <i className="bi bi-calendar-check absolute top-[17px] left-[17px]"></i>
                 <span>Calendar</span>
               </a>
-            </li>
+            </li> */}
             <li>
               <a
                 onClick={() => {

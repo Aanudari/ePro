@@ -8,6 +8,8 @@ import { arraySearch } from "../../service/searchArray";
 import Select from "react-select";
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
+import fs from "fs";
+const FormData = require("form-data");
 function TrainingFiles() {
   const location = useLocation();
   const { TOKEN } = useStateContext();
@@ -50,34 +52,6 @@ function TrainingFiles() {
     setShowDelete(true);
     setId(e.currentTarget.dataset.id);
   };
-  const [selectedFile, setSelectedFile] = useState(null);
-  const handleCreate = (event) => {
-    event.preventDefault();
-    const formData = new FormData();
-    formData.append("selectedFile", selectedFile);
-
-    axios({
-      method: "post",
-      headers: {
-        accept: "text/plain",
-        Authorization: `${TOKEN}`,
-        "Content-Type": "multipart/form-data",
-      },
-      url: `http://192.168.10.248:9000/v1/TrainingFile/fileadd`,
-      data: "formData",
-    })
-      .then((res) => {
-        if (res.data.isSuccess === true) {
-          notification.success(`${res.data.resultMessage}`);
-          hideModalDelete();
-          const timer = setTimeout(() => navigate(0), 1000);
-          return () => clearTimeout(timer);
-        } else {
-          console.log(res.data.resultMessage);
-        }
-      })
-      .catch((err) => console.log(err));
-  };
   const handleDelete = () => {
     axios({
       method: "delete",
@@ -99,8 +73,37 @@ function TrainingFiles() {
       })
       .catch((err) => console.log(err));
   };
+  const [selectedFile, setSelectedFile] = useState(false);
   const handleFileSelect = (event) => {
     setSelectedFile(event.target.files[0]);
+  };
+  const handleCreate = async (event) => {
+    event.preventDefault();
+    const data = new FormData();
+    data.append("file", selectedFile);
+    axios({
+      method: "post",
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `${TOKEN}`,
+      },
+      url: `http://192.168.10.248:9000/v1/TrainingFile/fileadd`,
+      data,
+    })
+      .then((res) => {
+        if (res.data.isSuccess === true) {
+          notification.success(`${res.data.resultMessage}`);
+          const timer = setTimeout(() => navigate(0), 1000);
+          return () => clearTimeout(timer);
+        }
+        if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage == "Input string was not in a correct format."
+        ) {
+          logout();
+        }
+      })
+      .catch((err) => console.log(err));
   };
   return (
     <div className="w-full h-screen bg-gray-50">
@@ -126,7 +129,6 @@ function TrainingFiles() {
                 </label>
                 <input
                   className="block w-full text-sm-100 font-normal text-black dark:text-gray-400 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                  id="file_input"
                   type="file"
                   onChange={handleFileSelect}
                 />

@@ -29,6 +29,9 @@ function TrainingCategory() {
   const [showDelete, setShowDelete] = useState(null);
   const hideModalDelete = () => setShowDelete(null);
   const [id, setId] = useState();
+  const [showEdit, setShowEdit] = useState(null);
+  const hideModalEdit = () => setShowEdit(null);
+  const [editData, setEditData] = useState();
   const [department, setDepartment] = useState();
   const [selectedOptiondepartment, setSelectedOptiondepartment] =
     useState(null);
@@ -85,7 +88,8 @@ function TrainingCategory() {
     setId(e.currentTarget.dataset.id);
   };
   const handleEdit = (e) => {
-    alert(e.currentTarget.dataset.id);
+    setShowEdit(true);
+    setEditData(e);
   };
   const handleCreate = () => {
     setShowCreate(true);
@@ -289,6 +293,105 @@ function TrainingCategory() {
           </Modal.Body>
         </Modal>
         //edit
+        <Modal
+          show={showEdit}
+          onHide={hideModalEdit}
+          size="ml"
+          //   backdrop="static"
+          keyboard={false}
+          aria-labelledby="contained-modal-title-vcenter"
+          dialogClassName="modal-100w"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Ангилал засах</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="max-w-screen-lg mx-auto">
+              <div className="md:col-span-1">
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  name
+                </label>
+                <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
+                  <input
+                    type="text"
+                    className="outline-none  w-full rounded bg-gray-50 h-10 block p-2"
+                    // onChange={(e) => {
+                    //   setName(e.target.value);
+                    //   setcheckEmpty1(false);
+                    // }}
+                    // id={checkEmpty1 === true ? "border-red" : null}
+                  />
+                </div>
+              </div>
+
+              <div className="md:col-span-1">
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  startDate
+                </label>
+                <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
+                  <DatePicker
+                    className="outline-none text-center text-sm  outline-none  focus:ring-0 bg-transparent"
+                    selected={date1}
+                    onChange={(date) => setDate1(date)}
+                    selectsStart
+                    startDate={date1}
+                    dateFormat="yyyy, MM сарын dd"
+                  />
+                </div>
+              </div>
+              <div className="md:col-span-1">
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  endDate
+                </label>
+                <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
+                  <DatePicker
+                    className="outline-none text-center text-sm  outline-none  focus:ring-0 bg-transparent"
+                    selected={date2}
+                    onChange={(date) => setDate2(date)}
+                    selectsStart
+                    startDate={date2}
+                    dateFormat="yyyy, MM сарын dd"
+                  />
+                </div>
+              </div>
+              <div className="md:col-span-1">
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  department
+                </label>
+                <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1 ">
+                  <Select
+                    className="outline-none  w-full rounded bg-gray-50"
+                    options={department}
+                    defaultValue={selectedOptiondepartment}
+                    // onChange={(item) => {
+                    //   handleOrg(item);
+                    //   setcheckEmpty2(false);
+                    // }}
+                    // id={checkEmpty2 === true ? "border-red" : null}
+                    noOptionsMessage={({ inputValue }) =>
+                      !inputValue && "Сонголт хоосон байна"
+                    }
+                    getOptionLabel={(option) => option.name}
+                    getOptionValue={(option) => option.id}
+                  />
+                </div>
+              </div>
+
+              <div className="col-span-1 text-right mt-4">
+                <div className="inline-flex items-end">
+                  <button
+                    onClick={navigateIndex}
+                    type="submit"
+                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal>
       </div>
       <Navigation />
 

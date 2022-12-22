@@ -64,6 +64,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import CreateRate from "./pages/rating/rate-users/CreateRate";
 import ExamDash from "./pages/main-exam/examDashboard";
 import "react-toastify/dist/ReactToastify.css";
+import RatingCore from "./pages/ratingMain/RatingCore";
 function App() {
   const { activeMenu, showTop, roleId, error, setError } = useStateContext();
   const { width } = getWindowDimensions();
@@ -499,6 +500,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199, 1, 4]}>
                 <UserThanks />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/rating-main"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <RatingCore />
               </ProtectedRoute>
             }
           />

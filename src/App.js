@@ -28,8 +28,12 @@ import Dashboard from "./pages/Dashboard";
 import PrepareQuestions from "./components/PrepareQuestions";
 import LevelOneUI from "./pages/userUI/LevelOne/LevelOneUI";
 import ErrorThanks from "./pages/error-thanks/ErrorThanks";
+import Thanks from "./pages/error-thanks/Thanks";
 import CreateErrorThanks from "./pages/error-thanks/CreateErrorThanks";
+import CreateThanks from "./pages/error-thanks/CreateThanks";
 import EditErrorThanks from "./pages/error-thanks/EditErrorThanks";
+import UserErrorThanks from "./pages/error-thanks/UserErrorThanks";
+import UserThanks from "./pages/error-thanks/UserThanks";
 import UINavigation from "./components/UINavigation";
 import LevelOneUITakeExam from "./pages/userUI/LevelOne/LevelOneUITakeExam";
 import LevelOneUIExamResult from "./pages/userUI/LevelOne/LevelOneUIExamResult";
@@ -96,7 +100,23 @@ function App() {
             path="/trainings"
             element={
               <ProtectedRoute allowedRoles={[199]}>
-                <Traingings />
+                <Training />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/training-files"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <TrainingFiles />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/training-category"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <TrainingCategory />
               </ProtectedRoute>
             }
           />
@@ -303,6 +323,16 @@ function App() {
             }
           />
           <Route
+            path="/exam-dash"
+            element={
+              <QueryClientProvider client={queryClient}>
+                <ProtectedRoute allowedRoles={[199]}>
+                  <ExamDash />
+                </ProtectedRoute>
+              </QueryClientProvider>
+            }
+          />
+          <Route
             path="/error-thanks"
             element={
               <ProtectedRoute allowedRoles={[199]}>
@@ -311,13 +341,11 @@ function App() {
             }
           />
           <Route
-            path="/exam-dash"
+            path="/thanks"
             element={
-              <QueryClientProvider client={queryClient}>
-                <ProtectedRoute allowedRoles={[199]}>
-                  <ExamDash />
-                </ProtectedRoute>
-              </QueryClientProvider>
+              <ProtectedRoute allowedRoles={[199]}>
+                <Thanks />
+              </ProtectedRoute>
             }
           />
           <Route
@@ -329,10 +357,34 @@ function App() {
             }
           />
           <Route
+            path="/create-thanks"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <CreateThanks />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/edit-error-thanks"
             element={
               <ProtectedRoute allowedRoles={[199]}>
                 <EditErrorThanks />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/user-error-thanks"
+            element={
+              <ProtectedRoute allowedRoles={[199, 1, 4]}>
+                <UserErrorThanks />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/user-thanks"
+            element={
+              <ProtectedRoute allowedRoles={[199, 1, 4]}>
+                <UserThanks />
               </ProtectedRoute>
             }
           />

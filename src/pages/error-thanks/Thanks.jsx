@@ -6,14 +6,16 @@ import axios from "axios";
 import { Modal } from "react-bootstrap";
 import { arraySearch } from "../../service/searchArray";
 import Select from "react-select";
+import ReactPaginate from "react-paginate";
+
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
 
 // import "./pg.css";
-function ErrorThanks() {
-  const location = useLocation();
+function Thanks() {
   const { TOKEN } = useStateContext();
   const navigate = useNavigate();
+  const location = useLocation();
   const logout = () => {
     localStorage.clear();
     sessionStorage.clear();
@@ -21,7 +23,7 @@ function ErrorThanks() {
     window.location.reload();
   };
   let color = "blue";
-  const [currentTab, setCurrentTab] = useState("3");
+  const [currentTab, setCurrentTab] = useState(`${location.state.type}`);
   const [complainInfo, setComplainInfo] = useState();
   const [complain, setComplain] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
@@ -48,7 +50,6 @@ function ErrorThanks() {
         //   res.data.complainInfos.sort((a, b) => (a.qty < b.qty ? 1 : -1))
         // );
         setComplainInfo(res.data.complainInfos);
-
         if (res.data.resultMessage === "Unauthorized") {
           logout();
         }
@@ -71,23 +72,12 @@ function ErrorThanks() {
       })
       .catch((err) => console.log(err));
   }, []);
-  // const total = complain.reduce(
-  //   (total, currentItem) => (total = total + Math.floor(currentItem.too)),
-  //   0
-  // );
-  // console.log(total);
 
   const handleTabClick = (e) => {
-    if (e.target.id == 3) {
-      navigate("/thanks", {
+    if (e.target.id == 2 || e.target.id == 1) {
+      navigate("/error-thanks", {
         state: { type: e.target.id },
       });
-    }
-    if (e.target.id == 2) {
-      setCurrentTab(e.target.id);
-    }
-    if (e.target.id == 1) {
-      setCurrentTab(e.target.id);
     }
   };
   const handleCreate = () => {
@@ -130,44 +120,8 @@ function ErrorThanks() {
       state: { data: tab },
     });
   };
-  const [page, setPage] = useState(0);
-  const dataPerPage = 3;
-  const numberOfdataVistited = page * dataPerPage;
 
-  let one = [];
-  let two = [];
-  let three = [];
-  const [status, setStatus] = useState("1");
-  for (let index = 0; index < complain.length; index++) {
-    const element = complain[index];
-    if (element.complain === "1") {
-      one.push(element.complain);
-    }
-    if (element.complain === "2") {
-      two.push(element.complain);
-    }
-    if (element.complain === "3") {
-      three.push(element.complain);
-    }
-  }
-  const changePage = ({ selected }) => {
-    setPage(selected);
-  };
-  let final;
-  const handlePageCount = () => {
-    if (status == "1") {
-      final = one.length;
-    }
-    if (status == "2") {
-      final = two.length;
-    }
-    if (status == "3") {
-      final = three.length;
-    }
-  };
   const [count, setCount] = useState();
-  handlePageCount();
-  const totalPages = Math.ceil(parseInt(final) / dataPerPage);
 
   const handleOnChange = async (e) => {
     let value = e.target.value;
@@ -271,7 +225,7 @@ function ErrorThanks() {
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
             <p className="focus:outline-none text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">
-              Алдаа талархал
+              Талархал
             </p>
             <div className="my-2 flex sm:flex-row flex-col">
               <div className="mr-2">
@@ -303,9 +257,6 @@ function ErrorThanks() {
                 {complainInfo
                   ? complainInfo.map((tab, i) => (
                       <li
-                        // onClick={() => {
-                        //   setStatus(tab.id);
-                        // }}
                         key={i}
                         className="-mb-px mr-2 last:mr-2 mt-2 flex-auto text-center"
                       >
@@ -347,10 +298,10 @@ function ErrorThanks() {
                   <th className="px-4 py-3 font-bold">Харьяалагдах хэлтэс </th>
                   <th className="px-4 py-3 font-bold">Ажлын байр </th>
                   <th className="px-4 py-3 font-bold">Ажилтны нэр </th>
-                  <th className="px-4 py-3 font-bold">Гомдлын төрөл </th>
-                  <th className="px-4 py-3 font-bold">Гомдлын дэлгэрэнгүй </th>
-                  <th className="px-4 py-3 font-bold">Журам </th>
-                  <th className="px-4 py-3 font-bold">Алдаа </th>
+                  <th className="px-4 py-3 font-bold">Төрөл </th>
+                  <th className="px-4 py-3 font-bold">Дэлгэрэнгүй </th>
+                  <th className="px-4 py-3 font-bold">Бүртгэгдсэн суваг </th>
+                  <th className="px-4 py-3 font-bold">Тоогоор </th>
                   <th className="px-4 py-3 font-bold">Action </th>
                 </tr>
               </thead>
@@ -432,4 +383,4 @@ function ErrorThanks() {
   );
 }
 
-export default ErrorThanks;
+export default Thanks;

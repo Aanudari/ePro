@@ -5,9 +5,9 @@ function Home() {
   const [showSettings, setshowSettings] = useState(false);
   const [showIndividual, setShowIndividual] = useState(false);
   return (
-    <div className="w-full h-screen bg-[#50a3a2]">
+    <div className="w-full bg-[#50a3a2]">
       <Navigation />
-      <div className="h-full px-5 py-3 flex gap-2">
+      <div className="h-[calc(100vh-56px)] px-5 py-3 flex gap-2">
         <div style={{
           backgroundSize: "cover",
           backgroundImage: `url("https://media.istockphoto.com/vectors/online-cloud-file-query-and-management-isometric-businessman-holding-vector-id1294081206?k=20&m=1294081206&s=612x612&w=0&h=19dJEa2eUHR7KMDzoFGBsXBQu9kGHtbg6ZXj4JJbZQc=")`

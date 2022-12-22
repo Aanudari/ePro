@@ -10,6 +10,7 @@ import CategoryModal from './CategoryModal';
 import ExamModalMain from './ExamModalMain';
 import ImageBoard from './ImageBoard';
 import AddCategoryMenu from './AddCategoryMenu';
+import Document from './Document';
 function ExamDash() {
     const [examModalId, setexamModalId] = useState();
     const [categoryModal, setCategoryModal] = useState(false);
@@ -33,7 +34,7 @@ function ExamDash() {
                 "Content-Type": "application/json",
                 'Authorization': `${TOKEN}`
             },
-            url: "http://192.168.10.248:9000/v1/ExamNew",
+            url: `${process.env.REACT_APP_URL}/v1/ExamNew`,
         })
             .then(
                 res => {
@@ -53,7 +54,7 @@ function ExamDash() {
                 "Content-Type": "application/json",
                 'Authorization': `${TOKEN}`
             },
-            url: "http://192.168.10.248:9000/v1/Pool/Category",
+            url: `${process.env.REACT_APP_URL}/v1/Pool/Category`,
         })
             .then(
                 res => {
@@ -78,6 +79,8 @@ function ExamDash() {
     }
     const [showCategoryMenu, setShowCategoryMenu] = useState(false);
     const [showAddCategory, setShowAddCategory] = useState(false);
+    const [showReport, setShowReport] = useState(false);
+    const [documentId, setDocumentId] = useState();
     return ( 
     <div className="w-full min-h-screen bg-gray-200 relative">
       <Navigation />
@@ -91,11 +94,15 @@ function ExamDash() {
             showAddCategory={showAddCategory} setShowAddCategory={setShowAddCategory}/> 
             }
             <ExamBoard examModal={examModal} setExamModal={setExamModal} exams={data && data}
-            handleExamModal={handleExamModal}
+            handleExamModal={handleExamModal} setShowReport={setShowReport}
             />
             {
                 imgStatus && 
                 <ImageBoard imgStatus={imgStatus} setImgStatus={setImgStatus}/>
+            }
+            {
+                showReport && 
+                <Document setShowReport={setShowReport}/>
             }
         </div>
             <ExamBoardController imgStatus={imgStatus} setImgStatus={setImgStatus} 

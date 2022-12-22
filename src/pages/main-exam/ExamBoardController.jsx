@@ -5,14 +5,13 @@ function ExamBoardController({showCategoryMenu, setShowCategoryMenu, imgStatus, 
         ">
             <button onClick={() => {
                 setShowCategoryMenu(true)
-            }} className="w-full py-2 border active:bg-gray-200 hover:bg-gray-100">
-            Категори үзэх <i className="bi bi-caret-down ml-2"></i>
+            }} className="w-full py-3 rounded-full active:bg-gray-200 hover:bg-gray-100">
+            <i className="bi bi-bookmarks text-2xl text-teal-600"></i>
             </button>
             <button onClick={() => {
                 setImgStatus(!imgStatus)
-            }} className="w-full py-2 border mt-2 active:bg-gray-200 hover:bg-gray-100 ">
-            Файлууд
-            <i className="bi bi-caret-down ml-2"></i>
+            }} className="w-full py-3 rounded-full active:bg-gray-200 hover:bg-gray-100">
+            <i className="bi bi-card-image text-2xl text-teal-600"></i>
             </button>
         </div>
      );

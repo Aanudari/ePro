@@ -31,11 +31,12 @@ function TrainingCategory() {
   const [id, setId] = useState();
   const [showEdit, setShowEdit] = useState(null);
   const hideModalEdit = () => setShowEdit(null);
-  const [editData, setEditData] = useState();
+  const [editData, setEditData] = useState([]);
   const [department, setDepartment] = useState();
   const [selectedOptiondepartment, setSelectedOptiondepartment] =
     useState(null);
   const [name, setName] = useState("");
+  const [nameEdit, setNameEdit] = useState("");
   const [departmentID, setDepartmentID] = useState("");
   const format = "YYYYMMDDHHmmss";
   const [date1, setDate1] = useState(new Date());
@@ -142,17 +143,51 @@ function TrainingCategory() {
         data: JSON.stringify(data),
       })
         .then((res) => {
-          if (res.data.isSuccess === true) {
-            console.log(res.data);
-            // notification.success(`${res.data.resultMessage}`);
-            // hideModalCreate();
-            // const timer = setTimeout(() => navigate(0), 1000);
-            // return () => clearTimeout(timer);
+          if (res.data.isSuccess == true) {
+            notification.success(`${res.data.resultMessage}`);
+            hideModalCreate();
+            const timer = setTimeout(() => navigate(0), 1000);
+            return () => clearTimeout(timer);
           }
         })
         .catch((err) => console.log(err));
     }
   };
+  const startDateEdit = moment(editData.startDate).format(format);
+  const endDateEdit = moment(editData.endDate).format(format);
+  const editDataSet = {
+    id: `${editData.id}`,
+    name: `${nameEdit}` === "" ? editData.name : `${nameEdit}`,
+    startDate: `${startDateEdit}`,
+    endDate: `${endDateEdit}`,
+    department: `${editData.department}`,
+  };
+
+  const navigateIndexEdit = (e) => {
+    e.preventDefault();
+    axios({
+      method: "put",
+      headers: {
+        Authorization: `${TOKEN}`,
+        "Content-Type": "application/json",
+        accept: "text/plain",
+      },
+      url: `http://192.168.10.248:9000/v1/Training/category/edit`,
+      data: JSON.stringify(editDataSet),
+    })
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.isSuccess === true) {
+          console.log(res.data);
+          notification.success(`${res.data.resultMessage}`);
+          hideModalCreate();
+          const timer = setTimeout(() => navigate(0), 1000);
+          return () => clearTimeout(timer);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div className="w-full h-screen bg-gray-50">
       <div>
@@ -316,64 +351,10 @@ function TrainingCategory() {
                   <input
                     type="text"
                     className="outline-none  w-full rounded bg-gray-50 h-10 block p-2"
-                    // onChange={(e) => {
-                    //   setName(e.target.value);
-                    //   setcheckEmpty1(false);
-                    // }}
-                    // id={checkEmpty1 === true ? "border-red" : null}
-                  />
-                </div>
-              </div>
-
-              <div className="md:col-span-1">
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  startDate
-                </label>
-                <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                  <DatePicker
-                    className="outline-none text-center text-sm  outline-none  focus:ring-0 bg-transparent"
-                    selected={date1}
-                    onChange={(date) => setDate1(date)}
-                    selectsStart
-                    startDate={date1}
-                    dateFormat="yyyy, MM сарын dd"
-                  />
-                </div>
-              </div>
-              <div className="md:col-span-1">
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  endDate
-                </label>
-                <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                  <DatePicker
-                    className="outline-none text-center text-sm  outline-none  focus:ring-0 bg-transparent"
-                    selected={date2}
-                    onChange={(date) => setDate2(date)}
-                    selectsStart
-                    startDate={date2}
-                    dateFormat="yyyy, MM сарын dd"
-                  />
-                </div>
-              </div>
-              <div className="md:col-span-1">
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  department
-                </label>
-                <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1 ">
-                  <Select
-                    className="outline-none  w-full rounded bg-gray-50"
-                    options={department}
-                    defaultValue={selectedOptiondepartment}
-                    // onChange={(item) => {
-                    //   handleOrg(item);
-                    //   setcheckEmpty2(false);
-                    // }}
-                    // id={checkEmpty2 === true ? "border-red" : null}
-                    noOptionsMessage={({ inputValue }) =>
-                      !inputValue && "Сонголт хоосон байна"
-                    }
-                    getOptionLabel={(option) => option.name}
-                    getOptionValue={(option) => option.id}
+                    defaultValue={editData.name}
+                    onChange={(e) => {
+                      setNameEdit(e.target.value);
+                    }}
                   />
                 </div>
               </div>
@@ -381,7 +362,7 @@ function TrainingCategory() {
               <div className="col-span-1 text-right mt-4">
                 <div className="inline-flex items-end">
                   <button
-                    onClick={navigateIndex}
+                    onClick={navigateIndexEdit}
                     type="submit"
                     className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
                   >

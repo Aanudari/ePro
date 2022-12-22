@@ -33,7 +33,7 @@ function Traingings() {
       <Navigation />
       <div className="h-screen px-5 py-3">
         <div className="w-full h-full bg-white rounded-lg p-5 flex flex-col gap-2">
-          <button onClick={handleCreate}>ADD</button>
+          <button onClick={handleCreate}>Create training</button>
           <button onClick={navigateFiles}>Training files</button>
           <button onClick={navigateCategory}>Training category</button>
           {/* <TrainCell />

@@ -21,6 +21,7 @@ function Navigation() {
   const navigate = useNavigate();
   const logout = () => {
     localStorage.clear();
+    sessionStorage.clear();
     navigate("/");
     window.location.reload();
   };

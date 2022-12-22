@@ -38,12 +38,12 @@ export default function Question({
         );
     }, []);
     const [count, setCount] = useState(0);
-    const handleCheck = (answerId, questionId) => {
+    const handleCheck = (answerId, questionId, isTrue) => {
         setCount(count + 1)
         let arr = {
             AquestionId : questionId,
             answerId : answerId,
-            count : count
+            count : isTrue
         }
             setContainer((prev) => [...prev, arr])
     }
@@ -69,7 +69,7 @@ export default function Question({
                                     id={value}
                                     onChange={(e) => {
                                         setAnswer(text.id)
-                                        handleCheck(text.id, data.id)
+                                        handleCheck(text.id, data.id, text.isTrue)
                                     }}
                                     checked={
                                         text.id === answer

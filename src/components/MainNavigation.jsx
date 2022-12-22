@@ -23,75 +23,33 @@ function MainNavigation() {
             </span>
           </div>
           <ul className="h-full">
-            <li>
-              <a
-                onClick={() => {
+            <li onClick={() => {
                   navigate("/dashboard");
-                }}
+                }} className="cursor-pointer active:opacity-80">
+              <a
               >
                 <i className="bi bi-calendar-check absolute top-[17px] left-[17px]"></i>
                 <span>Хянах самбар</span>
               </a>
             </li>
-            <li>
-              <a className="relative">
-                <i className="bi bi-clock absolute top-[17px] left-[17px]"></i>
+            <li onClick={() => {
+                      navigate("/exam-dash");
+                    }} className="relative cursor-pointer active:opacity-80 ">
+              <a >
+                <i onClick={() => {
+                      navigate("/exam-dash");
+                    }} className="bi bi-clock absolute top-[17px] left-[17px] "></i>
                 <span>Шалгалт</span>
               </a>
-              <ul>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/exam-form");
-                    }}
-                  >
-                    Шалгалтын форм
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/exam-pool");
-                    }}
-                  >
-                    Шалгалтын сан
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/exam-result");
-                    }}
-                  >
-                    Шалгалтын дүн харах
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/exam-dash");
-                    }}
-                  >
-                    Exam new
-                  </a>
-                </li>
-              </ul>
             </li>
-            <li>
+            <li onClick={() => {
+                      navigate("/rating-main");
+                    }} className="relative cursor-pointer active:opacity-80 "> 
               <a>
                 <i className="bi bi-bar-chart-line absolute top-[17px] left-[17px]"></i>
                 <span>Үнэлгээ</span>
               </a>
-              <ul>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/rating-main");
-                    }}
-                  >
-                    rating new !
-                  </a>
-                </li>
+              {/* <ul>
                 <li>
                   <a
                     onClick={() => {
@@ -99,15 +57,6 @@ function MainNavigation() {
                     }}
                   >
                     Үнэлгээ үүсгэх
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/level-one");
-                    }}
-                  >
-                    level 1
                   </a>
                 </li>
                 <li>
@@ -173,7 +122,7 @@ function MainNavigation() {
                     Bank
                   </a>
                 </li>
-              </ul>
+              </ul> */}
             </li>
             <li>
               <a

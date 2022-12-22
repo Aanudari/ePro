@@ -12,6 +12,7 @@ function CreateExamMain({checked, depId, setCategoryModal, setShowCategoryMenu, 
     const navigate = useNavigate();
     const logout = () => {
         localStorage.clear();
+        sessionStorage.clear();
         navigate("/");
         window.location.reload();
     };

@@ -22,6 +22,7 @@ function ExamDash() {
     const [imgStatus, setImgStatus] = useState(false);
     const logout = () => {
       localStorage.clear();
+      sessionStorage.clear();
       navigate("/");
       window.location.reload();
     };

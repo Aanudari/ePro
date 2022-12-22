@@ -20,10 +20,16 @@ function useCounter(initialState) {
 }
 
 export default function ExamInit() {
-  const { TOKEN, qlength, setQlength, error, setError, gameStarted, setGameStarted, gameFinished,
-    setGameFinished, uniqueRightAnswer, uniqueWrongAnswer, showAnswer, setShowAnswer, rightAnswer } = useStateContext();
+  const { TOKEN, qlength, setQlength, gameStarted, setGameStarted, gameFinished, showAnswer, 
+    setShowAnswer, rightAnswer, setVarientID } = useStateContext();
   const examId = sessionStorage.getItem("exam_id")
   const navigate = useNavigate();
+  const logout = () => {
+    localStorage.clear();
+    sessionStorage.clear();
+    navigate("/");
+    window.location.reload();
+  };
   useEffect(() => {
     axios({
       method: "get",
@@ -31,20 +37,17 @@ export default function ExamInit() {
         "Content-Type": "application/json",
         'Authorization': `${TOKEN}`
       },
-      url: `http://192.168.10.248:9000/v1/ExamNew/start?examId=${examId}`,
+      url: `${process.env.REACT_APP_URL}/v1/ExamNew/start?examId=${examId}`,
       
     })
       .then(
         res => {
-          console.log(res)
           sessionStorage.setItem("exam_data", JSON.stringify(res.data.variantInfo));
           setQlength(res.data.variantInfo.questionList.length)
         }
       )
       .catch(err => console.log("message"))
   }, [examId])
-
-
   //display width tootsooloh
   const { width } = getWindowDimensions();
   //display width tootsooloh
@@ -75,12 +78,31 @@ export default function ExamInit() {
     }
   }
   let length = questions?.questionList.length
+  const [exam_chosen, Exam_chosen] = useState();
   // console.log(correct + " correct ALL")
   // console.log(rightAnswer && rightAnswer[1] + " chosen")
   const intersection = rightAnswer && correct.filter(element => rightAnswer[1].includes(element));
   const outsection = rightAnswer && correct.filter(element => !rightAnswer[1].includes(element));
   let score = intersection?.length * 100 / length
   let roundedScore = Math.round(score, -1)
+  let eId = sessionStorage.getItem("exam_id")
+  // console.log(eId)
+  const handleStartExam = () => {
+    axios({
+      method: "get",
+      headers: {
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/ExamNew/start?examId=${eId}`,
+    })
+      .then((res) => {
+        setVarientID(res.data.variantInfo.id)
+        if (res.data.resultMessage === "Unauthorized") {
+          logout();
+        }
+      })
+      .catch((err) => console.log(err));
+  }
   return (
     <div className="body flex-col">
       {
@@ -173,6 +195,7 @@ export default function ExamInit() {
                     {
                       setGameStarted(true)
                     setShowAnswer(false)
+                    handleStartExam()
                     }
                   }
                 >
@@ -186,7 +209,7 @@ export default function ExamInit() {
         <div className="game-area">
           {gameStarted && !showAnswer ?(
             <>
-              <QuestionCorrection data={questions} roundedScore={roundedScore}/>
+              <QuestionCorrection Exam_chosen={Exam_chosen} data={questions} roundedScore={roundedScore}/>
             </>
           ) : null
           }

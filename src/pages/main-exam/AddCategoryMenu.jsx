@@ -9,6 +9,7 @@ function AddCategoryMenu({ showAddCategory, setShowAddCategory }) {
     const navigate = useNavigate();
     const logout = () => {
         localStorage.clear();
+        sessionStorage.clear();
         navigate("/");
         window.location.reload();
     };

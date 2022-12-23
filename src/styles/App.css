@@ -1,6 +1,13 @@
-
-table, th, td {
-  border:1px solid black;
+table,
+th,
+td {
+  border: 1px solid black;
+}
+.c-card img {
+  transition: transform 0.3s ease-in-out;
+}
+.c-card:hover img {
+  transform: scale(1.05);
 }
 
 .box {
@@ -25,7 +32,6 @@ a {
   border-radius: 0;
 }
 
-
 .cellx {
   background-color: #f4511e;
   border: none;
@@ -37,8 +43,9 @@ a {
   cursor: pointer;
 }
 
-.cellx:hover {opacity: 1}
-
+.cellx:hover {
+  opacity: 1;
+}
 
 .cellt {
   background-color: #206c98;
@@ -51,7 +58,9 @@ a {
   z-index: 1;
 }
 
-.cellt:hover {opacity: 1}
+.cellt:hover {
+  opacity: 1;
+}
 
 .cus-index {
   z-index: 1000;
@@ -72,14 +81,16 @@ a {
   z-index: 1;
 }
 
-.celly:hover {opacity: 1}
+.celly:hover {
+  opacity: 1;
+}
 
 .borderx {
   border: 1px solid silver;
 }
 .borderx:hover {
   /* background-color: white; */
-  border: .5px solid silver;
+  border: 0.5px solid silver;
   opacity: 0.9;
   box-shadow: 0 0 2px silver;
 }
@@ -97,15 +108,13 @@ a {
   opacity: 0.4;
 }
 
-
 .z-cus {
-  z-index: 100100
-  ;
+  z-index: 100100;
 }
 
 .side-commend {
   animation-name: appear;
-  animation-duration: .4s;
+  animation-duration: 0.4s;
 }
 
 @keyframes appear {
@@ -129,7 +138,9 @@ a {
   height: 90px;
 }
 
-.cellu:hover {opacity: 1}
+.cellu:hover {
+  opacity: 1;
+}
 
 .front-eth {
   z-index: 100100100;
@@ -140,12 +151,11 @@ a {
 }
 
 .glass {
-  background: rgba( 255, 255, 255, 0.25 );
-  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-  backdrop-filter: blur( 20px );
-  -webkit-backdrop-filter: blur( 10.5px );
-  border: 1px solid rgba( 255, 255, 255, 0.18 );
-
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(10.5px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 * {
   -webkit-user-select: none; /* Safari */
@@ -154,7 +164,14 @@ a {
 }
 
 .linear {
-  background-image: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12);
+  background-image: linear-gradient(
+    to right top,
+    #051937,
+    #004d7a,
+    #008793,
+    #00bf72,
+    #a8eb12
+  );
 }
 
 .shadow-cus-l {
@@ -163,18 +180,18 @@ a {
 
 .appearPoolMenu {
   animation: appearMenu;
-  animation-duration: .3s;
+  animation-duration: 0.3s;
 }
 .disappearPoolMenu {
   animation: disappearMenu;
-  animation-duration: .5s;
+  animation-duration: 0.5s;
   transition: all;
   transform: translateX(5);
 }
 
 @keyframes appearMenu {
   from {
-    right : -600px
+    right: -600px;
   }
   to {
     right: 0;
@@ -182,7 +199,7 @@ a {
 }
 @keyframes disappearMenu {
   from {
-    right : 0
+    right: 0;
   }
   to {
     right: -200px;

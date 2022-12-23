@@ -3,14 +3,15 @@ import "./styles/styles.scss";
 import "./styles/core.scss";
 import "./styles/modal.scss";
 import "./styles/validation.css";
+import "react-datepicker/dist/react-datepicker.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import AddCategory from "./pages/rating/rating/AddCategory";
 import { useStateContext } from "./contexts/ContextProvider";
 import Training from "./pages/training/Training";
-import TrainingFiles from "./pages/training/TrainingFiles"
-import TrainingCategory from "./pages/training/TrainingCategory"
+import TrainingFiles from "./pages/training/TrainingFiles";
+import TrainingCategory from "./pages/training/TrainingCategory";
 import TookTraining from "./pages/training/took-training";
 import CreateTraining from "./pages/training/create-training";
 import { ProtectedRoute } from "./components/ProtectedRoute";

@@ -23,28 +23,39 @@ function MainNavigation() {
             </span>
           </div>
           <ul className="h-full">
-            <li onClick={() => {
-                  navigate("/dashboard");
-                }} className="cursor-pointer active:opacity-80">
-              <a
-              >
+            <li
+              onClick={() => {
+                navigate("/dashboard");
+              }}
+              className="cursor-pointer active:opacity-80"
+            >
+              <a>
                 <i className="bi bi-calendar-check absolute top-[17px] left-[17px]"></i>
                 <span>Хянах самбар</span>
               </a>
             </li>
-            <li onClick={() => {
-                      navigate("/exam-dash");
-                    }} className="relative cursor-pointer active:opacity-80 ">
-              <a >
-                <i onClick={() => {
-                      navigate("/exam-dash");
-                    }} className="bi bi-clock absolute top-[17px] left-[17px] "></i>
+            <li
+              onClick={() => {
+                navigate("/exam-dash");
+              }}
+              className="relative cursor-pointer active:opacity-80 "
+            >
+              <a>
+                <i
+                  onClick={() => {
+                    navigate("/exam-dash");
+                  }}
+                  className="bi bi-clock absolute top-[17px] left-[17px] "
+                ></i>
                 <span>Шалгалт</span>
               </a>
             </li>
-            <li onClick={() => {
-                      navigate("/rating-main");
-                    }} className="relative cursor-pointer active:opacity-80 "> 
+            <li
+              onClick={() => {
+                navigate("/rating-main");
+              }}
+              className="relative cursor-pointer active:opacity-80 "
+            >
               <a>
                 <i className="bi bi-bar-chart-line absolute top-[17px] left-[17px]"></i>
                 <span>Үнэлгээ</span>
@@ -125,27 +136,11 @@ function MainNavigation() {
               </ul> */}
             </li>
             <li>
-              <a
-                onClick={() => {
-                  navigate("/trainings");
-                }}
-              >
+              <a>
                 <i className="bi bi-book absolute top-[17px] left-[17px]"></i>
                 <span>Сургалт</span>
               </a>
-              {/* <ul>
-                <li>
-                  <a>Сургалт төлөвлөх</a>
-                </li>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/took-training");
-                    }}
-                  >
-                    Сургалтанд хамрагдсан
-                  </a>
-                </li>
+              <ul>
                 <li>
                   <a
                     onClick={() => {
@@ -155,7 +150,25 @@ function MainNavigation() {
                     Сургалтууд
                   </a>
                 </li>
-              </ul> */}
+                <li>
+                  <a
+                    onClick={() => {
+                      navigate("/training-files");
+                    }}
+                  >
+                    Сургалтын файлууд
+                  </a>
+                </li>
+                <li>
+                  <a
+                    onClick={() => {
+                      navigate("/training-category");
+                    }}
+                  >
+                    Сургалтын ангилал
+                  </a>
+                </li>
+              </ul>
             </li>
             {/* <li>
               <a

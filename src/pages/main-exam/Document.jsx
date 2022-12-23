@@ -4,7 +4,7 @@ function Document({setShowReport}) {
     return ( 
         <div className={`fixed ${activeMenu ? 'w-[calc(100%-250px)] left-[250px]' : "w-full left-0"}  
          !bg-black top-[56px] h-[calc(100%-56px)] !bg-opacity-50  flex justify-end`}>
-      <div className="from-left bg-white w-1/2 h-full  flex flex-col justify-between shadow">
+      <div className="from-left bg-white w-[350px] h-full  flex flex-col justify-between shadow">
         <div className="px-3 pt-3">
           <h6 className="text-teal-600 text-[14px] flex justify-between">
             <span className="font-[500]">

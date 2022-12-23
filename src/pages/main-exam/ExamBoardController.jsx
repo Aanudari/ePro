@@ -1,6 +1,6 @@
 function ExamBoardController({showCategoryMenu, setShowCategoryMenu, imgStatus, setImgStatus}) {
     return ( 
-        <div className="w-full h-full bg-red-100 ml-2 bg-white shadow-sm
+        <div className="max-w-[calc(9%)] min-w-[calc(9%)] h-full ml-2 bg-white shadow-sm
         px-4 py-3 
         ">
             <button onClick={() => {

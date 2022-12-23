@@ -82,9 +82,9 @@ function ExamDash() {
     const [showReport, setShowReport] = useState(false);
     const [documentId, setDocumentId] = useState();
     return ( 
-    <div className="w-full min-h-screen bg-gray-200 relative">
+    <div className="w-full min-h-screen bg-teal-500 relative">
       <Navigation />
-      <div className='px-2 py-1 flex h-[calc(100%-64px)] items-end'>
+      <div className='px-2 py-1 flex h-[calc(100%-64px)] items-end justify-start'>
         <div className='h-full flex flex-col justify-between'>
             {
                 showCategoryMenu && 

@@ -3,7 +3,7 @@ import { useStateContext } from "../../contexts/ContextProvider"
 
 function ExamCategory({ categories, categoryModal, setCategoryModal, handleCategoryModal, setShowCategoryMenu,
     trigger, setTrigger, showAddCategory, setShowAddCategory }) {
-    const {TOKEN} = useStateContext();
+    const {TOKEN, activeMenu} = useStateContext();
     const deleteCategory = (value) => {
         axios({
             method: "delete",
@@ -21,8 +21,8 @@ function ExamCategory({ categories, categoryModal, setCategoryModal, handleCateg
             })
     }
     return (
-        <div className={`absolute top-[56px] w-[calc(100%-15px)] shadow bg core-bg-g h-[calc(100%-68px)] mb-2 h-full flex  px-3 
-        py-3 gap-2 drop-down`}>
+        <div className={`absolute top-[56px]  shadow bg core-bg-g h-[calc(100%-68px)] mb-2 h-full flex  px-3 
+        py-3 gap-2 drop-down ${activeMenu ? "w-[calc(100%-14px)]" : "w-[calc(100%-100px)]"} `}>
             <div className="w-full">
                 <button onClick={() => {
                     setShowAddCategory(!showAddCategory)

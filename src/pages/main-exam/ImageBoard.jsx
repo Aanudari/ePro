@@ -5,7 +5,7 @@ import { useStateContext } from "../../contexts/ContextProvider";
 
 function ImageBoard({imgStatus, setImgStatus}) {
     const navigate = useNavigate();
-    const {TOKEN} = useStateContext();
+    const {TOKEN, activeMenu} = useStateContext();
     const [data, setData] = useState();
     const [fileId, setFileId] = useState(false);
     const logout = () => {
@@ -51,10 +51,11 @@ function ImageBoard({imgStatus, setImgStatus}) {
                 console.log(err)
             })
     }
+    console.log(activeMenu)
     return ( 
-        <div className={`absolute top-[56px] w-[calc(100%-15px)] shadow bg core-bg-g h-[calc(100%-68px)] mb-2 h-full flex  px-3 
-        py-3 gap-2 drop-down`}>
-            <div className="w-full flex gap-2 ">
+        <div className={`absolute top-[56px] shadow bg core-bg-g h-[calc(100%-68px)] mb-2 h-full flex justify-between px-3 
+        py-3 gap-2 drop-down ${activeMenu ? "w-[calc(100%-10px)]" : "w-[calc(100%-100px)]"} `}>
+            <div className="flex gap-2 ">
                 {
                     data?.map((img, index) => (
                         <div key={index} className="relative parent w-[300px] h-[200px] ">

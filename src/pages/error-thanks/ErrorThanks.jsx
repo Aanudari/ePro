@@ -182,7 +182,7 @@ function ErrorThanks() {
     }
   };
   return (
-    <div className="w-full h-screen bg-gray-50">
+    <div className="w-full min-h-[calc(100%-56px)] ">
       <div>
         <Modal
           show={showCreate}
@@ -267,7 +267,7 @@ function ErrorThanks() {
         </Modal>
       </div>
       <Navigation />
-      <div className="sm:px-6 w-full">
+      <div className=" w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
             <p className="focus:outline-none text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">
@@ -293,121 +293,138 @@ function ErrorThanks() {
           </div>
         </div>
 
-        <div className="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10">
-          <div className="sm:flex items-center justify-between">
-            <div className="flex items-center">
-              <ul
-                className="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row"
-                role="tablist"
-              >
-                {complainInfo
-                  ? complainInfo.map((tab, i) => (
-                      <li
-                        // onClick={() => {
-                        //   setStatus(tab.id);
-                        // }}
-                        key={i}
-                        className="-mb-px mr-2 last:mr-2 mt-2 flex-auto text-center"
-                      >
-                        <a
-                          className={
-                            "text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " +
-                            (currentTab === `${tab.id}`
-                              ? "text-white bg-" + color + "-600"
-                              : "text-" + color + "-600 bg-white")
-                          }
-                          key={i}
-                          id={tab.id}
-                          disabled={currentTab === `${tab.id}`}
-                          onClick={handleTabClick}
-                        >
-                          {tab.category}
-                        </a>
-                      </li>
-                    ))
-                  : null}
-              </ul>
-            </div>
+        <div className="w-full px-4 mx-auto mt-0">
+          <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg border-1">
+            <div className="flex-auto px-4 lg:px-10 py-10 pt-0 bg-white">
+              <div className="mt-4">
+                <div className="sm:flex items-center justify-between">
+                  <div className="flex items-center">
+                    <ul
+                      className="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row"
+                      role="tablist"
+                    >
+                      {complainInfo
+                        ? complainInfo.map((tab, i) => (
+                            <li
+                              // onClick={() => {
+                              //   setStatus(tab.id);
+                              // }}
+                              key={i}
+                              className="-mb-px mr-2 last:mr-2 mt-2 flex-auto text-center"
+                            >
+                              <a
+                                className={
+                                  "text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " +
+                                  (currentTab === `${tab.id}`
+                                    ? "text-white bg-" + color + "-600"
+                                    : "text-" + color + "-600 bg-white")
+                                }
+                                key={i}
+                                id={tab.id}
+                                disabled={currentTab === `${tab.id}`}
+                                onClick={handleTabClick}
+                              >
+                                {tab.category}
+                              </a>
+                            </li>
+                          ))
+                        : null}
+                    </ul>
+                  </div>
 
-            <button
-              className="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 sm:mt-0 inline-flex items-start justify-start px-6 py-3 bg-indigo-700 hover:bg-indigo-600 focus:outline-none rounded 
+                  <button
+                    className="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 sm:mt-0 inline-flex items-start justify-start px-6 py-3 bg-indigo-700 hover:bg-indigo-600 focus:outline-none rounded 
                text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-              type="button"
-              onClick={showModalCreate}
-            >
-              <i className="bi bi-plus text-bold" />
-              Бүртгэл нэмэх
-            </button>
-          </div>
-          <div className="mt-3 overflow-x-auto">
-            <table className="items-center w-full bg-transparent border-collapse ">
-              <thead>
-                <tr className="text-sm text-left  bg-gray-200 border-b">
-                  <th className="px-4 py-3 font-bold">Огноо </th>
-                  <th className="px-4 py-3 font-bold">Харьяалагдах хэлтэс </th>
-                  <th className="px-4 py-3 font-bold">Ажлын байр </th>
-                  <th className="px-4 py-3 font-bold">Ажилтны нэр </th>
-                  <th className="px-4 py-3 font-bold">Гомдлын төрөл </th>
-                  <th className="px-4 py-3 font-bold">Гомдлын дэлгэрэнгүй </th>
-                  <th className="px-4 py-3 font-bold">Журам </th>
-                  <th className="px-4 py-3 font-bold">Алдаа </th>
-                  <th className="px-4 py-3 font-bold">Action </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white text-sm">
-                {complain
-                  ? complain.map((tab, i) => (
-                      <tr
-                        key={i}
-                        className={
-                          currentTab === `${tab.complain}`
-                            ? "focus:outline-none h-16 border border-gray-100 rounded"
-                            : "hidden"
-                        }
-                        // onChange={() => {
-                        //   setTotalPages(tab.complain);
-                        // }}
-                      >
-                        <td className="px-1 py-1 border">{tab.createdAt}</td>
-                        <td className="px-1 py-1 border">
-                          {tab.departmentName}
-                        </td>
-                        <td className="px-1 py-1 border">{tab.unitName}</td>
-                        <td className="px-1 py-1 border">{tab.firstName}</td>
-                        <td className="px-1 py-1 border">{tab.complainType}</td>
-                        <td className="px-1 py-1 border">{tab.description}</td>
-                        <td className="px-1 py-1 border">{tab.rule}</td>
-                        <td className="px-1 py-1 border">{tab.too}</td>
-                        <td className="px-1 py-1 border">
-                          <a
-                            className="text-yellow-400 hover:text-black mx-2"
-                            data-id={tab}
-                            onClick={() => {
-                              handleEdit(tab);
-                            }}
-                          >
-                            <i className="bi bi-pencil-square"></i>
-                          </a>
-                          <a
-                            data-id={tab.id}
-                            onClick={showModalDelete}
-                            className="text-rose-400 hover:text-black ml-2"
-                          >
-                            <i className="bi bi-trash-fill"></i>
-                          </a>
-                        </td>
+                    type="button"
+                    onClick={showModalCreate}
+                  >
+                    <i className="bi bi-plus text-bold" />
+                    Бүртгэл нэмэх
+                  </button>
+                </div>
+                <div className="mt-3 overflow-x-auto">
+                  <table className="items-center w-full bg-transparent border-collapse ">
+                    <thead>
+                      <tr className="text-sm text-left  bg-gray-200 border-b">
+                        <th className="px-4 py-3 font-bold">Огноо </th>
+                        <th className="px-4 py-3 font-bold">
+                          Харьяалагдах хэлтэс{" "}
+                        </th>
+                        <th className="px-4 py-3 font-bold">Ажлын байр </th>
+                        <th className="px-4 py-3 font-bold">Ажилтны нэр </th>
+                        <th className="px-4 py-3 font-bold">Гомдлын төрөл </th>
+                        <th className="px-4 py-3 font-bold">
+                          Гомдлын дэлгэрэнгүй{" "}
+                        </th>
+                        <th className="px-4 py-3 font-bold">Журам </th>
+                        <th className="px-4 py-3 font-bold">Алдаа </th>
+                        <th className="px-4 py-3 font-bold">Action </th>
                       </tr>
-                    ))
-                  : // .slice(
-                    //   numberOfdataVistited,
-                    //   numberOfdataVistited + dataPerPage
-                    // )
-                    null}
-              </tbody>
-            </table>
+                    </thead>
+                    <tbody className="bg-white text-sm">
+                      {complain
+                        ? complain.map((tab, i) => (
+                            <tr
+                              key={i}
+                              className={
+                                currentTab === `${tab.complain}`
+                                  ? "focus:outline-none h-16 border border-gray-100 rounded"
+                                  : "hidden"
+                              }
+                              // onChange={() => {
+                              //   setTotalPages(tab.complain);
+                              // }}
+                            >
+                              <td className="px-1 py-1 border">
+                                {tab.createdAt}
+                              </td>
+                              <td className="px-1 py-1 border">
+                                {tab.departmentName}
+                              </td>
+                              <td className="px-1 py-1 border">
+                                {tab.unitName}
+                              </td>
+                              <td className="px-1 py-1 border">
+                                {tab.firstName}
+                              </td>
+                              <td className="px-1 py-1 border">
+                                {tab.complainType}
+                              </td>
+                              <td className="px-1 py-1 border">
+                                {tab.description}
+                              </td>
+                              <td className="px-1 py-1 border">{tab.rule}</td>
+                              <td className="px-1 py-1 border">{tab.too}</td>
+                              <td className="px-1 py-1 border">
+                                <a
+                                  className="text-yellow-400 hover:text-black mx-2"
+                                  data-id={tab}
+                                  onClick={() => {
+                                    handleEdit(tab);
+                                  }}
+                                >
+                                  <i className="bi bi-pencil-square"></i>
+                                </a>
+                                <a
+                                  data-id={tab.id}
+                                  onClick={showModalDelete}
+                                  className="text-rose-400 hover:text-black ml-2"
+                                >
+                                  <i className="bi bi-trash-fill"></i>
+                                </a>
+                              </td>
+                            </tr>
+                          ))
+                        : // .slice(
+                          //   numberOfdataVistited,
+                          //   numberOfdataVistited + dataPerPage
+                          // )
+                          null}
+                    </tbody>
+                  </table>
 
-            <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">
-              {/* <ReactPaginate
+                  <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">
+                    {/* <ReactPaginate
                 previousLabel={"Өмнө"}
                 nextLabel={"Дараах"}
                 pageCount={totalPages}
@@ -423,6 +440,9 @@ function ErrorThanks() {
                 pageRangeDisplayed={5}
                 subContainerClassName={"pages pagination"}
               /> */}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -235,7 +235,7 @@ function CreateTraining() {
     }
   };
   return (
-    <div className="w-full h-screen bg-gray-50">
+    <div className="w-full min-h-[calc(100%-56px)] ">
       <Navigation />
 
       <div className="w-full">
@@ -246,260 +246,263 @@ function CreateTraining() {
             </p>
           </div>
         </div>
-        <div className="p-4 container max-w-screen-lg mx-auto">
-          <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
-            <div className="lg:col-span-2">
-              <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
-                <div className="md:col-span-2">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Сургалтын нэр
-                  </label>
-                  <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                    <input
-                      type="text"
-                      className="outline-none  w-full rounded bg-gray-50 h-10 block p-2"
-                      onChange={(e) => {
-                        setName(e.target.value);
-                        setcheckEmptyname(false);
-                      }}
-                      id={checkEmptyname === true ? "border-red" : null}
-                    />
+        <div className="w-full px-4 mx-auto mt-0">
+          <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg border-1">
+            <div className="flex-auto px-4 lg:px-10 py-10 pt-0 bg-white">
+              <div className="mt-4">
+                <div className="flex flex-wrap">
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                        Сургалтын нэр
+                      </label>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          setName(e.target.value);
+                          setcheckEmptyname(false);
+                        }}
+                        id={checkEmptyname === true ? "border-red" : null}
+                        className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                      />
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                        Дэлгэрэнгүй
+                      </label>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          setdescription(e.target.value);
+                          setcheckEmptydescription(false);
+                        }}
+                        id={
+                          checkEmptydescription === true ? "border-red" : null
+                        }
+                        className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                      />
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                        Сургалтын файл
+                      </label>
+                      <input
+                        type="file"
+                        onChange={handleFileSelect}
+                        className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                      />
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                        Сургалт явагдах хугацаа
+                      </label>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          setduration(e.target.value);
+                          setcheckEmptyduration(false);
+                        }}
+                        id={checkEmptyduration === true ? "border-red" : null}
+                        className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                      />
+                    </div>
                   </div>
                 </div>
-                <div className="md:col-span-5">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Дэлгэрэнгүй
-                  </label>
-                  <div
-                    className="block 2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 
-                    focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  >
-                    <textarea
-                      rows="4"
-                      className="outline-none block p-2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg  focus:ring-blue-500 
-                    focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      type="text"
-                      onChange={(e) => {
-                        setdescription(e.target.value);
-                        setcheckEmptydescription(false);
-                      }}
-                      id={checkEmptydescription === true ? "border-red" : null}
-                    />
+                <div className="flex flex-wrap">
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                        Багшийн нэр
+                      </label>
+                      <input
+                        type="text"
+                        onChange={(e) => {
+                          setteacher(e.target.value);
+                          setcheckEmptyteacher(false);
+                        }}
+                        id={checkEmptyteacher === true ? "border-red" : null}
+                        className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Файлаа оруулна уу 📁
-                  </label>
-                  <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                    <input
-                      className="outline-none  w-full rounded bg-gray-50 h-10 block p-2"
-                      type="file"
-                      onChange={handleFileSelect}
-                      // onChange={(e) => {
-                      //   handleFileSelect(e);
-                      //   setcheckEmptyfileUrl(false);
-                      // }}
-                      // id={checkEmptyfileUrl === true ? "border-red" : null}
-                    />
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                        Сургалтын ангилал
+                      </label>
+
+                      <Select
+                        className="px-2 py-2 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                        options={category}
+                        defaultValue={selectedOptioncategory}
+                        onChange={(item) => {
+                          handleTrainingCategoryId(item);
+                          setcheckEmptytCategory(false);
+                        }}
+                        id={checkEmptytCategory === true ? "border-red" : null}
+                        noOptionsMessage={({ inputValue }) =>
+                          !inputValue && "Сонголт хоосон байна"
+                        }
+                        getOptionLabel={(option) => option.name}
+                        getOptionValue={(option) => option.id}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="md:col-span-1">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Сургалт явагдах хугацаа
-                  </label>
-                  <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                    <input
-                      className="outline-none  w-full rounded bg-gray-50 h-10 block p-2"
-                      type="time"
-                      step="360000"
-                      onChange={(e) => {
-                        setduration(e.target.value);
-                        setcheckEmptyduration(false);
-                      }}
-                      id={checkEmptyduration === true ? "border-red" : null}
-                    />
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                        Сургалтын хичээллэх төлөв
+                      </label>
+                      <Select
+                        className="px-2 py-2 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                        options={options}
+                        defaultValue={selectedOption}
+                        onChange={(item) => {
+                          handleTrainingType(item);
+                          setcheckEmptysessionType(false);
+                        }}
+                        id={
+                          checkEmptysessionType === true ? "border-red" : null
+                        }
+                        noOptionsMessage={({ inputValue }) =>
+                          !inputValue && "Сонголт хоосон байна"
+                        }
+                        getOptionLabel={(option) => option.value}
+                        getOptionValue={(option) => option.id}
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Багшийн нэр
-                  </label>
-                  <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                    <input
-                      type="text"
-                      className="outline-none  w-full rounded bg-gray-50 h-10 block p-2"
-                      onChange={(e) => {
-                        setteacher(e.target.value);
-                        setcheckEmptyteacher(false);
-                      }}
-                      id={checkEmptyteacher === true ? "border-red" : null}
-                    />
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                        startDate
+                      </label>
+                      <DatePicker
+                        className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                        selected={date1}
+                        onChange={(date) => setDate1(date)}
+                        showTimeSelect
+                        timeFormat="HH:mm"
+                        timeIntervals={15}
+                        selectsStart
+                        startDate={date1}
+                        dateFormat="yyyy.MM.dd, HH:mm"
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Сургалтын ангилал
-                  </label>
-                  <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1 ">
-                    <Select
-                      className="outline-none  w-full rounded bg-gray-50"
-                      options={category}
-                      defaultValue={selectedOptioncategory}
-                      onChange={(item) => {
-                        handleTrainingCategoryId(item);
-                        setcheckEmptytCategory(false);
-                      }}
-                      id={checkEmptytCategory === true ? "border-red" : null}
-                      noOptionsMessage={({ inputValue }) =>
-                        !inputValue && "Сонголт хоосон байна"
-                      }
-                      getOptionLabel={(option) => option.name}
-                      getOptionValue={(option) => option.id}
-                    />
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                        endDate
+                      </label>
+                      <DatePicker
+                        className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                        selected={date2}
+                        onChange={(date) => setDate2(date)}
+                        showTimeSelect
+                        timeFormat="HH:mm"
+                        timeIntervals={15}
+                        selectsStart
+                        startDate={date2}
+                        dateFormat="yyyy.MM.dd, HH:mm"
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="md:col-span-1">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Сургалтын хичээллэх төлөв
-                  </label>
-                  <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                    <Select
-                      options={options}
-                      defaultValue={selectedOption}
-                      onChange={(item) => {
-                        handleTrainingType(item);
-                        setcheckEmptysessionType(false);
-                      }}
-                      id={checkEmptysessionType === true ? "border-red" : null}
-                      className="outline-none  w-full rounded bg-gray-50"
-                      noOptionsMessage={({ inputValue }) =>
-                        !inputValue && "Сонголт хоосон байна"
-                      }
-                      getOptionLabel={(option) => option.value}
-                      getOptionValue={(option) => option.id}
-                    />
-                  </div>
-                </div>
-                <div className="md:col-span-1">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    startDate
-                  </label>
-                  <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                    <DatePicker
-                      className="outline-none text-center text-sm  outline-none  focus:ring-0 bg-transparent"
-                      selected={date1}
-                      onChange={(date) => setDate1(date)}
-                      showTimeSelect
-                      timeFormat="HH:mm"
-                      timeIntervals={15}
-                      selectsStart
-                      startDate={date1}
-                      dateFormat="yyyy.MM.dd, HH:mm"
-                    />
-                  </div>
-                </div>
-                <div className="md:col-span-1">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    endDate
-                  </label>
-                  <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                    <DatePicker
-                      className="outline-none text-center text-sm  outline-none  focus:ring-0 bg-transparent"
-                      selected={date2}
-                      onChange={(date) => setDate2(date)}
-                      showTimeSelect
-                      timeFormat="HH:mm"
-                      timeIntervals={15}
-                      selectsStart
-                      startDate={date2}
-                      dateFormat="yyyy.MM.dd, HH:mm"
-                    />
-                  </div>
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Байршил
-                  </label>
-                  <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                    <input
-                      type="text"
-                      className="outline-none  w-full rounded bg-gray-50 h-10 block p-2"
-                      onChange={(e) => {
-                        setlocation(e.target.value);
-                        setcheckEmptylocation(false);
-                      }}
-                      id={checkEmptylocation === true ? "border-red" : null}
-                    />
-                  </div>
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Харьяалагдах хэлтэс
-                  </label>
-                  <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1 ">
-                    <Select
-                      className="outline-none  w-full rounded bg-gray-50"
-                      options={department}
-                      defaultValue={selectedOptiondepartment}
-                      onChange={(item) => {
-                        handleOrg(item);
-                        // setcheckEmpty1(false);
-                      }}
-                      // id={checkEmpty1 === true ? "border-red" : null}
-                      noOptionsMessage={({ inputValue }) =>
-                        !inputValue && "Сонголт хоосон байна"
-                      }
-                      getOptionLabel={(option) => option.name}
-                      getOptionValue={(option) => option.id}
-                    />
-                  </div>
-                </div>
-                <div className="md:col-span-1">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Ажлын байр
-                  </label>
-                  <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                    <Select
-                      options={org}
-                      defaultValue={selectedOptionorg}
-                      onChange={(item) => {
-                        handleWorkers(item);
-                        // setcheckEmpty2(false);
-                      }}
-                      // id={checkEmpty2 === true ? "border-red" : null}
-                      className="outline-none  w-full rounded bg-gray-50"
-                      noOptionsMessage={({ inputValue }) =>
-                        !inputValue && "Сонголт хоосон байна"
-                      }
-                      getOptionLabel={(option) => option.name}
-                      getOptionValue={(option) => option.id}
-                    />
-                  </div>
-                </div>
-                <div className="md:col-span-1">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Ажилтны нэр
-                  </label>
-                  <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                    <Select
-                      options={workers}
-                      defaultValue={selectedOptionWorkers}
-                      onChange={(item) => {
-                        handleWorkersID(item);
-                        // setcheckEmpty3(false);
-                      }}
-                      // id={checkEmpty3 === true ? "border-red" : null}
-                      className="outline-none  w-full rounded bg-gray-50"
-                      noOptionsMessage={({ inputValue }) =>
-                        !inputValue && "Сонголт хоосон байна"
-                      }
-                      getOptionLabel={(option) => option.firstName}
-                      getOptionValue={(option) => option.deviceId}
-                    />
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                        Байршил
+                      </label>
+                      <input
+                        type="text"
+                        className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                        onChange={(e) => {
+                          setlocation(e.target.value);
+                          setcheckEmptylocation(false);
+                        }}
+                        id={checkEmptylocation === true ? "border-red" : null}
+                      />
+                    </div>
                   </div>
                 </div>
 
+                {/* <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
+                  About Me
+                </h6> */}
+                <div className="flex flex-wrap">
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                        Харьяалагдах хэлтэс
+                      </label>
+                      <Select
+                        className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                        options={department}
+                        defaultValue={selectedOptiondepartment}
+                        onChange={(item) => {
+                          handleOrg(item);
+                          // setcheckEmpty1(false);
+                        }}
+                        // id={checkEmpty1 === true ? "border-red" : null}
+                        noOptionsMessage={({ inputValue }) =>
+                          !inputValue && "Сонголт хоосон байна"
+                        }
+                        getOptionLabel={(option) => option.name}
+                        getOptionValue={(option) => option.id}
+                      />
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                        Ажлын байр
+                      </label>
+                      <Select
+                        className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                        options={org}
+                        defaultValue={selectedOptionorg}
+                        onChange={(item) => {
+                          handleWorkers(item);
+                          // setcheckEmpty2(false);
+                        }}
+                        // id={checkEmpty2 === true ? "border-red" : null}
+                        noOptionsMessage={({ inputValue }) =>
+                          !inputValue && "Сонголт хоосон байна"
+                        }
+                        getOptionLabel={(option) => option.name}
+                        getOptionValue={(option) => option.id}
+                      />
+                    </div>
+                  </div>
+                  <div className="w-full lg:w-6/12 px-4">
+                    <div className="relative w-full mb-3">
+                      <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                        Ажилтны нэр
+                      </label>
+                      <Select
+                        options={workers}
+                        defaultValue={selectedOptionWorkers}
+                        onChange={(item) => {
+                          handleWorkersID(item);
+                          // setcheckEmpty3(false);
+                        }}
+                        // id={checkEmpty3 === true ? "border-red" : null}
+                        className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                        noOptionsMessage={({ inputValue }) =>
+                          !inputValue && "Сонголт хоосон байна"
+                        }
+                        getOptionLabel={(option) => option.firstName}
+                        getOptionValue={(option) => option.deviceId}
+                      />
+                    </div>
+                  </div>
+                </div>
                 <div className="col-span-5 text-right">
                   <div className="inline-flex items-end">
                     <button

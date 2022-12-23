@@ -19,27 +19,27 @@ function Traingings() {
     navigate("/");
     window.location.reload();
   };
-  const handleCreate = () => {
-    navigate("/create-training");
-  };
-  const navigateFiles = () => {
-    navigate("/training-files");
-  };
-  const navigateCategory = () => {
-    navigate("/training-category");
-  };
+
   return (
-    <div className="w-full h-screen bg-gray-50">
+    <div className="w-full min-h-[calc(100%-56px)] ">
       <Navigation />
-      <div className="h-screen px-5 py-3">
-        <div className="w-full h-full bg-white rounded-lg p-5 flex flex-col gap-2">
-          <button onClick={handleCreate}>Create training</button>
-          <button onClick={navigateFiles}>Training files</button>
-          <button onClick={navigateCategory}>Training category</button>
-          {/* <TrainCell />
-          <TrainCell />
-          <TrainCell />
-          <TrainCell /> */}
+      <div className="w-full">
+        <div className="px-4 md:px-10 py-4 md:py-7">
+          <div className="flex items-center justify-between">
+            <p className="focus:outline-none text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">
+              Сургалтууд
+            </p>
+          </div>
+        </div>
+
+        <div className="w-full px-4 mx-auto mt-0">
+          <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg border-1">
+            <div className="flex-auto px-4 lg:px-10 py-10 pt-0 bg-white">
+              <div className="mt-4">
+                <TrainCell />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

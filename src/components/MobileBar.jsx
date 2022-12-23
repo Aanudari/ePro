@@ -153,33 +153,33 @@ function MobileBar() {
                 <li>
                   <a
                     onClick={() => {
-                      navigate("/create-training");
-                    }}
-                  >
-                    Сургалт төлөвлөх
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/took-training");
-                    }}
-                  >
-                    Сургалтанд хамрагдсан
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={() => {
                       navigate("/trainings");
                     }}
                   >
                     Сургалтууд
                   </a>
                 </li>
+                <li>
+                  <a
+                    onClick={() => {
+                      navigate("/training-files");
+                    }}
+                  >
+                    Сургалтын файлууд
+                  </a>
+                </li>
+                <li>
+                  <a
+                    onClick={() => {
+                      navigate("/training-category");
+                    }}
+                  >
+                    Сургалтын ангилал
+                  </a>
+                </li>
               </ul>
             </li>
-            <li>
+            {/* <li>
               <a
                 onClick={() => {
                   navigate("/calendar");
@@ -188,7 +188,7 @@ function MobileBar() {
                 <i className="bi bi-calendar-check absolute top-[17px] left-[17px]"></i>
                 <span>Calendar</span>
               </a>
-            </li>
+            </li> */}
             <li>
               <a
                 onClick={() => {

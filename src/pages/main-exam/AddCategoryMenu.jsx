@@ -4,8 +4,19 @@ import { useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import DepartmentSelect from "../exam/ExamForm/DepartmentSelect";
+import DatePicker from "react-datepicker";
 
 function AddCategoryMenu({ showAddCategory, setShowAddCategory }) {
+    function addZero(i) {
+        if (i < 10) { i = "0" + i }
+        return i;
+    }
+    const [selectV, setSelectV] = useState(new Date())
+    const [value, setValue] = useState(new Date());
+    var datestring = value.getFullYear() + "" + addZero((value.getMonth() + 1)) + addZero(value.getDate()) +
+        addZero(value.getHours()) + addZero(value.getMinutes()) + addZero(value.getSeconds());
+    var datestring2 = selectV.getFullYear() + "" + addZero((selectV.getMonth() + 1)) + addZero(selectV.getDate()) +
+        addZero(selectV.getHours()) + addZero(selectV.getMinutes()) + addZero(selectV.getSeconds());
     const navigate = useNavigate();
     const logout = () => {
         localStorage.clear();
@@ -20,8 +31,8 @@ function AddCategoryMenu({ showAddCategory, setShowAddCategory }) {
     const [data, setData] = useState();
     let arr = {
         "name": `${name}`,
-        "startDate": null,
-        "endDate": null,
+        "startDate": `${datestring}`,
+        "endDate": `${datestring2}`,
         "department": `${department}`
     }
     useEffect(() => {
@@ -31,7 +42,7 @@ function AddCategoryMenu({ showAddCategory, setShowAddCategory }) {
                 "Content-Type": "application/json",
                 'Authorization': `${TOKEN}`
             },
-            url: "http://192.168.10.248:9000/v1/User/department",
+            url: `${process.env.REACT_APP_URL}/v1/User/department`,
         })
             .then(
                 res => {
@@ -80,6 +91,7 @@ function AddCategoryMenu({ showAddCategory, setShowAddCategory }) {
                         <i className="bi bi-x-lg text-white text-2xl font-[500]"></i>
                     </button>
                 </div>
+
                 <div className="h-full w-full px-3 pt-10 overflow-scroll flex justify-center items-center mb-20">
                     <div className="w-1/2 h-1/2">
                         <div className="group w-full">
@@ -93,9 +105,37 @@ function AddCategoryMenu({ showAddCategory, setShowAddCategory }) {
                             <span className="bar"></span>
                             <label className=''>Категори нэр</label>
                         </div>
-                        <DepartmentSelect data={data} handleOptions={handleOptions} />
+                        <h6 className="mt-[-20px]"></h6>
+                        <div className="w-full flex gap-2 mb-3 ">
+                            <DatePicker
+                                selected={value}
+                                value={value}
+                                onChange={date => setValue(date)}
+                                className='form-control form-control-sm
+                                            py-2 mt-2 ml-0 border border-dark'
+                                showTimeSelect
+                                timeFormat='HH:mm'
+                                timeIntervals={15}
+                                timeCaption='time'
+                                dateFormat='yyyy-MM-dd h:mm aa'
+                            />
+                            <DatePicker
+                                selected={selectV}
+                                value={selectV}
+                                onChange={date => setSelectV(date)}
+                                className='form-control form-control-sm
+                                            py-2 mt-2 ml-0 border border-dark'
+                                showTimeSelect
+                                timeFormat='HH:mm'
+                                timeIntervals={15}
+                                timeCaption='time'
+                                dateFormat='yyyy-MM-dd h:mm aa'
+                            />
+                        </div>
 
+                        <DepartmentSelect data={data} handleOptions={handleOptions} />
                     </div>
+
                 </div>
                 {
                     name !== "" && department !== undefined &&

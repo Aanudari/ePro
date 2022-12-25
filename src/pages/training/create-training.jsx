@@ -64,7 +64,7 @@ function CreateTraining() {
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `http://192.168.10.248:9000/v1/Training/category`,
+      url: `${process.env.REACT_APP_URL}/v1/Training/category`,
     })
       .then((res) => {
         setCategory(res.data.trainingCatList);
@@ -86,7 +86,7 @@ function CreateTraining() {
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `http://192.168.10.248:9000/v1/User/department`,
+      url: `${process.env.REACT_APP_URL}/v1/User/department`,
     })
       .then((res) => {
         setDepartment(res.data.departments);
@@ -102,7 +102,7 @@ function CreateTraining() {
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `http://192.168.10.248:9000/v1/User/org/${item.id}`,
+      url: `${process.env.REACT_APP_URL}/v1/User/org/${item.id}`,
     })
       .then((res) => {
         if (res.data.resultMessage === "Unauthorized") {
@@ -120,7 +120,7 @@ function CreateTraining() {
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `http://192.168.10.248:9000/v1/User/unit/devices?unitId=${item.id}`,
+      url: `${process.env.REACT_APP_URL}/v1/User/unit/devices?unitId=${item.id}`,
     })
       .then((res) => {
         if (res.data.resultMessage === "Unauthorized") {
@@ -151,7 +151,7 @@ function CreateTraining() {
         "Content-Type": "multipart/form-data",
         Authorization: `${TOKEN}`,
       },
-      url: `http://192.168.10.248:9000/v1/TrainingFile/fileadd`,
+      url: `${process.env.REACT_APP_URL}/v1/TrainingFile/fileadd`,
       data,
     })
       .then((res) => {
@@ -220,7 +220,7 @@ function CreateTraining() {
           "Content-Type": "application/json",
           accept: "text/plain",
         },
-        url: `http://192.168.10.248:9000/v1/Training/add`,
+        url: `${process.env.REACT_APP_URL}/v1/Training/add`,
         data: JSON.stringify(data),
       })
         .then((res) => {

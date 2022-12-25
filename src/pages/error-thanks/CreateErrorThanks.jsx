@@ -59,7 +59,7 @@ function CreateErrorThanks() {
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `http://192.168.10.248:9000/v1/User/department`,
+      url: `${process.env.REACT_APP_URL}/v1/User/department`,
     })
       .then((res) => {
         setDepartment(res.data.departments);
@@ -75,7 +75,7 @@ function CreateErrorThanks() {
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `http://192.168.10.248:9000/v1/User/org/${item.id}`,
+      url: `${process.env.REACT_APP_URL}/v1/User/org/${item.id}`,
     })
       .then((res) => {
         if (res.data.resultMessage === "Unauthorized") {
@@ -93,7 +93,7 @@ function CreateErrorThanks() {
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `http://192.168.10.248:9000/v1/User/unit/devices?unitId=${item.id}`,
+      url: `${process.env.REACT_APP_URL}/v1/User/unit/devices?unitId=${item.id}`,
     })
       .then((res) => {
         if (res.data.resultMessage === "Unauthorized") {
@@ -154,7 +154,7 @@ function CreateErrorThanks() {
           "Content-Type": "application/json",
           accept: "text/plain",
         },
-        url: `http://192.168.10.248:9000/v1/Complain/add`,
+        url: `${process.env.REACT_APP_URL}/v1/Complain/add`,
         data: JSON.stringify(data),
       })
         .then((res) => {

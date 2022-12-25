@@ -33,7 +33,7 @@ function TrainingFiles() {
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `http://192.168.10.248:9000/v1/TrainingFile/filelist`,
+      url: `${process.env.REACT_APP_URL}/v1/TrainingFile/filelist`,
     })
       .then((res) => {
         if (res.data.isSuccess == true) {
@@ -59,7 +59,7 @@ function TrainingFiles() {
         Authorization: `${TOKEN}`,
         accept: "text/plain",
       },
-      url: `http://192.168.10.248:9000/v1/TrainingFile/${id}`,
+      url: `${process.env.REACT_APP_URL}/v1/TrainingFile/${id}`,
     })
       .then((res) => {
         if (res.data.isSuccess === true) {
@@ -87,7 +87,7 @@ function TrainingFiles() {
         "Content-Type": "multipart/form-data",
         Authorization: `${TOKEN}`,
       },
-      url: `http://192.168.10.248:9000/v1/TrainingFile/fileadd`,
+      url: `${process.env.REACT_APP_URL}/v1/TrainingFile/fileadd`,
       data,
     })
       .then((res) => {

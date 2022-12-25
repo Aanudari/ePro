@@ -55,7 +55,7 @@ function CreateTemplate ({ show, voc, onClose }) {
                     "Authorization": `${TOKEN}`,
                     "Content-Type": "application/json",
                 },
-                url: `http://192.168.10.248:9000/v1/RatingTemplate/add`,
+                url: `${process.env.REACT_APP_URL}/v1/RatingTemplate/add`,
                 data: JSON.stringify(post_template_data),
             })
                 .then((res) => {

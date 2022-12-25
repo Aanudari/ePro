@@ -24,7 +24,7 @@ function CategoryModal({ setCategoryModal, id, depId, setShowCategoryMenu, setTr
                 "Content-Type": "application/json",
                 'Authorization': `${TOKEN}`
             },
-            url: `http://192.168.10.248:9000/v1/Pool/Question/${id}`,
+            url: `${process.env.REACT_APP_URL}/v1/Pool/Question/${id}`,
         })
             .then(
                 res => {

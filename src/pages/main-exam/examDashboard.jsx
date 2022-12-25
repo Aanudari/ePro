@@ -116,7 +116,7 @@ function ExamDash() {
       }
       {
         examModal && 
-        <ExamModalMain id={examModalId} setExamModal={setExamModal}/>
+        <ExamModalMain exams={data} id={examModalId} setExamModal={setExamModal}/>
       }
       {
         showAddCategory && 

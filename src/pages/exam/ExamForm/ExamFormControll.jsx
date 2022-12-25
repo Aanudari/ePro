@@ -20,7 +20,7 @@ function ExamFormControll({ setKeyX }) {
                 "Content-Type": "application/json",
                 'Authorization': `${TOKEN}`
             },
-            url: "http://192.168.10.248:9000/v1/ExamNew",
+            url: `${process.env.REACT_APP_URL}/v1/ExamNew`,
         })
             .then(
                 res => {
@@ -29,6 +29,7 @@ function ExamFormControll({ setKeyX }) {
             )
             .catch(err => console.log(err))
     }, [trigger])
+    console.log(data)
     // console.log(modalData)
     const handleDeleteExam = (id) => {
         axios({
@@ -37,7 +38,7 @@ function ExamFormControll({ setKeyX }) {
                 "Content-Type": "application/json",
                 'Authorization': `${TOKEN}`
             },
-            url: `http://192.168.10.248:9000/v1/Exam/${id}`,
+            url: `${process.env.REACT_APP_URL}/v1/Exam/${id}`,
         })
             .then(
                 res => {

@@ -41,7 +41,7 @@ function ErrorThanks() {
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `http://192.168.10.248:9000/v1/Complain/complainInfo`,
+      url: `${process.env.REACT_APP_URL}/v1/Complain/complainInfo`,
     })
       .then((res) => {
         // setComplainInfo(
@@ -61,7 +61,7 @@ function ErrorThanks() {
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `http://192.168.10.248:9000/v1/Complain`,
+      url: `${process.env.REACT_APP_URL}/v1/Complain`,
     })
       .then((res) => {
         setComplain(res.data.complains);
@@ -112,7 +112,7 @@ function ErrorThanks() {
         Authorization: `${TOKEN}`,
         accept: "text/plain",
       },
-      url: `http://192.168.10.248:9000/v1/Complain/delete?id=${id}`,
+      url: `${process.env.REACT_APP_URL}/v1/Complain/delete?id=${id}`,
     })
       .then((res) => {
         if (res.data.isSuccess === true) {

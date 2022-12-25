@@ -25,7 +25,7 @@ const SelectRate = ( props ) => {
                 "Authorization": `${TOKEN}`,
                 "accept": "text/plain",
             },
-            url: `http://192.168.10.248:9000/v1/RatingTemplate/user/${userdata.deviceId}`,
+            url: `${process.env.REACT_APP_URL}/v1/RatingTemplate/user/${userdata.deviceId}`,
         })
             .then(
                 res => {

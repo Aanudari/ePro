@@ -19,7 +19,7 @@ function LevelOneUITakeExam() {
                 "Content-Type": "application/json",
                 'Authorization': `${TOKEN}`
             },
-            url: "http://192.168.10.248:9000/v1/ExamNew",
+            url: `${process.env.REACT_APP_URL}/v1/ExamNew`,
         })
             .then(
                 res => {

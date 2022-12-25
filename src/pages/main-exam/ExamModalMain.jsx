@@ -2,9 +2,7 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import { useStateContext } from "../../contexts/ContextProvider"
 import { useNavigate } from "react-router-dom";
-import EditQuestionMain from "./EditQuestionMain";
-import EditQuestionMain2 from "./EditQuestionMain2";
-function ExamModalMain({ setExamModal, id }) {
+function ExamModalMain({ setExamModal, id, exams }) {
     const [data, setData] = useState();
     const { TOKEN, activeMenu } = useStateContext();
     const navigate = useNavigate();
@@ -14,6 +12,10 @@ function ExamModalMain({ setExamModal, id }) {
         navigate("/");
         window.location.reload();
     };
+    let chosen = exams.filter((item, index) => {
+        return item.id == id
+    })
+    console.log(chosen[0])
     useEffect(() => {
         axios({
             method: "get",
@@ -21,7 +23,7 @@ function ExamModalMain({ setExamModal, id }) {
                 "Content-Type": "application/json",
                 'Authorization': `${TOKEN}`
             },
-            url: `http://192.168.10.248:9000/v1/ExamNew/variants?examId=${id}`,
+            url: `${process.env.REACT_APP_URL}/v1/ExamNew/variants?examId=${id}`,
         })
             .then(
                 res => {
@@ -41,7 +43,7 @@ function ExamModalMain({ setExamModal, id }) {
                 "Content-Type": "application/json",
                 'Authorization': `${TOKEN}`
             },
-            url: `http://192.168.10.248:9000/v1/ExamNew/delete?examId=${id}`,
+            url: `${process.env.REACT_APP_URL}/v1/ExamNew/delete?examId=${id}`,
         })
             .then(
                 res => {
@@ -163,6 +165,11 @@ function ExamModalMain({ setExamModal, id }) {
                         className="w-[20px] h-full ">
                         <i className="bi bi-x-lg text-white text-2xl font-[500]"></i>
                     </button>
+                </div>
+                <div className="h-20 w-full px-2 py-2 lowercase">
+                    Нэр: {chosen[0].name}
+                    эхлэх: {chosen[0].startDate}
+                    Дуусах: {chosen[0].expireDate}
                 </div>
                 <div className="w-full h-full px-10 py-2 overflow-scroll">
                     <div className="h-full pt-2">

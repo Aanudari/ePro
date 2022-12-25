@@ -32,7 +32,7 @@ function AddCategory({ show, voc, onClose, template_id }) {
                 "Authorization": `${TOKEN}`,
                 "Content-Type": "application/json",
             },
-            url: `http://192.168.10.248:9000/v1/Category/cat`,
+            url: `${process.env.REACT_APP_URL}/v1/Category/cat`,
             data: JSON.stringify(add_cat_data),
         })
             .then((res) => {

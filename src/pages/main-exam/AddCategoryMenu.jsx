@@ -72,7 +72,7 @@ function AddCategoryMenu({ showAddCategory, setShowAddCategory }) {
                 setShowAddCategory(false)
             })
             .catch((err) => {
-                console.log(err)
+                alert(err)
             })
     }
     return (
@@ -92,7 +92,7 @@ function AddCategoryMenu({ showAddCategory, setShowAddCategory }) {
                     </button>
                 </div>
 
-                <div className="h-full w-full px-3 pt-10 overflow-scroll flex justify-center items-center mb-20">
+                <div className="h-full w-full px-3 overflow-scroll flex justify-center pt-20">
                     <div className="w-1/2 h-1/2">
                         <div className="group w-full">
                             <input
@@ -139,7 +139,7 @@ function AddCategoryMenu({ showAddCategory, setShowAddCategory }) {
                 </div>
                 {
                     name !== "" && department !== undefined &&
-                    <div onClick={submitCategory} className="h-20 bg-gray-700 flex justify-center 
+                    <div onClick={submitCategory} className="min-h-[50px] bg-gray-700 flex justify-center 
                     cursor-pointer hover:bg-gray-600 items-center text-white font-[500]">Категори үүсгэх</div>
                 }
             </div>

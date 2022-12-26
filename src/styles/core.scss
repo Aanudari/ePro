@@ -409,3 +409,16 @@ select::-ms-expand {
     height: 0;
   }
 }
+
+
+
+.appear-smooth-height {
+  animation: appear-smooth-height;
+  animation-duration: .8s;
+}
+
+@keyframes appear-smooth-height {
+  from {
+    height: 10px;
+  }
+}

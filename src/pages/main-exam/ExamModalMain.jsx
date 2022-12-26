@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import { useStateContext } from "../../contexts/ContextProvider"
 import { useNavigate } from "react-router-dom";
+import ExamHeader from "./ExamHeader";
+import ExamEditHeader from "./ExamEditHeader";
 function ExamModalMain({ setExamModal, id, exams }) {
     const [data, setData] = useState();
     const { TOKEN, activeMenu } = useStateContext();
@@ -15,7 +17,33 @@ function ExamModalMain({ setExamModal, id, exams }) {
     let chosen = exams.filter((item, index) => {
         return item.id == id
     })
-    console.log(chosen[0])
+    let deviceIds = []
+    for (let index = 0; index < chosen[0].devInfos.length; index++) {
+        const element = chosen[0].devInfos[index].deviceId;
+        deviceIds.push(element)
+    }
+    const [users, setUsers] = useState();
+    useEffect(() => {
+        axios({
+            method: "get",
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `${TOKEN}`
+            },
+            url: `${process.env.REACT_APP_URL}/v1/User`,
+        })
+            .then(
+                res => {
+                    if (res.data.errorCode == 401) {
+                        logout()
+                    } else {
+                        setUsers(res.data.result)
+                    }
+                }
+            )
+            .catch(err => console.log(err))
+    }, [])
+    let array1 = users?.filter(val => deviceIds.includes(JSON.stringify(val.deviceId)));
     useEffect(() => {
         axios({
             method: "get",
@@ -105,47 +133,16 @@ function ExamModalMain({ setExamModal, id, exams }) {
         let assigned = Object.assign(filtered[0], { answerList: arr })
         setFiltered([assigned])
     }
-    const schema = {
-        "questionId": `${checked[0]}`,
-        "qCategory": `${id}`,
-        "question": "string",
-        "points": "string",
-        "qimgUrl": "string",
-        "answers": [
-            {
-                "id": "string",
-                "answer": "string",
-                "aImgUrl": "string",
-                "isTrue": "string"
-            }
-        ]
-    }
     const handleEditSubmit = (id) => {
         if (checked.includes(id)) {
             setChecked([])
-            // console.log(schema)
-            // axios({
-            //     method: "put",
-            //     headers: {
-            //         "Content-Type": "application/json",
-            //         "Authorization": TOKEN
-            //     },
-            //     url: `${process.env.REACT_APP_URL}/v1/Pool/update/question`,
-            //     data: schema,
-            // })
-            //     .then((res) => {
-            //         console.log(res)
-            //     })
-            //     .catch((err) => {
-            //         console.log(err)
-            //     })
         } else {
             setChecked([id])
             setFilteredQuestion(id)
         }
     }
     const [showSide, setShowSide] = useState(false);
-    // console.log(filtered && filtered[0].answerList)
+    const [editHeader, setEditHeader] = useState(false);
     return (
         <div className={`fixed ${activeMenu ? "top-[56px] left-[250px] w-[calc(100%-250px)] h-[calc(100%-56px)]"
             : "w-full h-full top-[25px] left-0"
@@ -166,11 +163,12 @@ function ExamModalMain({ setExamModal, id, exams }) {
                         <i className="bi bi-x-lg text-white text-2xl font-[500]"></i>
                     </button>
                 </div>
-                <div className="h-20 w-full px-2 py-2 lowercase">
-                    Нэр: {chosen[0].name}
-                    эхлэх: {chosen[0].startDate}
-                    Дуусах: {chosen[0].expireDate}
-                </div>
+                {
+                    editHeader === false ? 
+                    <ExamHeader array1={array1} chosen={chosen} setEditHeader={setEditHeader} editHeader={editHeader}/>
+                    :
+                    <ExamEditHeader array1={array1} chosen={chosen} setEditHeader={setEditHeader} editHeader={editHeader}/>
+                }
                 <div className="w-full h-full px-10 py-2 overflow-scroll">
                     <div className="h-full pt-2">
                         {
@@ -271,7 +269,12 @@ function ExamModalMain({ setExamModal, id, exams }) {
                                                     :
                                                     checked.includes(question.id) ? filtered : question?.answerList?.map((answer, index) => (
                                                         <h6 key={index} className="mt-3 font-[400] pl-3 flex items-center">
-                                                            <i className="bi bi-circle text-gray-400 text-xl"></i>
+                                                            {
+                                                                answer.isTrue == "1" ?
+                                                                    <i className="bi bi-check-circle text-xl px-1 text-teal-500"></i>
+                                                                    :
+                                                                    <i className={`bi bi-circle text-xl px-1 outline-none text-gray-400`}></i>
+                                                            }
                                                             <span className="ml-2 text-[14px] font-[400]">{answer.answer}</span>
                                                         </h6>
                                                     ))
@@ -287,12 +290,12 @@ function ExamModalMain({ setExamModal, id, exams }) {
             </div>
             {
                 showSide &&
-            <div className="h-screen w-[200px] bg-teal-400 transition from-left overflow-scroll">
-                <div className="h-[50px]"></div>
-                <input
-        type="file"
-      />
-            </div>
+                <div className="h-screen w-[200px] bg-teal-400 transition from-left overflow-scroll">
+                    <div className="h-[50px]"></div>
+                    <input
+                        type="file"
+                    />
+                </div>
             }
         </div>
     );

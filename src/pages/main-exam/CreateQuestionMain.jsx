@@ -57,38 +57,28 @@ function CreateQuestionMain({ setQuestion, question, point, setPoint, setQImgUrl
                     <span className="bar"></span>
                     <label className=''>Асуулт </label>
                 </div>
-                <div className='flex'>
-                    <div className='h-full mt-auto'>
+                <div className='flex border pt-4 px-3 rounded mb-4'>
+                    <div className='h-full '>
                         <div className='m-auto'>
                             <div className="group w-full !bg-red-200">
                                 <input onChange={(e) => {
                                     handleSchema(question, e.target.value, qImgUrl)
                                 }}
-                                    className={'custom-validation !border-b-[2px] !border-[#50a3a2] font-[400]'}
+                                    className={'custom-validation !appearance-none !border-b-[2px] !border-[#50a3a2] font-[400]'}
                                     type="number" required />
                                 <span className="highlight"></span>
                                 <span className="bar"></span>
                                 <label className=''>Оноо </label>
                             </div>
-                            {/* <div className="group w-full">
-                            <input onChange={(e) => {
-                                handleSchema(question, point, e.target.value)
-                            }}
-                                className={'custom-validation !border-b-[2px] !border-[#50a3a2] font-[400]'}
-                                type="number" required />
-                            <span className="highlight"></span>
-                            <span className="bar"></span>
-                            <label className=''>Хариултын тоо </label>
-                        </div> */}
                             <div className="group w-full">
                                 <input onChange={(e) => {
                                     handleAnswers(e.target.value)
                                 }}
-                                    className={'custom-validation !border-b-[2px] !border-[#50a3a2] font-[400]'}
+                                    className={'custom-validation !appearance-none !border-b-[2px] !border-[#50a3a2] font-[400]'}
                                     type="number" required />
                                 <span className="highlight"></span>
                                 <span className="bar"></span>
-                                <label className=''>Хариултын тоо </label>
+                                <label className='appearance-none'>Хариултын тоо </label>
                             </div>
                         </div>
                     </div>

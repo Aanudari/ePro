@@ -137,7 +137,11 @@ a {
   z-index: 1;
   height: 90px;
 }
-
+input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 .cellu:hover {
   opacity: 1;
 }

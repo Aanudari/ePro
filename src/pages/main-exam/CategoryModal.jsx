@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import CreateQuestionMain from "./CreateQuestionMain";
 import EditQuestionMain from "./EditQuestionMain";
 import CreateExamMain from "./CreateExamMain";
+import ImageUploaderSmall from "../exam/ExamForm/ImageUploaderSmall";
 function CategoryModal({ setCategoryModal, id, depId, setShowCategoryMenu, setTriggerCat, triggerCat }) {
     const { TOKEN, activeMenu } = useStateContext();
     const navigate = useNavigate();
@@ -38,7 +39,6 @@ function CategoryModal({ setCategoryModal, id, depId, setShowCategoryMenu, setTr
             .catch(err => console.log(err))
     }, [addAnswer, trigger])
     const [answers, setAnswers] = useState(false);
-
     const [question, setQuestion] = useState('');
     const [point, setPoint] = useState('');
     const [qImgUrl, setQImgUrl] = useState('');
@@ -165,141 +165,141 @@ function CategoryModal({ setCategoryModal, id, depId, setShowCategoryMenu, setTr
     const handleExamHalf = () => {
         setExamState(!examState)
     }
+    const [imgSide, setImgSide] = useState(false);
     // console.log(checked)
     return (
         <div className={`fixed ${activeMenu ? "top-[56px] left-[250px] w-[calc(100%-250px)] h-[calc(100%-56px)]"
-        : "w-full h-full top-[25px] left-0"
-        } 
+            : "w-full h-full top-[25px] left-0"
+            } 
             bg-black bg-opacity-50 flex justify-center items-center
             `}>
             {
                 examState ?
-                    <div className="w-[calc(85%)] shrink h-[600px] bg-white flex flex-col ">
-                        <div className="w-full min-h-[50px] bg-gray-700 flex justify-between px-3 ">
-                            <button onClick={() => {
-                                setAddAnswer(!addAnswer)
-                                setCreateExam(false)
-                                setChecked([])
-                                setAnswers()
-                            }}
-                                className="w-[20px] h-full ">
-                                {
-                                    addAnswer ?
-                                        <i className="bi bi-x-circle text-sky-500 text-2xl font-[500]"></i>
-                                        :
-                                        <i className="bi bi-plus-circle text-white text-2xl font-[500]"></i>
-                                }
-                            </button>
-
-                            <div>
-                                {
-                                    data?.length !== undefined &&
-                                    <button onClick={() => {
-                                        setCreateExam(!createExam)
-                                        setAddAnswer(false)
-
-                                        setAnswers()
-                                    }}
-                                        className="w-[20px] h-full ">
-                                        {
-                                            createExam && !addAnswer && data?.length !== undefined ?
-                                                <i className="bi bi-bookmark-x text-sky-500 text-2xl font-[500] "></i>
-                                                :
-                                                <i className="bi bi-bookmark-plus text-white text-2xl font-[500] "></i>
-                                        }
-                                    </button>
-                                }
+                    <div className="w-screen h-screen flex justify-center items-center gap-2 pl-2">
+                        <div className="w-[calc(80%)] shrink h-[600px] bg-white flex flex-col ">
+                            <div className="w-full min-h-[50px] bg-gray-700 flex justify-between px-3 ">
                                 <button onClick={() => {
-                                    setCategoryModal(false)
+                                    setAddAnswer(!addAnswer)
+                                    setCreateExam(false)
+                                    setChecked([])
+                                    setAnswers()
                                 }}
-                                    className="w-[20px] h-full ml-5 ">
-                                    <i className="bi bi-x-lg text-red-500 text-2xl font-[500]"></i>
+                                    className="w-[20px] h-full ">
+                                    {
+                                        addAnswer ?
+                                            <i className="bi bi-x-circle text-sky-500 text-2xl font-[500]"></i>
+                                            :
+                                            <i className="bi bi-plus-circle text-white text-2xl font-[500]"></i>
+                                    }
                                 </button>
+
+                                <div>
+                                    {
+                                        data?.length !== undefined &&
+                                        <button onClick={() => {
+                                            setCreateExam(!createExam)
+                                            setAddAnswer(false)
+
+                                            setAnswers()
+                                        }}
+                                            className="w-[20px] h-full ">
+                                            {
+                                                createExam && !addAnswer && data?.length !== undefined ?
+                                                    <i className="bi bi-bookmark-x text-sky-500 text-2xl font-[500] "></i>
+                                                    :
+                                                    <i className="bi bi-bookmark-plus text-white text-2xl font-[500] "></i>
+                                            }
+                                        </button>
+                                    }
+                                    <button onClick={() => {
+                                        setCategoryModal(false)
+                                    }}
+                                        className="w-[20px] h-full ml-5 ">
+                                        <i className="bi bi-x-lg text-red-500 text-2xl font-[500]"></i>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                        {
-                            addAnswer ?
-                                <div className="w-full h-full">
-                                    {/* CREATE QUESTION !!!
+                            {
+                                addAnswer ?
+                                    <div className="w-full h-full">
+                                        {/* CREATE QUESTION !!!
                             CREATE QUESTION !!!
                             CREATE QUESTION !!!
                             CREATE QUESTION !!! */}
-                                    <CreateQuestionMain question={question} handleSchema={handleSchema}
-                                        setQuestion={setQuestion} setPoint={setPoint} point={point} setQImgUrl={setQImgUrl}
-                                        qImgUrl={qImgUrl} handleCreateQuesiton={handleCreateQuesiton} />
-                                </div>
-                                :
-                                <div className="w-full h-full px-3 overflow-scroll">
-                                    <div>
-                                        {
-                                            data?.map((question, index) => (
-                                                <div key={index}>
-                                                    <div className={`w-full parent h-14 font-[400] border-b flex items-center justify-between
-                                             hover:text-sky-500 px-2 
-                                            ${checked.includes(question.id) && "text-sky-400"} relative`}
-                                                    >
-                                                        <span className="m-0 font-[400]">
-                                                            {question.question}
-                                                        </span>
-                                                        {
-                                                            createExam && !addAnswer && data?.length !== undefined &&
-                                                            <div onClick={() => {
-                                                                handleCheck(question.id)
-                                                            }} className={`absolute cursor-pointer right-[20px] w-[20px] h-[20px] rounded border-[2px] 
-                                             hover:!border-sky-400 ${checked.includes(question.id) && "!border-sky-400"}`}>
-                                                                {
-                                                                    checked.includes(question.id) &&
-                                                                    <i className="bi bi-check2 text-xl absolute top-[-7px] right-[-1.5px] text-sky-500"></i>
-                                                                }
-
-                                                            </div>
-                                                        }
-                                                        {
-                                                            createExam && !addAnswer && data?.length !== undefined ? null :
-                                                                <div className={`child h-full w-[50px]  ${answerContainer.includes(question.id) ? 'flex' : "hidden"} 
-                                                justify-between items-center mb-1`}>
-                                                                    {
-                                                                        answerContainer.includes(question.id) ?
-                                                                            <i onClick={() => {
-                                                                                setAnswerContainer([])
-                                                                            }} className="bi bi-x-circle cursor-pointer text-red-500"></i>
-                                                                            :
-                                                                            <i onClick={() => {
-                                                                                editQuestion(question.id)
-                                                                            }} className="bi bi-arrow-bar-down cursor-pointer text-black"></i>
-                                                                    }
-                                                                    <i onClick={() => {
-                                                                        deleteQuestion(question.id)
-                                                                    }} className="bi bi-trash3-fill cursor-pointer text-red-500"></i>
-                                                                </div>
-                                                        }
-                                                    </div>
-                                                    {
-                                                        answers && answerContainer.includes(question.id) &&
-                                                        <EditQuestionMain question={question}/>
-                                                    }
-                                                </div>
-                                            ))
-                                        }
+                                        <CreateQuestionMain question={question} handleSchema={handleSchema}
+                                            setQuestion={setQuestion} setPoint={setPoint} point={point} setQImgUrl={setQImgUrl}
+                                            qImgUrl={qImgUrl} handleCreateQuesiton={handleCreateQuesiton} />
                                     </div>
-                                </div>
-                        }
-                        {
-                            addAnswer &&
-                            <div onClick={submitQuestion} className="w-full h-14 bg-gray-600 hover:bg-gray-700 cursor-pointer flex 
+                                    :
+                                    <div className="w-full h-full px-3 overflow-scroll py-5">
+                                        <div className="">
+                                            {
+                                                data?.map((question, index) => (
+                                                    <div key={index} className="mb-4 p-2 rounded-lg border bg-teal-500">
+                                                        <div className={`w-full parent h-14 font-[400] flex items-center justify-between
+                                             hover:text-sky-500 px-2 text-white
+                                            ${checked.includes(question.id) && "text-sky-400"} relative`}
+                                                        >
+                                                            <span className="m-0 font-[500]">
+                                                                {question.question}
+                                                            </span>
+                                                            {
+                                                                createExam && !addAnswer && data?.length !== undefined &&
+                                                                <div onClick={() => {
+                                                                    handleCheck(question.id)
+                                                                }} className={`absolute cursor-pointer right-[20px] w-[20px] h-[20px] rounded border-[2px] 
+                                             hover:!border-gray-200 ${checked.includes(question.id) && "!border-white"}`}>
+                                                                    {
+                                                                        checked.includes(question.id) &&
+                                                                        <i className="bi bi-check2 text-xl absolute top-[-7px] right-[-1.5px] text-white"></i>
+                                                                    }
+
+                                                                </div>
+                                                            }
+                                                            {
+                                                                createExam && !addAnswer && data?.length !== undefined ? null :
+                                                                    <div className={`child h-full w-[50px]  ${answerContainer.includes(question.id) ? 'flex' : "hidden"} 
+                                                justify-end items-center mb-1`}>
+
+                                                                        <i onClick={() => {
+                                                                            deleteQuestion(question.id)
+                                                                        }} className="bi bi-trash3-fill cursor-pointer text-red-500 text-xl mb-1"></i>
+                                                                    </div>
+                                                            }
+                                                        </div>
+                                                        <EditQuestionMain imgSide={imgSide} setImgSide={setImgSide}
+                                                         question={question} />
+                                                    </div>
+                                                ))
+                                            }
+                                        </div>
+                                    </div>
+                            }
+                            {
+                                addAnswer &&
+                                <div onClick={submitQuestion} className="w-full h-14 bg-gray-600 hover:bg-gray-700 cursor-pointer flex 
                 justify-center items-center font-[500] text-sky-500
                 ">Асуулт үүсгэх</div>
-                        }
-                        {
-                            createExam && !addAnswer && data?.length !== undefined && checked.length > 0 ?
-                                <div onClick={handleExamHalf} className="w-full h-14 bg-gray-600 hover:bg-gray-700 cursor-pointer flex 
+                            }
+                            {
+                                createExam && !addAnswer && data?.length !== undefined && checked.length > 0 ?
+                                    <div onClick={handleExamHalf} className="w-full h-14 bg-gray-600 hover:bg-gray-700 cursor-pointer flex 
                 justify-center items-center font-[500] text-sky-500
                 ">Шалгалт үүсгэх {checked.length}/10
-                </div> : null
+                                    </div> : null
+                            }
+                        </div>
+                        {
+                            imgSide && 
+                        <div className="w-[300px] h-screen bg-white appear-smooth p-2">
+                            <div className="h-[26px]"></div>
+                            <div className="w-full h-full border">
+                            <ImageUploaderSmall/>
+                            </div>
+                        </div>
                         }
-
-                    </div> :
-
+                    </div>
+                    :
                     // page !!!
                     // page !!!
                     // page !!!
@@ -348,8 +348,8 @@ function CategoryModal({ setCategoryModal, id, depId, setShowCategoryMenu, setTr
                                 </button>
                             </div>
                         </div>
-                        <CreateExamMain setTriggerCat={setTriggerCat} triggerCat={triggerCat} setShowCategoryMenu={setShowCategoryMenu} 
-                        setCategoryModal={setCategoryModal} setExamState={setExamState} depId={depId} checked={checked}/>
+                        <CreateExamMain setTriggerCat={setTriggerCat} triggerCat={triggerCat} setShowCategoryMenu={setShowCategoryMenu}
+                            setCategoryModal={setCategoryModal} setExamState={setExamState} depId={depId} checked={checked} />
                         {
                             addAnswer &&
                             <div onClick={submitQuestion} className="w-full h-14 bg-gray-600 hover:bg-gray-700 cursor-pointer flex 

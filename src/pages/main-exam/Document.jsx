@@ -1,5 +1,5 @@
 import { useStateContext } from "../../contexts/ContextProvider";
-function Document({setShowReport}) {
+function Document({setShowReport, id}) {
     const {activeMenu} = useStateContext();
     return ( 
         <div className={`fixed ${activeMenu ? 'w-[calc(100%-250px)] left-[250px]' : "w-full left-0"}  
@@ -16,7 +16,7 @@ function Document({setShowReport}) {
             }} className="bi bi-x-circle cursor-pointer"></i>
           </h6>
           <div className=" h-[calc(100%-25px)] overflow-scroll px-4">
-
+            {id}
           </div>
         </div>
         <div className="bg-gray-100 border-t shadow-lg h-[56px] flex items-center px-3">

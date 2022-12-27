@@ -14,9 +14,9 @@ function DepartmentSelect({data, handleOptions}) {
     })
   }
   const [selectedOption, setSelectedOption] = useState(null);
-  // useEffect(() => {
-  //   handleOptions(selectedOption?.value)
-  // },[selectedOption])
+  useEffect(() => {
+    handleOptions(selectedOption?.value)
+  },[selectedOption])
     return (
         <div className="App z-10">
             <Select

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import DepartmentSelect from "../exam/ExamForm/DepartmentSelect";
 import DatePicker from "react-datepicker";
 
-function AddCategoryMenu({ showAddCategory, setShowAddCategory }) {
+function AddCategoryMenu({ showAddCategory, setShowAddCategory, trigger, setTrigger }) {
     function addZero(i) {
         if (i < 10) { i = "0" + i }
         return i;
@@ -35,6 +35,7 @@ function AddCategoryMenu({ showAddCategory, setShowAddCategory }) {
         "endDate": `${datestring2}`,
         "department": `${department}`
     }
+    console.log(department)
     useEffect(() => {
         axios({
             method: "get",
@@ -50,6 +51,7 @@ function AddCategoryMenu({ showAddCategory, setShowAddCategory }) {
                         logout()
                     } else {
                         setData(res.data.departments)
+                        setTrigger(!trigger)
                     }
                 }
             )

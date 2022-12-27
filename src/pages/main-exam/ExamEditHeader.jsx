@@ -4,7 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useStateContext } from "../../contexts/ContextProvider";
 
-function ExamEditHeader({ array1, chosen, editHeader, setEditHeader }) {
+function ExamEditHeader({ array1, chosen, editHeader, setEditHeader, setExamModal, examTri, setExamTri }) {
     const navigate = useNavigate();
     const {TOKEN} = useStateContext();
     function addZero(i) {
@@ -55,6 +55,8 @@ function ExamEditHeader({ array1, chosen, editHeader, setEditHeader }) {
             })
             .catch((err) => console.log(err));
     }, [departmentId])
+    const [divisionId, setdivisionId] = useState(0);
+    const [unitId, setUnitId] = useState();
     // console.log(department)
     const [value, setValue] = useState(new Date(chosen[0].startDate));
     const [selectV, setSelectV] = useState(new Date(chosen[0].expireDate))
@@ -65,6 +67,43 @@ function ExamEditHeader({ array1, chosen, editHeader, setEditHeader }) {
     const handleDepartment = (value) => {
         setdepartmentId(value)
     }
+    const handleDivision = (value) => {
+        setdivisionId(value)
+    }
+    const handleUnit = (value) => {
+        setUnitId(value)
+    }
+    
+    const [name, setName] = useState(chosen[0].name);
+    const [duration, setDuration] = useState(chosen[0].duration);
+    // console.log(chosen[0])
+    let schema = {
+        "id": `${chosen[0].id}`,
+        "examName": `${name}`,
+        "startDate": `${datestring}`,
+        "expireDate": `${datestring2}`,
+        "duration": duration,
+        "devices": chosen[0].devInfos
+      }
+    const handleSubmit = () => {
+        axios({
+            method: "put",
+            headers: {
+              Authorization: `${TOKEN}`,
+              "Content-Type": "application/json",
+              accept: "text/plain",
+            },
+            url: `${process.env.REACT_APP_URL}/v1/ExamNew/edit`,
+            data: JSON.stringify(schema),
+          })
+            .then((res) => {
+                setExamTri(!examTri)
+            })
+            .catch((err) => console.log(err));
+    }
+    // console.log("department : ", departmentId)
+    // console.log("division : ", divisionId)
+    // console.log("unitId : ", unitId)
     return (
         <div className="h-40 overflow-hidden appear-smooth-height w-full px-2 uppercase bg-gray-600 text-white  flex items-center 
         shadow justify-between px-4">
@@ -94,10 +133,14 @@ function ExamEditHeader({ array1, chosen, editHeader, setEditHeader }) {
                     />
                 </div>
                 <div className="h-full flex items-start flex-col justify-center border-r pr-3 border-gray-400">
-                    <input defaultValue={chosen[0].name} type="text" className={`outline-none text-black mt-2
+                    <input defaultValue={name} onChange={(e) => {
+                        setName(e.target.value)
+                    }} type="text" className={`outline-none text-black mt-2
                     rounded-md ml-2 h-[38px] focus:border-b-[2px] border-teal-500 px-2 text-[14px] font-[400]`}
                         autoCorrect="false" spellCheck={false} />
-                    <input defaultValue={chosen[0].duration} type="text" className={`outline-none text-black mt-2
+                    <input defaultValue={duration} onChange={(e) => {
+                        setDuration(e.target.value)
+                    }} type="text" className={`outline-none text-black mt-2
                     rounded-md ml-2 h-[38px] focus:border-b-[2px] border-teal-500 px-2 text-[14px] font-[400]`}
                         autoCorrect="false" spellCheck={false} />
                 </div>
@@ -114,7 +157,9 @@ function ExamEditHeader({ array1, chosen, editHeader, setEditHeader }) {
                     </select>
                     {
                         division?.length > 0 &&
-                        <select name="" id=""  className="ml-2">
+                        <select onChange={(event) => {
+                            handleDivision(event.target.value)
+                        }} name="" id=""  className="ml-2">
                             {
                                 division?.map((item, index) => (
                                     <option key={index} value={`${item.id}`}>{item.unitName}</option>
@@ -123,12 +168,28 @@ function ExamEditHeader({ array1, chosen, editHeader, setEditHeader }) {
                         </select>
                     }
                     </div>
-                    <div>feafea</div>
+                    <div>
+                    {
+                        division && division[divisionId]?.unitDivisions?.length > 0 &&
+                        <select name="" id="" onChange={(event) => {
+                            handleUnit(event.target.value)
+                        }} className="mt-2 font-[500]">
+                            {
+                                division[divisionId]?.unitDivisions?.map((item, index) => (
+                                    <option key={index} value={`${item.id}`}>
+                                        {item.unitName}
+                                        </option>
+                                ))
+                            }
+                        </select>
+                    }
+                    </div>
                 </div>
             </div>
             <div
                 onClick={() => {
                     setEditHeader(!editHeader)
+                    handleSubmit()
                 }}
                 className="h-9 bg-teal-600 rounded-sm px-3 flex items-center font-[400] text-white cursor-pointer active:bg-teal-400 
                 hover:!bg-teal-500">

@@ -241,7 +241,7 @@ function CategoryModal({ setCategoryModal, id, depId, setShowCategoryMenu, setTr
                                             ${checked.includes(question.id) && "text-sky-400"} relative`}
                                                         >
                                                             <span className="m-0 font-[500]">
-                                                                {question.question}
+                                                                {question.question}{question.id}
                                                             </span>
                                                             {
                                                                 createExam && !addAnswer && data?.length !== undefined &&

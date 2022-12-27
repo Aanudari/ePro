@@ -21,7 +21,7 @@ function ErrorThanks() {
     window.location.reload();
   };
   let color = "blue";
-  const [currentTab, setCurrentTab] = useState("3");
+  const [currentTab, setCurrentTab] = useState("1");
   const [complainInfo, setComplainInfo] = useState();
   const [complain, setComplain] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
@@ -71,35 +71,14 @@ function ErrorThanks() {
       })
       .catch((err) => console.log(err));
   }, []);
-  // const total = complain.reduce(
-  //   (total, currentItem) => (total = total + Math.floor(currentItem.too)),
-  //   0
-  // );
-  // console.log(total);
 
   const handleTabClick = (e) => {
-    if (e.target.id == 3) {
-      navigate("/thanks", {
-        state: { type: e.target.id },
-      });
-    }
-    if (e.target.id == 2) {
-      setCurrentTab(e.target.id);
-    }
-    if (e.target.id == 1) {
-      setCurrentTab(e.target.id);
-    }
+    setCurrentTab(e.target.id);
   };
   const handleCreate = () => {
     if (selectedOption === null) {
       notification.error(`Сонголт хоосон байна!`);
-    }
-    if (selectedOption.id == 3) {
-      navigate("/create-thanks", {
-        state: { type: selectedOption },
-      });
-    }
-    if (selectedOption.id == 1 || selectedOption.id == 2) {
+    } else {
       navigate("/create-error-thanks", {
         state: { type: selectedOption },
       });
@@ -130,45 +109,8 @@ function ErrorThanks() {
       state: { data: tab },
     });
   };
-  const [page, setPage] = useState(0);
-  const dataPerPage = 3;
-  const numberOfdataVistited = page * dataPerPage;
 
-  let one = [];
-  let two = [];
-  let three = [];
-  const [status, setStatus] = useState("1");
-  for (let index = 0; index < complain.length; index++) {
-    const element = complain[index];
-    if (element.complain === "1") {
-      one.push(element.complain);
-    }
-    if (element.complain === "2") {
-      two.push(element.complain);
-    }
-    if (element.complain === "3") {
-      three.push(element.complain);
-    }
-  }
-  const changePage = ({ selected }) => {
-    setPage(selected);
-  };
-  let final;
-  const handlePageCount = () => {
-    if (status == "1") {
-      final = one.length;
-    }
-    if (status == "2") {
-      final = two.length;
-    }
-    if (status == "3") {
-      final = three.length;
-    }
-  };
   const [count, setCount] = useState();
-  handlePageCount();
-  const totalPages = Math.ceil(parseInt(final) / dataPerPage);
-
   const handleOnChange = async (e) => {
     let value = e.target.value;
     if (value.length > 2) {
@@ -181,6 +123,14 @@ function ErrorThanks() {
       // setCount(complain.length);
     }
   };
+  const newArr = complain?.map((v) => {
+    let obj = complainInfo.find((o) => o.id === v.complain);
+    if (obj) {
+      obj = v;
+    }
+    return v;
+  });
+  console.log(newArr);
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <div>
@@ -267,6 +217,20 @@ function ErrorThanks() {
         </Modal>
       </div>
       <Navigation />
+      {/* <div className='container'>
+            <div className='tabs'>
+                {tabs.map((tab, i) =>
+                    <button key={i} id={tab.id} disabled={currentTab === `${tab.id}`} onClick={(handleTabClick)}>{tab.tabTitle}</button>
+                )}
+            </div>
+            <div className='content'>
+                {tabs.map((tab, i) =>
+                    <div key={i}>
+                        {currentTab === `${tab.id}` && <div><p className='title'>{tab.title}</p><p>{tab.content}</p></div>}
+                    </div>
+                )}
+            </div>
+        </div> */}
       <div className=" w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
@@ -352,12 +316,33 @@ function ErrorThanks() {
                         </th>
                         <th className="px-4 py-3 font-bold">Ажлын байр </th>
                         <th className="px-4 py-3 font-bold">Ажилтны нэр </th>
-                        <th className="px-4 py-3 font-bold">Гомдлын төрөл </th>
-                        <th className="px-4 py-3 font-bold">
-                          Гомдлын дэлгэрэнгүй{" "}
-                        </th>
-                        <th className="px-4 py-3 font-bold">Журам </th>
-                        <th className="px-4 py-3 font-bold">Алдаа </th>
+                        {currentTab === "3" ? (
+                          <th className="px-4 py-3 font-bold">Төрөл </th>
+                        ) : (
+                          <th className="px-4 py-3 font-bold">
+                            Гомдлын төрөл{" "}
+                          </th>
+                        )}
+                        {currentTab === "3" ? (
+                          <th className="px-4 py-3 font-bold">Дэлгэрэнгүй </th>
+                        ) : (
+                          <th className="px-4 py-3 font-bold">
+                            Гомдлын дэлгэрэнгүй{" "}
+                          </th>
+                        )}
+                        {currentTab === "3" ? (
+                          <th className="px-4 py-3 font-bold">
+                            Бүртгэгдсэн суваг{" "}
+                          </th>
+                        ) : (
+                          <th className="px-4 py-3 font-bold">Журам </th>
+                        )}
+                        {currentTab === "3" ? (
+                          <th className="px-4 py-3 font-bold">Тоогоор</th>
+                        ) : (
+                          <th className="px-4 py-3 font-bold">Алдаа </th>
+                        )}
+
                         <th className="px-4 py-3 font-bold">Action </th>
                       </tr>
                     </thead>

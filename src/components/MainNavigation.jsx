@@ -168,18 +168,18 @@ function MainNavigation() {
                     Сургалтын ангилал
                   </a>
                 </li>
+                <li>
+                  <a
+                    onClick={() => {
+                      navigate("/training-rating");
+                    }}
+                  >
+                    Сургалтын үнэлгээ
+                  </a>
+                </li>
               </ul>
             </li>
-            {/* <li>
-              <a
-                onClick={() => {
-                  navigate("/calendar");
-                }}
-              >
-                <i className="bi bi-calendar-check absolute top-[17px] left-[17px]"></i>
-                <span>Calendar</span>
-              </a>
-            </li> */}
+
             <li>
               <a
                 onClick={() => {

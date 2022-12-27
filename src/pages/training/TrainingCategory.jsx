@@ -398,6 +398,7 @@ function TrainingCategory() {
               Ангилал нэмэх
             </button>
           </div>
+
           <div className="mt-3 overflow-x-auto">
             <table className="items-center w-full bg-transparent border-collapse ">
               <thead>

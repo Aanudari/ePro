@@ -103,9 +103,16 @@ function EditErrorThanks() {
             <div className="lg:col-span-2">
               <div className="grid gap-4 gap-y-2 text-sm grid-cols-1 md:grid-cols-5">
                 <div className="md:col-span-2">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Гомдлын төрөл
-                  </label>
+                  {chek?.id === "3" ? (
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                      Төрөл
+                    </label>
+                  ) : (
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                      Гомдлын төрөл
+                    </label>
+                  )}
+
                   <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
                     <input
                       type="text"
@@ -120,9 +127,16 @@ function EditErrorThanks() {
                   </div>
                 </div>
                 <div className="md:col-span-2">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Журам
-                  </label>
+                  {chek?.id === "3" ? (
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                      Бүртгэгдсэн суваг{" "}
+                    </label>
+                  ) : (
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                      Журам
+                    </label>
+                  )}
+
                   <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
                     <input
                       className="outline-none  w-full rounded bg-gray-50 h-10 block p-2"
@@ -138,9 +152,16 @@ function EditErrorThanks() {
                 </div>
 
                 <div className="md:col-span-1">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Алдаа
-                  </label>
+                  {chek?.id === "3" ? (
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                      Тоогоор
+                    </label>
+                  ) : (
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                      Алдаа
+                    </label>
+                  )}
+
                   <Select
                     options={options}
                     defaultValue={data.too}
@@ -155,9 +176,16 @@ function EditErrorThanks() {
                   />
                 </div>
                 <div className="md:col-span-5">
-                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                    Гомдлын дэлгэрэнгүй
-                  </label>
+                  {chek?.id === "3" ? (
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                      Дэлгэрэнгүй
+                    </label>
+                  ) : (
+                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                      Гомдлын дэлгэрэнгүй
+                    </label>
+                  )}
+
                   <div
                     className="block 2 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 
                   focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

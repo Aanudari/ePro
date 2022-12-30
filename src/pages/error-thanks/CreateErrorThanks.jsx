@@ -20,6 +20,7 @@ function CreateErrorThanks() {
     window.location.reload();
   };
   const type = location.state.type.category;
+  const typeid = location.state.type.id;
   const format = "YYYYMMDDHHmmss";
   const [startDate, setStartDate] = useState(new Date());
   const dateTime1 = moment(startDate).format(format);
@@ -270,9 +271,16 @@ function CreateErrorThanks() {
                 <div className="flex flex-wrap">
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
-                      <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                        Гомдлын төрөл
-                      </label>
+                      {typeid === "3" ? (
+                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                          Төрөл
+                        </label>
+                      ) : (
+                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                          Гомдлын төрөл
+                        </label>
+                      )}
+
                       <input
                         type="text"
                         className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
@@ -286,9 +294,16 @@ function CreateErrorThanks() {
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
-                      <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                        Журам
-                      </label>
+                      {typeid === "3" ? (
+                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                          Бүртгэгдсэн суваг{" "}
+                        </label>
+                      ) : (
+                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                          Журам
+                        </label>
+                      )}
+
                       <input
                         className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
                         type="text"
@@ -303,9 +318,16 @@ function CreateErrorThanks() {
 
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
-                      <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                        Алдааны тоо
-                      </label>
+                      {typeid === "3" ? (
+                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                          Тоогоор
+                        </label>
+                      ) : (
+                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                          Алдааны тоо
+                        </label>
+                      )}
+
                       <Select
                         placeholder="Алдааны тоо"
                         options={options}
@@ -326,10 +348,16 @@ function CreateErrorThanks() {
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
-                      <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                        Гомдлын дэлгэрэнгүй
-                      </label>
-
+                      {" "}
+                      {typeid === "3" ? (
+                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                          Дэлгэрэнгүй
+                        </label>
+                      ) : (
+                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                          Гомдлын дэлгэрэнгүй
+                        </label>
+                      )}
                       <textarea
                         rows="4"
                         className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"

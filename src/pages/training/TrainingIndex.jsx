@@ -3,8 +3,9 @@ import Navigation from "../../components/Navigation";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-
+import { ToastContainer } from "react-toastify";
 import TrainingCell from "./TrainingCell";
+import { notification } from "../../service/toast";
 function TrainingIndex() {
   const location = useLocation();
   const { TOKEN } = useStateContext();
@@ -50,7 +51,13 @@ function TrainingIndex() {
   //     }
   //   };
   //   handlePageCount();
-
+  const checkCategory = () => {
+    if (category === null) {
+      notification.error("Ангилал хоосон байна.");
+    } else {
+      navigate("/create-training");
+    }
+  };
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <Navigation />
@@ -67,7 +74,7 @@ function TrainingIndex() {
               className="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 sm:mt-0 inline-flex items-start justify-start px-6 py-3 bg-indigo-700 hover:bg-indigo-600 focus:outline-none rounded 
                text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
               type="button"
-              onClick={() => navigate("/create-training")}
+              onClick={checkCategory}
             >
               <i className="bi bi-plus text-bold" />
               Сургалт үүсгэх
@@ -76,14 +83,23 @@ function TrainingIndex() {
         </div>
         <div className=" text-gray-900 font-sans p-6">
           <div className="flex flex-wrap -mx-4">
-            {category
-              ? category.map((data, index) => (
-                  <TrainingCell key={index} data={data} id={data.id} />
-                ))
-              : null}
+            {category ? (
+              category.map((data, index) => (
+                <TrainingCell key={index} data={data} id={data.id} />
+              ))
+            ) : (
+              <p className="p-4 text-center text-sm font-medium">
+                Сургалтын ангилал үүсээгүй байна.
+                <a className="underline" href="/training-category">
+                  {" "}
+                  Ангилал үүсгэх &rarr;{" "}
+                </a>
+              </p>
+            )}
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

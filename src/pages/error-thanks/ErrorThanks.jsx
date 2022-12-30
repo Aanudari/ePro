@@ -4,7 +4,7 @@ import { useStateContext } from "../../contexts/ContextProvider";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { Modal } from "react-bootstrap";
-import { arraySearch } from "../../service/searchArray";
+
 import Select from "react-select";
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
@@ -65,6 +65,7 @@ function ErrorThanks() {
     })
       .then((res) => {
         setComplain(res.data.complains);
+
         if (res.data.resultMessage === "Unauthorized") {
           logout();
         }
@@ -111,18 +112,7 @@ function ErrorThanks() {
   };
 
   const [count, setCount] = useState();
-  const handleOnChange = async (e) => {
-    let value = e.target.value;
-    if (value.length > 2) {
-      let search = await arraySearch(complain, value);
-      setComplain(search);
-      setCount(search.length);
-    } else {
-      setComplainInfo(complainInfo);
-      setComplain(complain);
-      // setCount(complain.length);
-    }
-  };
+
   const newArr = complain?.map((v) => {
     let obj = complainInfo.find((o) => o.id === v.complain);
     if (obj) {
@@ -130,7 +120,7 @@ function ErrorThanks() {
     }
     return v;
   });
-  console.log(newArr);
+
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <div>
@@ -196,41 +186,28 @@ function ErrorThanks() {
           <Modal.Body>
             <div className="p-6 text-center">
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                Are you sure you want to delete?
+                Устгах уу?
               </h3>
               <button
                 type="button"
                 onClick={handleDelete}
                 className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
               >
-                Yes, I'm sure
+                Тийм
               </button>
               <button
                 onClick={hideModalDelete}
                 type="button"
                 className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
               >
-                No, cancel
+                Үгүй
               </button>
             </div>
           </Modal.Body>
         </Modal>
       </div>
       <Navigation />
-      {/* <div className='container'>
-            <div className='tabs'>
-                {tabs.map((tab, i) =>
-                    <button key={i} id={tab.id} disabled={currentTab === `${tab.id}`} onClick={(handleTabClick)}>{tab.tabTitle}</button>
-                )}
-            </div>
-            <div className='content'>
-                {tabs.map((tab, i) =>
-                    <div key={i}>
-                        {currentTab === `${tab.id}` && <div><p className='title'>{tab.title}</p><p>{tab.content}</p></div>}
-                    </div>
-                )}
-            </div>
-        </div> */}
+
       <div className=" w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
@@ -238,17 +215,13 @@ function ErrorThanks() {
               Алдаа талархал
             </p>
             <div className="my-2 flex sm:flex-row flex-col">
-              <div className="mr-2">
-                <p>Count: {count}</p>
-              </div>
-
               <div className="block relative">
                 <span className="h-full absolute inset-y-0 left-0 flex items-center pl-2">
                   <i className="bi bi-search" />
                 </span>
                 <input
                   name="search"
-                  onChange={handleOnChange}
+                  // onChange={handleOnChange}
                   placeholder="Хайлт"
                   className="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-black focus:outline-none"
                 />

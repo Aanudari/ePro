@@ -14,11 +14,10 @@ export default function QuestionCorrection({roundedScore, Exam_chosen}) {
   const [container, setContainer] = useState([]);
   let answer = [[],[],[]]
   useEffect(() => {
-    Exam_chosen(obj.id)
+    Exam_chosen(obj?.id)
     const sorted = container.sort((a,b) => b.count - a.count)
     for (let index = 0; index < sorted.length; index++) {
       const element = sorted[index];
-      // console.log(element)
       if(!answer[0].includes(sorted[index].AquestionId)) {
               answer[0].push(element.AquestionId)
               answer[1].push(element.answerId)

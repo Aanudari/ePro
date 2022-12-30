@@ -1,6 +1,7 @@
 function EditQuestionMenu({answer, i, deleteAnswer, handleEditQuestion}) {
+    console.log(answer)
     return (
-        <div key={i} className="">
+        <div className="">
             <div className="h-[42px] mt-1 relative parent">
                 {
                     answer.isTrue == "1" ?

@@ -49,7 +49,7 @@ function ExamFormControll({ setKeyX }) {
             .catch(err => console.log(err))
     }
     return (
-        <div className="w-full relative flex flex-wrap gap-4 p-4 justify-center md:justify-start ">
+        <div className="w-full relative flex flex-wrap gap-4 p-4 justify-center md:justify-start">
             {
                 data &&
                 data.map((item, index) => (

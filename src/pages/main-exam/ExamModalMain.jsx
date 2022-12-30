@@ -6,6 +6,7 @@ import ExamHeader from "./ExamHeader";
 import ExamEditHeader from "./ExamEditHeader";
 import EditQuestionMenu from "./edits/EditQuestionMenu";
 function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
+    const [filtered, setFiltered] = useState();
     const [data, setData] = useState();
     const { TOKEN, activeMenu } = useStateContext();
     const navigate = useNavigate();
@@ -67,6 +68,7 @@ function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
             )
             .catch(err => console.log(err))
     }, [trigger2])
+    // console.log(data)
     const handleDeleteExam = () => {
         axios({
             method: "delete",
@@ -104,7 +106,7 @@ function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
         data[0]?.questionList?.map((item) => {
             return item
         })
-    const [filtered, setFiltered] = useState();
+
     const handleFilter = () => {
         let filtered = questions?.filter((item, index) => {
             return item.id == filteredQuestion
@@ -150,6 +152,9 @@ function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
         let assigned = Object.assign(filtered[0], { answerList: arr })
         setFiltered([assigned])
     }
+    // const handleEditSubmit = () => {
+    //     console.log('submitting !!!')
+    // }
     const handleEditSubmit = (id) => {
         if (checked.includes(id)) {
             setChecked([])
@@ -223,6 +228,7 @@ function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
             )
             .catch(err => console.log(err))
     }, [categoryID])
+    
     const [arr, setArr] = useState([]);
     const handleCollectIds = (id) => {
         if(arr.includes(id)) {
@@ -310,6 +316,7 @@ function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
             })
             .catch((err) => console.log(err));
     }
+    // console.log(filtered && filtered[0]?.answerList)
     return (
         <div className={`fixed ${activeMenu ? "top-[56px] left-[250px] w-[calc(100%-250px)] h-[calc(100%-56px)]"
             : "w-full h-full top-[25px] left-0"
@@ -367,7 +374,7 @@ function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
                                                         }} type="text" className="outline-none mt-2 rounded-md ml-2 h-[40px] focus:border-b-[2px] focus:h-[42px] border-teal-500 px-2 text-[14px] w-[calc(90%)] font-[400]"
                                                             autoCorrect="false" spellCheck={false} />
                                                     </div> :
-                                                    <span className="m-0 hover:text-sky-500 font-[500]">
+                                                    <span className="m-0 font-[500]">
                                                         {index + 1}. {question.question}
                                                     </span>
                                             }
@@ -398,7 +405,8 @@ function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
                                                     <div className="">
                                                         {
                                                             filtered && filtered[0]?.answerList.map((answer, i) => (
-                                                                <EditQuestionMenu answer={answer} i={i} key={i} deleteAnswer={deleteAnswer} handleEditQuestion={handleEditQuestion} />
+                                                                <EditQuestionMenu answer={answer} i={i} key={i} 
+                                                                deleteAnswer={deleteAnswer} handleEditQuestion={handleEditQuestion} />
                                                             ))
                                                         }
                                                         <div className="w-full mt-4 flex justify-between">
@@ -469,7 +477,7 @@ function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
                                 <h6 className="text-teal-600 text-[14px] flex justify-between">
                                     <span className="font-[500]">
                                         <i className="bi bi-caret-down-square-fill mr-2"></i>
-                                        Шалгалтын категоиуд
+                                        Шалгалтын категориуд
                                     </span>
                                     <i onClick={() => {
                                         setSideQuestions(false)

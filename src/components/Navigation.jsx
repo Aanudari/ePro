@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import getWindowDimensions from "./SizeDetector"
 import MobileBar from "./MobileBar";
-import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { Menu, Transition } from '@headlessui/react'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')

@@ -93,7 +93,7 @@ function Document({setShowReport, id}) {
         }
       })
       .catch((err) => console.log(err));
-  }, [id]);
+  }, [selected]);
     const {activeMenu} = useStateContext();
     return ( 
         <div className={`fixed ${activeMenu ? 'w-[calc(100%-250px)] left-[250px]' : "w-full left-0"}  
@@ -128,7 +128,7 @@ function Document({setShowReport, id}) {
           </div>
         </div>
         <div className="bg-gray-100 border-t shadow-lg h-[56px] flex items-center px-3">
-          <div 
+          {/* <div 
         //     onClick={() => {
         //     setShowModal(true)
         //   }} 
@@ -140,7 +140,7 @@ function Document({setShowReport, id}) {
             <div className="pl-2 h-full flex items-center border-l border-gray-300 ">
             <i className="bi bi-file-earmark-spreadsheet"></i>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

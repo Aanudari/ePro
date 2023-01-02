@@ -31,7 +31,6 @@ function RatingModalMain({setShowModal, deviceId}) {
             })
             .catch((err) => console.log(err));
     }, [])
-    console.log(data)
     return ( 
         <div className={`${activeMenu ? " left-[250px] w-[calc(100%-250px)]" : "left-0 w-full"} 
         top-[56px] fixed  h-[calc(100%-56px)] 

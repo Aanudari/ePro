@@ -21,7 +21,7 @@ function useCounter(initialState) {
 
 export default function ExamInit() {
   const { TOKEN, qlength, setQlength, gameStarted, setGameStarted, gameFinished, showAnswer, 
-    setShowAnswer, rightAnswer, setVarientID } = useStateContext();
+    setShowAnswer, rightAnswer, setVarientID, } = useStateContext();
   const examId = sessionStorage.getItem("exam_id")
   const navigate = useNavigate();
   const logout = () => {

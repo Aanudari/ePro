@@ -14,7 +14,7 @@ function SubCategoryCell (subcategory) {
                 "Authorization": `${TOKEN}`,
                 "accept": "text/plain",
             },
-            url: `http://192.168.10.248:9000/v1/Category/sub/${subID}`,
+            url: `${process.env.REACT_APP_URL}/v1/Category/sub/${subID}`,
         })
             .then(
                 res => {

@@ -9,7 +9,7 @@ import { ToastContainer } from "react-toastify";
 import axios from "axios";
 import Select from "react-select";
 import moment from "moment";
-function CreateErrorThanks() {
+function CreateThanks() {
   const location = useLocation();
   const { TOKEN } = useStateContext();
   const navigate = useNavigate();
@@ -20,7 +20,6 @@ function CreateErrorThanks() {
     window.location.reload();
   };
   const type = location.state.type.category;
-  const typeid = location.state.type.id;
   const format = "YYYYMMDDHHmmss";
   const [startDate, setStartDate] = useState(new Date());
   const dateTime1 = moment(startDate).format(format);
@@ -34,11 +33,13 @@ function CreateErrorThanks() {
     { value: "4" },
     { value: "5" },
   ];
+  const optionsType = [{ value: "Баярласан" }, { value: "Талархсан" }];
   const [selectedOptiondepartment, setSelectedOptiondepartment] =
     useState(null);
   const [selectedOptionorg, setSelectedOptionorg] = useState(null);
   const [selectedOptionWorkers, setSelectedOptionWorkers] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOptionType, setSelectedOptionType] = useState(null);
   const [checkEmpty1, setcheckEmpty1] = useState(false);
   const [checkEmpty2, setcheckEmpty2] = useState(false);
   const [checkEmpty3, setcheckEmpty3] = useState(false);
@@ -108,6 +109,9 @@ function CreateErrorThanks() {
   };
   const handleWorkersID = (item) => {
     setWorkersID(item.deviceId);
+  };
+  const handleType = (item) => {
+    setComplainType(item.value);
   };
   const handleToo = (item) => {
     setTooVal(item.value);
@@ -271,39 +275,31 @@ function CreateErrorThanks() {
                 <div className="flex flex-wrap">
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
-                      {typeid === "3" ? (
-                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                          Төрөл
-                        </label>
-                      ) : (
-                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                          Гомдлын төрөл
-                        </label>
-                      )}
-
-                      <input
-                        type="text"
-                        className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                        onChange={(e) => {
-                          setComplainType(e.target.value);
+                      <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                        Төрөл
+                      </label>
+                      <Select
+                        options={optionsType}
+                        defaultValue={selectedOptionType}
+                        onChange={(item) => {
+                          handleType(item);
                           setcheckEmpty4(false);
                         }}
                         id={checkEmpty4 === true ? "border-red" : null}
+                        className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                        noOptionsMessage={({ inputValue }) =>
+                          !inputValue && "Сонголт хоосон байна"
+                        }
+                        getOptionLabel={(option) => option.value}
+                        getOptionValue={(option) => option.value}
                       />
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
-                      {typeid === "3" ? (
-                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                          Бүртгэгдсэн суваг{" "}
-                        </label>
-                      ) : (
-                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                          Журам
-                        </label>
-                      )}
-
+                      <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                        Бүртгэгдсэн суваг
+                      </label>
                       <input
                         className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
                         type="text"
@@ -318,18 +314,10 @@ function CreateErrorThanks() {
 
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
-                      {typeid === "3" ? (
-                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                          Тоогоор
-                        </label>
-                      ) : (
-                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                          Алдааны тоо
-                        </label>
-                      )}
-
+                      <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                        Тоогоор
+                      </label>
                       <Select
-                        placeholder="Алдааны тоо"
                         options={options}
                         defaultValue={selectedOption}
                         onChange={(item) => {
@@ -348,16 +336,10 @@ function CreateErrorThanks() {
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
                     <div className="relative w-full mb-3">
-                      {" "}
-                      {typeid === "3" ? (
-                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                          Дэлгэрэнгүй
-                        </label>
-                      ) : (
-                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                          Гомдлын дэлгэрэнгүй
-                        </label>
-                      )}
+                      <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                        Дэлгэрэнгүй
+                      </label>
+
                       <textarea
                         rows="4"
                         className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
@@ -398,4 +380,4 @@ function CreateErrorThanks() {
   );
 }
 
-export default CreateErrorThanks;
+export default CreateThanks;

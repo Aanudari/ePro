@@ -21,7 +21,7 @@ function IndexComment(rate) {
                 "Authorization": `${TOKEN}`,
                 "accept": "text/plain",
             },
-            url: `http://192.168.10.248:9000/v1/RatingComment/get/${rate.rate.id}`,
+            url: `${process.env.REACT_APP_URL}/v1/RatingComment/get/${rate.rate.id}`,
         })
             .then(
                 res => {

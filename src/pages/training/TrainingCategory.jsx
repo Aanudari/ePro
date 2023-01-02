@@ -49,7 +49,7 @@ function TrainingCategory() {
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `http://192.168.10.248:9000/v1/User/department`,
+      url: `${process.env.REACT_APP_URL}/v1/User/department`,
     })
       .then((res) => {
         setDepartment(res.data.departments);
@@ -65,7 +65,7 @@ function TrainingCategory() {
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `http://192.168.10.248:9000/v1/Training/category`,
+      url: `${process.env.REACT_APP_URL}/v1/Training/category`,
     })
       .then((res) => {
         setCategory(res.data.trainingCatList);
@@ -103,7 +103,7 @@ function TrainingCategory() {
         Authorization: `${TOKEN}`,
         accept: "text/plain",
       },
-      url: `http://192.168.10.248:9000/v1/Training/category/delete?catId=${id}`,
+      url: `${process.env.REACT_APP_URL}/v1/Training/category/delete?catId=${id}`,
     })
       .then((res) => {
         if (res.data.isSuccess === true) {
@@ -139,7 +139,7 @@ function TrainingCategory() {
           "Content-Type": "application/json",
           accept: "text/plain",
         },
-        url: `http://192.168.10.248:9000/v1/Training/category/add`,
+        url: `${process.env.REACT_APP_URL}/v1/Training/category/add`,
         data: JSON.stringify(data),
       })
         .then((res) => {
@@ -172,7 +172,7 @@ function TrainingCategory() {
         "Content-Type": "application/json",
         accept: "text/plain",
       },
-      url: `http://192.168.10.248:9000/v1/Training/category/edit`,
+      url: `${process.env.REACT_APP_URL}/v1/Training/category/edit`,
       data: JSON.stringify(editDataSet),
     })
       .then((res) => {

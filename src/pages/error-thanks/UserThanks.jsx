@@ -7,17 +7,19 @@ import axios from "axios";
 import { Modal } from "react-bootstrap";
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
-function UserErrorThanks() {
-  const location = useLocation();
+function UserThanks() {
   const { TOKEN, deviceId } = useStateContext();
   const navigate = useNavigate();
+
+  const location = useLocation();
   const logout = () => {
     localStorage.clear();
     sessionStorage.clear();
     navigate("/");
     window.location.reload();
   };
-  const [currentTab, setCurrentTab] = useState("1");
+
+  const [currentTab, setCurrentTab] = useState(`${location.state.type}`);
   const [complainInfo, setComplainInfo] = useState();
   const [complain, setComplain] = useState([]);
   useEffect(() => {
@@ -63,10 +65,14 @@ function UserErrorThanks() {
   }, []);
 
   let color = "blue";
+  console.log(deviceId);
   const handleTabClick = (e) => {
-    setCurrentTab(e.target.id);
+    if (e.target.id == 2 || e.target.id == 1) {
+      navigate("/user-error-thanks", {
+        state: { type: e.target.id },
+      });
+    }
   };
-
   return (
     <UserLayout>
       <ToastContainer />
@@ -123,32 +129,10 @@ function UserErrorThanks() {
                     </th>
                     <th className="px-4 py-3 font-bold">Ажлын байр </th>
                     <th className="px-4 py-3 font-bold">Ажилтны нэр </th>
-                    {currentTab === "3" ? (
-                      <th className="px-4 py-3 font-bold">Төрөл </th>
-                    ) : (
-                      <th className="px-4 py-3 font-bold">Гомдлын төрөл </th>
-                    )}
-                    {currentTab === "3" ? (
-                      <th className="px-4 py-3 font-bold">Дэлгэрэнгүй </th>
-                    ) : (
-                      <th className="px-4 py-3 font-bold">
-                        Гомдлын дэлгэрэнгүй{" "}
-                      </th>
-                    )}
-                    {currentTab === "3" ? (
-                      <th className="px-4 py-3 font-bold">
-                        Бүртгэгдсэн суваг{" "}
-                      </th>
-                    ) : (
-                      <th className="px-4 py-3 font-bold">Журам </th>
-                    )}
-                    {currentTab === "3" ? (
-                      <th className="px-4 py-3 font-bold">Тоогоор</th>
-                    ) : (
-                      <th className="px-4 py-3 font-bold">Алдаа </th>
-                    )}
-
-                    <th className="px-4 py-3 font-bold">Action </th>
+                    <th className="px-4 py-3 font-bold">Төрөл </th>
+                    <th className="px-4 py-3 font-bold">Дэлгэрэнгүй </th>
+                    <th className="px-4 py-3 font-bold">Бүртгэгдсэн суваг </th>
+                    <th className="px-4 py-3 font-bold">Тоогоор </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white text-sm">
@@ -191,4 +175,4 @@ function UserErrorThanks() {
   );
 }
 
-export default UserErrorThanks;
+export default UserThanks;

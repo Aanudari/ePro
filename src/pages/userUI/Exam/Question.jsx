@@ -47,6 +47,7 @@ export default function Question({
         }
             setContainer((prev) => [...prev, arr])
     }
+    console.log(data)
     return (
         <div className="question " ref={questionRef}>
             <div className="question-inner">

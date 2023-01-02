@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import getWindowDimensions from "./SizeDetector"
 import MobileBar from "./MobileBar";
-import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { Menu, Transition } from '@headlessui/react'
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -32,7 +32,7 @@ function Navigation() {
       headers: {
         "Content-Type": "application/json",
       },
-      url: `http://192.168.10.248:9000/v1/User/${deviceId}`,
+      url: `${process.env.REACT_APP_URL}/v1/User/${deviceId}`,
     })
       .then(
         res => setData(res.data.result)

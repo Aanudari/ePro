@@ -21,6 +21,7 @@ function ExamDash() {
     const [examModal, setExamModal] = useState(false);
     const [trigger, setTrigger] = useState(false);
     const [imgStatus, setImgStatus] = useState(false);
+    const [examTri, setExamTri] = useState(false);
     const logout = () => {
       localStorage.clear();
       sessionStorage.clear();
@@ -46,7 +47,7 @@ function ExamDash() {
                 }
             )
             .catch(err => console.log(err))
-    }, [categoryModal, examModal])
+    }, [categoryModal, examModal, examTri])
     useEffect(() => {
         axios({
             method: "get",
@@ -84,7 +85,7 @@ function ExamDash() {
     return ( 
     <div className="w-full min-h-screen bg-teal-500 relative">
       <Navigation />
-      <div className='px-2 py-1 flex h-[calc(100%-64px)] items-end justify-start'>
+      <div className='px-2 py-1 flex h-[calc(100%-64px)] items-end justify-center'>
         <div className='h-full flex flex-col justify-between'>
             {
                 showCategoryMenu && 
@@ -102,7 +103,7 @@ function ExamDash() {
             }
             {
                 showReport && 
-                <Document setShowReport={setShowReport}/>
+                <Document setShowReport={setShowReport} id={examModalId}/>
             }
         </div>
             <ExamBoardController imgStatus={imgStatus} setImgStatus={setImgStatus} 
@@ -116,11 +117,11 @@ function ExamDash() {
       }
       {
         examModal && 
-        <ExamModalMain id={examModalId} setExamModal={setExamModal}/>
+        <ExamModalMain examTri={examTri} setExamTri={setExamTri} exams={data} id={examModalId} setExamModal={setExamModal}/>
       }
       {
         showAddCategory && 
-        <AddCategoryMenu showAddCategory={showAddCategory} setShowAddCategory={setShowAddCategory}/>
+        <AddCategoryMenu trigger={trigger} setTrigger={setTrigger} showAddCategory={showAddCategory} setShowAddCategory={setShowAddCategory}/>
       }
     </div>
      );

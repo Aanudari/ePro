@@ -1,14 +1,11 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import TakeExamCell from '../../../components/sub-components/TakeExamCell';
 import { useStateContext } from '../../../contexts/ContextProvider';
-import ReadyCheck from '../../../components/sub-components/ReadyCheck';
 import UserLayout from '../../../layout/UserLayout';
 import { useNavigate } from 'react-router-dom';
 import ExamCard from '../Exam/ExamCard';
 function LevelOneUITakeExam() {
     const [data, setData] = useState();
-    const [questions, setquestions] = useState();
     const [key, setKey] = useState('1');
     const navigate = useNavigate();
     const { TOKEN, readyCheck, setReadyCheck, examID, examName } = useStateContext();
@@ -19,7 +16,7 @@ function LevelOneUITakeExam() {
                 "Content-Type": "application/json",
                 'Authorization': `${TOKEN}`
             },
-            url: "http://192.168.10.248:9000/v1/ExamNew",
+            url: `${process.env.REACT_APP_URL}/v1/ExamNew`,
         })
             .then(
                 res => {

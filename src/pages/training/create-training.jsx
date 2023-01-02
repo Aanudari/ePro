@@ -150,31 +150,6 @@ function CreateTraining() {
   const handleTrainingType = (item) => {
     setsessionType(item.id);
   };
-<<<<<<< HEAD
-  const handleFileSelect = (event) => {
-    setSelectedFile(event.target.files[0]);
-    const data = new FormData();
-    data.append("file", selectedFile);
-    axios({
-      method: "post",
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `${TOKEN}`,
-      },
-      url: `${process.env.REACT_APP_URL}/v1/TrainingFile/fileadd`,
-      data,
-    })
-      .then((res) => {
-        console.log(res.data.isSuccess);
-        if (res.data.isSuccess == true) {
-          setfileUrl(res.data.path);
-        }
-        if (res.data.isSuccess == false) {
-          alert("Өөр файл оруулна уу");
-        }
-      })
-      .catch((err) => console.log(err));
-=======
 
   const d = () => {
     if (d1 > d2 || d1 == d2) {
@@ -182,7 +157,6 @@ function CreateTraining() {
     } else {
       setduration(d1 - d2);
     }
->>>>>>> 447977aae6f51e4634273131d3f0d54fec808ef7
   };
   useEffect(() => {
     d();
@@ -278,13 +252,8 @@ function CreateTraining() {
           "Content-Type": "application/json",
           accept: "text/plain",
         },
-<<<<<<< HEAD
         url: `${process.env.REACT_APP_URL}/v1/Training/add`,
         data: JSON.stringify(data),
-=======
-        url: `http://192.168.10.248:9000/v1/Training/add`,
-        data: JSON.stringify(dataFULL),
->>>>>>> 447977aae6f51e4634273131d3f0d54fec808ef7
       })
         .then((res) => {
           console.log(res.data);

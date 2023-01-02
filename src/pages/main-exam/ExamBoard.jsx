@@ -31,6 +31,7 @@ function ExamBoard({ exams, examModal, setExamModal, handleExamModal, setShowRep
                             </div>
                             <div onClick={() => {
                                 setShowReport(true)
+                                handleExamModal(exam.id)
                             }} className="w-1/4 h-full flex justify-between items-center text-[11px] cursor-pointer
                      uppercase font-[500] bg-teal-500 !text-white active:bg-teal-500 hover:bg-teal-600">
                                 <div className="w-full flex justify-center items-center font-[500]">

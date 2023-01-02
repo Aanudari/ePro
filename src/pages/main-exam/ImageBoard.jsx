@@ -53,7 +53,7 @@ function ImageBoard({imgStatus, setImgStatus}) {
     }
     return ( 
         <div className={`absolute top-[56px] shadow bg core-bg-g h-[calc(100%-68px)] mb-2 h-full flex justify-between px-3 
-        py-3 gap-2 drop-down ${activeMenu ? "w-[calc(100%-10px)]" : "w-[calc(100%-100px)]"} `}>
+        py-3 gap-2 drop-down ${activeMenu ? "w-[calc(100%-10px)]" : "w-full left-0"} `}>
             <div className="flex gap-2 ">
                 {
                     data?.map((img, index) => (

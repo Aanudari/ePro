@@ -1,5 +1,4 @@
 function EditQuestionMenu({answer, i, deleteAnswer, handleEditQuestion}) {
-    console.log(answer)
     return (
         <div className="">
             <div className="h-[42px] mt-1 relative parent">

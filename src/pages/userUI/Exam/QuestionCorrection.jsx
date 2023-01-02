@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import axios from "axios";
 
 export default function QuestionCorrection({roundedScore, Exam_chosen}) {
-  const { showAnswer, gameStarted, reminder, setReminder, setRightAnswer, rightAnswer, varientID, setShowAnswer} = useStateContext();
+  const { showAnswer, gameStarted, reminder, setReminder, setRightAnswer, rightAnswer, varientID, setShowAnswer, examID} = useStateContext();
   var data = sessionStorage.getItem("exam_data");
   var obj = JSON.parse(data)
   let user = localStorage.getItem("user")
@@ -50,14 +50,14 @@ var datestring = value.getFullYear() + "" + addZero((value.getMonth() + 1)) + ad
       main.push(small)
     }
     let schema = {
-      "examId": `${obj.id}`,
+      "examId": `${examID}`,
       "variantId": `${varientID}`,
       "devId": `${userParsed.device_id}`,
       "score": `${roundedScore}`,
       "endAt": `${datestring}`,
       "onlyQuestionId": main
     }
-    // console.log(JSON.stringify(schema))
+    console.log(JSON.stringify(schema))
     axios({
       method: "post",
       headers: {

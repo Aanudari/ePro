@@ -248,7 +248,7 @@ function CreateTraining() {
           accept: "text/plain",
         },
         url: `${process.env.REACT_APP_URL}/v1/Training/add`,
-        data: JSON.stringify(data),
+        data: JSON.stringify(dataFULL),
       })
         .then((res) => {
           console.log(res.data);

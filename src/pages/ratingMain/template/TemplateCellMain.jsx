@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { useStateContext } from '../../../contexts/ContextProvider';
 import TemplateEditModal from "../modal/TemplateEditModal"
 
-function TemplateCellMain({ data }) {
+function TemplateCellMain({ data, trigger, setTrigger }) {
     const {templateID, setTemplateID} = useStateContext();
     const [showModal, setShowModal] = useState();
     return (
@@ -11,7 +11,6 @@ function TemplateCellMain({ data }) {
                 {data.name}
             </span>
             <div className="h-full flex">
-
                 <div onClick={() => {
                     setShowModal(!showModal)
                     setTemplateID(data.id)
@@ -21,10 +20,10 @@ function TemplateCellMain({ data }) {
             </div>
             {
                 showModal &&
-                <TemplateEditModal data={data} setShowModal={setShowModal}/>
+                <TemplateEditModal trigger={trigger} setTrigger={setTrigger} 
+                data={data} setShowModal={setShowModal}/>
             }
         </div>
     );
 }
-
 export default TemplateCellMain;

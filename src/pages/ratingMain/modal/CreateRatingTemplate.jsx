@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-function CreateRatingTemplate({ setShowModal }) {
+function CreateRatingTemplate({ setShowModal, tri, setTri }) {
   const navigate = useNavigate();
   const logout = () => {
     localStorage.clear();
@@ -120,8 +120,8 @@ function CreateRatingTemplate({ setShowModal }) {
       data: main,
     })
       .then((res) => {
-        console.log(res)
         setShowModal(false)
+        setTri(!tri)
       })
       .catch((err) => {
         console.log(err)

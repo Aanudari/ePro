@@ -6,9 +6,10 @@ import { useNavigate } from "react-router-dom";
 import SubCategory from "./SubCategory";
 import EditSubCategory from "./EditSubCategory";
 
-function TemplateEditModal({ setShowModal, data }) {
+function TemplateEditModal({ setShowModal, trigger, setTrigger }) {
     const { activeMenu, templateID, TOKEN } = useStateContext()
     const [addCategory, setaddCategory] = useState();
+    const [ids, setIds] = useState([]);
     const [datas, setDatas] = useState();
     const logout = () => {
         localStorage.clear();
@@ -33,7 +34,7 @@ function TemplateEditModal({ setShowModal, data }) {
                 }
             })
             .catch((err) => console.log(err));
-    }, [addCategory])
+    }, [addCategory, ids])
     const [catName, setCatName] = useState('');
     const [catPoint, setCatPoint] = useState('');
     let main = {
@@ -54,66 +55,108 @@ function TemplateEditModal({ setShowModal, data }) {
         })
             .then((res) => {
                 setaddCategory(false)
+                setTrigger(!trigger)
             })
             .catch((err) => {
                 console.log(err)
             })
     }
-    const [ids, setIds] = useState([]);
-    const [editMenu, setEditMenu] = useState(false);
     const handleCollector = (value) => {
-        setEditMenu(!editMenu)
-        if(ids.includes(value)) {
+        if (ids.includes(value)) {
             setIds([])
         } else {
             setIds([value])
         }
     }
+    const deleteCategory = (value) => {
+        axios({
+            method: "delete",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": TOKEN
+            },
+            url: `${process.env.REACT_APP_URL}/v1/Category/cat/${value}`,
+        })
+            .then((res) => {
+                setIds([])
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+    const deleteTemplate = (value) => {
+        axios({
+            method: "delete",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": TOKEN
+            },
+            url: `${process.env.REACT_APP_URL}/v1/RatingTemplate/${value}`,
+        })
+            .then((res) => {
+                setTrigger(!trigger)
+                setShowModal(false)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+
     return (
         <div className={`${activeMenu ? " left-[250px] w-[calc(100%-250px)]" : "left-0 w-full"} 
         top-[56px] fixed  h-[calc(100%-56px)] 
         bg-black bg-opacity-50 flex items-center justify-center`}>
             {
                 !addCategory ?
-                    <div className="bg-white appear-smooth w-10/12 h-[calc(80%)] rounded">
+                    <div className="bg-white appear-smooth w-10/12 h-[calc(80%)] rounded ">
                         <div className="w-full h-12 bg-teal-500 rounded-t flex justify-between px-4 items-center">
-                            <i onClick={() => {
-                                setaddCategory(!addCategory)
-                            }} className="bi bi-plus-circle text-xl text-white cursor-pointer"></i>
-                            <i onClick={() => {
-                                setShowModal(false)
-                            }} className="bi bi-x-lg text-xl cursor-pointer hover:scale-105"></i>
-                        </div>
-                        <div className="h-[calc(100%-50px)] w-full px-3 pt-1 overflow-scroll">
-                            <div className="mt-2 bg-teal-500">
+                            <div className="flex items-center">
+                                <i onClick={() => {
+                                    setaddCategory(!addCategory)
+                                }} className="bi bi-plus-circle text-xl text-white cursor-pointer"></i>
                                 <div className=" flex justify-start px-4 py-2">
                                     <span className="text-white font-[500] text-sm">{datas?.name}</span>
                                 </div>
                             </div>
+                            <div>
+                            <i onClick={() => {
+                                deleteTemplate(datas.id)
+                            }} className="bi bi-trash3 text-xl cursor-pointer hover:scale-105 mr-5 "></i>
+                            <i onClick={() => {
+                                setShowModal(false)
+                            }} className="bi bi-x-lg text-xl cursor-pointer hover:scale-105"></i>
+                            </div>
+                        </div>
+                        <div className="h-[calc(100%-50px)] w-full px-3 pt-1 overflow-scroll pb-5">
+                            <div className="mt-2 bg-teal-500">
+
+                            </div>
                             <div className="w-full mt-1">
                                 {
                                     datas?.categories.map((item, index) => (
-                                        <div className="mt-2 bg-teal-500 rounded parent" key={index}>
+                                        <div className="mt-2 bg-teal-500 rounded" key={index}>
                                             <div className=" flex justify-between px-4 py-2 relative">
-                                                <span className="text-white font-[500] text-sm">Нэр: {item.name}</span>
+                                                <div className="">
+                                                    <i onClick={() => {
+                                                        deleteCategory(item.id)
+                                                    }} className="bi bi-trash3-fill text-white mr-2 text-sm"></i>
+                                                    <span className="text-white font-[500] text-sm">Нэр: {item.name}</span>
+                                                </div>
                                                 <div className="flex">
-                                                <i onClick={() => {
-                                                    handleCollector(item.id)
-                                                }} className="bi bi-plus-circle text-white ml-2 child hidden absolute right-[100px] top-[11px]
+                                                    <i onClick={() => {
+                                                        handleCollector(item.id)
+                                                    }} className="bi bi-plus-circle text-white ml-2 absolute right-[100px] top-[5px]
                                                 cursor-pointer"></i>
-                                                <span className="text-white font-[500] text-sm">Оноо: {item.maxPoints}</span>
+                                                    <span className="text-white font-[500] text-sm">{item.maxPoints}<i className="bi bi-percent"></i></span>
                                                 </div>
                                             </div>
                                             <div className="px-4 bg-white border-l border-teal-500 border-r">
                                                 {
                                                     item?.subCategory.map((it, i) => (
-                                                        <SubCategory key={i} it={it} />
+                                                        <SubCategory key={i} it={it} setIds={setIds} mainId={item.id} ids={ids} />
                                                     ))
                                                 }
-                                                {
-                                                    editMenu && 
-                                                    <EditSubCategory/>
-                                                }
+                                                <EditSubCategory setIds={setIds} id={ids} mainId={item.id} />
                                             </div>
                                         </div>
                                     ))

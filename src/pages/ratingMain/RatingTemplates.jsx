@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import TemplateCellMain from "./template/TemplateCellMain";
 
 
-function RatingTemplates({ setSideMenu, setShowModal }) {
+function RatingTemplates({ setSideMenu, setShowModal, tri, setTri }) {
   const { TOKEN } = useStateContext();
   const navigate = useNavigate();
   const logout = () => {
@@ -15,6 +15,7 @@ function RatingTemplates({ setSideMenu, setShowModal }) {
     window.location.reload();
   };
   const [data, setData] = useState();
+  const [trigger, setTrigger] = useState(false);
   // console.log(data)
   useEffect(() => {
     axios({
@@ -32,7 +33,7 @@ function RatingTemplates({ setSideMenu, setShowModal }) {
         }
       })
       .catch((err) => console.log(err));
-  }, [])
+  }, [trigger, tri])
   // const [showModal, setShowModal] = useState(false);
   const { activeMenu } = useStateContext();
   // console.log(data)
@@ -46,6 +47,7 @@ function RatingTemplates({ setSideMenu, setShowModal }) {
               <i className="bi bi-caret-down-square-fill mr-2"></i>
               Үнэлгээний загварууд
             </span>
+
             <i onClick={() => {
               setSideMenu(false)
             }} className="bi bi-x-circle cursor-pointer"></i>
@@ -54,7 +56,8 @@ function RatingTemplates({ setSideMenu, setShowModal }) {
             {
               data &&
               data.map((item, index) => (
-                <TemplateCellMain data={item} key={index} setShowModal={setShowModal} />
+                <TemplateCellMain trigger={trigger} setTrigger={setTrigger} data={item} 
+                key={index} setShowModal={setShowModal} />
               ))
             }
           </div>

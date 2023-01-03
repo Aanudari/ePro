@@ -57,6 +57,7 @@ import CreateRate from "./pages/rating/rate-users/CreateRate";
 import ExamDash from "./pages/main-exam/examDashboard";
 import "react-toastify/dist/ReactToastify.css";
 import RatingCore from "./pages/ratingMain/RatingCore";
+import RatingIndividual from "./pages/ratingMain/RatingIndivdual";
 function App() {
   const { activeMenu, showTop, roleId, error, setError } = useStateContext();
   const { width } = getWindowDimensions();
@@ -393,6 +394,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199]}>
                 <RatingCore />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/rating-individual"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <RatingIndividual />
               </ProtectedRoute>
             }
           />

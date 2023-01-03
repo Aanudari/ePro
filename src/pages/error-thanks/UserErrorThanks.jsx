@@ -147,8 +147,6 @@ function UserErrorThanks() {
                     ) : (
                       <th className="px-4 py-3 font-bold">Алдаа </th>
                     )}
-
-                    <th className="px-4 py-3 font-bold">Action </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white text-sm">

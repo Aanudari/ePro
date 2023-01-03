@@ -1,0 +1,111 @@
+import UserLayout from "../../layout/UserLayout";
+import React, { useEffect, useState } from "react";
+import Navigation from "../../components/Navigation";
+import { useStateContext } from "../../contexts/ContextProvider";
+import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
+import { Modal } from "react-bootstrap";
+import { notification } from "../../service/toast";
+import { ToastContainer } from "react-toastify";
+function UserTraining() {
+  const location = useLocation();
+  const { TOKEN, deviceId } = useStateContext();
+  const navigate = useNavigate();
+  const logout = () => {
+    localStorage.clear();
+    sessionStorage.clear();
+    navigate("/");
+    window.location.reload();
+  };
+  const [userTrain, setUserTrain] = useState();
+  useEffect(() => {
+    axios({
+      method: "get",
+      headers: {
+        Authorization: `${TOKEN}`,
+      },
+      url: `http://192.168.10.248:9000/v1/Training`,
+    })
+      .then((res) => {
+        setUserTrain(res.data.trainingList);
+        if (res.data.resultMessage === "Unauthorized") {
+          logout();
+        }
+      })
+      .catch((err) => console.log(err));
+  }, []);
+  return (
+    <UserLayout>
+      <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-5 ">
+        {userTrain ? (
+          userTrain.map((data, i) => (
+            <div
+              key={i}
+              className="max-w-md mx-auto bg-white rounded-xl  shadow-lg shadow-md overflow-hidden md:max-w-2xl  transform hover:scale-105 duration-500 ease-in-out"
+            >
+              <div className=" w-full max-w-xs p-6 overflow-hidden bg-white shadow-lg rounded-xl dark:bg-gray-800">
+                <div className="flex items-center justify-between mb-4 space-x-12 ">
+                  {data.startedWatch === null ? (
+                    <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-400 border-2 border-rose-600 rounded-md absolute top-3 right-3">
+                      ҮЗЭЭГҮЙ
+                    </span>
+                  ) : (
+                    <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-700 border-2 border-green-600 rounded-md absolute top-3 right-3  ">
+                      ҮЗСЭН
+                    </span>
+                  )}
+                </div>
+
+                <p className="mb-2 text-lg text-gray-800 dark:text-white font-bold mt-2">
+                  {data.name}
+                </p>
+                <p className="text-sm font-normal text-gray-400">
+                  {data.description}
+                </p>
+
+                <div className="dark:text-white">
+                  <div className="flex items-center justify-between  text-sm border-b border-gray-200 md:space-x-24">
+                    {data.sessionType === "1" ? <p>Тэнхим</p> : <p>Онлайн</p>}
+                    {/* <div className="flex items-end text-xs">aaa</div> */}
+                  </div>
+                </div>
+
+                {/* <div className="flex items-center justify-between p-2 my-6 bg-blue-100 rounded">
+                  <div className="flex items-start justify-between w-full">
+                    <p className="flex-grow w-full text-2xl text-gray-700">
+                      <span className="font-light text-gray-400 text-md">
+                        $
+                      </span>
+                      4,500
+                      <span className="text-sm font-light text-gray-400">
+                        /Month
+                      </span>
+                    </p>
+                    <span className="flex-none px-3 py-1 text-sm text-indigo-500 border border-indigo-500 rounded-full">
+                      Full time
+                    </span>
+                  </div>
+                </div> */}
+
+                <button
+                  type="button"
+                  className="py-2 px-4  bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+                >
+                  Сургалт үзэх
+                </button>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="p-4 text-center text-sm font-medium">
+            Танд сургалт хувиарлагдаагүй байна.
+          </p>
+        )}
+      </div>
+
+      <ToastContainer />
+    </UserLayout>
+  );
+}
+
+export default UserTraining;

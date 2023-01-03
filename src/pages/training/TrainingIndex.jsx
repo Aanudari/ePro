@@ -18,8 +18,6 @@ function TrainingIndex() {
   };
   const [category, setCategory] = useState([]);
 
-  const [ID, setID] = useState();
-
   useEffect(() => {
     axios({
       method: "get",

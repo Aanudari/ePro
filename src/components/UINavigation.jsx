@@ -5,8 +5,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 const navigation = [
   { name: "Dashboard", href: "/" },
   { name: "Шалгалт", href: "/levelone-ui-take-exam" },
-  { name: "Сургалт", href: "/" },
-  { name: "Календар", href: "/" },
+  { name: "Сургалт", href: "/user-training" },
+  // { name: "Календар", href: "/" },
   { name: "Алдаа / талархал", href: "/user-error-thanks" },
 ];
 

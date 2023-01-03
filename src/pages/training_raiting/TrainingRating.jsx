@@ -685,7 +685,6 @@ function TrainingRating() {
           </table>
         </div>
       </div>
-
       <ToastContainer />
     </div>
   );

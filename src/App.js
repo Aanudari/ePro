@@ -57,6 +57,8 @@ import CreateRate from "./pages/rating/rate-users/CreateRate";
 import ExamDash from "./pages/main-exam/examDashboard";
 import "react-toastify/dist/ReactToastify.css";
 import RatingCore from "./pages/ratingMain/RatingCore";
+import EditTraining from "./pages/training/Edit-training";
+import UserTraining from "./pages/training/User-training";
 import RatingIndividual from "./pages/ratingMain/RatingIndivdual";
 function App() {
   const { activeMenu, showTop, roleId, error, setError } = useStateContext();
@@ -119,6 +121,14 @@ function App() {
             }
           />
           <Route
+            path="/edit-training"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <EditTraining />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/training-files"
             element={
               <ProtectedRoute allowedRoles={[199]}>
@@ -147,6 +157,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199]}>
                 <CreateTraining />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/user-training"
+            element={
+              <ProtectedRoute allowedRoles={[199, 1, 4]}>
+                <UserTraining />
               </ProtectedRoute>
             }
           />

@@ -9,6 +9,7 @@ function RatingUserCell({ data }) {
         setShowModal(true)
         setDeviceId(value)
     }
+    
     return (
         <div className="h-10 w-full text-white bg-teal-500 mb-1 flex items-center pl-3 justify-between shadow-sm hover:!text-gray-700">
             <div className="min-w-[250px] flex justify-between">

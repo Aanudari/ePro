@@ -59,6 +59,7 @@ import "react-toastify/dist/ReactToastify.css";
 import RatingCore from "./pages/ratingMain/RatingCore";
 import EditTraining from "./pages/training/Edit-training";
 import UserTraining from "./pages/training/User-training";
+import RatingIndividual from "./pages/ratingMain/RatingIndivdual";
 function App() {
   const { activeMenu, showTop, roleId, error, setError } = useStateContext();
   const { width } = getWindowDimensions();
@@ -411,6 +412,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199]}>
                 <RatingCore />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/rating-individual"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <RatingIndividual />
               </ProtectedRoute>
             }
           />

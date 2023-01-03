@@ -38,7 +38,6 @@ function RatingControll() {
     return roles.push(item.roleName)
   })
   let finalArr = [... new Set(roles)]
-  // console.log(finalArr)
   return (
     <div className="h-[calc(100%-56px)] w-full px-4 pt-2">
       <div className="w-full h-10 text-white pr-8 flex justify-between">

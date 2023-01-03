@@ -31,15 +31,16 @@ function RatingModalMain({setShowModal, deviceId}) {
             })
             .catch((err) => console.log(err));
     }, [])
-    console.log(data)
     return ( 
         <div className={`${activeMenu ? " left-[250px] w-[calc(100%-250px)]" : "left-0 w-full"} 
         top-[56px] fixed  h-[calc(100%-56px)] 
         bg-black bg-opacity-50 flex items-center justify-center`}> 
         <div  className="bg-white appear-smooth w-10/12 h-[calc(80%)] rounded ">
-            <div onClick={() => {
+            <div  className="w-full h-12 bg-teal-500 rounded-t px-3 flex justify-end items-center">
+              <i onClick={() => {
                 setShowModal(false)
-            }} className="w-full h-12 bg-teal-500 rounded-t"></div>
+            }} className="bi bi-x-lg text-xl text-white"></i>
+            </div>
             <div className="h-full w-full px-3 pt-1 overflow-scroll">
               <h6 className="text-teal-500 mt-2 mb-3">Үнэлгээ хийх загвар сонгох: </h6>
               {

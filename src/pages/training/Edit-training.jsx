@@ -10,7 +10,8 @@ import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
 import moment from "moment";
 import DatePicker from "react-datepicker";
-function CreateTraining() {
+function EditTraining() {
+  const locationn = useLocation();
   const { TOKEN } = useStateContext();
   const navigate = useNavigate();
   const logout = () => {
@@ -19,6 +20,8 @@ function CreateTraining() {
     navigate("/");
     window.location.reload();
   };
+  const train = locationn.state.data;
+  console.log(train);
   const format = "YYYYMMDDHHmmss";
   const format1 = "HHmm";
   const [date1, setDate1] = useState(new Date());
@@ -64,7 +67,6 @@ function CreateTraining() {
   const [durationEnd, setdurationEnd] = useState(new Date());
   const d1 = moment(durationStart).format(format1);
   const d2 = moment(durationEnd).format(format1);
-
   useEffect(() => {
     axios({
       method: "get",
@@ -152,28 +154,35 @@ function CreateTraining() {
   };
 
   const dataFULL = {
-    name: `${name}`,
-    description: `${description}`,
-    fileUrl: `${fileUrl}`,
-    duration: `${duration}`,
-    teacher: `${teacher}`,
-    tCategory: `${tCategory}`,
-    sessionType: `${sessionType}`,
-    startDate: `${startDate}`,
-    endDate: `${endDate}`,
-    location: `${location}`,
+    id: `${train.id}`,
+    name: `${name}` === "" ? train.name : `${name}`,
+    description: `${description}` === "" ? train.description : `${description}`,
+    fileUrl: `${fileUrl}` === "" ? train.fileUrl : `${fileUrl}`,
+    duration: `${duration}` === "" ? train.duration : `${duration}`,
+    teacher: `${teacher}` === "" ? train.teacher : `${teacher}`,
+    tCategory: `${tCategory}` === "" ? train.tCategory : `${tCategory}`,
+    sessionType: `${sessionType}` === "" ? train.sessionType : `${sessionType}`,
+    startDate: `${startDate}` === "" ? train.startDate : `${startDate}`,
+    endDate: `${endDate}` === "" ? train.endDate : `${endDate}`,
+    location: `${location}` === "" ? train.location : `${location}`,
     addTrainingDevs:
       orgID === "" && workersID === ""
         ? [
             {
-              departmentId: `${departmentID}`,
+              departmentId:
+                `${departmentID}` === ""
+                  ? train.departmentID
+                  : `${departmentID}`,
             },
           ]
         : [
             {
-              departmentId: `${departmentID}`,
-              unitId: `${orgID}`,
-              devId: `${workersID}`,
+              departmentId:
+                `${departmentID}` === ""
+                  ? train.departmentID
+                  : `${departmentID}`,
+              unitId: `${orgID}` === "" ? train.unitId : `${orgID}`,
+              devId: `${workersID}` === "" ? train.devId : `${workersID}`,
             },
           ],
   };
@@ -214,25 +223,9 @@ function CreateTraining() {
       notification.error("Үргэлжлэх хугацаа буруу байна.");
     } else {
       setduration(d1 - d2);
+      console.log(duration);
     }
-    if (name.length === 0) {
-      setcheckEmptyname(true);
-    }
-    if (description.length === 0) {
-      setcheckEmptydescription(true);
-    }
-    if (teacher.length === 0) {
-      setcheckEmptyteacher(true);
-    }
-    if (tCategory.length === 0) {
-      setcheckEmptytCategory(true);
-    }
-    if (sessionType.length === 0) {
-      setcheckEmptysessionType(true);
-    }
-    if (location.length === 0) {
-      setcheckEmptylocation(true);
-    }
+
     if (startDate == endDate || startDate > endDate) {
       notification.invalidFileUpload("Эхлэх дуусах хугацаа алдаатай байна.");
     }
@@ -241,13 +234,13 @@ function CreateTraining() {
     } else {
       console.log(dataFULL);
       axios({
-        method: "post",
+        method: "put",
         headers: {
           Authorization: `${TOKEN}`,
           "Content-Type": "application/json",
           accept: "text/plain",
         },
-        url: `http://192.168.10.248:9000/v1/Training/add`,
+        url: `http://192.168.10.248:9000/v1/Training/edit`,
         data: JSON.stringify(dataFULL),
       })
         .then((res) => {
@@ -284,6 +277,7 @@ function CreateTraining() {
                 </label>
                 <input
                   type="text"
+                  defaultValue={train.name}
                   onChange={(e) => {
                     setName(e.target.value);
                     setcheckEmptyname(false);
@@ -299,6 +293,7 @@ function CreateTraining() {
                 <textarea
                   className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
                   rows="8"
+                  defaultValue={train.description}
                   onChange={(e) => {
                     setdescription(e.target.value);
                     setcheckEmptydescription(false);
@@ -313,6 +308,7 @@ function CreateTraining() {
                   </label>
                   <input
                     type="file"
+                    defaultValue={train.fileUrl}
                     onChange={handleFileSelect}
                     className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
                   />
@@ -364,6 +360,7 @@ function CreateTraining() {
                   </label>
                   <input
                     type="text"
+                    defaultValue={train.teacher}
                     onChange={(e) => {
                       setteacher(e.target.value);
                       setcheckEmptyteacher(false);
@@ -456,6 +453,7 @@ function CreateTraining() {
                   <input
                     type="text"
                     className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                    defaultValue={train.location}
                     onChange={(e) => {
                       setlocation(e.target.value);
                       setcheckEmptylocation(false);
@@ -553,4 +551,4 @@ function CreateTraining() {
   );
 }
 
-export default CreateTraining;
+export default EditTraining;

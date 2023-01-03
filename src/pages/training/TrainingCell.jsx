@@ -26,7 +26,6 @@ function TrainingCell({ data, id }) {
     })
       .then((res) => {
         setTrains(res.data.trainingList);
-        // console.log(trains);
         if (res.data.resultMessage === "Unauthorized") {
           logout();
         }
@@ -36,6 +35,7 @@ function TrainingCell({ data, id }) {
   let filtered = trains?.filter((item, index) => {
     return item.tCategory == id;
   });
+
   const checking = () => {
     if (filtered?.length == null) {
       notification.error(`Хоосон байна.`);
@@ -55,9 +55,7 @@ function TrainingCell({ data, id }) {
           <h5 className="mt-2 mb-2 font-bold">{data.name}</h5>
         </div>
         <div className="p-4 flex items-center text-sm text-gray-600">
-          <span className="ml-2">
-            Сургалтын тоо: {filtered?.length == null ? 0 : filtered?.length}
-          </span>
+          <span className="ml-2">Сургалтын тоо: {filtered?.length}</span>
         </div>
       </a>
       <ToastContainer />

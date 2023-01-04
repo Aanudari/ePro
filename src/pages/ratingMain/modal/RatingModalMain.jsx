@@ -51,7 +51,9 @@ function RatingModalMain({setShowModal, deviceId}) {
                   </div> : 
                 data && 
                 data.map((item, index) => ( 
-                  <div className="mt-1 hover:bg-teal-500 cursor-pointer pl-3 flex items-center text-[13px] h-12 font-[500] text-white 
+                  <div onClick={() => {
+                    navigate("/rating-individual", {state: {data : data, user : deviceId}})
+                  }} className="mt-1 hover:bg-teal-500 cursor-pointer pl-3 flex items-center text-[13px] h-12 font-[500] text-white 
                   bg-teal-400" key={index}> 
                   {item.name} 
                   </div> 

@@ -114,7 +114,7 @@ function TrainingFiles() {
       .catch((err) => console.log(err));
   };
   return (
-    <div className="w-full h-screen bg-gray-50">
+    <div className="w-full min-h-[calc(100%-56px)]">
       <div>
         <Modal
           show={showCreate}

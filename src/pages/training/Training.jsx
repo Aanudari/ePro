@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Navigation from "../../components/Navigation";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -8,9 +8,9 @@ import { Modal } from "react-bootstrap";
 import Select from "react-select";
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
-function Traingings() {
+function Training() {
   const location = useLocation();
-  const { TOKEN } = useStateContext();
+  const { TOKEN, activeMenu } = useStateContext();
   const navigate = useNavigate();
   const logout = () => {
     localStorage.clear();
@@ -18,25 +18,92 @@ function Traingings() {
     navigate("/");
     window.location.reload();
   };
-  const data = location.state.data;
-  const [id, setId] = useState();
-
+  const videoRef = useRef(null);
+  const [trains, setTrains] = useState([]);
+  const [category, setCategory] = useState([]);
   const [showView, setShowView] = useState(null);
   const [TRateChoosen, setTRateChoosen] = useState();
   const hideModalView = () => setShowView(null);
-  const [showCreate, setShowCreate] = useState(null);
-  const showModalCreate = () => setShowCreate(true);
-  const hideModalCreate = () => setShowCreate(null);
   const [showDelete, setShowDelete] = useState(null);
   const hideModalDelete = () => setShowDelete(null);
-  const [showEdit, setShowEdit] = useState(null);
-  const hideModalEdit = () => setShowEdit(null);
+  const [id, setId] = useState();
+  const [choosedTrain, setChoosedTrain] = useState();
+  const [watchedUsers, setWatchedUsers] = useState();
+  const options = [
+    { id: "1", value: "Тэнхим" },
+    { id: "2", value: "Онлайн" },
+  ];
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      headers: {
+        Authorization: `${TOKEN}`,
+      },
+      url: `http://192.168.10.248:9000/v1/Training`,
+    })
+      .then((res) => {
+        setTrains(res.data.trainingList);
+        if (res.data.resultMessage === "Unauthorized") {
+          logout();
+        }
+      })
+      .catch((err) => console.log(err));
+  }, []);
+  useEffect(() => {
+    axios({
+      method: "get",
+      headers: {
+        accept: "text/plain",
+        Authorization: `${TOKEN}`,
+      },
+      url: `http://192.168.10.248:9000/v1/Training/category`,
+    })
+      .then((res) => {
+        setCategory(res.data.trainingCatList);
+        if (res.data.isSuccess == true) {
+          setCategory(res.data.trainingCatList);
+        }
+        if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage == "Input string was not in a correct format."
+        ) {
+          logout();
+        }
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   const showModalDelete = (e) => {
     setShowDelete(true);
-    setId(e.currentTarget.dataset.id);
+    setId(e.id);
+  };
+  const showModalView = (data) => {
+    setShowView(true);
+    setChoosedTrain(data);
+    axios({
+      method: "get",
+      headers: {
+        accept: "text/plain",
+        Authorization: `${TOKEN}`,
+      },
+      url: `http://192.168.10.248:9000/v1/TrainingReport/training/watched?trainingId=${data.id}`,
+    })
+      .then((res) => {
+        setWatchedUsers(res.data.watchedList);
+        if (res.data.isSuccess == true) {
+          setWatchedUsers(res.data.watchedList);
+        }
+        if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage == "Input string was not in a correct format."
+        ) {
+          logout();
+        }
+      })
+      .catch((err) => console.log(err));
   };
   const handleDelete = () => {
-    console.log(id);
     axios({
       method: "delete",
       headers: {
@@ -48,7 +115,7 @@ function Traingings() {
       .then((res) => {
         if (res.data.isSuccess === true) {
           notification.success(`${res.data.resultMessage}`);
-          const timer = setTimeout(() => navigate("/trainings"), 1000);
+          const timer = setTimeout(() => navigate(0), 1000);
           return () => clearTimeout(timer);
         } else {
           console.log(res.data.resultMessage);
@@ -61,27 +128,39 @@ function Traingings() {
       state: { data: data },
     });
   };
+
   return (
-    <div className="w-full min-h-[calc(100%-56px)] ">
-      <Navigation />
-      <div>
+    <div className=" min-h-[calc(100%-56px)] ">
+      <div className="flex justify-end">
         <Modal
           show={showView}
           onHide={hideModalView}
-          size="lg"
-          //   backdrop="static"
+          size="xl"
+          style={
+            activeMenu
+              ? {
+                  width: "calc(100% - 250px)",
+                  left: "250px",
+                }
+              : {
+                  width: "calc(100%)",
+                  left: "0",
+                }
+          }
+          // backdrop="static"
           keyboard={false}
           aria-labelledby="contained-modal-title-vcenter"
           dialogClassName="modal-100w"
           centered
         >
           <Modal.Header closeButton>
-            <Modal.Title>{TRateChoosen?.name}</Modal.Title>
+            <Modal.Title>{choosedTrain?.name}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div>йййййййй</div>
           </Modal.Body>
         </Modal>
+        {/* Устгах */}
         <Modal
           show={showDelete}
           onHide={hideModalDelete}
@@ -93,155 +172,277 @@ function Traingings() {
           centered
         >
           <Modal.Header closeButton>
-            <Modal.Title>Сургалтын үнэлгээ устгах</Modal.Title>
+            <Modal.Title>Сургалт устгах</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div className="p-6 text-center">
-              <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+              <h3 className="mb-5 text-lg font-normal text-gray-500 ">
                 Устгах уу?
               </h3>
               <button
                 type="button"
                 onClick={handleDelete}
-                className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
+                className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300  font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
               >
                 Тийм
               </button>
               <button
                 onClick={hideModalDelete}
                 type="button"
-                className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+                className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 "
               >
                 Үгүй
               </button>
             </div>
           </Modal.Body>
         </Modal>
-        <Modal
-          show={showEdit}
-          onHide={hideModalEdit}
-          size="ml"
-          //   backdrop="static"
-          keyboard={false}
-          aria-labelledby="contained-modal-title-vcenter"
-          dialogClassName="modal-100w"
-          centered
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Сургалтын үнэлгээ засах</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <div className="max-w-screen-lg mx-auto">
-              <div className="md:col-span-1">
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                  name
-                </label>
-                <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                  <input
-                    type="text"
-                    className="outline-none  w-full rounded bg-gray-50 h-10 block p-2"
-                    // defaultValue={editData.name}
-                    // onChange={(e) => {
-                    //   setNameEdit(e.target.value);
-                    // }}
-                  />
-                </div>
-              </div>
-
-              <div className="col-span-1 text-right mt-4">
-                <div className="inline-flex items-end">
-                  <button
-                    // onClick={navigateIndexEdit}
-                    type="submit"
-                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                  >
-                    Submit
-                  </button>
-                </div>
-              </div>
-            </div>
-          </Modal.Body>
-        </Modal>
       </div>
-      <div className="container mx-auto ">
-        <div className="flex justify-between w-full px-4 py-2">
-          <div className="text-lg font-bold">Сургалтууд</div>
-          {/* <div className="px-2 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600">
-            <i className="bi bi-clipboard-plus" onClick={showModalCreate} />
-          </div> */}
-        </div>
+      <Navigation />
 
-        <div className="mt-6 overflow-x-auto">
-          <table className="w-full border border-collapse table-auto">
-            <thead className="">
-              <tr className="text-base font-bold text-left bg-gray-50">
-                <th className="px-4 py-3 border-b-2 border-red-500">no</th>
-                <th className="px-4 py-3 border-b-2 border-yellow-500">name</th>
-                <th className="px-4 py-3 border-b-2 border-green-500">
-                  description
-                </th>
-                <th className="px-4 py-3 text-center border-b-2 border-blue-500 sm:text-left">
-                  teacher
-                </th>
-                <th className="px-4 py-3 border-b-2 border-purple-500">
-                  startDate
-                </th>
-                <th className="px-4 py-3 border-b-2 border-purple-500">
-                  endDate
-                </th>
-                <th className="px-4 py-3 text-center border-b-2 border-pink-500 sm:text-left">
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody className="text-sm font-normal text-gray-900">
-              {data
-                ? data.map((data, i) => (
-                    <tr
-                      key={i}
-                      className="py-10 border-b border-gray-200 hover:bg-gray-200"
-                      data-id={data}
-                    >
-                      <td className="flex flex-row items-center px-4 py-4">
-                        {i + 1}
-                      </td>
-                      <td className="px-4 py-4">{data.name}</td>
-                      <td className="px-4 py-4">{data.description}</td>
-                      <td className="px-4 py-4">{data.teacher}</td>
-                      <td className="px-4 py-4">{data.startDate}</td>
-                      <td className="px-4 py-4">{data.endDate}</td>
-                      <td className="px-4 py-4">
-                        <a
-                          data-id={data.id}
-                          // onClick={() => {
-                          //   showModalView(data);
-                          // }}
-                          className="text-blue-400 hover:text-black ml-2  text-lg"
+      <div className="sm:px-6 w-full">
+        <div className="px-4 md:px-10 py-4 md:py-7">
+          <div className="flex items-center justify-between">
+            <p className="focus:outline-none  sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">
+              Сургалтууд
+            </p>
+          </div>
+        </div>
+        <div className="sm:flex items-center justify-between p-2">
+          <div className="flex items-center"></div>
+          <button
+            className="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 sm:mt-0 inline-flex items-start justify-start px-6 py-3 bg-indigo-700 hover:bg-indigo-600 focus:outline-none rounded 
+               text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+            type="button"
+            onClick={() => navigate("/create-training")}
+          >
+            <i className="bi bi-plus text-bold" />
+            Сургалт нэмэх
+          </button>
+        </div>
+        <div className="p-8">
+          {trains ? (
+            trains.map((data, index) => (
+              <div
+                key={index}
+                className="max-w-full mx-auto overflow-hidden rounded-lg shadow-lg pricing-box lg:max-w-none lg:flex mt-2"
+              >
+                <div className="w-full px-6 py-8 bg-white  lg:flex-shrink-2 lg:p-12">
+                  <h3 className="text-xl  leading-8 text-gray-800 sm:text-xl sm:leading-9 ">
+                    {data.name}
+                  </h3>
+                  {data.description === null ? (
+                    ""
+                  ) : (
+                    <p className="mt-4 leading-6 text-gray-800 ">
+                      {data.description}
+                    </p>
+                  )}
+
+                  <div className="mt-2">
+                    <div className="flex items-center">
+                      <h4 className="flex-shrink-0 pr-4 text-sm font-semibold leading-5 tracking-wider text-indigo-600 uppercase bg-white ">
+                        ерөнхий
+                      </h4>
+                      <div className="flex-1 border-t-2 border-gray-200"></div>
+                    </div>
+                    <ul className="mt-2 lg:grid lg:grid-cols-2 lg:col-gap-8 lg:row-gap-5">
+                      <li className="flex items-start lg:col-span-1">
+                        <div className="flex-shrink-0 text-emerald-500 text-lg">
+                          <i className="bi bi-card-checklist" />
+                        </div>
+                        <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                          Ангилал:{" "}
+                          {
+                            category.find((obj) => obj.id === data.tCategory)
+                              .name
+                          }
+                        </p>
+                      </li>
+                      {data.teacher === null ? (
+                        ""
+                      ) : (
+                        <li className="flex items-start lg:col-span-1">
+                          <div className="flex-shrink-0 text-emerald-500 text-lg">
+                            <i className="bi bi-person-video3" />
+                          </div>
+                          <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                            Багш: {data.teacher}
+                          </p>
+                        </li>
+                      )}
+
+                      <li className="flex items-start lg:col-span-1">
+                        <div className="flex-shrink-0 text-emerald-500 text-lg">
+                          <i className="bi bi-people-fill" />
+                        </div>
+                        <p className="ml-3 text-sm leading-5 text-gray-700">
+                          Сургалт үзэх нийт ажилчидын тоо:{" "}
+                          {data.trainingDevs.length}
+                        </p>
+                      </li>
+
+                      <li className="flex items-start lg:col-span-1">
+                        <div className="flex-shrink-0 text-emerald-500 text-lg">
+                          <i className="bi bi-signpost-split-fill" />
+                        </div>
+                        <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                          {
+                            options.find((obj) => obj.id === data.sessionType)
+                              .value
+                          }
+                        </p>
+                      </li>
+                      {data.startDate === null ? (
+                        ""
+                      ) : (
+                        <li className="flex items-start lg:col-span-1">
+                          <div className="flex-shrink-0 text-emerald-500 text-lg">
+                            <i className="bi bi-calendar-check" />
+                          </div>
+                          <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                            Эхлэх хугацаа: {data.startDate}
+                          </p>
+                        </li>
+                      )}
+
+                      {data.endDate === null ? (
+                        ""
+                      ) : (
+                        <li className="flex items-start lg:col-span-1">
+                          <div className="flex-shrink-0 text-emerald-500 text-lg">
+                            <i className="bi bi-calendar-check-fill" />
+                          </div>
+                          <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                            Дуусах хугацаа: {data.endDate}
+                          </p>
+                        </li>
+                      )}
+
+                      {data.location === null ? (
+                        ""
+                      ) : (
+                        <li className="flex items-start lg:col-span-1">
+                          <div className="flex-shrink-0 text-emerald-500 text-lg">
+                            <i className="bi bi-pin-map-fill" />
+                          </div>
+                          <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                            Байршил: {data.location}
+                          </p>
+                        </li>
+                      )}
+
+                      {data.duration === null ? (
+                        ""
+                      ) : (
+                        <li className="flex items-start lg:col-span-1">
+                          <div className="flex-shrink-0 text-emerald-500 text-lg">
+                            <i className="bi bi-clock-history" />
+                          </div>
+                          <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                            Үргэлжлэх хугацаа: {data.duration}
+                          </p>
+                        </li>
+                      )}
+                    </ul>
+                  </div>
+                  <div className="mt-2">
+                    <div className="flex items-center">
+                      <h4 className="flex-shrink-0 pr-4 text-sm font-semibold leading-5 tracking-wider text-indigo-600 uppercase bg-white ">
+                        Үйлдэл
+                      </h4>
+                      <div className="flex-1 border-t-2 border-gray-200"></div>
+                    </div>
+                    <ul className="mt-2 lg:grid lg:grid-cols-3 lg:col-gap-8 lg:row-gap-5">
+                      <li className="flex items-center lg:col-span-1">
+                        <div className="flex-shrink-0 items-center">
+                          <a
+                            onClick={() => {
+                              showModalView(data);
+                            }}
+                            className="group flex items-center justify-between rounded-lg border border-current px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 focus:outline-none focus:ring active:bg-indigo-500"
+                          >
+                            <i className="bi bi-eye-fill mr-1" /> Харах
+                          </a>
+                        </div>
+                      </li>
+                      <li className="flex items-center lg:col-span-1">
+                        <div className="flex-shrink-0 items-center">
+                          <a
+                            data-id={data}
+                            onClick={() => {
+                              handleEdit(data);
+                            }}
+                            className="group flex items-center justify-between rounded-lg border border-current px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 focus:outline-none focus:ring active:bg-indigo-500"
+                          >
+                            <i className="bi bi-pencil-square mr-1" /> Засварлах
+                          </a>
+                        </div>
+                      </li>
+                      <li className="flex items-center lg:col-span-1">
+                        <div className="flex-shrink-0 items-center">
+                          <a
+                            data-id={data}
+                            onClick={() => {
+                              showModalDelete(data);
+                            }}
+                            className="group flex items-center justify-between rounded-lg border border-current px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 focus:outline-none focus:ring active:bg-indigo-500"
+                          >
+                            <i className="bi bi-trash-fill mr-1" /> Устгах
+                          </a>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div className="px-6 py-8 text-center bg-gray-100  lg:flex-shrink-4 lg:flex lg:flex-col lg:justify-center lg:p-4">
+                  <div className="flex items-center justify-center mt-4 leading-none text-gray-900 ">
+                    {data.fileUrl.slice(-4) === ".mp4" ? (
+                      <div>
+                        <video
+                          ref={videoRef}
+                          width="100%"
+                          // height="100%"
+
+                          controls
                         >
-                          <i className="bi bi-eye-fill"></i>
-                        </a>
-                        <a
-                          className="text-yellow-600 hover:text-black ml-2 text-lg"
-                          data-id={data}
-                          onClick={() => {
-                            handleEdit(data);
-                          }}
-                        >
-                          <i className="bi bi-pencil-square"></i>
-                        </a>
-                        <a
-                          data-id={data.id}
-                          onClick={showModalDelete}
-                          className="text-rose-400 hover:text-black ml-2 text-lg"
-                        >
-                          <i className="bi bi-trash-fill"></i>
-                        </a>
-                      </td>
-                    </tr>
-                  ))
-                : null}
-            </tbody>
-          </table>
+                          <source
+                            src={`http://` + `${data.fileUrl}`}
+                            type="video/mp4"
+                          />
+                        </video>
+                      </div>
+                    ) : (
+                      <div className="rounded border-l-4 border-red-500 bg-red-50 p-4">
+                        <strong className="block font-medium text-red-700">
+                          Файл хавсаргаагүй байна.
+                        </strong>
+                      </div>
+                    )}
+                  </div>
+                  {data.fileUrl === "" ? (
+                    ""
+                  ) : (
+                    <p className="mt-4 text-sm leading-5">
+                      <span className="block font-medium text-gray-500 ">
+                        <i className="bi bi-play-circle-fill" /> Файлын нэр:
+                      </span>
+                      <span className="inline-block font-medium text-gray-500  ">
+                        {data.fileUrl.slice(29)}
+                      </span>
+                    </p>
+                  )}
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="p-4 text-center text-sm font-medium">
+              Сургалт үүсээгүй байна.
+              <a className="underline" href="/create-training">
+                {" "}
+                Сургалт үүсгэх &rarr;{" "}
+              </a>
+            </p>
+          )}
         </div>
       </div>
       <ToastContainer />
@@ -249,4 +450,4 @@ function Traingings() {
   );
 }
 
-export default Traingings;
+export default Training;

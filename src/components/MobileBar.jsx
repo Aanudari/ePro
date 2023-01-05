@@ -153,7 +153,7 @@ function MobileBar() {
                 <li>
                   <a
                     onClick={() => {
-                      navigate("/trainings");
+                      navigate("/training");
                     }}
                   >
                     Сургалтууд

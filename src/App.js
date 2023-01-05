@@ -211,62 +211,6 @@ function App() {
             }
           />
           <Route
-            path="/telesales-edit"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <TelesalesEdit />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/telesales-edit"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <TelesalesEdit />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/online-edit"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <OnlineEdit />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/branch-edit"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <BranchEdit />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/installer-edit"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <InstallerEdit />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/care-edit"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <CareEdit />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/bank-edit"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <BankEdit />
-              </ProtectedRoute>
-            }
-          />
-          <Route
             path="/notification"
             element={
               <ProtectedRoute allowedRoles={[199]}>

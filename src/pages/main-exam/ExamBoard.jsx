@@ -18,7 +18,7 @@ function ExamBoard({ exams, examModal, setExamModal, handleExamModal, setShowRep
                                 handleExamModal(exam.id)
                             }} className="w-full h-14 flex gap-1 border-b
                 font-[600] hover:text-teal-600 cursor-pointer hover:border-b-teal-500">
-                                <div className="w-1/4 h-full flex justify-center items-center text-[11px]
+                                <div className="w-1/4 h-full flex justify-start pl-2 items-center text-[11px]
                      uppercase font-[500]">{exam.name}</div>
                                 <div className="w-1/4 h-full flex justify-center items-center text-[11px]
                      uppercase font-[500]">{exam.startDate}</div>

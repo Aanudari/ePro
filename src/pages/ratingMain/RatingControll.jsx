@@ -14,6 +14,7 @@ function RatingControll() {
     navigate("/");
     window.location.reload();
   };
+  const accepted = ["1", "3", "4", "5", "7", "168", "188", "191", "195"]
   const [data, setData] = useState();
   useEffect(() => {
     axios({
@@ -37,7 +38,78 @@ function RatingControll() {
   data?.map((item) => {
     return roles.push(item.roleName)
   })
-  let finalArr = [... new Set(roles)]
+  let main = []
+  for (let index = 0; index < data?.length; index++) {
+    const element = data[index];
+    if (accepted.includes(element.role)) {
+      main.push({
+        "org" : element.organizationUnitId,
+        "index" : index,
+        "id": element.role,
+        "name": element.roleName
+      })
+    }
+  }
+  let unique = main.filter((value, index, self) =>
+    index === self.findIndex((t) => (
+      t.id === value.id && t.name === value.name
+    ))
+  )
+  let users= []
+  for (let index = 0; index < unique.length; index++) {
+    const element = unique[index];
+    let filtered = data.filter((item, i) => {
+      return item.role == element.id
+    })
+    users.push(filtered)
+  }
+  let time = {
+    "startDate": "",
+    "endDate": ""
+  }
+  const [statusData, setStatusData] = useState([]);
+  useEffect(() => {
+    axios({
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": TOKEN
+      },
+      url: `${process.env.REACT_APP_URL}/v1/Rating/role/4`,
+      data: time,
+    })
+      .then((res) => {
+        setStatusData(res.data.result)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [])
+  // console.log(users)
+  const handleChangeOptions = (value) => {
+    setIndex(value)
+    let temp = unique.filter((item, index) => {
+      return index == value
+    })
+    axios({
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": TOKEN
+      },
+      url: `${process.env.REACT_APP_URL}/v1/Rating/role/${temp[0].id}`,
+      data: time,
+    })
+      .then((res) => {
+        console.log(res.data.result)
+        setStatusData(res.data.result)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+  const [index, setIndex] = useState(0);
+  // console.log(statusData)
   return (
     <div className="h-[calc(100%-56px)] w-full px-4 pt-2">
       <div className="w-full h-10 text-white pr-8 flex justify-between">
@@ -46,10 +118,12 @@ function RatingControll() {
           Үнэлгээ хийх
         </span>
         <div className="h-full w-[calc(100%-200px)] flex justify-end">
-          <select name="" id="" className="min-w-[150px] max-w-[150px] mb-1">
+          <select onChange={(e) => {
+            handleChangeOptions(e.target.value)
+          }} name="" id="" className="min-w-[150px] max-w-[150px] mb-1">
             {
-              finalArr?.map((item, index) => (
-                <option key={index} value={`${index}`}>{item}</option>
+              unique?.map((item, index) => (
+                <option key={index} value={`${index}`}>{item.name}</option>
               ))
             }
           </select>
@@ -58,8 +132,8 @@ function RatingControll() {
       <div className=" h-[calc(100%-25px)] overflow-scroll px-4 pt-2">
         {
           data &&
-          data.map((item, index) => (
-            <RatingUserCell key={index} data={item} />
+          statusData.map((item, index) => (
+            <RatingUserCell key={index} data={item.user} />
           ))
         }
       </div>

@@ -3,7 +3,7 @@ function RatingProcessSub({data, countPoints}) {
     for (let index = 0; index < data.maxPoints; index++) {
         const element = index + 1
         arr.push(element)
-    }
+    }   
     return ( 
         <div className="py-1 px-4 border-b flex justify-between items-center">
             <span className="text-[14px] font-[400]">{data.name}</span>

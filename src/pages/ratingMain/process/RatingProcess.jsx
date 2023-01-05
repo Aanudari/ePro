@@ -1,6 +1,7 @@
 import RatingProcessSub from "./RatingProcessSub";
 import { useState } from "react";
-function RatingProcess({ item }) {
+import { useEffect } from "react";
+function RatingProcess({ item, handleSubmit }) {
     let schema = []
     for (let index = 0; index < item.subCategory.length; index++) {
         const element = item.subCategory[index];
@@ -24,6 +25,9 @@ function RatingProcess({ item }) {
         setMain(pre)
     }
     let total = main.map(e => Number(e.points)).reduce((a, b) => a + b, 0)
+    useEffect(() => {
+        handleSubmit(main, total, item.id)
+    }, [main])
     return (
         <div className="mt-2">
             <div className="w-full bg-teal-500 h-12 rounded-t-lg flex items-center px-4 justify-between">

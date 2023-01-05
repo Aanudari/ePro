@@ -59,7 +59,11 @@ import "react-toastify/dist/ReactToastify.css";
 import RatingCore from "./pages/ratingMain/RatingCore";
 import EditTraining from "./pages/training/Edit-training";
 import UserTraining from "./pages/training/User-training";
+
+import Player from "./pages/training/Player";
+
 import RatingIndividual from "./pages/ratingMain/RatingIndivdual";
+
 function App() {
   const { activeMenu, showTop, roleId, error, setError } = useStateContext();
   const { width } = getWindowDimensions();
@@ -105,10 +109,34 @@ function App() {
             }
           />
           <Route
-            path="/trainings"
+            path="/training-files"
             element={
               <ProtectedRoute allowedRoles={[199]}>
-                <TrainingIndex />
+                <TrainingFiles />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/training-category"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <TrainingCategory />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/training"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <Training />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/create-training"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <CreateTraining />
               </ProtectedRoute>
             }
           />
@@ -128,22 +156,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/training-files"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <TrainingFiles />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/training-category"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <TrainingCategory />
-              </ProtectedRoute>
-            }
-          />
+
           <Route
             path="/took-training"
             element={
@@ -152,19 +165,20 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/create-training"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <CreateTraining />
-              </ProtectedRoute>
-            }
-          />
+
           <Route
             path="/user-training"
             element={
               <ProtectedRoute allowedRoles={[199, 1, 4]}>
                 <UserTraining />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/player"
+            element={
+              <ProtectedRoute allowedRoles={[199, 1, 4]}>
+                <Player />
               </ProtectedRoute>
             }
           />

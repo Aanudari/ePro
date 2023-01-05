@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Navigation from "../../components/Navigation";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -10,6 +10,7 @@ import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
 import moment from "moment";
 import DatePicker from "react-datepicker";
+
 function EditTraining() {
   const locationn = useLocation();
   const { TOKEN } = useStateContext();
@@ -21,9 +22,8 @@ function EditTraining() {
     window.location.reload();
   };
   const train = locationn.state.data;
-  console.log(train);
   const format = "YYYYMMDDHHmmss";
-  const format1 = "HHmm";
+
   const [date1, setDate1] = useState(new Date());
   const [date2, setDate2] = useState(new Date());
   const startDate = moment(date1).format(format);
@@ -63,10 +63,8 @@ function EditTraining() {
   const [tCategory, settCategory] = useState("");
   const [sessionType, setsessionType] = useState("");
   const [location, setlocation] = useState("");
-  const [durationStart, setdurationStart] = useState(new Date());
-  const [durationEnd, setdurationEnd] = useState(new Date());
-  const d1 = moment(durationStart).format(format1);
-  const d2 = moment(durationEnd).format(format1);
+  const videoRef = useRef(null);
+
   useEffect(() => {
     axios({
       method: "get",
@@ -107,6 +105,7 @@ function EditTraining() {
       })
       .catch((err) => console.log(err));
   }, []);
+
   const handleOrg = (item) => {
     axios({
       method: "get",
@@ -193,38 +192,25 @@ function EditTraining() {
   const handleCreate = async () => {
     const data = new FormData();
     data.append("file", selectedFile);
-    fetch("http://192.168.10.248:9000/v1/TrainingFile/fileadd", {
-      method: "POST",
-      headers: {
-        Authorization: `${TOKEN}`,
-      },
-      body: data,
-    }).then(
-      function (res) {
-        console.log(res);
-        if (res.ok) {
-          setfileUrl(res.url);
-          console.log(res.statusText);
-        } else {
-          console.log(res);
-        }
-      },
-      function (e) {
-        console.log("Error submitting form!", e);
-      }
-    );
+    console.log(data);
+    // axios({
+    //   method: "post",
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //     Authorization: `${TOKEN}`,
+    //   },
+    //   url: `http://192.168.10.248:9000/v1/TrainingFile/fileadd`,
+    //   data,
+    // })
+    //   .then((res) => {
+    //     setfileUrl(res.data.path);
+    //     console.log(res.data);
+    //   })
+    //   .catch((err) => console.log(err));
   };
-  // useEffect(() => {
-  //   d();
-  // }, [durationStart, durationEnd]);
+
   const navigateIndex = (e) => {
     e.preventDefault();
-    if (d1 > d2 || d1 == d2) {
-      notification.error("Үргэлжлэх хугацаа буруу байна.");
-    } else {
-      setduration(d1 - d2);
-      console.log(duration);
-    }
 
     if (startDate == endDate || startDate > endDate) {
       notification.invalidFileUpload("Эхлэх дуусах хугацаа алдаатай байна.");
@@ -233,28 +219,34 @@ function EditTraining() {
       setcheckEmptydepartment(true);
     } else {
       console.log(dataFULL);
-      axios({
-        method: "put",
-        headers: {
-          Authorization: `${TOKEN}`,
-          "Content-Type": "application/json",
-          accept: "text/plain",
-        },
-        url: `http://192.168.10.248:9000/v1/Training/edit`,
-        data: JSON.stringify(dataFULL),
-      })
-        .then((res) => {
-          console.log(res.data);
-          if (res.data.isSuccess === true) {
-            notification.success(`${res.data.resultMessage}`);
-            const timer = setTimeout(() => navigate("/trainings"), 1000);
-            return () => clearTimeout(timer);
-          }
-        })
-        .catch((err) => console.log(err));
+      // axios({
+      //   method: "put",
+      //   headers: {
+      //     Authorization: `${TOKEN}`,
+      //     "Content-Type": "application/json",
+      //     accept: "text/plain",
+      //   },
+      //   url: `http://192.168.10.248:9000/v1/Training/edit`,
+      //   data: JSON.stringify(dataFULL),
+      // })
+      //   .then((res) => {
+      //     console.log(res.data);
+      //     if (res.data.isSuccess === true) {
+      //       notification.success(`${res.data.resultMessage}`);
+      //       const timer = setTimeout(() => navigate("/trainings"), 1000);
+      //       return () => clearTimeout(timer);
+      //     }
+      //   })
+      //   .catch((err) => console.log(err));
     }
   };
-
+  const object = options.find((obj) => obj.id === train.sessionType);
+  const getdate1 = new Date(train.startDate);
+  const getdate2 = new Date(train.endDate);
+  const dep = department?.find(
+    (obj) => obj.id === train.trainingDevs[0].departmentId
+  );
+  console.log(dep);
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <Navigation />
@@ -263,7 +255,7 @@ function EditTraining() {
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
             <p className="focus:outline-none text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">
-              Сургалт үүсгэх
+              Сургалт засварлах
             </p>
           </div>
         </div>
@@ -304,55 +296,69 @@ function EditTraining() {
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                    Файл хавсаргах
+                    Файл
                   </label>
-                  <input
-                    type="file"
-                    defaultValue={train.fileUrl}
-                    onChange={handleFileSelect}
-                    className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                  />
-                </div>
+                  {train.fileUrl.slice(-4) === ".mp4" ? (
+                    <div>
+                      <video
+                        ref={videoRef}
+                        width="100%"
+                        // height="100%"
 
+                        controls
+                      >
+                        <source
+                          src={`http://` + `${train.fileUrl}`}
+                          type="video/mp4"
+                        />
+                      </video>
+                    </div>
+                  ) : train.fileUrl.slice(-4) ===
+                    (".gif" || ".png" || ".jpg" || "jpeg") ? (
+                    <img src={`http://` + `${train.fileUrl}`} alt="aaa" />
+                  ) : train.fileUrl.slice(-4) ===
+                    (".pdf" || "docx" || "xlsx") ? (
+                    <div className="flex items-center justify-between px-2 py-2  border-2 border-gray-200">
+                      <p className="flex items-center">
+                        {train.fileUrl.slice(29)}
+                      </p>
+                      <div className="flex items-center">
+                        <button className="p-1 mr-4 text-sm  border border-gray-400 rounded">
+                          <i
+                            className="bi bi-eye"
+                            onClick={() =>
+                              window.open(`http://${train.fileUrl}`)
+                            }
+                          >
+                            OPEN
+                          </i>
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <input
+                      type="file"
+                      onChange={handleFileSelect}
+                      className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                    />
+                  )}
+                </div>
                 <div>
                   <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                     Үргэлжлэх хугацаа
                   </label>
-
-                  <div
-                    className="inline-flex items-center border rounded-md bg-gray-200 "
-
-                    // onChange={(e) => {
-                    //   setduration(e.target.value);
-                    //   setcheckEmptyduration(false);
-                    // }}
-                    // id={checkEmptyduration === true ? "border-red" : null}
-                  >
-                    <DatePicker
-                      className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                      selected={durationStart}
-                      onChange={(date) => setdurationStart(date)}
-                      showTimeSelect
-                      showTimeSelectOnly
-                      timeIntervals={15}
-                      timeCaption="Time"
-                      dateFormat="hh:mm a"
-                    />
-                    <div className="inline-block px-2 h-full">to</div>
-                    <DatePicker
-                      className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                      selected={durationEnd}
-                      onChange={(date) => setdurationEnd(date)}
-                      showTimeSelect
-                      showTimeSelectOnly
-                      timeIntervals={15}
-                      timeCaption="Time"
-                      dateFormat="hh:mm a"
-                    />
-                  </div>
+                  <input
+                    type="text"
+                    defaultValue={train.duration}
+                    onChange={(e) => {
+                      setduration(e.target.value);
+                      setcheckEmptyduration(false);
+                    }}
+                    id={checkEmptyduration === true ? "border-red" : null}
+                    className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                  />
                 </div>
               </div>
-
               <div className="grid grid-cols-1 gap-4  sm:grid-cols-3">
                 <div>
                   <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
@@ -378,7 +384,7 @@ function EditTraining() {
                   <Select
                     className="px-2 py-2 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
                     options={category}
-                    defaultValue={selectedOptioncategory}
+                    defaultValue={{ id: train.tCategory, name: train.tCatName }}
                     onChange={(item) => {
                       handleTrainingCategoryId(item);
                       setcheckEmptytCategory(false);
@@ -399,7 +405,10 @@ function EditTraining() {
                   <Select
                     className="px-2 py-2 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
                     options={options}
-                    defaultValue={selectedOption}
+                    defaultValue={{
+                      id: train.sessionType,
+                      value: object.value,
+                    }}
                     onChange={(item) => {
                       handleTrainingType(item);
                       setcheckEmptysessionType(false);
@@ -420,14 +429,14 @@ function EditTraining() {
                   </label>
                   <DatePicker
                     className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                    selected={date1}
+                    selected={getdate1}
                     onChange={(date) => setDate1(date)}
                     showTimeSelect
                     timeFormat="HH:mm"
                     timeIntervals={15}
                     selectsStart
-                    startDate={date1}
-                    dateFormat="yyyy.MM.dd, HH:mm"
+                    startDate={getdate1}
+                    dateFormat="yyyy.MM.dd, HH:mm:ss"
                   />
                 </div>
                 <div>
@@ -436,14 +445,14 @@ function EditTraining() {
                   </label>
                   <DatePicker
                     className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                    selected={date2}
+                    selected={getdate2}
                     onChange={(date) => setDate2(date)}
                     showTimeSelect
                     timeFormat="HH:mm"
                     timeIntervals={15}
                     selectsStart
-                    startDate={date2}
-                    dateFormat="yyyy.MM.dd, HH:mm"
+                    startDate={getdate2}
+                    dateFormat="yyyy.MM.dd, HH:mm:ss"
                   />
                 </div>
                 <div>
@@ -468,9 +477,9 @@ function EditTraining() {
                     Харьяалагдах хэлтэс
                   </label>
                   <Select
-                    className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                    className="px-3 py-3 text-blueGray-600 bg-white text-sm text-black w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
                     options={department}
-                    defaultValue={selectedOptiondepartment}
+                    isMulti
                     onChange={(item) => {
                       handleOrg(item);
                       setcheckEmptydepartment(false);
@@ -528,7 +537,7 @@ function EditTraining() {
               <div className="mt-4 text-right">
                 <div className="inline-flex items-end">
                   <button
-                    onClick={() => navigate("/trainings")}
+                    onClick={() => navigate("/training")}
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
                   >
                     Exit

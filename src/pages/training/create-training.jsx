@@ -178,43 +178,60 @@ function CreateTraining() {
           ],
   };
   const handleFileSelect = (event) => {
-    setSelectedFile(event.target.files[0]);
-    handleCreate();
+    if (event.target.files[0].name.slice(-4) === ".mp4") {
+      setSelectedFile(event.target.files[0]);
+      handleCreate();
+    } else {
+      notification.error("Video хавсаргана уу.");
+    }
   };
   const handleCreate = async () => {
     const data = new FormData();
     data.append("file", selectedFile);
-    fetch("http://192.168.10.248:9000/v1/TrainingFile/fileadd", {
-      method: "POST",
+    axios({
+      method: "post",
       headers: {
+        "Content-Type": "multipart/form-data",
         Authorization: `${TOKEN}`,
       },
-      body: data,
-    }).then(
-      function (res) {
-        console.log(res);
-        if (res.ok) {
-          setfileUrl(res.url);
-          console.log(res.statusText);
-        } else {
-          console.log(res);
-        }
-      },
-      function (e) {
-        console.log("Error submitting form!", e);
-      }
-    );
+      url: `http://192.168.10.248:9000/v1/TrainingFile/fileadd`,
+      data,
+    })
+      .then((res) => {
+        setfileUrl(res.data.path);
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+    // fetch("http://192.168.10.248:9000/v1/TrainingFile/fileadd", {
+    //   method: "POST",
+    //   headers: {
+    //     Authorization: `${TOKEN}`,
+    //   },
+    //   body: data,
+    // }).then(
+    //   function (res) {
+    //     console.log(res.Response);
+    //     if (res.ok) {
+    //       console.log(res.statusText);
+    //     } else {
+    //       console.log(res);
+    //     }
+    //   },
+    //   function (e) {
+    //     console.log("Error submitting form!", e);
+    //   }
+    // );
   };
   // useEffect(() => {
   //   d();
   // }, [durationStart, durationEnd]);
   const navigateIndex = (e) => {
     e.preventDefault();
-    if (d1 > d2 || d1 == d2) {
-      notification.error("Үргэлжлэх хугацаа буруу байна.");
-    } else {
-      setduration(d1 - d2);
-    }
+    // if (d1 > d2 || d1 == d2) {
+    //   notification.error("Үргэлжлэх хугацаа буруу байна.");
+    // } else {
+    //   setduration(d1 - d2);
+    // }
     if (name.length === 0) {
       setcheckEmptyname(true);
     }
@@ -239,7 +256,6 @@ function CreateTraining() {
     if (departmentID.length === 0) {
       setcheckEmptydepartment(true);
     } else {
-      console.log(dataFULL);
       axios({
         method: "post",
         headers: {
@@ -322,17 +338,17 @@ function CreateTraining() {
                   <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                     Үргэлжлэх хугацаа
                   </label>
+                  <input
+                    type="text"
+                    onChange={(e) => {
+                      setduration(e.target.value);
+                      setcheckEmptyduration(false);
+                    }}
+                    id={checkEmptyduration === true ? "border-red" : null}
+                    className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                  />
 
-                  <div
-                    className="inline-flex items-center border rounded-md bg-gray-200 "
-
-                    // onChange={(e) => {
-                    //   setduration(e.target.value);
-                    //   setcheckEmptyduration(false);
-                    // }}
-                    // id={checkEmptyduration === true ? "border-red" : null}
-                  >
-                    <DatePicker
+                  {/* <DatePicker
                       className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
                       selected={durationStart}
                       onChange={(date) => setdurationStart(date)}
@@ -352,8 +368,7 @@ function CreateTraining() {
                       timeIntervals={15}
                       timeCaption="Time"
                       dateFormat="hh:mm a"
-                    />
-                  </div>
+                    /> */}
                 </div>
               </div>
 
@@ -530,7 +545,7 @@ function CreateTraining() {
               <div className="mt-4 text-right">
                 <div className="inline-flex items-end">
                   <button
-                    onClick={() => navigate("/trainings")}
+                    onClick={() => navigate("/training")}
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
                   >
                     Exit

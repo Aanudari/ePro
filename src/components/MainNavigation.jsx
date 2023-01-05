@@ -144,7 +144,7 @@ function MainNavigation() {
                 <li>
                   <a
                     onClick={() => {
-                      navigate("/trainings");
+                      navigate("/training");
                     }}
                   >
                     Сургалтууд

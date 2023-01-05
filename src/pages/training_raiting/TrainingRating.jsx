@@ -609,14 +609,31 @@ function TrainingRating() {
           </Modal.Body>
         </Modal>
       </div>
-      <div className="container mx-auto ">
-        <div className="flex justify-between w-full px-4 py-2">
-          <div className="text-lg font-bold">Сургалтын үнэлгээ</div>
-          <div className="px-2 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600">
-            <i className="bi bi-clipboard-plus" onClick={showModalCreate} />
+
+      <div className="sm:px-6 w-full">
+        <div className="px-4 md:px-10 py-4 md:py-7">
+          <div className="flex items-center justify-between">
+            <p className="focus:outline-none text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">
+              Сургалтын үнэлгээ
+            </p>
           </div>
         </div>
-        <div className="mt-6 overflow-x-auto">
+
+        <div className="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10">
+          <div className="sm:flex items-center justify-between">
+            <div className="flex items-center"></div>
+            <button
+              className="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 sm:mt-0 inline-flex items-start justify-start px-6 py-3 bg-indigo-700 hover:bg-indigo-600 focus:outline-none rounded 
+               text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button"
+              onClick={showModalCreate}
+            >
+              <i className="bi bi-plus text-bold" />
+              Үнэлгээ нэмэх
+            </button>
+          </div>
+
+          <div className="mt-3 overflow-x-auto"></div>
           <table className="w-full border border-collapse table-auto">
             <thead className="">
               <tr className="text-base font-bold text-left bg-gray-50">

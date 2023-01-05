@@ -34,16 +34,18 @@ function UserTraining() {
       })
       .catch((err) => console.log(err));
   }, []);
+  const navigatePlayer = (data) => {
+    navigate("/player", {
+      state: { data: data },
+    });
+  };
   return (
     <UserLayout>
       <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-5 ">
         {userTrain ? (
           userTrain.map((data, i) => (
-            <div
-              key={i}
-              className="max-w-md mx-auto bg-white rounded-xl  shadow-lg shadow-md overflow-hidden md:max-w-2xl  transform hover:scale-105 duration-500 ease-in-out"
-            >
-              <div className=" w-full max-w-xs p-6 overflow-hidden bg-white shadow-lg rounded-xl dark:bg-gray-800">
+            <div key={i}>
+              <div className="w-full max-w-xs p-6 overflow-hidden bg-white shadow-lg rounded-xl dark:bg-gray-800  bg-white rounded-xl  shadow-lg shadow-md overflow-hidden md:max-w-2xl  transform hover:scale-105 duration-500 ease-in-out">
                 <div className="flex items-center justify-between mb-4 space-x-12 ">
                   {data.startedWatch === null ? (
                     <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-400 border-2 border-rose-600 rounded-md absolute top-3 right-3">
@@ -88,6 +90,9 @@ function UserTraining() {
                 </div> */}
 
                 <button
+                  onClick={() => {
+                    navigatePlayer(data);
+                  }}
                   type="button"
                   className="py-2 px-4  bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
                 >

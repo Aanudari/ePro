@@ -36,11 +36,6 @@ function CreateRatingTemplate({ setShowModal, tri, setTri }) {
       "description": "L-1 operator"
     },
     {
-      "id": "2",
-      "roleName": "L1-senior",
-      "description": "L1-senior"
-    },
-    {
       "id": "3",
       "roleName": "L-2 care",
       "description": "L-2 care"
@@ -56,11 +51,6 @@ function CreateRatingTemplate({ setShowModal, tri, setTri }) {
       "description": "L-2 online"
     },
     {
-      "id": "6",
-      "roleName": "L-2 senior",
-      "description": "L-2 senior"
-    },
-    {
       "id": "7",
       "roleName": "L-2 bank",
       "description": "L-2 bank"
@@ -71,29 +61,14 @@ function CreateRatingTemplate({ setShowModal, tri, setTri }) {
       "description": "L-2 Telesales operator"
     },
     {
-      "id": "169",
-      "roleName": "Telesales senior ",
-      "description": "Telesales senior"
-    },
-    {
       "id": "188",
       "roleName": "Branch staff",
       "description": "Branch staff"
     },
     {
-      "id": "189",
-      "roleName": "Branch senior",
-      "description": "Branch senior"
-    },
-    {
       "id": "191",
       "roleName": "Order specialist",
       "description": "Order specialist"
-    },
-    {
-      "id": "193",
-      "roleName": "SSD manager",
-      "description": "SSD manager"
     },
     {
       "id": "195",

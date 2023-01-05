@@ -13,7 +13,7 @@ function RatingHeader({ setSideMenu, sideMenu }) {
         <div className="w-full h-14 bg-gray-100 border-b-[2px] border-gray-300 shadow-sm flex justify-between
         items-center px-10">
             <div className="!flex h-full items-center ">
-            <div className="!flex h-full items-center ">
+                <div className="!flex h-full items-center ">
                     <DatePicker
                         selected={value}
                         value={value}
@@ -39,17 +39,17 @@ function RatingHeader({ setSideMenu, sideMenu }) {
                         timeCaption='time'
                         dateFormat='yyyy-MM-dd h:mm aa'
                     />
-                
-            </div>
-            <div className="h-9 bg-teal-500 rounded-sm px-3 flex items-center font-[400] text-white
-            cursor-pointer active:bg-teal-400 ml-2">
-                <span className="mr-2 mb-1 font-[400] text-white">
-                    Тайлан
-                </span>
-                <div className="pl-2 h-full flex items-center border-l border-gray-300">
-                <i className="bi bi-file-earmark-spreadsheet"></i>
+
                 </div>
-            </div>
+                <div className="h-9 bg-teal-500 rounded-sm px-3 flex items-center font-[400] text-white
+            cursor-pointer active:bg-teal-400 ml-2">
+                    <span className="mr-2 mb-1 font-[400] text-white">
+                        Тайлан
+                    </span>
+                    <div className="pl-2 h-full flex items-center border-l border-gray-300">
+                        <i className="bi bi-file-earmark-spreadsheet"></i>
+                    </div>
+                </div>
             </div>
             <div onClick={() => {
                 setSideMenu(!sideMenu)

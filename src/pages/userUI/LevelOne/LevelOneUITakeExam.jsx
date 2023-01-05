@@ -1,17 +1,15 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import TakeExamCell from '../../../components/sub-components/TakeExamCell';
 import { useStateContext } from '../../../contexts/ContextProvider';
-import ReadyCheck from '../../../components/sub-components/ReadyCheck';
 import UserLayout from '../../../layout/UserLayout';
 import { useNavigate } from 'react-router-dom';
 import ExamCard from '../Exam/ExamCard';
 function LevelOneUITakeExam() {
     const [data, setData] = useState();
-    const [questions, setquestions] = useState();
     const [key, setKey] = useState('1');
     const navigate = useNavigate();
     const { TOKEN, readyCheck, setReadyCheck, examID, examName } = useStateContext();
+
     useEffect(() => {
         axios({
             method: "get",
@@ -19,7 +17,7 @@ function LevelOneUITakeExam() {
                 "Content-Type": "application/json",
                 'Authorization': `${TOKEN}`
             },
-            url: "http://192.168.10.248:9000/v1/ExamNew",
+            url: `${process.env.REACT_APP_URL}/v1/ExamNew`,
         })
             .then(
                 res => {
@@ -30,7 +28,7 @@ function LevelOneUITakeExam() {
     }, [])
     return (
         <UserLayout>
-            <div className='flex min-h-screen h-full core-bg-b'>
+            <div className='flex min-h-[calc(100%-50px)] h-full core-bg-b'>
                 <div className="relative h-full w-[230px] hidden md:block ">
                     <ul className="sidebar">
                         <li onClick={() => {
@@ -52,14 +50,12 @@ function LevelOneUITakeExam() {
                         <div className="">
                             <div className=" w-full inline-block align-middle">
                                 <div className='flex gap-4 flex-wrap md:pl-10'>
-
                                     {
                                         data ? data.map((item, index) => (
                                             <ExamCard key={index} data={item} />
-                                        )) : <div>
-
+                                        )) : 
+                                        <div>
                                             Идэвхитэй шалгалт байхгүй байна.
-
                                         </div>
                                     }
                                 </div>

@@ -39,7 +39,7 @@ function EditErrorThanks() {
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `http://192.168.10.248:9000/v1/Complain/complainInfo`,
+      url: `${process.env.REACT_APP_URL}/v1/Complain/complainInfo`,
     })
       .then((res) => {
         setComplainInfo(res.data.complainInfos);
@@ -74,7 +74,7 @@ function EditErrorThanks() {
         "Content-Type": "application/json",
         accept: "text/plain",
       },
-      url: `http://192.168.10.248:9000/v1/Complain/edit`,
+      url: `${process.env.REACT_APP_URL}/v1/Complain/edit`,
       data: JSON.stringify(editData),
     })
       .then((res) => {

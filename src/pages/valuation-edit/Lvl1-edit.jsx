@@ -47,7 +47,7 @@ function LeveloneEdit() {
         Authorization: `${TOKEN}`,
         "Content-Type": "application/json",
       },
-      url: `http://192.168.10.248:9000/v1/Rating/${dID}`,
+      url: `${process.env.REACT_APP_URL}/v1/Rating/${dID}`,
       data: JSON.stringify(dates),
     })
       .then((res) => {

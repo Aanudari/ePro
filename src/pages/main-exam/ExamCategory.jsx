@@ -22,7 +22,7 @@ function ExamCategory({ categories, categoryModal, setCategoryModal, handleCateg
     }
     return (
         <div className={`absolute top-[56px]  shadow bg core-bg-g h-[calc(100%-68px)] mb-2 h-full flex  px-3 
-        py-3 gap-2 drop-down ${activeMenu ? "w-[calc(100%-14px)]" : "w-[calc(100%-100px)]"} `}>
+        py-3 gap-2 drop-down ${activeMenu ? "w-[calc(100%-14px)]" : "w-full left-0"} `}>
             <div className="w-full">
                 <button onClick={() => {
                     setShowAddCategory(!showAddCategory)

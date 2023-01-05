@@ -91,7 +91,7 @@ function CreateExamForm({ setKeyMain }) {
                 "Content-Type": "application/json",
                 'Authorization': `${TOKEN}`
             },
-            url: `http://192.168.10.248:9000/v1/Exam/add`,
+            url: `${process.env.REACT_APP_URL}/v1/Exam/add`,
             data: final,
         })
             .then((res) => {

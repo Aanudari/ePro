@@ -31,7 +31,7 @@ function RatingIndexPage() {
         Authorization: `${TOKEN}`,
         accept: "text/plain",
       },
-      url: `http://192.168.10.248:9000/v1/RatingTemplate`,
+      url: `${process.env.REACT_APP_URL}/v1/RatingTemplate`,
     })
       .then((res) => {
         setGetTemplate(res.data.result);

@@ -3,8 +3,16 @@ import Navigation from "../components/Navigation";
 import NotiCell from "../components/sub-components/NotiCell";
 import UserSub from "../components/sub-components/UserSub";
 import axios from "axios";
+import Select from 'react-select';
+const options = [
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' },
+  ];
 
+  
 function Notification() {
+    const [selectedOption, setSelectedOption] = useState(options[0]);
     const [pageStatus, setpageStatus] = useState('1');
     const [users, setUsers] = useState();
     useEffect(() => {
@@ -13,7 +21,7 @@ function Notification() {
             headers: {
                 "Content-Type": "application/json",
             },
-            url: `http://192.168.10.248:9000/v1/User`,
+            url: `${process.env.REACT_APP_URL}/v1/User`,
         })
             .then(
                 res => setUsers(res.data.result)
@@ -53,6 +61,13 @@ function Notification() {
                             }
                         </div>
                     }
+                    <div className="App">
+      <Select
+        defaultValue={selectedOption}
+        onChange={setSelectedOption}
+        options={options}
+      />
+    </div>
                 </div>
             </div>
         </div>

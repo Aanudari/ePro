@@ -8,6 +8,7 @@ import CreateRatingTemplate from "./modal/CreateRatingTemplate";
 function RatingCore() {
     const [showModal, setShowModal] = useState(false);
     const [sideMenu, setSideMenu] = useState(false);
+    const [tri, setTri] = useState(false);
     return ( 
         <div className="w-full max-h-[calc(100vh-100px)] relative">
             <Navigation />
@@ -15,13 +16,14 @@ function RatingCore() {
                 <RatingHeader sideMenu={sideMenu} setSideMenu={setSideMenu}/>
                 {
                     sideMenu && 
-                <RatingTemplates setShowModal={setShowModal} setSideMenu={setSideMenu}/>
+                <RatingTemplates setShowModal={setShowModal} setSideMenu={setSideMenu}
+                tri={tri} setTri={setTri}/>
                 }
                 <RatingControll/>
             </div>
             {
                 showModal && 
-                <CreateRatingTemplate setShowModal={setShowModal}/>
+                <CreateRatingTemplate tri={tri} setTri={setTri} setShowModal={setShowModal}/>
             }
         </div>
      );

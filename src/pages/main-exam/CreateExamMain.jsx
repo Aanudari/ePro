@@ -28,7 +28,7 @@ function CreateExamMain({checked, depId, setCategoryModal, setShowCategoryMenu, 
                 "Content-Type": "application/json",
                 'Authorization': `${TOKEN}`
             },
-            url: `http://192.168.10.248:9000/v1/User/org/${depId}`,
+            url: `${process.env.REACT_APP_URL}/v1/User/org/${depId}`,
         })
             .then(
                 res => {
@@ -48,7 +48,7 @@ function CreateExamMain({checked, depId, setCategoryModal, setShowCategoryMenu, 
                 "Content-Type": "application/json",
                 'Authorization': `${TOKEN}`
             },
-            url: `http://192.168.10.248:9000/v1/User/role/${unit}`,
+            url: `${process.env.REACT_APP_URL}/v1/User/role/${unit}`,
         })
             .then(
                 res => {
@@ -79,12 +79,11 @@ function CreateExamMain({checked, depId, setCategoryModal, setShowCategoryMenu, 
     const [duration, setDuration] = useState(0);
     const [role_id, setRole_id] = useState(1);
     const [exam_name, setExam_name] = useState('');
-    const [varSelect, setVarSelect] = useState('');
+    const [varSelect, setVarSelect] = useState('A');
     const [count, setCount] = useState();
     const [showQuestionMenu, setshowQuestionMenu] = useState(false);
     const [key, setKey] = useState(1);
     let qIds = [] 
-    
     for (let index = 0; index < checked.length; index++) {
         const element = checked[index];
         let ids = {
@@ -112,9 +111,6 @@ function CreateExamMain({checked, depId, setCategoryModal, setShowCategoryMenu, 
           }
         ]
       };
-    //   console.log(depId)
-    //   console.log(main)
-
     const [question, setQuestion] = useState({
         "question": ``,
         "imgUrl": "string",
@@ -185,12 +181,8 @@ function CreateExamMain({checked, depId, setCategoryModal, setShowCategoryMenu, 
         if (varSelect === '') {
             setNoti_variant(true)
         }
-        // if (role_id === 0) {
-        //     setNoti_role(true)
-        // }
         if (exam_name !== '' && duration !== 0 && count !== 0 &&
             varSelect !== ''
-            // && role_id !== 0
         ) {
             handleSubmitMain()
         }
@@ -301,23 +293,6 @@ function CreateExamMain({checked, depId, setCategoryModal, setShowCategoryMenu, 
                                         <span className="highlight"></span>
                                         <span className="bar"></span>
                                         <label>Үргэлжлэх хугацаа (мин)</label>
-                                    </div>
-                                
-                                    <div className="group">
-                                        <input
-                                            className={noti_variant ? 'custom-validation ' : ""}
-                                            onChange={(e) => {
-                                                setVarSelect(e.target.value)
-                                                setNoti_variant(false)
-                                            }} type="text" required />
-                                        {
-                                            noti_variant &&
-                                            <i className="bi bi-exclamation-lg text-2xl text-red-500
-                                    animate-bounce absolute top-[10px] left-[-15px]"></i>
-                                        }
-                                        <span className="highlight"></span>
-                                        <span className="bar"></span>
-                                        <label>Вариант </label>
                                     </div>
                                     <div className="p-0 md:p-3"></div>
                                     <div className="select-con relative hidden">

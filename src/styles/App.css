@@ -137,7 +137,11 @@ a {
   z-index: 1;
   height: 90px;
 }
-
+input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 .cellu:hover {
   opacity: 1;
 }
@@ -204,4 +208,10 @@ a {
   to {
     right: -200px;
   }
+}
+
+input[type="file"] { 
+  opacity: 0; /* make transparent */
+  z-index: 1; /* move under anything else */
+  position: absolute; /* don't let it take up space */
 }

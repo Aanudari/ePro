@@ -59,7 +59,11 @@ import "react-toastify/dist/ReactToastify.css";
 import RatingCore from "./pages/ratingMain/RatingCore";
 import EditTraining from "./pages/training/Edit-training";
 import UserTraining from "./pages/training/User-training";
+
 import Player from "./pages/training/Player";
+
+import RatingIndividual from "./pages/ratingMain/RatingIndivdual";
+
 function App() {
   const { activeMenu, showTop, roleId, error, setError } = useStateContext();
   const { width } = getWindowDimensions();
@@ -221,62 +225,6 @@ function App() {
             }
           />
           <Route
-            path="/telesales-edit"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <TelesalesEdit />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/telesales-edit"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <TelesalesEdit />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/online-edit"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <OnlineEdit />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/branch-edit"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <BranchEdit />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/installer-edit"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <InstallerEdit />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/care-edit"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <CareEdit />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/bank-edit"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <BankEdit />
-              </ProtectedRoute>
-            }
-          />
-          <Route
             path="/notification"
             element={
               <ProtectedRoute allowedRoles={[199]}>
@@ -422,6 +370,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199]}>
                 <RatingCore />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/rating-individual"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <RatingIndividual />
               </ProtectedRoute>
             }
           />

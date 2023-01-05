@@ -39,7 +39,7 @@ function Login() {
         headers: {
           "Content-Type": "application/json",
         },
-        url: `http://192.168.10.248:9000/v1/Auth/login`,
+        url: `${process.env.REACT_APP_URL}/v1/Auth/login`,
         data: JSON.stringify(data),
       })
         .then((res) => {

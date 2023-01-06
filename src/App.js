@@ -59,9 +59,7 @@ import "react-toastify/dist/ReactToastify.css";
 import RatingCore from "./pages/ratingMain/RatingCore";
 import EditTraining from "./pages/training/Edit-training";
 import UserTraining from "./pages/training/User-training";
-
 import Player from "./pages/training/Player";
-
 import RatingIndividual from "./pages/ratingMain/RatingIndivdual";
 
 function App() {

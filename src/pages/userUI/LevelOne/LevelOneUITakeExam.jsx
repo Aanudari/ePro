@@ -25,6 +25,7 @@ function LevelOneUITakeExam() {
       })
       .catch((err) => console.log(err));
   }, []);
+  //   console.log(data);
   return (
     <UserLayout>
       <div className="flex min-h-[calc(100vh-130px)] h-full core-bg-b">

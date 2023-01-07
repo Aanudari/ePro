@@ -15,7 +15,6 @@
     "bootstrap": "^5.2.0",
     "bootstrap-icons": "^1.9.1",
     "classnames": "^2.3.2",
-    "emoji-picker-react": "^4.4.7",
     "eslint-plugin-jest": "^27.1.6",
     "fs": "^0.0.1-security",
     "gsap": "^3.11.3",

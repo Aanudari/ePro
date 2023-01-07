@@ -51,10 +51,11 @@ export default function QuestionCorrection({ roundedScore, Exam_chosen }) {
     addZero(value.getHours()) +
     addZero(value.getMinutes()) +
     addZero(value.getSeconds());
+  console.log(rightAnswer);
   const handleSubmit = () => {
     let main = [];
     for (let index = 0; index < rightAnswer[1].length; index++) {
-      const questionId = rightAnswer[1][index];
+      const questionId = rightAnswer[0][index];
       const answerId = rightAnswer[1][index];
       const isTrue = rightAnswer[2][index];
       let small = {
@@ -76,7 +77,7 @@ export default function QuestionCorrection({ roundedScore, Exam_chosen }) {
       endAt: `${datestring}`,
       onlyQuestionId: main,
     };
-    console.log(schema);
+    console.log(JSON.stringify(schema));
     axios({
       method: "post",
       headers: {

@@ -11,6 +11,7 @@ import ExamModalMain from "./ExamModalMain";
 import ImageBoard from "./ImageBoard";
 import AddCategoryMenu from "./AddCategoryMenu";
 import Document from "./Document";
+import DocumentFinishedExam from "./DocumentFinishedExam";
 function ExamDash() {
   const [examModalId, setexamModalId] = useState();
   const [categoryModal, setCategoryModal] = useState(false);
@@ -78,7 +79,7 @@ function ExamDash() {
   const [showCategoryMenu, setShowCategoryMenu] = useState(false);
   const [showAddCategory, setShowAddCategory] = useState(false);
   const [showReport, setShowReport] = useState(false);
-  const [documentId, setDocumentId] = useState();
+  const [showDocument, setShowDocument] = useState(false);
   return (
     <div className="w-full min-h-screen bg-teal-500 relative">
       <Navigation />
@@ -103,12 +104,16 @@ function ExamDash() {
             exams={data && data}
             handleExamModal={handleExamModal}
             setShowReport={setShowReport}
+            setShowDocument={setShowDocument}
           />
           {imgStatus && (
             <ImageBoard imgStatus={imgStatus} setImgStatus={setImgStatus} />
           )}
           {showReport && (
             <Document setShowReport={setShowReport} id={examModalId} />
+          )}
+          {showDocument && (
+            <DocumentFinishedExam setShowDocument={setShowDocument} />
           )}
         </div>
         <ExamBoardController

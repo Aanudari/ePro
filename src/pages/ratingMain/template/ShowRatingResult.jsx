@@ -29,9 +29,6 @@ function ShowRatingResult({ setShowResult, personId }) {
         alert(err);
       });
   }, [trigger]);
-
-  // console.log(data && data[0].categories[0].scoreId);
-  // console.log(data && data);
   return (
     <div
       className={`${

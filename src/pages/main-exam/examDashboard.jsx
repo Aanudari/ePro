@@ -1,130 +1,152 @@
-import React, {useEffect, useState} from 'react';
-import Navigation from '../../components/Navigation';
-import { useStateContext } from '../../contexts/ContextProvider';
-import ExamBoard from './ExamBoard';
-import axios from 'axios';
-import ExamBoardController from './ExamBoardController';
-import { useNavigate } from 'react-router-dom';
-import ExamCategory from './ExamCategory';
-import CategoryModal from './CategoryModal';
-import ExamModalMain from './ExamModalMain';
-import ImageBoard from './ImageBoard';
-import AddCategoryMenu from './AddCategoryMenu';
-import Document from './Document';
+import React, { useEffect, useState } from "react";
+import Navigation from "../../components/Navigation";
+import { useStateContext } from "../../contexts/ContextProvider";
+import ExamBoard from "./ExamBoard";
+import axios from "axios";
+import ExamBoardController from "./ExamBoardController";
+import { useNavigate } from "react-router-dom";
+import ExamCategory from "./ExamCategory";
+import CategoryModal from "./CategoryModal";
+import ExamModalMain from "./ExamModalMain";
+import ImageBoard from "./ImageBoard";
+import AddCategoryMenu from "./AddCategoryMenu";
+import Document from "./Document";
 function ExamDash() {
-    const [examModalId, setexamModalId] = useState();
-    const [categoryModal, setCategoryModal] = useState(false);
-    const {TOKEN} = useStateContext();
-    const [data, setData] = useState();
-    const [categories, setCategories] = useState();
-    const navigate = useNavigate();
-    const [examModal, setExamModal] = useState(false);
-    const [trigger, setTrigger] = useState(false);
-    const [imgStatus, setImgStatus] = useState(false);
-    const [examTri, setExamTri] = useState(false);
-    const logout = () => {
-      localStorage.clear();
-      sessionStorage.clear();
-      navigate("/");
-      window.location.reload();
-    };
-    useEffect(() => {
-        axios({
-            method: "get",
-            headers: {
-                "Content-Type": "application/json",
-                'Authorization': `${TOKEN}`
-            },
-            url: `${process.env.REACT_APP_URL}/v1/ExamNew`,
-        })
-            .then(
-                res => {
-                    if(res.data.errorCode == 401) {
-                        logout()
-                    } else {
-                        setData(res.data.examList)
-                    }
-                }
-            )
-            .catch(err => console.log(err))
-    }, [categoryModal, examModal, examTri])
-    useEffect(() => {
-        axios({
-            method: "get",
-            headers: {
-                "Content-Type": "application/json",
-                'Authorization': `${TOKEN}`
-            },
-            url: `${process.env.REACT_APP_URL}/v1/Pool/Category`,
-        })
-            .then(
-                res => {
-                    if(res.data.errorCode == 401) {
-                        logout()
-                    } else {
-                        setCategories(res.data.categoryList)
-                    }
-                }
-            )
-            .catch(err => console.log(err))
-    }, [trigger])
-    const [depId, setDepId] = useState();
-    const [cModalId, setCModalId] = useState();
+  const [examModalId, setexamModalId] = useState();
+  const [categoryModal, setCategoryModal] = useState(false);
+  const { TOKEN } = useStateContext();
+  const [data, setData] = useState();
+  const [categories, setCategories] = useState();
+  const navigate = useNavigate();
+  const [examModal, setExamModal] = useState(false);
+  const [trigger, setTrigger] = useState(false);
+  const [imgStatus, setImgStatus] = useState(false);
+  const [examTri, setExamTri] = useState(false);
+  const logout = () => {
+    localStorage.clear();
+    sessionStorage.clear();
+    navigate("/");
+    window.location.reload();
+  };
+  useEffect(() => {
+    axios({
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/ExamNew`,
+    })
+      .then((res) => {
+        if (res.data.errorCode == 401) {
+          logout();
+        } else {
+          setData(res.data.examList);
+        }
+      })
+      .catch((err) => console.log(err));
+  }, [categoryModal, examModal, examTri]);
+  //   console.log(data);
+  useEffect(() => {
+    axios({
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/Pool/Category`,
+    })
+      .then((res) => {
+        if (res.data.errorCode == 401) {
+          logout();
+        } else {
+          setCategories(res.data.categoryList);
+        }
+      })
+      .catch((err) => console.log(err));
+  }, [trigger]);
+  const [depId, setDepId] = useState();
+  const [cModalId, setCModalId] = useState();
 
-    const handleCategoryModal = (id, Did) => {
-        setCModalId(id)
-        setDepId(Did)
-    }
-    const handleExamModal = (id) => {
-        setexamModalId(id)
-    }
-    const [showCategoryMenu, setShowCategoryMenu] = useState(false);
-    const [showAddCategory, setShowAddCategory] = useState(false);
-    const [showReport, setShowReport] = useState(false);
-    const [documentId, setDocumentId] = useState();
-    return ( 
+  const handleCategoryModal = (id, Did) => {
+    setCModalId(id);
+    setDepId(Did);
+  };
+  const handleExamModal = (id) => {
+    setexamModalId(id);
+  };
+  const [showCategoryMenu, setShowCategoryMenu] = useState(false);
+  const [showAddCategory, setShowAddCategory] = useState(false);
+  const [showReport, setShowReport] = useState(false);
+  const [documentId, setDocumentId] = useState();
+  return (
     <div className="w-full min-h-screen bg-teal-500 relative">
       <Navigation />
-      <div className='px-2 py-1 flex h-[calc(100%-64px)] items-end justify-center'>
-        <div className='h-full flex flex-col justify-between'>
-            {
-                showCategoryMenu && 
-            <ExamCategory categories={categories && categories} categoryModal={categoryModal} 
-            setCategoryModal={setCategoryModal} setShowCategoryMenu={setShowCategoryMenu} 
-            handleCategoryModal={handleCategoryModal} trigger={trigger} setTrigger={setTrigger}
-            showAddCategory={showAddCategory} setShowAddCategory={setShowAddCategory}/> 
-            }
-            <ExamBoard examModal={examModal} setExamModal={setExamModal} exams={data && data}
-            handleExamModal={handleExamModal} setShowReport={setShowReport}
+      <div className="px-2 py-1 flex h-[calc(100%-64px)] items-end justify-center">
+        <div className="h-full flex flex-col justify-between">
+          {showCategoryMenu && (
+            <ExamCategory
+              categories={categories && categories}
+              categoryModal={categoryModal}
+              setCategoryModal={setCategoryModal}
+              setShowCategoryMenu={setShowCategoryMenu}
+              handleCategoryModal={handleCategoryModal}
+              trigger={trigger}
+              setTrigger={setTrigger}
+              showAddCategory={showAddCategory}
+              setShowAddCategory={setShowAddCategory}
             />
-            {
-                imgStatus && 
-                <ImageBoard imgStatus={imgStatus} setImgStatus={setImgStatus}/>
-            }
-            {
-                showReport && 
-                <Document setShowReport={setShowReport} id={examModalId}/>
-            }
+          )}
+          <ExamBoard
+            examModal={examModal}
+            setExamModal={setExamModal}
+            exams={data && data}
+            handleExamModal={handleExamModal}
+            setShowReport={setShowReport}
+          />
+          {imgStatus && (
+            <ImageBoard imgStatus={imgStatus} setImgStatus={setImgStatus} />
+          )}
+          {showReport && (
+            <Document setShowReport={setShowReport} id={examModalId} />
+          )}
         </div>
-            <ExamBoardController imgStatus={imgStatus} setImgStatus={setImgStatus} 
-            showCategoryMenu={showCategoryMenu}
-             setShowCategoryMenu={setShowCategoryMenu}/>
+        <ExamBoardController
+          imgStatus={imgStatus}
+          setImgStatus={setImgStatus}
+          showCategoryMenu={showCategoryMenu}
+          setShowCategoryMenu={setShowCategoryMenu}
+        />
       </div>
-      {
-        categoryModal && <CategoryModal setTriggerCat={setTrigger} triggerCat={trigger}
-         setShowCategoryMenu={setShowCategoryMenu} depId={depId} id={cModalId} 
-         setCategoryModal={setCategoryModal}/>
-      }
-      {
-        examModal && 
-        <ExamModalMain examTri={examTri} setExamTri={setExamTri} exams={data} id={examModalId} setExamModal={setExamModal}/>
-      }
-      {
-        showAddCategory && 
-        <AddCategoryMenu trigger={trigger} setTrigger={setTrigger} showAddCategory={showAddCategory} setShowAddCategory={setShowAddCategory}/>
-      }
+      {categoryModal && (
+        <CategoryModal
+          setTriggerCat={setTrigger}
+          triggerCat={trigger}
+          setShowCategoryMenu={setShowCategoryMenu}
+          depId={depId}
+          id={cModalId}
+          setCategoryModal={setCategoryModal}
+        />
+      )}
+      {examModal && (
+        <ExamModalMain
+          examTri={examTri}
+          setExamTri={setExamTri}
+          exams={data}
+          id={examModalId}
+          setExamModal={setExamModal}
+        />
+      )}
+      {showAddCategory && (
+        <AddCategoryMenu
+          trigger={trigger}
+          setTrigger={setTrigger}
+          showAddCategory={showAddCategory}
+          setShowAddCategory={setShowAddCategory}
+        />
+      )}
     </div>
-     );
+  );
 }
 
 export default ExamDash;

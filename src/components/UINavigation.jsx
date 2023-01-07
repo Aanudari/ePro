@@ -3,7 +3,6 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const navigation = [
-  { name: "Dashboard", href: "/" },
   { name: "Шалгалт", href: "/levelone-ui-take-exam" },
   { name: "Сургалт", href: "/user-training" },
   // { name: "Календар", href: "/" },
@@ -47,19 +46,8 @@ export default function UINavigation() {
                 </div>
                 <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                   <div className="flex flex-shrink-0 items-center">
-                    {/* <img
-                    className="block h-8 w-auto lg:hidden"
-                    src="ddish_logo.631bd794.svg"
-                    alt="Your Company"
-                  />
-                  
-                  <img
-                    className="hidden h-8 w-auto lg:block"
-                    src="ddish_logo.631bd794.svg"
-                    alt="Your Company"
-                  /> */}
                     <h4 className="text-white m-0 hidden md:block pl-10 ">
-                      E-Pro систем
+                      E-pro систем
                     </h4>
                     <h4 className="text-white m-0 md:hidden pl-5">E-Pro </h4>
                   </div>

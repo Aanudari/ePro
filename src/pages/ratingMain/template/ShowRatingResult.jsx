@@ -1,16 +1,7 @@
 import { useEffect, useState } from "react";
 import { useStateContext } from "../../../contexts/ContextProvider";
 import axios from "axios";
-import EmojiPicker, {
-  EmojiStyle,
-  SkinTones,
-  Theme,
-  Categories,
-  EmojiClickData,
-  Emoji,
-  SuggestionMode,
-  SkinTonePickerLocation,
-} from "emoji-picker-react";
+import EmojiPicker from "emoji-picker-react";
 import ShowSubCategory from "./ShowSubCategory";
 function ShowRatingResult({ setShowResult, personId }) {
   const { TOKEN, activeMenu } = useStateContext();

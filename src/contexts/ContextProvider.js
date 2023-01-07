@@ -4,49 +4,132 @@ import { useLocalStorage } from "../components/useLocalStorage";
 const StateContext = createContext("");
 
 export const ContextProvider = ({ children }) => {
+  function addZero(i) {
+    if (i < 10) {
+      i = "0" + i;
+    }
+    return i;
+  }
   const [activeMenu, setActiveMenu] = useState(true);
   const [showTop, setShowTop] = useState(false);
   const [user, setUser] = useLocalStorage("user", null);
-  const allRoles = [192, 194, 169, 193, 197, 192, 188, 189, 195, 190, 208, 196, 1, 2, 3, 4, 5, 6, 7, 168, 199]
-  const roleId = user ? user.role_id : null
-  const TOKEN = user ? user.token : null
-  const deviceId = user ? user.device_id : null
+  const allRoles = [
+    192, 194, 169, 193, 197, 192, 188, 189, 195, 190, 208, 196, 1, 2, 3, 4, 5,
+    6, 7, 168, 199,
+  ];
+  const roleId = user ? user.role_id : null;
+  const TOKEN = user ? user.token : null;
+  const deviceId = user ? user.device_id : null;
   const [inputValue, setInputValue] = useState("");
   const [sideBarTrack, setsideBarTrack] = useState(0);
   const [showModal, setShowModal] = useState(false);
-  const [uiStatus, setUiStatus] = useState('1');
+  const [uiStatus, setUiStatus] = useState("1");
   const [isAuthenticated, setisAuthenticated] = useState(false);
   const [expandedMenu, setExpandedMenu] = useState(false);
-  const [mobileBar, setMobileBar] = useState(false)
+  const [mobileBar, setMobileBar] = useState(false);
   const [readyCheck, setReadyCheck] = useState(false);
-  const [examID, setExamID] = useState('');
-  const [examName, setExamName] = useState('');
+  const [examID, setExamID] = useState("");
+  const [examName, setExamName] = useState("");
   const [qlength, setQlength] = useState(0);
   const [error, setError] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
   const [gameFinished, setGameFinished] = useState(false);
-  const someValue = useRef([])
-  const wrongValue = useRef([])
-  const uniqueRightAnswer = new Set(someValue.current.map(e => e))
-  const uniqueWrongAnswer = new Set(wrongValue.current.map(e => e))
+  const someValue = useRef([]);
+  const wrongValue = useRef([]);
+  const uniqueRightAnswer = new Set(someValue.current.map((e) => e));
+  const uniqueWrongAnswer = new Set(wrongValue.current.map((e) => e));
   const [showAnswer, setShowAnswer] = useState(false);
   const [reminder, setReminder] = useState(false);
-  const [time, setTime] = useState('');
+  const [time, setTime] = useState("");
   const [rightAnswer, setRightAnswer] = useState();
   const [rightAnswerCount, setRightAnswerCount] = useState(0);
   const [varientID, setVarientID] = useState();
   const [templateID, setTemplateID] = useState();
+  const [ratingDate, setRatingDate] = useState(new Date());
+  const [ratingDate2, setRatingDate2] = useState(new Date());
+  var datestringRating =
+    ratingDate.getFullYear() +
+    "" +
+    addZero(ratingDate.getMonth() + 1) +
+    addZero(ratingDate.getDate()) +
+    addZero(ratingDate.getHours()) +
+    addZero(ratingDate.getMinutes()) +
+    addZero(ratingDate.getSeconds());
+  var datestringRating2 =
+    ratingDate2.getFullYear() +
+    "" +
+    addZero(ratingDate2.getMonth() + 1) +
+    addZero(ratingDate2.getDate()) +
+    addZero(ratingDate2.getHours()) +
+    addZero(ratingDate2.getMinutes()) +
+    addZero(ratingDate2.getSeconds());
   return (
-    <StateContext.Provider value={{
-      activeMenu, setActiveMenu, user, setUser, roleId, allRoles, sideBarTrack,
-      setsideBarTrack, deviceId, TOKEN, inputValue, setInputValue, showTop, setShowTop,
-      uiStatus, setUiStatus, showModal, setShowModal, isAuthenticated, setisAuthenticated,
-      expandedMenu, setExpandedMenu, mobileBar, setMobileBar, readyCheck, setReadyCheck,
-      examID, setExamID, qlength, setQlength, error, setError, gameStarted, setGameStarted,
-      gameFinished, setGameFinished, someValue, uniqueRightAnswer, uniqueWrongAnswer, showAnswer, setShowAnswer,
-      wrongValue, reminder, setReminder, examName, setExamName, time, setTime, rightAnswer, setRightAnswer,
-      rightAnswerCount, setRightAnswerCount, varientID, setVarientID, templateID, setTemplateID
-    }}>
+    <StateContext.Provider
+      value={{
+        activeMenu,
+        setActiveMenu,
+        user,
+        setUser,
+        roleId,
+        allRoles,
+        sideBarTrack,
+        setsideBarTrack,
+        deviceId,
+        TOKEN,
+        inputValue,
+        setInputValue,
+        showTop,
+        setShowTop,
+        uiStatus,
+        setUiStatus,
+        showModal,
+        setShowModal,
+        isAuthenticated,
+        setisAuthenticated,
+        expandedMenu,
+        setExpandedMenu,
+        mobileBar,
+        setMobileBar,
+        readyCheck,
+        setReadyCheck,
+        examID,
+        setExamID,
+        qlength,
+        setQlength,
+        error,
+        setError,
+        gameStarted,
+        setGameStarted,
+        gameFinished,
+        setGameFinished,
+        someValue,
+        uniqueRightAnswer,
+        uniqueWrongAnswer,
+        showAnswer,
+        setShowAnswer,
+        wrongValue,
+        reminder,
+        setReminder,
+        examName,
+        setExamName,
+        time,
+        setTime,
+        rightAnswer,
+        setRightAnswer,
+        rightAnswerCount,
+        setRightAnswerCount,
+        varientID,
+        setVarientID,
+        templateID,
+        setTemplateID,
+        ratingDate2,
+        setRatingDate2,
+        ratingDate,
+        setRatingDate,
+        datestringRating,
+        datestringRating2,
+      }}
+    >
       {children}
     </StateContext.Provider>
   );

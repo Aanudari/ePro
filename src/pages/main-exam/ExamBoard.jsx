@@ -4,8 +4,8 @@ function ExamBoard({
   setExamModal,
   handleExamModal,
   setShowReport,
+  setShowDocument,
 }) {
-  console.log(exams && exams);
   return (
     <div className="min-w-[1150px] min-h-full max-h-full bg-white py-3 px-4 shadow-sm">
       <h6 className="text-gray-500 font-[500]">Шалгалтууд</h6>
@@ -14,10 +14,10 @@ function ExamBoard({
           Нэр
         </div>
         <div className="w-1/4 h-full flex justify-center items-center bg-teal-500 text-white text-[11px] uppercase font-[500]">
-          эхлэх
+          эхлэх, дуусах
         </div>
         <div className="w-1/4 h-full flex justify-center items-center bg-teal-500 text-white text-[11px] uppercase font-[500]">
-          дуусах
+          Статус
         </div>
         <div className="w-1/4 h-full flex justify-center items-center bg-teal-500 text-white text-[11px] uppercase font-[500]">
           Хугацаа
@@ -43,7 +43,7 @@ function ExamBoard({
                 exam.examSummary.status == "Exam over"
                   ? "text-gray-400 hover:text-teal-600  hover:border-b-teal-500"
                   : exam.examSummary.status == "Ongoing"
-                  ? "hover:text-green-600  hover:border-b-green-500"
+                  ? "hover:text-green-600  hover:border-b-green-500 bg-gray-50"
                   : "text-gray-400 hover:text-amber-600  hover:border-b-amber-600 bg-amber-100"
               }
                 font-[600] cursor-pointer `}
@@ -55,16 +55,29 @@ function ExamBoard({
                 {exam.name}
               </div>
               <div
-                className="w-1/4 h-full flex justify-center items-center text-[11px]
+                className="w-1/4 h-full flex flex-col justify-center items-center text-[11px]
                      uppercase font-[500]"
               >
-                {exam.startDate}
+                <span className="m-0 font-[500]">{exam.startDate}</span>
+                <span
+                  className={`m-0 font-[500] ${
+                    exam.examSummary.status == "Ongoing" && "text-red-400"
+                  }`}
+                >
+                  {exam.expireDate}
+                </span>
               </div>
               <div
                 className="w-1/4 h-full flex justify-center items-center text-[11px]
                      uppercase font-[500]"
               >
-                {exam.expireDate}
+                {exam.examSummary.status == "Exam over" ? (
+                  "Дууссан"
+                ) : exam.examSummary.status == "Ongoing" ? (
+                  <span className="font-[500] text-green-500">Идэвхитэй</span>
+                ) : (
+                  "Хүлээгдэж буй"
+                )}
               </div>
               <div
                 className="w-1/4 h-full flex justify-center items-center text-[11px]
@@ -83,7 +96,9 @@ function ExamBoard({
                      uppercase font-[500] bg-green-500 !text-white active:bg-green-500 hover:bg-green-600"
               >
                 <div className="w-full flex justify-center items-center font-[500]">
-                  Идэвхитэй
+                  <span className="font-[500]">
+                    {exam.examSummary.taken}/{exam.examSummary.total}
+                  </span>
                 </div>
                 <div className="h-full min-w-[50px] border-l flex justify-center items-center">
                   <i className="bi bi-check2-circle text-[20px]"></i>
@@ -92,7 +107,7 @@ function ExamBoard({
             ) : exam.examSummary.status == "Exam over" ? (
               <div
                 onClick={() => {
-                  setShowReport(true);
+                  setShowDocument(true);
                   handleExamModal(exam.id);
                 }}
                 className="w-1/4 h-full flex justify-between items-center text-[11px] cursor-pointer

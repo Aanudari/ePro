@@ -20,10 +20,10 @@ function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
     return item.id == id;
   });
   let deviceIds = [];
-  for (let index = 0; index < chosen[0].devInfos.length; index++) {
-    const element = chosen[0].devInfos[index].deviceId;
-    deviceIds.push(element);
-  }
+  // for (let index = 0; index < chosen[0].devInfos.length; index++) {
+  //   const element = chosen[0].devInfos[index].deviceId;
+  //   deviceIds.push(element);
+  // }
   const [trigger2, setTrigger2] = useState(false);
   const [users, setUsers] = useState();
   useEffect(() => {

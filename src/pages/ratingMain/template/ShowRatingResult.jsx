@@ -29,6 +29,7 @@ function ShowRatingResult({ setShowResult, personId }) {
         alert(err);
       });
   }, [trigger]);
+  // console.log(data && data[0]);
   return (
     <div
       className={`${
@@ -82,7 +83,7 @@ function ShowRatingResult({ setShowResult, personId }) {
             {data &&
               data.map((element, ind) => (
                 <div key={ind} className="w-full border p-2 my-4 bg-teal-500">
-                  <div className="bg-teal-500 w-[] text-white px-3 py-2 w-full flex flex-col">
+                  <div className="bg-teal-500 text-white px-3 py-2 w-full flex flex-col">
                     <div className="flex w-full justify-between">
                       <div className=" flex gap-4">
                         <span className="text-sm font-[500]">

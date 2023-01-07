@@ -9,12 +9,11 @@ function ExamCard({ data }) {
       <div
         className={`w-[250px] min-h-[320px] max-h-[320px] overflow-hidden bg-gray-100`}
       >
-        <img
-          className="w-full h-[150px]"
-          src="https://img.freepik.com/premium-vector/job-exam-test-vector-illustration_138676-243.jpg?w=2000"
-          alt=""
-        />
-        <div className="flex flex-col justify-between h-[170px]">
+        <div className="w-full h-[150px] bg-white flex justify-center items-center">
+          <img className="h-[100px] w-[100px]" src="exam-done.png" alt="" />
+        </div>
+
+        <div className="flex flex-col justify-between h-[170px] bg-gray-100">
           <div className="px-6 pt-2">
             <div className="font-bold text-[15px] text-gray-600/90">
               {data.name}
@@ -35,12 +34,7 @@ function ExamCard({ data }) {
               } rounded-full px-3 py-1 text-sm
                font-semibold text-white mr-2 mb-2`}
             >
-              Дүн :{" "}
-              {status > 80
-                ? "Сайн"
-                : status < 80 && status > 50
-                ? "Дунд"
-                : "Хангалтгүй"}
+              Дүн : {status > 80 ? "Сайн" : "Хангалтгүй"}
             </span>
           </div>
         </div>

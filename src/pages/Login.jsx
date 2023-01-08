@@ -7,14 +7,19 @@ function Login() {
   const { setUser, setisAuthenticated } = useStateContext();
   const navigate = useNavigate();
   const redirect = (data) => {
-    switch (data.role_id) {
-      case "1":
-        navigate("/levelone-ui-take-exam");
-        break;
-      case "199":
-        navigate("/home");
-        break;
+    if (data.role_id == "199") {
+      navigate("/home");
+    } else {
+      navigate("/levelone-ui-take-exam");
     }
+    // switch (data.role_id) {
+    //   case "1":
+    //     navigate("/levelone-ui-take-exam");
+    //     break;
+    //   case "199":
+    //     navigate("/home");
+    //     break;
+    // }
     setUser(data);
   };
 
@@ -47,6 +52,7 @@ function Login() {
             redirect(res.data);
             setisAuthenticated(true);
             localStorage.setItem("token", res.data.token);
+            console.log(res);
           } else {
             setalert(true);
           }

@@ -20,7 +20,7 @@ function CommentMain({
     setInput(input + emoji);
   };
   let schema = {
-    eventId: data[0].id,
+    eventId: data && data[0].id,
     content: input,
     type: "rating",
   };

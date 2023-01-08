@@ -9,8 +9,10 @@ function ExamCard({ data }) {
       <div
         className={`w-[250px] min-h-[320px] max-h-[320px] overflow-hidden bg-gray-100`}
       >
-        <div className="w-full h-[150px] bg-white flex justify-center items-center">
-          <img className="h-[100px] w-[100px]" src="exam-done.png" alt="" />
+        <div className="w-full h-[150px] bg-white flex justify-center items-center font-bold text-2xl text-emerald-600">
+          {/* <img className="w-full h-full" src="completed.jpg" alt="" /> */}
+          COMPLETED
+          <i className="bi bi-check2-circle ml-2"></i>
         </div>
 
         <div className="flex flex-col justify-between h-[170px] bg-gray-100">

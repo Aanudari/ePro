@@ -1,25 +1,24 @@
-
 .cus-buttons .raise:hover,
 .raise:focus {
   box-shadow: 0 0.5em 0.5em -0.4em var(--hover);
   transform: translateY(-0.25em);
 }
- $colors: (
-  raise: #50a3a2, 
+$colors: (
+  raise: #50a3a2,
 );
- @each $button, $color in $colors {
+@each $button, $color in $colors {
   .#{$button} {
     --color: #{$color};
     --hover: #{adjust-hue($color, 45deg)};
   }
 }
 
-.cus-buttons .raise {  
+.cus-buttons .raise {
   color: var(--color);
   transition: 0.25s;
-  
+
   &:hover,
-  &:focus { 
+  &:focus {
     border-color: #50a3a2;
     color: #50a3a2;
   }
@@ -41,28 +40,27 @@
 
 // here button 2
 
-
 .cus-buttons2 .raise2:hover,
 .raise:focus {
   box-shadow: 0 0.5em 0.5em -0.4em var(--hover);
   transform: translateY(-0.25em);
 }
- $colors: (
-  raise: #50a3a2, 
+$colors: (
+  raise: #50a3a2,
 );
- @each $button, $color in $colors {
+@each $button, $color in $colors {
   .#{$button} {
     --color: #{$color};
     --hover: #{adjust-hue($color, 45deg)};
   }
 }
 
-.cus-buttons2 .raise2 {  
+.cus-buttons2 .raise2 {
   color: var(--color);
   transition: 0.25s;
-  
+
   &:hover,
-  &:focus { 
+  &:focus {
     border-color: #50a3a2;
     color: #50a3a2;
   }
@@ -79,25 +77,29 @@
 
 .drop-down {
   animation: dropdown;
-  animation-duration: .5s;
+  animation-duration: 0.5s;
 }
 
 @keyframes dropdown {
   from {
-    top: -1000px
+    top: -1000px;
   }
   to {
-    top: 56px
+    top: 56px;
   }
 }
 
 .shrink {
   animation: shrink;
-  animation-duration: .5s;
+  animation-duration: 0.5s;
 }
 
 @keyframes shrink {
   from {
     height: 0;
   }
+}
+
+.custom-height {
+  height: 100% !important;
 }

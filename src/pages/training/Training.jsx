@@ -316,10 +316,9 @@ function Training() {
                         </div>
                         <p className="ml-3 text-sm leading-5 text-gray-700 ">
                           Ангилал:{" "}
-                          {
-                            category?.find((obj) => obj.id === data.tCategory)
-                              .name
-                          }
+                          {category &&
+                            category.find((obj) => obj.id === data.tCategory)
+                              .name}
                         </p>
                       </li>
                       {data.teacher === null ? (

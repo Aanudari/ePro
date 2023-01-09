@@ -54,7 +54,6 @@ function RatingControll() {
       index ===
       self.findIndex((t) => t.id === value.id && t.name === value.name)
   );
-
   let users = [];
   for (let index = 0; index < unique.length; index++) {
     const element = unique[index];
@@ -85,7 +84,7 @@ function RatingControll() {
         console.log(err);
       });
   }, []);
-  console.log(users);
+  // console.log(users)
   const handleChangeOptions = (value) => {
     setIndex(value);
     let temp = unique.filter((item, index) => {
@@ -101,7 +100,6 @@ function RatingControll() {
       data: time,
     })
       .then((res) => {
-        console.log(res.data.result);
         setStatusData(res.data.result);
       })
       .catch((err) => {

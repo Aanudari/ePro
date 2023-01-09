@@ -1,20 +1,7 @@
-import { Fragment } from "react";
-import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { useNavigate, useLocation } from "react-router-dom";
-
-const navigation = [
-  { name: "Шалгалт", href: "/levelone-ui-take-exam" },
-  { name: "Сургалт", href: "/user-training" },
-  // { name: "Календар", href: "/" },
-  { name: "Алдаа / талархал", href: "/user-error-thanks" },
-];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
+import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 
 export default function UINavigation() {
-  const location = useLocation();
   const navigate = useNavigate();
   const logout = () => {
     localStorage.clear();
@@ -22,9 +9,11 @@ export default function UINavigation() {
     navigate("/");
     window.location.reload();
   };
+  const [show, setShow] = useState(false);
   return (
     <div className="">
-      <header className="header fixed">
+      <div className="h-[60px]"></div>
+      <header className="header fixed top-0">
         <div className="header-content responsive-wrapper">
           <div className="header-logo">
             <a href="#">
@@ -79,11 +68,25 @@ export default function UINavigation() {
               <a href="#" className="icon-button">
                 <i className="bi bi-bell-fill"></i>
               </a>
-              <a href="#" className="avatar ">
+              <a
+                onClick={() => {
+                  setShow(true);
+                }}
+                className="avatar "
+              >
                 <img src="user2.png" alt="" />
               </a>
             </div>
           </div>
+          {show && (
+            <div
+              onClick={logout}
+              className="fixed cursor-pointer bg-gray-100 text-sm top-12 shadow-md font-[400] rounded px-3 py-2 right-[60px] z-20"
+            >
+              <i className="bi bi-box-arrow-left mr-2"></i>
+              Гарах
+            </div>
+          )}
           <a href="#" className="button">
             <i className="ph-list-bold"></i>
             <span>Menu</span>

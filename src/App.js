@@ -61,6 +61,7 @@ import EditTraining from "./pages/training/Edit-training";
 import UserTraining from "./pages/training/User-training";
 import Player from "./pages/training/Player";
 import RatingIndividual from "./pages/ratingMain/RatingIndivdual";
+import TrainingUserCell from "./pages/training/TrainingUserCell";
 
 function App() {
   const { activeMenu, showTop, roleId, error, setError } = useStateContext();
@@ -135,6 +136,15 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199]}>
                 <CreateTraining />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/train-users"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <TrainingUserCell />
               </ProtectedRoute>
             }
           />

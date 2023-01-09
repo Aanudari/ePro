@@ -8,6 +8,7 @@ import { Modal } from "react-bootstrap";
 import Select from "react-select";
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
+
 function Training() {
   const location = useLocation();
   const { TOKEN, activeMenu } = useStateContext();
@@ -22,17 +23,16 @@ function Training() {
   const [trains, setTrains] = useState([]);
   const [category, setCategory] = useState([]);
   const [showView, setShowView] = useState(null);
-  const [TRateChoosen, setTRateChoosen] = useState();
   const hideModalView = () => setShowView(null);
   const [showDelete, setShowDelete] = useState(null);
   const hideModalDelete = () => setShowDelete(null);
   const [id, setId] = useState();
   const [choosedTrain, setChoosedTrain] = useState();
-  const [watchedUsers, setWatchedUsers] = useState();
   const options = [
     { id: "1", value: "Тэнхим" },
     { id: "2", value: "Онлайн" },
   ];
+  const [watchedUsers, setWatchedUsers] = useState([]);
 
   useEffect(() => {
     axios({
@@ -73,35 +73,36 @@ function Training() {
       })
       .catch((err) => console.log(err));
   }, []);
-
   const showModalDelete = (e) => {
     setShowDelete(true);
     setId(e.id);
   };
   const showModalView = (data) => {
-    setShowView(true);
-    setChoosedTrain(data);
-    axios({
-      method: "get",
-      headers: {
-        accept: "text/plain",
-        Authorization: `${TOKEN}`,
-      },
-      url: `http://192.168.10.248:9000/v1/TrainingReport/training/watched?trainingId=${data.id}`,
-    })
-      .then((res) => {
-        setWatchedUsers(res.data.watchedList);
-        if (res.data.isSuccess == true) {
-          setWatchedUsers(res.data.watchedList);
-        }
-        if (
-          res.data.resultMessage === "Unauthorized" ||
-          res.data.resultMessage == "Input string was not in a correct format."
-        ) {
-          logout();
-        }
-      })
-      .catch((err) => console.log(err));
+    navigate("/train-users", {
+      state: { data: data },
+    });
+    // setShowView(true);
+    // setChoosedTrain(data);
+    // axios({
+    //   method: "get",
+    //   headers: {
+    //     accept: "text/plain",
+    //     Authorization: `${TOKEN}`,
+    //   },
+    //   url: `http://192.168.10.248:9000/v1/TrainingReport/training/watched?trainingId=${data.id}`,
+    // })
+    //   .then((res) => {
+    //     if (res.data.isSuccess == true) {
+    //       setWatchedUsers(res.data.watchedList);
+    //     }
+    //     if (
+    //       res.data.resultMessage === "Unauthorized" ||
+    //       res.data.resultMessage == "Input string was not in a correct format."
+    //     ) {
+    //       logout();
+    //     }
+    //   })
+    //   .catch((err) => console.log(err));
   };
   const handleDelete = () => {
     axios({
@@ -128,9 +129,39 @@ function Training() {
       state: { data: data },
     });
   };
-
+  // console.log(watchedUsers);
+  let unique = watchedUsers.filter(
+    (value, index, self) =>
+      index === self.findIndex((t) => t.unit == value.unit)
+  );
+  let mainOption = [
+    {
+      department: "Борлуулалт үйлчилгээний алба",
+      unit: "Бүгд",
+      lastName: "all_employee",
+      firstName: "all_employee",
+      deviceId: "0000",
+      hugatsaa: "",
+    },
+  ];
+  mainOption.push(...unique);
+  let arr = [];
+  // console.log(mainOption);
+  const [index, setIndex] = useState(0);
+  for (let index = 0; index < mainOption?.length; index++) {
+    const element = watchedUsers[index];
+    let filtered = watchedUsers.filter((item, i) => {
+      return item.unit == element.unit;
+    });
+    arr.push(filtered);
+  }
+  console.log(index);
+  // console.log(mainOption);
+  const handleOptions = (value) => {
+    setIndex(value);
+  };
   return (
-    <div className=" min-h-[calc(100%-56px)] ">
+    <div className="w-full min-h-[calc(100%-56px)] ">
       <div className="flex justify-end">
         <Modal
           show={showView}
@@ -157,7 +188,40 @@ function Training() {
             <Modal.Title>{choosedTrain?.name}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <div>йййййййй</div>
+            <select
+              onChange={(e) => {
+                handleOptions(e.target.value);
+              }}
+              name=""
+              id=""
+            >
+              {mainOption.map((el, i) => (
+                <option key={i} value={`${i}`}>
+                  {el.unit}
+                </option>
+              ))}
+            </select>
+            <div>
+              {index == 0
+                ? watchedUsers.map((item, index) => (
+                    <div key={index} className="flex gap-2 justify-between">
+                      <span>{index + 1}</span>
+                      <span>
+                        {item.lastName[0]}. {item.firstName}
+                      </span>
+                      <span>{item.hugatsaa == "" ? "uzeegui" : "uzsen"}</span>
+                    </div>
+                  ))
+                : arr[index].map((item, index) => (
+                    <div key={index} className="flex gap-2 justify-between">
+                      <span>{index + 1}</span>
+                      <span>
+                        {item.lastName[0]}. {item.firstName}
+                      </span>
+                      <span>{item.hugatsaa == "" ? "uzeegui" : "uzsen"}</span>
+                    </div>
+                  ))}
+            </div>
           </Modal.Body>
         </Modal>
         {/* Устгах */}
@@ -252,10 +316,9 @@ function Training() {
                         </div>
                         <p className="ml-3 text-sm leading-5 text-gray-700 ">
                           Ангилал:{" "}
-                          {
+                          {category &&
                             category.find((obj) => obj.id === data.tCategory)
-                              .name
-                          }
+                              .name}
                         </p>
                       </li>
                       {data.teacher === null ? (

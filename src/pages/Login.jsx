@@ -10,7 +10,8 @@ function Login() {
     if (data.role_id == "199") {
       navigate("/home");
     } else {
-      navigate("/levelone-ui-take-exam");
+      // navigate("/levelone-ui-take-exam");
+      navigate("/user-main");
     }
     // switch (data.role_id) {
     //   case "1":

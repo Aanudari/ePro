@@ -5,7 +5,7 @@ export const CheckLogin = ({ children }) => {
   const { user } = useStateContext();
   if (user ? user.role_id === "199" : null) {
     return <Navigate to="/home" />;
-  } else if (user ? user.role_id === "1" : null) {
+  } else if (user) {
     return <Navigate to="/user-main" />;
   } else return children;
 };

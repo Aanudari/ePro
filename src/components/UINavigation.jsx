@@ -24,158 +24,72 @@ export default function UINavigation() {
   };
   return (
     <div className="">
-      <Disclosure
-        as="nav"
-        className="core-bg fixed top-0 w-full core-index shadow-md"
-      >
-        {({ open }) => (
-          <>
-            <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-              <div className="relative flex h-16 items-center justify-between">
-                <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                  {/* Mobile menu button*/}
-                  <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                    <span className="sr-only">Open main menu</span>
-                    {open ? (
-                      // <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
-                      <i className="bi bi-box-arrow-up-left"></i>
-                    ) : (
-                      <i className="bi bi-list"></i>
-                    )}
-                  </Disclosure.Button>
-                </div>
-                <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                  <div className="flex flex-shrink-0 items-center">
-                    <h4 className="text-white m-0 hidden md:block pl-10 ">
-                      E-pro систем
-                    </h4>
-                    <h4 className="text-white m-0 md:hidden pl-5">E-Pro </h4>
-                  </div>
-                  <div className="hidden sm:ml-6 sm:block">
-                    <div className="flex space-x-4">
-                      {navigation.map((item, index) => (
-                        <a
-                          key={item.name}
-                          onClick={() => {
-                            navigate(`${item.href}`);
-                          }}
-                          className={classNames(
-                            location.pathname === item.href
-                              ? "bg-gray-900 text-white cursor-pointer"
-                              : "text-gray-300 hover:bg-gray-700 hover:text-white cursor-pointer",
-                            "px-3 py-2 rounded-md text-sm font-medium cursor-pointer"
-                          )}
-                          aria-current={item.current ? "page" : undefined}
-                        >
-                          {item.name}
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-                <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                  <button
-                    type="button"
-                    className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-                  >
-                    <span className="sr-only">View notifications</span>
-                    <i className="bi bi-bell text-white"></i>
-                  </button>
-
-                  {/* Profile dropdown */}
-                  <Menu as="div" className="relative ml-3">
-                    <div>
-                      <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-                        <span className="sr-only">Open user menu</span>
-                        <img
-                          className="h-10 w-10 rounded-full"
-                          src="user2.png"
-                          alt=""
-                        />
-                      </Menu.Button>
-                    </div>
-                    <Transition
-                      as={Fragment}
-                      enter="transition ease-out duration-100"
-                      enterFrom="transform opacity-0 scale-95"
-                      enterTo="transform opacity-100 scale-100"
-                      leave="transition ease-in duration-75"
-                      leaveFrom="transform opacity-100 scale-100"
-                      leaveTo="transform opacity-0 scale-95"
-                    >
-                      <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        <Menu.Item>
-                          {({ active }) => (
-                            <a
-                              href="#"
-                              className={classNames(
-                                active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
-                              )}
-                            >
-                              Цэс 1
-                            </a>
-                          )}
-                        </Menu.Item>
-                        <Menu.Item>
-                          {({ active }) => (
-                            <a
-                              href="#"
-                              className={classNames(
-                                active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
-                              )}
-                            >
-                              Цэс 2
-                            </a>
-                          )}
-                        </Menu.Item>
-                        <Menu.Item>
-                          {({ active }) => (
-                            <a
-                              onClick={() => {
-                                logout();
-                              }}
-                              href="#"
-                              className={classNames(
-                                active ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
-                              )}
-                            >
-                              Гарах
-                            </a>
-                          )}
-                        </Menu.Item>
-                      </Menu.Items>
-                    </Transition>
-                  </Menu>
-                </div>
+      <header className="header fixed">
+        <div className="header-content responsive-wrapper">
+          <div className="header-logo">
+            <a href="#">
+              <div>
+                <img src="https://assets.codepen.io/285131/untitled-ui-icon.svg" />
               </div>
+              {/* <img src="https://assets.codepen.io/285131/untitled-ui.svg" /> */}
+              <h6 className="text-black text-xl ml-2 vietnam-pro mb-0">
+                E-PRO
+              </h6>
+            </a>
+          </div>
+          <div className="header-navigation">
+            <nav className="header-navigation-links">
+              {/* <a href="#"> Нүүр </a> */}
+              <a
+                className="cursor-pointer"
+                onClick={() => {
+                  navigate("/user-main");
+                }}
+              >
+                {" "}
+                Home{" "}
+              </a>
+              <a
+                className="cursor-pointer"
+                onClick={() => {
+                  navigate("/user-training");
+                }}
+              >
+                {" "}
+                Сургалт{" "}
+              </a>
+              <a
+                className="cursor-pointer"
+                onClick={() => {
+                  navigate("/user-error-thanks");
+                }}
+              >
+                {" "}
+                Бүртгэл{" "}
+              </a>
+            </nav>
+            <div className="header-navigation-actions">
+              {/* <a href="#" className="button">
+              <i className="ph-lightning-bold"></i>
+              <span>Upgrade now</span>
+            </a> */}
+              <a href="#" className="icon-button">
+                <i className="bi bi-gear-wide"></i>
+              </a>
+              <a href="#" className="icon-button">
+                <i className="bi bi-bell-fill"></i>
+              </a>
+              <a href="#" className="avatar ">
+                <img src="user2.png" alt="" />
+              </a>
             </div>
-
-            <Disclosure.Panel className="sm:hidden">
-              <div className="space-y-1 px-2 pt-2 pb-3">
-                {navigation.map((item) => (
-                  <Disclosure.Button
-                    key={item.name}
-                    as="a"
-                    href={item.href}
-                    className={classNames(
-                      item.current
-                        ? "bg-gray-900 text-white"
-                        : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                      "block px-3 py-2 rounded-md text-base font-medium"
-                    )}
-                    aria-current={item.current ? "page" : undefined}
-                  >
-                    {item.name}
-                  </Disclosure.Button>
-                ))}
-              </div>
-            </Disclosure.Panel>
-          </>
-        )}
-      </Disclosure>
+          </div>
+          <a href="#" className="button">
+            <i className="ph-list-bold"></i>
+            <span>Menu</span>
+          </a>
+        </div>
+      </header>
     </div>
   );
 }

@@ -113,7 +113,11 @@ function ExamDash() {
             <Document setShowReport={setShowReport} id={examModalId} />
           )}
           {showDocument && (
-            <DocumentFinishedExam setShowDocument={setShowDocument} />
+            <DocumentFinishedExam
+              setShowDocument={setShowDocument}
+              exams={data && data}
+              id={examModalId}
+            />
           )}
         </div>
         <ExamBoardController

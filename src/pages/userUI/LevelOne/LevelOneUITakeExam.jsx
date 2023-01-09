@@ -10,7 +10,6 @@ function LevelOneUITakeExam() {
   const navigate = useNavigate();
   const { TOKEN, readyCheck, setReadyCheck, examID, examName } =
     useStateContext();
-
   useEffect(() => {
     axios({
       method: "get",

@@ -61,7 +61,9 @@ import EditTraining from "./pages/training/Edit-training";
 import UserTraining from "./pages/training/User-training";
 import Player from "./pages/training/Player";
 import RatingIndividual from "./pages/ratingMain/RatingIndivdual";
+import UserCore from "./pages/UserMainUI/UserCore";
 import TrainingUserCell from "./pages/training/TrainingUserCell";
+
 
 function App() {
   const { activeMenu, showTop, roleId, error, setError } = useStateContext();
@@ -177,7 +179,7 @@ function App() {
           <Route
             path="/user-training"
             element={
-              <ProtectedRoute allowedRoles={[199, 1, 4]}>
+              <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
                 <UserTraining />
               </ProtectedRoute>
             }
@@ -185,7 +187,7 @@ function App() {
           <Route
             path="/player"
             element={
-              <ProtectedRoute allowedRoles={[199, 1, 4]}>
+              <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
                 <Player />
               </ProtectedRoute>
             }
@@ -267,7 +269,7 @@ function App() {
           <Route
             path="/levelone-ui"
             element={
-              <ProtectedRoute allowedRoles={[199, 1]}>
+              <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
                 <LevelOneUI />
               </ProtectedRoute>
             }
@@ -275,7 +277,7 @@ function App() {
           <Route
             path="/levelone-ui-take-exam"
             element={
-              <ProtectedRoute allowedRoles={[199, 1]}>
+              <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
                 <LevelOneUITakeExam />
               </ProtectedRoute>
             }
@@ -283,7 +285,7 @@ function App() {
           <Route
             path="/levelone-ui-exam-result"
             element={
-              <ProtectedRoute allowedRoles={[199, 1]}>
+              <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
                 <LevelOneUIExamResult />
               </ProtectedRoute>
             }
@@ -291,7 +293,7 @@ function App() {
           <Route
             path="/levelone-ui-notification"
             element={
-              <ProtectedRoute allowedRoles={[199, 1]}>
+              <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
                 <LevelOneUINotification />
               </ProtectedRoute>
             }
@@ -299,7 +301,7 @@ function App() {
           <Route
             path="/ui-training"
             element={
-              <ProtectedRoute allowedRoles={[199, 1]}>
+              <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
                 <UITraining />
               </ProtectedRoute>
             }
@@ -307,7 +309,7 @@ function App() {
           <Route
             path="/exam"
             element={
-              <ProtectedRoute allowedRoles={[199, 1]}>
+              <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
                 <Exam />
               </ProtectedRoute>
             }
@@ -323,7 +325,7 @@ function App() {
           <Route
             path="/exam-init"
             element={
-              <ProtectedRoute allowedRoles={[199, 1]}>
+              <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
                 <ExamInit />
               </ProtectedRoute>
             }
@@ -367,7 +369,7 @@ function App() {
           <Route
             path="/user-error-thanks"
             element={
-              <ProtectedRoute allowedRoles={[199, 1, 4]}>
+              <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
                 <UserErrorThanks />
               </ProtectedRoute>
             }
@@ -386,6 +388,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199]}>
                 <RatingIndividual />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/user-main"
+            element={
+              <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
+                <UserCore />
               </ProtectedRoute>
             }
           />

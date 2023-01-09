@@ -115,6 +115,7 @@ function ExamDash() {
           {showDocument && (
             <DocumentFinishedExam
               setShowDocument={setShowDocument}
+              exams={data && data}
               id={examModalId}
             />
           )}

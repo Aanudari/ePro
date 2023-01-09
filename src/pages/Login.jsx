@@ -52,7 +52,6 @@ function Login() {
             redirect(res.data);
             setisAuthenticated(true);
             localStorage.setItem("token", res.data.token);
-            console.log(res);
           } else {
             setalert(true);
           }

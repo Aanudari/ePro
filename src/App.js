@@ -61,6 +61,7 @@ import EditTraining from "./pages/training/Edit-training";
 import UserTraining from "./pages/training/User-training";
 import Player from "./pages/training/Player";
 import RatingIndividual from "./pages/ratingMain/RatingIndivdual";
+import UserCore from "./pages/UserMainUI/UserCore";
 
 function App() {
   const { activeMenu, showTop, roleId, error, setError } = useStateContext();
@@ -376,6 +377,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199]}>
                 <RatingIndividual />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/user-main"
+            element={
+              <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
+                <UserCore />
               </ProtectedRoute>
             }
           />

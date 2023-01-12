@@ -12,7 +12,7 @@ import { ToastContainer } from "react-toastify";
 import moment from "moment";
 function TrainingCategory() {
   const location = useLocation();
-  const { TOKEN } = useStateContext();
+  const { TOKEN, activeMenu } = useStateContext();
   const navigate = useNavigate();
   const logout = () => {
     localStorage.clear();
@@ -52,8 +52,13 @@ function TrainingCategory() {
       url: `${process.env.REACT_APP_URL}/v1/User/department`,
     })
       .then((res) => {
-        setDepartment(res.data.departments);
-        if (res.data.resultMessage === "Unauthorized") {
+        if (res.data.isSuccess == true) {
+          setDepartment(res.data.departments);
+        }
+        if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct format."
+        ) {
           logout();
         }
       })
@@ -68,7 +73,6 @@ function TrainingCategory() {
       url: `${process.env.REACT_APP_URL}/v1/Training/category`,
     })
       .then((res) => {
-        setCategory(res.data.trainingCatList);
         if (res.data.isSuccess == true) {
           setCategory(res.data.trainingCatList);
         }
@@ -109,10 +113,16 @@ function TrainingCategory() {
         if (res.data.isSuccess === true) {
           notification.success(`${res.data.resultMessage}`);
           hideModalDelete();
-          const timer = setTimeout(() => navigate(0), 1000);
+          const timer = setTimeout(() => navigate(0), 500);
           return () => clearTimeout(timer);
         } else {
           console.log(res.data.resultMessage);
+        }
+        if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage == "Input string was not in a correct format."
+        ) {
+          logout();
         }
       })
       .catch((err) => console.log(err));
@@ -146,8 +156,11 @@ function TrainingCategory() {
           if (res.data.isSuccess == true) {
             notification.success(`${res.data.resultMessage}`);
             hideModalCreate();
-            const timer = setTimeout(() => navigate(0), 1000);
+            const timer = setTimeout(() => navigate(0), 500);
             return () => clearTimeout(timer);
+          }
+          if (res.data.resultMessage === "Unauthorized") {
+            logout();
           }
         })
         .catch((err) => console.log(err));
@@ -181,8 +194,11 @@ function TrainingCategory() {
           console.log(res.data);
           notification.success(`${res.data.resultMessage}`);
           hideModalCreate();
-          const timer = setTimeout(() => navigate(0), 1000);
+          const timer = setTimeout(() => navigate(0), 500);
           return () => clearTimeout(timer);
+        }
+        if (res.data.resultMessage === "Unauthorized") {
+          logout();
         }
       })
       .catch((err) => console.log(err));
@@ -196,7 +212,18 @@ function TrainingCategory() {
           show={showCreate}
           onHide={hideModalCreate}
           size="ml"
-          //   backdrop="static"
+          backdrop="static"
+          style={
+            activeMenu
+              ? {
+                  width: "calc(100% - 250px)",
+                  left: "250px",
+                }
+              : {
+                  width: "calc(100%)",
+                  left: "0",
+                }
+          }
           keyboard={false}
           aria-labelledby="contained-modal-title-vcenter"
           dialogClassName="modal-100w"
@@ -296,7 +323,18 @@ function TrainingCategory() {
           show={showDelete}
           onHide={hideModalDelete}
           size="ml"
-          //   backdrop="static"
+          backdrop="static"
+          style={
+            activeMenu
+              ? {
+                  width: "calc(100% - 250px)",
+                  left: "250px",
+                }
+              : {
+                  width: "calc(100%)",
+                  left: "0",
+                }
+          }
           keyboard={false}
           aria-labelledby="contained-modal-title-vcenter"
           dialogClassName="modal-100w"
@@ -332,7 +370,18 @@ function TrainingCategory() {
           show={showEdit}
           onHide={hideModalEdit}
           size="ml"
-          //   backdrop="static"
+          backdrop="static"
+          style={
+            activeMenu
+              ? {
+                  width: "calc(100% - 250px)",
+                  left: "250px",
+                }
+              : {
+                  width: "calc(100%)",
+                  left: "0",
+                }
+          }
           keyboard={false}
           aria-labelledby="contained-modal-title-vcenter"
           dialogClassName="modal-100w"

@@ -8,11 +8,11 @@ import { Modal } from "react-bootstrap";
 import Select from "react-select";
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
-import fs from "fs";
+
 const FormData = require("form-data");
 function TrainingFiles() {
   const location = useLocation();
-  const { TOKEN } = useStateContext();
+  const { TOKEN, activeMenu } = useStateContext();
   const navigate = useNavigate();
   const logout = () => {
     localStorage.clear();
@@ -65,10 +65,16 @@ function TrainingFiles() {
         if (res.data.isSuccess === true) {
           notification.success(`${res.data.resultMessage}`);
           hideModalDelete();
-          const timer = setTimeout(() => navigate(0), 1000);
+          const timer = setTimeout(() => navigate(0), 500);
           return () => clearTimeout(timer);
         } else {
           console.log(res.data.resultMessage);
+        }
+        if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage == "Input string was not in a correct format."
+        ) {
+          logout();
         }
       })
       .catch((err) => console.log(err));
@@ -94,13 +100,10 @@ function TrainingFiles() {
         console.log(res.data);
         if (res.data.isSuccess === true) {
           notification.invalidFileUpload(`${res.data.resultMessage}`);
-          const timer = setTimeout(() => navigate(0), 1000);
+          const timer = setTimeout(() => navigate(0), 500);
           return () => clearTimeout(timer);
         }
-        if (
-          res.data.resultMessage === "Unauthorized" ||
-          res.data.resultMessage == "Input string was not in a correct format."
-        ) {
+        if (res.data.resultMessage === "Unauthorized") {
           logout();
         }
         if (
@@ -120,7 +123,7 @@ function TrainingFiles() {
           show={showCreate}
           onHide={hideModalCreate}
           size="ml"
-          //   backdrop="static"
+          backdrop="static"
           keyboard={false}
           aria-labelledby="contained-modal-title-vcenter"
           dialogClassName="modal-100w"
@@ -163,7 +166,18 @@ function TrainingFiles() {
           show={showDelete}
           onHide={hideModalDelete}
           size="ml"
-          //   backdrop="static"
+          backdrop="static"
+          style={
+            activeMenu
+              ? {
+                  width: "calc(100% - 250px)",
+                  left: "250px",
+                }
+              : {
+                  width: "calc(100%)",
+                  left: "0",
+                }
+          }
           keyboard={false}
           aria-labelledby="contained-modal-title-vcenter"
           dialogClassName="modal-100w"

@@ -27,7 +27,7 @@ function TrainingUserCell() {
         accept: "text/plain",
         Authorization: `${TOKEN}`,
       },
-      url: `http://192.168.10.248:9000/v1/TrainingReport/training/watched?trainingId=${selectedTrain.id}`,
+      url: `${process.env.REACT_APP_URL}/v1/TrainingReport/training/watched?trainingId=${selectedTrain.id}`,
     })
       .then((res) => {
         if (res.data.isSuccess == true) {
@@ -58,7 +58,7 @@ function TrainingUserCell() {
   );
   let mainOption = [
     {
-      department: "Борлуулалт үйлчилгээний алба",
+      department: "",
       unit: "Бүгд",
       lastName: "all_employee",
       firstName: "all_employee",
@@ -72,11 +72,7 @@ function TrainingUserCell() {
     let filtered = watchedUsers.filter((item, i) => {
       return item.unit == value;
     });
-    if (filtered.length === 0) {
-      setFilteredList(watchedUsers);
-    } else if (filtered.length > 0) {
-      setFilteredList(filtered);
-    }
+    setFilteredList(filtered);
   };
 
   return (
@@ -86,7 +82,11 @@ function TrainingUserCell() {
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
             <p className="focus:outline-none text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">
-              Хувиарлагдсан хэрэглэгчид
+              Хувиарлагдсан хэрэглэгчид (
+              {filteredList?.length === 0
+                ? watchedUsers?.length
+                : filteredList?.length}
+              )
             </p>
           </div>
         </div>
@@ -121,7 +121,7 @@ function TrainingUserCell() {
                 className="flex-shrink-0 px-4 py-2 text-base font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200"
                 type="submit"
               >
-                Filter
+                <i className="bi bi-search" />
               </button>
             </div>
           </div>
@@ -129,14 +129,14 @@ function TrainingUserCell() {
           <table className="items-center w-full bg-transparent border-collapse ">
             <thead>
               <tr className="text-sm text-left  bg-gray-200 border-b">
-                <th className="px-4 py-3 font-bold">no </th>
-                <th className="px-4 py-3 font-bold">unit </th>
-                <th className="px-4 py-3 font-bold">Name </th>
-                <th className="px-4 py-3 font-bold">status </th>
+                <th className="px-4 py-3 font-bold">№ </th>
+                <th className="px-4 py-3 font-bold">Хэлтэс </th>
+                <th className="px-4 py-3 font-bold">Овог нэр </th>
+                <th className="px-4 py-3 font-bold">Status </th>
               </tr>
             </thead>
             <tbody className="bg-white text-sm ">
-              {filteredList
+              {filteredList.length > 0
                 ? filteredList.map((data, i) => (
                     <tr key={i}>
                       <td className="px-1 py-1 border">{i + 1}</td>
@@ -146,21 +146,19 @@ function TrainingUserCell() {
                       </td>
                       <td className="px-1 py-1 border">
                         {data.hugatsaa === "" ? (
-                          <span className="relative inline-block px-3 py-1 font-semibold leading-tight text-grey-900 items-center">
-                            <span
-                              aria-hidden="true"
-                              className="absolute inset-0 bg-gray-200 rounded-full opacity-50"
-                            ></span>
-                            <span className="relative">Үзээгүй</span>
-                          </span>
+                          <div
+                            className="bg-red-200 border-red-600 text-red-600 border-l-2 p-1"
+                            role="alert"
+                          >
+                            <p className="font-bold">Үзээгүй</p>
+                          </div>
                         ) : (
-                          <span className="relative inline-block px-3 py-1 font-semibold leading-tight text-green-900 items-center">
-                            <span
-                              aria-hidden="true"
-                              className="absolute inset-0 bg-green-200 rounded-full opacity-50"
-                            ></span>
-                            <span className="relative">Үзсэн</span>
-                          </span>
+                          <div
+                            className="bg-green-200 border-green-600 text-green-600 border-l-2 p-1"
+                            role="alert"
+                          >
+                            <p className="font-bold">Үзсэн</p>
+                          </div>
                         )}
                       </td>
                     </tr>
@@ -174,21 +172,19 @@ function TrainingUserCell() {
                       </td>
                       <td className="px-1 py-1 border">
                         {data.hugatsaa === "" ? (
-                          <span className="relative inline-block px-3 py-1 font-semibold leading-tight text-grey-900 items-center">
-                            <span
-                              aria-hidden="true"
-                              className="absolute inset-0 bg-gray-200 rounded-full opacity-50"
-                            ></span>
-                            <span className="relative">Үзээгүй</span>
-                          </span>
+                          <div
+                            className="bg-red-200 border-red-600 text-red-600 border-l-2 p-1"
+                            role="alert"
+                          >
+                            <p className="font-bold">Үзээгүй</p>
+                          </div>
                         ) : (
-                          <span className="relative inline-block px-3 py-1 font-semibold leading-tight text-green-900 items-center">
-                            <span
-                              aria-hidden="true"
-                              className="absolute inset-0 bg-green-200 rounded-full opacity-50"
-                            ></span>
-                            <span className="relative">Үзсэн</span>
-                          </span>
+                          <div
+                            className="bg-green-200 border-green-600 text-green-600 border-l-2 p-1"
+                            role="alert"
+                          >
+                            <p className="font-bold">Үзсэн</p>
+                          </div>
                         )}
                       </td>
                     </tr>

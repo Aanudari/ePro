@@ -24,11 +24,16 @@ function UserTraining() {
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `http://192.168.10.248:9000/v1/Training`,
+      url: `${process.env.REACT_APP_URL}/v1/Training`,
     })
       .then((res) => {
-        setUserTrain(res.data.trainingList);
-        if (res.data.resultMessage === "Unauthorized") {
+        if (res.data.isSuccess == true) {
+          setUserTrain(res.data.trainingList);
+        }
+        if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct format."
+        ) {
           logout();
         }
       })

@@ -1,5 +1,4 @@
 import Navigation from "../../components/Navigation";
-
 function Home() {
   return (
     <div className="w-full bg-[#50a3a2]">

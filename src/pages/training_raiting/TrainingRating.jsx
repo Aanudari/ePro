@@ -9,18 +9,11 @@ import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
 import moment from "moment";
 import DatePicker from "react-datepicker";
+import { logout } from "../../service/examService";
 function TrainingRating() {
   const [tRate, setTRate] = useState([]);
-  const location = useLocation();
   const { TOKEN, activeMenu } = useStateContext();
   const navigate = useNavigate();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
-
   const [showDelete, setShowDelete] = useState(null);
   const [id, setId] = useState();
   const hideModalDelete = () => setShowDelete(null);

@@ -1,21 +1,14 @@
 import { useStateContext } from "../../../contexts/ContextProvider";
 import { useEffect, useState } from "react";
+import { logout } from "../../../service/examService";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 function DocumentFinishedExam({ setShowDocument, id, exams }) {
   const { activeMenu, TOKEN } = useStateContext();
   let filtered = exams.filter((item) => {
     return item.id == id;
   });
-  const navigate = useNavigate();
   const [data, setData] = useState();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   useEffect(() => {
     axios({
       method: "get",

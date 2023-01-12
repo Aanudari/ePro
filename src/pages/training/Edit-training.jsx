@@ -3,24 +3,17 @@ import Navigation from "../../components/Navigation";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-import { Modal } from "react-bootstrap";
-
 import Select from "react-select";
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
 import moment from "moment";
 import DatePicker from "react-datepicker";
+import { logout } from "../../service/examService";
 
 function EditTraining() {
   const locationn = useLocation();
   const { TOKEN } = useStateContext();
   const navigate = useNavigate();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   const train = locationn.state.data;
   const format = "YYYYMMDDHHmmss";
 

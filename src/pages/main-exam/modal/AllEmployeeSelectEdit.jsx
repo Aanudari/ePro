@@ -1,7 +1,7 @@
 import { useStateContext } from "../../../contexts/ContextProvider";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { logout } from "../../../service/examService";
 
 function AllEmployeeSelectEdit({
   setShow,
@@ -25,18 +25,10 @@ function AllEmployeeSelectEdit({
     setChosen(initialData);
     setChosenPre(initialDataPre);
   }, []);
-  const navigate = useNavigate();
   const [chosen, setChosen] = useState([]);
   const [chosenPre, setChosenPre] = useState([]);
   const { activeMenu, TOKEN } = useStateContext();
   const [users, setUsers] = useState();
-
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   useEffect(() => {
     axios({
       method: "get",

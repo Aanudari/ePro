@@ -1,22 +1,14 @@
 import UserLayout from "../../components/UserLayout";
 import React, { useEffect, useState } from "react";
-import Navigation from "../../components/Navigation";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-import { Modal } from "react-bootstrap";
-import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
+import { logout } from "../../service/examService";
 function UserErrorThanks() {
   const location = useLocation();
   const { TOKEN, deviceId } = useStateContext();
   const navigate = useNavigate();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   const [currentTab, setCurrentTab] = useState("1");
   const [complainInfo, setComplainInfo] = useState();
   const [complain, setComplain] = useState([]);

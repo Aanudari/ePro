@@ -2,18 +2,12 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useStateContext } from "../../../contexts/ContextProvider";
+import { logout } from "../../../service/examService";
 
 function ImageBoard({ imgStatus, setImgStatus }) {
-  const navigate = useNavigate();
   const { TOKEN, activeMenu } = useStateContext();
   const [data, setData] = useState();
   const [fileId, setFileId] = useState(false);
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   useEffect(() => {
     axios({
       method: "get",

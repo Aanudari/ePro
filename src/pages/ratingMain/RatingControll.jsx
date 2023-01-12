@@ -1,18 +1,11 @@
-import { useNavigate } from "react-router-dom";
 import { useStateContext } from "../../contexts/ContextProvider";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import RatingUserCell from "./template/RatingUserCell";
+import { logout } from "../../service/examService";
 
 function RatingControll() {
   const { TOKEN } = useStateContext();
-  const navigate = useNavigate();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   const accepted = ["1", "3", "4", "5", "7", "168", "188", "191", "195"];
   const [data, setData] = useState();
   useEffect(() => {

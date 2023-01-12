@@ -2,21 +2,13 @@ import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useStateContext } from "../../contexts/ContextProvider";
-import { useNavigate } from "react-router-dom";
 import Select from "react-select";
-import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
+import { logout } from "../../service/examService";
 
 function TrainingProgressCell({ data }) {
   const [trains, setTrains] = useState([]);
-  const navigate = useNavigate();
   const { TOKEN } = useStateContext();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   function ProgressBar({ percentage, startAt = 0 }) {
     return (
       <>

@@ -4,22 +4,15 @@ import { useStateContext } from "../../contexts/ContextProvider";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { Modal } from "react-bootstrap";
-
+import { logout } from "../../service/examService";
 import Select from "react-select";
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
 
 // import "./pg.css";
 function ErrorThanks() {
-  const location = useLocation();
   const { TOKEN, activeMenu } = useStateContext();
   const navigate = useNavigate();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   let color = "blue";
   const [currentTab, setCurrentTab] = useState("1");
   const [complainInfo, setComplainInfo] = useState();

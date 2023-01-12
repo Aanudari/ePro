@@ -1,23 +1,15 @@
 import React from "react";
-import ImageUploading from "react-images-uploading";
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useStateContext } from "../../../contexts/ContextProvider";
+import { logout } from "../../../service/examService";
 
 export default function ImageUploaderSmall({ question }) {
-  const navigate = useNavigate();
   const { TOKEN } = useStateContext();
   const [data, setData] = useState();
   // console.log(question.qimgUrl);
   const [images, setImages] = React.useState([question.qimgUrl]);
   const maxNumber = 69;
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   const onChange = (imageList, addUpdateIndex) => {
     setImages(imageList);
   };

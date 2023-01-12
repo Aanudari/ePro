@@ -4,7 +4,6 @@ import { useStateContext } from "../../contexts/ContextProvider";
 import ExamBoard from "./ExamBoard";
 import axios from "axios";
 import ExamBoardController from "./ExamBoardController";
-import { useNavigate } from "react-router-dom";
 import ExamCategory from "./modal/ExamCategory";
 import CategoryModal from "./modal/CategoryModal";
 import ExamModalMain from "./modal/ExamModalMain";
@@ -12,23 +11,18 @@ import ImageBoard from "./modal/ImageBoard";
 import AddCategoryMenu from "./modal/AddCategoryMenu";
 import Document from "./modal/Document";
 import DocumentFinishedExam from "./modal/DocumentFinishedExam";
+import { logout } from "../../service/examService";
 function ExamDash() {
   const [examModalId, setexamModalId] = useState();
   const [categoryModal, setCategoryModal] = useState(false);
   const { TOKEN } = useStateContext();
   const [data, setData] = useState();
   const [categories, setCategories] = useState();
-  const navigate = useNavigate();
   const [examModal, setExamModal] = useState(false);
   const [trigger, setTrigger] = useState(false);
   const [imgStatus, setImgStatus] = useState(false);
   const [examTri, setExamTri] = useState(false);
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
+
   useEffect(() => {
     axios({
       method: "get",

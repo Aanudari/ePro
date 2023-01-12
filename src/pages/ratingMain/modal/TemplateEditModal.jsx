@@ -2,22 +2,15 @@ import { useEffect } from "react";
 import { useStateContext } from "../../../contexts/ContextProvider";
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import SubCategory from "./SubCategory";
 import EditSubCategory from "./EditSubCategory";
+import { logout } from "../../../service/examService";
 
 function TemplateEditModal({ setShowModal, trigger, setTrigger }) {
   const { activeMenu, templateID, TOKEN } = useStateContext();
   const [addCategory, setaddCategory] = useState();
   const [ids, setIds] = useState([]);
   const [datas, setDatas] = useState();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
-  const navigate = useNavigate();
   useEffect(() => {
     axios({
       method: "get",

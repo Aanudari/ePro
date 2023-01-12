@@ -4,7 +4,7 @@ import axios from "axios";
 import DatePicker from "react-datepicker";
 import { useNavigate } from "react-router-dom";
 import AllEmployeeSelect from "./modal/AllEmployeeSelect";
-
+import { logout } from "../../service/examService";
 function CreateExamMain({
   checked,
   depId,
@@ -14,12 +14,6 @@ function CreateExamMain({
   triggerCat,
 }) {
   const navigate = useNavigate();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   const [showSelect, setShowSelect] = useState(false);
   const [optionss, setOptionss] = useState();
   const [unit, setUnit] = useState();

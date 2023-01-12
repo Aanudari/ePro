@@ -6,8 +6,7 @@ import axios from "axios";
 import { Modal } from "react-bootstrap";
 import { arraySearch } from "../../service/searchArray";
 import Select from "react-select";
-import ReactPaginate from "react-paginate";
-
+import { logout } from "../../service/examService";
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
 
@@ -16,12 +15,6 @@ function Thanks() {
   const { TOKEN, activeMenu } = useStateContext();
   const navigate = useNavigate();
   const location = useLocation();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   let color = "blue";
   const [currentTab, setCurrentTab] = useState(`${location.state.type}`);
   const [complainInfo, setComplainInfo] = useState();

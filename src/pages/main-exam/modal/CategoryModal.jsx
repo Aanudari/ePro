@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useStateContext } from "../../../contexts/ContextProvider";
-import { useNavigate } from "react-router-dom";
 import CreateQuestionMain from "../CreateQuestionMain";
 import EditQuestionMain from "../EditQuestionMain";
 import CreateExamMain from "../CreateExamMain";
 import ImageUploaderSmall from "../SelectOptions/ImageUploderSmall";
+import { logout } from "../../../service/examService";
 function CategoryModal({
   setCategoryModal,
   id,
@@ -15,13 +15,6 @@ function CategoryModal({
   triggerCat,
 }) {
   const { TOKEN, activeMenu } = useStateContext();
-  const navigate = useNavigate();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   const [data, setData] = useState();
   const [addAnswer, setAddAnswer] = useState(false);
   const [trigger, setTrigger] = useState(false);

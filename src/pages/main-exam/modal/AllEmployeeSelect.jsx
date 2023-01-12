@@ -2,18 +2,11 @@ import { useStateContext } from "../../../contexts/ContextProvider";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { logout } from "../../../service/examService";
 
 function AllEmployeeSelect({ setShow, getEmployees, setShowSelect }) {
-  const navigate = useNavigate();
   const { activeMenu, TOKEN } = useStateContext();
   const [users, setUsers] = useState();
-  const [contents, setContents] = useState();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   useEffect(() => {
     axios({
       method: "get",

@@ -5,17 +5,11 @@ import { useNavigate } from "react-router-dom";
 import ExamHeader from "../ExamHeader";
 import ExamEditHeader from "../ExamEditHeader";
 import EditQuestionMenu from "../edits/EditQuestionMenu";
+import { logout } from "../../../service/examService";
 function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
   const [filtered, setFiltered] = useState();
   const [data, setData] = useState();
   const { TOKEN, activeMenu } = useStateContext();
-  const navigate = useNavigate();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   let chosen = exams.filter((item, index) => {
     return item.id == id;
   });

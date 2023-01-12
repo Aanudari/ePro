@@ -1,23 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import Navigation from "../../components/Navigation";
 import { useStateContext } from "../../contexts/ContextProvider";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { Modal } from "react-bootstrap";
-
-import Select from "react-select";
-import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
+import { logout } from "../../service/examService";
 function TrainingUserCell() {
   const location = useLocation();
   const { TOKEN, activeMenu } = useStateContext();
-  const navigate = useNavigate();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   const selectedTrain = location.state.data;
   const [watchedUsers, setWatchedUsers] = useState([]);
   useEffect(() => {

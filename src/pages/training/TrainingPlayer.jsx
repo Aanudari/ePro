@@ -1,12 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import UserLayout from "../../components/UserLayout";
-import Navigation from "../../components/Navigation";
 import { useStateContext } from "../../contexts/ContextProvider";
-import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
-import { Modal } from "react-bootstrap";
-import { notification } from "../../service/toast";
+import { useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { logout } from "../../service/examService";
 const TrainingPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -29,13 +26,6 @@ const TrainingPlayer = () => {
   };
   const location = useLocation();
   const { TOKEN, deviceId } = useStateContext();
-  const navigate = useNavigate();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   const url = location.state.data.fileUrl;
 
   console.log(location.state.data.fileUrl.slice(-4));

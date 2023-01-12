@@ -8,16 +8,11 @@ import TrainingProgressCell from "./TrainingProgressCell";
 import moment from "moment";
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
+import { logout } from "../../service/examService";
 function Training() {
   const location = useLocation();
   const { TOKEN, activeMenu } = useStateContext();
   const navigate = useNavigate();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   const videoRef = useRef(null);
   const [trains, setTrains] = useState([]);
   const [category, setCategory] = useState([]);

@@ -5,6 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import DepartmentSelect from "../SelectOptions/DepartmentSelect";
 import DatePicker from "react-datepicker";
+import { logout } from "../../../service/examService";
 
 function AddCategoryMenu({ setShowAddCategory, trigger, setTrigger }) {
   function addZero(i) {
@@ -31,13 +32,6 @@ function AddCategoryMenu({ setShowAddCategory, trigger, setTrigger }) {
     addZero(selectV.getHours()) +
     addZero(selectV.getMinutes()) +
     addZero(selectV.getSeconds());
-  const navigate = useNavigate();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   const { TOKEN } = useStateContext();
   const { activeMenu } = useStateContext();
   const [name, setName] = useState("");

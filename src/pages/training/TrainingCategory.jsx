@@ -5,7 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import { Modal } from "react-bootstrap";
-
+import { logout } from "../../service/examService";
 import Select from "react-select";
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
@@ -14,12 +14,6 @@ function TrainingCategory() {
   const location = useLocation();
   const { TOKEN, activeMenu } = useStateContext();
   const navigate = useNavigate();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   const [checkEmpty1, setcheckEmpty1] = useState(false);
   const [checkEmpty2, setcheckEmpty2] = useState(false);
   const [category, setCategory] = useState();

@@ -1,17 +1,11 @@
 import { useStateContext } from "../../../contexts/ContextProvider";
 import { useEffect, useState } from "react";
+import { logout } from "../../../service/examService";
 import axios from "axios";
 function Document({ setShowReport, id }) {
-  const navigate = useStateContext();
   const [data, setData] = useState();
   const [users, setUsers] = useState();
   const [names, setNames] = useState();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   const { TOKEN } = useStateContext();
   useEffect(() => {
     axios({

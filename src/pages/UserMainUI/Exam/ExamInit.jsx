@@ -2,10 +2,9 @@ import React, { useRef, useState, useEffect } from "react";
 import MyTimer from "../../../components/Timer";
 import axios from "axios";
 import { useStateContext } from "../../../contexts/ContextProvider";
-import getWindowDimensions from "../../../components/SizeDetector";
 import QuestionCorrection from "./QuestionCorrection";
 import QuestionCorrectionShow from "./QuestionCorrectionShow";
-import { useNavigate } from "react-router-dom";
+import { logout } from "../../../service/examService";
 
 function useCounter(initialState) {
   const [value, setValue] = useState(initialState);
@@ -28,13 +27,6 @@ export default function ExamInit() {
     setVarientID,
   } = useStateContext();
   const examId = sessionStorage.getItem("exam_id");
-  const navigate = useNavigate();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   useEffect(() => {
     axios({
       method: "get",

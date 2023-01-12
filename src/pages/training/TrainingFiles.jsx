@@ -4,22 +4,14 @@ import { useStateContext } from "../../contexts/ContextProvider";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { Modal } from "react-bootstrap";
-
-import Select from "react-select";
+import { logout } from "../../service/examService";
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
 
 const FormData = require("form-data");
 function TrainingFiles() {
-  const location = useLocation();
   const { TOKEN, activeMenu } = useStateContext();
   const navigate = useNavigate();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   const [files, setFiles] = useState();
   const [showCreate, setShowCreate] = useState(null);
   const showModalCreate = () => setShowCreate(true);

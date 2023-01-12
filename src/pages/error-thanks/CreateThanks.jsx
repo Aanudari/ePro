@@ -5,7 +5,7 @@ import { useStateContext } from "../../contexts/ContextProvider";
 import { useNavigate, useLocation } from "react-router-dom";
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
-
+import { logout } from "../../service/examService";
 import axios from "axios";
 import Select from "react-select";
 import moment from "moment";
@@ -13,12 +13,6 @@ function CreateThanks() {
   const location = useLocation();
   const { TOKEN } = useStateContext();
   const navigate = useNavigate();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   const type = location.state.type.category;
   const format = "YYYYMMDDHHmmss";
   const [startDate, setStartDate] = useState(new Date());

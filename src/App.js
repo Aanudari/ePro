@@ -40,6 +40,7 @@ import UserCore from "./pages/UserMainUI/UserCore";
 import ExamInitContinue from "./pages/userUI/ExamInitContinue";
 import MainNavigation from "./components/MainNavigation";
 import TrainingUserCell from "./pages/training/TrainingUserCell";
+import CreateQuestion from "./pages/training_raiting/CreateQuestion";
 
 function App() {
   const { activeMenu, showTop, roleId } = useStateContext();
@@ -157,6 +158,15 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/train-question-create"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <CreateQuestion />
+              </ProtectedRoute>
+            }
+          />
+
           <Route path="*" element={<NotFound />} />
           {/* Үнэлгээ хийгдэх Page-нүүд */}
           <Route

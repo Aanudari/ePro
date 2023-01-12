@@ -21,25 +21,15 @@ import NotFound from "./pages/404";
 import { CheckLogin } from "./components/BackToHome";
 import LeveloneEdit from "./pages/valuation-edit/Lvl1-edit";
 import ComplainEdit from "./pages/valuation-edit/Complain-edit";
-import TelesalesEdit from "./pages/valuation-edit/Telesales-edit";
-import OnlineEdit from "./pages/valuation-edit/OnlineEdit";
-import BranchEdit from "./pages/valuation-edit/BranchEdit";
-import InstallerEdit from "./pages/valuation-edit/InstallerEdit";
-import CareEdit from "./pages/valuation-edit/CareEdit";
-import BankEdit from "./pages/valuation-edit/Bank";
 import Notification from "./pages/Notification";
 import SearchResult from "./components/Result";
 import Dashboard from "./pages/Dashboard";
 import PrepareQuestions from "./components/PrepareQuestions";
 import LevelOneUI from "./pages/userUI/LevelOne/LevelOneUI";
 import ErrorThanks from "./pages/error-thanks/ErrorThanks";
-
 import CreateErrorThanks from "./pages/error-thanks/CreateErrorThanks";
-
 import EditErrorThanks from "./pages/error-thanks/EditErrorThanks";
 import UserErrorThanks from "./pages/error-thanks/UserErrorThanks";
-
-import UINavigation from "./components/UINavigation";
 import LevelOneUITakeExam from "./pages/userUI/LevelOne/LevelOneUITakeExam";
 import LevelOneUIExamResult from "./pages/userUI/LevelOne/LevelOneUIExamResult";
 import LevelOneUINotification from "./pages/userUI/LevelOne/LevelOneUINotification";
@@ -48,9 +38,7 @@ import getWindowDimensions from "./components/SizeDetector";
 import NotValid from "./pages/NotValid";
 import SessionTimeout from "./components/SessionTimeout";
 import Exam from "./pages/userUI/Exam";
-import CalendarX from "./pages/training/Calendar/calendar";
 import ExamInit from "./pages/userUI/ExamInit";
-import MainNavigation from "./components/MainNavigation";
 import RatingIndexPage from "../src/pages/rating/rating/RatingIndexPage";
 import { QueryClient, QueryClientProvider } from "react-query";
 import CreateRate from "./pages/rating/rate-users/CreateRate";
@@ -63,9 +51,10 @@ import Player from "./pages/training/Player";
 import RatingIndividual from "./pages/ratingMain/RatingIndivdual";
 import UserCore from "./pages/UserMainUI/UserCore";
 import ExamInitContinue from "./pages/userUI/ExamInitContinue";
+import MainNavigation from "./components/MainNavigation";
 
 function App() {
-  const { activeMenu, showTop, roleId, error, setError } = useStateContext();
+  const { activeMenu, showTop, roleId, error } = useStateContext();
   const { width } = getWindowDimensions();
   const queryClient = new QueryClient();
   return (
@@ -301,14 +290,6 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
                 <Exam />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/calendar"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <CalendarX />
               </ProtectedRoute>
             }
           />

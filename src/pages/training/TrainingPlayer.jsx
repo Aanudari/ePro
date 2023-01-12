@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import UserLayout from "../../layout/UserLayout";
+import UserLayout from "../../components/UserLayout";
 import Navigation from "../../components/Navigation";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { useNavigate, useLocation } from "react-router-dom";

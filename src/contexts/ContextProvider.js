@@ -31,7 +31,6 @@ export const ContextProvider = ({ children }) => {
   const [examID, setExamID] = useState("");
   const [examName, setExamName] = useState("");
   const [qlength, setQlength] = useState(0);
-  const [error, setError] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
   const [gameFinished, setGameFinished] = useState(false);
   const someValue = useRef([]);
@@ -96,8 +95,6 @@ export const ContextProvider = ({ children }) => {
         setExamID,
         qlength,
         setQlength,
-        error,
-        setError,
         gameStarted,
         setGameStarted,
         gameFinished,

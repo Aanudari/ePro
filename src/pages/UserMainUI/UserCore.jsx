@@ -1,4 +1,4 @@
-import UserLayout from "../../layout/UserLayout";
+import UserLayout from "../../components/UserLayout";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useStateContext } from "../../contexts/ContextProvider";
@@ -173,13 +173,13 @@ function UserCore() {
                           <a
                             className="cursor-pointer"
                             onClick={() => {
-                              setReadyCheck(!readyCheck);
+                              navigate("/exam-init", { state: examID });
                               setExamID(item.id);
                               setExamName(item.name);
                               sessionStorage.setItem("exam_id", item.id);
                             }}
                           >
-                            Үргэлжүүлэх !
+                            Үргэлжлүүлэх !
                           </a>
                         ) : null}
                       </div>

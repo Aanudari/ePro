@@ -1,4 +1,4 @@
-import UINavigation from "../components/UINavigation";
+import UINavigation from "./UINavigation";
 
 function UserLayout({ children }) {
   return (

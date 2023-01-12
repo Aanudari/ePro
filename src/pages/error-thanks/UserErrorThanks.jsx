@@ -1,4 +1,4 @@
-import UserLayout from "../../layout/UserLayout";
+import UserLayout from "../../components/UserLayout";
 import React, { useEffect, useState } from "react";
 import Navigation from "../../components/Navigation";
 import { useStateContext } from "../../contexts/ContextProvider";

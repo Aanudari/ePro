@@ -12,7 +12,6 @@ function CreateQuestionMain({
   qImgUrl,
   handleCreateQuesiton,
 }) {
-  const [imageValue, setImageValue] = useState();
   const [length, setLength] = useState();
   const [checked, setChecked] = useState([]);
   const handleAnswers = (value) => {
@@ -107,7 +106,7 @@ function CreateQuestionMain({
             </div>
           </div>
           <div className="group w-full ml-5 mt-[20px]">
-            <ImageUploader />
+            <ImageUploader setImageUrl={setQImgUrl} />
           </div>
         </div>
         <div className="h-[100px]">

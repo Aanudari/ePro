@@ -3,17 +3,10 @@ import axios from "axios";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { useNavigate } from "react-router-dom";
 import TemplateCellMain from "./template/TemplateCellMain";
+import { logout } from "../../service/examService";
 
-
-function RatingTemplates({ setSideMenu, setShowModal, tri, setTri }) {
+function RatingTemplates({ setSideMenu, setShowModal, tri }) {
   const { TOKEN } = useStateContext();
-  const navigate = useNavigate();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   const [data, setData] = useState();
   const [trigger, setTrigger] = useState(false);
   // console.log(data)
@@ -29,17 +22,19 @@ function RatingTemplates({ setSideMenu, setShowModal, tri, setTri }) {
         if (res.data.resultMessage === "Unauthorized") {
           logout();
         } else {
-          setData(res.data.result)
+          setData(res.data.result);
         }
       })
       .catch((err) => console.log(err));
-  }, [trigger, tri])
+  }, [trigger, tri]);
   // const [showModal, setShowModal] = useState(false);
   const { activeMenu } = useStateContext();
   // console.log(data)
   return (
-    <div className={`fixed ${activeMenu ? 'w-[calc(100%-250px)]' : "w-full"}  
-         !bg-black top-[56px] h-[calc(100%-56px)] !bg-opacity-50  flex justify-end`}>
+    <div
+      className={`fixed ${activeMenu ? "w-[calc(100%-250px)]" : "w-full"}  
+         !bg-black top-[56px] h-[calc(100%-56px)] !bg-opacity-50  flex justify-end`}
+    >
       <div className="from-left bg-white w-[400px] h-full  flex flex-col justify-between shadow">
         <div className="px-2 pt-3">
           <h6 className="text-teal-600 text-[14px] flex justify-between">
@@ -48,30 +43,39 @@ function RatingTemplates({ setSideMenu, setShowModal, tri, setTri }) {
               Үнэлгээний загварууд
             </span>
 
-            <i onClick={() => {
-              setSideMenu(false)
-            }} className="bi bi-x-circle cursor-pointer"></i>
+            <i
+              onClick={() => {
+                setSideMenu(false);
+              }}
+              className="bi bi-x-circle cursor-pointer"
+            ></i>
           </h6>
           <div className=" h-[calc(100%-25px)] overflow-scroll px-4">
-            {
-              data &&
+            {data &&
               data.map((item, index) => (
-                <TemplateCellMain trigger={trigger} setTrigger={setTrigger} data={item} 
-                key={index} setShowModal={setShowModal} />
-              ))
-            }
+                <TemplateCellMain
+                  trigger={trigger}
+                  setTrigger={setTrigger}
+                  data={item}
+                  key={index}
+                  setShowModal={setShowModal}
+                />
+              ))}
           </div>
         </div>
         <div className="bg-gray-100 border-t shadow-lg h-[56px] flex items-center px-3">
-          <div onClick={() => {
-            setShowModal(true)
-          }} className="h-9 min-w-[170px] hover:bg-teal-600 bg-teal-500 rounded-sm px-3 flex items-center font-[400] text-white
-            cursor-pointer active:bg-teal-400">
+          <div
+            onClick={() => {
+              setShowModal(true);
+            }}
+            className="h-9 min-w-[170px] hover:bg-teal-600 bg-teal-500 rounded-sm px-3 flex items-center font-[400] text-white
+            cursor-pointer active:bg-teal-400"
+          >
             <span className="mr-2 mb-1 font-[400] text-white">
               Загвар үүсгэх
             </span>
             <div className="pl-2 h-full flex items-center border-l border-gray-300 ">
-            <i className="bi bi-file-plus"></i>
+              <i className="bi bi-file-plus"></i>
             </div>
           </div>
         </div>

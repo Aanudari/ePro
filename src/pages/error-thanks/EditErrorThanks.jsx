@@ -5,19 +5,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
-import moment from "moment";
+import { logout } from "../../service/examService";
 
 import Select from "react-select";
 function EditErrorThanks() {
   const location = useLocation();
   const { TOKEN } = useStateContext();
   const navigate = useNavigate();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   const options = [
     { value: "1" },
     { value: "2" },

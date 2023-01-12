@@ -2,18 +2,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { useNavigate } from "react-router-dom";
-
-function ExamHeader({ array1, chosen, editHeader, setEditHeader }) {
+import { logout } from "../../service/examService";
+function ExamHeader({ chosen, editHeader, setEditHeader }) {
   const [data, setData] = useState();
   const { TOKEN } = useStateContext();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
-  //   console.log(chosen[0]);
-  const navigate = useNavigate();
   useEffect(() => {
     axios({
       method: "get",

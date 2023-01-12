@@ -1,108 +1,103 @@
 import React, {
-    useState,
-    useEffect,
-    useCallback,
-    useRef,
-    Fragment,
-} from 'react';
-import moment from 'moment';
-import { useStateContext } from '../contexts/ContextProvider';
-import { useNavigate } from 'react-router-dom';
-import SessionExpired from './SessionExpired';
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  Fragment,
+} from "react";
+import moment from "moment";
+import { useStateContext } from "../contexts/ContextProvider";
+import { useNavigate } from "react-router-dom";
+import SessionExpired from "./SessionExpired";
+import { logout } from "../service/examService";
 
 const SessionTimeout = () => {
-    const navigate = useNavigate();
-    const logout = () => {
-        localStorage.clear();
-        sessionStorage.clear();
-        navigate('/')
-        window.location.reload();
-    };
-    const { isAuthenticated } = useStateContext();
-    const [events, setEvents] = useState(['click', 'load', 'scroll']);
-    const [second, setSecond] = useState(0);
-    const [isOpen, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const { isAuthenticated } = useStateContext();
+  const [events, setEvents] = useState(["click", "load", "scroll"]);
+  const [second, setSecond] = useState(0);
+  const [isOpen, setOpen] = useState(false);
 
-    let timeStamp;
-    let warningInactiveInterval = useRef();
-    let startTimerInterval = useRef();
+  let timeStamp;
+  let warningInactiveInterval = useRef();
+  let startTimerInterval = useRef();
 
-    // start inactive check
-    // initialize the time
-    let timeChecker = () => {
-        startTimerInterval.current = setTimeout(() => {
-            let storedTimeStamp = sessionStorage.getItem('lastTimeStamp');
-            warningInactive(storedTimeStamp);
-        }, 1800000);
-    };
+  // start inactive check
+  // initialize the time
+  let timeChecker = () => {
+    startTimerInterval.current = setTimeout(() => {
+      let storedTimeStamp = sessionStorage.getItem("lastTimeStamp");
+      warningInactive(storedTimeStamp);
+    }, 1800000);
+  };
 
-    // warning timer
-    let warningInactive = (timeString) => {
-        clearTimeout(startTimerInterval.current);
+  // warning timer
+  let warningInactive = (timeString) => {
+    clearTimeout(startTimerInterval.current);
 
-        warningInactiveInterval.current = setInterval(() => {
-            const maxTime = 2;
-            const popTime = 1;
+    warningInactiveInterval.current = setInterval(() => {
+      const maxTime = 2;
+      const popTime = 1;
 
-            const diff = moment.duration(moment().diff(moment(timeString)));
-            const minPast = diff.minutes();
-            const leftSecond = 60 - diff.seconds();
+      const diff = moment.duration(moment().diff(moment(timeString)));
+      const minPast = diff.minutes();
+      const leftSecond = 60 - diff.seconds();
 
-            if (minPast === popTime) {
-                setSecond(leftSecond);
-                setOpen(true);
-            }
+      if (minPast === popTime) {
+        setSecond(leftSecond);
+        setOpen(true);
+      }
 
-            if (minPast === maxTime) {
-                clearInterval(warningInactiveInterval.current);
-                setOpen(false);
-                sessionStorage.removeItem('lastTimeStamp');
-                logout();
-            }
-        }, 1000);
-    };
-
-    // reset interval timer
-    let resetTimer = useCallback(() => {
-        clearTimeout(startTimerInterval.current);
+      if (minPast === maxTime) {
         clearInterval(warningInactiveInterval.current);
-
-        if (isAuthenticated) {
-            timeStamp = moment();
-            sessionStorage.setItem('lastTimeStamp', timeStamp);
-        } else {
-            clearInterval(warningInactiveInterval.current);
-            sessionStorage.removeItem('lastTimeStamp');
-        }
-        timeChecker();
         setOpen(false);
-    }, [isAuthenticated]);
+        sessionStorage.removeItem("lastTimeStamp");
+        logout();
+      }
+    }, 1000);
+  };
 
-    // handle close popup
-    const handleClose = () => {
-        setOpen(false);
-        resetTimer();
-    };
+  // reset interval timer
+  let resetTimer = useCallback(() => {
+    clearTimeout(startTimerInterval.current);
+    clearInterval(warningInactiveInterval.current);
 
-    useEffect(() => {
-        events.forEach((event) => {
-            window.addEventListener(event, resetTimer);
-        });
-
-        timeChecker();
-
-        return () => {
-            clearTimeout(startTimerInterval.current);
-            //   resetTimer();
-        };
-    }, [resetTimer, events, timeChecker]);
-
-    if (!isOpen) {
-        return null;
+    if (isAuthenticated) {
+      timeStamp = moment();
+      sessionStorage.setItem("lastTimeStamp", timeStamp);
+    } else {
+      clearInterval(warningInactiveInterval.current);
+      sessionStorage.removeItem("lastTimeStamp");
     }
+    timeChecker();
+    setOpen(false);
+  }, [isAuthenticated]);
 
-    // change fragment to modal and handleclose func to close
-    return <SessionExpired time={second} />
+  // handle close popup
+  const handleClose = () => {
+    setOpen(false);
+    resetTimer();
+  };
+
+  useEffect(() => {
+    events.forEach((event) => {
+      window.addEventListener(event, resetTimer);
+    });
+
+    timeChecker();
+
+    return () => {
+      clearTimeout(startTimerInterval.current);
+      //   resetTimer();
+    };
+  }, [resetTimer, events, timeChecker]);
+
+  if (!isOpen) {
+    return null;
+  }
+
+  // change fragment to modal and handleclose func to close
+  return <SessionExpired time={second} />;
 };
 
 export default SessionTimeout;

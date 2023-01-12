@@ -9,6 +9,7 @@ import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
 import moment from "moment";
 import DatePicker from "react-datepicker";
+import { logout } from "../../service/examService";
 function TrainingRating() {
   const location = useLocation();
   const { TOKEN, activeMenu } = useStateContext();

@@ -1,14 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
+import { logout } from "../service/examService";
 
 export default function UINavigation() {
   const navigate = useNavigate();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   const [show, setShow] = useState(false);
   return (
     <div className="">

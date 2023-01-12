@@ -2,12 +2,9 @@ import { useState, useEffect } from "react";
 import { useStateContext } from "../../contexts/ContextProvider";
 import axios from "axios";
 import DatePicker from "react-datepicker";
-import OptionSelect from "../exam/ExamForm/OptionSelect";
-import PointSelect from "../exam/ExamForm/PointSelect";
-import CheckModal from "../../components/exam-comp/CheckModal";
 import { useNavigate } from "react-router-dom";
-import AllEmployeeSelect from "./AllEmployeeSelect";
-
+import AllEmployeeSelect from "./modal/AllEmployeeSelect";
+import { logout } from "../../service/examService";
 function CreateExamMain({
   checked,
   depId,
@@ -17,12 +14,6 @@ function CreateExamMain({
   triggerCat,
 }) {
   const navigate = useNavigate();
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   const [showSelect, setShowSelect] = useState(false);
   const [optionss, setOptionss] = useState();
   const [unit, setUnit] = useState();
@@ -479,15 +470,6 @@ function CreateExamMain({
               </div>
               <div></div>
             </div>
-          )}
-          {checkTime && (
-            <CheckModal
-              setCheckTime={setCheckTime}
-              datestring={showstring}
-              datestring2={showstring2}
-              setshowQuestionMenu={setshowQuestionMenu}
-              handleCreateExam={handleCreateExam}
-            />
           )}
         </form>
         {count === uniqueList.length && (

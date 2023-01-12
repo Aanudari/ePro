@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useStateContext } from "../../contexts/ContextProvider";
-import AllEmployeeSelectEdit from "./AllEmployeeSelectEdit";
-
+import AllEmployeeSelectEdit from "./modal/AllEmployeeSelectEdit";
+import { logout } from "../../service/examService";
 function ExamEditHeader({
   chosen,
   editHeader,
@@ -39,12 +39,6 @@ function ExamEditHeader({
     }
     return i;
   }
-  const logout = () => {
-    localStorage.clear();
-    sessionStorage.clear();
-    navigate("/");
-    window.location.reload();
-  };
   const [department, setDepartment] = useState();
   const [departmentId, setdepartmentId] = useState();
   const [division, setDivision] = useState();

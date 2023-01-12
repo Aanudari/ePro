@@ -1,4 +1,4 @@
-import { useStateContext } from "../../contexts/ContextProvider";
+import { useStateContext } from "../../../contexts/ContextProvider";
 import { useEffect, useState } from "react";
 import axios from "axios";
 function Document({ setShowReport, id }) {
@@ -65,14 +65,7 @@ function Document({ setShowReport, id }) {
   let filtered = users?.filter((item, index) => {
     return item.id === id;
   });
-  // console.log(filtered && filtered[0].devInfos)
   let final = [];
-  // for (let index = 0; index < names?.length; index++) {
-  //   const element = names[index];
-  //   filtered && filtered[0]?.devInfos.filter(item => {
-  //     return item.deviceId == element.deviceId && final.push(element)
-  //   })
-  // }
   const [selected, setSelected] = useState();
   const selectedUser = (value) => {
     setSelected(value);
@@ -124,7 +117,7 @@ function Document({ setShowReport, id }) {
                       user.status == "C"
                         ? "bg-green-500"
                         : user.status == "P"
-                        ? "bg-gray-400"
+                        ? "bg-teal-700"
                         : "bg-teal-500"
                     } border-b mb-1 shadow-sm hover:border-b hover:shadow-lg hover:border-teal-400
                     flex justify-between items-center`}
@@ -140,15 +133,15 @@ function Document({ setShowReport, id }) {
                     </div>
                     {user.status == "Not started" ? (
                       <span className="flex items-center justify-center bg-red-400 text-white px-3 rounded-full text-[13px] h-7  font-[400]">
-                        Not yet
+                        Not scored
                       </span>
                     ) : user.status == "C" ? (
                       <span className="flex items-center justify-center bg-white text-black px-3 rounded-full text-[13px] h-7  font-[400]">
                         {user.score}%
                       </span>
                     ) : (
-                      <span className="flex items-center justify-center bg-amber-500 text-white px-3 rounded-full text-[13px] h-7  font-[400]">
-                        Pending ...
+                      <span className="flex items-center justify-center bg-amber-600 text-white px-3 rounded-full text-[13px] h-7  font-[400]">
+                        In process ...
                       </span>
                     )}
                   </div>

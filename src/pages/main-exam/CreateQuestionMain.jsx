@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import ImageUploader from "./../exam/ExamForm/ImageUploader";
+import ImageUploader from "./SelectOptions/ImageOptions";
 import AnswerCellMain from "./AnswerCellMain";
 function CreateQuestionMain({
   setQuestion,

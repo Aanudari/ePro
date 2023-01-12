@@ -3,7 +3,7 @@ import axios from "axios";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { useNavigate } from "react-router-dom";
 
-function ExamHeader({ array1, chosen, editHeader, setEditHeader }) {
+function ExamHeader({ chosen, editHeader, setEditHeader }) {
   const [data, setData] = useState();
   const { TOKEN } = useStateContext();
   const logout = () => {
@@ -12,7 +12,6 @@ function ExamHeader({ array1, chosen, editHeader, setEditHeader }) {
     navigate("/");
     window.location.reload();
   };
-  //   console.log(chosen[0]);
   const navigate = useNavigate();
   useEffect(() => {
     axios({

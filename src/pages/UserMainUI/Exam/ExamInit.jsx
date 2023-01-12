@@ -1,10 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
-import MyTimer from "../../components/Timer";
+import MyTimer from "../../../components/Timer";
 import axios from "axios";
-import { useStateContext } from "../../contexts/ContextProvider";
-import getWindowDimensions from "../../components/SizeDetector";
-import QuestionCorrection from "./Exam/QuestionCorrection";
-import QuestionCorrectionShow from "./Exam/QuestionCorrectionShow";
+import { useStateContext } from "../../../contexts/ContextProvider";
+import getWindowDimensions from "../../../components/SizeDetector";
+import QuestionCorrection from "./QuestionCorrection";
+import QuestionCorrectionShow from "./QuestionCorrectionShow";
 import { useNavigate } from "react-router-dom";
 
 function useCounter(initialState) {
@@ -14,7 +14,7 @@ function useCounter(initialState) {
   return { value, add, reset };
 }
 
-export default function ExamInitContinue() {
+export default function ExamInit() {
   const {
     TOKEN,
     qlength,
@@ -199,7 +199,7 @@ export default function ExamInitContinue() {
                     handleStartExam();
                   }}
                 >
-                  Үргэлжлүүлэх
+                  Асуулт үзэх
                 </button>
               </>
             ) : null}

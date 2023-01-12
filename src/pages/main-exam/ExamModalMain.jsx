@@ -66,7 +66,6 @@ function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
       })
       .catch((err) => console.log(err));
   }, [trigger2]);
-  //   console.log(data);
   const handleDeleteExam = () => {
     axios({
       method: "delete",
@@ -135,7 +134,7 @@ function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
     questionId: `${[...checked]}`,
     question: `${questionName}`,
     points: `${points}`,
-    qimgUrl: "string",
+    qimgUrl: "",
     answers: filtered && filtered[0]?.answerList,
   };
   const addAnswer = (id) => {

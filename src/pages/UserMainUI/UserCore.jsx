@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useStateContext } from "../../contexts/ContextProvider";
 import axios from "axios";
+import RatingCellDes from "./RatingCellDes";
 function UserCore() {
   const [data, setData] = useState();
+  const [rating, setRating] = useState();
   const navigate = useNavigate();
   const {
     TOKEN,
@@ -14,8 +16,8 @@ function UserCore() {
     examName,
     setExamID,
     setExamName,
+    deviceId,
   } = useStateContext();
-  console.log(examID);
   useEffect(() => {
     axios({
       method: "get",
@@ -30,7 +32,24 @@ function UserCore() {
       })
       .catch((err) => console.log(err));
   }, []);
-  //   console.log(data && data);
+  useEffect(() => {
+    axios({
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/Rating/${deviceId}`,
+      data: {
+        startDate: "",
+        endDate: "",
+      },
+    })
+      .then((res) => {
+        setRating(res.data.ratings);
+      })
+      .catch((err) => console.log(err));
+  }, []);
   return (
     <UserLayout>
       <div className="w-full">
@@ -48,20 +67,12 @@ function UserCore() {
               </div>
             </div>
             <div className="horizontal-tabs">
-              <a href="#">My details</a>
-              <a href="#">Profile</a>
-              <a href="#">Password</a>
-              <a href="#">Team</a>
-              <a href="#">Plan</a>
-              <a href="#">Billing</a>
-              <a href="#">Email</a>
-              <a href="#">Notifications</a>
-              <a href="#" className="active">
-                Integrations
-              </a>
-              <a href="#">API</a>
+              <a className="cursor-pointer">Нийт</a>
+              <a className="cursor-pointer">Мессеж</a>
+              <a className="cursor-pointer">Password</a>
+              <a className="cursor-pointer">API</a>
             </div>
-            <div className="content-header">
+            {/* <div className="content-header">
               <div className="content-header-intro">
                 <h2>Intergrations and connected apps</h2>
                 <p>
@@ -79,6 +90,11 @@ function UserCore() {
                   <span>Request integration</span>
                 </a>
               </div>
+            </div> */}
+            <div className="flex gap-[5px]">
+              {rating?.map((element, index) => {
+                return <RatingCellDes data={element} key={index} />;
+              })}
             </div>
             <div className="content">
               <div className="content-panel">
@@ -134,18 +150,21 @@ function UserCore() {
                             Шалгалт өгөх
                           </a>
                         ) : item.isExamTaken.status == "C" ? (
-                          <span
-                            className={`font-[500] text-[14px] ${
-                              item.isExamTaken.score > 80
-                                ? "!text-green-600"
-                                : item.isExamTaken.score < 80 &&
-                                  item.isExamTaken.score > 50
-                                ? "!text-orange-500"
-                                : "!text-red-500"
-                            } `}
-                          >
-                            Дүн: {item.isExamTaken.score}%
-                          </span>
+                          <div className="font-[500] text-[13.5px]">
+                            <i className="bi bi-graph-up-arrow text mr-2"></i>:
+                            <span
+                              className={`font-[500] text-[14px] ml-2 ${
+                                item.isExamTaken.score > 80
+                                  ? "!text-green-600"
+                                  : item.isExamTaken.score < 80 &&
+                                    item.isExamTaken.score > 50
+                                  ? "!text-orange-500"
+                                  : "!text-red-500"
+                              } `}
+                            >
+                              {item.isExamTaken.score}%
+                            </span>
+                          </div>
                         ) : item.isExamTaken.status == "O" ? (
                           <span className="font-[500] text-[14px]">
                             No score recorded!

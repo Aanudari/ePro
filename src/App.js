@@ -5,9 +5,8 @@ import "./styles/modal.scss";
 import "./styles/validation.css";
 import "react-datepicker/dist/react-datepicker.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./pages/Login";
-import Home from "./pages/Home";
-import AddCategory from "./pages/rating/rating/AddCategory";
+import Login from "./pages/core/Login";
+import Home from "./pages/core/Home";
 import { useStateContext } from "./contexts/ContextProvider";
 import Training from "./pages/training/Training";
 import TrainingFiles from "./pages/training/TrainingFiles";
@@ -15,41 +14,19 @@ import TrainingCategory from "./pages/training/TrainingCategory";
 import CreateTraining from "./pages/training/create-training";
 import TrainingRating from "./pages/training_raiting/TrainingRating";
 import { ProtectedRoute } from "./components/ProtectedRoute";
-import NotFound from "./pages/404";
+import NotFound from "./pages/core/404";
 import { CheckLogin } from "./components/BackToHome";
-import LeveloneEdit from "./pages/valuation-edit/Lvl1-edit";
-import ComplainEdit from "./pages/valuation-edit/Complain-edit";
-import TelesalesEdit from "./pages/valuation-edit/Telesales-edit";
-import OnlineEdit from "./pages/valuation-edit/OnlineEdit";
-import BranchEdit from "./pages/valuation-edit/BranchEdit";
-import InstallerEdit from "./pages/valuation-edit/InstallerEdit";
-import CareEdit from "./pages/valuation-edit/CareEdit";
-import BankEdit from "./pages/valuation-edit/Bank";
-import Notification from "./pages/Notification";
+import Notification from "./pages/core/Notification";
 import SearchResult from "./components/Result";
-import Dashboard from "./pages/Dashboard";
-import PrepareQuestions from "./components/PrepareQuestions";
-import LevelOneUI from "./pages/userUI/LevelOne/LevelOneUI";
+import Dashboard from "./pages/core/Dashboard";
 import ErrorThanks from "./pages/error-thanks/ErrorThanks";
-
 import CreateErrorThanks from "./pages/error-thanks/CreateErrorThanks";
-
 import EditErrorThanks from "./pages/error-thanks/EditErrorThanks";
 import UserErrorThanks from "./pages/error-thanks/UserErrorThanks";
-
-import UINavigation from "./components/UINavigation";
-import LevelOneUITakeExam from "./pages/userUI/LevelOne/LevelOneUITakeExam";
-import LevelOneUIExamResult from "./pages/userUI/LevelOne/LevelOneUIExamResult";
-import LevelOneUINotification from "./pages/userUI/LevelOne/LevelOneUINotification";
 import UITraining from "./pages/userUI/UITraining";
 import getWindowDimensions from "./components/SizeDetector";
-import NotValid from "./pages/NotValid";
 import SessionTimeout from "./components/SessionTimeout";
-import Exam from "./pages/userUI/Exam";
-import CalendarX from "./pages/training/Calendar/calendar";
 import ExamInit from "./pages/userUI/ExamInit";
-import MainNavigation from "./components/MainNavigation";
-import RatingIndexPage from "../src/pages/rating/rating/RatingIndexPage";
 import { QueryClient, QueryClientProvider } from "react-query";
 import CreateRate from "./pages/rating/rate-users/CreateRate";
 import ExamDash from "./pages/main-exam/examDashboard";
@@ -60,16 +37,17 @@ import UserTraining from "./pages/training/User-training";
 import TrainingPlayer from "./pages/training/TrainingPlayer";
 import RatingIndividual from "./pages/ratingMain/RatingIndivdual";
 import UserCore from "./pages/UserMainUI/UserCore";
+import ExamInitContinue from "./pages/userUI/ExamInitContinue";
+import MainNavigation from "./components/MainNavigation";
 import TrainingUserCell from "./pages/training/TrainingUserCell";
 
 function App() {
-  const { activeMenu, showTop, roleId, error, setError } = useStateContext();
+  const { activeMenu, showTop, roleId } = useStateContext();
   const { width } = getWindowDimensions();
   const queryClient = new QueryClient();
   return (
     <BrowserRouter>
       <div className="flex w-full relative">
-        {error && <NotValid />}
         {showTop ? (
           <div className="fixed w-full h-screen bg-black top-z right-0"></div>
         ) : null}
@@ -95,14 +73,6 @@ function App() {
               // ProtectedRoute = Системрүү нэврээгүй хэрэглэгчийг тухайн path руу хандхад block лох үүрэгтэй component
               <ProtectedRoute allowedRoles={[199]}>
                 <Home />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/rating"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <RatingIndexPage />
               </ProtectedRoute>
             }
           />
@@ -163,7 +133,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/user-training"
             element={
@@ -191,34 +160,10 @@ function App() {
           <Route path="*" element={<NotFound />} />
           {/* Үнэлгээ хийгдэх Page-нүүд */}
           <Route
-            path="/level-one-edit"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <LeveloneEdit />
-              </ProtectedRoute>
-            }
-          />
-          <Route
             path="/create-rate-user"
             element={
               <ProtectedRoute allowedRoles={[199]}>
                 <CreateRate />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/complain-edit"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <ComplainEdit />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/add-category"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <AddCategory />
               </ProtectedRoute>
             }
           />
@@ -247,66 +192,10 @@ function App() {
             }
           />
           <Route
-            path="/prepare-questions"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <PrepareQuestions />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/levelone-ui"
-            element={
-              <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
-                <LevelOneUI />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/levelone-ui-take-exam"
-            element={
-              <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
-                <LevelOneUITakeExam />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/levelone-ui-exam-result"
-            element={
-              <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
-                <LevelOneUIExamResult />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/levelone-ui-notification"
-            element={
-              <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
-                <LevelOneUINotification />
-              </ProtectedRoute>
-            }
-          />
-          <Route
             path="/ui-training"
             element={
               <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
                 <UITraining />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/exam"
-            element={
-              <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
-                <Exam />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/calendar"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <CalendarX />
               </ProtectedRoute>
             }
           />
@@ -319,7 +208,15 @@ function App() {
             }
           />
           <Route
-            path="/exam-dash"
+            path="/exam-init-continue"
+            element={
+              <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
+                <ExamInitContinue />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/exam-dashboard"
             element={
               <QueryClientProvider client={queryClient}>
                 <ProtectedRoute allowedRoles={[199]}>

@@ -36,14 +36,14 @@ function MainNavigation() {
             </li>
             <li
               onClick={() => {
-                navigate("/exam-dash");
+                navigate("/exam-dashboard");
               }}
               className="relative cursor-pointer active:opacity-80 "
             >
               <a>
                 <i
                   onClick={() => {
-                    navigate("/exam-dash");
+                    navigate("/exam-dashboard");
                   }}
                   className="bi bi-clock absolute top-[17px] left-[17px] "
                 ></i>

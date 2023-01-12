@@ -176,6 +176,7 @@ function CategoryModal({
   };
   const [imgSide, setImgSide] = useState(false);
   // console.log(checked)
+  // console.log(data);
   return (
     <div
       className={`fixed ${
@@ -314,6 +315,14 @@ function CategoryModal({
                         setImgSide={setImgSide}
                         question={question}
                       />
+                      {imgSide && (
+                        <div className="w-[300px] h-screen bg-white appear-smooth p-2 fixed top-[30px] right-0">
+                          <div className="h-[26px]"></div>
+                          <div className="w-full h-full border">
+                            <ImageUploaderSmall question={question} />
+                          </div>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -344,11 +353,9 @@ function CategoryModal({
             ) : null}
           </div>
           {imgSide && (
-            <div className="w-[300px] h-screen bg-white appear-smooth p-2">
+            <div className="w-[300px] h-screen appear-smooth p-2">
               <div className="h-[26px]"></div>
-              <div className="w-full h-full border">
-                <ImageUploaderSmall />
-              </div>
+              <div className="w-full h-full"></div>
             </div>
           )}
         </div>

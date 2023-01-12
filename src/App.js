@@ -34,11 +34,12 @@ import "react-toastify/dist/ReactToastify.css";
 import RatingCore from "./pages/ratingMain/RatingCore";
 import EditTraining from "./pages/training/Edit-training";
 import UserTraining from "./pages/training/User-training";
-import Player from "./pages/training/Player";
+import TrainingPlayer from "./pages/training/TrainingPlayer";
 import RatingIndividual from "./pages/ratingMain/RatingIndivdual";
 import UserCore from "./pages/UserMainUI/UserCore";
 import ExamInitContinue from "./pages/userUI/ExamInitContinue";
 import MainNavigation from "./components/MainNavigation";
+import TrainingUserCell from "./pages/training/TrainingUserCell";
 
 function App() {
   const { activeMenu, showTop, roleId } = useStateContext();
@@ -107,6 +108,15 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route
+            path="/train-users"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <TrainingUserCell />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/training-list"
             element={
@@ -135,7 +145,7 @@ function App() {
             path="/player"
             element={
               <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
-                <Player />
+                <TrainingPlayer />
               </ProtectedRoute>
             }
           />

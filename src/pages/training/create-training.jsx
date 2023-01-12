@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Navigation from "../../components/Navigation";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { Modal } from "react-bootstrap";
-
 import Select from "react-select";
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
 import moment from "moment";
 import DatePicker from "react-datepicker";
+
 function CreateTraining() {
-  const { TOKEN } = useStateContext();
+  const { TOKEN, activeMenu } = useStateContext();
   const navigate = useNavigate();
   const logout = () => {
     localStorage.clear();
@@ -60,11 +60,10 @@ function CreateTraining() {
   const [tCategory, settCategory] = useState("");
   const [sessionType, setsessionType] = useState("");
   const [location, setlocation] = useState("");
-  const [durationStart, setdurationStart] = useState(new Date());
-  const [durationEnd, setdurationEnd] = useState(new Date());
-  const d1 = moment(durationStart).format(format1);
-  const d2 = moment(durationEnd).format(format1);
-
+  const videoRef = useRef(null);
+  const [id, setId] = useState();
+  const [showDelete, setShowDelete] = useState(null);
+  const hideModalDelete = () => setShowDelete(null);
   useEffect(() => {
     axios({
       method: "get",
@@ -75,7 +74,6 @@ function CreateTraining() {
       url: `${process.env.REACT_APP_URL}/v1/Training/category`,
     })
       .then((res) => {
-        setCategory(res.data.trainingCatList);
         if (res.data.isSuccess == true) {
           setCategory(res.data.trainingCatList);
         }
@@ -98,8 +96,13 @@ function CreateTraining() {
       url: `${process.env.REACT_APP_URL}/v1/User/department`,
     })
       .then((res) => {
-        setDepartment(res.data.departments);
-        if (res.data.resultMessage === "Unauthorized") {
+        if (res.data.isSuccess == true) {
+          setDepartment(res.data.departments);
+        }
+        if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct format."
+        ) {
           logout();
         }
       })
@@ -114,9 +117,13 @@ function CreateTraining() {
       url: `${process.env.REACT_APP_URL}/v1/User/org/${item.id}`,
     })
       .then((res) => {
-        if (res.data.resultMessage === "Unauthorized") {
+        if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct format."
+        ) {
           logout();
-        } else {
+        }
+        if (res.data.isSuccess == true) {
           setOrg(res.data.organizations);
           setDepartmentID(item.id);
         }
@@ -132,9 +139,13 @@ function CreateTraining() {
       url: `${process.env.REACT_APP_URL}/v1/User/unit/devices?unitId=${item.id}`,
     })
       .then((res) => {
-        if (res.data.resultMessage === "Unauthorized") {
+        if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct format."
+        ) {
           logout();
-        } else {
+        }
+        if (res.data.isSuccess == true) {
           setWorkers(res.data.unitDevices);
           setOrgID(item.id);
         }
@@ -150,6 +161,58 @@ function CreateTraining() {
   const handleTrainingType = (item) => {
     setsessionType(item.id);
   };
+  const handleFileSelect = (event) => {
+    if (event.target.files[0].name.slice(-4) === ".mp4") {
+      const data = new FormData();
+      const imagedata = event.target.files[0];
+      data.append("file", imagedata);
+      axios({
+        mode: "no-cors",
+        method: "post",
+        url: `${process.env.REACT_APP_URL}/v1/TrainingFile/fileadd`,
+        data,
+        headers: {
+          Authorization: `${TOKEN}`,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+        .then((res) => {
+          if (res.data.isSuccess === true) {
+            setfileUrl(res.data.path);
+            setId(res.data.id);
+          } else {
+            notification.error(`${res.data.resultMessage}`);
+          }
+          if (res.data.resultMessage === "Unauthorized") {
+            logout();
+          }
+        })
+        .catch((err) => console.log(err));
+    } else {
+      notification.error("Video хавсаргана уу.");
+    }
+  };
+  const handleProgress = () => {
+    const video = videoRef.current;
+    setduration(video.duration);
+  };
+  const handleDelete = () => {
+    axios({
+      method: "delete",
+      headers: {
+        Authorization: `${TOKEN}`,
+        accept: "text/plain",
+      },
+      url: `${process.env.REACT_APP_URL}/v1/TrainingFile/${id}`,
+    })
+      .then((res) => {
+        if (res.data.isSuccess === true) {
+          navigate(0);
+        } else {
+        }
+      })
+      .catch((err) => console.log(err));
+  };
 
   const dataFULL = {
     name: `${name}`,
@@ -162,76 +225,17 @@ function CreateTraining() {
     startDate: `${startDate}`,
     endDate: `${endDate}`,
     location: `${location}`,
-    addTrainingDevs:
-      orgID === "" && workersID === ""
-        ? [
-            {
-              departmentId: `${departmentID}`,
-            },
-          ]
-        : [
-            {
-              departmentId: `${departmentID}`,
-              unitId: `${orgID}`,
-              devId: `${workersID}`,
-            },
-          ],
-  };
-  const handleFileSelect = (event) => {
-    if (event.target.files[0].name.slice(-4) === ".mp4") {
-      setSelectedFile(event.target.files[0]);
-      handleCreate();
-    } else {
-      notification.error("Video хавсаргана уу.");
-    }
-  };
-  const handleCreate = async () => {
-    const data = new FormData();
-    data.append("file", selectedFile);
-    axios({
-      method: "post",
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `${TOKEN}`,
+    addTrainingDevs: [
+      {
+        departmentId: "string",
+        unitId: "string",
+        devId: "string",
       },
-      url: `http://192.168.10.248:9000/v1/TrainingFile/fileadd`,
-      data,
-    })
-      .then((res) => {
-        setfileUrl(res.data.path);
-        console.log(res.data);
-      })
-      .catch((err) => console.log(err));
-    // fetch("http://192.168.10.248:9000/v1/TrainingFile/fileadd", {
-    //   method: "POST",
-    //   headers: {
-    //     Authorization: `${TOKEN}`,
-    //   },
-    //   body: data,
-    // }).then(
-    //   function (res) {
-    //     console.log(res.Response);
-    //     if (res.ok) {
-    //       console.log(res.statusText);
-    //     } else {
-    //       console.log(res);
-    //     }
-    //   },
-    //   function (e) {
-    //     console.log("Error submitting form!", e);
-    //   }
-    // );
+    ],
   };
-  // useEffect(() => {
-  //   d();
-  // }, [durationStart, durationEnd]);
+  console.log(dataFULL);
   const navigateIndex = (e) => {
     e.preventDefault();
-    // if (d1 > d2 || d1 == d2) {
-    //   notification.error("Үргэлжлэх хугацаа буруу байна.");
-    // } else {
-    //   setduration(d1 - d2);
-    // }
     if (name.length === 0) {
       setcheckEmptyname(true);
     }
@@ -251,37 +255,82 @@ function CreateTraining() {
       setcheckEmptylocation(true);
     }
     if (startDate == endDate || startDate > endDate) {
-      notification.invalidFileUpload("Эхлэх дуусах хугацаа алдаатай байна.");
-    }
-    if (departmentID.length === 0) {
-      setcheckEmptydepartment(true);
+      notification.error("Эхлэх дуусах хугацаа алдаатай байна.");
     } else {
-      axios({
-        method: "post",
-        headers: {
-          Authorization: `${TOKEN}`,
-          "Content-Type": "application/json",
-          accept: "text/plain",
-        },
-        url: `${process.env.REACT_APP_URL}/v1/Training/add`,
-        data: JSON.stringify(dataFULL),
-      })
-        .then((res) => {
-          console.log(res.data);
-          if (res.data.isSuccess === true) {
-            notification.success(`${res.data.resultMessage}`);
-            const timer = setTimeout(() => navigate("/trainings"), 1000);
-            return () => clearTimeout(timer);
-          }
-        })
-        .catch((err) => console.log(err));
+      console.log(dataFULL);
+      // axios({
+      //   method: "post",
+      //   headers: {
+      //     Authorization: `${TOKEN}`,
+      //     "Content-Type": "application/json",
+      //     accept: "text/plain",
+      //   },
+      //   url: `${process.env.REACT_APP_URL}/v1/Training/add`,
+      //   data: JSON.stringify(dataFULL),
+      // })
+      //   .then((res) => {
+      //     console.log(res.data);
+      //     if (res.data.isSuccess === true) {
+      //       notification.success(`${res.data.resultMessage}`);
+      //       const timer = setTimeout(() => navigate("/training"), 500);
+      //       return () => clearTimeout(timer);
+      //     }
+      //   })
+      //   .catch((err) => console.log(err));
     }
   };
 
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <Navigation />
-
+      <div>
+        <Modal
+          show={showDelete}
+          onHide={hideModalDelete}
+          size="ml"
+          style={
+            activeMenu
+              ? {
+                  width: "calc(100% - 250px)",
+                  left: "250px",
+                }
+              : {
+                  width: "calc(100%)",
+                  left: "0",
+                }
+          }
+          backdrop="static"
+          keyboard={false}
+          aria-labelledby="contained-modal-title-vcenter"
+          dialogClassName="modal-100w"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Файл устгах</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="p-6 text-center">
+              <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                Устгах уу?
+              </h3>
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
+              >
+                Тийм
+              </button>
+              <button
+                onClick={hideModalDelete}
+                type="button"
+                className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+              >
+                Үгүй
+              </button>
+            </div>
+          </Modal.Body>
+        </Modal>
+      </div>
       <div className="w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
@@ -322,53 +371,42 @@ function CreateTraining() {
                   id={checkEmptydescription === true ? "border-red" : null}
                 ></textarea>
               </div>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-1  flex items-center">
                 <div>
                   <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                     Файл хавсаргах
                   </label>
-                  <input
-                    type="file"
-                    onChange={handleFileSelect}
-                    className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                    Үргэлжлэх хугацаа
-                  </label>
-                  <input
-                    type="text"
-                    onChange={(e) => {
-                      setduration(e.target.value);
-                      setcheckEmptyduration(false);
-                    }}
-                    id={checkEmptyduration === true ? "border-red" : null}
-                    className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                  />
-
-                  {/* <DatePicker
-                      className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                      selected={durationStart}
-                      onChange={(date) => setdurationStart(date)}
-                      showTimeSelect
-                      showTimeSelectOnly
-                      timeIntervals={15}
-                      timeCaption="Time"
-                      dateFormat="hh:mm a"
+                  {fileUrl?.slice(-4) === ".mp4" ? (
+                    <div className=" flex items-center">
+                      <div className="py-12 ">
+                        <video
+                          onLoadedMetadata={handleProgress}
+                          ref={videoRef}
+                          width="50%"
+                          // height="100%"
+                          id="myVideo"
+                          controls
+                        >
+                          <source
+                            src={`http://` + `${fileUrl}`}
+                            type="video/mp4"
+                          />
+                        </video>
+                        <a
+                          onClick={handleDelete}
+                          className="text-rose-400 hover:text-black ml-2 text-lg"
+                        >
+                          <i className="bi bi-trash-fill"></i>
+                        </a>
+                      </div>
+                    </div>
+                  ) : (
+                    <input
+                      type="file"
+                      onChange={handleFileSelect}
+                      className="px-3 py-3 text-blueGray-600 bg-white text-sm w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
                     />
-                    <div className="inline-block px-2 h-full">to</div>
-                    <DatePicker
-                      className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                      selected={durationEnd}
-                      onChange={(date) => setdurationEnd(date)}
-                      showTimeSelect
-                      showTimeSelectOnly
-                      timeIntervals={15}
-                      timeCaption="Time"
-                      dateFormat="hh:mm a"
-                    /> */}
+                  )}
                 </div>
               </div>
 
@@ -387,7 +425,6 @@ function CreateTraining() {
                     className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
                   />
                 </div>
-
                 <div>
                   <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                     Ангилал

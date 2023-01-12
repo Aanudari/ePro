@@ -7,7 +7,7 @@ import axios from "axios";
 import { Modal } from "react-bootstrap";
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
-const Player = () => {
+const TrainingPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const videoRef = useRef(null);
@@ -60,9 +60,6 @@ const Player = () => {
             <progress value={progress} max="100" />
           </div>
         </div>
-      ) : location.state.data.fileUrl.slice(-4) ===
-        (".gif" || ".png" || ".jpg" || "jpeg") ? (
-        <img src={`http://` + `${url}`} alt="aaa" />
       ) : (
         <div>file baihgui {location.state.data.fileUrl}</div>
       )}
@@ -72,4 +69,4 @@ const Player = () => {
   );
 };
 
-export default Player;
+export default TrainingPlayer;

@@ -29,11 +29,13 @@ function UserErrorThanks() {
       url: `${process.env.REACT_APP_URL}/v1/Complain/complainInfo`,
     })
       .then((res) => {
-        // setComplainInfo(
-        //   res.data.complainInfos.sort((a, b) => (a.qty < b.qty ? 1 : -1))
-        // );
-        setComplainInfo(res.data.complainInfos);
-        if (res.data.resultMessage === "Unauthorized") {
+        if (res.data.isSuccess === true) {
+          setComplainInfo(res.data.complainInfos);
+        }
+        if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct format."
+        ) {
           logout();
         }
       })
@@ -48,14 +50,18 @@ function UserErrorThanks() {
       url: `${process.env.REACT_APP_URL}/v1/Complain/device?deviceId=${deviceId}`,
     })
       .then((res) => {
-        setComplain(res.data.complains);
-
+        if (res.data.isSuccess === true) {
+          setComplain(res.data.complains);
+        }
         if (res.data.isSuccess == false) {
           alert(`${res.data.resultMessage}`);
           //   const timer = setTimeout(() => navigate(0), 2000);
           //   return () => clearTimeout(timer);
         }
-        if (res.data.resultMessage === "Unauthorized") {
+        if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct format."
+        ) {
           logout();
         }
       })

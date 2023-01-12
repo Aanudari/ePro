@@ -42,8 +42,13 @@ function EditErrorThanks() {
       url: `${process.env.REACT_APP_URL}/v1/Complain/complainInfo`,
     })
       .then((res) => {
-        setComplainInfo(res.data.complainInfos);
-        if (res.data.resultMessage === "Unauthorized") {
+        if (res.data.isSuccess == true) {
+          setComplainInfo(res.data.complainInfos);
+        }
+        if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct format."
+        ) {
           logout();
         }
       })
@@ -78,11 +83,15 @@ function EditErrorThanks() {
       data: JSON.stringify(editData),
     })
       .then((res) => {
-        console.log(res.data.resultMessage);
         if (res.data.isSuccess === true) {
           notification.success(`${res.data.resultMessage}`);
-          const timer = setTimeout(() => navigate("/error-thanks"), 1000);
+          const timer = setTimeout(() => navigate("/error-thanks"), 500);
           return () => clearTimeout(timer);
+        } else {
+          console.log(res.data.resultMessage);
+        }
+        if (res.data.resultMessage === "Unauthorized") {
+          logout();
         }
       })
       .catch((err) => console.log(err));

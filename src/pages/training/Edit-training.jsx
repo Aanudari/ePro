@@ -72,10 +72,9 @@ function EditTraining() {
         accept: "text/plain",
         Authorization: `${TOKEN}`,
       },
-      url: `http://192.168.10.248:9000/v1/Training/category`,
+      url: `${process.env.REACT_APP_URL}/v1/Training/category`,
     })
       .then((res) => {
-        setCategory(res.data.trainingCatList);
         if (res.data.isSuccess == true) {
           setCategory(res.data.trainingCatList);
         }
@@ -95,11 +94,16 @@ function EditTraining() {
         accept: "text/plain",
         Authorization: `${TOKEN}`,
       },
-      url: `http://192.168.10.248:9000/v1/User/department`,
+      url: `${process.env.REACT_APP_URL}/v1/User/department`,
     })
       .then((res) => {
-        setDepartment(res.data.departments);
-        if (res.data.resultMessage === "Unauthorized") {
+        if (res.data.isSuccess === true) {
+          setDepartment(res.data.departments);
+        }
+        if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct format."
+        ) {
           logout();
         }
       })
@@ -112,12 +116,16 @@ function EditTraining() {
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `http://192.168.10.248:9000/v1/User/org/${item.id}`,
+      url: `${process.env.REACT_APP_URL}/v1/User/org/${item.id}`,
     })
       .then((res) => {
-        if (res.data.resultMessage === "Unauthorized") {
+        if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct format."
+        ) {
           logout();
-        } else {
+        }
+        if (res.data.isSuccess === true) {
           setOrg(res.data.organizations);
           setDepartmentID(item.id);
         }
@@ -130,12 +138,16 @@ function EditTraining() {
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `http://192.168.10.248:9000/v1/User/unit/devices?unitId=${item.id}`,
+      url: `${process.env.REACT_APP_URL}/v1/User/unit/devices?unitId=${item.id}`,
     })
       .then((res) => {
-        if (res.data.resultMessage === "Unauthorized") {
+        if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct format."
+        ) {
           logout();
-        } else {
+        }
+        if (res.data.isSuccess === true) {
           setWorkers(res.data.unitDevices);
           setOrgID(item.id);
         }
@@ -186,8 +198,12 @@ function EditTraining() {
           ],
   };
   const handleFileSelect = (event) => {
-    setSelectedFile(event.target.files[0]);
-    handleCreate();
+    if (event.target.files[0].name.slice(-4) === ".mp4") {
+      setSelectedFile(event.target.files[0]);
+      handleCreate();
+    } else {
+      notification.error("Video хавсаргана уу.");
+    }
   };
   const handleCreate = async () => {
     const data = new FormData();
@@ -199,7 +215,7 @@ function EditTraining() {
     //     "Content-Type": "multipart/form-data",
     //     Authorization: `${TOKEN}`,
     //   },
-    //   url: `http://192.168.10.248:9000/v1/TrainingFile/fileadd`,
+    //   url: `${process.env.REACT_APP_URL}/v1/TrainingFile/fileadd`,
     //   data,
     // })
     //   .then((res) => {
@@ -226,14 +242,14 @@ function EditTraining() {
       //     "Content-Type": "application/json",
       //     accept: "text/plain",
       //   },
-      //   url: `http://192.168.10.248:9000/v1/Training/edit`,
+      //   url: `${process.env.REACT_APP_URL}/v1/Training/edit`,
       //   data: JSON.stringify(dataFULL),
       // })
       //   .then((res) => {
       //     console.log(res.data);
       //     if (res.data.isSuccess === true) {
       //       notification.success(`${res.data.resultMessage}`);
-      //       const timer = setTimeout(() => navigate("/trainings"), 1000);
+      //       const timer = setTimeout(() => navigate("/trainings"), 500);
       //       return () => clearTimeout(timer);
       //     }
       //   })
@@ -312,28 +328,6 @@ function EditTraining() {
                           type="video/mp4"
                         />
                       </video>
-                    </div>
-                  ) : train.fileUrl.slice(-4) ===
-                    (".gif" || ".png" || ".jpg" || "jpeg") ? (
-                    <img src={`http://` + `${train.fileUrl}`} alt="aaa" />
-                  ) : train.fileUrl.slice(-4) ===
-                    (".pdf" || "docx" || "xlsx") ? (
-                    <div className="flex items-center justify-between px-2 py-2  border-2 border-gray-200">
-                      <p className="flex items-center">
-                        {train.fileUrl.slice(29)}
-                      </p>
-                      <div className="flex items-center">
-                        <button className="p-1 mr-4 text-sm  border border-gray-400 rounded">
-                          <i
-                            className="bi bi-eye"
-                            onClick={() =>
-                              window.open(`http://${train.fileUrl}`)
-                            }
-                          >
-                            OPEN
-                          </i>
-                        </button>
-                      </div>
                     </div>
                   ) : (
                     <input

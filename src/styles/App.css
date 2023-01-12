@@ -209,13 +209,6 @@ input::-webkit-inner-spin-button {
     right: -200px;
   }
 }
-
-input[type="file"] {
-  opacity: 0; /* make transparent */
-  z-index: 1; /* move under anything else */
-  position: absolute; /* don't let it take up space */
-}
-
 .clearfix {
   *zoom: 1;
 } /* For IE 6/7 */

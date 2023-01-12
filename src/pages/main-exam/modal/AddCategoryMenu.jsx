@@ -1,17 +1,12 @@
-import { useStateContext } from "../../contexts/ContextProvider";
+import { useStateContext } from "../../../contexts/ContextProvider";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import DepartmentSelect from "../exam/ExamForm/DepartmentSelect";
+import DepartmentSelect from "../SelectOptions/DepartmentSelect";
 import DatePicker from "react-datepicker";
 
-function AddCategoryMenu({
-  showAddCategory,
-  setShowAddCategory,
-  trigger,
-  setTrigger,
-}) {
+function AddCategoryMenu({ setShowAddCategory, trigger, setTrigger }) {
   function addZero(i) {
     if (i < 10) {
       i = "0" + i;

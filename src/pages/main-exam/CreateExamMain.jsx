@@ -2,11 +2,8 @@ import { useState, useEffect } from "react";
 import { useStateContext } from "../../contexts/ContextProvider";
 import axios from "axios";
 import DatePicker from "react-datepicker";
-import OptionSelect from "../exam/ExamForm/OptionSelect";
-import PointSelect from "../exam/ExamForm/PointSelect";
-import CheckModal from "../../components/exam-comp/CheckModal";
 import { useNavigate } from "react-router-dom";
-import AllEmployeeSelect from "./AllEmployeeSelect";
+import AllEmployeeSelect from "./modal/AllEmployeeSelect";
 
 function CreateExamMain({
   checked,
@@ -479,15 +476,6 @@ function CreateExamMain({
               </div>
               <div></div>
             </div>
-          )}
-          {checkTime && (
-            <CheckModal
-              setCheckTime={setCheckTime}
-              datestring={showstring}
-              datestring2={showstring2}
-              setshowQuestionMenu={setshowQuestionMenu}
-              handleCreateExam={handleCreateExam}
-            />
           )}
         </form>
         {count === uniqueList.length && (

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useStateContext } from "../../contexts/ContextProvider";
+import { useStateContext } from "../../../contexts/ContextProvider";
 import { useNavigate } from "react-router-dom";
-import CreateQuestionMain from "./CreateQuestionMain";
-import EditQuestionMain from "./EditQuestionMain";
-import CreateExamMain from "./CreateExamMain";
-import ImageUploaderSmall from "../exam/ExamForm/ImageUploaderSmall";
+import CreateQuestionMain from "../CreateQuestionMain";
+import EditQuestionMain from "../EditQuestionMain";
+import CreateExamMain from "../CreateExamMain";
+import ImageUploaderSmall from "../SelectOptions/ImageUploderSmall";
 function CategoryModal({
   setCategoryModal,
   id,

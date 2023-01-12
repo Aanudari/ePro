@@ -1,9 +1,9 @@
-import UserLayout from "../../components/UserLayout";
+import UserLayout from "../../../components/UserLayout";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useStateContext } from "../../contexts/ContextProvider";
+import { useStateContext } from "../../../contexts/ContextProvider";
 import axios from "axios";
-import RatingCellDes from "./RatingCellDes";
+import RatingCellDes from "../RatingCellDes";
 function UserCore() {
   const [data, setData] = useState();
   const [rating, setRating] = useState();
@@ -72,25 +72,6 @@ function UserCore() {
               <a className="cursor-pointer">Password</a>
               <a className="cursor-pointer">API</a>
             </div>
-            {/* <div className="content-header">
-              <div className="content-header-intro">
-                <h2>Intergrations and connected apps</h2>
-                <p>
-                  Supercharge your workflow and connect the tool you use every
-                  day.
-                </p>
-              </div>
-              <div className="content-header-actions">
-                <a href="#" className="button">
-                  <i className="ph-faders-bold"></i>
-                  <span>Filters</span>
-                </a>
-                <a href="#" className="button">
-                  <i className="ph-plus-bold"></i>
-                  <span>Request integration</span>
-                </a>
-              </div>
-            </div> */}
             <div className="flex gap-[5px]">
               {rating?.map((element, index) => {
                 return <RatingCellDes data={element} key={index} />;

@@ -1,4 +1,4 @@
-import { useStateContext } from "../../contexts/ContextProvider";
+import { useStateContext } from "../../../contexts/ContextProvider";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -162,7 +162,6 @@ function AllEmployeeSelectEdit({
       setIndexDetect((prev) => [...prev, index]);
     }
   };
-  //   console.log(chosen);
   return (
     <div
       className={`${

@@ -1,9 +1,8 @@
 import axios from "axios";
-import { useStateContext } from "../../contexts/ContextProvider";
+import { useStateContext } from "../../../contexts/ContextProvider";
 
 function ExamCategory({
   categories,
-  categoryModal,
   setCategoryModal,
   handleCategoryModal,
   setShowCategoryMenu,

@@ -23,12 +23,10 @@ import ErrorThanks from "./pages/error-thanks/ErrorThanks";
 import CreateErrorThanks from "./pages/error-thanks/CreateErrorThanks";
 import EditErrorThanks from "./pages/error-thanks/EditErrorThanks";
 import UserErrorThanks from "./pages/error-thanks/UserErrorThanks";
-import UITraining from "./pages/userUI/UITraining";
 import getWindowDimensions from "./components/SizeDetector";
 import SessionTimeout from "./components/SessionTimeout";
-import ExamInit from "./pages/userUI/ExamInit";
+import ExamInit from "./pages/UserMainUI/Exam/ExamInit";
 import { QueryClient, QueryClientProvider } from "react-query";
-import CreateRate from "./pages/rating/rate-users/CreateRate";
 import ExamDash from "./pages/main-exam/examDashboard";
 import "react-toastify/dist/ReactToastify.css";
 import RatingCore from "./pages/ratingMain/RatingCore";
@@ -36,8 +34,8 @@ import EditTraining from "./pages/training/Edit-training";
 import UserTraining from "./pages/training/User-training";
 import TrainingPlayer from "./pages/training/TrainingPlayer";
 import RatingIndividual from "./pages/ratingMain/RatingIndivdual";
-import UserCore from "./pages/UserMainUI/UserCore";
-import ExamInitContinue from "./pages/userUI/ExamInitContinue";
+import UserCore from "./pages/UserMainUI/Rating/UserCore";
+import ExamInitContinue from "./pages/UserMainUI/Exam/ExamInitContinue";
 import MainNavigation from "./components/MainNavigation";
 import TrainingUserCell from "./pages/training/TrainingUserCell";
 
@@ -158,15 +156,6 @@ function App() {
             }
           />
           <Route path="*" element={<NotFound />} />
-          {/* Үнэлгээ хийгдэх Page-нүүд */}
-          <Route
-            path="/create-rate-user"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <CreateRate />
-              </ProtectedRoute>
-            }
-          />
           <Route
             path="/notification"
             element={
@@ -188,14 +177,6 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199]}>
                 <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/ui-training"
-            element={
-              <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
-                <UITraining />
               </ProtectedRoute>
             }
           />

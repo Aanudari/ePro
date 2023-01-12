@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useStateContext } from "../../contexts/ContextProvider";
+import { useStateContext } from "../../../contexts/ContextProvider";
 import { useNavigate } from "react-router-dom";
-import ExamHeader from "./ExamHeader";
-import ExamEditHeader from "./ExamEditHeader";
-import EditQuestionMenu from "./edits/EditQuestionMenu";
+import ExamHeader from "../ExamHeader";
+import ExamEditHeader from "../ExamEditHeader";
+import EditQuestionMenu from "../edits/EditQuestionMenu";
 function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
   const [filtered, setFiltered] = useState();
   const [data, setData] = useState();

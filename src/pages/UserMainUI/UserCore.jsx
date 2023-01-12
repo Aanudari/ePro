@@ -1,4 +1,4 @@
-import UserLayout from "../../layout/UserLayout";
+import UserLayout from "../../components/UserLayout";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useStateContext } from "../../contexts/ContextProvider";

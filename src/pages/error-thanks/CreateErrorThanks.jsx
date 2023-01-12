@@ -63,8 +63,13 @@ function CreateErrorThanks() {
       url: `${process.env.REACT_APP_URL}/v1/User/department`,
     })
       .then((res) => {
-        setDepartment(res.data.departments);
-        if (res.data.resultMessage === "Unauthorized") {
+        if (res.data.isSuccess == true) {
+          setDepartment(res.data.departments);
+        }
+        if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct format."
+        ) {
           logout();
         }
       })
@@ -79,11 +84,15 @@ function CreateErrorThanks() {
       url: `${process.env.REACT_APP_URL}/v1/User/org/${item.id}`,
     })
       .then((res) => {
-        if (res.data.resultMessage === "Unauthorized") {
-          logout();
-        } else {
+        if (res.data.isSuccess == true) {
           setOrg(res.data.organizations);
           setDepartmentID(item.id);
+        }
+        if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct format."
+        ) {
+          logout();
         }
       })
       .catch((err) => console.log(err));
@@ -97,11 +106,15 @@ function CreateErrorThanks() {
       url: `${process.env.REACT_APP_URL}/v1/User/unit/devices?unitId=${item.id}`,
     })
       .then((res) => {
-        if (res.data.resultMessage === "Unauthorized") {
-          logout();
-        } else {
+        if (res.data.isSuccess == true) {
           setWorkers(res.data.unitDevices);
           setOrgID(item.id);
+        }
+        if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct format."
+        ) {
+          logout();
         }
       })
       .catch((err) => console.log(err));
@@ -161,8 +174,13 @@ function CreateErrorThanks() {
         .then((res) => {
           if (res.data.isSuccess === true) {
             notification.success(`${res.data.resultMessage}`);
-            const timer = setTimeout(() => navigate("/error-thanks"), 1000);
+            const timer = setTimeout(() => navigate("/error-thanks"), 500);
             return () => clearTimeout(timer);
+          } else {
+            console.log(res.data.resultMessage);
+          }
+          if (res.data.resultMessage === "Unauthorized") {
+            logout();
           }
         })
         .catch((err) => console.log(err));

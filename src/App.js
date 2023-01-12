@@ -10,10 +10,8 @@ import Home from "./pages/Home";
 import AddCategory from "./pages/rating/rating/AddCategory";
 import { useStateContext } from "./contexts/ContextProvider";
 import Training from "./pages/training/Training";
-import TrainingIndex from "./pages/training/TrainingIndex";
 import TrainingFiles from "./pages/training/TrainingFiles";
 import TrainingCategory from "./pages/training/TrainingCategory";
-import TookTraining from "./pages/training/took-training";
 import CreateTraining from "./pages/training/create-training";
 import TrainingRating from "./pages/training_raiting/TrainingRating";
 import { ProtectedRoute } from "./components/ProtectedRoute";
@@ -59,11 +57,10 @@ import "react-toastify/dist/ReactToastify.css";
 import RatingCore from "./pages/ratingMain/RatingCore";
 import EditTraining from "./pages/training/Edit-training";
 import UserTraining from "./pages/training/User-training";
-import Player from "./pages/training/Player";
+import TrainingPlayer from "./pages/training/TrainingPlayer";
 import RatingIndividual from "./pages/ratingMain/RatingIndivdual";
 import UserCore from "./pages/UserMainUI/UserCore";
 import TrainingUserCell from "./pages/training/TrainingUserCell";
-
 
 function App() {
   const { activeMenu, showTop, roleId, error, setError } = useStateContext();
@@ -168,15 +165,6 @@ function App() {
           />
 
           <Route
-            path="/took-training"
-            element={
-              <ProtectedRoute allowedRoles={[199]}>
-                <TookTraining />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
             path="/user-training"
             element={
               <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
@@ -188,7 +176,7 @@ function App() {
             path="/player"
             element={
               <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
-                <Player />
+                <TrainingPlayer />
               </ProtectedRoute>
             }
           />

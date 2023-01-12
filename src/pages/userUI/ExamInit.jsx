@@ -46,7 +46,6 @@ export default function ExamInit() {
       url: `${process.env.REACT_APP_URL}/v1/ExamNew/start?examId=${examId}`,
     })
       .then((res) => {
-        console.log(res);
         sessionStorage.setItem(
           "exam_data",
           JSON.stringify(res.data.variantInfo)
@@ -69,7 +68,7 @@ export default function ExamInit() {
 
   //time generate hiih
   const time = new Date();
-  time.setMinutes(time.getMinutes() + 10);
+  time.setMinutes(time.getMinutes() + 10, time.getSeconds() + 10);
   //time generate hiih
   // console.log(rightAnswer)
 

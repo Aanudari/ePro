@@ -49,7 +49,7 @@ export default function Question({ data, indexQ, setContainer }) {
         </h4>
         {data.imgUrl && (
           <img
-            src={`${data.imgUrl}`}
+            src={`http://${data.imgUrl}`}
             alt=""
             className="mb-4 w-full h-[150px] md:h-[280px] mb-4 rounded"
           />

@@ -351,7 +351,7 @@ function Training() {
                         <div className="flex-shrink-0 text-emerald-500 text-lg">
                           <i className="bi bi-calendar-check-fill" />
                         </div>
-                        {data.endDate + data.duration >= nowdateTime ? (
+                        {nowdateTime >= data.endDate + data.duration ? (
                           <p className="ml-3 text-sm leading-5 text-gray-700 ">
                             Дуусах хугацаа: {data.endDate}
                           </p>

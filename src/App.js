@@ -62,6 +62,7 @@ import UserTraining from "./pages/training/User-training";
 import Player from "./pages/training/Player";
 import RatingIndividual from "./pages/ratingMain/RatingIndivdual";
 import UserCore from "./pages/UserMainUI/UserCore";
+import ExamInitContinue from "./pages/userUI/ExamInitContinue";
 
 function App() {
   const { activeMenu, showTop, roleId, error, setError } = useStateContext();
@@ -316,6 +317,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
                 <ExamInit />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/exam-init-continue"
+            element={
+              <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
+                <ExamInitContinue />
               </ProtectedRoute>
             }
           />

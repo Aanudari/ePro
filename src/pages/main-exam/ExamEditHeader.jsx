@@ -3,10 +3,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useStateContext } from "../../contexts/ContextProvider";
-import AllEmployeeSelect from "./AllEmployeeSelect";
+import AllEmployeeSelectEdit from "./AllEmployeeSelectEdit";
 
 function ExamEditHeader({
-  array1,
   chosen,
   editHeader,
   setEditHeader,
@@ -14,6 +13,24 @@ function ExamEditHeader({
   examTri,
   setExamTri,
 }) {
+  const [initial, setInitial] = useState();
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      headers: {
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/ExamNew/GetDevicesByExamId?_examId=${chosen[0].id}`,
+    })
+      .then((res) => {
+        setInitial(res.data.devices);
+        if (res.data.resultMessage === "Unauthorized") {
+          logout();
+        }
+      })
+      .catch((err) => console.log(err));
+  }, []);
   const navigate = useNavigate();
   const { TOKEN } = useStateContext();
   function addZero(i) {
@@ -96,7 +113,7 @@ function ExamEditHeader({
   const handleUnit = (value) => {
     setUnitId(value);
   };
-
+  const [rechosen, setRechosen] = useState();
   const [name, setName] = useState(chosen[0].name);
   const [duration, setDuration] = useState(chosen[0].duration);
   let schema = {
@@ -105,7 +122,7 @@ function ExamEditHeader({
     startDate: `${datestring}`,
     expireDate: `${datestring2}`,
     duration: duration,
-    devices: chosen[0].devInfos,
+    devices: rechosen !== undefined ? rechosen : null,
   };
   const handleSubmit = () => {
     axios({
@@ -124,6 +141,10 @@ function ExamEditHeader({
       .catch((err) => console.log(err));
   };
   const [show, setShow] = useState(false);
+  const getEmployees = (val) => {
+    setRechosen(val);
+  };
+
   return (
     <div
       className="h-40 overflow-hidden appear-smooth-height w-full px-2 uppercase bg-gray-600 text-white  flex items-center 
@@ -179,12 +200,22 @@ function ExamEditHeader({
           />
         </div>
       </div>
+      {/* <div className=""
+
+      >
+        Сонгох
+      </div> */}
       <div
         onClick={() => {
           setShow(true);
         }}
+        className="h-9 bg-teal-600 rounded-sm px-3 flex items-center font-[400] text-white cursor-pointer active:bg-teal-400 
+                hover:!bg-teal-500"
       >
-        Сонгох
+        <span className="mr-2 mb-1 font-[400] text-white">Ажилтан сонгох</span>
+        <div className="pl-2 h-full flex items-center border-l border-gray-300">
+          <i className="bi bi-gear-fill"></i>
+        </div>
       </div>
       <div
         onClick={() => {
@@ -199,7 +230,13 @@ function ExamEditHeader({
           <i className="bi bi-ui-checks"></i>
         </div>
       </div>
-      {show && <AllEmployeeSelect setShow={setShow} />}
+      {show && (
+        <AllEmployeeSelectEdit
+          getEmployees={getEmployees}
+          setShow={setShow}
+          getUsers={initial}
+        />
+      )}
     </div>
   );
 }

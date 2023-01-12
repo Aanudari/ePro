@@ -1,65 +1,55 @@
 import React from "react";
 import ImageUploading from "react-images-uploading";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useStateContext } from "../../../contexts/ContextProvider";
 
-export default function ImageUploaderSmall() {
-  const [images, setImages] = React.useState([]);
+export default function ImageUploaderSmall({ question }) {
+  const navigate = useNavigate();
+  const { TOKEN } = useStateContext();
+  const [data, setData] = useState();
+  // console.log(question.qimgUrl);
+  const [images, setImages] = React.useState([question.qimgUrl]);
   const maxNumber = 69;
+  const logout = () => {
+    localStorage.clear();
+    sessionStorage.clear();
+    navigate("/");
+    window.location.reload();
+  };
   const onChange = (imageList, addUpdateIndex) => {
     setImages(imageList);
   };
-  // console.log(images[0]?.file.name)
+  useEffect(() => {
+    axios({
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/ExamFile`,
+    })
+      .then((res) => {
+        if (res.data.errorCode == 401) {
+          logout();
+        } else {
+          setData(res.data.examFileLists);
+        }
+      })
+      .catch((err) => console.log(err));
+  }, []);
+  let str =
+    "192.168.10.248:9000/files/ExamFiles/310837741_5650402448345638_7025071623941900526_n.jpg";
+  console.log(question.qimgUrl.length);
+  // console.log(question.question);
+  // console.log(question.qimgUrl);
   return (
     <div className="border-b-[2px] border-[#50a3a2]">
-      <ImageUploading
-        multiple
-        value={images}
-        onChange={onChange}
-        maxNumber={maxNumber}
-        dataURLKey="data_url"
-        acceptType={["jpg"]}
-      >
-        {({
-          imageList,
-          onImageUpload,
-          onImageRemoveAll,
-          onImageUpdate,
-          onImageRemove,
-          isDragging,
-          dragProps
-        }) => (
-          // write your building UI
-          <div className="upload__image-wrapper w-[280px] p-2 flex justify-between">
-            <button
-              style={isDragging ? { color: "red" } : null}
-              onClick={(r) => {
-                r.preventDefault()
-                onImageUpload()
-              }}
-              {...dragProps}
-              className=''
-            >
-                {
-                    images.length == 0 &&
-                <img className="w-[100px]" src="https://user-images.githubusercontent.com/6290720/91559755-9d6e8c00-e973-11ea-9bde-4b60c89f441a.png" alt="" />
-                }
-            </button>
-            &nbsp;
-            {imageList.map((image, index) => (
-              <div key={index} className="image-item relative rounded-none">
-                <img src={image.data_url} alt="" className="w-[300px] md:w-[600px] h-[200px]" />
-                <div className="image-item__btn-wrapper flex">
-                  <button className="cus-btn2" onClick={() => onImageUpdate(index)}>
-                  <i className="bi bi-alexa"></i>
-                  </button>
-                  <button className="cus-btn2 bg-red-400 hover:bg-red-500" onClick={() => onImageRemove(index)}>
-                  <i className="bi bi-x-lg"></i>
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </ImageUploading>
+      <img
+        src={`http://192.168.10.248:9000/files/ExamFiles/310837741_5650402448345638_7025071623941900526_n.jpg`}
+        alt="test"
+      />
     </div>
   );
 }

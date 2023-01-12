@@ -14,7 +14,7 @@ function useCounter(initialState) {
   return { value, add, reset };
 }
 
-export default function ExamInit() {
+export default function ExamInitContinue() {
   const {
     TOKEN,
     qlength,
@@ -199,7 +199,7 @@ export default function ExamInit() {
                     handleStartExam();
                   }}
                 >
-                  Асуулт үзэх
+                  Үргэлжлүүлэх
                 </button>
               </>
             ) : null}

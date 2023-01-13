@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useStateContext } from "../../contexts/ContextProvider";
-import { useNavigate } from "react-router-dom";
 import { logout } from "../../service/examService";
 function ExamHeader({ chosen, editHeader, setEditHeader }) {
   const [data, setData] = useState();
@@ -28,21 +27,21 @@ function ExamHeader({ chosen, editHeader, setEditHeader }) {
         <div className="h-full flex items-start flex-col justify-center border-r pr-3 border-gray-400">
           <span className="text-white text-[13.5px] font-[400]">
             <i className="bi bi-circle-half mr-2"></i>
-            {chosen[0].startDate}
+            {chosen[0]?.startDate}
           </span>
           <span className="text-white text-[13.5px] font-[400]">
             <i className="bi bi-circle-fill mr-2"></i>
-            {chosen[0].expireDate}
+            {chosen[0]?.expireDate}
           </span>
         </div>
         <div className="h-full flex items-start flex-col justify-center border-r pr-3 border-gray-400">
           <span className="text-white font-[400]">
             <i className="bi bi-card-checklist mr-2"></i>
-            {chosen[0].name}
+            {chosen[0]?.name}
           </span>
           <span className="text-white font-[400]">
             <i className="bi bi-alarm-fill mr-2"></i>
-            {chosen[0].duration}
+            {chosen[0]?.duration}
             <span className="m-0 lowercase font-[400]"> мин</span>
           </span>
         </div>

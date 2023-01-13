@@ -7,7 +7,6 @@ import { ToastContainer } from "react-toastify";
 import { logout } from "../../service/examService";
 
 function TrainingProgressCell({ data }) {
-  const [trains, setTrains] = useState([]);
   const { TOKEN } = useStateContext();
   function ProgressBar({ percentage, startAt = 0 }) {
     return (

@@ -1,6 +1,5 @@
 import QuestionShow from "./QuestionShow";
 import { useStateContext } from "../../../contexts/ContextProvider";
-import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 export default function QuestionCorrectionShow() {
   const navigate = useNavigate();

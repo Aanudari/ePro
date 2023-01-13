@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useStateContext } from "../../../contexts/ContextProvider";
-import { useNavigate } from "react-router-dom";
 import ExamHeader from "../ExamHeader";
 import ExamEditHeader from "../ExamEditHeader";
 import EditQuestionMenu from "../edits/EditQuestionMenu";
@@ -14,10 +13,6 @@ function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
     return item.id == id;
   });
   let deviceIds = [];
-  // for (let index = 0; index < chosen[0].devInfos.length; index++) {
-  //   const element = chosen[0].devInfos[index].deviceId;
-  //   deviceIds.push(element);
-  // }
   const [trigger2, setTrigger2] = useState(false);
   const [users, setUsers] = useState();
   useEffect(() => {
@@ -282,6 +277,7 @@ function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
       varName: `${data[0].name}`,
       questionIds: main,
     };
+    // console.log(JSON.stringify(final));
     axios({
       method: "put",
       headers: {
@@ -298,7 +294,15 @@ function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
       })
       .catch((err) => console.log(err));
   };
-  // console.log(filtered && filtered[0]?.answerList)
+  const handleCorrect = (value) => {
+    let arr = filtered[0].answerList.map((item, i) => {
+      return item.id == value
+        ? { ...item, isTrue: "1" }
+        : { ...item, isTrue: "0" };
+    });
+    let assigned = Object.assign(filtered[0], { answerList: arr });
+    setFiltered([assigned]);
+  };
   return (
     <div
       className={`fixed ${
@@ -426,6 +430,7 @@ function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
                                 key={i}
                                 deleteAnswer={deleteAnswer}
                                 handleEditQuestion={handleEditQuestion}
+                                handleCorrect={handleCorrect}
                               />
                             ))}
                           <div className="w-full mt-4 flex justify-between">

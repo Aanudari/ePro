@@ -303,6 +303,7 @@ function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
     let assigned = Object.assign(filtered[0], { answerList: arr });
     setFiltered([assigned]);
   };
+  const [userTrigger, setUserTrigger] = useState(false);
   return (
     <div
       className={`fixed ${
@@ -333,6 +334,7 @@ function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
             chosen={chosen}
             setEditHeader={setEditHeader}
             editHeader={editHeader}
+            userTrigger={userTrigger}
           />
         ) : (
           <ExamEditHeader
@@ -343,6 +345,8 @@ function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
             chosen={chosen}
             setEditHeader={setEditHeader}
             editHeader={editHeader}
+            userTrigger={userTrigger}
+            setUserTrigger={setUserTrigger}
           />
         )}
         <div className="w-full h-full px-10 py-2 overflow-scroll">

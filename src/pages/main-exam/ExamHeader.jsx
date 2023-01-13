@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { logout } from "../../service/examService";
-function ExamHeader({ chosen, editHeader, setEditHeader }) {
+function ExamHeader({ chosen, editHeader, setEditHeader, userTrigger }) {
   const [data, setData] = useState();
   const { TOKEN } = useStateContext();
   useEffect(() => {
@@ -20,7 +20,7 @@ function ExamHeader({ chosen, editHeader, setEditHeader }) {
         }
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [userTrigger]);
   return (
     <div className="h-20 w-full shadow bg-gray-600 text-white  flex items-center justify-between px-3">
       <div className="font-[500] text-[14px] h-full flex items-center gap-3">

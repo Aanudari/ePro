@@ -60,9 +60,6 @@ function UserCore() {
       return gotYa(exam.id);
     }
   });
-  console.log(nokori);
-  // console.log("outside " + data.length);
-  // console.log(nokori);
   return (
     <UserLayout>
       <div className="w-full">
@@ -166,10 +163,16 @@ function UserCore() {
                         ) : item.isExamTaken.status == "P" ? (
                           <a
                             className="cursor-pointer"
+                            // onClick={() => {
+                            //   navigate("/exam-init-continue", {
+                            //     state: examID,
+                            //   });
+                            //   setExamID(item.id);
+                            //   setExamName(item.name);
+                            //   sessionStorage.setItem("exam_id", item.id);
+                            // }
                             onClick={() => {
-                              navigate("/exam-init-continue", {
-                                state: examID,
-                              });
+                              setReadyCheck(!readyCheck);
                               setExamID(item.id);
                               setExamName(item.name);
                               sessionStorage.setItem("exam_id", item.id);
@@ -201,7 +204,7 @@ function UserCore() {
                 <div className="flex justify-end">
                   <button
                     onClick={() => {
-                      navigate("/exam-init", { state: examID });
+                      navigate("/exam", { state: examID });
                       setReadyCheck(false);
                     }}
                     className="intro-button"

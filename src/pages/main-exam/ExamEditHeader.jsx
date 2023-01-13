@@ -13,6 +13,8 @@ function ExamEditHeader({
   examTri,
   setExamTri,
   handleCorrect,
+  userTrigger,
+  setUserTrigger,
 }) {
   const [initial, setInitial] = useState();
 
@@ -132,8 +134,8 @@ function ExamEditHeader({
       data: JSON.stringify(schema),
     })
       .then((res) => {
-        console.log(res);
         setExamTri(!examTri);
+        setUserTrigger(!userTrigger);
       })
       .catch((err) => console.log(err));
   };
@@ -141,14 +143,14 @@ function ExamEditHeader({
   const getEmployees = (val) => {
     let tempo = [];
     for (let index = 0; index < val.length; index++) {
+      let element = val[index];
       let data = {
-        department: val.department,
-        unitId: val.unitId,
-        deviceId: `${val.deviceId}`,
+        department: element.department,
+        unitId: element.unitId,
+        deviceId: `${element.deviceId}`,
       };
       tempo.push(data);
     }
-    console.log(tempo);
     setRechosen(tempo);
   };
 

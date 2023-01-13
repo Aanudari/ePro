@@ -4,23 +4,6 @@ import axios from "axios";
 import { logout } from "../../../service/examService";
 
 function AllEmployeeSelectEdit({ setShow, getEmployees, getUsers }) {
-  let initialData = [];
-  let initialDataPre = [];
-
-  for (let initIndex = 0; initIndex < getUsers.length; initIndex++) {
-    const element = getUsers[initIndex];
-    let data = {
-      department: element.department,
-      unitId: element.unitId,
-      deviceId: parseInt(element.deviceId),
-    };
-    initialData.push(data);
-    initialDataPre.push(parseInt(element.deviceId));
-  }
-  useEffect(() => {
-    // setChosen(initialData);
-    // setChosenPre(initialDataPre);
-  }, []);
   const [chosen, setChosen] = useState([]);
   const [chosenPre, setChosenPre] = useState([]);
   const { activeMenu, TOKEN } = useStateContext();
@@ -150,7 +133,7 @@ function AllEmployeeSelectEdit({ setShow, getEmployees, getUsers }) {
       setIndexDetect((prev) => [...prev, index]);
     }
   };
-  console.log(chosen);
+  // console.log(chosen);
   return (
     <div
       className={`${

@@ -27,6 +27,7 @@ export default function ExamInit() {
     setVarientID,
   } = useStateContext();
   const examId = sessionStorage.getItem("exam_id");
+  const [leftDuration, setleftDuration] = useState();
   useEffect(() => {
     axios({
       method: "get",
@@ -37,6 +38,7 @@ export default function ExamInit() {
       url: `${process.env.REACT_APP_URL}/v1/ExamNew/start?examId=${examId}`,
     })
       .then((res) => {
+        setleftDuration(res.data.leftduration);
         sessionStorage.setItem(
           "exam_data",
           JSON.stringify(res.data.variantInfo)
@@ -45,14 +47,14 @@ export default function ExamInit() {
       })
       .catch((err) => console.log("message"));
   }, [examId]);
-
+  // console.log(leftDuration);
   // session storage dotor baih exam iin medeelel awah
   var data = sessionStorage.getItem("exam_data");
   // var questions = JSON.parse(data)
   var questions = JSON.parse(data);
   // session storage dotor baih exam iin medeelel awah
   const gameRef = useRef(null);
-
+  console.log(JSON.parse(data));
   //time generate hiih
   const time = new Date();
   time.setMinutes(time.getMinutes() + 10, time.getSeconds() + 10);

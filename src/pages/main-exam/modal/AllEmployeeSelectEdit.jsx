@@ -3,14 +3,10 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { logout } from "../../../service/examService";
 
-function AllEmployeeSelectEdit({
-  setShow,
-  getEmployees,
-  setShowSelect,
-  getUsers,
-}) {
+function AllEmployeeSelectEdit({ setShow, getEmployees, getUsers }) {
   let initialData = [];
   let initialDataPre = [];
+
   for (let initIndex = 0; initIndex < getUsers.length; initIndex++) {
     const element = getUsers[initIndex];
     let data = {
@@ -22,8 +18,8 @@ function AllEmployeeSelectEdit({
     initialDataPre.push(parseInt(element.deviceId));
   }
   useEffect(() => {
-    setChosen(initialData);
-    setChosenPre(initialDataPre);
+    // setChosen(initialData);
+    // setChosenPre(initialDataPre);
   }, []);
   const [chosen, setChosen] = useState([]);
   const [chosenPre, setChosenPre] = useState([]);
@@ -154,6 +150,7 @@ function AllEmployeeSelectEdit({
       setIndexDetect((prev) => [...prev, index]);
     }
   };
+  console.log(chosen);
   return (
     <div
       className={`${

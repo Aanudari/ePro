@@ -175,7 +175,7 @@ export default function ExamInitContinue() {
             {!gameStarted && !gameFinished ? (
               <>
                 <p className="intro-desc mb-1 font-bold ">
-                  {`Нийт асуулт: ${qlength} , Хугацаа: ${10} мин`}
+                  {`Нийт асуулт: ${qlength} , Үлдсэн хугацаа: ${10} мин`}
                 </p>
                 <p className="intro-desc mb-1">
                   {`Хариулт сонгоогүй тохиолдолд буруу хариулсанд тооцогдох ба`}

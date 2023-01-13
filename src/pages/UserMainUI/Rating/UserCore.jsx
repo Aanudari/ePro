@@ -50,6 +50,19 @@ function UserCore() {
       })
       .catch((err) => console.log(err));
   }, []);
+  // const [nokori, setNokori] = useState([]);
+  let nokori = [];
+  const gotYa = (value) => {
+    nokori.push(value);
+  };
+  data?.map((exam) => {
+    if (exam.isExamTaken.status == "O") {
+      return gotYa(exam.id);
+    }
+  });
+  console.log(nokori);
+  // console.log("outside " + data.length);
+  // console.log(nokori);
   return (
     <UserLayout>
       <div className="w-full">
@@ -154,7 +167,9 @@ function UserCore() {
                           <a
                             className="cursor-pointer"
                             onClick={() => {
-                              navigate("/exam-init", { state: examID });
+                              navigate("/exam-init-continue", {
+                                state: examID,
+                              });
                               setExamID(item.id);
                               setExamName(item.name);
                               sessionStorage.setItem("exam_id", item.id);

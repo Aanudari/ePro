@@ -12,6 +12,7 @@ function ExamEditHeader({
   setExamModal,
   examTri,
   setExamTri,
+  handleCorrect,
 }) {
   const [initial, setInitial] = useState();
 
@@ -118,6 +119,7 @@ function ExamEditHeader({
     duration: duration,
     devices: rechosen !== undefined ? rechosen : null,
   };
+  // console.log(JSON.stringify(schema));
   const handleSubmit = () => {
     axios({
       method: "put",
@@ -130,13 +132,24 @@ function ExamEditHeader({
       data: JSON.stringify(schema),
     })
       .then((res) => {
+        console.log(res);
         setExamTri(!examTri);
       })
       .catch((err) => console.log(err));
   };
   const [show, setShow] = useState(false);
   const getEmployees = (val) => {
-    setRechosen(val);
+    let tempo = [];
+    for (let index = 0; index < val.length; index++) {
+      let data = {
+        department: val.department,
+        unitId: val.unitId,
+        deviceId: `${val.deviceId}`,
+      };
+      tempo.push(data);
+    }
+    console.log(tempo);
+    setRechosen(tempo);
   };
 
   return (

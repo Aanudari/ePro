@@ -39,6 +39,7 @@ import ExamInitContinue from "./pages/UserMainUI/Exam/ExamInitContinue";
 import MainNavigation from "./components/MainNavigation";
 import TrainingUserCell from "./pages/training/TrainingUserCell";
 import Exam from "./pages/UserMainUI/ExamUser/core/Exam";
+import ExamShow from "./pages/UserMainUI/ExamUser/core/ExamShow";
 
 function App() {
   const { activeMenu, showTop, roleId } = useStateContext();
@@ -271,6 +272,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
                 <Exam />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/exam-result"
+            element={
+              <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
+                <ExamShow />
               </ProtectedRoute>
             }
           />

@@ -3,7 +3,12 @@ import { useState } from "react";
 import { useEffect } from "react";
 function QuestionCell({ data, collector }) {
   const [answer, setAnswer] = useState();
-  const [tempo, setTempo] = useState([]);
+  const [tempo, setTempo] = useState([
+    {
+      answerId: null,
+      isTrue: "0",
+    },
+  ]);
   let question = {
     questionId: `${data.id}`,
     onlyAnswerId: tempo,
@@ -16,6 +21,7 @@ function QuestionCell({ data, collector }) {
     setTempo([data]);
     setAnswer(id);
   };
+
   useEffect(() => {
     collector(question, data.id);
   }, [tempo]);

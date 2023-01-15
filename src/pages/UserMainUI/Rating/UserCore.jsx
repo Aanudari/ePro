@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useStateContext } from "../../../contexts/ContextProvider";
 import axios from "axios";
 import RatingCellDes from "../RatingCellDes";
+import { logout } from "../../../service/examService";
 function UserCore() {
   const [data, setData] = useState();
   const [rating, setRating] = useState();
@@ -28,7 +29,7 @@ function UserCore() {
       url: `${process.env.REACT_APP_URL}/v1/ExamNew`,
     })
       .then((res) => {
-        setData(res.data.examList);
+        res.data.errorCode === 401 ? logout() : setData(res.data.examList);
       })
       .catch((err) => console.log(err));
   }, []);

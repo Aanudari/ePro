@@ -1,14 +1,81 @@
-function ExamHeader({ finisher, data }) {
+import MyTimer from "../../../../components/Timer";
+import { useState } from "react";
+function ExamHeader({ finisher, minute, second, creater, examName }) {
+  let time = new Date();
+
+  time.setMinutes(
+    time.getMinutes() + parseInt(minute),
+    time.getSeconds() + parseInt(second)
+  );
+  const [show, setShow] = useState(false);
+  const check = parseInt(minute);
   return (
-    <div className="h-[60px] top-0 fixed bottom-0 bg-white shadow-sm w-full flex justify-end px-10">
-      <nav
-        onClick={() => {
-          finisher();
-        }}
-        className="header-navigation-links bg-teal-500 px-3 my-2 rounded"
-      >
-        <a className="cursor-pointer"> Дуусгах </a>
-      </nav>
+    <div className="h-[60px] top-0 fixed bottom-0 bg-white shadow-sm w-full flex items-center justify-between px-10 ">
+      <div className="flex flex-col justify-center h-[60px] items-start m-0">
+        <h6 className="mb-0">{examName}</h6>
+        <h6 className="text-[13px] m-0 text-gray-500">
+          Шалгалт үүсгэсэн: {creater}
+        </h6>
+      </div>
+      <div className="flex h-[60px]">
+        {minute != undefined && (
+          <nav
+            className={`${
+              check < 5 ? "!bg-red-500 " : "bg-black"
+            } px-3 my-2 w-[100px] mr-2 flex justify-center items-center`}
+          >
+            {" "}
+            <MyTimer
+              expiryTimestamp={time}
+              finisher={finisher}
+              minute={minute}
+            />
+          </nav>
+        )}
+        <nav
+          onClick={() => {
+            setShow(true);
+          }}
+          className="flex items-center cursor-pointer hover:bg-teal-600 bg-teal-500 px-3 my-2 rounded"
+        >
+          <a className=" !text-white mb-1"> Дуусгах </a>
+        </nav>
+      </div>
+
+      {show && (
+        <div
+          className="fixed w-screen h-screen bg-opacity-50 bg-black z-10 top-0 left-0 flex items-center
+      justify-center"
+        >
+          <div
+            className="pt-6 px-6 pb-6 bg-white w-2/6 flex flex-col items-center
+      justify-between text-black rounded shadow"
+          >
+            <i className="bi bi-info-circle text-teal-500 text-2xl"></i>
+            <span className="font-[500] mb-2">
+              Та энэ шалгалтыг дуусгахдаа итгэлтэй байна уу ?
+            </span>
+            <div className="flex justify-center w-full">
+              <button
+                onClick={() => {
+                  finisher();
+                }}
+                className="px-4 py-1 border bg-teal-500 hover:bg-teal-600 active:bg-teal-500 text-white font-[500] mr-2"
+              >
+                Тийм
+              </button>
+              <button
+                onClick={() => {
+                  setShow(false);
+                }}
+                className="px-4 py-1 border bg-red-500 hover:bg-red-600 active:bg-red-500 text-white font-[500]"
+              >
+                Үгүй
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

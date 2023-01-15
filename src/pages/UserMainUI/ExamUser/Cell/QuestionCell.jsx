@@ -27,9 +27,12 @@ function QuestionCell({ data, collector }) {
   }, [tempo]);
   return (
     <div className="p-3 my-3 rounded shadow-sm border bg-white">
-      <p className="font-[500] text-[14px]">
-        {data.question}
-        {data.id}
+      <p className=" flex justify-between">
+        <span className="font-[500] text-[14px]">{data.question}</span>
+        <span className="font-[500]">
+          {data.points + " "}
+          оноо
+        </span>
       </p>
       {data.imgUrl !== "" && (
         <div className="flex w-full justify-center">

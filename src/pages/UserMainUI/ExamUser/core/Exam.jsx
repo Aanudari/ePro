@@ -24,8 +24,10 @@ function Exam() {
       .then((res) => {
         if (res.data.errorCode === 401) {
           logout();
+        } else if (res.data.isSuccess === false) {
+          navigate("/user-main");
         } else {
-          setVariant(res.data);
+          setVariant(res?.data);
           setData(res.data.variantInfo);
           localStorage.setItem(
             "exam",
@@ -35,7 +37,6 @@ function Exam() {
       })
       .catch((err) => console.log(err));
   }, []);
-
   let temp = [];
   const [tempo, setTempo] = useState([]);
   for (let index = 0; index < data?.questionList.length; index++) {
@@ -106,23 +107,22 @@ function Exam() {
         addZero(new Date().getSeconds()),
       onlyQuestionId: tempo,
     };
-    navigate("/exam-result", { state: tempo });
-    // axios({
-    //   method: "post",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: TOKEN,
-    //   },
-    //   url: `${process.env.REACT_APP_URL}/v1/ExamNew/end`,
-    //   data: main,
-    // })
-    //   .then((res) => {
-    //     console.log(res);
-    //     navigate("/exam-result", { state: tempo });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
+    // navigate("/exam-result", { state: tempo });
+    axios({
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: TOKEN,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/ExamNew/end`,
+      data: main,
+    })
+      .then((res) => {
+        navigate("/exam-result", { state: tempo });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
   return (
     <div className="px-16 w-full flex justify-center relative pt-20">
@@ -131,7 +131,14 @@ function Exam() {
           <QuestionCell collector={collector} key={i} data={item} />
         ))}
       </div>
-      <ExamHeader data={tempo} finisher={finisher} />
+      <ExamHeader
+        data={tempo}
+        finisher={finisher}
+        minute={variant?.leftMinutes}
+        second={variant?.leftSeconds}
+        examName={variant?.examName}
+        creater={variant?.createdBy}
+      />
     </div>
   );
 }

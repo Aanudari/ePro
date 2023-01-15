@@ -222,7 +222,6 @@ function CreateExamMain({
     }
   };
   const handleSubmitMain = () => {
-    console.log(JSON.stringify(main));
     axios({
       method: "post",
       headers: {

@@ -1,10 +1,12 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useStateContext } from "../../../../contexts/ContextProvider";
 import QuestionCell from "../Cell/QuestionCell";
 import ExamHeader from "./ExamHeader";
+import { logout } from "../../../../service/examService";
 function Exam() {
+  const navigate = useNavigate();
   let location = useLocation();
   let id = location.state;
   const { TOKEN, deviceId } = useStateContext();
@@ -20,10 +22,18 @@ function Exam() {
       url: `${process.env.REACT_APP_URL}/v1/ExamNew/start?examId=${id}`,
     })
       .then((res) => {
-        setVariant(res.data);
-        setData(res.data.variantInfo);
+        if (res.data.errorCode === 401) {
+          logout();
+        } else {
+          setVariant(res.data);
+          setData(res.data.variantInfo);
+          localStorage.setItem(
+            "exam",
+            JSON.stringify(res.data.variantInfo.questionList)
+          );
+        }
       })
-      .catch((err) => console.log("message"));
+      .catch((err) => console.log(err));
   }, []);
 
   let temp = [];
@@ -32,7 +42,12 @@ function Exam() {
     const element = data.questionList[index];
     let dat = {
       questionId: element.id,
-      onlyAnswerId: null,
+      onlyAnswerId: [
+        {
+          answerId: null,
+          isTrue: "0",
+        },
+      ],
     };
     temp.push(dat);
   }
@@ -91,23 +106,24 @@ function Exam() {
         addZero(new Date().getSeconds()),
       onlyQuestionId: tempo,
     };
-    axios({
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: TOKEN,
-      },
-      url: `${process.env.REACT_APP_URL}/v1/ExamNew/end`,
-      data: main,
-    })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    navigate("/exam-result", { state: tempo });
+    // axios({
+    //   method: "post",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: TOKEN,
+    //   },
+    //   url: `${process.env.REACT_APP_URL}/v1/ExamNew/end`,
+    //   data: main,
+    // })
+    //   .then((res) => {
+    //     console.log(res);
+    //     navigate("/exam-result", { state: tempo });
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
-  //   console.log(data);
   return (
     <div className="px-16 w-full flex justify-center relative pt-20">
       <div className="w-4/6">
@@ -115,7 +131,7 @@ function Exam() {
           <QuestionCell collector={collector} key={i} data={item} />
         ))}
       </div>
-      <ExamHeader finisher={finisher} />
+      <ExamHeader data={tempo} finisher={finisher} />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-function ExamHeader({ finisher }) {
+function ExamHeader({ finisher, data }) {
   return (
     <div className="h-[60px] top-0 fixed bottom-0 bg-white shadow-sm w-full flex justify-end px-10">
       <nav

@@ -2,7 +2,7 @@ import UINavigation from "./UINavigation";
 
 function UserLayout({ children }) {
   return (
-    <div className="w-full">
+    <div className="w-full relative">
       <div className="relative w-full">
         <UINavigation />
       </div>

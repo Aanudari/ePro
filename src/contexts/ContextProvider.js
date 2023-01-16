@@ -46,6 +46,7 @@ export const ContextProvider = ({ children }) => {
   const [templateID, setTemplateID] = useState();
   const [ratingDate, setRatingDate] = useState(new Date());
   const [ratingDate2, setRatingDate2] = useState(new Date());
+  const [sore, setSore] = useState();
   var datestringRating =
     ratingDate.getFullYear() +
     "" +
@@ -125,6 +126,8 @@ export const ContextProvider = ({ children }) => {
         setRatingDate,
         datestringRating,
         datestringRating2,
+        sore,
+        setSore,
       }}
     >
       {children}

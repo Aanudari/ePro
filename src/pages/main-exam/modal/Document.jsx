@@ -2,6 +2,7 @@ import { useStateContext } from "../../../contexts/ContextProvider";
 import { useEffect, useState } from "react";
 import { logout } from "../../../service/examService";
 import axios from "axios";
+import ShowExamResult from "./ShowExamResult";
 function Document({ setShowReport, id }) {
   const [data, setData] = useState();
   const [users, setUsers] = useState();
@@ -81,6 +82,29 @@ function Document({ setShowReport, id }) {
       .catch((err) => console.log(err));
   }, [selected]);
   const { activeMenu } = useStateContext();
+  const [result, setResult] = useState();
+  const [uId, setUId] = useState();
+  const handleResultCertain = (user) => {
+    setUId(user.deviceId);
+    axios({
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/ExamReport/examResult/${id}/${user.deviceId}`,
+    })
+      .then((res) => {
+        if (res.data.errorCode == 401) {
+          logout();
+        } else {
+          setResult(res.data.examQuestions);
+          setShow(true);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+  const [show, setShow] = useState(false);
   return (
     <div
       className={`fixed ${
@@ -89,6 +113,7 @@ function Document({ setShowReport, id }) {
          !bg-black top-[56px] h-[calc(100%-56px)] !bg-opacity-50  flex justify-end`}
     >
       <div className="from-left bg-white w-[450px] h-[calc(100%)] flex flex-col justify-between shadow">
+        {show && <ShowExamResult setShow={setShow} result={result} id={uId} />}
         <div className="h-full">
           <h6 className="text-teal-600 text-[14px] flex justify-between mx-3 py-3">
             <span className="font-[500]">
@@ -107,9 +132,16 @@ function Document({ setShowReport, id }) {
               {users &&
                 users.map((user, index) => (
                   <div
+                    onClick={
+                      user.status == "C"
+                        ? () => {
+                            handleResultCertain(user);
+                          }
+                        : null
+                    }
                     className={`py-2 px-3 ${
                       user.status == "C"
-                        ? "bg-green-500"
+                        ? "bg-green-500 cursor-pointer"
                         : user.status == "P"
                         ? "bg-teal-700"
                         : "bg-teal-500"

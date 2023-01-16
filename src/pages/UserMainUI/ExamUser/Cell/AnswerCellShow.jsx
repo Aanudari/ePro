@@ -1,5 +1,4 @@
 function AnswerCellShow({ data, correct, wrong }) {
-  console.log(correct);
   return (
     <div className="font-[400]">
       <p className="border-b border-black pb-2 relative">

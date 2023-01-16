@@ -67,7 +67,7 @@ export default function UINavigation() {
                 onClick={() => {
                   setShow(!show);
                 }}
-                className="avatar "
+                className="avatar cursor-pointer"
               >
                 <img src="user2.png" alt="" />
               </a>

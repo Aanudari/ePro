@@ -61,6 +61,20 @@ function UserCore() {
       return gotYa(exam.id);
     }
   });
+  const [detector, setDetector] = useState(0);
+  let indexed = ["A", "C", "O", "P"];
+  let tempo = [data];
+  for (let index = 0; index < indexed?.length; index++) {
+    const element = indexed[index];
+    let temp = [];
+    for (let i = 0; i < data?.length; i++) {
+      const el = data[i];
+      if (el.isExamTaken.status == element) {
+        temp.push(el);
+      }
+    }
+    tempo.push(temp);
+  }
   return (
     <UserLayout>
       <div className="w-full">
@@ -91,18 +105,56 @@ function UserCore() {
             <div className="content">
               <div className="content-panel">
                 <div className="vertical-tabs">
-                  <a href="#" className="active">
+                  <a
+                    onClick={() => {
+                      setDetector(0);
+                    }}
+                    href="#"
+                    className={`${detector == 0 && "active"}`}
+                  >
                     Бүгд
                   </a>
-                  <a href="#">Идэвхитэй</a>
-                  <a href="#">Дууссан</a>
-                  <a href="#">Бүртгэлгүй</a>
-                  <a href="#">In process</a>
+                  <a
+                    onClick={() => {
+                      setDetector(1);
+                    }}
+                    href="#"
+                    className={`${detector == 1 && "active"}`}
+                  >
+                    Идэвхитэй
+                  </a>
+                  <a
+                    onClick={() => {
+                      setDetector(2);
+                    }}
+                    href="#"
+                    className={`${detector == 2 && "active"}`}
+                  >
+                    Дууссан
+                  </a>
+                  <a
+                    onClick={() => {
+                      setDetector(3);
+                    }}
+                    className={`${detector == 3 && "active"}`}
+                    href="#"
+                  >
+                    Бүртгэлгүй
+                  </a>
+                  <a
+                    onClick={() => {
+                      setDetector(4);
+                    }}
+                    className={`${detector == 4 && "active"}`}
+                    href="#"
+                  >
+                    In process
+                  </a>
                 </div>
               </div>
               <div className="content-main">
                 <div className="card-grid">
-                  {data?.map((item, index) => (
+                  {tempo[detector]?.map((item, index) => (
                     <article key={index} className="card">
                       <div className="card-header">
                         <div className="overflow-hidden w-[250px] h-[40px] flex justify-start">
@@ -111,6 +163,7 @@ function UserCore() {
                           </span>
                           <h3 className="text-[11px] uppercase">{item.name}</h3>
                         </div>
+                        <span>{item.id}</span>
                         {/* <label className="toggle">
                         <input type="checkbox" defaultChecked />
                         <span></span>
@@ -164,19 +217,11 @@ function UserCore() {
                         ) : item.isExamTaken.status == "P" ? (
                           <a
                             className="cursor-pointer"
-                            // onClick={() => {
-                            //   navigate("/exam-init-continue", {
-                            //     state: examID,
-                            //   });
-                            //   setExamID(item.id);
-                            //   setExamName(item.name);
-                            //   sessionStorage.setItem("exam_id", item.id);
-                            // }
                             onClick={() => {
-                              setReadyCheck(!readyCheck);
                               setExamID(item.id);
                               setExamName(item.name);
                               sessionStorage.setItem("exam_id", item.id);
+                              navigate("/exam", { state: examID });
                             }}
                           >
                             Үргэлжлүүлэх !
@@ -191,24 +236,25 @@ function UserCore() {
           </div>
         </main>
         {readyCheck && (
-          <div className="h-screen flex justify-center items-center w-full top-0 left-0 fixed z-10 bg-black bg-opacity-50">
-            <div className="p-3 body-bg-cus2 rounded-lg w-3/4 md:w-1/3">
-              <div className="body-bg-cus rounded-lg px-2 md:px-10 py-4">
+          <div className="h-screen flex justify-center items-center w-full top-0 left-0 fixed custom-z bg-black bg-opacity-50">
+            <div className="p-3 bg-gray-100 rounded-lg w-3/4 md:w-1/3">
+              <div className="bg-white rounded-lg px-2 md:px-10 pt-3">
                 <div className="flex flex-col items-center justify-center">
-                  <span className="text-white text-[18px] font-[500]">
+                  <span className="text-gray-600 text-[15px] font-[500]">
                     {examName}
                   </span>
-                  <p className="text-white text-[18px] font-[500] m-0">
+                  <p className="text-gray-600 text-[15px] font-[500] m-0">
                     Та энэ шалгалтыг өгөх дөө итгэлтэй байна уу. ?
                   </p>
                 </div>
-                <div className="flex justify-end">
+                <div className="flex justify-end items-end">
                   <button
                     onClick={() => {
                       navigate("/exam", { state: examID });
                       setReadyCheck(false);
                     }}
-                    className="intro-button"
+                    className="px-3 py-2 border rounded mt-2 mb-1 font-[500] text-[14px] text-gray-600 hover:bg-teal-500
+                    hover:text-white hover:!border-teal-500 transition-all"
                   >
                     Тийм
                   </button>
@@ -217,7 +263,8 @@ function UserCore() {
                       setReadyCheck(false);
                     }}
                     id={"intro-bg"}
-                    className="intro-button ml-2"
+                    className="px-3 py-2 border hover:bg-teal-500 transition-all
+                    hover:text-white hover:!border-teal-500 rounded ml-2 mt-2 mb-1 text-[14px] border-box min-w-[50px]"
                   >
                     <i className="bi bi-x-lg"></i>
                   </button>

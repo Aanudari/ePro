@@ -9,7 +9,8 @@ function Exam() {
   const navigate = useNavigate();
   let location = useLocation();
   let id = location.state;
-  const { TOKEN, deviceId } = useStateContext();
+  const finalId = sessionStorage.getItem("exam_id");
+  const { TOKEN, deviceId, setSore } = useStateContext();
   const [data, setData] = useState();
   const [variant, setVariant] = useState();
   useEffect(() => {
@@ -19,7 +20,7 @@ function Exam() {
         "Content-Type": "application/json",
         Authorization: `${TOKEN}`,
       },
-      url: `${process.env.REACT_APP_URL}/v1/ExamNew/start?examId=${id}`,
+      url: `${process.env.REACT_APP_URL}/v1/ExamNew/start?examId=${finalId}`,
     })
       .then((res) => {
         if (res.data.errorCode === 401) {
@@ -85,6 +86,7 @@ function Exam() {
       }
     }
     let score = Math.round((container.length * 100) / tempo.length);
+    setSore(score);
     // console.log(score);
     function addZero(i) {
       if (i < 10) {
@@ -93,7 +95,7 @@ function Exam() {
       return i;
     }
     let main = {
-      examId: id,
+      examId: finalId,
       variantId: data.id,
       devId: deviceId,
       score: `${score}`,

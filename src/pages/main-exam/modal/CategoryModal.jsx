@@ -13,11 +13,14 @@ function CategoryModal({
   setShowCategoryMenu,
   setTriggerCat,
   triggerCat,
+  addAnswer,
+  setAddAnswer,
 }) {
   const { TOKEN, activeMenu } = useStateContext();
   const [data, setData] = useState();
-  const [addAnswer, setAddAnswer] = useState(false);
+
   const [trigger, setTrigger] = useState(false);
+
   useEffect(() => {
     axios({
       method: "get",
@@ -99,7 +102,6 @@ function CategoryModal({
     });
     setFinalArr(newArr);
   };
-  const [success, setSuccess] = useState(false);
   const submitQuestion = () => {
     console.log(answerSchema);
     axios({
@@ -229,7 +231,7 @@ function CategoryModal({
               </div>
             </div>
             {addAnswer ? (
-              <div className="w-full h-full">
+              <div className="w-full h-full overflow-scroll">
                 {/* CREATE QUESTION !!!
                             CREATE QUESTION !!!
                             CREATE QUESTION !!!

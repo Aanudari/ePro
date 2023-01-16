@@ -2,7 +2,6 @@ import MyTimer from "../../../../components/Timer";
 import { useState } from "react";
 function ExamHeader({ finisher, minute, second, creater, examName }) {
   let time = new Date();
-
   time.setMinutes(
     time.getMinutes() + parseInt(minute),
     time.getSeconds() + parseInt(second)

@@ -45,31 +45,42 @@ function ExamCategory({
           <i className="bi bi-plus-circle"></i>
         </button>
         {categories?.map((category, index) => (
-          <div key={index} className="relative parent">
+          <div key={index} className="relative parent ">
             <div
               onClick={() => {
                 setCategoryModal(true);
                 handleCategoryModal(category.id, category.departmentId);
               }}
-              className="w-full text-white mt-1 h-16 cursor-pointer shadow-sm bg-teal-300 hover:!text-sky-600 flex 
-                    justify-between px-3 py-2 hover:shadow-cus "
+              className={`w-full text-white mt-1 h-16  shadow-sm ${
+                category.status == "A"
+                  ? "bg-teal-400 hover:bg-teal-500 cursor-pointer"
+                  : "bg-gray-400"
+              } 
+               flex justify-between px-3 py-2 hover:shadow-cus transition-all`}
             >
-              <div className="flex flex-col w-[100px] justify-center">
+              <div className="flex flex-col justify-center ">
                 <h6 className="font-[500] text-[12px] uppercase">
-                  {category.name}
-                </h6>
-              </div>
-              <div className="flex flex-col justify-center">
-                <h6 className="font-[500] text-[12px] uppercase">
+                  {category.status == "O" && (
+                    <i className="bi bi-clock-history mr-2 text-lg"></i>
+                  )}
                   {category.departmentName}
                 </h6>
               </div>
-              <div className="flex justify-center items-center">
-                <div
-                  className="h-8 w-[100px] bg-gray-700 rounded-full flex 
+              <div className="flex justify-between w-[calc(60%)]">
+                <div className="flex flex-col justify-center">
+                  <h6 className="font-[500] text-[12px] uppercase">
+                    {category.name}
+                  </h6>
+                </div>
+                <div className="flex justify-center items-center">
+                  <div
+                    className="h-8 w-[100px] bg-gray-700 rounded-full flex 
                         justify-center items-center"
-                >
-                  <h6 className="m-0 text-[13px]">{category.questionCount}</h6>
+                  >
+                    <h6 className="m-0 text-[13px]">
+                      {category.questionCount}
+                    </h6>
+                  </div>
                 </div>
               </div>
             </div>
@@ -77,9 +88,9 @@ function ExamCategory({
               onClick={() => {
                 deleteCategory(category.id);
               }}
-              className="child top-[15px] hidden mr-4 h-8 w-[50px] bg-gray-700 rounded-full flex 
+              className="child top-[15px] mr-4 h-8 w-[50px] bg-gray-700 rounded-full flex 
                                 justify-center text-white hover:!text-red-500 items-center absolute right-[calc(12%)]
-                                cursor-pointer"
+                                cursor-pointer transition-all"
             >
               <i className="bi bi-trash3-fill"></i>
             </div>

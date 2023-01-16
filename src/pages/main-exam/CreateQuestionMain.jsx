@@ -3,7 +3,6 @@ import { useState } from "react";
 import ImageUploader from "./SelectOptions/ImageOptions";
 import AnswerCellMain from "./AnswerCellMain";
 function CreateQuestionMain({
-  setQuestion,
   question,
   point,
   setPoint,
@@ -48,13 +47,13 @@ function CreateQuestionMain({
   };
   useEffect(() => {
     handleCreateQuesiton(object, checked[0]);
-  }, [checked, object]);
+  }, [checked, object, qImgUrl]);
   useEffect(() => {
     handleObject();
   }, [length]);
   return (
     <div className="w-full h-full pt-4 overflow-scroll px-4">
-      <div className="w-full h-full">
+      <div className="w-full">
         <div className="group w-full">
           <input
             className={
@@ -109,7 +108,7 @@ function CreateQuestionMain({
             <ImageUploader setImageUrl={setQImgUrl} />
           </div>
         </div>
-        <div className="h-[100px]">
+        <div className="">
           {arr?.map((item, index) => (
             <AnswerCellMain
               arr={arr[index]}

@@ -107,7 +107,7 @@ function ExamBoard({
             ) : exam.examSummary.status == "Exam over" ? (
               <div
                 onClick={() => {
-                  setShowDocument(true);
+                  setShowReport(true);
                   handleExamModal(exam.id);
                 }}
                 className="w-1/4 h-full flex justify-between items-center text-[11px] cursor-pointer

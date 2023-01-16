@@ -22,6 +22,8 @@ function ExamDash() {
   const [trigger, setTrigger] = useState(false);
   const [imgStatus, setImgStatus] = useState(false);
   const [examTri, setExamTri] = useState(false);
+  const [showAddCategory, setShowAddCategory] = useState(false);
+  const [addAnswer, setAddAnswer] = useState(false);
 
   useEffect(() => {
     axios({
@@ -59,7 +61,7 @@ function ExamDash() {
         }
       })
       .catch((err) => console.log(err));
-  }, [trigger]);
+  }, [trigger, showAddCategory, addAnswer]);
   const [depId, setDepId] = useState();
   const [cModalId, setCModalId] = useState();
 
@@ -71,7 +73,6 @@ function ExamDash() {
     setexamModalId(id);
   };
   const [showCategoryMenu, setShowCategoryMenu] = useState(false);
-  const [showAddCategory, setShowAddCategory] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [showDocument, setShowDocument] = useState(false);
   return (
@@ -123,6 +124,8 @@ function ExamDash() {
       </div>
       {categoryModal && (
         <CategoryModal
+          addAnswer={addAnswer}
+          setAddAnswer={setAddAnswer}
           setTriggerCat={setTrigger}
           triggerCat={trigger}
           setShowCategoryMenu={setShowCategoryMenu}

@@ -61,6 +61,20 @@ function UserCore() {
       return gotYa(exam.id);
     }
   });
+  const [detector, setDetector] = useState(0);
+  let indexed = ["A", "C", "O", "P"];
+  let tempo = [data];
+  for (let index = 0; index < indexed?.length; index++) {
+    const element = indexed[index];
+    let temp = [];
+    for (let i = 0; i < data?.length; i++) {
+      const el = data[i];
+      if (el.isExamTaken.status == element) {
+        temp.push(el);
+      }
+    }
+    tempo.push(temp);
+  }
   return (
     <UserLayout>
       <div className="w-full">
@@ -91,18 +105,56 @@ function UserCore() {
             <div className="content">
               <div className="content-panel">
                 <div className="vertical-tabs">
-                  <a href="#" className="active">
+                  <a
+                    onClick={() => {
+                      setDetector(0);
+                    }}
+                    href="#"
+                    className={`${detector == 0 && "active"}`}
+                  >
                     Бүгд
                   </a>
-                  <a href="#">Идэвхитэй</a>
-                  <a href="#">Дууссан</a>
-                  <a href="#">Бүртгэлгүй</a>
-                  <a href="#">In process</a>
+                  <a
+                    onClick={() => {
+                      setDetector(1);
+                    }}
+                    href="#"
+                    className={`${detector == 1 && "active"}`}
+                  >
+                    Идэвхитэй
+                  </a>
+                  <a
+                    onClick={() => {
+                      setDetector(2);
+                    }}
+                    href="#"
+                    className={`${detector == 2 && "active"}`}
+                  >
+                    Дууссан
+                  </a>
+                  <a
+                    onClick={() => {
+                      setDetector(3);
+                    }}
+                    className={`${detector == 3 && "active"}`}
+                    href="#"
+                  >
+                    Бүртгэлгүй
+                  </a>
+                  <a
+                    onClick={() => {
+                      setDetector(4);
+                    }}
+                    className={`${detector == 4 && "active"}`}
+                    href="#"
+                  >
+                    In process
+                  </a>
                 </div>
               </div>
               <div className="content-main">
                 <div className="card-grid">
-                  {data?.map((item, index) => (
+                  {tempo[detector]?.map((item, index) => (
                     <article key={index} className="card">
                       <div className="card-header">
                         <div className="overflow-hidden w-[250px] h-[40px] flex justify-start">

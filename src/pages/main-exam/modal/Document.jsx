@@ -81,6 +81,7 @@ function Document({ setShowReport, id }) {
       })
       .catch((err) => console.log(err));
   }, [selected]);
+  const [finalScore, setfinalScore] = useState();
   const { activeMenu } = useStateContext();
   const [result, setResult] = useState();
   const [uId, setUId] = useState();
@@ -98,6 +99,7 @@ function Document({ setShowReport, id }) {
         if (res.data.errorCode == 401) {
           logout();
         } else {
+          setfinalScore(res.data.score);
           setResult(res.data.examQuestions);
           setShow(true);
         }
@@ -113,7 +115,14 @@ function Document({ setShowReport, id }) {
          !bg-black top-[56px] h-[calc(100%-56px)] !bg-opacity-50  flex justify-end`}
     >
       <div className="from-left bg-white w-[450px] h-[calc(100%)] flex flex-col justify-between shadow">
-        {show && <ShowExamResult setShow={setShow} result={result} id={uId} />}
+        {show && (
+          <ShowExamResult
+            setShow={setShow}
+            result={result}
+            id={uId}
+            score={finalScore}
+          />
+        )}
         <div className="h-full">
           <h6 className="text-teal-600 text-[14px] flex justify-between mx-3 py-3">
             <span className="font-[500]">

@@ -2,7 +2,6 @@ import { useStateContext } from "../../../contexts/ContextProvider";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import DepartmentSelect from "../SelectOptions/DepartmentSelect";
 import DatePicker from "react-datepicker";
 import { logout } from "../../../service/examService";

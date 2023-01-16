@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import QuestionCellAdmin from "../Cell/QuestionCellAdmin";
 
-function ShowExamResult({ setShow, result, id }) {
+function ShowExamResult({ setShow, result, id, score }) {
   const { activeMenu, TOKEN } = useStateContext();
   const [data, setData] = useState();
   useEffect(() => {
@@ -28,7 +28,7 @@ function ShowExamResult({ setShow, result, id }) {
       })
       .catch((err) => console.log(err));
   }, []);
-  console.log(result);
+  // console.log(result);
   return (
     <div
       className={`${
@@ -44,6 +44,13 @@ function ShowExamResult({ setShow, result, id }) {
               <span className="text-white font-[500] text-sm">
                 {data && data.lastName[0]}. {data && data.firstName} /{" "}
                 {data && data.roleName}
+              </span>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <div className=" flex justify-start px-4 py-2">
+              <span className="text-white font-[500] text-sm">
+                Оноо : {score}%
               </span>
             </div>
           </div>

@@ -1,11 +1,12 @@
+import AnswerCellAdmin from "./AnswerCellAdmin";
+import { useState } from "react";
 function QuestionCellAdmin({ data }) {
-  console.log(data);
+  const [check, setCheck] = useState(false);
   return (
     <div
-      //   className={`p-4 my-4 rounded shadow-sm border ${
-      //     correct.includes(tempo[0]) ? "bg-green-100" : "bg-red-100"
-      //   } `}
-      className={`p-4 my-4 rounded shadow-sm border  `}
+      className={`p-4 my-4 rounded shadow-sm border ${
+        check ? "bg-green-100" : "bg-red-100"
+      } `}
     >
       <p className=" flex justify-between">
         <span className="font-[500] text-[14px]">{data.questionName}</span>
@@ -14,7 +15,7 @@ function QuestionCellAdmin({ data }) {
           оноо
         </span>
       </p>
-      {data.imgUrl !== "" && (
+      {data.qimgurl !== "" && (
         <div className="flex w-full justify-center">
           <img
             src={`http://${data.qimgurl}`}
@@ -24,9 +25,9 @@ function QuestionCellAdmin({ data }) {
         </div>
       )}
       <div>
-        {/* {data.answerList.map((e, i) => (
-          <AnswerCellShow data={e} key={i} correct={correct} wrong={wrong} />
-        ))} */}
+        {data.answerDtl.map((e, i) => (
+          <AnswerCellAdmin data={e} key={i} setCheck={setCheck} />
+        ))}
       </div>
     </div>
   );

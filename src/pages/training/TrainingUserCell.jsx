@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import Navigation from "../../components/Navigation";
 import { useStateContext } from "../../contexts/ContextProvider";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import { logout } from "../../service/examService";
@@ -10,6 +10,7 @@ function TrainingUserCell() {
   const { TOKEN, activeMenu } = useStateContext();
   const selectedTrain = location.state.data;
   const [watchedUsers, setWatchedUsers] = useState([]);
+  const navigate = useNavigate();
   useEffect(() => {
     axios({
       method: "get",
@@ -64,7 +65,6 @@ function TrainingUserCell() {
     });
     setFilteredList(filtered);
   };
-
   return (
     <div className="w-full min-h-[calc(100%-56px)]">
       <Navigation />
@@ -112,6 +112,13 @@ function TrainingUserCell() {
                 type="submit"
               >
                 <i className="bi bi-search" />
+              </button>
+              <button
+                onClick={() => navigate("/training")}
+                className="flex-shrink-0 px-4 py-2 text-base font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200"
+                type="submit"
+              >
+                Exit
               </button>
             </div>
           </div>

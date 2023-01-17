@@ -8,7 +8,7 @@ import { logout } from "../../service/examService";
 function UserTraining() {
   const { TOKEN, deviceId } = useStateContext();
   const navigate = useNavigate();
-  const [userTrain, setUserTrain] = useState();
+  const [userTrain, setUserTrain] = useState([]);
   useEffect(() => {
     axios({
       method: "get",
@@ -18,6 +18,7 @@ function UserTraining() {
       url: `${process.env.REACT_APP_URL}/v1/Training`,
     })
       .then((res) => {
+        console.log(res.data);
         if (res.data.isSuccess == true) {
           setUserTrain(res.data.trainingList);
         }
@@ -35,10 +36,16 @@ function UserTraining() {
       state: { data: data },
     });
   };
+  console.log(deviceId);
+
   return (
     <UserLayout>
       <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-5 ">
-        {userTrain ? (
+        {userTrain.length === 0 ? (
+          <p className="p-4 text-center text-sm font-medium">
+            Танд сургалт хувиарлагдаагүй байна.
+          </p>
+        ) : (
           userTrain.map((data, i) => (
             <div key={i}>
               <div className="w-full max-w-xs p-6 overflow-hidden bg-white shadow-lg rounded-xl dark:bg-gray-800  bg-white rounded-xl  shadow-lg shadow-md overflow-hidden md:max-w-2xl  transform hover:scale-105 duration-500 ease-in-out">
@@ -97,10 +104,6 @@ function UserTraining() {
               </div>
             </div>
           ))
-        ) : (
-          <p className="p-4 text-center text-sm font-medium">
-            Танд сургалт хувиарлагдаагүй байна.
-          </p>
         )}
       </div>
 

@@ -10,46 +10,42 @@ import { ToastContainer } from "react-toastify";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import { logout } from "../../service/examService";
+import getWindowDimensions from "../../components/SizeDetector";
 function TrainingRating() {
-  const [tRate, setTRate] = useState([]);
+  const location = useLocation();
   const { TOKEN, activeMenu } = useStateContext();
   const navigate = useNavigate();
-  const [showDelete, setShowDelete] = useState(null);
+  const { width } = getWindowDimensions();
+  const [trains, setTrains] = useState([]);
+  const [tRate, setTRate] = useState([]);
+  const [filteredList, setFilteredList] = useState(tRate);
   const [id, setId] = useState();
+  const [showDelete, setShowDelete] = useState(null);
   const hideModalDelete = () => setShowDelete(null);
+  const [showDeleteAnswer, setShowDeleteAnswer] = useState(null);
+  const hideModalDeleteAnswer = () => setShowDeleteAnswer(null);
   const [showCreate, setShowCreate] = useState(null);
+  const [showQuestion, setShowQuestion] = useState(null);
+  const hideModalQuestion = () => setShowQuestion(null);
   const showModalCreate = () => setShowCreate(true);
   const hideModalCreate = () => setShowCreate(null);
   const format = "YYYYMMDDHHmmss";
+  const today = new Date();
+  const nowdateTime = moment(today).format(format);
   const [date1, setDate1] = useState(new Date());
   const [date2, setDate2] = useState(new Date());
-  const startDate = moment(date1).format(format);
-  const endDate = moment(date2).format(format);
-  const [trains, setTrains] = useState([]);
-
   const [name, setName] = useState();
   const [description, setDescription] = useState();
   const [selectedOptionTrains, setSelectedOptionTrains] = useState(null);
+  const startDate = moment(date1).format(format);
+  const endDate = moment(date2).format(format);
   const [checkEmpty1, setcheckEmpty1] = useState(false);
   const [checkEmpty2, setcheckEmpty2] = useState(false);
   const [checkEmpty3, setcheckEmpty3] = useState(false);
-  const [filteredList, setFilteredList] = useState(tRate);
   const [searchQuery, setSearchQuery] = useState("");
   const [tid, setTid] = useState();
-  const [formValues, setFormValues] = useState([{ answer: "" }]);
-  let handleChange = (i, e) => {
-    let newFormValues = [...formValues];
-    newFormValues[i][e.target.name] = e.target.value;
-    setFormValues(newFormValues);
-  };
-  let addFormFields = () => {
-    setFormValues([...formValues, { name: "", maxPoints: "" }]);
-  };
-  let removeFormFields = (i) => {
-    let newFormValues = [...formValues];
-    newFormValues.splice(i, 1);
-    setFormValues(newFormValues);
-  };
+  const [trateID, setTrateID] = useState();
+  const [qId, setQId] = useState();
   useEffect(() => {
     axios({
       method: "get",
@@ -93,15 +89,31 @@ function TrainingRating() {
       })
       .catch((err) => console.log(err));
   }, []);
-  const showModalView = (data) => {
+  const navigateView = (data) => {
     navigate("/train-rate-view", {
       state: { data: data },
     });
   };
-
+  const handleEdit = (data) => {
+    navigate("/edit-train-rate", {
+      state: { data: data },
+    });
+  };
   const showModalDelete = (data) => {
     setShowDelete(true);
     setId(data.id);
+  };
+  const showModalDeleteAnswer = (question) => {
+    setShowDeleteAnswer(true);
+    console.log(question);
+    setQId(question.questionId);
+  };
+  const showModalQuestion = (data) => {
+    setTrateID(data.id);
+    setShowQuestion(true);
+  };
+  const showModalQuestionNew = () => {
+    setShowQuestion(true);
   };
   const handleDelete = () => {
     axios({
@@ -129,32 +141,32 @@ function TrainingRating() {
       })
       .catch((err) => console.log(err));
   };
-
-  const navigateIndexEdit = (e) => {
-    e.preventDefault();
-    // axios({
-    //   method: "put",
-    //   headers: {
-    //     Authorization: `${TOKEN}`,
-    //     "Content-Type": "application/json",
-    //     accept: "text/plain",
-    //   },
-    //   url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating`,
-    //   data: JSON.stringify(editDataSet),
-    // })
-    //   .then((res) => {
-    //     if (res.data.isSuccess === true) {
-    //       console.log(res.data);
-    //       notification.success(`${res.data.resultMessage}`);
-    //       hideModalEdit();
-    //       const timer = setTimeout(() => navigate(0), 1000);
-    //       return () => clearTimeout(timer);
-    //     }
-    //     if (res.data.resultMessage === "Unauthorized") {
-    //       logout();
-    //     }
-    //   })
-    //   .catch((err) => console.log(err));
+  const handleDeleteAnswer = () => {
+    axios({
+      method: "delete",
+      headers: {
+        Authorization: `${TOKEN}`,
+        accept: "text/plain",
+      },
+      url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating/deletequestion?queId=${qId}`,
+    })
+      .then((res) => {
+        console.log(res);
+        if (res.data.isSuccess === true) {
+          notification.success(`${res.data.resultMessage}`);
+          const timer = setTimeout(() => navigate(0), 1000);
+          return () => clearTimeout(timer);
+        } else {
+          console.log(res.data.resultMessage);
+        }
+        if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct format."
+        ) {
+          logout();
+        }
+      })
+      .catch((err) => console.log(err));
   };
   const data = {
     name: `${name}`,
@@ -174,7 +186,6 @@ function TrainingRating() {
     } else if (startDate === endDate || startDate > endDate) {
       notification.error("Эхлэх дуусах хугацаа алдаатай байна.");
     } else {
-      console.log(data);
       axios({
         method: "post",
         headers: {
@@ -187,10 +198,10 @@ function TrainingRating() {
       })
         .then((res) => {
           if (res.data.isSuccess == true) {
-            notification.success(`${res.data.resultMessage}`);
+            setTrateID(res.data.id);
+            // notification.success(`${res.data.resultMessage}`);
             hideModalCreate();
-            // const timer = setTimeout(() => showModalCreateAnswers(), 1000);
-            const timer = setTimeout(() => navigate(0), 1000);
+            const timer = setTimeout(() => showModalQuestionNew(), 500);
             return () => clearTimeout(timer);
           }
           if (res.data.resultMessage === "Unauthorized") {
@@ -202,32 +213,7 @@ function TrainingRating() {
   };
   const handleTraining = (item) => {
     setTid(item.id);
-    console.log(item.id);
   };
-  const createAnswers = () => {};
-  let unique = trains.filter(
-    (value, index, self) => index === self.findIndex((t) => t.id == value.id)
-  );
-  let mainOption = [
-    {
-      createdAt: null,
-      createdBy: null,
-      department: null,
-      endDate: null,
-      id: "10000",
-      name: "Бүгд",
-      startDate: null,
-      status: null,
-    },
-  ];
-  mainOption.push(...unique);
-  const handleOptions = (value) => {
-    let filtered = tRate.filter((item) => {
-      return item.trainingId === value;
-    });
-    setFilteredList(filtered);
-  };
-
   const handleSearch = (event) => {
     const query = event.target.value;
     setSearchQuery(query);
@@ -236,26 +222,85 @@ function TrainingRating() {
     });
     setFilteredList(searchList);
   };
-  const today = new Date();
-  const nowdateTime = moment(today).format(format);
+  const [question, setQuestion] = useState();
+  const [checkEmpty11, setcheckEmpty11] = useState(false);
+  const [formFields, setFormFields] = useState([{ answer: "", points: "" }]);
+
+  const dataQUEST = {
+    ratingId: `${trateID}`,
+    questions: [
+      {
+        questionName: `${question}`,
+        trRatingAnswer: formFields,
+      },
+    ],
+  };
+  const handleFormChange = (event, index) => {
+    let data = [...formFields];
+    data[index][event.target.name] = event.target.value;
+    setFormFields(data);
+  };
+  const addFields = () => {
+    let object = {
+      answer: "",
+      points: "",
+    };
+    setFormFields([...formFields, object]);
+  };
+
+  const removeFields = (index) => {
+    let data = [...formFields];
+    data.splice(index, 1);
+    setFormFields(data);
+  };
+  const submit = (e) => {
+    e.preventDefault();
+    if (question == null) {
+      setcheckEmpty11(true);
+    } else if (formFields[0].answer === "") {
+      notification.error("Хариулт хоосон байна.");
+    } else {
+      axios({
+        method: "post",
+        headers: {
+          Authorization: `${TOKEN}`,
+          "Content-Type": "application/json",
+          accept: "text/plain",
+        },
+        url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating/addquestion`,
+        data: dataQUEST,
+      }).then((res) => {
+        if (res.data.isSuccess == true) {
+          notification.success(`${res.data.resultMessage}`);
+          hideModalQuestion();
+          const timer = setTimeout(() => navigate(0), 500);
+          return () => clearTimeout(timer);
+        }
+        if (res.data.resultMessage === "Unauthorized") {
+          logout();
+        }
+      });
+      //   .catch((err) => console.log(err));
+    }
+  };
 
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <Navigation />
       <div>
         <Modal
-          show={showCreate}
-          onHide={hideModalCreate}
-          size="ml"
+          show={showQuestion}
+          onHide={hideModalQuestion}
+          size="xl"
           style={
-            activeMenu
+            width < 768
               ? {
-                  width: "calc(100% - 250px)",
-                  left: "250px",
-                }
-              : {
                   width: "calc(100%)",
                   left: "0",
+                }
+              : {
+                  width: "calc(100% - 250px)",
+                  left: "250px",
                 }
           }
           backdrop="static"
@@ -265,7 +310,115 @@ function TrainingRating() {
           centered
         >
           <Modal.Header closeButton>
-            <Modal.Title>Сургалтын үнэлгээ нэмэх</Modal.Title>
+            <Modal.Title>2. Асуулт нэмэх</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="space-y-4 grid grid-cols-1 gap-4  sm:grid-cols-1">
+              <div>
+                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  Асуулт
+                </label>
+                <input
+                  className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                  onChange={(e) => {
+                    setQuestion(e.target.value);
+                    setcheckEmpty11(false);
+                  }}
+                  id={checkEmpty11 === true ? "border-red" : null}
+                />
+              </div>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
+                {formFields.map((form, index) => {
+                  return (
+                    <div key={index}>
+                      <div>
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                          Хариулт
+                        </label>
+                        <input
+                          name="answer"
+                          type="text"
+                          className="px-3 py-2 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                          onChange={(event) => handleFormChange(event, index)}
+                          value={form.answer}
+                        />
+                      </div>
+                      <div>
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                          Оноо
+                        </label>
+                        <input
+                          name="points"
+                          type="number"
+                          className="px-3 py-2 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                          onChange={(event) => handleFormChange(event, index)}
+                          value={form.points}
+                        />
+                      </div>
+                      <div>
+                        <button
+                          onClick={() => removeFields(index)}
+                          className="mt-2 px-3 py-2 text-xs bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+                        >
+                          <i className="bi bi-trash-fill" />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="mt-4 text-right">
+                <div className="inline-flex items-end"></div>
+              </div>
+              <div className="mt-4 text-right text-xs">
+                <div className="inline-flex items-end">
+                  <button
+                    onClick={addFields}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+                  >
+                    Хариулт нэмэх
+                  </button>
+                  <button
+                    onClick={() => hideModalQuestion()}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+                  >
+                    Exit
+                  </button>
+                  <button
+                    onClick={submit}
+                    type="submit"
+                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </Modal.Body>
+        </Modal>
+        <Modal
+          show={showCreate}
+          onHide={hideModalCreate}
+          size="ml"
+          style={
+            width < 768
+              ? {
+                  width: "calc(100%)",
+                  left: "0",
+                }
+              : {
+                  width: "calc(100% - 250px)",
+                  left: "250px",
+                }
+          }
+          backdrop="static"
+          keyboard={false}
+          aria-labelledby="contained-modal-title-vcenter"
+          dialogClassName="modal-100w"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>1. Сургалтын үнэлгээ нэмэх</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div className="max-w-screen-lg mx-auto">
@@ -360,9 +513,9 @@ function TrainingRating() {
                   <button
                     onClick={navigateIndex}
                     type="submit"
-                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                   >
-                    Submit
+                    Next
                   </button>
                 </div>
               </div>
@@ -374,6 +527,17 @@ function TrainingRating() {
           onHide={hideModalDelete}
           size="ml"
           backdrop="static"
+          style={
+            width < 768
+              ? {
+                  width: "calc(100%)",
+                  left: "0",
+                }
+              : {
+                  width: "calc(100% - 250px)",
+                  left: "250px",
+                }
+          }
           keyboard={false}
           aria-labelledby="contained-modal-title-vcenter"
           dialogClassName="modal-100w"
@@ -396,6 +560,52 @@ function TrainingRating() {
               </button>
               <button
                 onClick={hideModalDelete}
+                type="button"
+                className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+              >
+                Үгүй
+              </button>
+            </div>
+          </Modal.Body>
+        </Modal>
+        <Modal
+          show={showDeleteAnswer}
+          onHide={hideModalDeleteAnswer}
+          size="ml"
+          backdrop="static"
+          style={
+            width < 768
+              ? {
+                  width: "calc(100%)",
+                  left: "0",
+                }
+              : {
+                  width: "calc(100% - 250px)",
+                  left: "250px",
+                }
+          }
+          keyboard={false}
+          aria-labelledby="contained-modal-title-vcenter"
+          dialogClassName="modal-100w"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Асуулт устгах</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="p-6 text-center">
+              <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                Устгах уу?
+              </h3>
+              <button
+                type="button"
+                onClick={handleDeleteAnswer}
+                className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
+              >
+                Тийм
+              </button>
+              <button
+                onClick={hideModalDeleteAnswer}
                 type="button"
                 className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
               >
@@ -443,313 +653,166 @@ function TrainingRating() {
           </div>
         </div>
 
-        {filteredList.length > 0
-          ? filteredList.map((data, index) => (
-              <div key={index} className="p-2">
-                <div className="max-w-lg mx-auto overflow-hidden rounded-lg shadow-lg pricing-box lg:max-w-none lg:flex">
-                  <div className="px-6 py-8 bg-white dark:bg-gray-800 lg:flex-shrink-1 lg:p-12">
-                    <h3 className="text-xl  leading-8 text-gray-800 sm:text-xl sm:leading-9 ">
-                      {data.name}
-                    </h3>
-                    {data.description === null ? (
-                      ""
-                    ) : (
-                      <p className="mt-4 leading-6 text-gray-800 ">
-                        {data.description}
-                      </p>
-                    )}
-                    <div className="mt-2">
-                      <div className="flex items-center">
-                        <h4 className="flex-shrink-0 pr-4 text-sm font-semibold leading-5 tracking-wider text-indigo-600 uppercase bg-white ">
-                          ерөнхий
-                        </h4>
-                        <div className="flex-1 border-t-2 border-gray-200"></div>
+        {tRate?.map((data, index) => (
+          <div key={index} className="p-2">
+            <div className="max-w-full mx-auto overflow-hidden rounded-lg shadow-lg lg:max-w-none lg:flex">
+              <div className="w-full px-6 py-8 bg-white  lg:flex-shrink-2 lg:p-12">
+                <h3 className="text-lg font-bold leading-8 text-gray-900 sm:text-lg sm:leading-9 dark:text-white">
+                  {data.name}
+                </h3>
+                <p className="mt-2 text-base leading-6 text-gray-500 dark:text-gray-200">
+                  {data.description}
+                </p>
+                {data.trRatingQuestions.length > 0 ? (
+                  data.trRatingQuestions?.map((question, i) => (
+                    <div key={i} className="mt-2">
+                      <div className="sm:flex items-center justify-between p-2">
+                        <div className="flex items-center w-full">
+                          <h3 className="text-sm leading-8 text-indigo-600 uppercase bg-white">
+                            {question.question}
+                          </h3>{" "}
+                        </div>
+                        <div className="flex flex-col justify-center max-w-sm space-y-3 md:flex-row md:w-full md:space-x-3 md:space-y-0">
+                          <a
+                            data-id={question}
+                            onClick={() => showModalDeleteAnswer(question)}
+                            className="text-rose-400 hover:text-black "
+                          >
+                            <i className="bi bi-trash-fill mr-2"></i> Асуулт
+                            устгах
+                          </a>
+                        </div>
                       </div>
-                      <ul className="mt-8 lg:grid lg:grid-cols-2 lg:col-gap-8 lg:row-gap-5">
-                        {data.startDate === null ? (
-                          ""
-                        ) : (
-                          <li className="flex items-start lg:col-span-1">
-                            <div className="flex-shrink-0 text-emerald-500 text-lg">
-                              <i className="bi bi-calendar-check" />
-                            </div>
 
-                            <p className="ml-3 text-sm leading-5 text-gray-700 ">
-                              Эхлэх хугацаа: {data.startDate}
+                      <table className="items-center w-full bg-transparent border-collapse ">
+                        <thead>
+                          <tr className="text-sm text-left bg-gray-200 border-b">
+                            <th className="px-4 py-1 font-bold">Хариулт </th>
+                            <th className="px-4 py-1 font-bold">Оноо</th>
+                          </tr>
+                        </thead>
+                        {question.trRatingAnswer.length > 0 ? (
+                          question.trRatingAnswer?.map((answer, ind) => (
+                            <tbody key={ind} className="bg-white text-sm">
+                              <tr className="focus:outline-none h-8 border border-gray-100 rounded">
+                                <td className="px-1 py-1 border">
+                                  {answer.answer}
+                                </td>
+                                <td className="px-1 py-1 border">
+                                  {answer.points}
+                                </td>
+                              </tr>
+                            </tbody>
+                          ))
+                        ) : (
+                          <div
+                            className="bg-red-200 border-red-600 text-red-600 border-l-2 p-1"
+                            role="alert"
+                          >
+                            <p className="font-bold text-xs">
+                              Хариулт үүсээгүй байна.
                             </p>
-                          </li>
+                          </div>
                         )}
+                      </table>
+                    </div>
+                  ))
+                ) : (
+                  <div
+                    className="bg-red-200 border-red-600 text-red-600 border-l-2 p-1"
+                    role="alert"
+                  >
+                    <p className="font-bold">Асуулт үүсээгүй байна.</p>
+                  </div>
+                )}
+              </div>
+              <div className="px-4 py-4 text-center bg-gray-50 dark:bg-gray-700 lg:flex-shrink-0 lg:flex lg:flex-col lg:justify-center lg:p-12">
+                <ul className="w-full mt-4 mb-4 text-sm text-gray-600 dark:text-gray-100">
+                  {data.beginDate === null ? (
+                    ""
+                  ) : (
+                    <li className="flex items-start lg:col-span-1">
+                      <div className="flex-shrink-0 text-emerald-500 text-lg">
+                        <i className="bi bi-calendar-check" />
+                      </div>
 
-                        {data.expireDate === null ? (
-                          ""
-                        ) : (
-                          <li className="flex items-start lg:col-span-1">
-                            <div className="flex-shrink-0 text-emerald-500 text-lg">
-                              <i className="bi bi-calendar-check-fill" />
-                            </div>
-                            {nowdateTime >= data.expireDate ? (
-                              <p className="ml-3 text-sm leading-5 text-gray-700 ">
-                                Дуусах хугацаа: {data.expireDate}
-                              </p>
-                            ) : (
-                              <p className="ml-3 text-sm leading-5 text-red-500 ">
-                                Дуусах хугацаа: {data.expireDate} (Хугацаа
-                                дууссан)
-                              </p>
-                            )}
-                          </li>
-                        )}
-                        <li className="flex items-start lg:col-span-1">
-                          <div className="flex-shrink-0">
-                            <svg
-                              className="w-6 h-6 mr-2"
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="6"
-                              height="6"
-                              stroke="currentColor"
-                              fill="#10b981"
-                              viewBox="0 0 1792 1792"
-                            >
-                              <path d="M1412 734q0-28-18-46l-91-90q-19-19-45-19t-45 19l-408 407-226-226q-19-19-45-19t-45 19l-91 90q-18 18-18 46 0 27 18 45l362 362q19 19 45 19 27 0 46-19l543-543q18-18 18-45zm252 162q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"></path>
-                            </svg>
-                          </div>
-                          <p className="ml-3 text-sm leading-5 text-gray-700 dark:text-gray-200">
-                            Unlimited Templates
-                          </p>
-                        </li>
-                        <li className="flex items-start lg:col-span-1">
-                          <div className="flex-shrink-0">
-                            <svg
-                              className="w-6 h-6 mr-2"
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="6"
-                              height="6"
-                              stroke="currentColor"
-                              fill="#10b981"
-                              viewBox="0 0 1792 1792"
-                            >
-                              <path d="M1412 734q0-28-18-46l-91-90q-19-19-45-19t-45 19l-408 407-226-226q-19-19-45-19t-45 19l-91 90q-18 18-18 46 0 27 18 45l362 362q19 19 45 19 27 0 46-19l543-543q18-18 18-45zm252 162q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"></path>
-                            </svg>
-                          </div>
-                          <p className="ml-3 text-sm leading-5 text-gray-700 dark:text-gray-200">
-                            Free premium dashboard
-                          </p>
-                        </li>
-                        <li className="flex items-start lg:col-span-1">
-                          <div className="flex-shrink-0">
-                            <svg
-                              className="w-6 h-6 mr-2"
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="6"
-                              height="6"
-                              stroke="currentColor"
-                              fill="#10b981"
-                              viewBox="0 0 1792 1792"
-                            >
-                              <path d="M1412 734q0-28-18-46l-91-90q-19-19-45-19t-45 19l-408 407-226-226q-19-19-45-19t-45 19l-91 90q-18 18-18 46 0 27 18 45l362 362q19 19 45 19 27 0 46-19l543-543q18-18 18-45zm252 162q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"></path>
-                            </svg>
-                          </div>
-                          <p className="ml-3 text-sm leading-5 text-gray-700 dark:text-gray-200">
-                            Best ranking
-                          </p>
-                        </li>
-                        <li className="flex items-start lg:col-span-1">
-                          <div className="flex-shrink-0">
-                            <svg
-                              className="w-6 h-6 mr-2"
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="6"
-                              height="6"
-                              stroke="currentColor"
-                              fill="#10b981"
-                              viewBox="0 0 1792 1792"
-                            >
-                              <path d="M1412 734q0-28-18-46l-91-90q-19-19-45-19t-45 19l-408 407-226-226q-19-19-45-19t-45 19l-91 90q-18 18-18 46 0 27 18 45l362 362q19 19 45 19 27 0 46-19l543-543q18-18 18-45zm252 162q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"></path>
-                            </svg>
-                          </div>
-                          <p className="ml-3 text-sm leading-5 text-gray-700 dark:text-gray-200">
-                            Prenium svg
-                          </p>
-                        </li>
-                        <li className="flex items-start lg:col-span-1">
-                          <div className="flex-shrink-0">
-                            <svg
-                              className="w-6 h-6 mr-2"
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="6"
-                              height="6"
-                              stroke="currentColor"
-                              fill="#10b981"
-                              viewBox="0 0 1792 1792"
-                            >
-                              <path d="M1412 734q0-28-18-46l-91-90q-19-19-45-19t-45 19l-408 407-226-226q-19-19-45-19t-45 19l-91 90q-18 18-18 46 0 27 18 45l362 362q19 19 45 19 27 0 46-19l543-543q18-18 18-45zm252 162q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"></path>
-                            </svg>
-                          </div>
-                          <p className="ml-3 text-sm leading-5 text-gray-700 dark:text-gray-200">
-                            My wife
-                          </p>
-                        </li>
-                      </ul>
-                    </div>
-                    <div className="mt-8">
-                      <div className="flex items-center">
-                        <h4 className="flex-shrink-0 pr-4 text-sm font-semibold leading-5 tracking-wider text-indigo-600 uppercase bg-white dark:bg-gray-800">
-                          &amp; What&#x27;s not
-                        </h4>
+                      <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                        Эхлэх хугацаа: {data.beginDate}
+                      </p>
+                    </li>
+                  )}
+                  {data.expireDate === null ? (
+                    ""
+                  ) : (
+                    <li className="flex items-start lg:col-span-1">
+                      <div className="flex-shrink-0 text-emerald-500 text-lg">
+                        <i className="bi bi-calendar-check-fill" />
                       </div>
-                      <ul className="mt-8 lg:grid lg:grid-cols-2 lg:col-gap-8 lg:row-gap-5">
-                        <li className="flex items-start lg:col-span-1">
-                          <div className="flex-shrink-0">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="6"
-                              height="6"
-                              className="w-6 h-6 mr-2"
-                              fill="red"
-                              viewBox="0 0 1792 1792"
-                            >
-                              <path d="M1277 1122q0-26-19-45l-181-181 181-181q19-19 19-45 0-27-19-46l-90-90q-19-19-46-19-26 0-45 19l-181 181-181-181q-19-19-45-19-27 0-46 19l-90 90q-19 19-19 46 0 26 19 45l181 181-181 181q-19 19-19 45 0 27 19 46l90 90q19 19 46 19 26 0 45-19l181-181 181 181q19 19 45 19 27 0 46-19l90-90q19-19 19-46zm387-226q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"></path>
-                            </svg>
-                          </div>
-                          <p className="ml-3 text-sm leading-5 text-gray-700 dark:text-gray-200">
-                            No Contracts. No monthly, setup, or additional
-                            payment processor fees
-                          </p>
-                        </li>
-                        <li className="flex items-start lg:col-span-1">
-                          <div className="flex-shrink-0">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="6"
-                              height="6"
-                              className="w-6 h-6 mr-2"
-                              fill="red"
-                              viewBox="0 0 1792 1792"
-                            >
-                              <path d="M1277 1122q0-26-19-45l-181-181 181-181q19-19 19-45 0-27-19-46l-90-90q-19-19-46-19-26 0-45 19l-181 181-181-181q-19-19-45-19-27 0-46 19l-90 90q-19 19-19 46 0 26 19 45l181 181-181 181q-19 19-19 45 0 27 19 46l90 90q19 19 46 19 26 0 45-19l181-181 181 181q19 19 45 19 27 0 46-19l90-90q19-19 19-46zm387-226q0 209-103 385.5t-279.5 279.5-385.5 103-385.5-103-279.5-279.5-103-385.5 103-385.5 279.5-279.5 385.5-103 385.5 103 279.5 279.5 103 385.5z"></path>
-                            </svg>
-                          </div>
-                          <p className="ml-3 text-sm leading-5 text-gray-700 dark:text-gray-200">
-                            No 2-week on-boarding, it takes 20 minutes!
-                          </p>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="px-6 py-8 text-center bg-gray-50 dark:bg-gray-700 lg:flex-shrink-0 lg:flex lg:flex-col lg:justify-center lg:p-12">
-                    <p className="text-lg font-bold leading-6 text-gray-900 dark:text-white">
-                      Free
-                    </p>
-                    <div className="flex items-center justify-center mt-4 text-5xl font-extrabold leading-none text-gray-900 dark:text-white">
-                      <span>$0/mo</span>
-                    </div>
-                    <p className="mt-4 text-sm leading-5">
-                      <span className="block font-medium text-gray-500 dark:text-gray-400">
-                        Card payments:
-                      </span>
-                      <span className="inline-block font-medium text-gray-500  dark:text-gray-400">
-                        2.9% + 20p per transaction
-                      </span>
-                    </p>
-                    <div className="mt-6">
-                      <div className="rounded-md shadow">
-                        <button
-                          type="button"
-                          className="py-2 px-4  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
-                        >
-                          Create your store
-                        </button>
+                      {nowdateTime >= data.expireDate ? (
+                        <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                          Дуусах хугацаа: {data.expireDate}
+                        </p>
+                      ) : (
+                        <p className="ml-3 text-sm leading-5 text-red-500 ">
+                          Дуусах хугацаа: {data.expireDate} (Хугацаа дууссан)
+                        </p>
+                      )}
+                    </li>
+                  )}
+                  {data.trRatingQuestions.length === 0 ? (
+                    ""
+                  ) : (
+                    <li className="flex items-start lg:col-span-1">
+                      <div className="flex-shrink-0 text-emerald-500 text-lg">
+                        <i className="bi bi-card-checklist" />
                       </div>
-                    </div>
-                  </div>
+                      <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                        Асуултын тоо: {data.trRatingQuestions.length}
+                      </p>
+                    </li>
+                  )}
+                </ul>
+                <div className="mt-2 px-2 py-2">
+                  <button
+                    onClick={() => {
+                      showModalQuestion(data);
+                    }}
+                    className="mb-2 py-2  text-xs  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+                  >
+                    <i className="bi bi-pencil-square mr-1" /> Асуулт нэмэх
+                  </button>
+                  <button
+                    data-id={data}
+                    onClick={() => {
+                      handleEdit(data);
+                    }}
+                    className="mb-2 py-2 text-xs  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+                  >
+                    <i className="bi bi-pencil-square mr-1" /> Үнэлгээ засварлах
+                  </button>
+                  <button
+                    onClick={() => {
+                      navigateView(data);
+                    }}
+                    className="mb-2 py-2  text-xs  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+                  >
+                    <i className="bi bi-eye-fill mr-1" /> Хариултууд харах
+                  </button>
+                  <button
+                    data-id={data}
+                    onClick={() => {
+                      showModalDelete(data);
+                    }}
+                    className="py-2 text-xs bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+                  >
+                    <i className="bi bi-trash-fill mr-1" /> Устгах
+                  </button>
                 </div>
               </div>
-            ))
-          : tRate?.map((data, index) => (
-              <div key={index} className="p-2">
-                <div class="w-1/3 p-4 bg-white shadow-lg rounded-xl">
-                  <p class="mb-4 text-xl font-medium text-gray-800 dark:text-gray-50">
-                    {data.name}
-                  </p>
-                  <p class="text-sm text-black dark:text-white">
-                    {data.description}
-                  </p>
-
-                  <ul class="w-full mt-4 mb-4 text-sm text-gray-600 dark:text-gray-100">
-                    {data.beginDate === null ? (
-                      ""
-                    ) : (
-                      <li className="flex items-start lg:col-span-1">
-                        <div className="flex-shrink-0 text-emerald-500 text-lg">
-                          <i className="bi bi-calendar-check" />
-                        </div>
-
-                        <p className="ml-3 text-sm leading-5 text-gray-700 ">
-                          Эхлэх хугацаа: {data.beginDate}
-                        </p>
-                      </li>
-                    )}
-
-                    {data.expireDate === null ? (
-                      ""
-                    ) : (
-                      <li className="flex items-start lg:col-span-1">
-                        <div className="flex-shrink-0 text-emerald-500 text-lg">
-                          <i className="bi bi-calendar-check-fill" />
-                        </div>
-                        {nowdateTime >= data.expireDate ? (
-                          <p className="ml-3 text-sm leading-5 text-gray-700 ">
-                            Дуусах хугацаа: {data.expireDate}
-                          </p>
-                        ) : (
-                          <p className="ml-3 text-sm leading-5 text-red-500 ">
-                            Дуусах хугацаа: {data.expireDate} (Хугацаа дууссан)
-                          </p>
-                        )}
-                      </li>
-                    )}
-                    {data.trRatingQuestions.length === 0 ? (
-                      <div
-                        className="bg-red-200 border-red-600 text-red-600 border-l-2 p-1"
-                        role="alert"
-                      >
-                        <p className="font-bold">Асуулт үүсээгүй байна.</p>
-                      </div>
-                    ) : (
-                      <li className="flex items-start lg:col-span-1">
-                        <div className="flex-shrink-0 text-emerald-500 text-lg">
-                          <i className="bi bi-card-checklist" />
-                        </div>
-                        <p className="ml-3 text-sm leading-5 text-gray-700 ">
-                          Асуултын тоо: {data.trRatingQuestions.length}
-                        </p>
-                      </li>
-                    )}
-                  </ul>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      onClick={() => {
-                        showModalView(data);
-                      }}
-                      class="py-2 px-2 text-xs  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
-                    >
-                      <i className="bi bi-eye-fill mr-1" /> Харах
-                    </button>
-                    <button
-                      data-id={data}
-                      onClick={() => {
-                        showModalDelete(data);
-                      }}
-                      class="py-2 px-2 text-xs bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
-                    >
-                      <i className="bi bi-trash-fill mr-1" /> Устгах
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
+            </div>
+          </div>
+        ))}
       </div>
-
       <ToastContainer />
     </div>
   );

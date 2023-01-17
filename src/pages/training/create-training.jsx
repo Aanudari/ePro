@@ -10,8 +10,9 @@ import { ToastContainer } from "react-toastify";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import { logout } from "../../service/examService";
-
+import getWindowDimensions from "../../components/SizeDetector";
 function CreateTraining() {
+  const { width } = getWindowDimensions();
   const { TOKEN, activeMenu } = useStateContext();
   const navigate = useNavigate();
   const format = "YYYYMMDDHHmmss";
@@ -222,9 +223,9 @@ function CreateTraining() {
     location: `${location}`,
     addTrainingDevs: [
       {
-        departmentId: "string",
-        unitId: "string",
-        devId: "string",
+        departmentId: `${departmentID}`,
+        unitId: "",
+        devId: "",
       },
     ],
   };
@@ -252,7 +253,7 @@ function CreateTraining() {
     if (startDate == endDate || startDate > endDate) {
       notification.error("Эхлэх дуусах хугацаа алдаатай байна.");
     } else {
-      console.log(dataFULL);
+      console.log(JSON.stringify(dataFULL));
       // axios({
       //   method: "post",
       //   headers: {
@@ -284,14 +285,14 @@ function CreateTraining() {
           onHide={hideModalDelete}
           size="ml"
           style={
-            activeMenu
+            width < 768
               ? {
-                  width: "calc(100% - 250px)",
-                  left: "250px",
-                }
-              : {
                   width: "calc(100%)",
                   left: "0",
+                }
+              : {
+                  width: "calc(100% - 250px)",
+                  left: "250px",
                 }
           }
           backdrop="static"

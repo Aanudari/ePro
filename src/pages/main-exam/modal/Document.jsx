@@ -168,7 +168,7 @@ function Document({ setShowReport, id }) {
                     </div>
                     {user.status == "Not started" ? (
                       <span className="flex items-center justify-center bg-red-400 text-white px-3 rounded-full text-[13px] h-7  font-[400]">
-                        Not scored
+                        Шалгалт өгөөгүй
                       </span>
                     ) : user.status == "C" ? (
                       <span className="flex items-center justify-center bg-white text-black px-3 rounded-full text-[13px] h-7  font-[400]">
@@ -176,7 +176,7 @@ function Document({ setShowReport, id }) {
                       </span>
                     ) : (
                       <span className="flex items-center justify-center bg-amber-600 text-white px-3 rounded-full text-[13px] h-7  font-[400]">
-                        In process ...
+                        Шалгалт эхлүүлсэн ...
                       </span>
                     )}
                   </div>

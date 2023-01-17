@@ -24,7 +24,6 @@ function ExamDash() {
   const [examTri, setExamTri] = useState(false);
   const [showAddCategory, setShowAddCategory] = useState(false);
   const [addAnswer, setAddAnswer] = useState(false);
-
   useEffect(() => {
     axios({
       method: "get",
@@ -69,7 +68,9 @@ function ExamDash() {
     setCModalId(id);
     setDepId(Did);
   };
-  const handleExamModal = (id) => {
+  const [examSummary, setExamSummary] = useState();
+  const handleExamModal = (id, status) => {
+    setExamSummary(status);
     setexamModalId(id);
   };
   const [showCategoryMenu, setShowCategoryMenu] = useState(false);
@@ -141,6 +142,7 @@ function ExamDash() {
           exams={data}
           id={examModalId}
           setExamModal={setExamModal}
+          examSummary={examSummary}
         />
       )}
       {showAddCategory && (

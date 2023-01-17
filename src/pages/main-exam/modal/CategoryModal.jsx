@@ -326,6 +326,8 @@ function CategoryModal({
                       data={question}
                       indexed={ind}
                       handleCheck={handleCheck}
+                      createExam={createExam}
+                      checked={checked}
                     />
                   ))}
                 </div>

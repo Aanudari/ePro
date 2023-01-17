@@ -2,7 +2,15 @@ import { useState } from "react";
 import axios from "axios";
 import { useStateContext } from "../../../contexts/ContextProvider";
 
-function PoolQuestionEdit({ data, indexed, setTrigger, trigger, handleCheck }) {
+function PoolQuestionEdit({
+  data,
+  indexed,
+  setTrigger,
+  trigger,
+  handleCheck,
+  createExam,
+  checked,
+}) {
   const { TOKEN } = useStateContext();
   const [edit, setEdit] = useState(false);
   const [question, setQuestion] = useState(data.question);
@@ -90,14 +98,29 @@ function PoolQuestionEdit({ data, indexed, setTrigger, trigger, handleCheck }) {
             Өөрчлөлт хадгалах
           </button>
         )}
-        {data.status == "NE" && (
+        {!edit && createExam ? (
+          <button
+            onClick={() => {
+              handleCheck(data.id);
+            }}
+            className="absolute bottom-[20px] right-[20px] px-2 hover:bg-teal-600 py-1 bg-teal-500 font-[500] flex justify-center 
+        items-center text-white rounded-lg active:bg-teal-500"
+          >
+            {checked.includes(data.id) ? (
+              <i className="bi bi-check2 text-2xl "></i>
+            ) : (
+              <i className="bi bi-plus text-2xl"></i>
+            )}
+          </button>
+        ) : null}
+        {data.status == "NE" && !createExam ? (
           <button
             className="absolute bottom-[20px] right-[20px] px-3 py-2 bg-teal-500 font-[500] flex justify-center 
         items-center text-white rounded-lg "
           >
             <i className="bi bi-lock-fill text-xl"></i>
           </button>
-        )}
+        ) : null}
         <div
           onClick={() => {
             data.status !== "NE" && setEdit(true);

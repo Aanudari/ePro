@@ -40,6 +40,8 @@ import MainNavigation from "./components/MainNavigation";
 import TrainingUserCell from "./pages/training/TrainingUserCell";
 import Exam from "./pages/UserMainUI/ExamUser/core/Exam";
 import ExamShow from "./pages/UserMainUI/ExamUser/core/ExamShow";
+import EditTrainRate from "./pages/training_raiting/EditTrainRate";
+import RatedUsers from "./pages/training_raiting/RatedUsers";
 
 function App() {
   const { activeMenu, showTop, roleId } = useStateContext();
@@ -154,6 +156,22 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199]}>
                 <TrainingRating />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/edit-train-rate"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <EditTrainRate />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/train-rate-view"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <RatedUsers />
               </ProtectedRoute>
             }
           />

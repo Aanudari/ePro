@@ -16,7 +16,6 @@ function EditTraining() {
   const navigate = useNavigate();
   const train = locationn.state.data;
   const format = "YYYYMMDDHHmmss";
-
   const [date1, setDate1] = useState(new Date());
   const [date2, setDate2] = useState(new Date());
   const startDate = moment(date1).format(format);
@@ -57,7 +56,7 @@ function EditTraining() {
   const [sessionType, setsessionType] = useState("");
   const [location, setlocation] = useState("");
   const videoRef = useRef(null);
-
+  const [id, setId] = useState();
   useEffect(() => {
     axios({
       method: "get",
@@ -156,7 +155,27 @@ function EditTraining() {
   const handleTrainingType = (item) => {
     setsessionType(item.id);
   };
-
+  const handleProgress = () => {
+    const video = videoRef.current;
+    setduration(video.duration);
+  };
+  const handleDelete = () => {
+    axios({
+      method: "delete",
+      headers: {
+        Authorization: `${TOKEN}`,
+        accept: "text/plain",
+      },
+      url: `${process.env.REACT_APP_URL}/v1/TrainingFile/${id}`,
+    })
+      .then((res) => {
+        if (res.data.isSuccess === true) {
+          navigate(0);
+        } else {
+        }
+      })
+      .catch((err) => console.log(err));
+  };
   const dataFULL = {
     id: `${train.id}`,
     name: `${name}` === "" ? train.name : `${name}`,
@@ -192,8 +211,31 @@ function EditTraining() {
   };
   const handleFileSelect = (event) => {
     if (event.target.files[0].name.slice(-4) === ".mp4") {
-      setSelectedFile(event.target.files[0]);
-      handleCreate();
+      const data = new FormData();
+      const imagedata = event.target.files[0];
+      data.append("file", imagedata);
+      axios({
+        mode: "no-cors",
+        method: "post",
+        url: `${process.env.REACT_APP_URL}/v1/TrainingFile/fileadd`,
+        data,
+        headers: {
+          Authorization: `${TOKEN}`,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+        .then((res) => {
+          if (res.data.isSuccess === true) {
+            setfileUrl(res.data.path);
+            setId(res.data.id);
+          } else {
+            notification.error(`${res.data.resultMessage}`);
+          }
+          if (res.data.resultMessage === "Unauthorized") {
+            logout();
+          }
+        })
+        .catch((err) => console.log(err));
     } else {
       notification.error("Video хавсаргана уу.");
     }
@@ -255,7 +297,7 @@ function EditTraining() {
   const dep = department?.find(
     (obj) => obj.id === train.trainingDevs[0].departmentId
   );
-  console.log(dep);
+  console.log(train);
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <Navigation />
@@ -307,20 +349,29 @@ function EditTraining() {
                   <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                     Файл
                   </label>
-                  {train.fileUrl.slice(-4) === ".mp4" ? (
-                    <div>
-                      <video
-                        ref={videoRef}
-                        width="100%"
-                        // height="100%"
-
-                        controls
-                      >
-                        <source
-                          src={`http://` + `${train.fileUrl}`}
-                          type="video/mp4"
-                        />
-                      </video>
+                  {train.fileUrl?.slice(-4) === ".mp4" ? (
+                    <div className=" flex items-center">
+                      <div className="py-12 ">
+                        <video
+                          onLoadedMetadata={handleProgress}
+                          ref={videoRef}
+                          width="50%"
+                          // height="100%"
+                          id="myVideo"
+                          controls
+                        >
+                          <source
+                            src={`http://` + `${train.fileUrl}`}
+                            type="video/mp4"
+                          />
+                        </video>
+                        <a
+                          onClick={handleDelete}
+                          className="text-rose-400 hover:text-black ml-2 text-lg"
+                        >
+                          <i className="bi bi-trash-fill"></i>
+                        </a>
+                      </div>
                     </div>
                   ) : (
                     <input
@@ -329,21 +380,6 @@ function EditTraining() {
                       className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
                     />
                   )}
-                </div>
-                <div>
-                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                    Үргэлжлэх хугацаа
-                  </label>
-                  <input
-                    type="text"
-                    defaultValue={train.duration}
-                    onChange={(e) => {
-                      setduration(e.target.value);
-                      setcheckEmptyduration(false);
-                    }}
-                    id={checkEmptyduration === true ? "border-red" : null}
-                    className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                  />
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-4  sm:grid-cols-3">

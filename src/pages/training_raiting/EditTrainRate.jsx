@@ -1,0 +1,351 @@
+import React, { useEffect, useState } from "react";
+import Navigation from "../../components/Navigation";
+import { useStateContext } from "../../contexts/ContextProvider";
+import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
+import { Modal } from "react-bootstrap";
+import Select from "react-select";
+import { notification } from "../../service/toast";
+import { ToastContainer } from "react-toastify";
+import moment from "moment";
+import DatePicker from "react-datepicker";
+import { logout } from "../../service/examService";
+import getWindowDimensions from "../../components/SizeDetector";
+function EditTrainRate() {
+  const location = useLocation();
+  const { TOKEN } = useStateContext();
+  const navigate = useNavigate();
+  const { width } = getWindowDimensions();
+  const [trains, setTrains] = useState([]);
+  const [trateName, settrateName] = useState();
+  const [trateDesc, settrateDesc] = useState();
+  const trainrate = location.state.data;
+  const format = "YYYYMMDDHHmmss";
+  const [date1, setDate1] = useState(new Date());
+  const [date2, setDate2] = useState(new Date());
+  const startDate = moment(date1).format(format);
+  const endDate = moment(date2).format(format);
+  const [question, setQuestion] = useState();
+  const [answer, setAnswer] = useState();
+  const [points, setPoints] = useState();
+  const [tID, setTID] = useState();
+  const [checkName, setCheckName] = useState(false);
+  const [checkDesc, setCheckDesc] = useState(false);
+  const [checkQuest, setCheckQuest] = useState(false);
+  const [checkAns, setCheckAns] = useState(false);
+  const [checkTrain, setCheckTrain] = useState(false);
+  const [raw, setRaw] = useState([]);
+  //   const getdate1 = new Date(trainrate.beginDate);
+  //   const getdate2 = new Date(trainrate.expireDate);
+  const handleTrainId = (item) => {
+    setTID(item.id);
+  };
+  useEffect(() => {
+    axios({
+      method: "get",
+      headers: {
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/Training`,
+    })
+      .then((res) => {
+        if (res.data.isSuccess === true) {
+          setTrains(res.data.trainingList);
+        }
+        // console.log(trains);
+        if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct format."
+        ) {
+          logout();
+        }
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  const dataEditTrate = {
+    id: `${trainrate.id}`,
+    name: trateName === "" ? trainrate.name : `${trateName}`,
+    description: trateDesc === "" ? trainrate.description : `${trateDesc}`,
+    trainingId: tID === "" ? trainrate.trainingId : `${tID}`,
+    beginDate: `${startDate}` === "" ? trainrate.beginDate : `${startDate}`,
+    expireDate: `${endDate}` === "" ? trainrate.expireDate : `${endDate}`,
+    createdBy: `${trainrate.createdBy}`,
+    createdAt: `${trainrate.createdAt}`,
+    trRatingQuestions: raw,
+  };
+  const navigateIndex = (e) => {
+    e.preventDefault();
+    if (startDate == endDate || startDate > endDate) {
+      notification.invalidFileUpload("Эхлэх дуусах хугацаа алдаатай байна.");
+    } else {
+      console.log(dataEditTrate);
+      axios({
+        method: "put",
+        headers: {
+          Authorization: `${TOKEN}`,
+          "Content-Type": "application/json",
+          accept: "text/plain",
+        },
+        url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating`,
+        data: JSON.stringify(dataEditTrate),
+      })
+        .then((res) => {
+          if (res.data.isSuccess === true) {
+            notification.success(`${res.data.resultMessage}`);
+            const timer = setTimeout(() => navigate("/training-rating"), 1000);
+            return () => clearTimeout(timer);
+          }
+          const timer = setTimeout(() => navigate("/training-rating"), 1000);
+          return () => clearTimeout(timer);
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+
+  useEffect(() => {
+    setRaw(trainrate?.trRatingQuestions);
+  }, []);
+  const collector = (question, answer, point, id, answerId) => {
+    setQuestion(question);
+    setAnswer(answer);
+    setPoints(point);
+    let single = raw.filter((item) => {
+      return item.questionId == id;
+    });
+    let tempo = single[0].trRatingAnswer.map((el) => {
+      if (el.answerId == answerId) {
+        return {
+          ...el,
+          answer: answer,
+          points: point != undefined ? point : el.points,
+        };
+      } else {
+        return el;
+      }
+    });
+    let arr = [
+      {
+        questionId: `${id}`,
+        question: `${question}`,
+        trRatingAnswer: tempo,
+      },
+    ];
+    let final = raw.map((item) => {
+      if (item.questionId == id) {
+        return arr[0];
+      } else {
+        return item;
+      }
+    });
+    setRaw(final);
+  };
+  const object = trains.find((obj) => obj.id === trainrate.trainingId);
+  return (
+    <div className="w-full min-h-[calc(100%-56px)] ">
+      <Navigation />
+
+      <div className="w-full">
+        <div className="px-4 md:px-10 py-4 md:py-7">
+          <div className="flex items-center justify-between">
+            <p className="focus:outline-none text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">
+              Сургалтын үнэлгээ засварлах
+            </p>
+          </div>
+        </div>
+
+        <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 mb-6">
+          <div className="rounded-lg bg-white p-8 shadow-lg lg:col-span-3 lg:p-12">
+            <div className="space-y-4">
+              <div>
+                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                  Үнэлгээний нэр
+                </label>
+                <input
+                  type="text"
+                  defaultValue={trainrate.name}
+                  onChange={(e) => {
+                    settrateName(e.target.value);
+                    setCheckName(false);
+                  }}
+                  id={checkName === true ? "border-red" : null}
+                  className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                />
+              </div>
+              <div>
+                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                  Үнэлгээний тайлбар
+                </label>
+                <textarea
+                  className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                  rows="4"
+                  defaultValue={trainrate.description}
+                  onChange={(e) => {
+                    settrateDesc(e.target.value);
+                    setCheckDesc(false);
+                  }}
+                  id={checkDesc === true ? "border-red" : null}
+                ></textarea>
+              </div>
+              <div className="grid grid-cols-1 gap-4  sm:grid-cols-3">
+                <div>
+                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                    Сургалт
+                  </label>
+                  <Select
+                    className="px-2 py-2 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                    options={trains}
+                    defaultValue={{
+                      id: trainrate.trainingId,
+                      name: object?.value,
+                    }}
+                    onChange={(item) => {
+                      handleTrainId(item);
+                      setCheckTrain(false);
+                    }}
+                    id={checkTrain === true ? "border-red" : null}
+                    noOptionsMessage={({ inputValue }) =>
+                      !inputValue && "Сонголт хоосон байна"
+                    }
+                    getOptionLabel={(option) => option.name}
+                    getOptionValue={(option) => option.id}
+                  />
+                </div>
+                <div>
+                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                    startDate
+                  </label>
+                  <DatePicker
+                    className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                    selected={date1}
+                    onChange={(date) => setDate1(date)}
+                    showTimeSelect
+                    timeFormat="HH:mm"
+                    timeIntervals={15}
+                    selectsStart
+                    startDate={date1}
+                    dateFormat="yyyy.MM.dd, HH:mm:ss"
+                  />
+                </div>
+                <div>
+                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                    endDate
+                  </label>
+                  <DatePicker
+                    className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                    selected={date2}
+                    onChange={(date) => setDate2(date)}
+                    showTimeSelect
+                    timeFormat="HH:mm"
+                    timeIntervals={15}
+                    selectsStart
+                    startDate={date2}
+                    dateFormat="yyyy.MM.dd, HH:mm:ss"
+                  />
+                </div>
+              </div>
+
+              {raw.map((quest, index) => (
+                <div key={index} className="space-y-4">
+                  <div>
+                    <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                      Асуулт
+                    </label>
+                    <input
+                      type="text"
+                      defaultValue={quest.question}
+                      onChange={(e) => {
+                        // setQuestion(e.target.value);
+                        collector(
+                          e.target.value,
+                          answer,
+                          points,
+                          quest.questionId
+                        );
+                        //    setcheckEmptyname(false);
+                      }}
+                      //  id={checkEmptyname === true ? "border-red" : null}
+                      className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                    />
+                  </div>
+                  {quest.trRatingAnswer?.map((ans, i) => (
+                    <div
+                      key={i}
+                      className="grid grid-cols-1 gap-4  sm:grid-cols-3"
+                    >
+                      <div>
+                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                          Хариулт
+                        </label>
+                        <input
+                          type="text"
+                          defaultValue={ans.answer}
+                          onChange={(e) => {
+                            // setAnswer(e.target.value);
+                            collector(
+                              question,
+                              e.target.value,
+                              points,
+                              quest.questionId,
+                              ans.answerId
+                            );
+                            //    setcheckEmptyname(false);
+                          }}
+                          //  id={checkEmptyname === true ? "border-red" : null}
+                          className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                        />
+                      </div>
+                      <div>
+                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                          Оноо
+                        </label>
+                        <input
+                          type="text"
+                          defaultValue={ans.points}
+                          onChange={(e) => {
+                            // setPoints(e.target.value);
+                            collector(
+                              question,
+                              answer,
+                              e.target.value,
+                              quest.questionId,
+                              ans.answerId
+                            );
+                            //    setcheckEmptyname(false);
+                          }}
+                          //  id={checkEmptyname === true ? "border-red" : null}
+                          className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+
+              <div className="mt-4 text-right">
+                <div className="inline-flex items-end">
+                  <button
+                    onClick={() => navigate("/training-rating")}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+                  >
+                    Exit
+                  </button>
+                  <button
+                    onClick={navigateIndex}
+                    type="submit"
+                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ToastContainer />
+    </div>
+  );
+}
+
+export default EditTrainRate;

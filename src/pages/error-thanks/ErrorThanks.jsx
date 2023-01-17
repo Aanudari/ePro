@@ -4,13 +4,14 @@ import { useStateContext } from "../../contexts/ContextProvider";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { Modal } from "react-bootstrap";
-import { logout } from "../../service/examService";
 import Select from "react-select";
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
+import { logout } from "../../service/examService";
+import getWindowDimensions from "../../components/SizeDetector";
 
-// import "./pg.css";
 function ErrorThanks() {
+  const { width } = getWindowDimensions();
   const { TOKEN, activeMenu } = useStateContext();
   const navigate = useNavigate();
   let color = "blue";
@@ -22,6 +23,8 @@ function ErrorThanks() {
   const showModalCreate = () => setShowCreate(true);
   const hideModalCreate = () => setShowCreate(null);
   const [showDelete, setShowDelete] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredList, setFilteredList] = useState(complain);
   const [id, setId] = useState();
   const showModalDelete = (e) => {
     setShowDelete(true);
@@ -71,9 +74,6 @@ function ErrorThanks() {
       .catch((err) => console.log(err));
   }, []);
 
-  const handleTabClick = (e) => {
-    setCurrentTab(e.target.id);
-  };
   const handleCreate = () => {
     if (selectedOption === null) {
       notification.error(`Сонголт хоосон байна!`);
@@ -114,17 +114,23 @@ function ErrorThanks() {
       state: { data: tab },
     });
   };
+  const handleSearch = (event) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+    const searchList = complain.filter((item) => {
+      return item.firstName.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+    });
+    setFilteredList(searchList);
+    // setCurrentTab(value);
+  };
 
-  const [count, setCount] = useState();
-
-  const newArr = complain?.map((v) => {
-    let obj = complainInfo.find((o) => o.id === v.complain);
-    if (obj) {
-      obj = v;
-    }
-    return v;
-  });
-
+  const handleOptions = (value) => {
+    let filtered = complain.filter((item, i) => {
+      return item.complain == value;
+    });
+    setFilteredList(filtered);
+    setCurrentTab(value);
+  };
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <div>
@@ -134,14 +140,14 @@ function ErrorThanks() {
           size="ml"
           backdrop="static"
           style={
-            activeMenu
+            width < 768
               ? {
-                  width: "calc(100% - 250px)",
-                  left: "250px",
-                }
-              : {
                   width: "calc(100%)",
                   left: "0",
+                }
+              : {
+                  width: "calc(100% - 250px)",
+                  left: "250px",
                 }
           }
           keyboard={false}
@@ -191,14 +197,14 @@ function ErrorThanks() {
           size="ml"
           backdrop="static"
           style={
-            activeMenu
+            width < 768
               ? {
-                  width: "calc(100% - 250px)",
-                  left: "250px",
-                }
-              : {
                   width: "calc(100%)",
                   left: "0",
+                }
+              : {
+                  width: "calc(100% - 250px)",
+                  left: "250px",
                 }
           }
           keyboard={false}
@@ -233,35 +239,66 @@ function ErrorThanks() {
         </Modal>
       </div>
       <Navigation />
-
-      <div className=" w-full">
+      <div className="sm:px-6 w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
-            <p className="focus:outline-none text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">
-              Алдаа талархал
+            <p className="focus:outline-none  sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">
+              Алдаа талархал (
+              {filteredList?.length === 0
+                ? complain?.length
+                : filteredList?.length}
+              )
             </p>
-            <div className="my-2 flex sm:flex-row flex-col">
-              <div className="block relative">
-                <span className="h-full absolute inset-y-0 left-0 flex items-center pl-2">
-                  <i className="bi bi-search" />
-                </span>
-                <input
-                  name="search"
-                  // onChange={handleOnChange}
-                  placeholder="Хайлт"
-                  className="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-black focus:outline-none"
-                />
-              </div>
+          </div>
+        </div>
+        <div className="sm:flex items-center justify-between p-2">
+          <div className="flex items-center">
+            <select
+              onChange={(e) => {
+                handleOptions(e.target.value);
+              }}
+            >
+              <option>Төрлөөр хайх</option>
+              {complainInfo?.map((el, i) => (
+                <option key={i} value={`${el.id}`}>
+                  {el.category}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col justify-center w-3/4 max-w-sm space-y-3 md:flex-row md:w-full md:space-x-3 md:space-y-0">
+            <div className=" relative ">
+              <input
+                value={searchQuery}
+                onChange={handleSearch}
+                type="text"
+                name="search"
+                className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                placeholder="Нэрээр хайх"
+              />
             </div>
+            <button
+              className="flex-shrink-0 px-4 py-2 text-base font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200"
+              type="submit"
+            >
+              <i className="bi bi-search" />
+            </button>
+            <button
+              className="flex-shrink-0 px-2 py-2 text-base font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200"
+              onClick={showModalCreate}
+            >
+              <i className="bi bi-plus text-bold mr-1" />
+              Бүртгэл нэмэх
+            </button>
           </div>
         </div>
 
-        <div className="w-full px-4 mx-auto mt-0">
+        <div className="w-full px-4 mx-auto mt-2">
           <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg border-1">
             <div className="flex-auto px-4 lg:px-10 py-10 pt-0 bg-white">
               <div className="mt-4">
                 <div className="sm:flex items-center justify-between">
-                  <div className="flex items-center">
+                  {/* <div className="flex items-center">
                     <ul
                       className="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row"
                       role="tablist"
@@ -285,7 +322,7 @@ function ErrorThanks() {
                                 key={i}
                                 id={tab.id}
                                 disabled={currentTab === `${tab.id}`}
-                                onClick={handleTabClick}
+                               
                               >
                                 {tab.category}
                               </a>
@@ -293,22 +330,13 @@ function ErrorThanks() {
                           ))
                         : null}
                     </ul>
-                  </div>
-
-                  <button
-                    className="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 sm:mt-0 inline-flex items-start justify-start px-6 py-3 bg-indigo-700 hover:bg-indigo-600 focus:outline-none rounded 
-               text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
-                    onClick={showModalCreate}
-                  >
-                    <i className="bi bi-plus text-bold" />
-                    Бүртгэл нэмэх
-                  </button>
+                  </div> */}
                 </div>
                 <div className="mt-3 overflow-x-auto">
                   <table className="items-center w-full bg-transparent border-collapse ">
                     <thead>
                       <tr className="text-sm text-left  bg-gray-200 border-b">
+                        <th className="px-4 py-3 font-bold">№ </th>
                         <th className="px-4 py-3 font-bold">Огноо </th>
                         <th className="px-4 py-3 font-bold">
                           Харьяалагдах хэлтэс{" "}
@@ -346,19 +374,20 @@ function ErrorThanks() {
                       </tr>
                     </thead>
                     <tbody className="bg-white text-sm">
-                      {complain
-                        ? complain.map((tab, i) => (
+                      {filteredList.length > 0
+                        ? filteredList.map((tab, i) => (
                             <tr
                               key={i}
-                              className={
-                                currentTab === `${tab.complain}`
-                                  ? "focus:outline-none h-16 border border-gray-100 rounded"
-                                  : "hidden"
-                              }
+                              // className={
+                              //   currentTab === `${tab.complain}`
+                              //     ? "focus:outline-none h-16 border border-gray-100 rounded"
+                              //     : "hidden"
+                              // }
                               // onChange={() => {
                               //   setTotalPages(tab.complain);
                               // }}
                             >
+                              <td className="px-1 py-1 border">{i + 1}</td>
                               <td className="px-1 py-1 border">
                                 {tab.createdAt}
                               </td>
@@ -399,32 +428,61 @@ function ErrorThanks() {
                               </td>
                             </tr>
                           ))
-                        : // .slice(
-                          //   numberOfdataVistited,
-                          //   numberOfdataVistited + dataPerPage
-                          // )
-                          null}
+                        : complain?.map((tab, i) => (
+                            <tr
+                              key={i}
+                              // className={
+                              //   currentTab === `${tab.complain}`
+                              //     ? "focus:outline-none h-16 border border-gray-100 rounded"
+                              //     : "hidden"
+                              // }
+                              // onChange={() => {
+                              //   setTotalPages(tab.complain);
+                              // }}
+                            >
+                              <td className="px-1 py-1 border">{i + 1}</td>
+                              <td className="px-1 py-1 border">
+                                {tab.createdAt}
+                              </td>
+                              <td className="px-1 py-1 border">
+                                {tab.departmentName}
+                              </td>
+                              <td className="px-1 py-1 border">
+                                {tab.unitName}
+                              </td>
+                              <td className="px-1 py-1 border">
+                                {tab.firstName}
+                              </td>
+                              <td className="px-1 py-1 border">
+                                {tab.complainType}
+                              </td>
+                              <td className="px-1 py-1 border">
+                                {tab.description}
+                              </td>
+                              <td className="px-1 py-1 border">{tab.rule}</td>
+                              <td className="px-1 py-1 border">{tab.too}</td>
+                              <td className="px-1 py-1 border">
+                                <a
+                                  className="text-yellow-400 hover:text-black mx-2"
+                                  data-id={tab}
+                                  onClick={() => {
+                                    handleEdit(tab);
+                                  }}
+                                >
+                                  <i className="bi bi-pencil-square"></i>
+                                </a>
+                                <a
+                                  data-id={tab.id}
+                                  onClick={showModalDelete}
+                                  className="text-rose-400 hover:text-black ml-2"
+                                >
+                                  <i className="bi bi-trash-fill"></i>
+                                </a>
+                              </td>
+                            </tr>
+                          ))}
                     </tbody>
                   </table>
-
-                  <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between">
-                    {/* <ReactPaginate
-                previousLabel={"Өмнө"}
-                nextLabel={"Дараах"}
-                pageCount={totalPages}
-                onPageChange={changePage}
-                containerClassName={"navigationButtons"}
-                previousLinkClassName={"previousButton"}
-                nextLinkClassName={"nextButton"}
-                disabledClassName={"navigationDisabled"}
-                activeClassName={"navigationActive"}
-                breakLabel={"..."}
-                breakClassName={"break-me"}
-                marginPagesDisplayed={2}
-                pageRangeDisplayed={5}
-                subContainerClassName={"pages pagination"}
-              /> */}
-                  </div>
                 </div>
               </div>
             </div>

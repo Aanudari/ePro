@@ -9,8 +9,11 @@ import { logout } from "../../service/examService";
 import Select from "react-select";
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
+
+import getWindowDimensions from "../../components/SizeDetector";
 import moment from "moment";
 function TrainingCategory() {
+  const { width } = getWindowDimensions();
   const location = useLocation();
   const { TOKEN, activeMenu } = useStateContext();
   const navigate = useNavigate();
@@ -208,14 +211,14 @@ function TrainingCategory() {
           size="ml"
           backdrop="static"
           style={
-            activeMenu
+            width < 768
               ? {
-                  width: "calc(100% - 250px)",
-                  left: "250px",
-                }
-              : {
                   width: "calc(100%)",
                   left: "0",
+                }
+              : {
+                  width: "calc(100% - 250px)",
+                  left: "250px",
                 }
           }
           keyboard={false}
@@ -319,14 +322,14 @@ function TrainingCategory() {
           size="ml"
           backdrop="static"
           style={
-            activeMenu
+            width < 768
               ? {
-                  width: "calc(100% - 250px)",
-                  left: "250px",
-                }
-              : {
                   width: "calc(100%)",
                   left: "0",
+                }
+              : {
+                  width: "calc(100% - 250px)",
+                  left: "250px",
                 }
           }
           keyboard={false}
@@ -366,14 +369,14 @@ function TrainingCategory() {
           size="ml"
           backdrop="static"
           style={
-            activeMenu
+            width < 768
               ? {
-                  width: "calc(100% - 250px)",
-                  left: "250px",
-                }
-              : {
                   width: "calc(100%)",
                   left: "0",
+                }
+              : {
+                  width: "calc(100% - 250px)",
+                  left: "250px",
                 }
           }
           keyboard={false}

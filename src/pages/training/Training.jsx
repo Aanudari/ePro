@@ -9,7 +9,9 @@ import moment from "moment";
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
 import { logout } from "../../service/examService";
+import getWindowDimensions from "../../components/SizeDetector";
 function Training() {
+  const { width } = getWindowDimensions();
   const location = useLocation();
   const { TOKEN, activeMenu } = useStateContext();
   const navigate = useNavigate();
@@ -21,6 +23,7 @@ function Training() {
   const [showDelete, setShowDelete] = useState(null);
   const hideModalDelete = () => setShowDelete(null);
   const [id, setId] = useState();
+  const [filteredList, setFilteredList] = useState(trains);
   const options = [
     { id: "1", value: "Тэнхим" },
     { id: "2", value: "Онлайн" },
@@ -108,6 +111,9 @@ function Training() {
       state: { data: data },
     });
   };
+  const catnameChange = (data) => {
+    console.log(data);
+  };
   function secondsToHms(d) {
     d = Number(d);
     var h = Math.floor(d / 3600);
@@ -118,7 +124,7 @@ function Training() {
     var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
     return hDisplay + mDisplay + sDisplay;
   }
-  const [filteredList, setFilteredList] = useState(trains);
+
   const [searchQuery, setSearchQuery] = useState("");
   const handleSearch = (event) => {
     const query = event.target.value;
@@ -128,26 +134,10 @@ function Training() {
     });
     setFilteredList(searchList);
   };
-  let unique = category.filter(
-    (value, index, self) =>
-      index === self.findIndex((t) => t.name == value.name)
-  );
-  let mainOption = [
-    {
-      createdAt: null,
-      createdBy: null,
-      department: null,
-      endDate: null,
-      id: "10000",
-      name: "Бүгд",
-      startDate: null,
-      status: null,
-    },
-  ];
-  mainOption.push(...unique);
+
   const handleOptions = (value) => {
-    let filtered = trains.filter((item) => {
-      return item.tCategory === value;
+    let filtered = trains?.filter((item) => {
+      return item.tCatName === value;
     });
     setFilteredList(filtered);
   };
@@ -164,14 +154,14 @@ function Training() {
           size="ml"
           backdrop="static"
           style={
-            activeMenu
+            width < 768
               ? {
-                  width: "calc(100% - 250px)",
-                  left: "250px",
-                }
-              : {
                   width: "calc(100%)",
                   left: "0",
+                }
+              : {
+                  width: "calc(100% - 250px)",
+                  left: "250px",
                 }
           }
           keyboard={false}
@@ -206,12 +196,15 @@ function Training() {
         </Modal>
       </div>
       <Navigation />
-
       <div className="sm:px-6 w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
             <p className="focus:outline-none  sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">
-              Сургалтууд ({`${filteredList.length}`})
+              Сургалтууд (
+              {filteredList?.length === 0
+                ? trains?.length
+                : filteredList?.length}
+              )
             </p>
           </div>
         </div>
@@ -222,8 +215,9 @@ function Training() {
                 handleOptions(e.target.value);
               }}
             >
-              {mainOption.map((el, i) => (
-                <option key={i} value={`${el.id}`}>
+              <option>Ангиллаар хайх</option>
+              {category?.map((el, i) => (
+                <option key={i} value={`${el.name}`}>
                   {el.name}
                 </option>
               ))}
@@ -255,214 +249,429 @@ function Training() {
             </button>
           </div>
         </div>
-        {filteredList.map((data, index) => (
-          <div key={index} className="p-2">
-            <div className="max-w-full mx-auto overflow-hidden rounded-lg shadow-lg pricing-box lg:max-w-none lg:flex mt-2">
-              <div className="w-full px-6 py-8 bg-white  lg:flex-shrink-2 lg:p-12">
-                <h3 className="text-xl  leading-8 text-gray-800 sm:text-xl sm:leading-9 ">
-                  {data.name}
-                </h3>
-                {data.description === null ? (
-                  ""
-                ) : (
-                  <p className="mt-4 leading-6 text-gray-800 ">
-                    {data.description}
-                  </p>
-                )}
-
-                <div className="mt-2">
-                  <div className="flex items-center">
-                    <h4 className="flex-shrink-0 pr-4 text-sm font-semibold leading-5 tracking-wider text-indigo-600 uppercase bg-white ">
-                      ерөнхий
-                    </h4>
-                    <div className="flex-1 border-t-2 border-gray-200"></div>
-                  </div>
-                  <ul className="mt-2 lg:grid lg:grid-cols-2 lg:col-gap-8 lg:row-gap-5">
-                    <li className="flex items-start lg:col-span-1">
-                      <div className="flex-shrink-0 text-emerald-500 text-lg">
-                        <i className="bi bi-card-checklist" />
-                      </div>
-                      <p className="ml-3 text-sm leading-5 text-gray-700 ">
-                        Ангилал:{" "}
-                        {category &&
-                          category?.find((obj) => obj.id === data.tCategory)
-                            .name}
+        {filteredList.length > 0
+          ? filteredList.map((data, index) => (
+              <div key={index} className="p-2">
+                <div className="max-w-full mx-auto overflow-hidden rounded-lg shadow-lg pricing-box lg:max-w-none lg:flex mt-2">
+                  <div className="w-full px-6 py-8 bg-white  lg:flex-shrink-2 lg:p-12">
+                    <h3 className="text-xl  leading-8 text-gray-800 sm:text-xl sm:leading-9 ">
+                      {data.name}
+                    </h3>
+                    {data.description === null ? (
+                      ""
+                    ) : (
+                      <p className="mt-4 leading-6 text-gray-800 ">
+                        {data.description}
                       </p>
-                    </li>
-                    {data.teacher === null ? (
-                      ""
-                    ) : (
-                      <li className="flex items-start lg:col-span-1">
-                        <div className="flex-shrink-0 text-emerald-500 text-lg">
-                          <i className="bi bi-person-video3" />
-                        </div>
-                        <p className="ml-3 text-sm leading-5 text-gray-700 ">
-                          Багш: {data.teacher}
-                        </p>
-                      </li>
                     )}
 
-                    <li className="flex items-start lg:col-span-1">
-                      <div className="flex-shrink-0 text-emerald-500 text-lg">
-                        <i className="bi bi-signpost-split-fill" />
+                    <div className="mt-2">
+                      <div className="flex items-center">
+                        <h4 className="flex-shrink-0 pr-4 text-sm font-semibold leading-5 tracking-wider text-indigo-600 uppercase bg-white ">
+                          ерөнхий
+                        </h4>
+                        <div className="flex-1 border-t-2 border-gray-200"></div>
                       </div>
-                      <p className="ml-3 text-sm leading-5 text-gray-700 ">
-                        {
-                          options.find((obj) => obj.id === data.sessionType)
-                            .value
-                        }
-                      </p>
-                    </li>
-                    {data.location === null ? (
-                      ""
-                    ) : (
-                      <li className="flex items-start lg:col-span-1">
-                        <div className="flex-shrink-0 text-emerald-500 text-lg">
-                          <i className="bi bi-pin-map-fill" />
-                        </div>
-                        <p className="ml-3 text-sm leading-5 text-gray-700 ">
-                          Байршил: {data.location}
-                        </p>
-                      </li>
-                    )}
-                    {data.startDate === null ? (
-                      ""
-                    ) : (
-                      <li className="flex items-start lg:col-span-1">
-                        <div className="flex-shrink-0 text-emerald-500 text-lg">
-                          <i className="bi bi-calendar-check" />
-                        </div>
-
-                        <p className="ml-3 text-sm leading-5 text-gray-700 ">
-                          Эхлэх хугацаа: {data.startDate}
-                        </p>
-                      </li>
-                    )}
-
-                    {data.endDate === null ? (
-                      ""
-                    ) : (
-                      <li className="flex items-start lg:col-span-1">
-                        <div className="flex-shrink-0 text-emerald-500 text-lg">
-                          <i className="bi bi-calendar-check-fill" />
-                        </div>
-                        {nowdateTime >= data.endDate + data.duration ? (
+                      <ul className="mt-2 lg:grid lg:grid-cols-2 lg:col-gap-8 lg:row-gap-5">
+                        <li className="flex items-start lg:col-span-1">
+                          <div className="flex-shrink-0 text-emerald-500 text-lg">
+                            <i className="bi bi-card-checklist" />
+                          </div>
                           <p className="ml-3 text-sm leading-5 text-gray-700 ">
-                            Дуусах хугацаа: {data.endDate}
+                            Ангилал:{" "}
+                            {category &&
+                              category?.find((obj) => obj.id === data.tCategory)
+                                .name}
                           </p>
+                        </li>
+                        {data.teacher === null ? (
+                          ""
                         ) : (
-                          <p className="ml-3 text-sm leading-5 text-red-500 ">
-                            Дуусах хугацаа: {data.endDate} (Хугацаа дууссан)
-                          </p>
+                          <li className="flex items-start lg:col-span-1">
+                            <div className="flex-shrink-0 text-emerald-500 text-lg">
+                              <i className="bi bi-person-video3" />
+                            </div>
+                            <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                              Багш: {data.teacher}
+                            </p>
+                          </li>
                         )}
-                      </li>
-                    )}
 
-                    {data.duration === null ? (
+                        <li className="flex items-start lg:col-span-1">
+                          <div className="flex-shrink-0 text-emerald-500 text-lg">
+                            <i className="bi bi-signpost-split-fill" />
+                          </div>
+                          <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                            {
+                              options.find((obj) => obj.id === data.sessionType)
+                                .value
+                            }
+                          </p>
+                        </li>
+                        {data.location === null ? (
+                          ""
+                        ) : (
+                          <li className="flex items-start lg:col-span-1">
+                            <div className="flex-shrink-0 text-emerald-500 text-lg">
+                              <i className="bi bi-pin-map-fill" />
+                            </div>
+                            <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                              Байршил: {data.location}
+                            </p>
+                          </li>
+                        )}
+                        {data.startDate === null ? (
+                          ""
+                        ) : (
+                          <li className="flex items-start lg:col-span-1">
+                            <div className="flex-shrink-0 text-emerald-500 text-lg">
+                              <i className="bi bi-calendar-check" />
+                            </div>
+
+                            <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                              Эхлэх хугацаа: {data.startDate}
+                            </p>
+                          </li>
+                        )}
+
+                        {data.endDate === null ? (
+                          ""
+                        ) : (
+                          <li className="flex items-start lg:col-span-1">
+                            <div className="flex-shrink-0 text-emerald-500 text-lg">
+                              <i className="bi bi-calendar-check-fill" />
+                            </div>
+                            {nowdateTime >= data.endDate + data.duration ? (
+                              <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                                Дуусах хугацаа: {data.endDate}
+                              </p>
+                            ) : (
+                              <p className="ml-3 text-sm leading-5 text-red-500 ">
+                                Дуусах хугацаа: {data.endDate} (Хугацаа дууссан)
+                              </p>
+                            )}
+                          </li>
+                        )}
+
+                        {data.duration === null ? (
+                          ""
+                        ) : (
+                          <li className="flex items-start lg:col-span-1">
+                            <div className="flex-shrink-0 text-emerald-500 text-lg">
+                              <i className="bi bi-clock-history" />
+                            </div>
+                            <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                              Үргэлжлэх хугацаа: {data.duration}
+                            </p>
+                          </li>
+                        )}
+                      </ul>
+                    </div>
+                    <div className="mt-2">
+                      <div className="flex items-center">
+                        <h4 className="flex-shrink-0 pr-4 text-sm font-semibold leading-5 tracking-wider text-indigo-600 uppercase bg-white ">
+                          Үйлдэл
+                        </h4>
+                        <div className="flex-1 border-t-2 border-gray-200"></div>
+                      </div>
+                      <ul className="mt-2 lg:grid lg:grid-cols-3 lg:col-gap-8 lg:row-gap-5">
+                        <li className="flex items-center lg:col-span-1">
+                          <div className="flex-shrink-0 items-center">
+                            <a
+                              onClick={() => {
+                                showModalView(data);
+                              }}
+                              className="group flex items-center justify-between rounded-lg border border-current px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 focus:outline-none focus:ring active:bg-indigo-500"
+                            >
+                              <i className="bi bi-eye-fill mr-1" /> Харах
+                            </a>
+                          </div>
+                        </li>
+                        <li className="flex items-center lg:col-span-1">
+                          <div className="flex-shrink-0 items-center">
+                            <a
+                              data-id={data}
+                              onClick={() => {
+                                handleEdit(data);
+                              }}
+                              className="group flex items-center justify-between rounded-lg border border-current px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 focus:outline-none focus:ring active:bg-indigo-500"
+                            >
+                              <i className="bi bi-pencil-square mr-1" />{" "}
+                              Засварлах
+                            </a>
+                          </div>
+                        </li>
+                        <li className="flex items-center lg:col-span-1">
+                          <div className="flex-shrink-0 items-center">
+                            <a
+                              data-id={data}
+                              onClick={() => {
+                                showModalDelete(data);
+                              }}
+                              className="group flex items-center justify-between rounded-lg border border-current px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 focus:outline-none focus:ring active:bg-indigo-500"
+                            >
+                              <i className="bi bi-trash-fill mr-1" /> Устгах
+                            </a>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div className="px-6 py-8 text-center bg-gray-100  lg:flex-shrink-4 lg:flex lg:flex-col lg:justify-center lg:p-4">
+                    <TrainingProgressCell data={data} />
+                    <div className="flex items-center justify-center mt-4 leading-none text-gray-900 ">
+                      {data.fileUrl.slice(-4) === ".mp4" ? (
+                        <div>
+                          <video
+                            ref={videoRef}
+                            width="100%"
+                            // height="100%"
+
+                            controls
+                          >
+                            <source
+                              src={`http://` + `${data.fileUrl}`}
+                              type="video/mp4"
+                            />
+                          </video>
+                        </div>
+                      ) : (
+                        <div className="rounded border-l-4 border-red-500 bg-red-50 p-4">
+                          <strong className="block font-medium text-red-700">
+                            Файл хавсаргаагүй байна.
+                          </strong>
+                        </div>
+                      )}
+                    </div>
+                    {data.fileUrl === "" ? (
                       ""
                     ) : (
-                      <li className="flex items-start lg:col-span-1">
-                        <div className="flex-shrink-0 text-emerald-500 text-lg">
-                          <i className="bi bi-clock-history" />
-                        </div>
-                        <p className="ml-3 text-sm leading-5 text-gray-700 ">
-                          Үргэлжлэх хугацаа: {data.duration}
-                        </p>
-                      </li>
+                      <p className="mt-4 text-sm leading-5">
+                        <span className="block font-medium text-gray-500 ">
+                          <i className="bi bi-play-circle-fill" /> Файлын нэр:
+                        </span>
+                        <span className="inline-block font-medium text-gray-500  ">
+                          {data.fileUrl.slice(29)}
+                        </span>
+                      </p>
                     )}
-                  </ul>
-                </div>
-                <div className="mt-2">
-                  <div className="flex items-center">
-                    <h4 className="flex-shrink-0 pr-4 text-sm font-semibold leading-5 tracking-wider text-indigo-600 uppercase bg-white ">
-                      Үйлдэл
-                    </h4>
-                    <div className="flex-1 border-t-2 border-gray-200"></div>
                   </div>
-                  <ul className="mt-2 lg:grid lg:grid-cols-3 lg:col-gap-8 lg:row-gap-5">
-                    <li className="flex items-center lg:col-span-1">
-                      <div className="flex-shrink-0 items-center">
-                        <a
-                          onClick={() => {
-                            showModalView(data);
-                          }}
-                          className="group flex items-center justify-between rounded-lg border border-current px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 focus:outline-none focus:ring active:bg-indigo-500"
-                        >
-                          <i className="bi bi-eye-fill mr-1" /> Харах
-                        </a>
-                      </div>
-                    </li>
-                    <li className="flex items-center lg:col-span-1">
-                      <div className="flex-shrink-0 items-center">
-                        <a
-                          data-id={data}
-                          onClick={() => {
-                            handleEdit(data);
-                          }}
-                          className="group flex items-center justify-between rounded-lg border border-current px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 focus:outline-none focus:ring active:bg-indigo-500"
-                        >
-                          <i className="bi bi-pencil-square mr-1" /> Засварлах
-                        </a>
-                      </div>
-                    </li>
-                    <li className="flex items-center lg:col-span-1">
-                      <div className="flex-shrink-0 items-center">
-                        <a
-                          data-id={data}
-                          onClick={() => {
-                            showModalDelete(data);
-                          }}
-                          className="group flex items-center justify-between rounded-lg border border-current px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 focus:outline-none focus:ring active:bg-indigo-500"
-                        >
-                          <i className="bi bi-trash-fill mr-1" /> Устгах
-                        </a>
-                      </div>
-                    </li>
-                  </ul>
                 </div>
               </div>
-              <div className="px-6 py-8 text-center bg-gray-100  lg:flex-shrink-4 lg:flex lg:flex-col lg:justify-center lg:p-4">
-                <TrainingProgressCell data={data} />
-                <div className="flex items-center justify-center mt-4 leading-none text-gray-900 ">
-                  {data.fileUrl.slice(-4) === ".mp4" ? (
-                    <div>
-                      <video
-                        ref={videoRef}
-                        width="100%"
-                        // height="100%"
+            ))
+          : trains &&
+            trains?.map((data, index) => (
+              <div key={index} className="p-2">
+                <div className="max-w-full mx-auto overflow-hidden rounded-lg shadow-lg pricing-box lg:max-w-none lg:flex mt-2">
+                  <div className="w-full px-6 py-8 bg-white  lg:flex-shrink-2 lg:p-12">
+                    <h3 className="text-xl  leading-8 text-gray-800 sm:text-xl sm:leading-9 ">
+                      {data?.name}
+                    </h3>
+                    {data?.description === null ? (
+                      ""
+                    ) : (
+                      <p className="mt-4 leading-6 text-gray-800 ">
+                        {data?.description}
+                      </p>
+                    )}
 
-                        controls
-                      >
-                        <source
-                          src={`http://` + `${data.fileUrl}`}
-                          type="video/mp4"
-                        />
-                      </video>
+                    <div className="mt-2">
+                      <div className="flex items-center">
+                        <h4 className="flex-shrink-0 pr-4 text-sm font-semibold leading-5 tracking-wider text-indigo-600 uppercase bg-white ">
+                          ерөнхий
+                        </h4>
+                        <div className="flex-1 border-t-2 border-gray-200"></div>
+                      </div>
+                      <ul className="mt-2 lg:grid lg:grid-cols-2 lg:col-gap-8 lg:row-gap-5">
+                        <li className="flex items-start lg:col-span-1">
+                          <div className="flex-shrink-0 text-emerald-500 text-lg">
+                            <i className="bi bi-card-checklist" />
+                          </div>
+                          <p className="ml-3 text-sm leading-5 text-gray-700">
+                            Ангилал:{" "}
+                            {
+                              (category?.find(
+                                (obj) => obj.id === data?.tCategory
+                              )).name
+                            }
+                          </p>
+                        </li>
+                        {data?.teacher === null ? (
+                          ""
+                        ) : (
+                          <li className="flex items-start lg:col-span-1">
+                            <div className="flex-shrink-0 text-emerald-500 text-lg">
+                              <i className="bi bi-person-video3" />
+                            </div>
+                            <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                              Багш: {data?.teacher}
+                            </p>
+                          </li>
+                        )}
+
+                        <li className="flex items-start lg:col-span-1">
+                          <div className="flex-shrink-0 text-emerald-500 text-lg">
+                            <i className="bi bi-signpost-split-fill" />
+                          </div>
+                          <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                            {
+                              options.find(
+                                (obj) => obj.id === data?.sessionType
+                              ).value
+                            }
+                          </p>
+                        </li>
+                        {data?.location === null ? (
+                          ""
+                        ) : (
+                          <li className="flex items-start lg:col-span-1">
+                            <div className="flex-shrink-0 text-emerald-500 text-lg">
+                              <i className="bi bi-pin-map-fill" />
+                            </div>
+                            <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                              Байршил: {data?.location}
+                            </p>
+                          </li>
+                        )}
+                        {data.startDate === null ? (
+                          ""
+                        ) : (
+                          <li className="flex items-start lg:col-span-1">
+                            <div className="flex-shrink-0 text-emerald-500 text-lg">
+                              <i className="bi bi-calendar-check" />
+                            </div>
+
+                            <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                              Эхлэх хугацаа: {data?.startDate}
+                            </p>
+                          </li>
+                        )}
+
+                        {data?.endDate === null ? (
+                          ""
+                        ) : (
+                          <li className="flex items-start lg:col-span-1">
+                            <div className="flex-shrink-0 text-emerald-500 text-lg">
+                              <i className="bi bi-calendar-check-fill" />
+                            </div>
+                            {nowdateTime >= data.endDate + data.duration ? (
+                              <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                                Дуусах хугацаа: {data.endDate}
+                              </p>
+                            ) : (
+                              <p className="ml-3 text-sm leading-5 text-red-500 ">
+                                Дуусах хугацаа: {data.endDate} (Хугацаа дууссан)
+                              </p>
+                            )}
+                          </li>
+                        )}
+
+                        {data.duration === null ? (
+                          ""
+                        ) : (
+                          <li className="flex items-start lg:col-span-1">
+                            <div className="flex-shrink-0 text-emerald-500 text-lg">
+                              <i className="bi bi-clock-history" />
+                            </div>
+                            <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                              Үргэлжлэх хугацаа: {data.duration}
+                            </p>
+                          </li>
+                        )}
+                      </ul>
                     </div>
-                  ) : (
-                    <div className="rounded border-l-4 border-red-500 bg-red-50 p-4">
-                      <strong className="block font-medium text-red-700">
-                        Файл хавсаргаагүй байна.
-                      </strong>
+                    <div className="mt-2">
+                      <div className="flex items-center">
+                        <h4 className="flex-shrink-0 pr-4 text-sm font-semibold leading-5 tracking-wider text-indigo-600 uppercase bg-white ">
+                          Үйлдэл
+                        </h4>
+                        <div className="flex-1 border-t-2 border-gray-200"></div>
+                      </div>
+                      <ul className="mt-2 lg:grid lg:grid-cols-3 lg:col-gap-8 lg:row-gap-5">
+                        <li className="flex items-center lg:col-span-1">
+                          <div className="flex-shrink-0 items-center">
+                            <a
+                              onClick={() => {
+                                showModalView(data);
+                              }}
+                              className="group flex items-center justify-between rounded-lg border border-current px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 focus:outline-none focus:ring active:bg-indigo-500"
+                            >
+                              <i className="bi bi-eye-fill mr-1" /> Харах
+                            </a>
+                          </div>
+                        </li>
+                        <li className="flex items-center lg:col-span-1">
+                          <div className="flex-shrink-0 items-center">
+                            <a
+                              data-id={data}
+                              onClick={() => {
+                                handleEdit(data);
+                              }}
+                              className="group flex items-center justify-between rounded-lg border border-current px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 focus:outline-none focus:ring active:bg-indigo-500"
+                            >
+                              <i className="bi bi-pencil-square mr-1" />{" "}
+                              Засварлах
+                            </a>
+                          </div>
+                        </li>
+                        <li className="flex items-center lg:col-span-1">
+                          <div className="flex-shrink-0 items-center">
+                            <a
+                              data-id={data}
+                              onClick={() => {
+                                showModalDelete(data);
+                              }}
+                              className="group flex items-center justify-between rounded-lg border border-current px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 focus:outline-none focus:ring active:bg-indigo-500"
+                            >
+                              <i className="bi bi-trash-fill mr-1" /> Устгах
+                            </a>
+                          </div>
+                        </li>
+                      </ul>
                     </div>
-                  )}
+                  </div>
+                  <div className="px-6 py-8 text-center bg-gray-100  lg:flex-shrink-4 lg:flex lg:flex-col lg:justify-center lg:p-4">
+                    <TrainingProgressCell data={data} />
+                    <div className="flex items-center justify-center mt-4 leading-none text-gray-900 ">
+                      {data.fileUrl.slice(-4) === ".mp4" ? (
+                        <div>
+                          <video
+                            ref={videoRef}
+                            width="100%"
+                            // height="100%"
+
+                            controls
+                          >
+                            <source
+                              src={`http://` + `${data.fileUrl}`}
+                              type="video/mp4"
+                            />
+                          </video>
+                        </div>
+                      ) : (
+                        <div className="rounded border-l-4 border-red-500 bg-red-50 p-4">
+                          <strong className="block font-medium text-red-700">
+                            Файл хавсаргаагүй байна.
+                          </strong>
+                        </div>
+                      )}
+                    </div>
+                    {data.fileUrl === "" ? (
+                      ""
+                    ) : (
+                      <p className="mt-4 text-sm leading-5">
+                        <span className="block font-medium text-gray-500 ">
+                          <i className="bi bi-play-circle-fill" /> Файлын нэр:
+                        </span>
+                        <span className="inline-block font-medium text-gray-500  ">
+                          {data.fileUrl.slice(29)}
+                        </span>
+                      </p>
+                    )}
+                  </div>
                 </div>
-                {data.fileUrl === "" ? (
-                  ""
-                ) : (
-                  <p className="mt-4 text-sm leading-5">
-                    <span className="block font-medium text-gray-500 ">
-                      <i className="bi bi-play-circle-fill" /> Файлын нэр:
-                    </span>
-                    <span className="inline-block font-medium text-gray-500  ">
-                      {data.fileUrl.slice(29)}
-                    </span>
-                  </p>
-                )}
               </div>
-            </div>
-          </div>
-        ))}
+            ))}
       </div>
 
       <ToastContainer />

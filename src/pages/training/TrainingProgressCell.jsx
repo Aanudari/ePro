@@ -5,14 +5,13 @@ import { useStateContext } from "../../contexts/ContextProvider";
 import Select from "react-select";
 import { ToastContainer } from "react-toastify";
 import { logout } from "../../service/examService";
-
 function TrainingProgressCell({ data }) {
   const [trains, setTrains] = useState([]);
   const { TOKEN } = useStateContext();
   function ProgressBar({ percentage, startAt = 0 }) {
     return (
       <>
-        <div class="w-full h-4 bg-gray-400 rounded-full mt-3">
+        <div className="w-full h-4 bg-gray-400 rounded-full mt-3">
           <div
             style={{
               width: `${percentage >= startAt ? percentage : startAt}%`,
@@ -53,11 +52,11 @@ function TrainingProgressCell({ data }) {
   });
 
   return (
-    <div class="w-full p-3 bg-white ">
-      <div class="block m-auto">
+    <div className="w-full p-3 bg-white ">
+      <div className="block m-auto">
         <div>
-          <span class="inline-block text-sm  font-bold">
-            Үзсэн :<span class="font-bold  ml-1 ">{nowatch.length}</span>/
+          <span className="inline-block text-sm  font-bold">
+            Үзсэн :<span className="font-bold  ml-1 ">{nowatch.length}</span>/
             {data.trainingDevs.length}
           </span>
         </div>
@@ -68,7 +67,6 @@ function TrainingProgressCell({ data }) {
           />
         </div>
       </div>
-
       <ToastContainer />
     </div>
   );

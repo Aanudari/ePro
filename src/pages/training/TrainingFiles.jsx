@@ -8,8 +8,10 @@ import { logout } from "../../service/examService";
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
 
+import getWindowDimensions from "../../components/SizeDetector";
 const FormData = require("form-data");
 function TrainingFiles() {
+  const { width } = getWindowDimensions();
   const { TOKEN, activeMenu } = useStateContext();
   const navigate = useNavigate();
   const [files, setFiles] = useState();
@@ -160,14 +162,14 @@ function TrainingFiles() {
           size="ml"
           backdrop="static"
           style={
-            activeMenu
+            width < 768
               ? {
-                  width: "calc(100% - 250px)",
-                  left: "250px",
-                }
-              : {
                   width: "calc(100%)",
                   left: "0",
+                }
+              : {
+                  width: "calc(100% - 250px)",
+                  left: "250px",
                 }
           }
           keyboard={false}

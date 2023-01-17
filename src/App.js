@@ -38,7 +38,8 @@ import UserCore from "./pages/UserMainUI/Rating/UserCore";
 import ExamInitContinue from "./pages/UserMainUI/Exam/ExamInitContinue";
 import MainNavigation from "./components/MainNavigation";
 import TrainingUserCell from "./pages/training/TrainingUserCell";
-import CreateQuestion from "./pages/training_raiting/CreateQuestion";
+import EditTrainRate from "./pages/training_raiting/EditTrainRate";
+import RatedUsers from "./pages/training_raiting/RatedUsers";
 
 function App() {
   const { activeMenu, showTop, roleId } = useStateContext();
@@ -157,14 +158,21 @@ function App() {
             }
           />
           <Route
-            path="/train-question-create"
+            path="/edit-train-rate"
             element={
               <ProtectedRoute allowedRoles={[199]}>
-                <CreateQuestion />
+                <EditTrainRate />
               </ProtectedRoute>
             }
           />
-
+          <Route
+            path="/train-rate-view"
+            element={
+              <ProtectedRoute allowedRoles={[199]}>
+                <RatedUsers />
+              </ProtectedRoute>
+            }
+          />
           <Route path="*" element={<NotFound />} />
           <Route
             path="/notification"

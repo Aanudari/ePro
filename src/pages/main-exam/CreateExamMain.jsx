@@ -51,24 +51,7 @@ function CreateExamMain({
       })
       .catch((err) => console.log(err));
   }, []);
-  useEffect(() => {
-    axios({
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${TOKEN}`,
-      },
-      url: `${process.env.REACT_APP_URL}/v1/User/role/${unit}`,
-    })
-      .then((res) => {
-        if (res.data.errorCode == 401) {
-          logout();
-        } else {
-          setUnitData(res.data.result);
-        }
-      })
-      .catch((err) => console.log(err));
-  }, [unit]);
+
   function addZero(i) {
     if (i < 10) {
       i = "0" + i;
@@ -316,7 +299,6 @@ function CreateExamMain({
                       setNoti_examName(false);
                     }}
                     type="text"
-                    required
                   />
                   {noti_examName && (
                     <i
@@ -337,7 +319,6 @@ function CreateExamMain({
                       setNoti_diration(false);
                     }}
                     type="number"
-                    required
                   />
                   {noti_diration && (
                     <i
@@ -372,7 +353,6 @@ function CreateExamMain({
                       }}
                       name="format"
                       id="format"
-                      required
                     >
                       <option>Ажлын байр</option>
                       <option value="188">Branch</option>
@@ -429,30 +409,20 @@ function CreateExamMain({
                     onClick={() => {
                       setShowSelect(true);
                     }}
-                    className="w-full mt-10"
+                    className="px-3 hover:bg-green-700 py-2 bg-green-600 font-[500] 
+                      flex justify-center items-center text-white rounded mt-4 w-[200px]"
                   >
-                    {/* <button
-                      onClick={() => {
-                        setShowSelect(true);
-                      }}
-                      className="cus-btn hover:shadow h-[48px]"
-                    > */}
-                    Ажилтан сонгох {allEmployee?.length}
-                    {/* </button> */}
+                    Нийт: {allEmployee?.length} ажилтан
                   </div>
                 ) : (
                   <div
                     onClick={() => {
                       setShowSelect(true);
                     }}
-                    className="w-full mt-10"
+                    className="px-3 hover:bg-teal-600 py-2 bg-teal-600 font-[500] 
+                      flex justify-center items-center text-white rounded hover:bg-teal-700 mt-4 w-[200px]"
                   >
-                    {/* <button
-                      
-                      className="cus-btn hover:shadow h-[48px]"
-                    > */}
                     Ажилтан сонгох
-                    {/* </button> */}
                   </div>
                 )}
 
@@ -461,7 +431,7 @@ function CreateExamMain({
                     onClick={(e) => {
                       handleCreateQuestions(e);
                     }}
-                    className="cus-btn hover:shadow h-[48px]"
+                    className="cus-btn !bg-teal-600 hover:!bg-teal-700 hover:shadow h-[48px]"
                   >
                     Шалгалт үүсгэх
                   </button>

@@ -5,8 +5,17 @@ import ExamHeader from "../ExamHeader";
 import ExamEditHeader from "../ExamEditHeader";
 import EditQuestionMenu from "../edits/EditQuestionMenu";
 import { logout } from "../../../service/examService";
-function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
+import ExamEditHeader2 from "../ExamEditHeader2";
+function ExamModalMain({
+  setExamModal,
+  id,
+  exams,
+  examTri,
+  setExamTri,
+  examSummary,
+}) {
   const [filtered, setFiltered] = useState();
+  const [showButton, setShowButton] = useState(false);
   const [data, setData] = useState();
   const { TOKEN, activeMenu } = useStateContext();
   let chosen = exams.filter((item, index) => {
@@ -54,7 +63,7 @@ function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
         }
       })
       .catch((err) => console.log(err));
-  }, [trigger2]);
+  }, [trigger2, showButton]);
   const handleDeleteExam = () => {
     axios({
       method: "delete",
@@ -191,24 +200,6 @@ function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
   const [categoryID, setcategoryID] = useState();
   const [showQuestions, setShowQuestions] = useState(false);
   const [categoryData, setCategoryData] = useState();
-  useEffect(() => {
-    axios({
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${TOKEN}`,
-      },
-      url: `${process.env.REACT_APP_URL}/v1/Pool/Question/${categoryID}`,
-    })
-      .then((res) => {
-        if (res.data.errorCode == 401) {
-          logout();
-        } else {
-          setCategoryData(res.data.questionList);
-        }
-      })
-      .catch((err) => console.log(err));
-  }, [categoryID]);
 
   const [arr, setArr] = useState([]);
   const handleCollectIds = (id) => {
@@ -304,6 +295,36 @@ function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
     setFiltered([assigned]);
   };
   const [userTrigger, setUserTrigger] = useState(false);
+  const [qID, setqID] = useState();
+  const [aID, setaID] = useState();
+  const changeisTrue = (questionId, answerId) => {
+    setShowButton(true);
+    setqID(questionId);
+    setaID(answerId);
+  };
+  let newIsTrue = {
+    questionId: qID,
+    answerId: aID,
+    isTrue: "0",
+  };
+  const submitNewIsTrue = () => {
+    axios({
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: TOKEN,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/ExamReport/edit/question`,
+      data: newIsTrue,
+    })
+      .then((res) => {
+        console.log(res);
+        setShowButton(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <div
       className={`fixed ${
@@ -336,6 +357,18 @@ function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
             editHeader={editHeader}
             userTrigger={userTrigger}
           />
+        ) : examSummary == "Exam over" ? (
+          <ExamEditHeader2
+            examTri={examTri}
+            setExamTri={setExamTri}
+            setExamModal={setExamModal}
+            array1={array1}
+            chosen={chosen}
+            setEditHeader={setEditHeader}
+            editHeader={editHeader}
+            userTrigger={userTrigger}
+            setUserTrigger={setUserTrigger}
+          />
         ) : (
           <ExamEditHeader
             examTri={examTri}
@@ -361,20 +394,12 @@ function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
                   className={`mt-3 border-t-[5px] border-l border-r border-[#50a3a2] rounded-lg realtive `}
                 >
                   <div
-                    onClick={() => {
-                      checked.length < 1 &&
-                        handleQuestion(
-                          question.id,
-                          question.question,
-                          question.points
-                        );
-                    }}
                     className={`w-full py-3 px-3 font-[400] flex flex-col
                                     transition hover:bg-opacity-10 hover:bg-gray-700 rounded-lg
-                                        cursor-pointer pt-10 ${
-                                          checked.includes(question.id) &&
-                                          "bg-opacity-10 bg-gray-700 "
-                                        }`}
+                                         pt-10 ${
+                                           checked.includes(question.id) &&
+                                           "bg-opacity-10 bg-gray-700 "
+                                         }`}
                   >
                     <div className="flex justify-between">
                       {checked.includes(question.id) ? (
@@ -474,10 +499,18 @@ function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
                             className="mt-3 font-[400] pl-3 flex items-center"
                           >
                             {answer.isTrue == "1" ? (
-                              <i className="bi bi-check-circle text-xl px-1 text-teal-500"></i>
+                              <i
+                                onClick={() => {
+                                  changeisTrue(question.id, answer.id);
+                                }}
+                                className="bi bi-check-circle hover:scale-105 transition-all text-xl px-1 text-teal-500 cursor-pointer"
+                              ></i>
                             ) : (
                               <i
-                                className={`bi bi-circle text-xl px-1 outline-none text-gray-400`}
+                                onClick={() => {
+                                  changeisTrue(question.id, answer.id);
+                                }}
+                                className={`bi bi-circle hover:scale-105 transition-all hover:text-teal-500 text-xl px-1 outline-none text-gray-400 cursor-pointer`}
                               ></i>
                             )}
                             <span className="ml-2 text-[14px] font-[400]">
@@ -485,6 +518,45 @@ function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
                             </span>
                           </h6>
                         ))
+                      )}
+                      {showButton && (
+                        <div
+                          className="glass rounded-t absolute h-full w-full top-0 left-0 flex items-center
+                        justify-center"
+                        >
+                          <div
+                            className="w-[500px] h-[200px] bg-white rounded flex flex-col
+                        justify-between p-4 shadow"
+                          >
+                            <div className="w-full flex justify-center">
+                              <i className="bi bi-exclamation-circle text-3xl text-teal-500"></i>
+                            </div>
+                            <span className="font-[400] text-center">
+                              Та асуултын зөв хариултыг өөрчилснөөр нийт
+                              шалгалтын үр дүнд нөлөөлөхийг анхаарна уу .
+                            </span>
+                            <div className="flex justify-end">
+                              <button
+                                onClick={() => {
+                                  submitNewIsTrue();
+                                }}
+                                className=" px-3 py-2 bg-teal-500 font-[500] flex justify-center 
+        items-center text-white rounded-lg "
+                              >
+                                Өөрчлөх
+                              </button>
+                              <button
+                                onClick={() => {
+                                  setShowButton(false);
+                                }}
+                                className=" px-3 py-2 bg-gray-400 font-[500] flex justify-center 
+        items-center text-white rounded-lg ml-2"
+                              >
+                                Цуцлах
+                              </button>
+                            </div>
+                          </div>
+                        </div>
                       )}
                     </div>
                   </div>
@@ -497,14 +569,14 @@ function ExamModalMain({ setExamModal, id, exams, examTri, setExamTri }) {
             <div className="py-3"></div>
           </div>
         </div>
-        <button
+        {/* <button
           onClick={() => {
             setSideQuestions(!sideQuestions);
           }}
           className="w-[35px] h-[35px] shadow absolute right-[calc(3%)] bottom-[calc(5%)] rounded-full flex justify-center items-center "
         >
           <i className="bi bi-plus-circle-fill text-[35px] text-teal-600 hover:scale-110 hover:text-teal-500 active:text-teal-400"></i>
-        </button>
+        </button> */}
       </div>
       {showSide && (
         <div className="h-screen w-[200px] bg-teal-400 transition from-left overflow-scroll">

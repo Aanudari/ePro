@@ -61,11 +61,11 @@ function ExamBoard({
                   exam.examSummary.status !== "Ongoing"
                     ? () => {
                         setExamModal(true);
-                        handleExamModal(exam.id);
+                        handleExamModal(exam.id, exam.examSummary.status);
                       }
                     : () => {
                         setShowReport(true);
-                        handleExamModal(exam.id);
+                        handleExamModal(exam.id, exam.examSummary.status);
                       }
                 }
                 className={`w-full h-14 flex gap-1 border-b ${

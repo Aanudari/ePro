@@ -6,6 +6,7 @@ import EditQuestionMain from "../EditQuestionMain";
 import CreateExamMain from "../CreateExamMain";
 import ImageUploaderSmall from "../SelectOptions/ImageUploderSmall";
 import { logout } from "../../../service/examService";
+import PoolQuestionEdit from "../edits/PoolQuestionEdit";
 function CategoryModal({
   setCategoryModal,
   id,
@@ -103,7 +104,6 @@ function CategoryModal({
     setFinalArr(newArr);
   };
   const submitQuestion = () => {
-    console.log(answerSchema);
     axios({
       method: "post",
       headers: {
@@ -170,8 +170,6 @@ function CategoryModal({
     setExamState(!examState);
   };
   const [imgSide, setImgSide] = useState(false);
-  // console.log(checked)
-  // console.log(data);
   return (
     <div
       className={`fixed ${
@@ -250,7 +248,7 @@ function CategoryModal({
             ) : (
               <div className="w-full h-full px-3 overflow-scroll py-5">
                 <div className="">
-                  {data?.map((question, index) => (
+                  {/* {data?.map((question, index) => (
                     <div
                       key={index}
                       className="mb-4 p-2 rounded-lg border bg-teal-500"
@@ -319,6 +317,16 @@ function CategoryModal({
                         </div>
                       )}
                     </div>
+                  ))} */}
+                  {data?.map((question, ind) => (
+                    <PoolQuestionEdit
+                      setTrigger={setTrigger}
+                      trigger={trigger}
+                      key={ind}
+                      data={question}
+                      indexed={ind}
+                      handleCheck={handleCheck}
+                    />
                   ))}
                 </div>
               </div>

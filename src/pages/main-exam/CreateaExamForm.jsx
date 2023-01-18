@@ -1,20 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useStateContext } from "../../contexts/ContextProvider";
-import axios from "axios";
 import DatePicker from "react-datepicker";
-import { useNavigate } from "react-router-dom";
 import AllEmployeeSelect from "./modal/AllEmployeeSelect";
-import { logout } from "../../service/examService";
+import axios from "axios";
 import GetQuestionIdsFromCategory from "./GetQuestionIdsFromCategory";
-function CreateExamForm({
-  checked,
-  depId,
-  setCategoryModal,
-  setShowCategoryMenu,
-  setTriggerCat,
-  triggerCat,
-  closeForm,
-}) {
+function CreateExamForm({ closeForm, examTri, setExamTri }) {
   const [showSelect, setShowSelect] = useState(false);
   const [allEmployee, setAllEmployee] = useState();
   const getEmployees = (employees) => {
@@ -85,9 +75,10 @@ function CreateExamForm({
   const [exam_name, setExam_name] = useState("");
   const [varSelect, setVarSelect] = useState("A");
   const [count, setCount] = useState();
-  const [showQuestionMenu, setshowQuestionMenu] = useState(false);
-  const [key, setKey] = useState(1);
+
   // console.log(allEmployee[0]);
+  const [AllQuestions, setAllQuestions] = useState([]);
+
   const main = {
     examName: `${exam_name}`,
     startDate: `${datestring}`,
@@ -97,31 +88,11 @@ function CreateExamForm({
     variants: [
       {
         name: `${varSelect}`,
-        questionIdList: [],
+        questionIdList: AllQuestions,
       },
     ],
   };
-  const [question, setQuestion] = useState({
-    question: ``,
-    imgUrl: "string",
-    answerList: [],
-  });
-  const [variants, setVariants] = useState({
-    name: `${varSelect}`,
-    questionList: [],
-  });
-  const [exam, setExam] = useState({
-    examName: `${exam_name}`,
-    startDate: `${datestring}`,
-    expireDate: `${datestring2}`,
-    duration: duration,
-    roleId: `${role_id}`,
-    variants: [],
-  });
 
-  useEffect(() => {
-    setExam((prev) => ({ ...prev, variants: variants }));
-  }, [variants]);
   const [noti_examName, setNoti_examName] = useState(false);
   const [noti_diration, setNoti_diration] = useState(false);
   const [noti_role, setNoti_role] = useState(false);
@@ -141,7 +112,38 @@ function CreateExamForm({
   const handleSubmitMain = () => {
     setShow(true);
   };
-  console.log(show);
+  const getIds = (value) => {
+    let temp = [];
+    for (let index = 0; index < value.length; index++) {
+      const element = value[index];
+      let tempo = {
+        id: element,
+      };
+      temp.push(tempo);
+    }
+    setAllQuestions(temp);
+  };
+  const handleCreateExam = () => {
+    axios({
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: TOKEN,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/ExamNew/add`,
+      data: main,
+    })
+      .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
+        closeForm(false);
+        setExamTri(!examTri);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <div
@@ -153,7 +155,7 @@ function CreateExamForm({
         bg-black bg-opacity-50 flex justify-center items-center
         `}
     >
-      {show && <GetQuestionIdsFromCategory setShow={setShow} />}
+      {show && <GetQuestionIdsFromCategory setShow={setShow} getIds={getIds} />}
       <div className="shrink w-[calc(85%)] h-[600px] bg-white flex flex-col ">
         <div className="w-full min-h-[50px] bg-gray-700 flex justify-end px-3 flex items-center ">
           <i
@@ -163,11 +165,12 @@ function CreateExamForm({
             className="bi bi-x text-white text-3xl cursor-pointer"
           ></i>
         </div>
-        <div className="w-full min-h-[calc(100vh-112px)] relative p-2">
+        <div className="w-full h-full relative p-2 flex flex-col justify-between">
           {showSelect && (
             <AllEmployeeSelect
               getEmployees={getEmployees}
               setShowSelect={setShowSelect}
+              getIds={getIds}
             />
           )}
           <div className="container-po px-0 md:px-4 pt-2 ">
@@ -314,20 +317,44 @@ function CreateExamForm({
                       Ажилтан сонгох
                     </div>
                   )}
-                  <div
-                    onClick={(e) => {
-                      handleCreateQuestions(e);
-                    }}
-                    className="px-3 hover:bg-teal-600 py-2 bg-teal-600 font-[500] 
+                  {AllQuestions?.length > 0 ? (
+                    <div
+                      onClick={(e) => {
+                        handleCreateQuestions(e);
+                      }}
+                      className="px-3 hover:bg-green-700 py-2 bg-green-600 font-[500] 
+                    flex justify-center items-center text-white rounded mt-4 w-[200px]"
+                    >
+                      Нийт: {AllQuestions?.length} Асуулт
+                    </div>
+                  ) : (
+                    <div
+                      onClick={(e) => {
+                        handleCreateQuestions(e);
+                      }}
+                      className="px-3 hover:bg-teal-600 py-2 bg-teal-600 font-[500] 
                       flex justify-center cursor-pointer items-center text-white rounded hover:bg-teal-700 mt-4 w-[200px]"
-                  >
-                    Асуулт сонгох
-                  </div>
+                    >
+                      Асуулт сонгох
+                    </div>
+                  )}
                 </div>
                 <div></div>
               </div>
             </form>
+            <div></div>
           </div>
+          {AllQuestions.length > 0 && allEmployee.length > 0 && (
+            <div
+              onClick={() => {
+                handleCreateExam();
+              }}
+              className="h-12 flex items-center justify-center bg-green-600 text-white font-[500] rounded
+          cursor-pointer hover:bg-green-700 active:bg-green-600"
+            >
+              Шалгалт үүсгэх
+            </div>
+          )}
         </div>
       </div>
     </div>

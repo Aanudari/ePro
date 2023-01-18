@@ -8,6 +8,8 @@ function ExamBoard({
   handleExamModal,
   setShowReport,
   setShowDocument,
+  examTri,
+  setExamTri,
 }) {
   let tempo = ["Ongoing", "Exam over", "Not yet"];
   let temp = [exams];
@@ -28,7 +30,13 @@ function ExamBoard({
 
   return (
     <div className="min-w-[1150px] min-h-full max-h-full bg-white py-3 px-4 shadow-sm relative">
-      {show && <CreateaExamForm closeForm={setShow} />}
+      {show && (
+        <CreateaExamForm
+          closeForm={setShow}
+          examTri={examTri}
+          setExamTri={setExamTri}
+        />
+      )}
       <select
         onChange={(e) => {
           setDetector(e.target.value);

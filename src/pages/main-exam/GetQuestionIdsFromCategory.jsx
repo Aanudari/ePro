@@ -2,7 +2,8 @@ import { useStateContext } from "../../contexts/ContextProvider";
 import { logout } from "../../service/examService";
 import axios from "axios";
 import { useState, useEffect } from "react";
-function GetQuestionIdsFromCategory({ setShow }) {
+import QuestionMain from "./QuestionMain";
+function GetQuestionIdsFromCategory({ setShow, getIds }) {
   const { activeMenu, TOKEN } = useStateContext();
   const [categories, setCategories] = useState();
   useEffect(() => {
@@ -26,7 +27,51 @@ function GetQuestionIdsFromCategory({ setShow }) {
       })
       .catch((err) => console.log(err));
   }, []);
-  console.log(categories);
+  const [questionIds, setQuestionIds] = useState([]);
+  const remover = (value) => {
+    let tempo = questionIds.filter((item) => {
+      return item !== value;
+    });
+    setQuestionIds(tempo);
+  };
+  const collector = (value) => {
+    setQuestionIds((prev) => [...prev, value]);
+  };
+  const [selected, setSelected] = useState([]);
+  const [catName, setCatName] = useState("");
+  const [catStatus, setCatStatus] = useState("");
+  const selectCatId = (value, catName, status) => {
+    if (selected.length > 0) {
+      setSelected([value]);
+      setCatName(catName);
+      setCatStatus(status);
+    } else {
+      setSelected((prev) => [...prev, value]);
+      setCatName(catName);
+      setCatStatus(status);
+    }
+  };
+  const [questions, setQuestions] = useState();
+  useEffect(() => {
+    axios({
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/Pool/Question/${
+        selected[0] == undefined ? 0 : selected[0]
+      }`,
+    })
+      .then((res) => {
+        if (res.data.errorCode == 401) {
+          logout();
+        } else {
+          setQuestions(res.data.questionList);
+        }
+      })
+      .catch((err) => console.log(err));
+  }, [selected]);
   return (
     <div
       className={`${
@@ -38,22 +83,28 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
       <div className="bg-gray-200 appear-smooth w-full h-[calc(100%)] relative">
         <div className="w-full h-12 bg-teal-500 flex justify-between px-4 items-center shadow-sm">
           <div className="flex items-center">
-            {/* <div className=" flex justify-between items-center px-4 py-2">
+            <div className=" flex justify-between items-center px-4 py-2">
               <span className="text-white font-[500] text-sm">
-                Сонгох : {chosen.length}/{users?.length}
+                Сонгосон : {questionIds.length}/10
               </span>
-              {chosen.length > 0 && (
+              {questionIds.length > 0 && (
                 <span
                   onClick={() => {
-                    setShowSelect(false);
-                    getEmployees(chosen);
+                    setShow(false);
+                    //   getEmployees(chosen);
                   }}
                   className="text-white font-[500] text-sm border-[2px] rounded  px-2 py-2 ml-2"
                 >
-                  <button>Хадгалах</button>
+                  <button
+                    onClick={() => {
+                      getIds(questionIds);
+                    }}
+                  >
+                    Хадгалах
+                  </button>
                 </span>
               )}
-            </div> */}
+            </div>
           </div>
           <div className="">
             <i
@@ -64,60 +115,86 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
             ></i>
           </div>
         </div>
-        <div>
-          {categories?.map((category, index) => (
-            <div key={index} className="relative parent ">
+        {selected.length > 0 ? (
+          <div className=" px-4 py-1">
+            <div className=" flex gap-2 h-16 items-center">
               <div
-                // onClick={() => {
-                //   setCategoryModal(true);
-                //   handleCategoryModal(category.id, category.departmentId);
-                // }}
-                className={`w-full text-white mt-1 h-16  shadow-sm ${
-                  category.status == "A"
-                    ? "bg-teal-400 hover:bg-teal-500 cursor-pointer"
-                    : "bg-gray-400"
-                } 
-               flex justify-between px-3 py-2 hover:shadow-cus transition-all`}
+                onClick={() => {
+                  setSelected([]);
+                }}
+                className="px-3 h-10 hover:bg-teal-600 py-2 bg-teal-600 font-[500] rounded
+                    shadow-md text-sm  flex justify-center cursor-pointer items-center text-white  hover:bg-teal-700 w-[200px]"
               >
-                <div className="flex flex-col justify-center ">
-                  <h6 className="font-[500] text-[12px] uppercase">
-                    {category.status == "O" && (
-                      <i className="bi bi-clock-history mr-2 text-lg"></i>
-                    )}
-                    {category.departmentName}
-                  </h6>
-                </div>
-                <div className="flex justify-between w-[calc(60%)]">
-                  <div className="flex flex-col justify-center">
+                <i className="bi bi-backspace mr-2"></i>Буцах
+              </div>
+              <div
+                className={`px-3 h-16 py-2 ${
+                  catStatus == "O" ? "bg-gray-400" : "bg-teal-500"
+                } font-[500] flex justify-center  items-center text-white  
+                w-full`}
+              >
+                {catName}
+              </div>
+            </div>
+            <div className=" mt-4">
+              {questions?.map((question, index) => (
+                <QuestionMain
+                  key={index}
+                  data={question}
+                  indexed={index}
+                  ids={questionIds}
+                  remover={remover}
+                  collector={collector}
+                />
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="px-4">
+            {categories?.map((category, index) => (
+              <div key={index} className="relative parent ">
+                <div
+                  onClick={() => {
+                    //   setCategoryModal(true);
+                    selectCatId(category.id, category.name, category.status);
+                  }}
+                  className={`w-full text-white mt-1 h-16  shadow-sm ${
+                    category.status == "A"
+                      ? "bg-teal-400 hover:bg-teal-500 cursor-pointer"
+                      : "bg-gray-400"
+                  } 
+               flex justify-between px-3 py-2 hover:shadow-cus transition-all`}
+                >
+                  <div className="flex flex-col justify-center ">
                     <h6 className="font-[500] text-[12px] uppercase">
-                      {category.name}
+                      {category.status == "O" && (
+                        <i className="bi bi-clock-history mr-2 text-lg"></i>
+                      )}
+                      {category.departmentName}
                     </h6>
                   </div>
-                  <div className="flex justify-center items-center">
-                    <div
-                      className="h-8 w-[100px] bg-gray-700 rounded-full flex 
-                        justify-center items-center"
-                    >
-                      <h6 className="m-0 text-[13px]">
-                        {category.questionCount}
+                  <div className="flex justify-between w-[calc(60%)]">
+                    <div className="flex flex-col justify-center">
+                      <h6 className="font-[500] text-[12px] uppercase">
+                        {category.name}
                       </h6>
+                    </div>
+                    <div className="flex justify-center items-center">
+                      <div
+                        className="h-8 w-[100px] bg-gray-700 rounded-full flex 
+                        justify-center items-center"
+                      >
+                        <h6 className="m-0 text-[13px]">
+                          {category.questionCount}
+                        </h6>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div
-                // onClick={() => {
-                //   deleteCategory(category.id);
-                // }}
-                className="child top-[15px] mr-4 h-8 w-[50px] bg-gray-700 rounded-full flex 
-                                justify-center text-white hover:!text-red-500 items-center absolute right-[calc(12%)]
-                                cursor-pointer transition-all"
-              >
-                <i className="bi bi-trash3-fill"></i>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -18,9 +18,6 @@ function DocumentFinishedExam({ setShowDocument, id, exams }) {
       url: `${process.env.REACT_APP_URL}/v1/ExamReport/oddQuestion?examId=${id}`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
         setData(res.data);
         if (res.data.resultMessage === "Unauthorized") {
           logout();

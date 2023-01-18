@@ -20,9 +20,6 @@ function TemplateEditModal({ setShowModal, trigger, setTrigger }) {
       url: `${process.env.REACT_APP_URL}/v1/RatingTemplate/template/${templateID}`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
         if (res.data.resultMessage === "Unauthorized") {
           logout();
         } else {

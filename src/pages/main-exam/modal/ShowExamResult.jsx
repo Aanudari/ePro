@@ -16,9 +16,6 @@ function ShowExamResult({ setShow, result, id, score }) {
       url: `${process.env.REACT_APP_URL}/v1/User/${id}`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
         if (res.data.isSuccess === true) {
           setData(res.data.result);
         }

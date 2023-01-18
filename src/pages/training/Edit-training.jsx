@@ -67,9 +67,6 @@ function EditTraining() {
       url: `${process.env.REACT_APP_URL}/v1/Training/category`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
         if (res.data.isSuccess == true) {
           setCategory(res.data.trainingCatList);
         }
@@ -92,9 +89,6 @@ function EditTraining() {
       url: `${process.env.REACT_APP_URL}/v1/User/department`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
         if (res.data.isSuccess === true) {
           setDepartment(res.data.departments);
         }
@@ -117,9 +111,6 @@ function EditTraining() {
       url: `${process.env.REACT_APP_URL}/v1/User/org/${item.id}`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
         if (
           res.data.resultMessage === "Unauthorized" ||
           res.data.resultMessage === "Input string was not in a correct format."
@@ -142,9 +133,6 @@ function EditTraining() {
       url: `${process.env.REACT_APP_URL}/v1/User/unit/devices?unitId=${item.id}`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
         if (
           res.data.resultMessage === "Unauthorized" ||
           res.data.resultMessage === "Input string was not in a correct format."

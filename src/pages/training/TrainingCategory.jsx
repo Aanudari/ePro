@@ -49,9 +49,6 @@ function TrainingCategory() {
       url: `${process.env.REACT_APP_URL}/v1/User/department`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
         if (res.data.isSuccess == true) {
           setDepartment(res.data.departments);
         }
@@ -73,9 +70,6 @@ function TrainingCategory() {
       url: `${process.env.REACT_APP_URL}/v1/Training/category`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
         if (res.data.isSuccess == true) {
           setCategory(res.data.trainingCatList);
         }

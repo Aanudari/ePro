@@ -55,9 +55,6 @@ function TrainingRating() {
       url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
         if (res.data.isSuccess === true) {
           setTRate(res.data.trRatingForm);
         }
@@ -79,9 +76,6 @@ function TrainingRating() {
       url: `${process.env.REACT_APP_URL}/v1/Training`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
         if (res.data.isSuccess === true) {
           setTrains(res.data.trainingList);
         }

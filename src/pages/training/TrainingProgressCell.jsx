@@ -34,9 +34,6 @@ function TrainingProgressCell({ data }) {
       url: `${process.env.REACT_APP_URL}/v1/TrainingReport/training/watched?trainingId=${data.id}`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
         if (res.data.isSuccess == true) {
           setWatchedUsers(res.data.watchedList);
         }

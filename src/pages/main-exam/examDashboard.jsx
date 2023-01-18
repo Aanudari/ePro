@@ -42,8 +42,6 @@ function ExamDash() {
       })
       .catch((err) => console.log(err));
   }, [categoryModal, examModal, examTri]);
-  console.log(examTri);
-  //   console.log(data);
   useEffect(() => {
     axios({
       method: "get",

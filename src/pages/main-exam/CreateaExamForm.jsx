@@ -344,7 +344,7 @@ function CreateExamForm({ closeForm, examTri, setExamTri }) {
             </form>
             <div></div>
           </div>
-          {AllQuestions.length > 0 && allEmployee.length > 0 && (
+          {AllQuestions?.length > 0 && allEmployee?.length > 0 && (
             <div
               onClick={() => {
                 handleCreateExam();

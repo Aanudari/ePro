@@ -93,7 +93,7 @@ function TrainingFiles() {
       .then((res) => {
         console.log(res.data);
         if (res.data.isSuccess === true) {
-          notification.invalidFileUpload(`${res.data.resultMessage}`);
+          notification.success(`${res.data.resultMessage}`);
           const timer = setTimeout(() => navigate(0), 500);
           return () => clearTimeout(timer);
         }
@@ -207,7 +207,7 @@ function TrainingFiles() {
       <div className="sm:px-6 w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
-            <p className="focus:outline-none text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">
+            <p className="focus:outline-none text-base sm:text-sm md:text-md lg:text-md font-bold leading-normal text-gray-800">
               Сургалтын файлууд
             </p>
           </div>
@@ -216,7 +216,7 @@ function TrainingFiles() {
         <div className="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10">
           <div className="sm:flex items-center justify-between">
             <div className="flex items-center"></div>
-            {/* <button
+            <button
               className="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 sm:mt-0 inline-flex items-start justify-start px-6 py-3 bg-indigo-700 hover:bg-indigo-600 focus:outline-none rounded 
                text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
               type="button"
@@ -224,7 +224,7 @@ function TrainingFiles() {
             >
               <i className="bi bi-plus text-bold" />
               Файл нэмэх
-            </button> */}
+            </button>
           </div>
           <div className="mt-3 overflow-x-auto">
             <table className="items-center w-full bg-transparent border-collapse ">

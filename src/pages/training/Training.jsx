@@ -144,6 +144,7 @@ function Training() {
   const today = new Date();
   const format = "YYYYMMDDHHmmss";
   const nowdateTime = moment(today).format(format);
+  console.log(filteredList.length);
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <div>
@@ -199,7 +200,7 @@ function Training() {
       <div className="sm:px-6 w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
-            <p className="focus:outline-none  sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">
+            <p className="focus:outline-none text-base sm:text-sm md:text-md lg:text-md font-bold leading-normal text-gray-800">
               Сургалтууд (
               {filteredList?.length === 0
                 ? trains?.length
@@ -459,19 +460,18 @@ function Training() {
                 </div>
               </div>
             ))
-          : trains &&
-            trains?.map((data, index) => (
+          : trains?.map((data, index) => (
               <div key={index} className="p-2">
                 <div className="max-w-full mx-auto overflow-hidden rounded-lg shadow-lg pricing-box lg:max-w-none lg:flex mt-2">
                   <div className="w-full px-6 py-8 bg-white  lg:flex-shrink-2 lg:p-12">
                     <h3 className="text-xl  leading-8 text-gray-800 sm:text-xl sm:leading-9 ">
-                      {data?.name}
+                      {data.name}
                     </h3>
-                    {data?.description === null ? (
+                    {data.description === null ? (
                       ""
                     ) : (
                       <p className="mt-4 leading-6 text-gray-800 ">
-                        {data?.description}
+                        {data.description}
                       </p>
                     )}
 
@@ -487,16 +487,14 @@ function Training() {
                           <div className="flex-shrink-0 text-emerald-500 text-lg">
                             <i className="bi bi-card-checklist" />
                           </div>
-                          <p className="ml-3 text-sm leading-5 text-gray-700">
+                          <p className="ml-3 text-sm leading-5 text-gray-700 ">
                             Ангилал:{" "}
-                            {
-                              (category?.find(
-                                (obj) => obj.id === data?.tCategory
-                              )).name
-                            }
+                            {category &&
+                              category?.find((obj) => obj.id === data.tCategory)
+                                .name}
                           </p>
                         </li>
-                        {data?.teacher === null ? (
+                        {data.teacher === null ? (
                           ""
                         ) : (
                           <li className="flex items-start lg:col-span-1">
@@ -504,7 +502,7 @@ function Training() {
                               <i className="bi bi-person-video3" />
                             </div>
                             <p className="ml-3 text-sm leading-5 text-gray-700 ">
-                              Багш: {data?.teacher}
+                              Багш: {data.teacher}
                             </p>
                           </li>
                         )}
@@ -515,13 +513,12 @@ function Training() {
                           </div>
                           <p className="ml-3 text-sm leading-5 text-gray-700 ">
                             {
-                              options.find(
-                                (obj) => obj.id === data?.sessionType
-                              ).value
+                              options.find((obj) => obj.id === data.sessionType)
+                                .value
                             }
                           </p>
                         </li>
-                        {data?.location === null ? (
+                        {data.location === null ? (
                           ""
                         ) : (
                           <li className="flex items-start lg:col-span-1">
@@ -529,7 +526,7 @@ function Training() {
                               <i className="bi bi-pin-map-fill" />
                             </div>
                             <p className="ml-3 text-sm leading-5 text-gray-700 ">
-                              Байршил: {data?.location}
+                              Байршил: {data.location}
                             </p>
                           </li>
                         )}
@@ -542,12 +539,12 @@ function Training() {
                             </div>
 
                             <p className="ml-3 text-sm leading-5 text-gray-700 ">
-                              Эхлэх хугацаа: {data?.startDate}
+                              Эхлэх хугацаа: {data.startDate}
                             </p>
                           </li>
                         )}
 
-                        {data?.endDate === null ? (
+                        {data.endDate === null ? (
                           ""
                         ) : (
                           <li className="flex items-start lg:col-span-1">

@@ -40,14 +40,14 @@ function UserTraining() {
 
   return (
     <UserLayout>
-      <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-5 ">
-        {userTrain.length === 0 ? (
-          <p className="p-4 text-center text-sm font-medium">
-            Танд сургалт хувиарлагдаагүй байна.
-          </p>
-        ) : (
-          userTrain.map((data, i) => (
-            <div key={i}>
+      {userTrain.length === 0 ? (
+        <p className="p-4 text-start text-sm font-medium">
+          Танд сургалт хувиарлагдаагүй байна.
+        </p>
+      ) : (
+        userTrain.map((data, i) => (
+          <div key={i}>
+            <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5 ">
               <div className="w-full max-w-xs p-6 overflow-hidden bg-white shadow-lg rounded-xl dark:bg-gray-800  bg-white rounded-xl  shadow-lg shadow-md overflow-hidden md:max-w-2xl  transform hover:scale-105 duration-500 ease-in-out">
                 <div className="flex items-center justify-between mb-4 space-x-12 ">
                   {data.startedWatch === null ? (
@@ -103,9 +103,9 @@ function UserTraining() {
                 </button>
               </div>
             </div>
-          ))
-        )}
-      </div>
+          </div>
+        ))
+      )}
 
       <ToastContainer />
     </UserLayout>

@@ -30,9 +30,6 @@ function TrainingFiles() {
       url: `${process.env.REACT_APP_URL}/v1/TrainingFile/filelist`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
         if (res.data.isSuccess == true) {
           setFiles(res.data.fileNames);
         }

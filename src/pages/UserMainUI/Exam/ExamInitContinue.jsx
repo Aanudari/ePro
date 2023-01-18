@@ -37,9 +37,6 @@ export default function ExamInitContinue() {
       url: `${process.env.REACT_APP_URL}/v1/ExamNew/start?examId=${examId}`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
         sessionStorage.setItem(
           "exam_data",
           JSON.stringify(res.data.variantInfo)
@@ -96,9 +93,6 @@ export default function ExamInitContinue() {
       url: `${process.env.REACT_APP_URL}/v1/ExamNew/start?examId=${eId}`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
         setVarientID(res.data.variantInfo.id);
         if (res.data.resultMessage === "Unauthorized") {
           logout();

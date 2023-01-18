@@ -14,9 +14,6 @@ function ExamHeader({ chosen, editHeader, setEditHeader, userTrigger }) {
       url: `${process.env.REACT_APP_URL}/v1/ExamNew/GetDevicesByExamId?_examId=${chosen[0].id}`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
         setData(res.data.devices);
         if (res.data.resultMessage === "Unauthorized") {
           logout();

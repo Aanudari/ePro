@@ -52,9 +52,6 @@ function AddCategoryMenu({ setShowAddCategory, trigger, setTrigger }) {
       url: `${process.env.REACT_APP_URL}/v1/User/department`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
         if (res.data.errorCode == 401) {
           logout();
         } else {
@@ -94,7 +91,7 @@ function AddCategoryMenu({ setShowAddCategory, trigger, setTrigger }) {
           ? "top-[56px] left-[250px] w-[calc(100%-250px)] h-[calc(100%-56px)]"
           : "w-full h-full top-[25px] left-0"
       } 
-        bg-black bg-opacity-50 flex justify-center items-center
+        bg-black bg-opacity-50 flex justify-center items-center z-20
         `}
     >
       <div className="shrink w-[calc(85%)] h-[600px] bg-white flex flex-col ">

@@ -15,9 +15,6 @@ function CreateRatingTemplate({ setShowModal, tri, setTri }) {
       url: `${process.env.REACT_APP_URL}/v1/User/role`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
         if (res.data.resultMessage === "Unauthorized") {
           logout();
         }

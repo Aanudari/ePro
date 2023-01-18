@@ -45,6 +45,7 @@ function ExamDash() {
       })
       .catch((err) => console.log(err));
   }, [categoryModal, examModal, examTri]);
+  console.log(examTri);
   //   console.log(data);
   useEffect(() => {
     axios({
@@ -107,6 +108,8 @@ function ExamDash() {
             handleExamModal={handleExamModal}
             setShowReport={setShowReport}
             setShowDocument={setShowDocument}
+            examTri={examTri}
+            setExamTri={setExamTri}
           />
           {imgStatus && (
             <ImageBoard imgStatus={imgStatus} setImgStatus={setImgStatus} />

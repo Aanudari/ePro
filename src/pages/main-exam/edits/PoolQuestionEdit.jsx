@@ -1,6 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useStateContext } from "../../../contexts/ContextProvider";
+import { useEffect } from "react";
 
 function PoolQuestionEdit({
   data,
@@ -11,13 +12,16 @@ function PoolQuestionEdit({
   createExam,
   checked,
 }) {
+  useEffect(() => {
+    setAnswers(data.answers);
+  }, [data]);
   const { TOKEN } = useStateContext();
   const [edit, setEdit] = useState(false);
   const [question, setQuestion] = useState(data.question);
   const [points, setPoints] = useState(data.points);
   const [qimgUrl, setQimgUrl] = useState(data.qimgUrl);
   const [answers, setAnswers] = useState(data.answers);
-  let main = {
+  const main = {
     questionId: data.id,
     question: question,
     points: points,
@@ -25,10 +29,12 @@ function PoolQuestionEdit({
     status: data.status,
     answers: answers,
   };
+  console.log(answers);
+  // console.log(data.id);
   const handleEdit = (value, answerId, isTrue) => {
-    let tempo = answers;
+    let tempo = main.answers;
     let temp = tempo.map((el, i) => {
-      if (el.id == answerId) {
+      if (i == answerId) {
         return { ...el, answer: value };
       } else {
         return el;
@@ -37,9 +43,9 @@ function PoolQuestionEdit({
     setAnswers(temp);
   };
   const handleIsTrue = (value, answerId) => {
-    let tempo = answers;
+    let tempo = main.answers;
     let temp = tempo.map((el, i) => {
-      if (el.id == answerId) {
+      if (i == answerId) {
         return { ...el, answer: value, isTrue: "1" };
       } else {
         return { ...el, isTrue: "0" };
@@ -48,7 +54,7 @@ function PoolQuestionEdit({
     setAnswers(temp);
   };
   const handleDelete = (id) => {
-    let tempo = answers;
+    let tempo = main.answers;
     let temp = tempo.filter((item, ind) => {
       if (item.id !== id && tempo.length > 0) {
         return item;
@@ -57,7 +63,7 @@ function PoolQuestionEdit({
     setAnswers(temp);
   };
   const addAnswer = () => {
-    let tempo = answers;
+    let tempo = main.answers;
     let blueP = { answer: "", aImgUrl: "", isTrue: "0" };
     tempo.push(blueP);
     let newSet = tempo.map((el) => {
@@ -197,21 +203,21 @@ function PoolQuestionEdit({
                       {item.isTrue == "1" ? (
                         <i
                           onClick={() => {
-                            handleIsTrue(item.answer, item.id, item.isTrue);
+                            handleIsTrue(item.answer, index, item.isTrue);
                           }}
                           className="bi bi-check-circle text-xl px-1 text-teal-500"
                         ></i>
                       ) : (
                         <i
                           onClick={() => {
-                            handleIsTrue(item.answer, item.id, item.isTrue);
+                            handleIsTrue(item.answer, index, item.isTrue);
                           }}
                           className="bi bi-circle text-xl px-1 text-gray-400"
                         ></i>
                       )}
                       <input
                         onChange={(e) => {
-                          handleEdit(e.target.value, item.id);
+                          handleEdit(e.target.value, index);
                         }}
                         defaultValue={item.answer}
                         type="text"

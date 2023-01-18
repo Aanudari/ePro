@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import { logout } from "../../service/examService";
+import { Modal } from "react-bootstrap";
 function UserTraining() {
   const { TOKEN, deviceId } = useStateContext();
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ function UserTraining() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
+          // alert(res.data.resultMessage);
         }
         if (res.data.isSuccess == true) {
           setUserTrain(res.data.trainingList);
@@ -33,81 +34,248 @@ function UserTraining() {
       })
       .catch((err) => console.log(err));
   }, []);
-  const navigatePlayer = (data) => {
+  const [showed, setShowed] = useState(false);
+  function secondsToHms(d) {
+    d = Number(d);
+    var h = Math.floor(d / 3600);
+    var m = Math.floor((d % 3600) / 60);
+    var s = Math.floor((d % 3600) % 60);
+    var hDisplay = h > 0 ? h + (h == 1 ? " цаг, " : " цаг, ") : "";
+    var mDisplay = m > 0 ? m + (m == 1 ? " минут, " : " минут, ") : "";
+    var sDisplay = s > 0 ? s + (s == 1 ? " секунд" : " секунд") : "";
+    return hDisplay + mDisplay + sDisplay;
+  }
+  const [showReady, setShowReady] = useState(null);
+  const hideModalReady = () => setShowReady(null);
+  const [chosedTrain, setChosedTrain] = useState();
+  const showModalReady = (data) => {
+    setShowReady(true);
+    setChosedTrain(data);
+  };
+  const navigatePlayer = () => {
     navigate("/player", {
-      state: { data: data },
+      state: { data: chosedTrain },
     });
   };
-  console.log(deviceId);
 
+  let nokori = [];
+  const gotYa = (value) => {
+    nokori.push(value);
+  };
+  userTrain?.map((exam) => {
+    if (exam.sessionType == "0") {
+      return gotYa(exam.sessionType);
+    }
+  });
+  const [detector, setDetector] = useState(0);
+  const indexed = [
+    { id: "1", value: "Тэнхим" },
+    { id: "2", value: "Онлайн" },
+  ];
+  let tempo = [userTrain];
+  for (let index = 0; index < indexed?.length; index++) {
+    const element = indexed[index];
+    let temp = [];
+    for (let i = 0; i < userTrain?.length; i++) {
+      const el = userTrain[i];
+      if (el.sessionType == element.id) {
+        temp.push(el);
+      }
+    }
+    tempo.push(temp);
+  }
   return (
     <UserLayout>
-      {userTrain.length === 0 ? (
-        <p className="p-4 text-start text-sm font-medium">
-          Танд сургалт хувиарлагдаагүй байна.
-        </p>
-      ) : (
-        userTrain.map((data, i) => (
-          <div key={i}>
-            <div className="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5 ">
-              <div className="w-full max-w-xs p-6 overflow-hidden bg-white shadow-lg rounded-xl dark:bg-gray-800  bg-white rounded-xl  shadow-lg shadow-md overflow-hidden md:max-w-2xl  transform hover:scale-105 duration-500 ease-in-out">
-                <div className="flex items-center justify-between mb-4 space-x-12 ">
-                  {data.startedWatch === null ? (
-                    <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-400 border-2 border-rose-600 rounded-md absolute top-3 right-3">
-                      ҮЗЭЭГҮЙ
-                    </span>
-                  ) : (
-                    <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-700 border-2 border-green-600 rounded-md absolute top-3 right-3  ">
-                      ҮЗСЭН
-                    </span>
-                  )}
+      <div>
+        <Modal
+          show={showReady}
+          onHide={hideModalReady}
+          size="ml"
+          backdrop="static"
+          keyboard={false}
+          aria-labelledby="contained-modal-title-vcenter"
+          dialogClassName="modal-100w"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Сургалт үзэх</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="p-6 text-center">
+              <h3 className="mb-5 text-lg font-normal text-gray-500 ">
+                Та сургалтыг эхлүүлэх гэж байна.
+              </h3>
+              <button
+                type="button"
+                onClick={navigatePlayer}
+                className="text-white bg-green-600 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300  font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
+              >
+                Тийм
+              </button>
+              <button
+                onClick={hideModalReady}
+                type="button"
+                className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 "
+              >
+                Үгүй
+              </button>
+            </div>
+          </Modal.Body>
+        </Modal>
+      </div>
+      <div className="max-w-screen-xl ml-auto mr-auto">
+        <div className="content">
+          <div className="content-panel">
+            <div className="vertical-tabs">
+              <a
+                onClick={() => {
+                  setDetector(0);
+                }}
+                className={`${detector == 0 && "active"}`}
+              >
+                Бүгд
+              </a>
+              <a
+                onClick={() => {
+                  setDetector(1);
+                }}
+                className={`${detector == 1 && "active"}`}
+              >
+                Тэнхим
+              </a>
+              <a
+                onClick={() => {
+                  setDetector(2);
+                }}
+                className={`${detector == 2 && "active"}`}
+              >
+                Онлайн
+              </a>
+            </div>
+          </div>
+          <div className="content-main">
+            {userTrain.length === 0 ? (
+              <div
+                className={
+                  showed
+                    ? "hidden"
+                    : "mt-2 flex items-center px-4 mb-2 text-gray-800 border-2 border-blue-500 rounded-md jusitfy-between"
+                }
+              >
+                <div className="flex items-center w-full ">
+                  Танд сургалт хувиарлагдаагүй байна.
                 </div>
-
-                <p className="mb-2 text-lg text-gray-800 dark:text-white font-bold mt-2">
-                  {data.name}
-                </p>
-                <p className="text-sm font-normal text-gray-400">
-                  {data.description}
-                </p>
-
-                <div className="dark:text-white">
-                  <div className="flex items-center justify-between  text-sm border-b border-gray-200 md:space-x-24">
-                    {data.sessionType === "1" ? <p>Тэнхим</p> : <p>Онлайн</p>}
-                    {/* <div className="flex items-end text-xs">aaa</div> */}
-                  </div>
-                </div>
-
-                {/* <div className="flex items-center justify-between p-2 my-6 bg-blue-100 rounded">
-                  <div className="flex items-start justify-between w-full">
-                    <p className="flex-grow w-full text-2xl text-gray-700">
-                      <span className="font-light text-gray-400 text-md">
-                        $
-                      </span>
-                      4,500
-                      <span className="text-sm font-light text-gray-400">
-                        /Month
-                      </span>
-                    </p>
-                    <span className="flex-none px-3 py-1 text-sm text-indigo-500 border border-indigo-500 rounded-full">
-                      Full time
-                    </span>
-                  </div>
-                </div> */}
-
                 <button
-                  onClick={() => {
-                    navigatePlayer(data);
-                  }}
+                  onClick={(e) => setShowed(true)}
                   type="button"
-                  className="py-2 px-4  bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 focus:ring-offset-blue-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+                  className="flex flex-shrink-0 p-2 -mr-1 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 sm:-mr-2"
                 >
-                  Сургалт үзэх
+                  <span className="sr-only">X</span>
+                  <i className="bi bi-x" />
                 </button>
+              </div>
+            ) : (
+              <div
+                className={
+                  showed
+                    ? "hidden"
+                    : "mt-2 flex items-center px-4 mb-2 text-gray-800  border-2 border-blue-500  rounded-md jusitfy-between"
+                }
+              >
+                <div className="flex items-center w-full">
+                  Танд дараах сургалтууд хувиарлагдсан байна.
+                </div>
+                <button
+                  onClick={(e) => setShowed(true)}
+                  type="button"
+                  className="flex flex-shrink-0 p-2 -mr-1 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 sm:-mr-2"
+                >
+                  <span className="sr-only">X</span>
+                  <i className="bi bi-x" />
+                </button>
+              </div>
+            )}
+            <div className="flex items-center">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {tempo[detector]?.map((data, i) => (
+                  <div key={i} className="mx-auto w-full">
+                    <div className="w-full mt-4 p-4 border border-2 block bg-white shadow-md hover:shadow-2xl rounded-lg overflow-hidden">
+                      <div className="flex items-center justify-between mb-4 space-x-12">
+                        <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-500 bg-green-200 rounded-md">
+                          ИДЭВХТЭЙ
+                        </span>
+
+                        {data.startedWatch === null ? (
+                          <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-400 border-2 border-rose-500 rounded-md bg-white rounded-md">
+                            ҮЗЭЭГҮЙ
+                          </span>
+                        ) : (
+                          <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-400 border-2 border-green-500 rounded-md bg-white rounded-md">
+                            ҮЗСЭН
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center">
+                          <div className="flex flex-col">
+                            <span className="font-bold text-black text-md dark:text-white">
+                              {data.name}
+                            </span>
+                            <span className="text-sm text-gray-500 dark:text-white">
+                              {data.description}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between ">
+                        <div className="flex items-center">
+                          <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
+                            Багш:
+                          </span>
+                          <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md">
+                            {data.teacher}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between ">
+                        <div className="flex items-center">
+                          <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
+                            Үргэлжлэх хугацаа:
+                          </span>
+                          <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md ">
+                            {secondsToHms(data.duration)}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between ">
+                        <div className="flex items-center">
+                          <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
+                            Байршил:
+                          </span>
+                          <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md ">
+                            {data.location}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center mt-4">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            showModalReady(data);
+                          }}
+                          className="py-2 text-sm bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-400 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-400 text-center  font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+                        >
+                          Сургалт үзэх
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
-        ))
-      )}
+        </div>
+      </div>
 
       <ToastContainer />
     </UserLayout>

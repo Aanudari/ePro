@@ -12,6 +12,9 @@ function ShowSubCategory({ setIds, it, ids }) {
       url: `${process.env.REACT_APP_URL}/v1/Category/sub/${it.id}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         setIds([]);
       })
       .catch((err) => {

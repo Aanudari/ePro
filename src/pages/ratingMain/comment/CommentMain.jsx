@@ -36,6 +36,9 @@ function CommentMain({
       data: schema,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         setInput("");
         setTrigger(!trigger);
         setShowEmoji(false);

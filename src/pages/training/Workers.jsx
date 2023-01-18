@@ -1,11 +1,9 @@
-import { useStateContext } from "../../../contexts/ContextProvider";
+import { useStateContext } from "../../contexts/ContextProvider";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { logout } from "../../../service/examService";
-
-function AllEmployeeSelectEdit({ setShow, getEmployees, getUsers }) {
-  const [chosen, setChosen] = useState([]);
-  const [chosenPre, setChosenPre] = useState([]);
+import { useNavigate } from "react-router-dom";
+import { logout } from "../../service/examService";
+function Workers({ setShow, getEmployees, reSetEmployee }) {
   const { activeMenu, TOKEN } = useStateContext();
   const [users, setUsers] = useState();
   useEffect(() => {
@@ -17,9 +15,6 @@ function AllEmployeeSelectEdit({ setShow, getEmployees, getUsers }) {
       url: `${process.env.REACT_APP_URL}/v1/User`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
         setUsers(res.data.result);
         if (res.data.resultMessage === "Unauthorized") {
           logout();
@@ -27,6 +22,7 @@ function AllEmployeeSelectEdit({ setShow, getEmployees, getUsers }) {
       })
       .catch((err) => console.log(err));
   }, []);
+  // console.log(users);
   let pre = [];
   let roles = [];
   for (let index = 0; index < users?.length; index++) {
@@ -46,6 +42,8 @@ function AllEmployeeSelectEdit({ setShow, getEmployees, getUsers }) {
     }
     main.push(tempo);
   }
+  const [chosenPre, setChosenPre] = useState([]);
+  const [chosen, setChosen] = useState([]);
   const [indexDetect, setIndexDetect] = useState([]);
   const [currentIndex, setCurrentIndex] = useState();
   useEffect(() => {
@@ -127,6 +125,7 @@ function AllEmployeeSelectEdit({ setShow, getEmployees, getUsers }) {
         final.push(data);
         finalPre.push(element.deviceId);
       }
+      // let finalUni = [...new Set(final)];
       const unique = [
         ...new Map(final.map((item) => [item.deviceId, item])).values(),
       ];
@@ -136,14 +135,14 @@ function AllEmployeeSelectEdit({ setShow, getEmployees, getUsers }) {
       setIndexDetect((prev) => [...prev, index]);
     }
   };
-  // console.log(chosen);
+  console.log(chosen);
   return (
     <div
       className={`${
         activeMenu ? " left-[250px] w-[calc(100%-250px)]" : "left-0 w-full"
       } 
-    top-[56px] fixed  h-[calc(100%-56px)] 
-    bg-black bg-opacity-50 flex items-center justify-center z-20`}
+      top-[40px] fixed  h-[calc(100%-56px)] 
+      bg-black bg-opacity-50 flex items-center justify-center z-20`}
     >
       <div className="bg-gray-200 appear-smooth w-full h-[calc(100%)] relative">
         <div className="w-full h-12 bg-teal-500 flex justify-between px-4 items-center shadow-sm">
@@ -209,7 +208,7 @@ function AllEmployeeSelectEdit({ setShow, getEmployees, getUsers }) {
                       chosenPre.includes(item.deviceId) &&
                       "!text-white !bg-teal-500"
                     } bg-gray-400 h-8 w-[200px] flex relative items-center text-[13px] hover:shadow-teal-500
-              transition-all cursor-pointer`}
+        transition-all cursor-pointer`}
                   >
                     {chosenPre.includes(item.deviceId) && (
                       <div className="transition-all">
@@ -228,4 +227,4 @@ function AllEmployeeSelectEdit({ setShow, getEmployees, getUsers }) {
   );
 }
 
-export default AllEmployeeSelectEdit;
+export default Workers;

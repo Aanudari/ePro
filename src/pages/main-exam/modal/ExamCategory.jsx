@@ -22,6 +22,9 @@ function ExamCategory({
       url: `${process.env.REACT_APP_URL}/v1/Pool/${value}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         setTrigger(!trigger);
       })
       .catch((err) => {

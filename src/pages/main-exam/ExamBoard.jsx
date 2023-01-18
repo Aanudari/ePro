@@ -50,7 +50,9 @@ function ExamBoard({
         <div className="w-1/4 h-full flex justify-center items-center bg-teal-500 text-white text-[11px] uppercase font-[500]">
           Хугацаа
         </div>
-        <div className="w-1/4 h-full flex justify-center items-center  text-[11px] uppercase font-[500] mr-2"></div>
+        <div className="w-1/4 h-full rounded cursor-pointer flex justify-center items-center bg-teal-600 text-white text-[11px] uppercase font-[600] mr-2">
+          Шалгалт үүсгэх
+        </div>
       </div>
       <div className="w-full h-full h-[570px]  overflow-scroll mt-2 border-b">
         {exams &&

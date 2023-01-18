@@ -18,6 +18,9 @@ function ImageBoard({ imgStatus, setImgStatus }) {
       url: `${process.env.REACT_APP_URL}/v1/ExamFile`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.errorCode == 401) {
           logout();
         } else {
@@ -37,6 +40,9 @@ function ImageBoard({ imgStatus, setImgStatus }) {
       url: `${process.env.REACT_APP_URL}/v1/ExamFile/${id}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         setFileId(!fileId);
       })
       .catch((err) => {

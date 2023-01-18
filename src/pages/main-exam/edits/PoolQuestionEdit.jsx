@@ -77,6 +77,9 @@ function PoolQuestionEdit({
       data: main,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         setTrigger(!trigger);
         setEdit(false);
       })

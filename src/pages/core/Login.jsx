@@ -7,7 +7,8 @@ function Login() {
   const { setUser, setisAuthenticated } = useStateContext();
   const navigate = useNavigate();
   const redirect = (data) => {
-    if (data.role_id == "199") {
+    console.log(data.role_id);
+    if (data.role_id == "199" || data.role_id == "4") {
       navigate("/home");
     } else {
       // navigate("/levelone-ui-take-exam");
@@ -57,7 +58,7 @@ function Login() {
             setalert(true);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => alert("aldaa"));
     }
   };
   useEffect(() => {

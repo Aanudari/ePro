@@ -67,6 +67,9 @@ function EditTraining() {
       url: `${process.env.REACT_APP_URL}/v1/Training/category`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess == true) {
           setCategory(res.data.trainingCatList);
         }
@@ -89,6 +92,9 @@ function EditTraining() {
       url: `${process.env.REACT_APP_URL}/v1/User/department`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess === true) {
           setDepartment(res.data.departments);
         }
@@ -111,6 +117,9 @@ function EditTraining() {
       url: `${process.env.REACT_APP_URL}/v1/User/org/${item.id}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (
           res.data.resultMessage === "Unauthorized" ||
           res.data.resultMessage === "Input string was not in a correct format."
@@ -133,6 +142,9 @@ function EditTraining() {
       url: `${process.env.REACT_APP_URL}/v1/User/unit/devices?unitId=${item.id}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (
           res.data.resultMessage === "Unauthorized" ||
           res.data.resultMessage === "Input string was not in a correct format."
@@ -169,6 +181,9 @@ function EditTraining() {
       url: `${process.env.REACT_APP_URL}/v1/TrainingFile/${id}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess === true) {
           navigate(0);
         } else {
@@ -225,6 +240,9 @@ function EditTraining() {
         },
       })
         .then((res) => {
+          if (res.data.isSuccess === false) {
+            alert(res.data.resultMessage);
+          }
           if (res.data.isSuccess === true) {
             setfileUrl(res.data.path);
             setId(res.data.id);
@@ -262,7 +280,6 @@ function EditTraining() {
 
   const navigateIndex = (e) => {
     e.preventDefault();
-
     if (startDate == endDate || startDate > endDate) {
       notification.invalidFileUpload("Эхлэх дуусах хугацаа алдаатай байна.");
     }
@@ -305,7 +322,7 @@ function EditTraining() {
       <div className="w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
-            <p className="focus:outline-none text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">
+            <p className="focus:outline-none text-base sm:text-sm md:text-md lg:text-md font-bold leading-normal text-gray-800">
               Сургалт засварлах
             </p>
           </div>

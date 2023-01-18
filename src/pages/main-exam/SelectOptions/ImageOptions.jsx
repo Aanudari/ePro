@@ -20,6 +20,9 @@ export default function ImageUploader({ setImageUrl }) {
       data: imageList,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.errorCode !== 500) {
           console.log(res.data.path);
           setImageUrl(res.data.path);

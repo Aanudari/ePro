@@ -41,6 +41,9 @@ function Thanks() {
       url: `${process.env.REACT_APP_URL}/v1/Complain/complainInfo`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess === true) {
           setComplainInfo(res.data.complainInfos);
         }
@@ -62,6 +65,9 @@ function Thanks() {
       url: `${process.env.REACT_APP_URL}/v1/Complain`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess === true) {
           setComplain(res.data.complains);
         }
@@ -107,6 +113,9 @@ function Thanks() {
       url: `${process.env.REACT_APP_URL}/v1/Complain/delete?id=${id}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess === true) {
           notification.success(`${res.data.resultMessage}`);
           const timer = setTimeout(() => navigate(0), 500);
@@ -254,7 +263,7 @@ function Thanks() {
       <div className="sm:px-6 w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
-            <p className="focus:outline-none text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">
+            <p className="focus:outline-none text-base sm:text-sm md:text-md lg:text-md font-bold leading-normal text-gray-800">
               Талархал
             </p>
             <div className="my-2 flex sm:flex-row flex-col">

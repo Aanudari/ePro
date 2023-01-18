@@ -49,6 +49,9 @@ function TrainingCategory() {
       url: `${process.env.REACT_APP_URL}/v1/User/department`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess == true) {
           setDepartment(res.data.departments);
         }
@@ -70,6 +73,9 @@ function TrainingCategory() {
       url: `${process.env.REACT_APP_URL}/v1/Training/category`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess == true) {
           setCategory(res.data.trainingCatList);
         }
@@ -107,6 +113,9 @@ function TrainingCategory() {
       url: `${process.env.REACT_APP_URL}/v1/Training/category/delete?catId=${id}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess === true) {
           notification.success(`${res.data.resultMessage}`);
           hideModalDelete();
@@ -150,6 +159,9 @@ function TrainingCategory() {
         data: JSON.stringify(data),
       })
         .then((res) => {
+          if (res.data.isSuccess === false) {
+            alert(res.data.resultMessage);
+          }
           if (res.data.isSuccess == true) {
             notification.success(`${res.data.resultMessage}`);
             hideModalCreate();
@@ -186,9 +198,11 @@ function TrainingCategory() {
       data: JSON.stringify(editDataSet),
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         console.log(res.data);
         if (res.data.isSuccess === true) {
-          console.log(res.data);
           notification.success(`${res.data.resultMessage}`);
           hideModalCreate();
           const timer = setTimeout(() => navigate(0), 500);
@@ -424,7 +438,7 @@ function TrainingCategory() {
       <div className="sm:px-6 w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
-            <p className="focus:outline-none text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">
+            <p className="focus:outline-none text-base sm:text-sm md:text-md lg:text-md font-bold leading-normal text-gray-800">
               Сургалтын ангилал
             </p>
           </div>

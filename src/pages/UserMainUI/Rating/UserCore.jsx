@@ -29,6 +29,9 @@ function UserCore() {
       url: `${process.env.REACT_APP_URL}/v1/ExamNew`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         res.data.errorCode === 401 ? logout() : setData(res.data.examList);
       })
       .catch((err) => console.log(err));
@@ -47,6 +50,9 @@ function UserCore() {
       },
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         setRating(res.data.ratings);
       })
       .catch((err) => console.log(err));

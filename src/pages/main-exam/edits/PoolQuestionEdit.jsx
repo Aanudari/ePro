@@ -151,7 +151,9 @@ function PoolQuestionEdit({
                   spellCheck={false}
                 />
               ) : (
-                <h6 className="mb-0 mt-1 ml-2 font-[400]">{data.question}</h6>
+                <h6 className="mb-0 mt-1 ml-2 font-[400]">
+                  {data.question}/{data.id}
+                </h6>
               )}
             </div>
             {edit ? (
@@ -230,7 +232,7 @@ focus:border-b-[2px] focus:h-[42px] border-teal-500 px-2 text-[14px] w-1/2 font-
                         <i className="bi bi-circle text-xl px-1 text-gray-400"></i>
                       )}
                       <span className="ml-2 text-[14px] font-[400]">
-                        {item.answer}
+                        {item.answer}/{item.id}
                       </span>
                     </h6>
                   </div>

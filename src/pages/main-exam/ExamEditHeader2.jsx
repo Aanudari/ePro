@@ -26,6 +26,9 @@ function ExamEditHeader2({
       url: `${process.env.REACT_APP_URL}/v1/ExamNew/GetDevicesByExamId?_examId=${chosen[0].id}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         setInitial(res.data.devices);
         if (res.data.resultMessage === "Unauthorized") {
           logout();
@@ -91,6 +94,9 @@ function ExamEditHeader2({
       data: JSON.stringify(schema),
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         setExamModal(false);
         setExamTri(!examTri);
         setUserTrigger(!userTrigger);

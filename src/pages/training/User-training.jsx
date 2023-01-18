@@ -18,7 +18,9 @@ function UserTraining() {
       url: `${process.env.REACT_APP_URL}/v1/Training`,
     })
       .then((res) => {
-        console.log(res.data);
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess == true) {
           setUserTrain(res.data.trainingList);
         }

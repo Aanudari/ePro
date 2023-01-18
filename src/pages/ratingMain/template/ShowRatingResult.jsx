@@ -23,6 +23,9 @@ function ShowRatingResult({ setShowResult, personId }) {
       data: time,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         setData(res.data.ratings);
       })
       .catch((err) => {

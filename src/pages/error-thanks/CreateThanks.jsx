@@ -58,6 +58,9 @@ function CreateThanks() {
       url: `${process.env.REACT_APP_URL}/v1/User/department`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess === true) {
           setDepartment(res.data.departments);
         }
@@ -79,6 +82,9 @@ function CreateThanks() {
       url: `${process.env.REACT_APP_URL}/v1/User/org/${item.id}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess === true) {
           setOrg(res.data.organizations);
           setDepartmentID(item.id);
@@ -101,6 +107,9 @@ function CreateThanks() {
       url: `${process.env.REACT_APP_URL}/v1/User/unit/devices?unitId=${item.id}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess == true) {
           setWorkers(res.data.unitDevices);
           setOrgID(item.id);
@@ -170,6 +179,9 @@ function CreateThanks() {
         data: JSON.stringify(data),
       })
         .then((res) => {
+          if (res.data.isSuccess === false) {
+            alert(res.data.resultMessage);
+          }
           if (res.data.isSuccess === true) {
             notification.success(`${res.data.resultMessage}`);
             const timer = setTimeout(() => navigate("/error-thanks"), 500);

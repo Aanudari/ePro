@@ -49,6 +49,9 @@ function TrainingCategory() {
       url: `${process.env.REACT_APP_URL}/v1/User/department`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess == true) {
           setDepartment(res.data.departments);
         }
@@ -70,6 +73,9 @@ function TrainingCategory() {
       url: `${process.env.REACT_APP_URL}/v1/Training/category`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess == true) {
           setCategory(res.data.trainingCatList);
         }
@@ -107,6 +113,9 @@ function TrainingCategory() {
       url: `${process.env.REACT_APP_URL}/v1/Training/category/delete?catId=${id}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess === true) {
           notification.success(`${res.data.resultMessage}`);
           hideModalDelete();
@@ -150,6 +159,9 @@ function TrainingCategory() {
         data: JSON.stringify(data),
       })
         .then((res) => {
+          if (res.data.isSuccess === false) {
+            alert(res.data.resultMessage);
+          }
           if (res.data.isSuccess == true) {
             notification.success(`${res.data.resultMessage}`);
             hideModalCreate();
@@ -186,9 +198,11 @@ function TrainingCategory() {
       data: JSON.stringify(editDataSet),
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         console.log(res.data);
         if (res.data.isSuccess === true) {
-          console.log(res.data);
           notification.success(`${res.data.resultMessage}`);
           hideModalCreate();
           const timer = setTimeout(() => navigate(0), 500);

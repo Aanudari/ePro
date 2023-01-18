@@ -17,6 +17,9 @@ function Document({ setShowReport, id }) {
       url: `${process.env.REACT_APP_URL}/v1/ExamReport/average?examId=${id}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         setData(res.data);
         if (res.data.resultMessage === "Unauthorized") {
           logout();
@@ -33,6 +36,9 @@ function Document({ setShowReport, id }) {
       url: `${process.env.REACT_APP_URL}/v1/ExamNew/GetDevicesByExamId?_examId=${id}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         setUsers(res.data.devices);
         if (res.data.resultMessage === "Unauthorized") {
           logout();
@@ -49,6 +55,9 @@ function Document({ setShowReport, id }) {
       url: `${process.env.REACT_APP_URL}/v1/User`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         setNames(res.data.result);
         if (res.data.resultMessage === "Unauthorized") {
           logout();
@@ -74,6 +83,9 @@ function Document({ setShowReport, id }) {
       url: `${process.env.REACT_APP_URL}/v1/ExamReport/device/score`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         setUserScore(res.data);
         if (res.data.resultMessage === "Unauthorized") {
           logout();
@@ -96,6 +108,9 @@ function Document({ setShowReport, id }) {
       url: `${process.env.REACT_APP_URL}/v1/ExamReport/examResult/${id}/${user.deviceId}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.errorCode == 401) {
           logout();
         } else {

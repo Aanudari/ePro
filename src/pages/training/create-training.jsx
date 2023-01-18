@@ -70,6 +70,9 @@ function CreateTraining() {
       url: `${process.env.REACT_APP_URL}/v1/Training/category`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess == true) {
           setCategory(res.data.trainingCatList);
         }
@@ -92,6 +95,9 @@ function CreateTraining() {
       url: `${process.env.REACT_APP_URL}/v1/User/department`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess == true) {
           setDepartment(res.data.departments);
         }
@@ -113,6 +119,9 @@ function CreateTraining() {
       url: `${process.env.REACT_APP_URL}/v1/User/org/${item.id}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (
           res.data.resultMessage === "Unauthorized" ||
           res.data.resultMessage === "Input string was not in a correct format."
@@ -135,6 +144,9 @@ function CreateTraining() {
       url: `${process.env.REACT_APP_URL}/v1/User/unit/devices?unitId=${item.id}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (
           res.data.resultMessage === "Unauthorized" ||
           res.data.resultMessage === "Input string was not in a correct format."
@@ -173,6 +185,9 @@ function CreateTraining() {
         },
       })
         .then((res) => {
+          if (res.data.isSuccess === false) {
+            alert(res.data.resultMessage);
+          }
           if (res.data.isSuccess === true) {
             setfileUrl(res.data.path);
             setId(res.data.id);
@@ -202,6 +217,9 @@ function CreateTraining() {
       url: `${process.env.REACT_APP_URL}/v1/TrainingFile/${id}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess === true) {
           navigate(0);
         } else {

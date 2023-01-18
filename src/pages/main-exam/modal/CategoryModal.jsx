@@ -32,6 +32,9 @@ function CategoryModal({
       url: `${process.env.REACT_APP_URL}/v1/Pool/Question/${id}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.errorCode == 401) {
           logout();
         } else {
@@ -114,6 +117,9 @@ function CategoryModal({
       data: JSON.stringify(answerSchema),
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         setAddAnswer(!addAnswer);
         setTriggerCat(triggerCat);
       })
@@ -149,6 +155,9 @@ function CategoryModal({
       url: `${process.env.REACT_APP_URL}/v1/Pool/question/${id}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         setTrigger(!trigger);
       })
       .catch((err) => {

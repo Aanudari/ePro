@@ -43,6 +43,9 @@ function CreateExamMain({
       url: `${process.env.REACT_APP_URL}/v1/User/org/${depId}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.errorCode == 401) {
           logout();
         } else {
@@ -215,6 +218,9 @@ function CreateExamMain({
       data: main,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         setCategoryModal(false);
         setShowCategoryMenu(false);
         setTriggerCat(triggerCat);

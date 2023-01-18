@@ -37,6 +37,9 @@ function Training() {
       url: `${process.env.REACT_APP_URL}/v1/Training`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess === true) {
           setTrains(res.data.trainingList);
         }
@@ -59,6 +62,9 @@ function Training() {
       url: `${process.env.REACT_APP_URL}/v1/Training/category`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess == true) {
           setCategory(res.data.trainingCatList);
         }
@@ -90,6 +96,9 @@ function Training() {
       url: `${process.env.REACT_APP_URL}/v1/Training/delete?trId=${id}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess === true) {
           notification.success(`${res.data.resultMessage}`);
           const timer = setTimeout(() => navigate(0), 500);

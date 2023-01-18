@@ -23,6 +23,9 @@ function Exam() {
       url: `${process.env.REACT_APP_URL}/v1/ExamNew/start?examId=${finalId}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.errorCode === 401) {
           logout();
         } else if (res.data.isSuccess === false) {
@@ -120,6 +123,9 @@ function Exam() {
       data: main,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         navigate("/exam-result", { state: tempo });
       })
       .catch((err) => {

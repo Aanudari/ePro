@@ -20,6 +20,9 @@ function TemplateEditModal({ setShowModal, trigger, setTrigger }) {
       url: `${process.env.REACT_APP_URL}/v1/RatingTemplate/template/${templateID}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.resultMessage === "Unauthorized") {
           logout();
         } else {
@@ -47,6 +50,9 @@ function TemplateEditModal({ setShowModal, trigger, setTrigger }) {
       data: main,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         setaddCategory(false);
         setTrigger(!trigger);
       })
@@ -71,6 +77,9 @@ function TemplateEditModal({ setShowModal, trigger, setTrigger }) {
       url: `${process.env.REACT_APP_URL}/v1/Category/cat/${value}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         setIds([]);
       })
       .catch((err) => {
@@ -87,6 +96,9 @@ function TemplateEditModal({ setShowModal, trigger, setTrigger }) {
       url: `${process.env.REACT_APP_URL}/v1/RatingTemplate/${value}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         setTrigger(!trigger);
         setShowModal(false);
       })

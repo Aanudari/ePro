@@ -55,6 +55,9 @@ function TrainingRating() {
       url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess === true) {
           setTRate(res.data.trRatingForm);
         }
@@ -76,6 +79,9 @@ function TrainingRating() {
       url: `${process.env.REACT_APP_URL}/v1/Training`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess === true) {
           setTrains(res.data.trainingList);
         }
@@ -125,6 +131,9 @@ function TrainingRating() {
       url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating/delete?trId=${id}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess === true) {
           notification.success(`${res.data.resultMessage}`);
           const timer = setTimeout(() => navigate(0), 1000);
@@ -151,7 +160,9 @@ function TrainingRating() {
       url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating/deletequestion?queId=${qId}`,
     })
       .then((res) => {
-        console.log(res);
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess === true) {
           notification.success(`${res.data.resultMessage}`);
           const timer = setTimeout(() => navigate(0), 1000);
@@ -197,6 +208,9 @@ function TrainingRating() {
         data: JSON.stringify(data),
       })
         .then((res) => {
+          if (res.data.isSuccess === false) {
+            alert(res.data.resultMessage);
+          }
           if (res.data.isSuccess == true) {
             setTrateID(res.data.id);
             // notification.success(`${res.data.resultMessage}`);
@@ -270,6 +284,9 @@ function TrainingRating() {
         url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating/addquestion`,
         data: dataQUEST,
       }).then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess == true) {
           notification.success(`${res.data.resultMessage}`);
           hideModalQuestion();

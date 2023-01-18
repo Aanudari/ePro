@@ -34,6 +34,9 @@ function ExamDash() {
       url: `${process.env.REACT_APP_URL}/v1/ExamNew`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.errorCode == 401) {
           logout();
         } else {
@@ -53,6 +56,9 @@ function ExamDash() {
       url: `${process.env.REACT_APP_URL}/v1/Pool/Category`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.errorCode == 401) {
           logout();
         } else {

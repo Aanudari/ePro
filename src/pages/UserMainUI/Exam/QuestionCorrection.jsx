@@ -88,7 +88,9 @@ export default function QuestionCorrection({ roundedScore, Exam_chosen }) {
       data: schema,
     })
       .then((res) => {
-        console.log(res);
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
       })
       .catch((err) => {
         console.log(err);

@@ -50,6 +50,9 @@ function RatingIndividual() {
       url: `${process.env.REACT_APP_URL}/v1/User`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.resultMessage === "Unauthorized") {
           logout();
         } else {
@@ -118,6 +121,9 @@ function RatingIndividual() {
       data: schema,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         notification.success(`Амжилттай`);
         const timer = setTimeout(() => navigate(-1), 1000);
         return () => clearTimeout(timer);

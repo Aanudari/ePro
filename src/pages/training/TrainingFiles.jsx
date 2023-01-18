@@ -30,6 +30,9 @@ function TrainingFiles() {
       url: `${process.env.REACT_APP_URL}/v1/TrainingFile/filelist`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess == true) {
           setFiles(res.data.fileNames);
         }
@@ -56,6 +59,9 @@ function TrainingFiles() {
       url: `${process.env.REACT_APP_URL}/v1/TrainingFile/${id}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess === true) {
           notification.success(`${res.data.resultMessage}`);
           hideModalDelete();
@@ -91,7 +97,9 @@ function TrainingFiles() {
       data,
     })
       .then((res) => {
-        console.log(res.data);
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess === true) {
           notification.invalidFileUpload(`${res.data.resultMessage}`);
           const timer = setTimeout(() => navigate(0), 500);

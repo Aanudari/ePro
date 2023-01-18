@@ -21,6 +21,9 @@ function UserThanks() {
       url: `${process.env.REACT_APP_URL}/v1/Complain/complainInfo`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess === true) {
           setComplainInfo(res.data.complainInfos);
         }
@@ -42,6 +45,9 @@ function UserThanks() {
       url: `${process.env.REACT_APP_URL}/v1/Complain/device?deviceId=${deviceId}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
         if (res.data.isSuccess === true) {
           setComplain(res.data.complains);
         }

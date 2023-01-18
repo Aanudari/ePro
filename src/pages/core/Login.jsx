@@ -57,7 +57,7 @@ function Login() {
             setalert(true);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => alert("aldaa"));
     }
   };
   useEffect(() => {

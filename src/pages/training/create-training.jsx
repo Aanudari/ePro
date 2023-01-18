@@ -11,6 +11,7 @@ import moment from "moment";
 import DatePicker from "react-datepicker";
 import { logout } from "../../service/examService";
 import getWindowDimensions from "../../components/SizeDetector";
+import Workers from "./Workers";
 function CreateTraining() {
   const { width } = getWindowDimensions();
   const { TOKEN, activeMenu } = useStateContext();
@@ -25,29 +26,18 @@ function CreateTraining() {
   const [category, setCategory] = useState();
   const [selectedOptioncategory, setSelectedOptioncategory] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
-  const [selectedOptiondepartment, setSelectedOptiondepartment] =
-    useState(null);
-  const [selectedOptionorg, setSelectedOptionorg] = useState(null);
-  const [selectedOptionWorkers, setSelectedOptionWorkers] = useState(null);
-  const [selectedFile, setSelectedFile] = useState(false);
   const options = [
     { id: "1", value: "Тэнхим" },
     { id: "2", value: "Онлайн" },
   ];
   const [checkEmptyname, setcheckEmptyname] = useState(false);
   const [checkEmptydescription, setcheckEmptydescription] = useState(false);
-  const [checkEmptydepartment, setcheckEmptydepartment] = useState(false);
-  const [checkEmptyduration, setcheckEmptyduration] = useState(false);
+
   const [checkEmptyteacher, setcheckEmptyteacher] = useState(false);
   const [checkEmptytCategory, setcheckEmptytCategory] = useState(false);
   const [checkEmptysessionType, setcheckEmptysessionType] = useState(false);
   const [checkEmptylocation, setcheckEmptylocation] = useState(false);
-  const [department, setDepartment] = useState();
-  const [org, setOrg] = useState();
-  const [workers, setWorkers] = useState();
-  const [departmentID, setDepartmentID] = useState("");
-  const [orgID, setOrgID] = useState("");
-  const [workersID, setWorkersID] = useState("");
+  const [checkEmptyDate, setCheckEmptyDate] = useState(false);
   const [name, setName] = useState("");
   const [description, setdescription] = useState("");
   const [fileUrl, setfileUrl] = useState("");
@@ -60,6 +50,8 @@ function CreateTraining() {
   const [id, setId] = useState();
   const [showDelete, setShowDelete] = useState(null);
   const hideModalDelete = () => setShowDelete(null);
+  const [roll, setRoll] = useState(0);
+  const [emp, setEmp] = useState([]);
   useEffect(() => {
     axios({
       method: "get",
@@ -85,6 +77,7 @@ function CreateTraining() {
       })
       .catch((err) => console.log(err));
   }, []);
+<<<<<<< HEAD
   useEffect(() => {
     axios({
       method: "get",
@@ -163,6 +156,8 @@ function CreateTraining() {
   const handleWorkersID = (item) => {
     setWorkersID(item.deviceId);
   };
+=======
+>>>>>>> complain
   const handleTrainingCategoryId = (item) => {
     settCategory(item.id);
   };
@@ -191,6 +186,7 @@ function CreateTraining() {
           if (res.data.isSuccess === true) {
             setfileUrl(res.data.path);
             setId(res.data.id);
+            setRoll(1);
           } else {
             notification.error(`${res.data.resultMessage}`);
           }
@@ -221,16 +217,55 @@ function CreateTraining() {
           alert(res.data.resultMessage);
         }
         if (res.data.isSuccess === true) {
-          navigate(0);
-        } else {
+          setRoll(0);
         }
       })
       .catch((err) => console.log(err));
   };
-
+  function Diceroll() {
+    return (
+      <>
+        <div>
+          {roll === 0 ? (
+            <input
+              type="file"
+              onChange={handleFileSelect}
+              className="px-3 py-3 text-blueGray-600 bg-white text-sm w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+            />
+          ) : (
+            <div className="text-center w-full mx-auto py-2 px-2 sm:px-6 lg:py-16 lg:px-8 z-20">
+              <video
+                className="items-center w-1/2 mx-auto py-12 px-12 sm:px-2 lg:py-2 lg:px-2 z-10"
+                onLoadedMetadata={handleProgress}
+                ref={videoRef}
+                // width="20%"
+                // height="100%"
+                id="myVideo"
+                controls
+              >
+                <source src={`http://` + `${fileUrl}`} type="video/mp4" />
+              </video>
+              <div className="lg:mt-0 lg:flex-shrink-0">
+                <div className="mt-2 inline-flex rounded-md shadow">
+                  <button
+                    onClick={() => handleDelete()}
+                    type="button"
+                    className="py-2 px-6  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+                  >
+                    Устгах
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </>
+    );
+  }
   const dataFULL = {
     name: `${name}`,
     description: `${description}`,
+    fileId: id === undefined ? "" : `${id}`,
     fileUrl: `${fileUrl}`,
     duration: `${duration}`,
     teacher: `${teacher}`,
@@ -239,15 +274,8 @@ function CreateTraining() {
     startDate: `${startDate}`,
     endDate: `${endDate}`,
     location: `${location}`,
-    addTrainingDevs: [
-      {
-        departmentId: `${departmentID}`,
-        unitId: "",
-        devId: "",
-      },
-    ],
+    addTrainingDevs: emp,
   };
-  console.log(dataFULL);
   const navigateIndex = (e) => {
     e.preventDefault();
     if (name.length === 0) {
@@ -270,28 +298,47 @@ function CreateTraining() {
     }
     if (startDate == endDate || startDate > endDate) {
       notification.error("Эхлэх дуусах хугацаа алдаатай байна.");
+      setCheckEmptyDate(true);
     } else {
       console.log(JSON.stringify(dataFULL));
-      // axios({
-      //   method: "post",
-      //   headers: {
-      //     Authorization: `${TOKEN}`,
-      //     "Content-Type": "application/json",
-      //     accept: "text/plain",
-      //   },
-      //   url: `${process.env.REACT_APP_URL}/v1/Training/add`,
-      //   data: JSON.stringify(dataFULL),
-      // })
-      //   .then((res) => {
-      //     console.log(res.data);
-      //     if (res.data.isSuccess === true) {
-      //       notification.success(`${res.data.resultMessage}`);
-      //       const timer = setTimeout(() => navigate("/training"), 500);
-      //       return () => clearTimeout(timer);
-      //     }
-      //   })
-      //   .catch((err) => console.log(err));
+      axios({
+        method: "post",
+        headers: {
+          Authorization: `${TOKEN}`,
+          "Content-Type": "application/json",
+          accept: "text/plain",
+        },
+        url: `${process.env.REACT_APP_URL}/v1/Training/add`,
+        data: JSON.stringify(dataFULL),
+      })
+        .then((res) => {
+          console.log(res.data.resultMessage);
+          if (res.data.isSuccess === true) {
+            notification.success(`${res.data.resultMessage}`);
+            const timer = setTimeout(() => navigate("/training"), 500);
+            return () => clearTimeout(timer);
+          }
+          if (res.data.isSuccess === false) {
+            notification.error(`${res.data.resultMessage}`);
+          }
+        })
+        .catch((err) => console.log(err));
     }
+  };
+  const [show, setShow] = useState(false);
+  const getEmployees = (value) => {
+    let tempo = [];
+    for (let index = 0; index < value.length; index++) {
+      const element = value[index];
+      let arr = {
+        departmentId:
+          element.department === undefined ? "" : element.department,
+        unitId: element.unitId,
+        devId: `${element.deviceId}`,
+      };
+      tempo.push(arr);
+    }
+    setEmp(tempo);
   };
 
   return (
@@ -348,7 +395,7 @@ function CreateTraining() {
       <div className="w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
-            <p className="focus:outline-none text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">
+            <p className="focus:outline-none text-base sm:text-sm md:text-md lg:text-md font-bold leading-normal text-gray-800">
               Сургалт үүсгэх
             </p>
           </div>
@@ -390,40 +437,11 @@ function CreateTraining() {
                   <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                     Файл хавсаргах
                   </label>
-                  {fileUrl?.slice(-4) === ".mp4" ? (
-                    <div className=" flex items-center">
-                      <div className="py-12 ">
-                        <video
-                          onLoadedMetadata={handleProgress}
-                          ref={videoRef}
-                          width="50%"
-                          // height="100%"
-                          id="myVideo"
-                          controls
-                        >
-                          <source
-                            src={`http://` + `${fileUrl}`}
-                            type="video/mp4"
-                          />
-                        </video>
-                        <a
-                          onClick={handleDelete}
-                          className="text-rose-400 hover:text-black ml-2 text-lg"
-                        >
-                          <i className="bi bi-trash-fill"></i>
-                        </a>
-                      </div>
-                    </div>
-                  ) : (
-                    <input
-                      type="file"
-                      onChange={handleFileSelect}
-                      className="px-3 py-3 text-blueGray-600 bg-white text-sm w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                    />
-                  )}
+                  <div>
+                    <Diceroll />
+                  </div>
                 </div>
               </div>
-
               <div className="grid grid-cols-1 gap-4  sm:grid-cols-3">
                 <div>
                   <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
@@ -490,7 +508,11 @@ function CreateTraining() {
                   <DatePicker
                     className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
                     selected={date1}
-                    onChange={(date) => setDate1(date)}
+                    onChange={(date) => {
+                      setDate1(date);
+                      setCheckEmptyDate(false);
+                    }}
+                    id={checkEmptyDate === true ? "border-red" : null}
                     showTimeSelect
                     timeFormat="HH:mm"
                     timeIntervals={15}
@@ -506,7 +528,11 @@ function CreateTraining() {
                   <DatePicker
                     className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
                     selected={date2}
-                    onChange={(date) => setDate2(date)}
+                    onChange={(date) => {
+                      setDate2(date);
+                      setCheckEmptyDate(false);
+                    }}
+                    id={checkEmptyDate === true ? "border-red" : null}
                     showTimeSelect
                     timeFormat="HH:mm"
                     timeIntervals={15}
@@ -530,67 +556,24 @@ function CreateTraining() {
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-1 gap-4 text-center sm:grid-cols-3">
-                <div>
-                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                    Харьяалагдах хэлтэс
-                  </label>
-                  <Select
-                    className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                    options={department}
-                    defaultValue={selectedOptiondepartment}
-                    onChange={(item) => {
-                      handleOrg(item);
-                      setcheckEmptydepartment(false);
-                    }}
-                    id={checkEmptydepartment === true ? "border-red" : null}
-                    noOptionsMessage={({ inputValue }) =>
-                      !inputValue && "Сонголт хоосон байна"
-                    }
-                    getOptionLabel={(option) => option.name}
-                    getOptionValue={(option) => option.id}
+              <div>
+                <button
+                  onClick={() => {
+                    setShow(true);
+                  }}
+                  type="submit"
+                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-2 rounded"
+                >
+                  Ажилтан сонгох {emp?.length}
+                </button>
+
+                {show && (
+                  <Workers
+                    setShow={setShow}
+                    getEmployees={getEmployees}
+                    // reSetEmployee={reSet}
                   />
-                </div>
-                <div>
-                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                    Ажлын байр
-                  </label>
-                  <Select
-                    className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                    options={org}
-                    defaultValue={selectedOptionorg}
-                    onChange={(item) => {
-                      handleWorkers(item);
-                      // setcheckEmpty2(false);
-                    }}
-                    // id={checkEmpty2 === true ? "border-red" : null}
-                    noOptionsMessage={({ inputValue }) =>
-                      !inputValue && "Сонголт хоосон байна"
-                    }
-                    getOptionLabel={(option) => option.name}
-                    getOptionValue={(option) => option.id}
-                  />
-                </div>
-                <div>
-                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                    Ажилтны нэр
-                  </label>
-                  <Select
-                    options={workers}
-                    defaultValue={selectedOptionWorkers}
-                    onChange={(item) => {
-                      handleWorkersID(item);
-                      // setcheckEmpty3(false);
-                    }}
-                    // id={checkEmpty3 === true ? "border-red" : null}
-                    className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                    noOptionsMessage={({ inputValue }) =>
-                      !inputValue && "Сонголт хоосон байна"
-                    }
-                    getOptionLabel={(option) => option.firstName}
-                    getOptionValue={(option) => option.deviceId}
-                  />
-                </div>
+                )}
               </div>
 
               <div className="mt-4 text-right">

@@ -73,7 +73,7 @@ function App() {
             path="/home"
             element={
               // ProtectedRoute = Системрүү нэврээгүй хэрэглэгчийг тухайн path руу хандхад block лох үүрэгтэй component
-              <ProtectedRoute allowedRoles={[199]}>
+              <ProtectedRoute allowedRoles={[199, 4]}>
                 <Home />
               </ProtectedRoute>
             }
@@ -81,7 +81,7 @@ function App() {
           <Route
             path="/training-files"
             element={
-              <ProtectedRoute allowedRoles={[199]}>
+              <ProtectedRoute allowedRoles={[199, 4]}>
                 <TrainingFiles />
               </ProtectedRoute>
             }
@@ -89,7 +89,7 @@ function App() {
           <Route
             path="/training-category"
             element={
-              <ProtectedRoute allowedRoles={[199]}>
+              <ProtectedRoute allowedRoles={[199, 4]}>
                 <TrainingCategory />
               </ProtectedRoute>
             }
@@ -97,7 +97,7 @@ function App() {
           <Route
             path="/training"
             element={
-              <ProtectedRoute allowedRoles={[199]}>
+              <ProtectedRoute allowedRoles={[199, 4]}>
                 <Training />
               </ProtectedRoute>
             }
@@ -105,7 +105,7 @@ function App() {
           <Route
             path="/create-training"
             element={
-              <ProtectedRoute allowedRoles={[199]}>
+              <ProtectedRoute allowedRoles={[199, 4]}>
                 <CreateTraining />
               </ProtectedRoute>
             }
@@ -114,7 +114,7 @@ function App() {
           <Route
             path="/train-users"
             element={
-              <ProtectedRoute allowedRoles={[199]}>
+              <ProtectedRoute allowedRoles={[199, 4]}>
                 <TrainingUserCell />
               </ProtectedRoute>
             }
@@ -122,7 +122,7 @@ function App() {
           <Route
             path="/training-list"
             element={
-              <ProtectedRoute allowedRoles={[199]}>
+              <ProtectedRoute allowedRoles={[199, 4]}>
                 <Training />
               </ProtectedRoute>
             }
@@ -130,7 +130,7 @@ function App() {
           <Route
             path="/edit-training"
             element={
-              <ProtectedRoute allowedRoles={[199]}>
+              <ProtectedRoute allowedRoles={[199, 4]}>
                 <EditTraining />
               </ProtectedRoute>
             }
@@ -138,7 +138,9 @@ function App() {
           <Route
             path="/user-training"
             element={
-              <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
+              <ProtectedRoute
+                allowedRoles={[199, 1, 2, 4, 188, 189, 191, 208, 168, 169, 6]}
+              >
                 <UserTraining />
               </ProtectedRoute>
             }
@@ -154,7 +156,7 @@ function App() {
           <Route
             path="/training-rating"
             element={
-              <ProtectedRoute allowedRoles={[199]}>
+              <ProtectedRoute allowedRoles={[199, 4]}>
                 <TrainingRating />
               </ProtectedRoute>
             }
@@ -162,7 +164,7 @@ function App() {
           <Route
             path="/edit-train-rate"
             element={
-              <ProtectedRoute allowedRoles={[199]}>
+              <ProtectedRoute allowedRoles={[199, 4]}>
                 <EditTrainRate />
               </ProtectedRoute>
             }
@@ -170,7 +172,7 @@ function App() {
           <Route
             path="/train-rate-view"
             element={
-              <ProtectedRoute allowedRoles={[199]}>
+              <ProtectedRoute allowedRoles={[199, 4]}>
                 <RatedUsers />
               </ProtectedRoute>
             }
@@ -179,7 +181,7 @@ function App() {
           <Route
             path="/notification"
             element={
-              <ProtectedRoute allowedRoles={[199]}>
+              <ProtectedRoute allowedRoles={[199, 4]}>
                 <Notification />
               </ProtectedRoute>
             }
@@ -187,7 +189,7 @@ function App() {
           <Route
             path="/search-result"
             element={
-              <ProtectedRoute allowedRoles={[199]}>
+              <ProtectedRoute allowedRoles={[199, 4]}>
                 <SearchResult />
               </ProtectedRoute>
             }
@@ -195,7 +197,7 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute allowedRoles={[199]}>
+              <ProtectedRoute allowedRoles={[199, 4]}>
                 <Dashboard />
               </ProtectedRoute>
             }
@@ -220,7 +222,7 @@ function App() {
             path="/exam-dashboard"
             element={
               <QueryClientProvider client={queryClient}>
-                <ProtectedRoute allowedRoles={[199]}>
+                <ProtectedRoute allowedRoles={[199, 4]}>
                   <ExamDash />
                 </ProtectedRoute>
               </QueryClientProvider>
@@ -229,7 +231,7 @@ function App() {
           <Route
             path="/error-thanks"
             element={
-              <ProtectedRoute allowedRoles={[199]}>
+              <ProtectedRoute allowedRoles={[199, 4]}>
                 <ErrorThanks />
               </ProtectedRoute>
             }
@@ -238,7 +240,7 @@ function App() {
           <Route
             path="/create-error-thanks"
             element={
-              <ProtectedRoute allowedRoles={[199]}>
+              <ProtectedRoute allowedRoles={[199, 4]}>
                 <CreateErrorThanks />
               </ProtectedRoute>
             }
@@ -247,7 +249,7 @@ function App() {
           <Route
             path="/edit-error-thanks"
             element={
-              <ProtectedRoute allowedRoles={[199]}>
+              <ProtectedRoute allowedRoles={[199, 4]}>
                 <EditErrorThanks />
               </ProtectedRoute>
             }
@@ -255,7 +257,7 @@ function App() {
           <Route
             path="/user-error-thanks"
             element={
-              <ProtectedRoute allowedRoles={[199, 1, 4, 188]}>
+              <ProtectedRoute allowedRoles={[199, 1, 188, 168]}>
                 <UserErrorThanks />
               </ProtectedRoute>
             }
@@ -264,7 +266,7 @@ function App() {
           <Route
             path="/rating-main"
             element={
-              <ProtectedRoute allowedRoles={[199]}>
+              <ProtectedRoute allowedRoles={[199, 4]}>
                 <RatingCore />
               </ProtectedRoute>
             }
@@ -272,7 +274,7 @@ function App() {
           <Route
             path="/rating-individual"
             element={
-              <ProtectedRoute allowedRoles={[199]}>
+              <ProtectedRoute allowedRoles={[199, 4]}>
                 <RatingIndividual />
               </ProtectedRoute>
             }

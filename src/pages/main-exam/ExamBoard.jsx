@@ -1,4 +1,5 @@
 import { useState } from "react";
+import CreateaExamForm from "./CreateaExamForm";
 
 function ExamBoard({
   exams,
@@ -21,9 +22,13 @@ function ExamBoard({
     }
     temp.push(arr);
   }
+
   const [detector, setDetector] = useState(0);
+  const [show, setShow] = useState(false);
+
   return (
-    <div className="min-w-[1150px] min-h-full max-h-full bg-white py-3 px-4 shadow-sm">
+    <div className="min-w-[1150px] min-h-full max-h-full bg-white py-3 px-4 shadow-sm relative">
+      {show && <CreateaExamForm closeForm={setShow} />}
       <select
         onChange={(e) => {
           setDetector(e.target.value);
@@ -50,7 +55,13 @@ function ExamBoard({
         <div className="w-1/4 h-full flex justify-center items-center bg-teal-500 text-white text-[11px] uppercase font-[500]">
           Хугацаа
         </div>
-        <div className="w-1/4 h-full rounded cursor-pointer flex justify-center items-center bg-teal-600 text-white text-[11px] uppercase font-[600] mr-2">
+        <div
+          onClick={() => {
+            setShow(true);
+          }}
+          className="w-1/4 h-full rounded cursor-pointer flex justify-center items-center active:bg-teal-600 bg-teal-600 hover:bg-teal-700 text-white text-[11px] uppercase font-[600] mr-2"
+        >
+          <i className="bi bi-plus text-lg text-md mr-2"></i>
           Шалгалт үүсгэх
         </div>
       </div>

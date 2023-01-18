@@ -33,7 +33,7 @@ function ExamCategory({
   };
   return (
     <div
-      className={`absolute top-[56px]  shadow bg core-bg-g h-[calc(100%-68px)] mb-2 h-full flex  px-3 
+      className={`absolute top-[56px] z-10 shadow bg core-bg-g h-[calc(100%-68px)] mb-2 h-full flex  px-3 
         py-3 gap-2 drop-down ${
           activeMenu ? "w-[calc(100%-14px)] left-[7px]" : "w-full left-0"
         } `}

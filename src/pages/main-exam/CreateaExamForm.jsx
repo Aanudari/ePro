@@ -75,8 +75,6 @@ function CreateExamForm({ closeForm, examTri, setExamTri }) {
   const [exam_name, setExam_name] = useState("");
   const [varSelect, setVarSelect] = useState("A");
   const [count, setCount] = useState();
-
-  // console.log(allEmployee[0]);
   const [AllQuestions, setAllQuestions] = useState([]);
 
   const main = {

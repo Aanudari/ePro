@@ -7,21 +7,11 @@ function Login() {
   const { setUser, setisAuthenticated } = useStateContext();
   const navigate = useNavigate();
   const redirect = (data) => {
-    console.log(data.role_id);
-    if (data.role_id == "199" || data.role_id == "4") {
+    if (data.role_id == "199") {
       navigate("/home");
     } else {
-      // navigate("/levelone-ui-take-exam");
       navigate("/user-main");
     }
-    // switch (data.role_id) {
-    //   case "1":
-    //     navigate("/levelone-ui-take-exam");
-    //     break;
-    //   case "199":
-    //     navigate("/home");
-    //     break;
-    // }
     setUser(data);
   };
 

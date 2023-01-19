@@ -12,6 +12,7 @@ function PoolQuestionEdit({
   createExam,
   checked,
 }) {
+  const [answers, setAnswers] = useState(data.answers);
   useEffect(() => {
     setAnswers(data.answers);
   }, [data]);
@@ -20,7 +21,6 @@ function PoolQuestionEdit({
   const [question, setQuestion] = useState(data.question);
   const [points, setPoints] = useState(data.points);
   const [qimgUrl, setQimgUrl] = useState(data.qimgUrl);
-  const [answers, setAnswers] = useState(data.answers);
   const main = {
     questionId: data.id,
     question: question,
@@ -29,8 +29,6 @@ function PoolQuestionEdit({
     status: data.status,
     answers: answers,
   };
-  console.log(answers);
-  // console.log(data.id);
   const handleEdit = (value, answerId, isTrue) => {
     let tempo = main.answers;
     let temp = tempo.map((el, i) => {
@@ -53,13 +51,14 @@ function PoolQuestionEdit({
     });
     setAnswers(temp);
   };
-  const handleDelete = (id) => {
+  const handleDelete = (index) => {
     let tempo = main.answers;
     let temp = tempo.filter((item, ind) => {
-      if (item.id !== id && tempo.length > 0) {
+      if (index !== ind && tempo.length > 0) {
         return item;
       }
     });
+    main.answers = temp;
     setAnswers(temp);
   };
   const addAnswer = () => {
@@ -71,7 +70,8 @@ function PoolQuestionEdit({
     });
     setAnswers(newSet);
   };
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     axios({
       method: "put",
       headers: {
@@ -91,22 +91,30 @@ function PoolQuestionEdit({
       })
       .catch((err) => console.log(err));
   };
+  const deleteQuestion = (val) => {
+    axios({
+      method: "delete",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: TOKEN,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/Pool/question/${val}`,
+    })
+      .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
+        setTrigger(!trigger);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <div className="h-full">
       <div
         className={`border-t-[5px] border-l border-r border-[#50a3a2] rounded-lg relative `}
       >
-        {edit && (
-          <button
-            onClick={() => {
-              handleSubmit();
-            }}
-            className="absolute bottom-[20px] right-[20px] px-3 hover:bg-teal-600 py-2 bg-teal-500 font-[500] flex justify-center 
-        items-center text-white rounded-lg active:bg-teal-500"
-          >
-            Өөрчлөлт хадгалах
-          </button>
-        )}
         {!edit && createExam ? (
           <button
             onClick={() => {
@@ -128,6 +136,17 @@ function PoolQuestionEdit({
         items-center text-white rounded-lg "
           >
             <i className="bi bi-lock-fill text-xl"></i>
+          </button>
+        ) : null}
+        {data.status == "SE" && !createExam ? (
+          <button
+            onClick={() => {
+              deleteQuestion(data.id);
+            }}
+            className="absolute top-[15px] right-[calc(20%)] px-3 py-2 bg-red-500 font-[500] flex justify-center 
+        items-center text-white rounded-lg "
+          >
+            <i className="bi bi-trash-fill text-xl"></i>
           </button>
         ) : null}
         <div
@@ -155,6 +174,7 @@ function PoolQuestionEdit({
                   className="outline-none rounded-md ml-2 h-[40px] focus:border-b-[2px] focus:h-[42px] border-teal-500 px-2 text-[16px] w-[calc(90%)] font-[400]"
                   autoCorrect="false"
                   spellCheck={false}
+                  autoFocus
                 />
               ) : (
                 <h6 className="mb-0 mt-1 ml-2 font-[400]">
@@ -189,74 +209,92 @@ function PoolQuestionEdit({
               </div>
             )}
           </div>
-          <div className="mt-3">
-            {edit
-              ? main.answers.map((item, index) => (
-                  <div key={index} className="relative parent">
-                    <h6 className=" font-[400] pl-3 flex items-center">
-                      <i
-                        onClick={() => {
-                          handleDelete(item.id);
-                        }}
-                        className="bi active:text-red-500 bi-trash3 absolute left-[calc(55%)] text-gray-600 child hidden top-[12px]"
-                      ></i>
-                      {item.isTrue == "1" ? (
+          <form
+            action=""
+            onSubmit={(e) => {
+              handleSubmit(e);
+            }}
+          >
+            <div className="mt-3">
+              {edit
+                ? main.answers.map((item, index) => (
+                    <div key={index} className="relative parent">
+                      <h6 className=" font-[400] pl-3 flex items-center">
                         <i
                           onClick={() => {
-                            handleIsTrue(item.answer, index, item.isTrue);
+                            handleDelete(index);
                           }}
-                          className="bi bi-check-circle text-xl px-1 text-teal-500"
+                          className="bi active:text-red-500 bi-trash3 absolute left-[calc(55%)] text-gray-600 child hidden top-[12px]"
                         ></i>
-                      ) : (
-                        <i
-                          onClick={() => {
-                            handleIsTrue(item.answer, index, item.isTrue);
+                        {item.isTrue == "1" ? (
+                          <i
+                            onClick={() => {
+                              handleIsTrue(item.answer, index, item.isTrue);
+                            }}
+                            className="bi bi-check-circle text-xl px-1 text-teal-500"
+                          ></i>
+                        ) : (
+                          <i
+                            onClick={() => {
+                              handleIsTrue(item.answer, index, item.isTrue);
+                            }}
+                            className="bi bi-circle text-xl px-1 text-gray-400"
+                          ></i>
+                        )}
+
+                        <input
+                          onChange={(e) => {
+                            handleEdit(e.target.value, index);
                           }}
-                          className="bi bi-circle text-xl px-1 text-gray-400"
-                        ></i>
-                      )}
-                      <input
-                        onChange={(e) => {
-                          handleEdit(e.target.value, index);
-                        }}
-                        defaultValue={item.answer}
-                        type="text"
-                        className={`outline-none rounded-md ml-2 h-[40px] 
+                          defaultValue={item.answer}
+                          type="text"
+                          className={`outline-none rounded-md ml-2 h-[40px] 
 focus:border-b-[2px] focus:h-[42px] border-teal-500 px-2 text-[14px] w-1/2 font-[400]`}
-                        autoCorrect="false"
-                        spellCheck={false}
-                      />
-                    </h6>
-                  </div>
-                ))
-              : data.answers.map((item, index) => (
-                  <div key={index} className="">
-                    <h6 className=" font-[400] pl-3 flex items-center">
-                      {item.isTrue == "1" ? (
-                        <i className="bi bi-check-circle text-xl px-1 text-teal-500"></i>
-                      ) : (
-                        <i className="bi bi-circle text-xl px-1 text-gray-400"></i>
-                      )}
-                      <span className="ml-2 text-[14px] font-[400]">
-                        {item.answer}/{item.id}
-                      </span>
-                    </h6>
-                  </div>
-                ))}
+                          autoCorrect="false"
+                          spellCheck={false}
+                          autoFocus
+                        />
+                      </h6>
+                    </div>
+                  ))
+                : data.answers.map((item, index) => (
+                    <div key={index} className="">
+                      <h6 className=" font-[400] pl-3 flex items-center">
+                        {item.isTrue == "1" ? (
+                          <i className="bi bi-check-circle text-xl px-1 text-teal-500"></i>
+                        ) : (
+                          <i className="bi bi-circle text-xl px-1 text-gray-400"></i>
+                        )}
+                        <span className="ml-2 text-[14px] font-[400]">
+                          {item.answer}/{item.id}
+                        </span>
+                      </h6>
+                    </div>
+                  ))}
+              {edit && (
+                <div className="mt-4">
+                  <span
+                    onClick={() => {
+                      addAnswer();
+                    }}
+                    className="text-teal-500 hover:text-teal-400 font-[500]"
+                  >
+                    <i className="bi bi-plus-lg mr-2"></i>
+                    Хариулт нэмэх
+                  </span>
+                </div>
+              )}
+            </div>
             {edit && (
-              <div className="mt-4">
-                <span
-                  onClick={() => {
-                    addAnswer();
-                  }}
-                  className="text-teal-500 hover:text-teal-400 font-[500]"
-                >
-                  <i className="bi bi-plus-lg mr-2"></i>
-                  Хариулт нэмэх
-                </span>
-              </div>
+              <button
+                type="submit"
+                className="absolute bottom-[20px] right-[20px] px-3 hover:bg-teal-600 py-2 bg-teal-500 font-[500] flex justify-center 
+        items-center text-white rounded-lg active:bg-teal-500"
+              >
+                Өөрчлөлт хадгалах
+              </button>
             )}
-          </div>
+          </form>
         </div>
       </div>
       <div className="py-3"></div>

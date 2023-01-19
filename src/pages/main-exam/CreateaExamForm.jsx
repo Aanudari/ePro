@@ -4,6 +4,9 @@ import DatePicker from "react-datepicker";
 import AllEmployeeSelect from "./modal/AllEmployeeSelect";
 import axios from "axios";
 import GetQuestionIdsFromCategory from "./GetQuestionIdsFromCategory";
+import { ToastContainer, toast } from "react-toastify";
+import { notification } from "../../service/toast.js";
+import "react-toastify/dist/ReactToastify.css";
 function CreateExamForm({ closeForm, examTri, setExamTri }) {
   const [showSelect, setShowSelect] = useState(false);
   const [allEmployee, setAllEmployee] = useState();
@@ -133,10 +136,33 @@ function CreateExamForm({ closeForm, examTri, setExamTri }) {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
+          toast.error(res.data.resultMessage, {
+            position: "bottom-right",
+            autoClose: 1000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        } else {
+          toast.success("Шалгалт ажилттай үүслээ !", {
+            position: "bottom-right",
+            autoClose: 1000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+          const timer = setTimeout(() => {
+            closeForm(false);
+            setExamTri(!examTri);
+          }, 2000);
+          return () => clearTimeout(timer);
         }
-        closeForm(false);
-        setExamTri(!examTri);
       })
       .catch((err) => {
         console.log(err);
@@ -153,6 +179,7 @@ function CreateExamForm({ closeForm, examTri, setExamTri }) {
         bg-black bg-opacity-50 flex justify-center items-center
         `}
     >
+      <ToastContainer />
       {show && <GetQuestionIdsFromCategory setShow={setShow} getIds={getIds} />}
       <div className="shrink w-[calc(85%)] h-[600px] bg-white flex flex-col ">
         <div className="w-full min-h-[50px] bg-gray-700 flex justify-end px-3 flex items-center ">

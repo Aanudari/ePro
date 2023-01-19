@@ -29,7 +29,7 @@ function ExamBoard({
   const [show, setShow] = useState(false);
 
   return (
-    <div className="min-w-[1150px] min-h-full max-h-full bg-white py-3 px-4 shadow-sm relative">
+    <div className="min-w-[800px] bg-white py-3 px-4 shadow-sm relative">
       {show && (
         <CreateaExamForm
           closeForm={setShow}
@@ -67,13 +67,13 @@ function ExamBoard({
           onClick={() => {
             setShow(true);
           }}
-          className="w-1/4 h-full rounded cursor-pointer flex justify-center items-center active:bg-teal-600 bg-teal-600 hover:bg-teal-700 text-white text-[11px] uppercase font-[600] mr-2"
+          className="w-1/4 h-full border-[1px] hover:bg-teal-600 hover:text-white transition-all !border-teal-500 rounded cursor-pointer flex justify-center items-center text-teal-600 text-[11px] uppercase font-bold mr-2"
         >
           <i className="bi bi-plus text-lg text-md mr-2"></i>
           Шалгалт үүсгэх
         </div>
       </div>
-      <div className="w-full h-full h-[570px]  overflow-scroll mt-2 border-b">
+      <div className="!h-[calc(100vh-188px)] w-full overflow-scroll mt-2 border-b">
         {exams &&
           temp[detector].map((exam, index) => (
             <div key={index} className="h-14 w-full flex border-b">

@@ -340,6 +340,24 @@ function ExamModalMain({
         console.log(err);
       });
   };
+  const handleGetCategories = (value) => {
+    axios({
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/Pool/Question/${value}`,
+    })
+      .then((res) => {
+        if (res.data.errorCode == 401) {
+          logout();
+        } else {
+          setCategoryData(res.data.questionList);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
   return (
     <div
       className={`fixed ${
@@ -584,19 +602,124 @@ function ExamModalMain({
             <div className="py-3"></div>
           </div>
         </div>
-        {/* <button
-          onClick={() => {
-            setSideQuestions(!sideQuestions);
-          }}
-          className="w-[35px] h-[35px] shadow absolute right-[calc(3%)] bottom-[calc(5%)] rounded-full flex justify-center items-center "
-        >
-          <i className="bi bi-plus-circle-fill text-[35px] text-teal-600 hover:scale-110 hover:text-teal-500 active:text-teal-400"></i>
-        </button> */}
+        {examSummary == "Not yet" && (
+          <button
+            onClick={() => {
+              setSideQuestions(!sideQuestions);
+            }}
+            className="w-[35px] h-[35px] shadow absolute right-[calc(3%)] bottom-[calc(5%)] rounded-full flex justify-center items-center "
+          >
+            <i className="bi bi-plus-circle-fill text-[35px] text-teal-600 hover:scale-110 hover:text-teal-500 active:text-teal-400"></i>
+          </button>
+        )}
       </div>
       {showSide && (
         <div className="h-screen w-[200px] bg-teal-400 transition from-left overflow-scroll">
           <div className="h-[50px]"></div>
           <input type="file" />
+        </div>
+      )}
+      {sideQuestions && (
+        <div className="h-screen w-[400px] bg-white transition from-left overflow-scroll shadow  flex flex-col justify-between">
+          <div className="px-2 py-2">
+            <div className="h-[30px]"></div>
+            {!showQuestions ? (
+              <h6 className="text-teal-600 text-[14px] flex justify-between">
+                <span className="font-[500]">
+                  <i className="bi bi-caret-down-square-fill mr-2"></i>
+                  Шалгалтын категориуд
+                </span>
+                <i
+                  onClick={() => {
+                    setSideQuestions(false);
+                  }}
+                  className="bi bi-x-circle cursor-pointer"
+                ></i>
+              </h6>
+            ) : (
+              <h6 className="text-teal-600 text-[14px] flex justify-between">
+                <span className="font-[500]">
+                  <i className="bi bi-caret-down-square-fill mr-2"></i>
+                  Асуултууд
+                </span>
+                <i
+                  onClick={() => {
+                    setSideQuestions(false);
+                    setShowQuestions(false);
+                  }}
+                  className="bi bi-x-circle cursor-pointer"
+                ></i>
+              </h6>
+            )}
+            {!showQuestions
+              ? categories?.map((item, index) => (
+                  <div
+                    key={index}
+                    onClick={() => {
+                      handleGetCategories(item.id);
+                      setShowQuestions(true);
+                    }}
+                    className="h-10 w-full bg-teal-500 mb-1 flex items-center pl-3 justify-between shadow-sm cursor-pointer hover:bg-teal-600 "
+                  >
+                    <span className="font-[500] text-white text-[12px]">
+                      {item.name}
+                    </span>
+                    <div className="h-full flex"></div>
+                  </div>
+                ))
+              : categoryData?.map((item, index) => (
+                  <div
+                    key={index}
+                    className=" py-2 w-full border mb-1 flex items-center pl-3 justify-between shadow-sm cursor-pointer  "
+                  >
+                    <span className="font-[500] text-teal-600 text-[12px]">
+                      {item.question}
+                    </span>
+                    <div
+                      onClick={() => {
+                        handleCollectIds(item.id);
+                      }}
+                      className="h-[20px] min-w-[20px] flex mr-2 border rounded flex items-center justify-center"
+                    >
+                      {arr.includes(item.id) && (
+                        <i className="bi bi-check text-2xl text-teal-600"></i>
+                      )}
+                    </div>
+                  </div>
+                ))}
+          </div>
+          <div className="h-[80px] bg-white shadow flex items-start w-full justify-between px-3 pt-3">
+            {showQuestions && (
+              <div
+                onClick={() => {
+                  setShowQuestions(false);
+                }}
+                className="h-[30px] w-[100px] bg-teal-500 rounded-sm px-3 flex items-center font-[400] text-white
+                            cursor-pointer active:bg-teal-400 hover:bg-teal-600"
+              >
+                <span className="mr-2 mb-1 font-[400] text-white">Буцах</span>
+                <div className="pl-2 h-full flex items-center border-l border-gray-300">
+                  <i className="bi bi-ui-checks"></i>
+                </div>
+              </div>
+            )}
+            {arr.length > 0 && (
+              <div
+                onClick={() => {
+                  handleAddQuestion();
+                }}
+                className="h-[30px] min-w-[150px] bg-teal-500 rounded-sm px-3 flex items-center font-[400] text-white
+                            cursor-pointer active:bg-teal-400 hover:bg-teal-600"
+              >
+                <span className="mr-2 mb-1 font-[400] text-white">
+                  Асуулт нэмэх
+                </span>
+                <div className="pl-2 h-full flex items-center border-l border-gray-300">
+                  <i className="bi bi-ui-checks"></i>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>

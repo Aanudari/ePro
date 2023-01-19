@@ -78,8 +78,8 @@ function ExamDash() {
   return (
     <div className="w-full min-h-screen bg-teal-500 relative">
       <Navigation />
-      <div className="px-2 py-1 flex h-[calc(100%-64px)] items-end justify-center">
-        <div className="h-full flex flex-col justify-between">
+      <div className="w-full px-2 py-1 flex h-[calc(100%-64px)] items-end justify-center">
+        <div className="w-full h-full flex flex-col justify-between">
           {showCategoryMenu && (
             <ExamCategory
               categories={categories && categories}

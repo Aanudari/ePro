@@ -40,7 +40,7 @@ function AddCategoryMenu({ setShowAddCategory, trigger, setTrigger }) {
     name: `${name}`,
     startDate: `${datestring}`,
     endDate: `${datestring2}`,
-    department: `${department}`,
+    department: null,
   };
   useEffect(() => {
     axios({
@@ -107,7 +107,7 @@ function AddCategoryMenu({ setShowAddCategory, trigger, setTrigger }) {
           </button>
         </div>
 
-        <div className="h-full w-full px-3 overflow-scroll flex justify-center pt-20">
+        <div className="h-full w-full px-3 overflow-scroll flex justify-center items-center pt-20">
           <div className="w-1/2 h-1/2">
             <div className="group w-full">
               <input
@@ -124,38 +124,43 @@ function AddCategoryMenu({ setShowAddCategory, trigger, setTrigger }) {
               <span className="bar"></span>
               <label className="">Категори нэр</label>
             </div>
-            <h6 className="mt-[-20px]"></h6>
-            <div className="w-full flex gap-2 mb-3 ">
-              <DatePicker
-                selected={value}
-                value={value}
-                onChange={(date) => setValue(date)}
-                className="form-control form-control-sm
-                                            py-2 mt-2 ml-0 border border-dark"
-                showTimeSelect
-                timeFormat="HH:mm"
-                timeIntervals={15}
-                timeCaption="time"
-                dateFormat="yyyy-MM-dd h:mm aa"
-              />
-              <DatePicker
-                selected={selectV}
-                value={selectV}
-                onChange={(date) => setSelectV(date)}
-                className="form-control form-control-sm
-                                            py-2 mt-2 ml-0 border border-dark"
-                showTimeSelect
-                timeFormat="HH:mm"
-                timeIntervals={15}
-                timeCaption="time"
-                dateFormat="yyyy-MM-dd h:mm aa"
-              />
+            <div className="w-full flex gap-2 mb-3">
+              <div className="flex w-full flex-col">
+                <p className="font-[400] mb-0">Эхлэх:</p>
+                <DatePicker
+                  selected={value}
+                  value={value}
+                  onChange={(date) => setValue(date)}
+                  className="form-control form-control-sm
+                                            py-2 ml-0 border border-dark"
+                  showTimeSelect
+                  timeFormat="HH:mm"
+                  timeIntervals={15}
+                  timeCaption="time"
+                  dateFormat="yyyy-MM-dd h:mm aa"
+                />
+              </div>
+              <div className="flex w-full flex-col">
+                <p className="font-[400] mb-0">Дуусах:</p>
+                <DatePicker
+                  selected={selectV}
+                  value={selectV}
+                  onChange={(date) => setSelectV(date)}
+                  className="form-control form-control-sm
+                                            py-2 ml-0 border border-dark"
+                  showTimeSelect
+                  timeFormat="HH:mm"
+                  timeIntervals={15}
+                  timeCaption="time"
+                  dateFormat="yyyy-MM-dd h:mm aa"
+                />
+              </div>
             </div>
 
-            <DepartmentSelect data={data} handleOptions={handleOptions} />
+            {/* <DepartmentSelect data={data} handleOptions={handleOptions} /> */}
           </div>
         </div>
-        {name !== "" && department !== undefined && (
+        {name !== "" && (
           <div
             onClick={submitCategory}
             className="min-h-[50px] bg-gray-700 flex justify-center 

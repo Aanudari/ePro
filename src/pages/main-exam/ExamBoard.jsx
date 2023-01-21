@@ -25,7 +25,7 @@ function ExamBoard({
     temp.push(arr);
   }
 
-  const [detector, setDetector] = useState(0);
+  const [detector, setDetector] = useState(1);
   const [show, setShow] = useState(false);
 
   return (

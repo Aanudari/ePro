@@ -77,7 +77,7 @@ function GetQuestionIdsFromCategory({ setShow, getIds }) {
 top-[56px] fixed  h-[calc(100%-56px)] 
 bg-black bg-opacity-50 flex items-center justify-center z-20`}
     >
-      <div className="bg-gray-200 appear-smooth w-full h-[calc(100%)] relative">
+      <div className="bg-gray-200 appear-smooth w-full h-[calc(100%)] relative pb-10">
         <div className="w-full h-12 bg-teal-500 flex justify-between px-4 items-center shadow-sm">
           <div className="flex items-center">
             <div className=" flex justify-between items-center px-4 py-2">
@@ -90,14 +90,15 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
                     setShow(false);
                     //   getEmployees(chosen);
                   }}
-                  className="text-white font-[500] text-sm border-[2px] rounded  px-2 py-2 ml-2"
+                  className="text-white cursor-pointer bg-teal-600 font-[400] text-md transition-all px-4 py-3 ml-2 fixed bottom-0 
+                  hover:bg-teal-700 hover:!bottom-[5px] hover:right-[5px] right-0 shadow z-20"
                 >
                   <button
                     onClick={() => {
                       getIds(questionIds);
                     }}
                   >
-                    Хадгалах
+                    {questionIds.length}/ Хадгалах
                   </button>
                 </span>
               )}

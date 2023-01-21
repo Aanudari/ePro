@@ -2,7 +2,9 @@ import { useState } from "react";
 import axios from "axios";
 import { useStateContext } from "../../../contexts/ContextProvider";
 import { useEffect } from "react";
-
+import DeleteConfirm from "../modal/DeleteComfirm";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function PoolQuestionEdit({
   data,
   indexed,
@@ -29,7 +31,9 @@ function PoolQuestionEdit({
     status: data.status,
     answers: answers,
   };
+  const [noti, setNoti] = useState(false);
   const handleEdit = (value, answerId, isTrue) => {
+    setNoti(false);
     let tempo = main.answers;
     let temp = tempo.map((el, i) => {
       if (i == answerId) {
@@ -71,50 +75,80 @@ function PoolQuestionEdit({
     setAnswers(newSet);
   };
   const handleSubmit = (e) => {
+    let tri = false;
     e.preventDefault();
-    axios({
-      method: "put",
-      headers: {
-        Authorization: `${TOKEN}`,
-        "Content-Type": "application/json",
-        accept: "text/plain",
-      },
-      url: `${process.env.REACT_APP_URL}/v1/Pool/update/question`,
-      data: main,
-    })
-      .then((res) => {
-        if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
-        setTrigger(!trigger);
-        setEdit(false);
+    for (let index = 0; index < main.answers.length; index++) {
+      const element = main.answers[index];
+      if (element.answer == "") {
+        tri = true;
+        toast.error("Хариултын утга оруулна уу !", {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        break;
+      }
+    }
+    if (tri === false) {
+      axios({
+        method: "put",
+        headers: {
+          Authorization: `${TOKEN}`,
+          "Content-Type": "application/json",
+          accept: "text/plain",
+        },
+        url: `${process.env.REACT_APP_URL}/v1/Pool/update/question`,
+        data: main,
       })
-      .catch((err) => console.log(err));
+        .then((res) => {
+          setTrigger(!trigger);
+          setEdit(false);
+          setImgSide(false);
+        })
+        .catch((err) => console.log(err));
+    }
   };
+  const [imgSide, setImgSide] = useState(false);
+  const [confirm, setConfirm] = useState(false);
+  const [questionId, setQuestionId] = useState();
   const deleteQuestion = (val) => {
+    setQuestionId(val);
+    setConfirm(true);
+  };
+  const actualDelete = () => [
     axios({
       method: "delete",
       headers: {
         "Content-Type": "application/json",
         Authorization: TOKEN,
       },
-      url: `${process.env.REACT_APP_URL}/v1/Pool/question/${val}`,
+      url: `${process.env.REACT_APP_URL}/v1/Pool/question/${questionId}`,
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
           alert(res.data.resultMessage);
         }
         setTrigger(!trigger);
+        setConfirm(false);
       })
       .catch((err) => {
         console.log(err);
-      });
-  };
+      }),
+  ];
   return (
     <div className="h-full">
+      <ToastContainer />
       <div
         className={`border-t-[5px] border-l border-r border-[#50a3a2] rounded-lg relative `}
       >
+        {confirm && (
+          <DeleteConfirm setConfirm={setConfirm} deleteCat={actualDelete} />
+        )}
         {!edit && createExam ? (
           <button
             onClick={() => {
@@ -143,10 +177,10 @@ function PoolQuestionEdit({
             onClick={() => {
               deleteQuestion(data.id);
             }}
-            className="absolute top-[15px] right-[calc(20%)] px-3 py-2 bg-red-500 font-[500] flex justify-center 
+            className="absolute top-[15px] right-[calc(20%)] px-2 py-1s bg-red-500 font-[500] flex justify-center 
         items-center text-white rounded-lg "
           >
-            <i className="bi bi-trash-fill text-xl"></i>
+            <i className="bi bi-trash3 text-lg"></i>
           </button>
         ) : null}
         <div
@@ -159,10 +193,10 @@ function PoolQuestionEdit({
               : data.status == "NE"
               ? "!bg-opacity-20 !bg-gray-700"
               : null
-          }  bg-gray-50 flex flex-col transition hover:bg-opacity-10 hover:bg-gray-700 rounded-lg cursor-pointer pt-10 `}
+          }  bg-gray-50 flex flex-col transition hover:bg-opacity-10 hover:bg-gray-700 rounded-lg  pt-10 `}
         >
           <div className="flex justify-between gap-2">
-            <div className="h-[42px] w-full flex items-start">
+            <div className=" w-full flex items-start">
               <span className="font-[500] mt-[2px]">{indexed + 1}.</span>
               {edit ? (
                 <input
@@ -177,14 +211,33 @@ function PoolQuestionEdit({
                   autoFocus
                 />
               ) : (
-                <h6 className="mb-0 mt-1 ml-2 font-[400]">
-                  {data.question}/{data.id}
-                </h6>
+                <div className="w-full">
+                  <h6 className="mb-0 mt-1 ml-2 font-[400]">{data.question}</h6>
+                  <div
+                    className={`${
+                      data.qimgUrl !== ""
+                        ? "border p-2 w-full mt-2 rounded flex justify-center"
+                        : "hidden"
+                    }`}
+                  >
+                    <img
+                      className="h-[400px] mt-2"
+                      src={`http://${data.qimgUrl}`}
+                      alt=""
+                    />
+                  </div>
+                </div>
               )}
             </div>
+
             {edit ? (
               <div className="h-[42px] flex items-center justify-end">
-                <i className="bi active:text-teal-500 bi-images text-xl mr-3 text-teal-600 "></i>
+                <i
+                  onClick={() => {
+                    setImgSide(!imgSide);
+                  }}
+                  className="bi active:text-teal-500 bi-images text-xl mr-3 text-teal-600 "
+                ></i>
                 <span className="mb-0 font-[500]">Оноо </span> :
                 <input
                   onChange={(e) => {
@@ -199,7 +252,6 @@ function PoolQuestionEdit({
               </div>
             ) : (
               <div className="h-[42px] flex items-start">
-                <i className="bi active:text-teal-500 bi-images text-xl mr-3 text-teal-600 "></i>
                 <span className="mb-0 font-[400] text-[15px] mt-[1px]">
                   Оноо:
                 </span>
@@ -209,52 +261,56 @@ function PoolQuestionEdit({
               </div>
             )}
           </div>
+
           <form
             action=""
             onSubmit={(e) => {
               handleSubmit(e);
             }}
+            className="flex "
           >
-            <div className="mt-3">
+            <div className="mt-3 ">
               {edit
                 ? main.answers.map((item, index) => (
-                    <div key={index} className="relative parent">
-                      <h6 className=" font-[400] pl-3 flex items-center">
-                        <i
-                          onClick={() => {
-                            handleDelete(index);
-                          }}
-                          className="bi active:text-red-500 bi-trash3 absolute left-[calc(55%)] text-gray-600 child hidden top-[12px]"
-                        ></i>
-                        {item.isTrue == "1" ? (
+                    <div key={index} className="flex w-full">
+                      <div className="relative w-[calc(100vw-300px)]">
+                        <h6 className=" font-[400] pl-3 flex items-center">
                           <i
                             onClick={() => {
-                              handleIsTrue(item.answer, index, item.isTrue);
+                              handleDelete(index);
                             }}
-                            className="bi bi-check-circle text-xl px-1 text-teal-500"
+                            className="bi active:text-red-500 bi-trash3 absolute left-[calc(55%)] text-gray-600 child hidden top-[12px]"
                           ></i>
-                        ) : (
-                          <i
-                            onClick={() => {
-                              handleIsTrue(item.answer, index, item.isTrue);
-                            }}
-                            className="bi bi-circle text-xl px-1 text-gray-400"
-                          ></i>
-                        )}
+                          {item.isTrue == "1" ? (
+                            <i
+                              onClick={() => {
+                                handleIsTrue(item.answer, index, item.isTrue);
+                              }}
+                              className="bi bi-check-circle text-xl px-1 text-teal-500"
+                            ></i>
+                          ) : (
+                            <i
+                              onClick={() => {
+                                handleIsTrue(item.answer, index, item.isTrue);
+                              }}
+                              className="bi bi-circle text-xl px-1 text-gray-400"
+                            ></i>
+                          )}
 
-                        <input
-                          onChange={(e) => {
-                            handleEdit(e.target.value, index);
-                          }}
-                          defaultValue={item.answer}
-                          type="text"
-                          className={`outline-none rounded-md ml-2 h-[40px] 
+                          <input
+                            onChange={(e) => {
+                              handleEdit(e.target.value, index);
+                            }}
+                            defaultValue={item.answer}
+                            type="text"
+                            className={`outline-none rounded-md ml-2 h-[40px] 
 focus:border-b-[2px] focus:h-[42px] border-teal-500 px-2 text-[14px] w-1/2 font-[400]`}
-                          autoCorrect="false"
-                          spellCheck={false}
-                          autoFocus
-                        />
-                      </h6>
+                            autoCorrect="false"
+                            spellCheck={false}
+                            autoFocus
+                          />
+                        </h6>
+                      </div>
                     </div>
                   ))
                 : data.answers.map((item, index) => (
@@ -266,7 +322,7 @@ focus:border-b-[2px] focus:h-[42px] border-teal-500 px-2 text-[14px] w-1/2 font-
                           <i className="bi bi-circle text-xl px-1 text-gray-400"></i>
                         )}
                         <span className="ml-2 text-[14px] font-[400]">
-                          {item.answer}/{item.id}
+                          {item.answer}
                         </span>
                       </h6>
                     </div>
@@ -282,6 +338,16 @@ focus:border-b-[2px] focus:h-[42px] border-teal-500 px-2 text-[14px] w-1/2 font-
                     <i className="bi bi-plus-lg mr-2"></i>
                     Хариулт нэмэх
                   </span>
+                </div>
+              )}
+              {imgSide && (
+                <div className="w-[500px] h-[200px] appear-smooth p-2 !bg-white mt-2 rounded p-2">
+                  {/* <ImageUploader setImageUrl={setQimgUrl} /> */}
+                  <img
+                    className="h-full"
+                    src={`http://${data.qimgUrl}`}
+                    alt=""
+                  />
                 </div>
               )}
             </div>

@@ -42,11 +42,45 @@ import Exam from "./pages/UserMainUI/ExamUser/core/Exam";
 import ExamShow from "./pages/UserMainUI/ExamUser/core/ExamShow";
 import EditTrainRate from "./pages/training_raiting/EditTrainRate";
 import RatedUsers from "./pages/training_raiting/RatedUsers";
-
+import { useEffect } from "react";
+import axios from "axios";
 function App() {
-  const { activeMenu, showTop, roleId } = useStateContext();
+  document.addEventListener(
+    "keydown",
+    (event) => {
+      if (
+        event.keyCode == 83 &&
+        (navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey)
+      ) {
+        event.preventDefault();
+        doSomethingElse();
+      }
+    },
+    false
+  );
+  const doSomethingElse = () => {
+    alert("Ctrl + S combination ашиглахын хориглов !");
+  };
+  const { activeMenu, showTop, roleId, TOKEN } = useStateContext();
   const { width } = getWindowDimensions();
   const queryClient = new QueryClient();
+  // useEffect(() => {
+  //   const api = () => {
+  //     axios({
+  //       method: "get",
+  //       headers: {
+  //         Authorization: `${TOKEN}`,
+  //       },
+  //       url: `${process.env.REACT_APP_URL}/v1/Notification/get`,
+  //     })
+  //       .then((res) => {
+  //         console.log(res.data.notifications);
+  //       })
+  //       .catch((err) => console.log(err));
+  //     setTimeout(api, 300000);
+  //   };
+  //   api();
+  // }, []);
   return (
     <BrowserRouter>
       <div className="flex w-full relative">

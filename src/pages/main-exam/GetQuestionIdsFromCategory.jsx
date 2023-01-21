@@ -113,7 +113,7 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
           </div>
         </div>
         {selected.length > 0 ? (
-          <div className=" px-4 py-1">
+          <div className="h-full px-4 py-1 overflow-scroll ">
             <div className=" flex gap-2 h-16 items-center">
               <div
                 onClick={() => {
@@ -133,7 +133,10 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
                 {catName}
               </div>
             </div>
-            <div className=" mt-4">
+            <div
+              className="mt-4 pb-16
+            "
+            >
               {questions?.map((question, index) => (
                 <QuestionMain
                   key={index}

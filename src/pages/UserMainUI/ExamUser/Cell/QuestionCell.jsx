@@ -12,6 +12,7 @@ function QuestionCell({ data, collector }) {
   let question = {
     questionId: `${data.id}`,
     onlyAnswerId: tempo,
+    point: `${data.points}`,
   };
   const handleAnswer = (id, isTrue, index) => {
     let data = {

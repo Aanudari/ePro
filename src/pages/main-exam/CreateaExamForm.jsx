@@ -147,21 +147,8 @@ function CreateExamForm({ closeForm, examTri, setExamTri }) {
             theme: "light",
           });
         } else {
-          toast.success("Шалгалт ажилттай үүслээ !", {
-            position: "bottom-right",
-            autoClose: 1000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-          const timer = setTimeout(() => {
-            closeForm(false);
-            setExamTri(!examTri);
-          }, 2000);
-          return () => clearTimeout(timer);
+          closeForm(false);
+          setExamTri(!examTri);
         }
       })
       .catch((err) => {

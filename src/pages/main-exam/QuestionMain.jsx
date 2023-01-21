@@ -31,11 +31,25 @@ function QuestionMain({ data, indexed, ids, remover, collector }) {
         }  flex flex-col transition rounded-lg pt-10 `}
       >
         <div className="flex justify-between gap-2">
-          <div className="h-[42px] w-full flex items-start">
+          {/* <div className="h-[42px] w-full flex items-start">
             <span className="font-[500] mt-[2px]">{indexed + 1}.</span>
-            <h6 className="mb-0 mt-1 ml-2 font-[400]">
-              {data.question}/{data.id}
-            </h6>
+            <h6 className="mb-0 mt-1 ml-2 font-[400]">{data.question}</h6>
+          </div> */}
+          <div className="w-full">
+            <h6 className="mb-0 mt-1 ml-2 font-[400]">{data.question}</h6>
+            <div
+              className={`${
+                data.qimgUrl !== ""
+                  ? "border bg-gray-100 p-2 w-full mt-2 rounded flex justify-center"
+                  : "hidden"
+              }`}
+            >
+              <img
+                className="h-[400px] mt-2"
+                src={`http://${data.qimgUrl}`}
+                alt=""
+              />
+            </div>
           </div>
 
           <div className="h-[42px] flex items-start">
@@ -56,7 +70,7 @@ function QuestionMain({ data, indexed, ids, remover, collector }) {
                   <i className="bi bi-circle text-xl px-1 text-gray-400"></i>
                 )}
                 <span className="ml-2 text-[14px] font-[400]">
-                  {item.answer}/{item.id}
+                  {item.answer}
                 </span>
               </h6>
             </div>

@@ -6,6 +6,7 @@ import ExamEditHeader from "../ExamEditHeader";
 import EditQuestionMenu from "../edits/EditQuestionMenu";
 import { logout } from "../../../service/examService";
 import ExamEditHeader2 from "../ExamEditHeader2";
+import DeleteConfirm from "./DeleteComfirm";
 function ExamModalMain({
   setExamModal,
   id,
@@ -64,27 +65,6 @@ function ExamModalMain({
       })
       .catch((err) => console.log(err));
   }, [trigger2, showButton]);
-  const handleDeleteExam = () => {
-    axios({
-      method: "delete",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${TOKEN}`,
-      },
-      url: `${process.env.REACT_APP_URL}/v1/ExamNew/delete?examId=${id}`,
-    })
-      .then((res) => {
-        if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
-        if (res.data.errorCode == 401) {
-          logout();
-        } else {
-          setExamModal(false);
-        }
-      })
-      .catch((err) => console.log(err));
-  };
 
   const handleQuestion = (id, name, point) => {
     if (checked.includes(id)) {
@@ -333,7 +313,6 @@ function ExamModalMain({
         if (res.data.isSuccess === false) {
           alert(res.data.resultMessage);
         }
-        console.log(res);
         setShowButton(false);
       })
       .catch((err) => {
@@ -358,29 +337,93 @@ function ExamModalMain({
       })
       .catch((err) => console.log(err));
   };
+  const [confirm, setConfirm] = useState(false);
+  const [questionId, setQuestionId] = useState();
+  const deleteExam = (val) => {
+    axios({
+      method: "delete",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/ExamNew/delete?examId=${id}`,
+    })
+      .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
+        if (res.data.errorCode == 401) {
+          logout();
+        } else {
+          setExamModal(false);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+  const handleDeleteExam = () => {
+    setConfirm(true);
+  };
+  const [count, setCount] = useState(0);
+
   return (
     <div
       className={`fixed ${
         activeMenu
           ? "top-[56px] left-[250px] w-[calc(100%-250px)] h-[calc(100%-56px)]"
-          : "w-full h-full top-[25px] left-0"
+          : "w-full h-full top-[56px] left-0"
       } 
-        bg-black bg-opacity-50 flex justify-center items-center gap-4 pl-4
+        bg-black bg-opacity-50 flex justify-center items-center
         `}
     >
-      <div className="shrink w-[calc(85%)] h-[600px] bg-white flex flex-col rounded-t-lg relative">
-        <div className="w-full min-h-[50px] bg-gray-700 flex justify-end px-3 rounded-t-lg">
-          <button onClick={handleDeleteExam} className="w-[20px] h-full mr-2">
-            <i className="bi bi-trash3-fill text-red-500 text-xl font-[500] "></i>
-          </button>
-          <button
-            onClick={() => {
-              setExamModal(false);
-            }}
-            className="w-[20px] h-full "
-          >
-            <i className="bi bi-x-lg text-white text-2xl font-[500]"></i>
-          </button>
+      {confirm && (
+        <DeleteConfirm setConfirm={setConfirm} deleteCat={deleteExam} />
+      )}
+      <div className="shrink w-[calc(100%)] h-[calc(100%)] bg-white flex flex-col relative shadow ">
+        <div
+          className={`w-full min-h-[50px] bg-gray-800 flex justify-between px-3`}
+        >
+          {examSummary == "Ongoing" && (
+            <div className="text-white min-h-[50px] flex items-center font-[500] text-sm">
+              Статус :
+              <span className="text-green-500 font-[500] ml-2">
+                Идэвхитэй <i className="bi bi-check2-circle ml-1"></i>
+              </span>
+            </div>
+          )}
+          {examSummary == "Not yet" && (
+            <div className="text-white min-h-[50px] flex items-center font-[500] text-sm">
+              Статус :
+              <span className="text-amber-400 font-[500] ml-2">
+                Editable <i className="bi bi-alarm-fill ml-1"></i>
+              </span>
+            </div>
+          )}
+          {examSummary == "Exam over" && (
+            <div className="text-white min-h-[50px] flex items-center font-[500] text-sm">
+              Статус :
+              <span className="text-gray-400 font-[500] ml-2">
+                Дууссан <i className="bi bi-hourglass-bottom ml-1"></i>
+              </span>
+            </div>
+          )}
+          <div className="flex justify-end items-center min-h-[50px]  mr-3">
+            {examSummary == "Not yet" && (
+              <button
+                onClick={handleDeleteExam}
+                className="w-[20px] h-full mr-5"
+              >
+                <i className="bi bi-trash3-fill text-red-500 text-xl font-[500] "></i>
+              </button>
+            )}
+            <button
+              onClick={() => {
+                setExamModal(false);
+              }}
+              className="w-[20px] h-full hover:scale-105"
+            >
+              <i className="bi bi-x-lg text-white text-2xl font-[500]"></i>
+            </button>
+          </div>
         </div>
         {editHeader === false ? (
           <ExamHeader
@@ -389,6 +432,7 @@ function ExamModalMain({
             setEditHeader={setEditHeader}
             editHeader={editHeader}
             userTrigger={userTrigger}
+            examSummary={examSummary}
           />
         ) : examSummary == "Exam over" ? (
           <ExamEditHeader2
@@ -428,7 +472,7 @@ function ExamModalMain({
                 >
                   <div
                     className={`w-full py-3 px-3 font-[400] flex flex-col
-                                    transition hover:bg-opacity-10 hover:bg-gray-700 rounded-lg
+                                    transition  rounded-lg
                                          pt-10 ${
                                            checked.includes(question.id) &&
                                            "bg-opacity-10 bg-gray-700 "
@@ -450,36 +494,25 @@ function ExamModalMain({
                           />
                         </div>
                       ) : (
-                        <span className="m-0 font-[500]">
+                        <span className="mb-2 font-[500]">
                           {index + 1}. {question.question}
                         </span>
                       )}
-                      {checked.includes(question.id) ? (
-                        <div className="h-[42px]">
-                          <i
-                            onClick={() => {
-                              setShowSide(!showSide);
-                            }}
-                            className="bi active:text-teal-500 bi-images
-                                                                        text-2xl mr-3 text-teal-600 "
-                          ></i>
-                          <span className="m-0 font-[500]">Оноо</span> :
-                          <input
-                            onChange={(e) => {
-                              setPoints(e.target.value);
-                            }}
-                            defaultValue={question.points}
-                            type="text"
-                            className="outline-none mt-2 rounded-md ml-2 h-[40px] focus:border-b-[2px] focus:h-[42px] border-teal-500 px-2 text-[14px] w-1/2 font-[400]"
-                            autoCorrect="false"
-                            spellCheck={false}
-                          />
-                        </div>
-                      ) : (
-                        <span className="m-0 font-[500]">
-                          {question.points}%
-                        </span>
-                      )}
+
+                      <span className="m-0 font-[500]">{question.points}%</span>
+                    </div>
+                    <div
+                      className={`${
+                        question.imgUrl !== ""
+                          ? "border p-2 w-full mt-2 rounded flex justify-center bg-gray-50"
+                          : "hidden"
+                      }`}
+                    >
+                      <img
+                        className="h-[300px] mt-2"
+                        src={`http://${question.imgUrl}`}
+                        alt=""
+                      />
                     </div>
                     <div>
                       {checked.includes(question.id) ? (
@@ -529,7 +562,7 @@ function ExamModalMain({
                         question?.answerList?.map((answer, index) => (
                           <h6
                             key={index}
-                            className="mt-3 font-[400] pl-3 flex items-center"
+                            className="mt-2 font-[400] pl-3 flex items-center"
                           >
                             {answer.isTrue == "1" ? (
                               <i
@@ -552,10 +585,10 @@ function ExamModalMain({
                           </h6>
                         ))
                       )}
-                      {showButton && (
+                      {showButton && examSummary == "Exam over" && (
                         <div
                           className="glass rounded-t absolute h-full w-full top-0 left-0 flex items-center
-                        justify-center"
+                        justify-center !shadow-none"
                         >
                           <div
                             className="w-[500px] h-[200px] bg-white rounded flex flex-col
@@ -591,6 +624,66 @@ function ExamModalMain({
                           </div>
                         </div>
                       )}
+                      {showButton && examSummary == "Not yet" && (
+                        <div
+                          className="glass rounded-t absolute h-full w-full top-0 left-0 flex items-center
+                        justify-center !shadow-none"
+                        >
+                          <div
+                            className="w-[500px] h-[200px] bg-white rounded flex flex-col
+                        justify-between p-4 shadow"
+                          >
+                            <div className="w-full flex justify-center">
+                              <i className="bi bi-emoji-smile text-3xl text-teal-500"></i>
+                            </div>
+                            <span className="font-[400] text-center">
+                              Та асуултад өөрчлөлт оруулахыг хүсвэл асуултын сан
+                              цэсийг ашиглана уу.
+                            </span>
+                            <div className="flex justify-end">
+                              <button
+                                onClick={() => {
+                                  setShowButton(false);
+                                }}
+                                className=" px-3 py-2 bg-gray-400 font-[500] flex justify-center 
+        items-center text-white rounded-lg ml-2"
+                              >
+                                Буцах
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      {showButton && examSummary == "Ongoing" && (
+                        <div
+                          className="glass rounded-t absolute h-full w-full top-0 left-0 flex items-center
+                        justify-center !shadow-none"
+                        >
+                          <div
+                            className="w-[500px] h-[200px] bg-white rounded flex flex-col
+                        justify-between p-4 shadow"
+                          >
+                            <div className="w-full flex justify-center">
+                              <i className="bi bi-emoji-smile text-3xl text-teal-500"></i>
+                            </div>
+                            <span className="font-[400] text-center">
+                              Шалгалтын явц үргэлжилж байгаа тул өөрчлөлт
+                              оруулах боломжгүй байна.
+                            </span>
+                            <div className="flex justify-end">
+                              <button
+                                onClick={() => {
+                                  setShowButton(false);
+                                }}
+                                className=" px-3 py-2 bg-gray-400 font-[500] flex justify-center 
+        items-center text-white rounded-lg ml-2"
+                              >
+                                Буцах
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -606,6 +699,7 @@ function ExamModalMain({
           <button
             onClick={() => {
               setSideQuestions(!sideQuestions);
+              setCount(count + 1);
             }}
             className="w-[35px] h-[35px] shadow absolute right-[calc(3%)] bottom-[calc(5%)] rounded-full flex justify-center items-center "
           >
@@ -619,109 +713,116 @@ function ExamModalMain({
           <input type="file" />
         </div>
       )}
-      {sideQuestions && (
-        <div className="h-screen w-[400px] bg-white transition from-left overflow-scroll shadow  flex flex-col justify-between">
-          <div className="px-2 py-2">
-            <div className="h-[30px]"></div>
-            {!showQuestions ? (
-              <h6 className="text-teal-600 text-[14px] flex justify-between">
-                <span className="font-[500]">
-                  <i className="bi bi-caret-down-square-fill mr-2"></i>
-                  Шалгалтын категориуд
-                </span>
-                <i
-                  onClick={() => {
-                    setSideQuestions(false);
-                  }}
-                  className="bi bi-x-circle cursor-pointer"
-                ></i>
-              </h6>
-            ) : (
-              <h6 className="text-teal-600 text-[14px] flex justify-between">
-                <span className="font-[500]">
-                  <i className="bi bi-caret-down-square-fill mr-2"></i>
-                  Асуултууд
-                </span>
-                <i
-                  onClick={() => {
-                    setSideQuestions(false);
-                    setShowQuestions(false);
-                  }}
-                  className="bi bi-x-circle cursor-pointer"
-                ></i>
-              </h6>
-            )}
-            {!showQuestions
-              ? categories?.map((item, index) => (
-                  <div
-                    key={index}
-                    onClick={() => {
-                      handleGetCategories(item.id);
-                      setShowQuestions(true);
-                    }}
-                    className="h-10 w-full bg-teal-500 mb-1 flex items-center pl-3 justify-between shadow-sm cursor-pointer hover:bg-teal-600 "
-                  >
-                    <span className="font-[500] text-white text-[12px]">
-                      {item.name}
-                    </span>
-                    <div className="h-full flex"></div>
-                  </div>
-                ))
-              : categoryData?.map((item, index) => (
-                  <div
-                    key={index}
-                    className=" py-2 w-full border mb-1 flex items-center pl-3 justify-between shadow-sm cursor-pointer  "
-                  >
-                    <span className="font-[500] text-teal-600 text-[12px]">
-                      {item.question}
-                    </span>
-                    <div
-                      onClick={() => {
-                        handleCollectIds(item.id);
-                      }}
-                      className="h-[20px] min-w-[20px] flex mr-2 border rounded flex items-center justify-center"
-                    >
-                      {arr.includes(item.id) && (
-                        <i className="bi bi-check text-2xl text-teal-600"></i>
-                      )}
-                    </div>
-                  </div>
-                ))}
-          </div>
-          <div className="h-[80px] bg-white shadow flex items-start w-full justify-between px-3 pt-3">
-            {showQuestions && (
-              <div
+
+      <div
+        className={`h-screen  shadow bg-white transition ${
+          sideQuestions
+            ? " w-[600px] from-left2"
+            : count > 0
+            ? "to-left overflow-scroll"
+            : "w-0"
+        }  overflow-scroll shadow  flex flex-col justify-between`}
+      >
+        <div className="px-2 py-2">
+          <div className="h-[30px]"></div>
+          {!showQuestions ? (
+            <h6 className="text-teal-600 text-[14px] flex justify-between">
+              <span className="font-[500]">
+                <i className="bi bi-caret-down-square-fill mr-2"></i>
+                Асуултын сан
+              </span>
+              <i
                 onClick={() => {
+                  setSideQuestions(false);
+                }}
+                className="bi bi-x-circle cursor-pointer"
+              ></i>
+            </h6>
+          ) : (
+            <h6 className="text-teal-600 text-[14px] flex justify-between">
+              <span className="font-[500]">
+                <i className="bi bi-caret-down-square-fill mr-2"></i>
+                Асуултууд
+              </span>
+              <i
+                onClick={() => {
+                  setSideQuestions(false);
                   setShowQuestions(false);
                 }}
-                className="h-[30px] w-[100px] bg-teal-500 rounded-sm px-3 flex items-center font-[400] text-white
-                            cursor-pointer active:bg-teal-400 hover:bg-teal-600"
-              >
-                <span className="mr-2 mb-1 font-[400] text-white">Буцах</span>
-                <div className="pl-2 h-full flex items-center border-l border-gray-300">
-                  <i className="bi bi-ui-checks"></i>
+                className="bi bi-x-circle cursor-pointer"
+              ></i>
+            </h6>
+          )}
+          {!showQuestions
+            ? categories?.map((item, index) => (
+                <div
+                  key={index}
+                  onClick={() => {
+                    handleGetCategories(item.id);
+                    setShowQuestions(true);
+                  }}
+                  className="h-10 w-full bg-teal-500 mb-1 flex items-center pl-3 justify-between shadow-sm cursor-pointer hover:bg-teal-600 "
+                >
+                  <span className="font-[500] text-white text-[12px]">
+                    {item.name}
+                  </span>
+                  <div className="h-full flex"></div>
                 </div>
-              </div>
-            )}
-            {arr.length > 0 && (
-              <div
-                onClick={() => {
-                  handleAddQuestion();
-                }}
-                className="h-[30px] min-w-[150px] bg-teal-500 rounded-sm px-3 flex items-center font-[400] text-white
-                            cursor-pointer active:bg-teal-400 hover:bg-teal-600"
-              >
-                <span className="mr-2 mb-1 font-[400] text-white">
-                  Асуулт нэмэх
-                </span>
-                <div className="pl-2 h-full flex items-center border-l border-gray-300">
-                  <i className="bi bi-ui-checks"></i>
+              ))
+            : categoryData?.map((item, index) => (
+                <div
+                  key={index}
+                  className=" py-2 w-full border mb-1 flex items-center pl-3 justify-between shadow-sm cursor-pointer  "
+                >
+                  <span className="font-[500] text-teal-600 text-[12px]">
+                    {item.question}
+                  </span>
+                  <div
+                    onClick={() => {
+                      handleCollectIds(item.id);
+                    }}
+                    className="h-[20px] min-w-[20px] flex mr-2 border rounded flex items-center justify-center"
+                  >
+                    {arr.includes(item.id) && (
+                      <i className="bi bi-check text-2xl text-teal-600"></i>
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
+              ))}
         </div>
-      )}
+        <div className="h-[80px] bg-white shadow flex items-start w-full justify-between px-3 pt-3">
+          {showQuestions && (
+            <div
+              onClick={() => {
+                setShowQuestions(false);
+              }}
+              className="h-[30px] w-[100px] bg-teal-500 rounded-sm px-3 flex items-center font-[400] text-white
+                            cursor-pointer active:bg-teal-400 hover:bg-teal-600"
+            >
+              <span className="mr-2 mb-1 font-[400] text-white">Буцах</span>
+              <div className="pl-2 h-full flex items-center border-l border-gray-300">
+                <i className="bi bi-ui-checks"></i>
+              </div>
+            </div>
+          )}
+          {arr.length > 0 && (
+            <div
+              onClick={() => {
+                handleAddQuestion();
+              }}
+              className="h-[30px] min-w-[150px] bg-teal-500 rounded-sm px-3 flex items-center font-[400] text-white
+                            cursor-pointer active:bg-teal-400 hover:bg-teal-600"
+            >
+              <span className="mr-2 mb-1 font-[400] text-white">
+                Асуулт нэмэх
+              </span>
+              <div className="pl-2 h-full flex items-center border-l border-gray-300">
+                <i className="bi bi-ui-checks"></i>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

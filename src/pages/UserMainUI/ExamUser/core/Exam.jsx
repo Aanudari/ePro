@@ -40,6 +40,7 @@ function Exam() {
   }, []);
   let temp = [];
   const [tempo, setTempo] = useState([]);
+  let totalScore = 0;
   for (let index = 0; index < data?.questionList.length; index++) {
     const element = data.questionList[index];
     let dat = {
@@ -51,9 +52,16 @@ function Exam() {
         },
       ],
     };
+    totalScore += parseInt(element.points);
     temp.push(dat);
   }
+  const [questions, setQuestions] = useState([]);
+  // console.log(questions);
   const collector = (props) => {
+    setQuestions((prev) => [
+      ...prev,
+      { point: props.point, id: props.questionId },
+    ]);
     if (tempo.length > 0) {
       let dataX = tempo.map((item) => {
         if (item.questionId == props.questionId) {
@@ -76,24 +84,34 @@ function Exam() {
   };
   const finisher = () => {
     let container = [];
+    let tempNo = 0;
     for (let index = 0; index < tempo.length; index++) {
       const element = tempo[index];
       if (element.onlyAnswerId) {
         if (element.onlyAnswerId[0]) {
           if (element.onlyAnswerId[0].isTrue == "1")
-            container.push(element.onlyAnswerId[0].isTrue);
+            container.push(element.questionId);
         }
       }
     }
-    let score = Math.round((container.length * 100) / tempo.length);
-    setSore(score);
-    // console.log(score);
+    for (let i = 0; i < container.length; i++) {
+      const element = container[i];
+      for (let j = 0; j < questions.length; j++) {
+        const el = questions[j];
+        if (element == el.id) {
+          tempNo = tempNo + parseInt(el.point);
+          break;
+        }
+      }
+    }
+    let score = Math.round((tempNo / totalScore) * 100);
     function addZero(i) {
       if (i < 10) {
         i = "0" + i;
       }
       return i;
     }
+
     let main = {
       examId: finalId,
       variantId: data.id,
@@ -109,7 +127,7 @@ function Exam() {
         addZero(new Date().getSeconds()),
       onlyQuestionId: tempo,
     };
-    // navigate("/exam-result", { state: tempo });
+    navigate("/exam-result", { state: tempo });
     axios({
       method: "post",
       headers: {
@@ -123,6 +141,7 @@ function Exam() {
         if (res.data.isSuccess === false) {
           alert(res.data.resultMessage);
         }
+        setSore(score);
         navigate("/exam-result", { state: tempo });
       })
       .catch((err) => {

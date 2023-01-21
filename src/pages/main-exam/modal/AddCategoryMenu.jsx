@@ -5,6 +5,7 @@ import axios from "axios";
 import DepartmentSelect from "../SelectOptions/DepartmentSelect";
 import DatePicker from "react-datepicker";
 import { logout } from "../../../service/examService";
+import { ToastContainer, toast } from "react-toastify";
 
 function AddCategoryMenu({ setShowAddCategory, trigger, setTrigger }) {
   function addZero(i) {
@@ -76,9 +77,19 @@ function AddCategoryMenu({ setShowAddCategory, trigger, setTrigger }) {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
+          toast.error(res.data.resultMessage, {
+            position: "bottom-right",
+            autoClose: 1000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        } else {
+          setShowAddCategory(false);
         }
-        setShowAddCategory(false);
       })
       .catch((err) => {
         alert(err);
@@ -94,6 +105,7 @@ function AddCategoryMenu({ setShowAddCategory, trigger, setTrigger }) {
         bg-black bg-opacity-50 flex justify-center items-center z-20
         `}
     >
+      <ToastContainer />
       <div className="shrink w-[calc(85%)] h-[600px] bg-white flex flex-col ">
         <div className="w-full min-h-[50px] bg-gray-700 flex justify-between items-center px-3">
           <h5 className="text-white m-0 text-[17px]">Категори нэмэх</h5>

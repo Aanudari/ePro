@@ -29,7 +29,7 @@ function ExamBoard({
   const [show, setShow] = useState(false);
 
   return (
-    <div className="min-w-[800px] bg-white py-3 px-4 shadow-sm relative">
+    <div className="min-w-[800px] glass-2 bg-white  shadow py-3 px-4 shadow-sm relative">
       {show && (
         <CreateaExamForm
           closeForm={setShow}
@@ -37,19 +37,64 @@ function ExamBoard({
           setExamTri={setExamTri}
         />
       )}
-      <select
-        onChange={(e) => {
-          setDetector(e.target.value);
-        }}
-        name=""
-        id=""
-        className="mb-2"
-      >
-        <option value="0">Бүгд</option>
-        <option value="1">Идэвхитэй</option>
-        <option value="2">Дууссан</option>
-        <option value="3">Эхлээгүй</option>
-      </select>
+      <div className="flex w-full mb-2">
+        <div
+          onClick={() => {
+            setDetector(0);
+          }}
+          className={`w-[150px] ${
+            detector == 0
+              ? "bg-teal-700 hover:!bg-teal-700 shadow"
+              : "bg-teal-500"
+          } h-9  hover:bg-teal-600 active:bg-teal-700 hover:mt-[-2px]   flex items-center justify-center font-[500] uppercase  
+          text-white text-[11px] cursor-pointer transition-all`}
+        >
+          Бүгд
+        </div>
+        <div
+          onClick={() => {
+            setDetector(1);
+          }}
+          className={`w-[150px] ${
+            detector == 1
+              ? "bg-teal-700 hover:!bg-teal-700 shadow"
+              : "bg-teal-500"
+          } h-9  hover:bg-teal-600 active:bg-teal-700 hover:mt-[-2px]   flex items-center justify-center font-[500] uppercase  
+          text-white text-[11px] cursor-pointer transition-all ml-1`}
+        >
+          Идэвхитэй
+          <i className="bi bi-check2-circle ml-1"></i>
+        </div>
+        <div
+          onClick={() => {
+            setDetector(2);
+          }}
+          className={`w-[150px] ${
+            detector == 2
+              ? "bg-teal-700 hover:!bg-teal-700 shadow"
+              : "bg-teal-500"
+          } h-9  hover:bg-teal-600 active:bg-teal-700 hover:mt-[-2px]   flex items-center justify-center font-[500] uppercase  
+          text-white text-[11px] cursor-pointer transition-all ml-1`}
+        >
+          Дууссан
+          <i className="bi bi-hourglass-bottom ml-2"></i>
+        </div>
+        <div
+          onClick={() => {
+            setDetector(3);
+          }}
+          className={`w-[150px] ${
+            detector == 3
+              ? "bg-teal-700 hover:!bg-teal-700 shadow"
+              : "bg-teal-500"
+          } h-9  hover:bg-teal-600 active:bg-teal-700 hover:mt-[-2px]   flex items-center justify-center font-[500] uppercase  
+          text-white text-[11px] cursor-pointer transition-all ml-1`}
+        >
+          Эхлээгүй
+          <i className="bi bi-alarm-fill ml-2"></i>
+        </div>
+      </div>
+
       <div className="w-full h-8 flex gap-1">
         <div className="w-1/4 h-full flex justify-center items-center bg-teal-500 text-white text-[11px] uppercase font-[500]">
           Нэр
@@ -85,7 +130,8 @@ function ExamBoard({
                         handleExamModal(exam.id, exam.examSummary.status);
                       }
                     : () => {
-                        setShowReport(true);
+                        // setShowReport(true);
+                        setExamModal(true);
                         handleExamModal(exam.id, exam.examSummary.status);
                       }
                 }

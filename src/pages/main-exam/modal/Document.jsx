@@ -81,6 +81,7 @@ function Document({ setShowReport, id }) {
       })
       .catch((err) => console.log(err));
   }, [selected]);
+
   const [finalScore, setfinalScore] = useState();
   const { activeMenu } = useStateContext();
   const [result, setResult] = useState();

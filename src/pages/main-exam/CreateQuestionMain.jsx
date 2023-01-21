@@ -17,7 +17,7 @@ function CreateQuestionMain({
     setLength(value);
   };
   const obj = {
-    answer: "string",
+    answer: "",
     aImgUrl: "",
     isTrue: "string",
   };

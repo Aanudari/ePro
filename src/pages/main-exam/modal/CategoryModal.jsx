@@ -5,6 +5,8 @@ import CreateQuestionMain from "../CreateQuestionMain";
 import CreateExamMain from "../CreateExamMain";
 import { logout } from "../../../service/examService";
 import PoolQuestionEdit from "../edits/PoolQuestionEdit";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function CategoryModal({
   setCategoryModal,
   id,
@@ -101,6 +103,7 @@ function CategoryModal({
     });
     setFinalArr(newArr);
   };
+
   const submitQuestion = () => {
     axios({
       method: "post",
@@ -113,10 +116,20 @@ function CategoryModal({
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
+          toast.error(res.data.resultMessage, {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        } else {
+          setAddAnswer(!addAnswer);
+          setTriggerCat(triggerCat);
         }
-        setAddAnswer(!addAnswer);
-        setTriggerCat(triggerCat);
       })
       .catch((err) => {
         console.log(err);
@@ -173,7 +186,7 @@ function CategoryModal({
   const handleExamHalf = () => {
     setExamState(!examState);
   };
-  const [imgSide, setImgSide] = useState(false);
+
   return (
     <div
       className={`fixed z-20 ${
@@ -184,9 +197,10 @@ function CategoryModal({
             bg-black bg-opacity-50 flex justify-center items-center
             `}
     >
+      <ToastContainer />
       {examState ? (
-        <div className="w-screen h-screen flex justify-center items-center gap-2 pl-2">
-          <div className="w-[calc(80%)] shrink h-[600px] bg-white flex flex-col ">
+        <div className="w-screen h-screen flex justify-center items-center gap-2 ">
+          <div className="w-[calc(90%)] shrink h-[calc(90%)] bg-white flex flex-col ">
             <div className="w-full min-h-[50px] bg-gray-700 flex justify-between px-3 ">
               <button
                 onClick={() => {
@@ -225,6 +239,7 @@ function CategoryModal({
                 <button
                   onClick={() => {
                     setCategoryModal(false);
+                    setAddAnswer(false);
                   }}
                   className="w-[20px] h-full ml-5 "
                 >
@@ -250,20 +265,27 @@ function CategoryModal({
                 />
               </div>
             ) : (
-              <div className="w-full h-full px-3 overflow-scroll py-5">
+              <div className="w-full h-full px-5 overflow-scroll py-5">
                 <div className="">
-                  {data?.map((question, ind) => (
-                    <PoolQuestionEdit
-                      setTrigger={setTrigger}
-                      trigger={trigger}
-                      key={ind}
-                      data={question}
-                      indexed={ind}
-                      handleCheck={handleCheck}
-                      createExam={createExam}
-                      checked={checked}
-                    />
-                  ))}
+                  {data?.length > 0 ? (
+                    data.map((question, ind) => (
+                      <PoolQuestionEdit
+                        setTrigger={setTrigger}
+                        trigger={trigger}
+                        key={ind}
+                        data={question}
+                        indexed={ind}
+                        handleCheck={handleCheck}
+                        createExam={createExam}
+                        checked={checked}
+                      />
+                    ))
+                  ) : (
+                    <div className="font-[400]">
+                      Асуултын сан хоосон байна. Та "+" icon дээр дарж шинэ
+                      асуулт үүсгэх боломжтой.{" "}
+                    </div>
+                  )}
                 </div>
               </div>
             )}
@@ -291,12 +313,6 @@ function CategoryModal({
               </div>
             ) : null}
           </div>
-          {imgSide && (
-            <div className="w-[300px] h-screen appear-smooth p-2">
-              <div className="h-[26px]"></div>
-              <div className="w-full h-full"></div>
-            </div>
-          )}
         </div>
       ) : (
         // page !!!

@@ -1,0 +1,27 @@
+.to-left-doc {
+  animation: to-left-doc;
+  animation-duration: 0.5s;
+  width: 0;
+}
+@keyframes to-left-doc {
+  from {
+    width: 450px;
+  }
+  to {
+    width: 1px;
+  }
+}
+
+.to-left-doc-w8 {
+  animation: to-left-doc-w8;
+  animation-duration: 5s;
+  display: none;
+}
+@keyframes to-left-doc-w8 {
+  from {
+    display: flex;
+  }
+  to {
+    display: none;
+  }
+}

@@ -12,6 +12,7 @@ import AddCategoryMenu from "./modal/AddCategoryMenu";
 import Document from "./modal/Document";
 import DocumentFinishedExam from "./modal/DocumentFinishedExam";
 import { logout } from "../../service/examService";
+import Loading from "../../components/Loading";
 function ExamDash() {
   const [examModalId, setexamModalId] = useState();
   const [categoryModal, setCategoryModal] = useState(false);
@@ -24,7 +25,11 @@ function ExamDash() {
   const [examTri, setExamTri] = useState(false);
   const [showAddCategory, setShowAddCategory] = useState(false);
   const [addAnswer, setAddAnswer] = useState(false);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(true);
+    }, "1000");
     axios({
       method: "get",
       headers: {
@@ -37,10 +42,13 @@ function ExamDash() {
         if (res.data.errorCode == 401) {
           logout();
         } else {
+          setLoading(false);
+          clearTimeout(timer);
           setData(res.data.examList);
         }
       })
       .catch((err) => console.log(err));
+    // return () =>
   }, [categoryModal, examModal, examTri]);
   useEffect(() => {
     axios({
@@ -75,8 +83,10 @@ function ExamDash() {
   const [showCategoryMenu, setShowCategoryMenu] = useState(false);
   const [showReport, setShowReport] = useState(false);
   const [showDocument, setShowDocument] = useState(false);
+  const [showActiveExamDetail, setShowActiveExamDetail] = useState(false);
   return (
     <div className="w-full min-h-screen bg-teal-500 relative">
+      {loading && <Loading />}
       <Navigation />
       <div className="w-full px-2 py-1 flex h-[calc(100%-64px)] items-end justify-center">
         <div className="w-full h-full flex flex-col justify-between">

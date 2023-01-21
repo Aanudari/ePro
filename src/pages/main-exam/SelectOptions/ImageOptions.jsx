@@ -6,7 +6,7 @@ import { useStateContext } from "../../../contexts/ContextProvider";
 export default function ImageUploader({ setImageUrl }) {
   const { TOKEN } = useStateContext();
   const [images, setImages] = React.useState([]);
-
+  const [id, setId] = useState();
   const maxNumber = 69;
   const onChange = (imageList, addUpdateIndex) => {
     axios({
@@ -24,9 +24,56 @@ export default function ImageUploader({ setImageUrl }) {
           alert(res.data.resultMessage);
         }
         if (res.data.errorCode !== 500) {
-          console.log(res.data.path);
           setImageUrl(res.data.path);
           setImages(imageList);
+          setId(res.data.id);
+        } else {
+          alert(res.data.resultMessage);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+  const imageRemove = (image) => {
+    axios({
+      method: "delete",
+      headers: {
+        Authorization: `${TOKEN}`,
+        "Content-Type": "multipart/form-data",
+        accept: "text/plain",
+      },
+      url: `${process.env.REACT_APP_URL}/v1/ExamFile/${id}`,
+    })
+      .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
+        if (res.data.errorCode !== 500) {
+          setImageUrl("");
+          setImages([]);
+        } else {
+          alert(res.data.resultMessage);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const imageUpdate = (image) => {
+    axios({
+      method: "delete",
+      headers: {
+        Authorization: `${TOKEN}`,
+        "Content-Type": "multipart/form-data",
+        accept: "text/plain",
+      },
+      url: `${process.env.REACT_APP_URL}/v1/ExamFile/${id}`,
+    })
+      .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
+        if (res.data.errorCode !== 500) {
+          setImageUrl("");
+          setImages([]);
         } else {
           alert(res.data.resultMessage);
         }
@@ -72,7 +119,7 @@ export default function ImageUploader({ setImageUrl }) {
               )}
             </button>
             &nbsp;
-            {imageList.map((image, index) => (
+            {images.map((image, index) => (
               <div key={index} className="image-item relative rounded-none">
                 <img
                   src={image.data_url}
@@ -82,13 +129,13 @@ export default function ImageUploader({ setImageUrl }) {
                 <div className="image-item__btn-wrapper flex">
                   <button
                     className="cus-btn2"
-                    onClick={() => onImageUpdate(index)}
+                    onClick={() => imageUpdate(index)}
                   >
                     <i className="bi bi-alexa"></i>
                   </button>
                   <button
                     className="cus-btn2 bg-red-400 hover:bg-red-500"
-                    onClick={() => onImageRemove(index)}
+                    onClick={() => imageRemove(image)}
                   >
                     <i className="bi bi-x-lg"></i>
                   </button>

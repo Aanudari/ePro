@@ -13,7 +13,9 @@ td {
 .box {
   overflow: hidden;
 }
-
+.custom-index-2 {
+  z-index: 1010101010101010101010101011010101010101010101010101010110;
+}
 a {
   text-decoration: none !important;
 }

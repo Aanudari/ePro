@@ -27,7 +27,9 @@ function QuestionMain({ data, indexed, ids, remover, collector }) {
 
       <div
         className={`w-full shadow-md py-3 px-3 font-[400] ${
-          ids.includes(data.id) ? "bg-green-100" : "bg-gray-50"
+          ids.includes(data.id)
+            ? "bg-emerald-100 shadow-emerald-500"
+            : "bg-gray-50"
         }  flex flex-col transition rounded-lg pt-10 `}
       >
         <div className="flex justify-between gap-2">

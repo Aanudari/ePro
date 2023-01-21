@@ -364,7 +364,7 @@ function ExamModalMain({
     setConfirm(true);
   };
   const [count, setCount] = useState(0);
-
+  console.log(categoryData);
   return (
     <div
       className={`fixed ${
@@ -753,42 +753,59 @@ function ExamModalMain({
               ></i>
             </h6>
           )}
-          {!showQuestions
-            ? categories?.map((item, index) => (
-                <div
-                  key={index}
-                  onClick={() => {
-                    handleGetCategories(item.id);
-                    setShowQuestions(true);
-                  }}
-                  className="h-10 w-full bg-teal-500 mb-1 flex items-center pl-3 justify-between shadow-sm cursor-pointer hover:bg-teal-600 "
-                >
-                  <span className="font-[500] text-white text-[12px]">
-                    {item.name}
-                  </span>
-                  <div className="h-full flex"></div>
-                </div>
-              ))
-            : categoryData?.map((item, index) => (
-                <div
-                  key={index}
-                  className=" py-2 w-full border mb-1 flex items-center pl-3 justify-between shadow-sm cursor-pointer  "
-                >
+          {!showQuestions ? (
+            categories?.map((item, index) => (
+              <div
+                key={index}
+                onClick={() => {
+                  handleGetCategories(item.id);
+                  setShowQuestions(true);
+                }}
+                className="h-10 w-full bg-teal-500 mb-1 flex items-center pl-3 justify-between shadow-sm cursor-pointer hover:bg-teal-600 "
+              >
+                <span className="font-[500] text-white text-[12px]">
+                  {item.name}
+                </span>
+                <div className="h-full flex"></div>
+              </div>
+            ))
+          ) : categoryData?.length > 0 ? (
+            categoryData?.map((item, index) => (
+              <div
+                key={index}
+                className=" py-2 w-full border mb-1 flex items-center pl-3 justify-between shadow-sm cursor-pointer gap-2 "
+              >
+                <div className="w-full ">
                   <span className="font-[500] text-teal-600 text-[12px]">
                     {item.question}
                   </span>
-                  <div
-                    onClick={() => {
-                      handleCollectIds(item.id);
-                    }}
-                    className="h-[20px] min-w-[20px] flex mr-2 border rounded flex items-center justify-center"
-                  >
-                    {arr.includes(item.id) && (
-                      <i className="bi bi-check text-2xl text-teal-600"></i>
-                    )}
-                  </div>
+                  {item.qimgUrl !== "" && (
+                    <div className="border bg-gray-100 p-2 rounded w-full flex justify-center">
+                      <img
+                        src={`http://${item.qimgUrl}`}
+                        className="h-[200px]"
+                        alt=""
+                      />
+                    </div>
+                  )}
                 </div>
-              ))}
+                <div
+                  onClick={() => {
+                    handleCollectIds(item.id);
+                  }}
+                  className="h-[20px] min-w-[20px] flex mr-2 border rounded flex items-center justify-center"
+                >
+                  {arr.includes(item.id) && (
+                    <i className="bi bi-check text-2xl text-teal-600"></i>
+                  )}
+                </div>
+              </div>
+            ))
+          ) : (
+            <span className="font-[500] text-teal-700 text-[12px] ml-2">
+              Асуултын сан хоосон байна ...
+            </span>
+          )}
         </div>
         <div className="h-[80px] bg-white shadow flex items-start w-full justify-between px-3 pt-3">
           {showQuestions && (

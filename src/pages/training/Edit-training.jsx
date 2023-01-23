@@ -9,7 +9,7 @@ import { ToastContainer } from "react-toastify";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import { logout } from "../../service/examService";
-
+import Workers from "./Workers";
 function EditTraining() {
   const locationn = useLocation();
   const { TOKEN } = useStateContext();
@@ -22,12 +22,6 @@ function EditTraining() {
   const endDate = moment(date2).format(format);
 
   const [category, setCategory] = useState();
-  const [selectedOptioncategory, setSelectedOptioncategory] = useState(null);
-  const [selectedOption, setSelectedOption] = useState(null);
-  const [selectedOptiondepartment, setSelectedOptiondepartment] =
-    useState(null);
-  const [selectedOptionorg, setSelectedOptionorg] = useState(null);
-  const [selectedOptionWorkers, setSelectedOptionWorkers] = useState(null);
   const [selectedFile, setSelectedFile] = useState(false);
   const options = [
     { id: "1", value: "Тэнхим" },
@@ -41,12 +35,7 @@ function EditTraining() {
   const [checkEmptytCategory, setcheckEmptytCategory] = useState(false);
   const [checkEmptysessionType, setcheckEmptysessionType] = useState(false);
   const [checkEmptylocation, setcheckEmptylocation] = useState(false);
-  const [department, setDepartment] = useState();
-  const [org, setOrg] = useState();
-  const [workers, setWorkers] = useState();
-  const [departmentID, setDepartmentID] = useState("");
-  const [orgID, setOrgID] = useState("");
-  const [workersID, setWorkersID] = useState("");
+
   const [name, setName] = useState("");
   const [description, setdescription] = useState("");
   const [fileUrl, setfileUrl] = useState("");
@@ -57,6 +46,11 @@ function EditTraining() {
   const [location, setlocation] = useState("");
   const videoRef = useRef(null);
   const [id, setId] = useState();
+  const object = options.find((obj) => obj.id === train.sessionType);
+  const getdate1 = new Date(train.startDate);
+  const getdate2 = new Date(train.endDate);
+  const [emp, setEmp] = useState([]);
+  const [file, setFile] = useState([]);
   useEffect(() => {
     axios({
       method: "get",
@@ -68,13 +62,14 @@ function EditTraining() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
         }
         if (res.data.isSuccess == true) {
           setCategory(res.data.trainingCatList);
+          setRoll(1);
+          setId(train.fileId);
         }
         if (
-          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Unauthorized" &&
           res.data.resultMessage == "Input string was not in a correct format."
         ) {
           logout();
@@ -89,78 +84,24 @@ function EditTraining() {
         accept: "text/plain",
         Authorization: `${TOKEN}`,
       },
-      url: `${process.env.REACT_APP_URL}/v1/User/department`,
+      url: `${process.env.REACT_APP_URL}/v1/Training/getFileByTraining/${train.id}`,
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
         }
-        if (res.data.isSuccess === true) {
-          setDepartment(res.data.departments);
+        if (res.data.isSuccess == true) {
+          setFile(res.data);
         }
         if (
-          res.data.resultMessage === "Unauthorized" ||
-          res.data.resultMessage === "Input string was not in a correct format."
+          res.data.resultMessage === "Unauthorized" &&
+          res.data.resultMessage == "Input string was not in a correct format."
         ) {
           logout();
         }
       })
       .catch((err) => console.log(err));
   }, []);
-
-  const handleOrg = (item) => {
-    axios({
-      method: "get",
-      headers: {
-        Authorization: `${TOKEN}`,
-      },
-      url: `${process.env.REACT_APP_URL}/v1/User/org/${item.id}`,
-    })
-      .then((res) => {
-        if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
-        if (
-          res.data.resultMessage === "Unauthorized" ||
-          res.data.resultMessage === "Input string was not in a correct format."
-        ) {
-          logout();
-        }
-        if (res.data.isSuccess === true) {
-          setOrg(res.data.organizations);
-          setDepartmentID(item.id);
-        }
-      })
-      .catch((err) => console.log(err));
-  };
-  const handleWorkers = (item) => {
-    axios({
-      method: "get",
-      headers: {
-        Authorization: `${TOKEN}`,
-      },
-      url: `${process.env.REACT_APP_URL}/v1/User/unit/devices?unitId=${item.id}`,
-    })
-      .then((res) => {
-        if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
-        if (
-          res.data.resultMessage === "Unauthorized" ||
-          res.data.resultMessage === "Input string was not in a correct format."
-        ) {
-          logout();
-        }
-        if (res.data.isSuccess === true) {
-          setWorkers(res.data.unitDevices);
-          setOrgID(item.id);
-        }
-      })
-      .catch((err) => console.log(err));
-  };
-  const handleWorkersID = (item) => {
-    setWorkersID(item.deviceId);
-  };
+  const [chosedDelete, setChosedDelete] = useState(0);
   const handleTrainingCategoryId = (item) => {
     settCategory(item.id);
   };
@@ -172,6 +113,7 @@ function EditTraining() {
     setduration(video.duration);
   };
   const handleDelete = () => {
+    console.log(id);
     axios({
       method: "delete",
       headers: {
@@ -182,10 +124,64 @@ function EditTraining() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
+        } else if (res.data.isSuccess === true) {
+          setChosedDelete(2);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+  const handleFileSelect = (event) => {
+    // if (event.target.files[0].name.slice(-4) === ".mp4") {
+    const data = new FormData();
+    const imagedata = event.target.files[0];
+    data.append("file", imagedata);
+    axios({
+      mode: "no-cors",
+      method: "post",
+      url: `${process.env.REACT_APP_URL}/v1/TrainingFile/fileadd`,
+      data,
+      headers: {
+        Authorization: `${TOKEN}`,
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.isSuccess === false) {
+          // alert(res.data.resultMessage);
         }
         if (res.data.isSuccess === true) {
-          navigate(0);
+          setfileUrl(res.data.path);
+          setId(res.data.id);
+          setChosedDelete(2);
+        } else {
+          notification.error(`${res.data.resultMessage}`);
+        }
+        if (res.data.resultMessage === "Unauthorized") {
+          logout();
+        }
+      })
+      .catch((err) => console.log(err));
+    // }
+    // else {
+    //   notification.error("Video хавсаргана уу.");
+    // }
+  };
+  const handleDeleteSelected = () => {
+    axios({
+      method: "delete",
+      headers: {
+        Authorization: `${TOKEN}`,
+        accept: "text/plain",
+      },
+      url: `${process.env.REACT_APP_URL}/v1/TrainingFile/${train.fileId}`,
+    })
+      .then((res) => {
+        if (res.data.isSuccess === false) {
+        }
+        if (res.data.isSuccess === true) {
+          notification.success(`${res.data.resultMessage}`);
+          setChosedDelete(1);
         } else {
         }
       })
@@ -203,60 +199,45 @@ function EditTraining() {
     startDate: `${startDate}` === "" ? train.startDate : `${startDate}`,
     endDate: `${endDate}` === "" ? train.endDate : `${endDate}`,
     location: `${location}` === "" ? train.location : `${location}`,
-    addTrainingDevs:
-      orgID === "" && workersID === ""
-        ? [
-            {
-              departmentId:
-                `${departmentID}` === ""
-                  ? train.departmentID
-                  : `${departmentID}`,
-            },
-          ]
-        : [
-            {
-              departmentId:
-                `${departmentID}` === ""
-                  ? train.departmentID
-                  : `${departmentID}`,
-              unitId: `${orgID}` === "" ? train.unitId : `${orgID}`,
-              devId: `${workersID}` === "" ? train.devId : `${workersID}`,
-            },
-          ],
+    addTrainingDevs: [],
   };
-  const handleFileSelect = (event) => {
-    if (event.target.files[0].name.slice(-4) === ".mp4") {
-      const data = new FormData();
-      const imagedata = event.target.files[0];
-      data.append("file", imagedata);
-      axios({
-        mode: "no-cors",
-        method: "post",
-        url: `${process.env.REACT_APP_URL}/v1/TrainingFile/fileadd`,
-        data,
-        headers: {
-          Authorization: `${TOKEN}`,
-          "Content-Type": "multipart/form-data",
-        },
+
+  const handleFileSelectAnother = (event) => {
+    // if (event.target.files[0].name.slice(-4) === ".mp4") {
+    const data = new FormData();
+    const imagedata = event.target.files[0];
+    data.append("file", imagedata);
+    axios({
+      mode: "no-cors",
+      method: "post",
+      url: `${process.env.REACT_APP_URL}/v1/TrainingFile/fileadd`,
+      data,
+      headers: {
+        Authorization: `${TOKEN}`,
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.isSuccess === false) {
+          // alert(res.data.resultMessage);
+        }
+        if (res.data.isSuccess === true) {
+          setfileUrl(res.data.path);
+          setId(res.data.id);
+          setChosedDelete(2);
+        } else {
+          notification.error(`${res.data.resultMessage}`);
+        }
+        if (res.data.resultMessage === "Unauthorized") {
+          logout();
+        }
       })
-        .then((res) => {
-          if (res.data.isSuccess === false) {
-            alert(res.data.resultMessage);
-          }
-          if (res.data.isSuccess === true) {
-            setfileUrl(res.data.path);
-            setId(res.data.id);
-          } else {
-            notification.error(`${res.data.resultMessage}`);
-          }
-          if (res.data.resultMessage === "Unauthorized") {
-            logout();
-          }
-        })
-        .catch((err) => console.log(err));
-    } else {
-      notification.error("Video хавсаргана уу.");
-    }
+      .catch((err) => console.log(err));
+    // }
+    // else {
+    //   notification.error("Video хавсаргана уу.");
+    // }
   };
   const handleCreate = async () => {
     const data = new FormData();
@@ -277,44 +258,116 @@ function EditTraining() {
     //   })
     //   .catch((err) => console.log(err));
   };
-
   const navigateIndex = (e) => {
     e.preventDefault();
-    if (startDate == endDate || startDate > endDate) {
+    if (startDate == endDate && startDate > endDate) {
       notification.invalidFileUpload("Эхлэх дуусах хугацаа алдаатай байна.");
-    }
-    if (departmentID.length === 0) {
-      setcheckEmptydepartment(true);
-    } else {
-      console.log(dataFULL);
-      // axios({
-      //   method: "put",
-      //   headers: {
-      //     Authorization: `${TOKEN}`,
-      //     "Content-Type": "application/json",
-      //     accept: "text/plain",
-      //   },
-      //   url: `${process.env.REACT_APP_URL}/v1/Training/edit`,
-      //   data: JSON.stringify(dataFULL),
-      // })
-      //   .then((res) => {
-      //     console.log(res.data);
-      //     if (res.data.isSuccess === true) {
-      //       notification.success(`${res.data.resultMessage}`);
-      //       const timer = setTimeout(() => navigate("/trainings"), 500);
-      //       return () => clearTimeout(timer);
-      //     }
-      //   })
-      //   .catch((err) => console.log(err));
-    }
+    } else console.log(dataFULL);
+    // axios({
+    //   method: "put",
+    //   headers: {
+    //     Authorization: `${TOKEN}`,
+    //     "Content-Type": "application/json",
+    //     accept: "text/plain",
+    //   },
+    //   url: `${process.env.REACT_APP_URL}/v1/Training/edit`,
+    //   data: JSON.stringify(dataFULL),
+    // })
+    //   .then((res) => {
+    //     console.log(res.data);
+    //     if (res.data.isSuccess === true) {
+    //       notification.success(`${res.data.resultMessage}`);
+    //       const timer = setTimeout(() => navigate("/trainings"), 500);
+    //       return () => clearTimeout(timer);
+    //     }
+    //   })
+    //   .catch((err) => console.log(err));
   };
-  const object = options.find((obj) => obj.id === train.sessionType);
-  const getdate1 = new Date(train.startDate);
-  const getdate2 = new Date(train.endDate);
-  const dep = department?.find(
-    (obj) => obj.id === train.trainingDevs[0].departmentId
-  );
-  console.log(train);
+  const [show, setShow] = useState(false);
+  const getEmployees = (value) => {
+    let tempo = [];
+    for (let index = 0; index < value.length; index++) {
+      const element = value[index];
+      let arr = {
+        departmentId:
+          element.department === undefined ? "" : element.department,
+        unitId: element.unitId,
+        devId: `${element.deviceId}`,
+      };
+      tempo.push(arr);
+    }
+    setEmp(tempo);
+  };
+  const [roll, setRoll] = useState(0);
+  function Diceroll() {
+    return (
+      <>
+        <div>
+          {chosedDelete === 1 ? (
+            <div>
+              {chosedDelete}
+              <input
+                type="file"
+                onChange={handleFileSelectAnother}
+                className="px-3 py-3 text-blueGray-600 bg-white text-sm w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+              />
+            </div>
+          ) : chosedDelete === 2 ? (
+            <div className="text-center w-full mx-auto py-2 px-2 sm:px-6 lg:py-16 lg:px-8 z-20">
+              {chosedDelete}
+              {fileUrl.slice(-4) === ".mp4" ? (
+                <video
+                  className="items-center w-1/2 mx-auto py-12 px-12 sm:px-2 lg:py-2 lg:px-2 z-10"
+                  onLoadedMetadata={handleProgress}
+                  ref={videoRef}
+                  // width="20%"
+                  // height="100%"
+                  id="myVideo"
+                  controls
+                >
+                  <source src={`http://` + `${fileUrl}`} type="video/mp4" />
+                </video>
+              ) : fileUrl.slice(-4) === ".png" ||
+                fileUrl.slice(-4) === "jpeg" ||
+                fileUrl.slice(-4) === ".jpg" ||
+                fileUrl.slice(-4) === ".png" ||
+                fileUrl.slice(-4) === ".gif" ? (
+                <div className="flex justify-center">
+                  <img
+                    className="h-24 rounded-xl"
+                    src={`http://` + `${fileUrl}`}
+                  />
+                </div>
+              ) : fileUrl.slice(-4) === ".mp3" ? (
+                <div className="flex justify-center">
+                  <audio controlsList="nodownload" controls>
+                    <source src={`http://` + `${fileUrl}`} type="audio/mpeg" />
+                  </audio>
+                </div>
+              ) : (
+                <div className="text-black text-md border-2 border-blue-500  rounded-md ">
+                  <div className="flex justify-center">{fileUrl.slice(29)}</div>
+                </div>
+              )}
+              <div className="lg:mt-0 lg:flex-shrink-0">
+                <div className="mt-2 inline-flex rounded-md shadow">
+                  <button
+                    onClick={() => handleDelete()}
+                    type="button"
+                    className="py-2 px-6  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+                  >
+                    Устгах
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
+      </>
+    );
+  }
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <Navigation />
@@ -361,42 +414,83 @@ function EditTraining() {
                   id={checkEmptydescription === true ? "border-red" : null}
                 ></textarea>
               </div>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-1  flex items-center">
                 <div>
                   <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                     Файл
                   </label>
-                  {train.fileUrl?.slice(-4) === ".mp4" ? (
-                    <div className=" flex items-center">
-                      <div className="py-12 ">
-                        <video
-                          onLoadedMetadata={handleProgress}
-                          ref={videoRef}
-                          width="50%"
-                          // height="100%"
-                          id="myVideo"
-                          controls
-                        >
-                          <source
-                            src={`http://` + `${train.fileUrl}`}
-                            type="video/mp4"
-                          />
-                        </video>
-                        <a
-                          onClick={handleDelete}
-                          className="text-rose-400 hover:text-black ml-2 text-lg"
-                        >
-                          <i className="bi bi-trash-fill"></i>
-                        </a>
+                  <div>
+                    {train.fileId === "" ? (
+                      <div>
+                        {chosedDelete}
+                        <input
+                          type="file"
+                          onChange={handleFileSelect}
+                          className="px-3 py-3 text-blueGray-600 bg-white text-sm w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                        />
                       </div>
-                    </div>
-                  ) : (
-                    <input
-                      type="file"
-                      onChange={handleFileSelect}
-                      className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                    />
-                  )}
+                    ) : (
+                      <div className="text-center w-full mx-auto py-2 px-2 sm:px-6 lg:py-16 lg:px-8 z-20">
+                        {chosedDelete}
+                        {train.fileUrl.slice(-4) === ".mp4" ? (
+                          <video
+                            className="items-center w-1/2 mx-auto py-12 px-12 sm:px-2 lg:py-2 lg:px-2 z-10"
+                            onLoadedMetadata={handleProgress}
+                            ref={videoRef}
+                            // width="20%"
+                            // height="100%"
+                            id="myVideo"
+                            controls
+                          >
+                            <source
+                              src={`http://` + `${train.fileUrl}`}
+                              type="video/mp4"
+                            />
+                          </video>
+                        ) : train.fileUrl.slice(-4) === ".png" ||
+                          train.fileUrl.slice(-4) === "jpeg" ||
+                          train.fileUrl.slice(-4) === ".jpg" ||
+                          train.fileUrl.slice(-4) === ".png" ||
+                          train.fileUrl.slice(-4) === ".gif" ? (
+                          <div className="flex justify-center">
+                            <img
+                              className="h-24 rounded-xl"
+                              src={`http://` + `${train.fileUrl}`}
+                            />
+                          </div>
+                        ) : train.fileUrl.slice(-4) === ".mp3" ? (
+                          <div className="flex justify-center">
+                            <audio controlsList="nodownload" controls>
+                              <source
+                                src={`http://` + `${train.fileUrl}`}
+                                type="audio/mpeg"
+                              />
+                            </audio>
+                          </div>
+                        ) : (
+                          <div className="text-black text-md border-2 border-blue-500  rounded-md ">
+                            <div className="flex justify-center">
+                              {train.fileUrl.slice(29)}
+                            </div>
+                          </div>
+                        )}
+                        <div className="lg:mt-0 lg:flex-shrink-0">
+                          <div className="mt-2 inline-flex rounded-md shadow">
+                            <button
+                              onClick={() => handleDeleteSelected()}
+                              type="button"
+                              className="py-2 px-6  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+                            >
+                              Устгах
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <Diceroll />
+                  </div>
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-4  sm:grid-cols-3">
@@ -512,66 +606,23 @@ function EditTraining() {
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-4 text-center sm:grid-cols-3">
-                <div>
-                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                    Харьяалагдах хэлтэс
-                  </label>
-                  <Select
-                    className="px-3 py-3 text-blueGray-600 bg-white text-sm text-black w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                    options={department}
-                    isMulti
-                    onChange={(item) => {
-                      handleOrg(item);
-                      setcheckEmptydepartment(false);
-                    }}
-                    id={checkEmptydepartment === true ? "border-red" : null}
-                    noOptionsMessage={({ inputValue }) =>
-                      !inputValue && "Сонголт хоосон байна"
-                    }
-                    getOptionLabel={(option) => option.name}
-                    getOptionValue={(option) => option.id}
+                <button
+                  onClick={() => {
+                    setShow(true);
+                  }}
+                  type="submit"
+                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-2 rounded"
+                >
+                  Ажилтан сонгох {emp?.length}
+                </button>
+
+                {show && (
+                  <Workers
+                    setShow={setShow}
+                    getEmployees={getEmployees}
+                    // reSetEmployee={reSet}
                   />
-                </div>
-                <div>
-                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                    Ажлын байр
-                  </label>
-                  <Select
-                    className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                    options={org}
-                    defaultValue={selectedOptionorg}
-                    onChange={(item) => {
-                      handleWorkers(item);
-                      // setcheckEmpty2(false);
-                    }}
-                    // id={checkEmpty2 === true ? "border-red" : null}
-                    noOptionsMessage={({ inputValue }) =>
-                      !inputValue && "Сонголт хоосон байна"
-                    }
-                    getOptionLabel={(option) => option.name}
-                    getOptionValue={(option) => option.id}
-                  />
-                </div>
-                <div>
-                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                    Ажилтны нэр
-                  </label>
-                  <Select
-                    options={workers}
-                    defaultValue={selectedOptionWorkers}
-                    onChange={(item) => {
-                      handleWorkersID(item);
-                      // setcheckEmpty3(false);
-                    }}
-                    // id={checkEmpty3 === true ? "border-red" : null}
-                    className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                    noOptionsMessage={({ inputValue }) =>
-                      !inputValue && "Сонголт хоосон байна"
-                    }
-                    getOptionLabel={(option) => option.firstName}
-                    getOptionValue={(option) => option.deviceId}
-                  />
-                </div>
+                )}
               </div>
 
               <div className="mt-4 text-right">

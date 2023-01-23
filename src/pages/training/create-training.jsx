@@ -81,36 +81,37 @@ function CreateTraining() {
     setsessionType(item.id);
   };
   const handleFileSelect = (event) => {
-    if (event.target.files[0].name.slice(-4) === ".mp4") {
-      const data = new FormData();
-      const imagedata = event.target.files[0];
-      data.append("file", imagedata);
-      axios({
-        mode: "no-cors",
-        method: "post",
-        url: `${process.env.REACT_APP_URL}/v1/TrainingFile/fileadd`,
-        data,
-        headers: {
-          Authorization: `${TOKEN}`,
-          "Content-Type": "multipart/form-data",
-        },
+    // if (event.target.files[0].name.slice(-4) === ".mp4") {
+    const data = new FormData();
+    const imagedata = event.target.files[0];
+    data.append("file", imagedata);
+    axios({
+      mode: "no-cors",
+      method: "post",
+      url: `${process.env.REACT_APP_URL}/v1/TrainingFile/fileadd`,
+      data,
+      headers: {
+        Authorization: `${TOKEN}`,
+        "Content-Type": "multipart/form-data",
+      },
+    })
+      .then((res) => {
+        if (res.data.isSuccess === true) {
+          setfileUrl(res.data.path);
+          setId(res.data.id);
+          setRoll(1);
+        } else {
+          notification.error(`${res.data.resultMessage}`);
+        }
+        if (res.data.resultMessage === "Unauthorized") {
+          logout();
+        }
       })
-        .then((res) => {
-          if (res.data.isSuccess === true) {
-            setfileUrl(res.data.path);
-            setId(res.data.id);
-            setRoll(1);
-          } else {
-            notification.error(`${res.data.resultMessage}`);
-          }
-          if (res.data.resultMessage === "Unauthorized") {
-            logout();
-          }
-        })
-        .catch((err) => console.log(err));
-    } else {
-      notification.error("Video хавсаргана уу.");
-    }
+      .catch((err) => console.log(err));
+    // }
+    // else {
+    //   notification.error("Video хавсаргана уу.");
+    // }
   };
   const handleProgress = () => {
     const video = videoRef.current;
@@ -144,17 +145,40 @@ function CreateTraining() {
             />
           ) : (
             <div className="text-center w-full mx-auto py-2 px-2 sm:px-6 lg:py-16 lg:px-8 z-20">
-              <video
-                className="items-center w-1/2 mx-auto py-12 px-12 sm:px-2 lg:py-2 lg:px-2 z-10"
-                onLoadedMetadata={handleProgress}
-                ref={videoRef}
-                // width="20%"
-                // height="100%"
-                id="myVideo"
-                controls
-              >
-                <source src={`http://` + `${fileUrl}`} type="video/mp4" />
-              </video>
+              {fileUrl.slice(-4) === ".mp4" ? (
+                <video
+                  className="items-center w-1/2 mx-auto py-12 px-12 sm:px-2 lg:py-2 lg:px-2 z-10"
+                  onLoadedMetadata={handleProgress}
+                  ref={videoRef}
+                  // width="20%"
+                  // height="100%"
+                  id="myVideo"
+                  controls
+                >
+                  <source src={`http://` + `${fileUrl}`} type="video/mp4" />
+                </video>
+              ) : fileUrl.slice(-4) === ".png" ||
+                fileUrl.slice(-4) === "jpeg" ||
+                fileUrl.slice(-4) === ".jpg" ||
+                fileUrl.slice(-4) === ".png" ||
+                fileUrl.slice(-4) === ".gif" ? (
+                <div className="flex justify-center">
+                  <img
+                    className="h-24 rounded-xl"
+                    src={`http://` + `${fileUrl}`}
+                  />
+                </div>
+              ) : fileUrl.slice(-4) === ".mp3" ? (
+                <div className="flex justify-center">
+                  <audio controlsList="nodownload" controls>
+                    <source src={`http://` + `${fileUrl}`} type="audio/mpeg" />
+                  </audio>
+                </div>
+              ) : (
+                <div className="text-black text-md border-2 border-blue-500  rounded-md ">
+                  <div className="flex justify-center">{fileUrl.slice(29)}</div>
+                </div>
+              )}
               <div className="lg:mt-0 lg:flex-shrink-0">
                 <div className="mt-2 inline-flex rounded-md shadow">
                   <button
@@ -222,7 +246,6 @@ function CreateTraining() {
         data: JSON.stringify(dataFULL),
       })
         .then((res) => {
-          console.log(res.data.resultMessage);
           if (res.data.isSuccess === true) {
             notification.success(`${res.data.resultMessage}`);
             const timer = setTimeout(() => navigate("/training"), 500);
@@ -305,7 +328,7 @@ function CreateTraining() {
       <div className="w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
-            <p className="focus:outline-none text-base sm:text-sm md:text-md lg:text-md font-bold leading-normal text-gray-800">
+            <p className="focus:outline-none text-base sm:text-sm md:text-xl lg:text-xl font-bold leading-normal text-gray-800">
               Сургалт үүсгэх
             </p>
           </div>

@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import { logout } from "../../service/examService";
+import moment from "moment";
 function TrainingUserCell() {
   const location = useLocation();
   const { TOKEN, activeMenu } = useStateContext();
@@ -68,6 +69,18 @@ function TrainingUserCell() {
     });
     setFilteredList(filtered);
   };
+  function secondsToHms(d) {
+    d = Number(d);
+    const h = Math.floor(d / 3600);
+    const m = Math.floor((d % 3600) / 60);
+    const s = Math.floor((d % 3600) % 60);
+
+    // var hDisplay = h > 0 ? h + (h == 1 ? " цаг, " : " цаг, ") : "";
+    // var mDisplay = m > 0 ? m + (m == 1 ? " минут, " : " минут, ") : "";
+    // var sDisplay = s > 0 ? s + (s == 1 ? " секунд" : " секунд") : "";
+    return `${h}:${m}:${s}`;
+  }
+  console.log(secondsToHms(selectedTrain.duration));
   return (
     <div className="w-full min-h-[calc(100%-56px)]">
       <Navigation />

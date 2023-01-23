@@ -17,7 +17,7 @@ function TrainingProgressCell({ data }) {
             }}
             className="w-3/4 h-full ml-1 font-bold text-center text-xs text-white bg-green-500 rounded-full transition-all duration-1000"
           >
-            {percentage}%
+            {Math.floor(percentage)}%
           </div>
         </div>
       </>
@@ -58,8 +58,11 @@ function TrainingProgressCell({ data }) {
       <div className="block m-auto">
         <div>
           <span className="inline-block text-sm  font-bold">
-            Үзсэн :<span className="font-bold  ml-1 ">{nowatch.length}</span>/
-            {data.trainingDevs.length}
+            Үзсэн :
+            <span className="font-bold  ml-1 ">
+              {nowatch && nowatch.length}
+            </span>
+            /{data.trainingDevs.length}
           </span>
         </div>
 

@@ -38,7 +38,6 @@ function Training() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
         }
         if (res.data.isSuccess === true) {
           setTrains(res.data.trainingList);
@@ -63,7 +62,6 @@ function Training() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
         }
         if (res.data.isSuccess == true) {
           setCategory(res.data.trainingCatList);
@@ -123,16 +121,6 @@ function Training() {
   const catnameChange = (data) => {
     console.log(data);
   };
-  function secondsToHms(d) {
-    d = Number(d);
-    var h = Math.floor(d / 3600);
-    var m = Math.floor((d % 3600) / 60);
-    var s = Math.floor((d % 3600) % 60);
-    var hDisplay = h > 0 ? h + (h == 1 ? " hour, " : " hours, ") : "";
-    var mDisplay = m > 0 ? m + (m == 1 ? " minute, " : " minutes, ") : "";
-    var sDisplay = s > 0 ? s + (s == 1 ? " second" : " seconds") : "";
-    return hDisplay + mDisplay + sDisplay;
-  }
 
   const [searchQuery, setSearchQuery] = useState("");
   const handleSearch = (event) => {
@@ -153,7 +141,7 @@ function Training() {
   const today = new Date();
   const format = "YYYYMMDDHHmmss";
   const nowdateTime = moment(today).format(format);
-  console.log(filteredList.length);
+  console.log(trains);
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <div>
@@ -209,7 +197,7 @@ function Training() {
       <div className="sm:px-6 w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
-            <p className="focus:outline-none text-base sm:text-sm md:text-md lg:text-md font-bold leading-normal text-gray-800">
+            <p className="focus:outline-none text-base sm:text-sm md:text-xl lg:text-xl font-bold leading-normal text-gray-800">
               Сургалтууд (
               {filteredList?.length === 0
                 ? trains?.length
@@ -262,7 +250,7 @@ function Training() {
         {filteredList.length > 0
           ? filteredList.map((data, index) => (
               <div key={index} className="p-2">
-                <div className="max-w-full mx-auto overflow-hidden rounded-lg shadow-lg pricing-box lg:max-w-none lg:flex mt-2">
+                <div className="max-w-full mx-auto overflow-hidden  rounded-lg shadow-lg pricing-box lg:max-w-none lg:flex mt-2">
                   <div className="w-full px-6 py-8 bg-white  lg:flex-shrink-2 lg:p-12">
                     <h3 className="text-xl  leading-8 text-gray-800 sm:text-xl sm:leading-9 ">
                       {data.name}
@@ -288,10 +276,7 @@ function Training() {
                             <i className="bi bi-card-checklist" />
                           </div>
                           <p className="ml-3 text-sm leading-5 text-gray-700 ">
-                            Ангилал:{" "}
-                            {category &&
-                              category?.find((obj) => obj.id === data.tCategory)
-                                .name}
+                            Ангилал: {data.tCatName}
                           </p>
                         </li>
                         {data.teacher === null ? (
@@ -312,10 +297,11 @@ function Training() {
                             <i className="bi bi-signpost-split-fill" />
                           </div>
                           <p className="ml-3 text-sm leading-5 text-gray-700 ">
-                            {
-                              options.find((obj) => obj.id === data.sessionType)
-                                .value
-                            }
+                            {/* {
+                              options?.find(
+                                (obj) => obj.id === data.sessionType
+                              ).value
+                            } */}
                           </p>
                         </li>
                         {data.location === null ? (
@@ -384,53 +370,48 @@ function Training() {
                         </h4>
                         <div className="flex-1 border-t-2 border-gray-200"></div>
                       </div>
-                      <ul className="mt-2 lg:grid lg:grid-cols-3 lg:col-gap-8 lg:row-gap-5">
-                        <li className="flex items-center lg:col-span-1">
-                          <div className="flex-shrink-0 items-center">
-                            <a
-                              onClick={() => {
-                                showModalView(data);
-                              }}
-                              className="group flex items-center justify-between rounded-lg border border-current px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 focus:outline-none focus:ring active:bg-indigo-500"
-                            >
-                              <i className="bi bi-eye-fill mr-1" /> Харах
-                            </a>
-                          </div>
-                        </li>
-                        <li className="flex items-center lg:col-span-1">
-                          <div className="flex-shrink-0 items-center">
-                            <a
-                              data-id={data}
-                              onClick={() => {
-                                handleEdit(data);
-                              }}
-                              className="group flex items-center justify-between rounded-lg border border-current px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 focus:outline-none focus:ring active:bg-indigo-500"
-                            >
-                              <i className="bi bi-pencil-square mr-1" />{" "}
-                              Засварлах
-                            </a>
-                          </div>
-                        </li>
-                        <li className="flex items-center lg:col-span-1">
-                          <div className="flex-shrink-0 items-center">
-                            <a
-                              data-id={data}
-                              onClick={() => {
-                                showModalDelete(data);
-                              }}
-                              className="group flex items-center justify-between rounded-lg border border-current px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 focus:outline-none focus:ring active:bg-indigo-500"
-                            >
-                              <i className="bi bi-trash-fill mr-1" /> Устгах
-                            </a>
-                          </div>
-                        </li>
-                      </ul>
+
+                      <div className="flex items-center justify-between w-full gap-4 mt-8">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            showModalView(data);
+                          }}
+                          className="group flex items-center justify-between rounded-lg border border-current px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 hover:text-white  focus:outline-none focus:ring active:bg-indigo-500"
+                        >
+                          <i className="bi bi-eye-fill mr-1" />
+                          <span className="font-bold text-xs">Харах</span>
+                        </button>
+                        <button
+                          data-id={data}
+                          onClick={() => {
+                            handleEdit(data);
+                          }}
+                          className="group flex items-center justify-between rounded-lg border border-current px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 hover:text-white  focus:outline-none focus:ring active:bg-indigo-500"
+                          type="button"
+                        >
+                          {" "}
+                          <i className="bi bi-pencil-square mr-1" />
+                          <span className="font-bold text-xs">Засварлах</span>
+                        </button>
+                        <button
+                          type="button"
+                          data-id={data}
+                          onClick={() => {
+                            showModalDelete(data);
+                          }}
+                          className="group flex items-center justify-between rounded-lg border border-current px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 hover:text-white  focus:outline-none focus:ring active:bg-indigo-500"
+                        >
+                          <i className="bi bi-trash-fill mr-1" />
+                          <span className="font-bold text-xs"> Устгах</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                   <div className="px-6 py-8 text-center bg-gray-100  lg:flex-shrink-4 lg:flex lg:flex-col lg:justify-center lg:p-4">
                     <TrainingProgressCell data={data} />
                     <div className="flex items-center justify-center mt-4 leading-none text-gray-900 ">
-                      {data.fileUrl.slice(-4) === ".mp4" ? (
+                      {data.fileUrl?.slice(-4) === ".mp4" ? (
                         <div>
                           <video
                             ref={videoRef}
@@ -461,7 +442,7 @@ function Training() {
                           <i className="bi bi-play-circle-fill" /> Файлын нэр:
                         </span>
                         <span className="inline-block font-medium text-gray-500  ">
-                          {data.fileUrl.slice(29)}
+                          {data.fileUrl?.slice(29)}
                         </span>
                       </p>
                     )}
@@ -470,8 +451,8 @@ function Training() {
               </div>
             ))
           : trains?.map((data, index) => (
-              <div key={index} className="p-2">
-                <div className="max-w-full mx-auto overflow-hidden rounded-lg shadow-lg pricing-box lg:max-w-none lg:flex mt-2">
+              <div key={index} className="p-2 ">
+                <div className="border border-2 border:bg-blue-500 max-w-full mx-auto overflow-hidden rounded-lg shadow-lg pricing-box lg:max-w-none lg:flex mt-2">
                   <div className="w-full px-6 py-8 bg-white  lg:flex-shrink-2 lg:p-12">
                     <h3 className="text-xl  leading-8 text-gray-800 sm:text-xl sm:leading-9 ">
                       {data.name}
@@ -496,11 +477,10 @@ function Training() {
                           <div className="flex-shrink-0 text-emerald-500 text-lg">
                             <i className="bi bi-card-checklist" />
                           </div>
-                          <p className="ml-3 text-sm leading-5 text-gray-700 ">
-                            Ангилал:{" "}
-                            {category &&
-                              category?.find((obj) => obj.id === data.tCategory)
-                                .name}
+                          <p className="ml-3 text-sm leading-5 text-gray-700">
+                            <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                              Ангилал: {data.tCatName}
+                            </p>
                           </p>
                         </li>
                         {data.teacher === null ? (
@@ -593,66 +573,81 @@ function Training() {
                         </h4>
                         <div className="flex-1 border-t-2 border-gray-200"></div>
                       </div>
-                      <ul className="mt-2 lg:grid lg:grid-cols-3 lg:col-gap-8 lg:row-gap-5">
-                        <li className="flex items-center lg:col-span-1">
-                          <div className="flex-shrink-0 items-center">
-                            <a
-                              onClick={() => {
-                                showModalView(data);
-                              }}
-                              className="group flex items-center justify-between rounded-lg border border-current px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 focus:outline-none focus:ring active:bg-indigo-500"
-                            >
-                              <i className="bi bi-eye-fill mr-1" /> Харах
-                            </a>
-                          </div>
-                        </li>
-                        <li className="flex items-center lg:col-span-1">
-                          <div className="flex-shrink-0 items-center">
-                            <a
-                              data-id={data}
-                              onClick={() => {
-                                handleEdit(data);
-                              }}
-                              className="group flex items-center justify-between rounded-lg border border-current px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 focus:outline-none focus:ring active:bg-indigo-500"
-                            >
-                              <i className="bi bi-pencil-square mr-1" />{" "}
-                              Засварлах
-                            </a>
-                          </div>
-                        </li>
-                        <li className="flex items-center lg:col-span-1">
-                          <div className="flex-shrink-0 items-center">
-                            <a
-                              data-id={data}
-                              onClick={() => {
-                                showModalDelete(data);
-                              }}
-                              className="group flex items-center justify-between rounded-lg border border-current px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 focus:outline-none focus:ring active:bg-indigo-500"
-                            >
-                              <i className="bi bi-trash-fill mr-1" /> Устгах
-                            </a>
-                          </div>
-                        </li>
-                      </ul>
+                      <div className="flex items-center justify-between w-full gap-4 mt-8  mx-auto overflow-hidden">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            showModalView(data);
+                          }}
+                          className="group flex items-center justify-between rounded-lg border border-current px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 hover:text-white  focus:outline-none focus:ring active:bg-indigo-500"
+                        >
+                          <i className="bi bi-eye-fill mr-1" />
+                          <span className="font-bold text-xs">Харах</span>
+                        </button>
+                        <button
+                          data-id={data}
+                          onClick={() => {
+                            handleEdit(data);
+                          }}
+                          className="group flex items-center justify-between rounded-lg border border-current px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 hover:text-white  focus:outline-none focus:ring active:bg-indigo-500"
+                          type="button"
+                        >
+                          {" "}
+                          <i className="bi bi-pencil-square mr-1" />
+                          <span className="font-bold text-xs">Засварлах</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          data-id={data}
+                          onClick={() => {
+                            showModalDelete(data);
+                          }}
+                          className="group flex items-center justify-between rounded-lg border border-current px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 hover:text-white  focus:outline-none focus:ring active:bg-indigo-500"
+                        >
+                          <i className="bi bi-trash-fill mr-1" />
+                          <span className="font-bold text-xs"> Устгах</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                   <div className="px-6 py-8 text-center bg-gray-100  lg:flex-shrink-4 lg:flex lg:flex-col lg:justify-center lg:p-4">
                     <TrainingProgressCell data={data} />
                     <div className="flex items-center justify-center mt-4 leading-none text-gray-900 ">
                       {data.fileUrl.slice(-4) === ".mp4" ? (
-                        <div>
-                          <video
-                            ref={videoRef}
-                            width="100%"
-                            // height="100%"
-
-                            controls
-                          >
+                        <video
+                          className="items-center w-1/2 mx-auto py-12 px-12 sm:px-2 lg:py-2 lg:px-2 z-10"
+                          // onLoadedMetadata={handleProgress}
+                          ref={videoRef}
+                          // width="20%"
+                          // height="100%"
+                          id="myVideo"
+                          controls
+                        >
+                          <source
+                            src={`http://` + `${data.fileUrl}`}
+                            type="video/mp4"
+                          />
+                        </video>
+                      ) : data.fileUrl.slice(-4) === ".png" ||
+                        data.fileUrl.slice(-4) === "jpeg" ||
+                        data.fileUrl.slice(-4) === ".jpg" ||
+                        data.fileUrl.slice(-4) === ".png" ||
+                        data.fileUrl.slice(-4) === ".gif" ? (
+                        <div className="flex justify-center">
+                          <img
+                            className="h-38 rounded-xl"
+                            src={`http://` + `${data.fileUrl}`}
+                          />
+                        </div>
+                      ) : data.fileUrl.slice(-4) === ".mp3" ? (
+                        <div className="flex justify-center">
+                          <audio controlsList="nodownload" controls>
                             <source
                               src={`http://` + `${data.fileUrl}`}
-                              type="video/mp4"
+                              type="audio/mpeg"
                             />
-                          </video>
+                          </audio>
                         </div>
                       ) : (
                         <div className="rounded border-l-4 border-red-500 bg-red-50 p-4">

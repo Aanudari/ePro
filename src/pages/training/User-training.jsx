@@ -6,6 +6,7 @@ import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import { logout } from "../../service/examService";
 import { Modal } from "react-bootstrap";
+import { notification } from "../../service/toast";
 function UserTraining() {
   const { TOKEN, deviceId } = useStateContext();
   const navigate = useNavigate();
@@ -52,6 +53,7 @@ function UserTraining() {
     setShowReady(true);
     setChosedTrain(data);
   };
+
   const navigatePlayer = () => {
     navigate("/player", {
       state: { data: chosedTrain },
@@ -84,6 +86,7 @@ function UserTraining() {
     }
     tempo.push(temp);
   }
+  console.log(userTrain);
   return (
     <UserLayout>
       <div>
@@ -199,76 +202,149 @@ function UserTraining() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {tempo[detector]?.map((data, i) => (
                   <div key={i} className="mx-auto w-full">
-                    <div className="w-full mt-4 p-4 border border-2 block bg-white shadow-md hover:shadow-2xl rounded-lg overflow-hidden">
-                      <div className="flex items-center justify-between mb-4 space-x-12">
-                        <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-500 bg-green-200 rounded-md">
-                          ИДЭВХТЭЙ
-                        </span>
+                    {data.startedWatch === null ? (
+                      <div className="w-full mt-4 p-4 border border-2 block bg-white shadow-md hover:shadow-2xl rounded-lg overflow-hidden">
+                        <div className="flex items-center justify-between mb-4 space-x-12">
+                          <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-500 bg-green-200 rounded-md">
+                            ИДЭВХТЭЙ
+                          </span>
 
-                        {data.startedWatch === null ? (
-                          <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-400 border-2 border-rose-500 rounded-md bg-white rounded-md">
-                            ҮЗЭЭГҮЙ
-                          </span>
-                        ) : (
-                          <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-400 border-2 border-green-500 rounded-md bg-white rounded-md">
-                            ҮЗСЭН
-                          </span>
-                        )}
-                      </div>
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center">
-                          <div className="flex flex-col">
-                            <span className="font-bold text-black text-md dark:text-white">
-                              {data.name}
+                          {data.startedWatch === null ? (
+                            <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-400 border-2 border-rose-500 rounded-md bg-white rounded-md">
+                              ҮЗЭЭГҮЙ
                             </span>
-                            <span className="text-sm text-gray-500 dark:text-white">
-                              {data.description}
+                          ) : (
+                            <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-400 border-2 border-green-500 rounded-md bg-white rounded-md">
+                              ҮЗСЭН
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center">
+                            <div className="flex flex-col">
+                              <span className="font-bold text-black text-md dark:text-white">
+                                {data.name}
+                              </span>
+                              <span className="text-sm text-gray-500 dark:text-white">
+                                {data.description}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between ">
+                          <div className="flex items-center">
+                            <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
+                              Багш:
+                            </span>
+                            <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md">
+                              {data.teacher}
                             </span>
                           </div>
                         </div>
-                      </div>
-                      <div className="flex items-center justify-between ">
-                        <div className="flex items-center">
-                          <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
-                            Багш:
-                          </span>
-                          <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md">
-                            {data.teacher}
-                          </span>
+                        <div className="flex items-center justify-between ">
+                          <div className="flex items-center">
+                            <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
+                              Үргэлжлэх хугацаа:
+                            </span>
+                            <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md ">
+                              {secondsToHms(data.duration)}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between ">
+                          <div className="flex items-center">
+                            <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
+                              Байршил:
+                            </span>
+                            <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md ">
+                              {data.location}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex items-center mt-4">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              showModalReady(data);
+                            }}
+                            className="py-2 text-sm bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-400 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-400 text-center  font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+                          >
+                            Сургалт үзэх
+                          </button>
                         </div>
                       </div>
-                      <div className="flex items-center justify-between ">
-                        <div className="flex items-center">
-                          <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
-                            Үргэлжлэх хугацаа:
+                    ) : (
+                      <div className="w-full mt-4 p-4 border border-2 block bg-white shadow-md hover:shadow-2xl rounded-lg overflow-hidden">
+                        <div className="flex items-center justify-between mb-4 space-x-12">
+                          <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-500 bg-green-200 rounded-md">
+                            ИДЭВХТЭЙ
                           </span>
-                          <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md ">
-                            {secondsToHms(data.duration)}
-                          </span>
+
+                          {data.startedWatch === null ? (
+                            <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-400 border-2 border-rose-500 rounded-md bg-white rounded-md">
+                              ҮЗЭЭГҮЙ
+                            </span>
+                          ) : (
+                            <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-400 border-2 border-green-500 rounded-md bg-white rounded-md">
+                              ҮЗСЭН
+                            </span>
+                          )}
                         </div>
-                      </div>
-                      <div className="flex items-center justify-between ">
-                        <div className="flex items-center">
-                          <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
-                            Байршил:
-                          </span>
-                          <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md ">
-                            {data.location}
-                          </span>
+                        <div className="flex items-center justify-between mb-2">
+                          <div className="flex items-center">
+                            <div className="flex flex-col">
+                              <span className="font-bold text-black text-md dark:text-white">
+                                {data.name}
+                              </span>
+                              <span className="text-sm text-gray-500 dark:text-white">
+                                {data.description}
+                              </span>
+                            </div>
+                          </div>
                         </div>
+                        <div className="flex items-center justify-between ">
+                          <div className="flex items-center">
+                            <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
+                              Багш:
+                            </span>
+                            <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md">
+                              {data.teacher}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between ">
+                          <div className="flex items-center">
+                            <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
+                              Үргэлжлэх хугацаа:
+                            </span>
+                            <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md ">
+                              {secondsToHms(data.duration)}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between ">
+                          <div className="flex items-center">
+                            <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
+                              Байршил:
+                            </span>
+                            <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md ">
+                              {data.location}
+                            </span>
+                          </div>
+                        </div>
+                        {/* <div className="flex items-center mt-4">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                showModalReady(data);
+                              }}
+                              className="py-2 text-sm bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-400 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-400 text-center  font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+                            >
+                              Сургалт үзэх
+                            </button>
+                          </div> */}
                       </div>
-                      <div className="flex items-center mt-4">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            showModalReady(data);
-                          }}
-                          className="py-2 text-sm bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-400 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-400 text-center  font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
-                        >
-                          Сургалт үзэх
-                        </button>
-                      </div>
-                    </div>
+                    )}
                   </div>
                 ))}
               </div>

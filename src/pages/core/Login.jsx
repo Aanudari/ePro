@@ -6,8 +6,9 @@ import { useStateContext } from "../../contexts/ContextProvider";
 function Login() {
   const { setUser, setisAuthenticated } = useStateContext();
   const navigate = useNavigate();
+  const adminRoles = ["199", "196"];
   const redirect = (data) => {
-    if (data.role_id == "199") {
+    if (adminRoles.includes(data.role_id)) {
       navigate("/home");
     } else {
       navigate("/user-main");

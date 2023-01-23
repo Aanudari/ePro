@@ -2,10 +2,12 @@ import { useStateContext } from "../../contexts/ContextProvider";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { logout } from "../../service/examService";
+import QuestionCellAdminMain from "./Cell/QuestionCellAdminMain";
 
 function ShowExamResultDetail({ setShow, id }) {
   const { activeMenu, TOKEN } = useStateContext();
   const [data, setData] = useState();
+  const [main, setMain] = useState();
   useEffect(() => {
     axios({
       method: "get",
@@ -15,7 +17,10 @@ function ShowExamResultDetail({ setShow, id }) {
       url: `${process.env.REACT_APP_URL}/v1/ExamReport/questionResult/${id}`,
     })
       .then((res) => {
+        setMain(res.data);
         if (res.data.isSuccess === true) {
+          // console.log(res.data);
+          // console.log(res.data);
           setData(res.data.examQuestions);
         }
         if (
@@ -27,7 +32,7 @@ function ShowExamResultDetail({ setShow, id }) {
       })
       .catch((err) => console.log(err));
   }, []);
-  console.log(data);
+  // console.log(data);
   return (
     <div
       className={`${
@@ -41,16 +46,21 @@ bg-black bg-opacity-50 flex items-center justify-center`}
           <div className="flex items-center">
             <div className=" flex justify-start px-4 py-2">
               <span className="text-white font-[500] text-sm">
-                {/* {data && data.lastName[0]}. {data && data.firstName} /{" "}
-                {data && data.roleName} */}
+                Нэр: {main?.examName}
               </span>
             </div>
           </div>
           <div className="flex items-center">
             <div className=" flex justify-start px-4 py-2">
               <span className="text-white font-[500] text-sm">
-                {/* Оноо : {score}% */}
-                Оноо
+                Дундаж оноо: {main?.examAvgScore}
+              </span>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <div className=" flex justify-start px-4 py-2">
+              <span className="text-white font-[500] text-sm">
+                Шалгалт өгсөн : {main?.examTakenUsers}/{main?.examTotalUsers}
               </span>
             </div>
           </div>
@@ -63,10 +73,10 @@ bg-black bg-opacity-50 flex items-center justify-center`}
             ></i>
           </div>
         </div>
-        <div className="px-4 h-[calc(100%)] overflow-scroll">
-          {/* {result?.map((item, index) => (
-        <QuestionCellAdmin key={index} data={item} />
-      ))} */}
+        <div className="px-20 h-[calc(100%)] overflow-scroll pb-20 ">
+          {data?.map((el, index) => (
+            <QuestionCellAdminMain data={el} key={index} />
+          ))}
         </div>
       </div>
     </div>

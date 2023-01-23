@@ -19,6 +19,7 @@ export const ContextProvider = ({ children }) => {
   ];
   const roleId = user ? user.role_id : null;
   const TOKEN = user ? user.token : null;
+  // console.log(TOKEN);
   const deviceId = user ? user.device_id : null;
   const [inputValue, setInputValue] = useState("");
   const [sideBarTrack, setsideBarTrack] = useState(0);

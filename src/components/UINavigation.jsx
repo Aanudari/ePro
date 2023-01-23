@@ -5,10 +5,11 @@ import { logout } from "../service/examService";
 export default function UINavigation() {
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
   return (
     <div className="">
       <div className="h-[60px]"></div>
-      <header className="header fixed top-0">
+      <header className="header w-[375px] md:w-full fixed top-0">
         <div className="header-content responsive-wrapper">
           <div className="header-logo">
             <a href="#">
@@ -82,10 +83,61 @@ export default function UINavigation() {
               Гарах
             </div>
           )}
-          <a href="#" className="button">
+          <a
+            onClick={() => {
+              setShowMenu(!showMenu);
+            }}
+            href="#"
+            className="button"
+          >
             <i className="ph-list-bold"></i>
             <span>Menu</span>
           </a>
+          {showMenu && (
+            <div
+              className="absolute w-[150px] h-[200px] bg-white rounded shadow-md top-[60px] right-0 flex md:hidden flex-col items-start
+            p-4 gap-2 
+            "
+            >
+              <a
+                className="cursor-pointer active:border-b"
+                onClick={() => {
+                  navigate("/user-main");
+                }}
+              >
+                {" "}
+                Home{" "}
+              </a>
+              <a
+                className="cursor-pointer active:border-b"
+                onClick={() => {
+                  navigate("/user-training");
+                }}
+              >
+                {" "}
+                Сургалт{" "}
+              </a>
+              <a
+                className="cursor-pointer active:border-b"
+                onClick={() => {
+                  navigate("/user-error-thanks");
+                }}
+              >
+                {" "}
+                Бүртгэл{" "}
+              </a>
+              <a className="cursor-pointer active:border-b"> Мэдэгдэл </a>
+              <a
+                className="cursor-pointer active:border-b"
+                onClick={() => {
+                  logout();
+                }}
+              >
+                {" "}
+                Гарах{" "}
+              </a>
+            </div>
+          )}
         </div>
       </header>
     </div>

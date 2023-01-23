@@ -6,7 +6,7 @@ function ExamHeaderShow() {
   const { sore } = useStateContext();
   return (
     <div className="h-[60px] top-0 fixed bottom-0 bg-white shadow-sm w-full flex justify-center px-10">
-      <div className="w-2/3 px-3 flex justify-between">
+      <div className="w-full md:w-2/3 flex justify-between">
         <div className="flex flex-col justify-center h-[60px] items-start m-0">
           <h6 className="text-[16px] m-0 text-gray-500">Оноо: {sore}%</h6>
         </div>

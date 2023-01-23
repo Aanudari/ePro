@@ -364,7 +364,6 @@ function ExamModalMain({
     setConfirm(true);
   };
   const [count, setCount] = useState(0);
-  console.log(categoryData);
   return (
     <div
       className={`fixed ${

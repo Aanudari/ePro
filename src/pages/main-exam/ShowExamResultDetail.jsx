@@ -1,10 +1,9 @@
-import { useStateContext } from "../../../contexts/ContextProvider";
-import { logout } from "../../../service/examService";
-import { useEffect, useState } from "react";
+import { useStateContext } from "../../contexts/ContextProvider";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import QuestionCellAdmin from "../Cell/QuestionCellAdmin";
+import { logout } from "../../service/examService";
 
-function ShowExamResult({ setShow, result, id, score }) {
+function ShowExamResultDetail({ setShow, id }) {
   const { activeMenu, TOKEN } = useStateContext();
   const [data, setData] = useState();
   useEffect(() => {
@@ -13,11 +12,11 @@ function ShowExamResult({ setShow, result, id, score }) {
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `${process.env.REACT_APP_URL}/v1/User/${id}`,
+      url: `${process.env.REACT_APP_URL}/v1/ExamReport/questionResult/${id}`,
     })
       .then((res) => {
         if (res.data.isSuccess === true) {
-          setData(res.data.result);
+          setData(res.data.examQuestions);
         }
         if (
           res.data.resultMessage === "Unauthorized" ||
@@ -28,29 +27,30 @@ function ShowExamResult({ setShow, result, id, score }) {
       })
       .catch((err) => console.log(err));
   }, []);
-  // console.log(result);
+  console.log(data);
   return (
     <div
       className={`${
         activeMenu ? " left-[250px] w-[calc(100%-250px)]" : "left-0 w-full"
       } 
-    top-[56px] fixed  h-[calc(100%-56px)] 
-    bg-black bg-opacity-50 flex items-center justify-center`}
+top-[56px] fixed  h-[calc(100%-56px)] 
+bg-black bg-opacity-50 flex items-center justify-center`}
     >
       <div className="bg-gray-200 appear-smooth w-full h-[calc(100%)] relative ">
         <div className="w-full h-12 bg-teal-500 flex justify-between px-4 items-center shadow">
           <div className="flex items-center">
             <div className=" flex justify-start px-4 py-2">
               <span className="text-white font-[500] text-sm">
-                {data && data.lastName[0]}. {data && data.firstName} /{" "}
-                {data && data.roleName}
+                {/* {data && data.lastName[0]}. {data && data.firstName} /{" "}
+                {data && data.roleName} */}
               </span>
             </div>
           </div>
           <div className="flex items-center">
             <div className=" flex justify-start px-4 py-2">
               <span className="text-white font-[500] text-sm">
-                Оноо : {score}%
+                {/* Оноо : {score}% */}
+                Оноо
               </span>
             </div>
           </div>
@@ -64,13 +64,13 @@ function ShowExamResult({ setShow, result, id, score }) {
           </div>
         </div>
         <div className="px-4 h-[calc(100%)] overflow-scroll">
-          {result?.map((item, index) => (
-            <QuestionCellAdmin key={index} data={item} />
-          ))}
+          {/* {result?.map((item, index) => (
+        <QuestionCellAdmin key={index} data={item} />
+      ))} */}
         </div>
       </div>
     </div>
   );
 }
 
-export default ShowExamResult;
+export default ShowExamResultDetail;

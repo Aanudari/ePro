@@ -18,7 +18,7 @@ function ExamBoard({
     let arr = [];
     for (let i = 0; i < exams?.length; i++) {
       const el = exams[i];
-      if (el.examSummary.status == element) {
+      if (el?.examSummary?.status == element) {
         arr.push(el);
       }
     }
@@ -120,11 +120,11 @@ function ExamBoard({
       </div>
       <div className="!h-[calc(100vh-188px)] w-full overflow-scroll mt-2 border-b">
         {exams &&
-          temp[detector].map((exam, index) => (
+          temp[detector]?.map((exam, index) => (
             <div key={index} className="h-14 w-full flex border-b">
               <div
                 onClick={
-                  exam.examSummary.status !== "Ongoing"
+                  exam?.examSummary?.status !== "Ongoing"
                     ? () => {
                         setExamModal(true);
                         handleExamModal(exam.id, exam.examSummary.status);
@@ -136,9 +136,9 @@ function ExamBoard({
                       }
                 }
                 className={`w-full h-14 flex gap-1 border-b ${
-                  exam.examSummary.status == "Exam over"
+                  exam?.examSummary?.status == "Exam over"
                     ? "text-gray-400 hover:text-teal-600  hover:border-b-teal-500"
-                    : exam.examSummary.status == "Ongoing"
+                    : exam?.examSummary?.status == "Ongoing"
                     ? "hover:text-green-600  hover:border-b-green-500 bg-gray-50"
                     : "text-gray-400 hover:text-amber-600  hover:border-b-amber-600 bg-amber-100"
                 }
@@ -157,19 +157,19 @@ function ExamBoard({
                   <span className="m-0 font-[500]">{exam.startDate}</span>
                   <span
                     className={`m-0 font-[500] ${
-                      exam.examSummary.status == "Ongoing" && "text-red-400"
+                      exam?.examSummary?.status == "Ongoing" && "text-red-400"
                     }`}
                   >
-                    {exam.expireDate}
+                    {exam?.expireDate}
                   </span>
                 </div>
                 <div
                   className="w-1/4 h-full flex justify-center items-center text-[11px]
                      uppercase font-[500]"
                 >
-                  {exam.examSummary.status == "Exam over" ? (
+                  {exam?.examSummary?.status == "Exam over" ? (
                     "Дууссан"
-                  ) : exam.examSummary.status == "Ongoing" ? (
+                  ) : exam?.examSummary?.status == "Ongoing" ? (
                     <span className="font-[500] text-green-500">Идэвхитэй</span>
                   ) : (
                     "Хүлээгдэж буй"
@@ -179,10 +179,10 @@ function ExamBoard({
                   className="w-1/4 h-full flex justify-center items-center text-[11px]
                      uppercase font-[500]"
                 >
-                  {exam.duration} мин {exam.id}
+                  {exam?.duration} мин {exam?.id}
                 </div>
               </div>
-              {exam.examSummary.status == "Ongoing" ? (
+              {exam?.examSummary?.status == "Ongoing" ? (
                 <div
                   onClick={() => {
                     setShowReport(true);
@@ -193,14 +193,14 @@ function ExamBoard({
                 >
                   <div className="w-full flex justify-center items-center font-[500]">
                     <span className="font-[500]">
-                      {exam.examSummary.taken}/{exam.examSummary.total}
+                      {exam?.examSummary?.taken}/{exam?.examSummary?.total}
                     </span>
                   </div>
                   <div className="h-full min-w-[50px] border-l flex justify-center items-center">
                     <i className="bi bi-check2-circle text-[20px]"></i>
                   </div>
                 </div>
-              ) : exam.examSummary.status == "Exam over" ? (
+              ) : exam?.examSummary?.status == "Exam over" ? (
                 <div
                   onClick={() => {
                     setShowReport(true);

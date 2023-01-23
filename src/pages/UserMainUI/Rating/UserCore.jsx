@@ -100,7 +100,7 @@ function UserCore() {
               <a className="cursor-pointer">Password</a>
               <a className="cursor-pointer">API</a>
             </div>
-            <div className="flex gap-[5px]">
+            <div className="flex gap-[5px] flex-wrap">
               {rating?.map((element, index) => {
                 return <RatingCellDes data={element} key={index} />;
               })}

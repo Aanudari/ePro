@@ -9,10 +9,10 @@ function ExamHeader({ finisher, minute, second, creater, examName }) {
   const [show, setShow] = useState(false);
   const check = parseInt(minute);
   return (
-    <div className="h-[60px] top-0 fixed bottom-0 bg-white shadow-sm w-full flex items-center justify-between px-10 ">
+    <div className="h-[60px] top-0 fixed bottom-0 bg-white shadow-sm w-full flex items-center justify-around px-2 md:px-10 ">
       <div className="flex flex-col justify-center h-[60px] items-start m-0">
-        <h6 className="mb-0">{examName}</h6>
-        <h6 className="text-[13px] m-0 text-gray-500">
+        <h6 className="mb-0 text-[10px] md:text-[14px]">{examName}</h6>
+        <h6 className="text-[9px] md:text-[13px] m-0 text-gray-500">
           Шалгалт үүсгэсэн: {creater}
         </h6>
       </div>
@@ -47,7 +47,7 @@ function ExamHeader({ finisher, minute, second, creater, examName }) {
       justify-center"
         >
           <div
-            className="pt-6 px-6 pb-6 bg-white w-2/6 flex flex-col items-center
+            className="pt-6 px-6 pb-6 bg-white w-5/6 md:w-2/6 flex flex-col items-center
       justify-between text-black rounded shadow"
           >
             <i className="bi bi-info-circle text-teal-500 text-2xl"></i>
@@ -59,7 +59,7 @@ function ExamHeader({ finisher, minute, second, creater, examName }) {
                 onClick={() => {
                   finisher();
                 }}
-                className="px-4 py-1 border bg-teal-500 hover:bg-teal-600 active:bg-teal-500 text-white font-[500] mr-2"
+                className="px-4 py-2 border-[2px] !border-teal-600  bg-teal-600 hover:bg-teal-700 active:bg-teal-600 text-white font-[500] mr-2"
               >
                 Тийм
               </button>
@@ -67,7 +67,7 @@ function ExamHeader({ finisher, minute, second, creater, examName }) {
                 onClick={() => {
                   setShow(false);
                 }}
-                className="px-4 py-1 border bg-red-500 hover:bg-red-600 active:bg-red-500 text-white font-[500]"
+                className="px-4 py-2 text-teal-600 border-[2px] !border-teal-600 font-[500]"
               >
                 Үгүй
               </button>

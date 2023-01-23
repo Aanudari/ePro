@@ -3,11 +3,13 @@ import { useEffect, useState } from "react";
 import { logout } from "../../../service/examService";
 import axios from "axios";
 import ShowExamResult from "./ShowExamResult";
+import ShowExamResultDetail from "../ShowExamResultDetail";
 function Document({ setShowReport, id }) {
   const [data, setData] = useState();
   const [users, setUsers] = useState();
   const [names, setNames] = useState();
   const { TOKEN } = useStateContext();
+
   useEffect(() => {
     axios({
       method: "get",
@@ -108,6 +110,7 @@ function Document({ setShowReport, id }) {
       .catch((err) => console.log(err));
   };
   const [show, setShow] = useState(false);
+  const [showDetail, setShowDetail] = useState(false);
   return (
     <div
       className={`fixed ${
@@ -124,12 +127,22 @@ function Document({ setShowReport, id }) {
             score={finalScore}
           />
         )}
+        {showDetail && <ShowExamResultDetail setShow={setShowDetail} id={id} />}
         <div className="h-full">
           <h6 className="text-teal-600 text-[14px] flex justify-between mx-3 py-3">
             <span className="font-[500]">
               <i className="bi bi-caret-down-square-fill mr-2"></i>
               Шалгалтын статус
             </span>
+            {/* <span
+              onClick={() => {
+                setShowDetail(true);
+              }}
+              className="font-[500] cursor-pointer hover:mt-[-2px] transition-all hover:text-teal-700"
+            >
+              <i className="bi bi-info-square  mr-2"></i>
+              Ерөнхий
+            </span> */}
             <i
               onClick={() => {
                 setShowReport(false);
@@ -151,7 +164,7 @@ function Document({ setShowReport, id }) {
                     }
                     className={`py-2 px-3 ${
                       user.status == "C"
-                        ? "bg-green-500 cursor-pointer"
+                        ? "bg-emerald-500 cursor-pointer hover:bg-emerald-600 transition-all shadow-emerald-500"
                         : user.status == "P"
                         ? "bg-teal-700"
                         : "bg-teal-500"
@@ -159,14 +172,15 @@ function Document({ setShowReport, id }) {
                     flex justify-between items-center`}
                     key={index}
                   >
-                    <div className="flex flex-col">
-                      <span className="text-[13px] font-[400]">
+                    <div className="flex flex-col h-full justify-between  ">
+                      <span className="text-[13px] font-[400] m-0">
                         {user.deviceName}
                       </span>
-                      <span className="text-white rounded-full text-[12px] py-1 mr-1 font-[400]">
+                      <span className="text-white rounded-full text-[12px] py-1 mr-1 font-[400] m-0">
                         {user.unitName}
                       </span>
                     </div>
+
                     {user.status == "Not started" ? (
                       <span className="flex items-center justify-center bg-red-400 text-white px-3 rounded-full text-[13px] h-7  font-[400]">
                         Шалгалт өгөөгүй

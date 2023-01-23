@@ -149,8 +149,8 @@ function Exam() {
       });
   };
   return (
-    <div className="px-16 w-full flex justify-center relative pt-20">
-      <div className="w-4/6">
+    <div className="px-2 md:px-16 w-full flex justify-center relative pt-20">
+      <div className="w-full md:w-4/6">
         {data?.questionList.map((item, i) => (
           <QuestionCell collector={collector} key={i} data={item} />
         ))}

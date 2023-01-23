@@ -9,7 +9,7 @@ function Document({ setShowReport, id }) {
   const [users, setUsers] = useState();
   const [names, setNames] = useState();
   const { TOKEN } = useStateContext();
-
+  const [trigger, setTrigger] = useState(false);
   useEffect(() => {
     axios({
       method: "get",
@@ -25,7 +25,7 @@ function Document({ setShowReport, id }) {
         }
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [trigger]);
   useEffect(() => {
     axios({
       method: "get",
@@ -41,7 +41,7 @@ function Document({ setShowReport, id }) {
         }
       })
       .catch((err) => console.log(err));
-  }, [id]);
+  }, [id, trigger]);
   useEffect(() => {
     axios({
       method: "get",
@@ -111,6 +111,29 @@ function Document({ setShowReport, id }) {
   };
   const [show, setShow] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
+  const [confirm, setConfirm] = useState(false);
+  const [userID, setUserID] = useState();
+  const handleDeleteExamResult = () => {
+    axios({
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: TOKEN,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/ExamReport/examRemove/${id}/${userID}`,
+    })
+      .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        } else {
+          setTrigger(!trigger);
+          setConfirm(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <div
       className={`fixed ${
@@ -134,7 +157,7 @@ function Document({ setShowReport, id }) {
               <i className="bi bi-caret-down-square-fill mr-2"></i>
               Шалгалтын статус
             </span>
-            {/* <span
+            <span
               onClick={() => {
                 setShowDetail(true);
               }}
@@ -142,7 +165,7 @@ function Document({ setShowReport, id }) {
             >
               <i className="bi bi-info-square  mr-2"></i>
               Ерөнхий
-            </span> */}
+            </span>
             <i
               onClick={() => {
                 setShowReport(false);
@@ -154,45 +177,97 @@ function Document({ setShowReport, id }) {
             <div className=" w-full px-3">
               {users &&
                 users.map((user, index) => (
-                  <div
-                    onClick={
-                      user.status == "C"
-                        ? () => {
-                            handleResultCertain(user);
-                          }
-                        : null
-                    }
-                    className={`py-2 px-3 ${
-                      user.status == "C"
-                        ? "bg-emerald-500 cursor-pointer hover:bg-emerald-600 transition-all shadow-emerald-500"
-                        : user.status == "P"
-                        ? "bg-teal-700"
-                        : "bg-teal-500"
-                    } border-b mb-1 shadow-sm hover:border-b hover:shadow-lg hover:border-teal-400
+                  <div key={index} className="flex">
+                    <div
+                      onClick={
+                        user.status == "C"
+                          ? () => {
+                              handleResultCertain(user);
+                            }
+                          : null
+                      }
+                      className={`py-2 px-3 w-full ${
+                        user.status == "C"
+                          ? "bg-emerald-500 cursor-pointer hover:bg-emerald-600 transition-all shadow-emerald-500"
+                          : user.status == "P"
+                          ? "bg-teal-700"
+                          : "bg-teal-500"
+                      } border-b mb-1 shadow-sm hover:border-b hover:shadow-lg hover:border-teal-400
                     flex justify-between items-center`}
-                    key={index}
-                  >
-                    <div className="flex flex-col h-full justify-between  ">
-                      <span className="text-[13px] font-[400] m-0">
-                        {user.deviceName}
-                      </span>
-                      <span className="text-white rounded-full text-[12px] py-1 mr-1 font-[400] m-0">
-                        {user.unitName}
-                      </span>
-                    </div>
+                    >
+                      <div className="flex flex-col h-full justify-between  ">
+                        <span className="text-[13px] font-[400] m-0">
+                          {user.deviceName}
+                        </span>
+                        <span className="text-white rounded-full text-[12px] py-1 mr-1 font-[400] m-0">
+                          {user.unitName}
+                        </span>
+                      </div>
 
-                    {user.status == "Not started" ? (
-                      <span className="flex items-center justify-center bg-red-400 text-white px-3 rounded-full text-[13px] h-7  font-[400]">
-                        Шалгалт өгөөгүй
-                      </span>
-                    ) : user.status == "C" ? (
-                      <span className="flex items-center justify-center bg-white text-black px-3 rounded-full text-[13px] h-7  font-[400]">
-                        {user.score}%
-                      </span>
-                    ) : (
-                      <span className="flex items-center justify-center bg-amber-600 text-white px-3 rounded-full text-[13px] h-7  font-[400]">
-                        Шалгалт эхлүүлсэн ...
-                      </span>
+                      {user.status == "Not started" ? (
+                        <span className="flex items-center justify-center bg-red-400 text-white px-3 rounded-full text-[13px] h-7  font-[400]">
+                          Шалгалт өгөөгүй
+                        </span>
+                      ) : user.status == "C" ? (
+                        <div className="flex">
+                          <span className="flex items-center justify-center bg-white text-black px-3 rounded-full text-[13px] h-7  font-[400]">
+                            {user.score}%
+                          </span>
+                        </div>
+                      ) : (
+                        <span className="flex items-center justify-center bg-amber-600 text-white px-3 rounded-full text-[13px] h-7  font-[400]">
+                          Шалгалт эхлүүлсэн ...
+                        </span>
+                      )}
+                    </div>
+                    {user.status == "C" && (
+                      <div
+                        onClick={() => {
+                          setUserID(user.deviceId);
+                          setConfirm(true);
+                        }}
+                        className="bg-rose-500 transition-all hover:bg-rose-600 cursor-pointer border-l mb-1 w-[50px] flex items-center justify-center border-b"
+                      >
+                        <i className="bi bi-eraser-fill text-xl text-white mr-2"></i>
+                      </div>
+                    )}
+                    {confirm && (
+                      <div
+                        className="bg-gray-200 rounded-t absolute h-full w-full top-0 left-0 flex items-center
+                        justify-center !shadow-none "
+                      >
+                        <div
+                          className="w-[500px] h-[200px] bg-white rounded flex flex-col
+                        justify-between p-4 shadow"
+                        >
+                          <div className="w-full flex justify-center">
+                            <i className="bi bi-exclamation-circle text-3xl text-rose-500"></i>
+                          </div>
+                          <span className="font-[400] text-center">
+                            Та тухайн хэрэглэгчийн шалгалтын мэдээллийг
+                            устгахдаа итгэлтэй байна уу ?
+                          </span>
+                          <div className="flex justify-end">
+                            <button
+                              onClick={() => {
+                                handleDeleteExamResult();
+                              }}
+                              className="px-3 py-2 border-[2px] rounded mt-2 mb-1 font-[500] text-[14px] text-rose-600 hover:bg-rose-500
+          hover:text-white hover:!border-rose-500 transition-all border-rose-500"
+                            >
+                              Устгах
+                            </button>
+                            <button
+                              onClick={() => {
+                                setConfirm(false);
+                              }}
+                              className="px-3 py-2 bg-gray-400 hover:bg-gray-500 text-white rounded mt-2 mb-1 font-[500] text-[13px] text-gray-600 transition-all ml-2"
+                            >
+                              Цуцлах
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     )}
                   </div>
                 ))}

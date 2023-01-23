@@ -63,7 +63,7 @@ function ShowExamResult({ setShow, result, id, score }) {
             ></i>
           </div>
         </div>
-        <div className="px-4 h-[calc(100%)] overflow-scroll">
+        <div className="px-4 h-[calc(100%)] overflow-scroll pb-20">
           {result?.map((item, index) => (
             <QuestionCellAdmin key={index} data={item} />
           ))}

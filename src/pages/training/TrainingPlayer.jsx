@@ -8,7 +8,7 @@ import { notification } from "../../service/toast";
 import axios from "axios";
 import getWindowDimensions from "../../components/SizeDetector";
 import { Modal } from "react-bootstrap";
-import { duration } from "moment";
+
 const TrainingPlayer = () => {
   const { width } = getWindowDimensions();
   const location = useLocation();
@@ -21,7 +21,31 @@ const TrainingPlayer = () => {
   const hideModalTRate = () => setShowTRate(null);
   const [showGiveRate, setShowGiveRate] = useState(null);
   const hideModalGiveRate = () => setShowGiveRate(null);
-
+  const [tRate, setTRate] = useState([]);
+  useEffect(() => {
+    axios({
+      method: "get",
+      headers: {
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating`,
+    })
+      .then((res) => {
+        if (res.data.isSuccess === false) {
+          // alert(res.data.resultMessage);
+        }
+        if (res.data.isSuccess === true) {
+          setTRate(res.data.trRatingForm);
+        }
+        if (
+          res.data.resultMessage == "Unauthorized" ||
+          res.data.resultMessage == "Input string was not in a correct format."
+        ) {
+          logout();
+        }
+      })
+      .catch((err) => console.log(err));
+  }, []);
   const togglePlay = () => {
     if (isPlaying) {
       videoRef.current.pause();
@@ -30,9 +54,6 @@ const TrainingPlayer = () => {
     }
     setIsPlaying(!isPlaying);
   };
-  const trID = {
-    trainingId: `${trn.id}`,
-  };
 
   const onTimeUpdate = () => {
     let ref = videoRef.current;
@@ -40,7 +61,8 @@ const TrainingPlayer = () => {
       let currentTime = ref.currentTime;
       let duration = ref.duration;
       let progress = (currentTime / duration) * 100;
-      if (duration === 100) {
+      console.log(progress);
+      if (progress === 100) {
         axios({
           method: "post",
           headers: {
@@ -50,13 +72,13 @@ const TrainingPlayer = () => {
           },
           url: `${process.env.REACT_APP_URL}/v1/Training/watch/end`,
           data: {
-            trainingId: `${trID}`,
+            trainingId: `${trn.id}`,
           },
         })
           .then((res) => {
             if (res.data.isSuccess === true) {
               notification.success(`Сургалт дууссан цаг бүртгэгдлээ.`);
-              const timer = setTimeout(() => setShowTRate(), 1000);
+              const timer = setTimeout(() => setShowTRate(true), 500);
               return () => clearTimeout(timer);
             }
             if (res.data.isSuccess === false) {
@@ -102,7 +124,12 @@ const TrainingPlayer = () => {
       })
       .catch((err) => console.log(err));
   };
+  const [value, setValue] = useState("");
 
+  function handleChange(event) {
+    setValue(event.target.value);
+    console.log(event.target.value);
+  }
   return (
     <UserLayout>
       <div>
@@ -146,37 +173,77 @@ const TrainingPlayer = () => {
         <Modal
           show={showGiveRate}
           onHide={hideModalGiveRate}
-          size="ml"
+          size="lg"
           backdrop="static"
           keyboard={false}
           aria-labelledby="contained-modal-title-vcenter"
           dialogClassName="modal-100w"
           centered
         >
-          <Modal.Header closeButton>
+          <Modal.Header>
             <Modal.Title>Сургалтанд үнэлгээ өгөх</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {/* <h6 key={index} className="mt-3 font-[400] pl-3 flex items-center">
-              {answer.isTrue == "1" ? (
-                <i
-                  onClick={() => {
-                    changeisTrue(question.id, answer.id);
-                  }}
-                  className="bi bi-check-circle hover:scale-105 transition-all text-xl px-1 text-teal-500 cursor-pointer"
-                ></i>
-              ) : (
-                <i
-                  onClick={() => {
-                    changeisTrue(question.id, answer.id);
-                  }}
-                  className={`bi bi-circle hover:scale-105 transition-all hover:text-teal-500 text-xl px-1 outline-none text-gray-400 cursor-pointer`}
-                ></i>
-              )}
-              <span className="ml-2 text-[14px] font-[400]">
-                {answer.answer}
-              </span>
-            </h6> */}
+            <div className="flex items-center justify-center">
+              <div className="w-full bg-white  mx-auto ">
+                <img
+                  src="https://cdn.dribbble.com/users/4958643/screenshots/15528764/media/8c6506430319bd0ba093f8b20a4a395d.png"
+                  className="h-56 w-full rounded-md object-cover"
+                />
+                <div className="relative block p-2">
+                  <h3 className="mt-2 text-lg font-bold text-gray-900">
+                    Science of Chemistry
+                  </h3>
+
+                  <p className="mt-2 hidden text-md sm:block">
+                    You can manage phone, email and chat conversations all from
+                    a single mailbox.
+                  </p>
+
+                  <div className="md:mt-0 md:col-span-2 border border-t-4 bg:gray-600  shadow-xl">
+                    <div className="shadow overflow-hidden sm:rounded-md">
+                      <div className="px-4 py-3 bg-white space-y-3 sm:p-3">
+                        <p className="text-base font-medium text-gray-900">
+                          ASUULT
+                        </p>
+                        <div className="space-y-2" onChange={handleChange}>
+                          <div className="flex items-start">
+                            <div className="flex items-center h-5">
+                              <input
+                                type="radio"
+                                value="0-17"
+                                name="answer"
+                                className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                              />
+                            </div>
+                            <div className="ml-3 text-sm">
+                              <label className="font-medium text-gray-700">
+                                0-17
+                              </label>
+                              <p className="text-gray-500">0-17</p>
+                            </div>
+                          </div>
+
+                          <h5>
+                            {value === undefined
+                              ? "Please select your answer"
+                              : `Your answer: ${value}`}
+                          </h5>
+                        </div>
+                      </div>
+                      <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                        <button
+                          type="submit"
+                          className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                          Илгээх
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </Modal.Body>
         </Modal>
       </div>

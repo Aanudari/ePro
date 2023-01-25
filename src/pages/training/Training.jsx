@@ -93,9 +93,8 @@ function Training() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
-        if (res.data.isSuccess === true) {
+          // alert(res.data.resultMessage);
+        } else if (res.data.isSuccess === true) {
           notification.success(`${res.data.resultMessage}`);
           const timer = setTimeout(() => navigate(0), 500);
           return () => clearTimeout(timer);

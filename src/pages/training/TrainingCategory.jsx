@@ -19,7 +19,7 @@ function TrainingCategory() {
   const navigate = useNavigate();
   const [checkEmpty1, setcheckEmpty1] = useState(false);
   const [checkEmpty2, setcheckEmpty2] = useState(false);
-  const [category, setCategory] = useState();
+  const [category, setCategory] = useState([]);
   const [showCreate, setShowCreate] = useState(null);
   const showModalCreate = () => setShowCreate(true);
   const hideModalCreate = () => setShowCreate(null);
@@ -214,7 +214,16 @@ function TrainingCategory() {
       })
       .catch((err) => console.log(err));
   };
-
+  const [filteredList, setFilteredList] = useState(category);
+  const [searchQuery, setSearchQuery] = useState("");
+  const handleSearch = (event) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+    const searchList = category?.filter((item) => {
+      return item.name.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+    });
+    setFilteredList(searchList);
+  };
   return (
     <div className="w-full min-h-[calc(100%-56px)]">
       <div>
@@ -352,12 +361,12 @@ function TrainingCategory() {
           centered
         >
           <Modal.Header closeButton>
-            <Modal.Title>Ангилал устгах</Modal.Title>
+            <span className="text-xl text-black">Ангилал устгах</span>
           </Modal.Header>
           <Modal.Body>
             <div className="p-6 text-center">
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                Устгах уу?
+                Та сургалтын ангиллыг устгахдаа итгэлтэй байна уу?
               </h3>
               <button
                 type="button"
@@ -438,26 +447,44 @@ function TrainingCategory() {
       <div className="sm:px-6 w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
-            <p className="focus:outline-none text-base sm:text-sm md:text-md lg:text-md font-bold leading-normal text-gray-800">
-              Сургалтын ангилал
+            <p className="focus:outline-none text-base sm:text-sm md:text-xl lg:text-xl font-bold leading-normal text-gray-800">
+              Сургалтын ангилал{" "}
+              {filteredList?.length > 0 ? `(${filteredList?.length})` : ""}
             </p>
           </div>
         </div>
 
         <div className="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10">
           <div className="sm:flex items-center justify-between">
-            <div className="flex items-center"></div>
-            <button
-              className="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 sm:mt-0 inline-flex items-start justify-start px-6 py-3 bg-indigo-700 hover:bg-indigo-600 focus:outline-none rounded 
-               text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-              type="button"
-              onClick={showModalCreate}
-            >
-              <i className="bi bi-plus text-bold" />
-              Ангилал нэмэх
-            </button>
-          </div>
+            <div className="flex items-center sm:justify-between sm:gap-4">
+              <div className="relative hidden sm:block">
+                <input
+                  value={searchQuery}
+                  onChange={handleSearch}
+                  type="text"
+                  name="search"
+                  className="w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500 flex-1 py-2 px-4 bg-white  text-gray-700 placeholder-gray-400 shadow-sm text-base"
+                  placeholder="Ангиллын нэр"
+                />
 
+                <button
+                  type="button"
+                  className="absolute top-1/2 right-1 -translate-y-1/2 rounded-md bg-gray-50 p-2 text-gray-600 transition hover:text-gray-700"
+                >
+                  <i className="bi bi-search" />
+                </button>
+              </div>
+            </div>
+            <div className="flex flex-col justify-center w-3/4 max-w-sm space-y-3 md:flex-row md:w-full md:space-x-3 md:space-y-0 md:justify-end sm:justify-end">
+              <button
+                className="flex-shrink-0 px-2 py-2 text-base font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200"
+                type="button"
+                onClick={showModalCreate}
+              >
+                Ангилал нэмэх
+              </button>
+            </div>
+          </div>
           <div className="mt-3 overflow-x-auto">
             <table className="items-center w-full bg-transparent border-collapse ">
               <thead>
@@ -471,8 +498,8 @@ function TrainingCategory() {
                 </tr>
               </thead>
               <tbody className="bg-white text-sm">
-                {category
-                  ? category.map((data, i) => (
+                {filteredList
+                  ? filteredList.map((data, i) => (
                       <tr key={i}>
                         <td className="px-1 py-1 border">{i + 1}</td>
                         <td className="px-1 py-1 border">{data.startDate}</td>
@@ -499,7 +526,33 @@ function TrainingCategory() {
                         </td>
                       </tr>
                     ))
-                  : null}
+                  : category.map((data, i) => (
+                      <tr key={i}>
+                        <td className="px-1 py-1 border">{i + 1}</td>
+                        <td className="px-1 py-1 border">{data.startDate}</td>
+                        <td className="px-1 py-1 border">{data.endDate}</td>
+                        <td className="px-1 py-1 border">{data.name}</td>
+                        <td className="px-1 py-1 border">{data.createdAt}</td>
+                        <td className="px-1 py-1 border">
+                          <a
+                            className="text-yellow-600 hover:text-black mx-2 text-lg"
+                            data-id={data}
+                            onClick={() => {
+                              handleEdit(data);
+                            }}
+                          >
+                            <i className="bi bi-pencil-square"></i>
+                          </a>
+                          <a
+                            data-id={data.id}
+                            onClick={showModalDelete}
+                            className="text-rose-400 hover:text-black ml-2 text-lg"
+                          >
+                            <i className="bi bi-trash-fill"></i>
+                          </a>
+                        </td>
+                      </tr>
+                    ))}
               </tbody>
             </table>
 

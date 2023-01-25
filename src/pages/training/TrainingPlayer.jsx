@@ -15,36 +15,13 @@ const TrainingPlayer = () => {
   const { TOKEN, deviceId } = useStateContext();
   const navigate = useNavigate();
   const [isPlaying, setIsPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
   const videoRef = useRef(null);
-  const [trate, setTrate] = useState([]);
   const trn = location.state.data;
   const [showTRate, setShowTRate] = useState(null);
   const hideModalTRate = () => setShowTRate(null);
   const [showGiveRate, setShowGiveRate] = useState(null);
   const hideModalGiveRate = () => setShowGiveRate(null);
-  // useEffect(() => {
-  //   axios({
-  //     method: "get",
-  //     headers: {
-  //       Authorization: `${TOKEN}`,
-  //     },
-  //     url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating`,
-  //   })
-  //     .then((res) => {
-  //       if (res.data.isSuccess === false) {
-  //         // alert(res.data.resultMessage);
-  //       }
-  //       if (res.data.isSuccess == true) {
-  //         setTrate(res.data.trRatingForm);
-  //       }
-  //       if (res.data.resultMessage === "Unauthorized") {
-  //         logout();
-  //       }
-  //     })
-  //     .catch((err) => console.log(err));
-  // }, []);
-  // console.log(trate);
+
   const togglePlay = () => {
     if (isPlaying) {
       videoRef.current.pause();
@@ -56,61 +33,38 @@ const TrainingPlayer = () => {
   const trID = {
     trainingId: `${trn.id}`,
   };
-  const saveStart = () => {
-    axios({
-      method: "post",
-      headers: {
-        Authorization: `${TOKEN}`,
-        "Content-Type": "application/json",
-        accept: "text/plain",
-      },
-      url: `${process.env.REACT_APP_URL}/v1/Training/watch/start`,
-      data: JSON.stringify(trID),
-    })
-      .then((res) => {
-        console.log(res.data);
-        if (res.data.isSuccess === true) {
-          notification.success(`Сургалт эхэлсэн цаг бүртгэгдлээ.`);
-        }
-        if (res.data.isSuccess === false) {
-          notification.error(`${res.data.resultMessage}`);
-        }
-      })
-      .catch((err) => console.log(err));
-  };
-  const saveEnd = () => {
-    axios({
-      method: "post",
-      headers: {
-        Authorization: `${TOKEN}`,
-        "Content-Type": "application/json",
-        accept: "text/plain",
-      },
-      url: `${process.env.REACT_APP_URL}/v1/Training/watch/end`,
-      data: JSON.stringify(trID),
-    })
-      .then((res) => {
-        console.log(res.data);
-        if (res.data.isSuccess === true) {
-          // notification.success(`Сургалт дууссан цаг бүртгэгдлээ.`);
-          // setShowTRate(true);
-        }
-        if (res.data.isSuccess === false) {
-          notification.error(`${res.data.resultMessage}`);
-        }
-      })
-      .catch((err) => console.log(err));
-  };
-  // const [second, setSecond] = useState(0);
-  const handleProgress = () => {
-    const duration = videoRef.current.duration;
-    const currentTime = videoRef.current.currentTime;
-    const progress = (currentTime / duration) * 100;
-    setProgress(progress);
-    // setSecond(second + 1);
-    // console.log(second / 4);
-    if (progress === 100) {
-      saveEnd();
+
+  const onTimeUpdate = () => {
+    let ref = videoRef.current;
+    if (ref) {
+      let currentTime = ref.currentTime;
+      let duration = ref.duration;
+      let progress = (currentTime / duration) * 100;
+      if (duration === 100) {
+        axios({
+          method: "post",
+          headers: {
+            Authorization: `${TOKEN}`,
+            "Content-Type": "application/json",
+            accept: "text/plain",
+          },
+          url: `${process.env.REACT_APP_URL}/v1/Training/watch/end`,
+          data: {
+            trainingId: `${trID}`,
+          },
+        })
+          .then((res) => {
+            if (res.data.isSuccess === true) {
+              notification.success(`Сургалт дууссан цаг бүртгэгдлээ.`);
+              const timer = setTimeout(() => setShowTRate(), 1000);
+              return () => clearTimeout(timer);
+            }
+            if (res.data.isSuccess === false) {
+              notification.error(`${res.data.resultMessage}`);
+            }
+          })
+          .catch((err) => console.log(err));
+      }
     }
   };
 
@@ -237,36 +191,76 @@ const TrainingPlayer = () => {
                 <p className="hidden text-white/90 sm:mt-4 sm:block">
                   {trn.description}
                 </p>
-                {trn.fileUrl.slice(-4) === ".mp4" ? (
-                  <div>
-                    <div className="mt-4 md:mt-8">
-                      <a
-                        // onClick={togglePlay}
-                        onClick={() => {
-                          setShowGiveRate(true);
-                        }}
-                        className="inline-block rounded border border-white bg-white px-8 py-3 text-sm font-medium text-blue-500 transition hover:bg-transparent hover:text-blue-200 focus:outline-none focus:ring focus:ring-yellow-400"
-                      >
-                        {/* {isPlaying ? "Pause" : "Play"} */}
-                      </a>
-                    </div>
-                  </div>
-                ) : (
-                  <div>file baihgui</div>
-                )}
+                aaaaaaaaaa
               </div>
             </div>
 
             <div className="grid grid-cols-1 gap-4 md:grid-cols-1 lg:grid-cols-1">
-              <video
-                onTimeUpdate={handleProgress}
-                ref={videoRef}
-                id="myVideo"
-                controls
-                className="h-40 w-full object-cover sm:h-56 md:h-full"
-              >
-                <source src={`http://` + `${trn.fileUrl}`} type="video/mp4" />
-              </video>
+              {trn.fileUrl.slice(-4) === ".mp4" ? (
+                <video
+                  onTimeUpdate={onTimeUpdate}
+                  className="items-center mx-auto h-40 w-full object-cover sm:h-56 md:h-full rounded-xl"
+                  ref={videoRef}
+                  // width="20%"
+                  // height="100%"
+                  id="myVideo"
+                  controls
+                >
+                  <source src={`http://` + `${trn.fileUrl}`} type="video/mp4" />
+                </video>
+              ) : trn.fileUrl.slice(-4) === ".png" ||
+                trn.fileUrl.slice(-4) === "jpeg" ||
+                trn.fileUrl.slice(-4) === ".jpg" ||
+                trn.fileUrl.slice(-4) === ".png" ||
+                trn.fileUrl.slice(-4) === ".gif" ? (
+                <div className="flex justify-center">
+                  <img
+                    className="items-center mx-auto h-40 w-full object-cover sm:h-56 md:h-full rounded-xl"
+                    src={`http://` + `${trn.fileUrl}`}
+                  />
+                </div>
+              ) : trn.fileUrl.slice(-4) === ".mp3" ? (
+                <div className="flex justify-center items-center mx-auto h-40 w-full object-cover sm:h-56 md:h-full ">
+                  <audio
+                    controlsList="nodownload"
+                    controls
+                    className="object-cover w-full  items-center mx-auto py-12 px-12 sm:px-2 lg:py-2 lg:px-2 z-10 rounded-2xl bg-indigo-200 "
+                  >
+                    <source
+                      src={`http://` + `${trn.fileUrl}`}
+                      type="audio/mpeg"
+                    />
+                  </audio>
+                </div>
+              ) : trn.fileUrl.slice(-4) === "xlsx" ||
+                trn.fileUrl.slice(-4) === ".pdf" ||
+                trn.fileUrl.slice(-4) === "docx" ||
+                trn.fileUrl.slice(-4) === "pptx" ? (
+                <p className="flex justify-center w-full  items-center mx-auto  text-md ">
+                  <span className="text-md  block  text-gray-500 ">
+                    <i className="bi bi-play-circle-fill font-bold">
+                      {" "}
+                      Файлын нэр:
+                    </i>
+                  </span>
+                  <span className="inline-block font-bold text-gray-500 ml-2">
+                    {trn.fileUrl.slice(29)}
+                  </span>
+                  <a
+                    className="text-blue-600 hover:text-black mx-2 text-lg"
+                    data-id={trn.fileUrl}
+                    onClick={() => window.open(`http://${trn.fileUrl}`)}
+                  >
+                    <i className="bi bi-download"></i>
+                  </a>
+                </p>
+              ) : (
+                <div className="rounded border-l-4 border-red-500 bg-red-50 p-4">
+                  <strong className="block font-medium text-red-700">
+                    Файл хавсаргаагүй байна.
+                  </strong>
+                </div>
+              )}
             </div>
           </div>
         </div>

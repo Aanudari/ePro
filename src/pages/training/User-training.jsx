@@ -55,9 +55,35 @@ function UserTraining() {
   };
 
   const navigatePlayer = () => {
-    navigate("/player", {
-      state: { data: chosedTrain },
-    });
+    axios({
+      method: "post",
+      headers: {
+        Authorization: `${TOKEN}`,
+        "Content-Type": "application/json",
+        accept: "text/plain",
+      },
+      url: `${process.env.REACT_APP_URL}/v1/Training/watch/start`,
+      data: {
+        trainingId: `${chosedTrain.id}`,
+      },
+    })
+      .then((res) => {
+        if (res.data.isSuccess === true) {
+          notification.success(`Сургалт эхэлсэн цаг бүртгэгдлээ.`);
+          const timer = setTimeout(
+            () =>
+              navigate("/player", {
+                state: { data: chosedTrain },
+              }),
+            1000
+          );
+          return () => clearTimeout(timer);
+        }
+        if (res.data.isSuccess === false) {
+          notification.error(`${res.data.resultMessage}`);
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   let nokori = [];

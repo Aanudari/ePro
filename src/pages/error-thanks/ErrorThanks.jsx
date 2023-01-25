@@ -41,7 +41,7 @@ function ErrorThanks() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
+          // alert(res.data.resultMessage);
         }
         if (res.data.isSuccess == true) {
           setComplainInfo(res.data.complainInfos);
@@ -65,7 +65,7 @@ function ErrorThanks() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
+          // alert(res.data.resultMessage);
         }
         if (res.data.isSuccess == true) {
           setComplain(res.data.complains);
@@ -222,12 +222,12 @@ function ErrorThanks() {
           centered
         >
           <Modal.Header closeButton>
-            <Modal.Title>Бүртгэл устгах</Modal.Title>
+            <span className="text-xl text-black">Бүртгэл устгах</span>
           </Modal.Header>
           <Modal.Body>
             <div className="p-6 text-center">
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                Устгах уу?
+                Та бүртгэлийг устгахдаа итгэлтэй байна уу?
               </h3>
               <button
                 type="button"
@@ -251,17 +251,34 @@ function ErrorThanks() {
       <div className="sm:px-6 w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
-            <p className="focus:outline-none  sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">
-              Алдаа талархал (
-              {filteredList?.length === 0
-                ? complain?.length
-                : filteredList?.length}
-              )
+            <p className="focus:outline-none text-base sm:text-sm md:text-xl lg:text-xl font-bold leading-normal text-gray-800">
+              Алдаа талархал
             </p>
           </div>
         </div>
+
         <div className="sm:flex items-center justify-between p-2">
-          <div className="flex items-center">
+          <div className="flex items-center sm:justify-between sm:gap-4">
+            <div className="relative hidden sm:block">
+              <input
+                value={searchQuery}
+                onChange={handleSearch}
+                type="text"
+                name="search"
+                className="w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500 flex-1 py-2 px-4 bg-white  text-gray-700 placeholder-gray-400 shadow-sm text-base"
+                placeholder="Ажилтны нэр"
+              />
+
+              <button
+                type="button"
+                className="absolute top-1/2 right-1 -translate-y-1/2 rounded-md bg-gray-50 p-2 text-gray-600 transition hover:text-gray-700"
+              >
+                <i className="bi bi-search" />
+              </button>
+            </div>
+          </div>
+
+          <div className="flex flex-col justify-center w-3/4 max-w-sm space-y-3 md:flex-row md:w-full md:space-x-3 md:space-y-0">
             <select
               onChange={(e) => {
                 handleOptions(e.target.value);
@@ -274,29 +291,10 @@ function ErrorThanks() {
                 </option>
               ))}
             </select>
-          </div>
-          <div className="flex flex-col justify-center w-3/4 max-w-sm space-y-3 md:flex-row md:w-full md:space-x-3 md:space-y-0">
-            <div className=" relative ">
-              <input
-                value={searchQuery}
-                onChange={handleSearch}
-                type="text"
-                name="search"
-                className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-                placeholder="Нэрээр хайх"
-              />
-            </div>
-            <button
-              className="flex-shrink-0 px-4 py-2 text-base font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200"
-              type="submit"
-            >
-              <i className="bi bi-search" />
-            </button>
             <button
               className="flex-shrink-0 px-2 py-2 text-base font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200"
               onClick={showModalCreate}
             >
-              <i className="bi bi-plus text-bold mr-1" />
               Бүртгэл нэмэх
             </button>
           </div>

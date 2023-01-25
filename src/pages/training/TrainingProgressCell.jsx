@@ -10,12 +10,12 @@ function TrainingProgressCell({ data }) {
   function ProgressBar({ percentage, startAt = 0 }) {
     return (
       <>
-        <div className="w-full h-4 bg-gray-400 rounded-full mt-3">
+        <div className="w-full h-4 bg-gray-300 rounded-full mt-3">
           <div
             style={{
               width: `${percentage >= startAt ? percentage : startAt}%`,
             }}
-            className="w-3/4 h-full ml-1 font-bold text-center text-xs text-white bg-green-500 rounded-full transition-all duration-1000"
+            className="w-3/4 h-full ml-1 font-bold text-center text-xs text-black bg-green-500 rounded-full transition-all duration-1000"
           >
             {Math.floor(percentage)}%
           </div>
@@ -54,7 +54,7 @@ function TrainingProgressCell({ data }) {
   });
 
   return (
-    <div className="w-full p-3 bg-white ">
+    <div className="w-full p-3 bg-white rounded-2xl border border-2 border:bg-indigo-300">
       <div className="block m-auto">
         <div>
           <span className="inline-block text-sm  font-bold">

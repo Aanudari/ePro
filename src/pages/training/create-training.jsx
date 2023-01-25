@@ -174,6 +174,18 @@ function CreateTraining() {
                     <source src={`http://` + `${fileUrl}`} type="audio/mpeg" />
                   </audio>
                 </div>
+              ) : fileUrl.slice(-4) === "xlsx" ||
+                fileUrl.slice(-4) === ".pdf" ||
+                fileUrl.slice(-4) === "docx" ||
+                fileUrl.slice(-4) === "pptx" ? (
+                <p className="mt-4 text-sm leading-5">
+                  <span className="block font-medium text-gray-500 ">
+                    <i className="bi bi-play-circle-fill" /> Файлын нэр:
+                  </span>
+                  <span className="inline-block font-medium text-gray-500  ">
+                    {fileUrl?.slice(29)}
+                  </span>
+                </p>
               ) : (
                 <div className="text-black text-md border-2 border-blue-500  rounded-md ">
                   <div className="flex justify-center">{fileUrl.slice(29)}</div>

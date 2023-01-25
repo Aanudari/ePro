@@ -13,13 +13,11 @@ import getWindowDimensions from "../../components/SizeDetector";
 function Training() {
   const { width } = getWindowDimensions();
   const location = useLocation();
-  const { TOKEN, activeMenu } = useStateContext();
+  const { TOKEN } = useStateContext();
   const navigate = useNavigate();
   const videoRef = useRef(null);
   const [trains, setTrains] = useState([]);
   const [category, setCategory] = useState([]);
-  const [showView, setShowView] = useState(null);
-  const hideModalView = () => setShowView(null);
   const [showDelete, setShowDelete] = useState(null);
   const hideModalDelete = () => setShowDelete(null);
   const [id, setId] = useState();
@@ -118,9 +116,6 @@ function Training() {
       state: { data: data },
     });
   };
-  const catnameChange = (data) => {
-    console.log(data);
-  };
 
   const [searchQuery, setSearchQuery] = useState("");
   const handleSearch = (event) => {
@@ -131,7 +126,6 @@ function Training() {
     });
     setFilteredList(searchList);
   };
-
   const handleOptions = (value) => {
     let filtered = trains?.filter((item) => {
       return item.tCatName === value;
@@ -141,7 +135,21 @@ function Training() {
   const today = new Date();
   const format = "YYYYMMDDHHmmss";
   const nowdateTime = moment(today).format(format);
-  console.log(trains);
+  function secondsToHms(d) {
+    d = Number(d);
+
+    var h = Math.floor(d / 3600);
+    var m = Math.floor((d % 3600) / 60);
+    var s = Math.floor((d % 3600) % 60);
+
+    return (
+      ("0" + h).slice(-2) +
+      ":" +
+      ("0" + m).slice(-2) +
+      ":" +
+      ("0" + s).slice(-2)
+    );
+  }
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <div>
@@ -168,24 +176,26 @@ function Training() {
           centered
         >
           <Modal.Header closeButton>
-            <Modal.Title>Сургалт устгах</Modal.Title>
+            <Modal.Title>
+              <span className="text-xl text-black">Сургалт устгах</span>
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div className="p-6 text-center">
               <h3 className="mb-5 text-lg font-normal text-gray-500 ">
-                Устгах уу?
+                Та сургалтыг устгахдаа итгэлтэй байна уу?
               </h3>
               <button
                 type="button"
                 onClick={handleDelete}
-                className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300  font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
+                className="text-white text-sm bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300  font-medium rounded-lg  inline-flex items-center px-5 py-2.5 text-center mr-2"
               >
                 Тийм
               </button>
               <button
                 onClick={hideModalDelete}
                 type="button"
-                className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 "
+                className="text-gray-500 text-sm bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200  font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 "
               >
                 Үгүй
               </button>
@@ -194,20 +204,39 @@ function Training() {
         </Modal>
       </div>
       <Navigation />
+
       <div className="sm:px-6 w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
             <p className="focus:outline-none text-base sm:text-sm md:text-xl lg:text-xl font-bold leading-normal text-gray-800">
-              Сургалтууд (
-              {filteredList?.length === 0
-                ? trains?.length
-                : filteredList?.length}
-              )
+              Сургалтууд{" "}
+              {filteredList.length > 0 ? `(${filteredList.length})` : ""}
             </p>
           </div>
         </div>
+
         <div className="sm:flex items-center justify-between p-2">
-          <div className="flex items-center">
+          <div className="flex items-center sm:justify-between sm:gap-4">
+            <div className="relative hidden sm:block">
+              <input
+                value={searchQuery}
+                onChange={handleSearch}
+                type="text"
+                name="search"
+                className="w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500 flex-1 py-2 px-4 bg-white  text-gray-700 placeholder-gray-400 shadow-sm text-base"
+                placeholder="Сургалтын нэр"
+              />
+
+              <button
+                type="button"
+                className="absolute top-1/2 right-1 -translate-y-1/2 rounded-md bg-gray-50 p-2 text-gray-600 transition hover:text-gray-700"
+              >
+                <i className="bi bi-search" />
+              </button>
+            </div>
+          </div>
+
+          <div className="flex flex-col justify-center w-3/4 max-w-sm space-y-3 md:flex-row md:w-full md:space-x-3 md:space-y-0">
             <select
               onChange={(e) => {
                 handleOptions(e.target.value);
@@ -220,42 +249,25 @@ function Training() {
                 </option>
               ))}
             </select>
-          </div>
-          <div className="flex flex-col justify-center w-3/4 max-w-sm space-y-3 md:flex-row md:w-full md:space-x-3 md:space-y-0">
-            <div className=" relative ">
-              <input
-                value={searchQuery}
-                onChange={handleSearch}
-                type="text"
-                name="search"
-                className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-                placeholder="Нэрээр хайх"
-              />
-            </div>
+
             <button
-              className="flex-shrink-0 px-4 py-2 text-base font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200"
-              type="submit"
-            >
-              <i className="bi bi-search" />
-            </button>
-            <button
-              className="flex-shrink-0 px-2 py-2 text-base font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200"
+              className="flex-shrink-0 px-2 py-2 text-base font-semibold text-white text-ыт bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200"
               onClick={() => navigate("/create-training")}
             >
-              <i className="bi bi-plus text-bold mr-1" />
               Сургалт нэмэх
             </button>
           </div>
         </div>
+
         {filteredList.length > 0
           ? filteredList.map((data, index) => (
               <div key={index} className="p-2">
-                <div className="max-w-full mx-auto overflow-hidden  rounded-lg shadow-lg pricing-box lg:max-w-none lg:flex mt-2">
+                <div className="max-w-full mx-auto overflow-hidden border border-t-4 rounded-lg shadow-lg pricing-box lg:max-w-none lg:flex mt-2">
                   <div className="w-full px-6 py-8 bg-white  lg:flex-shrink-2 lg:p-12">
                     <h3 className="text-xl  leading-8 text-gray-800 sm:text-xl sm:leading-9 ">
                       {data.name}
                     </h3>
-                    {data.description === null ? (
+                    {data.description === "" ? (
                       ""
                     ) : (
                       <p className="mt-4 leading-6 text-gray-800 ">
@@ -279,7 +291,7 @@ function Training() {
                             Ангилал: {data.tCatName}
                           </p>
                         </li>
-                        {data.teacher === null ? (
+                        {data.teacher === "" ? (
                           ""
                         ) : (
                           <li className="flex items-start lg:col-span-1">
@@ -304,7 +316,7 @@ function Training() {
                             } */}
                           </p>
                         </li>
-                        {data.location === null ? (
+                        {data.location === "" ? (
                           ""
                         ) : (
                           <li className="flex items-start lg:col-span-1">
@@ -316,7 +328,7 @@ function Training() {
                             </p>
                           </li>
                         )}
-                        {data.startDate === null ? (
+                        {data.startDate === "" ? (
                           ""
                         ) : (
                           <li className="flex items-start lg:col-span-1">
@@ -330,7 +342,7 @@ function Training() {
                           </li>
                         )}
 
-                        {data.endDate === null ? (
+                        {data.endDate === "" ? (
                           ""
                         ) : (
                           <li className="flex items-start lg:col-span-1">
@@ -349,7 +361,7 @@ function Training() {
                           </li>
                         )}
 
-                        {data.duration === null ? (
+                        {data.duration === "" ? (
                           ""
                         ) : (
                           <li className="flex items-start lg:col-span-1">
@@ -357,7 +369,7 @@ function Training() {
                               <i className="bi bi-clock-history" />
                             </div>
                             <p className="ml-3 text-sm leading-5 text-gray-700 ">
-                              Үргэлжлэх хугацаа: {data.duration}
+                              Үргэлжлэх хугацаа: {secondsToHms(data.duration)}
                             </p>
                           </li>
                         )}
@@ -457,7 +469,7 @@ function Training() {
                     <h3 className="text-xl  leading-8 text-gray-800 sm:text-xl sm:leading-9 ">
                       {data.name}
                     </h3>
-                    {data.description === null ? (
+                    {data.description === "" ? (
                       ""
                     ) : (
                       <p className="mt-4 leading-6 text-gray-800 ">
@@ -483,7 +495,7 @@ function Training() {
                             </p>
                           </p>
                         </li>
-                        {data.teacher === null ? (
+                        {data.teacher === "" ? (
                           ""
                         ) : (
                           <li className="flex items-start lg:col-span-1">
@@ -507,7 +519,7 @@ function Training() {
                             }
                           </p>
                         </li>
-                        {data.location === null ? (
+                        {data.location === "" ? (
                           ""
                         ) : (
                           <li className="flex items-start lg:col-span-1">
@@ -519,7 +531,7 @@ function Training() {
                             </p>
                           </li>
                         )}
-                        {data.startDate === null ? (
+                        {data.startDate === "" ? (
                           ""
                         ) : (
                           <li className="flex items-start lg:col-span-1">
@@ -533,7 +545,7 @@ function Training() {
                           </li>
                         )}
 
-                        {data.endDate === null ? (
+                        {data.endDate === "" ? (
                           ""
                         ) : (
                           <li className="flex items-start lg:col-span-1">
@@ -552,7 +564,7 @@ function Training() {
                           </li>
                         )}
 
-                        {data.duration === null ? (
+                        {data.duration === "" ? (
                           ""
                         ) : (
                           <li className="flex items-start lg:col-span-1">
@@ -560,7 +572,7 @@ function Training() {
                               <i className="bi bi-clock-history" />
                             </div>
                             <p className="ml-3 text-sm leading-5 text-gray-700 ">
-                              Үргэлжлэх хугацаа: {data.duration}
+                              Үргэлжлэх хугацаа: {secondsToHms(data.duration)}
                             </p>
                           </li>
                         )}
@@ -573,7 +585,8 @@ function Training() {
                         </h4>
                         <div className="flex-1 border-t-2 border-gray-200"></div>
                       </div>
-                      <div className="flex items-center justify-between w-full gap-4 mt-8  mx-auto overflow-hidden">
+
+                      <div className="flex flex-1 items-center justify-between gap-8 sm:justify-end">
                         <button
                           type="button"
                           onClick={() => {
@@ -616,7 +629,7 @@ function Training() {
                     <div className="flex items-center justify-center mt-4 leading-none text-gray-900 ">
                       {data.fileUrl.slice(-4) === ".mp4" ? (
                         <video
-                          className="items-center w-1/2 mx-auto py-12 px-12 sm:px-2 lg:py-2 lg:px-2 z-10"
+                          className="items-center mx-auto py-12 px-12 sm:px-2 lg:py-2 lg:px-2 z-10 rounded-2xl"
                           // onLoadedMetadata={handleProgress}
                           ref={videoRef}
                           // width="20%"
@@ -636,13 +649,17 @@ function Training() {
                         data.fileUrl.slice(-4) === ".gif" ? (
                         <div className="flex justify-center">
                           <img
-                            className="h-38 rounded-xl"
+                            className="h-32 rounded-xl"
                             src={`http://` + `${data.fileUrl}`}
                           />
                         </div>
                       ) : data.fileUrl.slice(-4) === ".mp3" ? (
                         <div className="flex justify-center">
-                          <audio controlsList="nodownload" controls>
+                          <audio
+                            controlsList="nodownload"
+                            controls
+                            className="items-center mx-auto py-12 px-12 sm:px-2 lg:py-2 lg:px-2 z-10 rounded-2xl bg-indigo-200"
+                          >
                             <source
                               src={`http://` + `${data.fileUrl}`}
                               type="audio/mpeg"

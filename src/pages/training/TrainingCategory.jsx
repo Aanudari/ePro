@@ -498,7 +498,7 @@ function TrainingCategory() {
                 </tr>
               </thead>
               <tbody className="bg-white text-sm">
-                {filteredList
+                {filteredList > 0
                   ? filteredList.map((data, i) => (
                       <tr key={i}>
                         <td className="px-1 py-1 border">{i + 1}</td>

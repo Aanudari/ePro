@@ -52,6 +52,7 @@ function RatedUsers() {
     });
     setFilteredList(searchList);
   };
+  console.log(tr.trainingId);
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <Navigation />

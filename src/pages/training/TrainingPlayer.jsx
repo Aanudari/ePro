@@ -21,21 +21,20 @@ const TrainingPlayer = () => {
   const hideModalTRate = () => setShowTRate(null);
   const [showGiveRate, setShowGiveRate] = useState(null);
   const hideModalGiveRate = () => setShowGiveRate(null);
-  const [tRate, setTRate] = useState([]);
+  const [tRate, setTRate] = useState();
   useEffect(() => {
     axios({
       method: "get",
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating`,
+      url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating/${trn.id}`,
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
           // alert(res.data.resultMessage);
-        }
-        if (res.data.isSuccess === true) {
-          setTRate(res.data.trRatingForm);
+        } else if (res.data.isSuccess === true) {
+          setTRate(res.data.trainingRatingForm);
         }
         if (
           res.data.resultMessage == "Unauthorized" ||
@@ -46,14 +45,6 @@ const TrainingPlayer = () => {
       })
       .catch((err) => console.log(err));
   }, []);
-  const togglePlay = () => {
-    if (isPlaying) {
-      videoRef.current.pause();
-    } else {
-      videoRef.current.play();
-    }
-    setIsPlaying(!isPlaying);
-  };
 
   const onTimeUpdate = () => {
     let ref = videoRef.current;
@@ -61,7 +52,7 @@ const TrainingPlayer = () => {
       let currentTime = ref.currentTime;
       let duration = ref.duration;
       let progress = (currentTime / duration) * 100;
-      console.log(progress);
+      // console.log(progress);
       if (progress === 100) {
         axios({
           method: "post",
@@ -89,18 +80,43 @@ const TrainingPlayer = () => {
       }
     }
   };
-
+  const [chosen, setChosen] = useState();
+  let temp = [];
   const rate = {
-    trainingId: "string",
-    ratingId: "string",
-    trRateQuestion: [
-      {
-        questionId: "string",
-        answer: "string",
-        points: "string",
-      },
-    ],
+    trainingId: `${trn?.id}`,
+    ratingId: `${tRate?.id}`,
+    trRateQuestion: chosen,
   };
+  for (let index = 0; index < tRate?.trRatingQuestions.length; index++) {
+    const element = tRate?.trRatingQuestions[index];
+    let arr = {
+      questionId: element.questionId,
+      answer: "",
+      points: "",
+    };
+    temp.push(arr);
+  }
+
+  const [container, setContainer] = useState([]);
+  useEffect(() => {
+    let arr = [];
+    for (let index = 0; index < chosen?.length; index++) {
+      const element = chosen[index];
+      arr.push(element.answer);
+    }
+    setContainer(arr);
+  }, [chosen]);
+
+  function handleChange(answer, questionId, points) {
+    let tempo = chosen.map((item) => {
+      if (item.questionId === questionId) {
+        return { ...item, answer: answer, points: points };
+      } else {
+        return item;
+      }
+    });
+    setChosen(tempo);
+  }
   const handleRate = () => {
     axios({
       method: "post",
@@ -115,7 +131,7 @@ const TrainingPlayer = () => {
       .then((res) => {
         if (res.data.isSuccess === true) {
           notification.success(`${res.data.resultMessage}`);
-          const timer = setTimeout(() => navigate("/user-training"), 500);
+          const timer = setTimeout(() => navigate("/user-training"), 1000);
           return () => clearTimeout(timer);
         }
         if (res.data.isSuccess === false) {
@@ -124,12 +140,7 @@ const TrainingPlayer = () => {
       })
       .catch((err) => console.log(err));
   };
-  const [value, setValue] = useState("");
 
-  function handleChange(event) {
-    setValue(event.target.value);
-    console.log(event.target.value);
-  }
   return (
     <UserLayout>
       <div>
@@ -143,8 +154,8 @@ const TrainingPlayer = () => {
           dialogClassName="modal-100w"
           centered
         >
-          <Modal.Header closeButton>
-            <Modal.Title>Сургалтанд үнэлгээ өгөх</Modal.Title>
+          <Modal.Header>
+            <Modal.Title></Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div className="text-center p-2">
@@ -162,10 +173,12 @@ const TrainingPlayer = () => {
                 type="button"
                 onClick={() => {
                   setShowGiveRate(true);
+                  setChosen(temp);
+                  hideModalTRate(true);
                 }}
                 className="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-green-300  font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
               >
-                Үнэлгээ бөглөх
+                Үнэлгээ өгөх
               </button>
             </div>
           </Modal.Body>
@@ -191,49 +204,58 @@ const TrainingPlayer = () => {
                   className="h-56 w-full rounded-md object-cover"
                 />
                 <div className="relative block p-2">
-                  <h3 className="mt-2 text-lg font-bold text-gray-900">
-                    Science of Chemistry
-                  </h3>
-
-                  <p className="mt-2 hidden text-md sm:block">
-                    You can manage phone, email and chat conversations all from
-                    a single mailbox.
-                  </p>
+                  <div className="p-2">
+                    <h3 className="mt-2 text-lg font-bold text-gray-900">
+                      {tRate?.name}
+                    </h3>
+                    <p className="mt-2 hidden text-md sm:block">
+                      {tRate?.description}
+                    </p>
+                  </div>
 
                   <div className="md:mt-0 md:col-span-2 border border-t-4 bg:gray-600  shadow-xl">
                     <div className="shadow overflow-hidden sm:rounded-md">
-                      <div className="px-4 py-3 bg-white space-y-3 sm:p-3">
-                        <p className="text-base font-medium text-gray-900">
-                          ASUULT
-                        </p>
-                        <div className="space-y-2" onChange={handleChange}>
-                          <div className="flex items-start">
-                            <div className="flex items-center h-5">
-                              <input
-                                type="radio"
-                                value="0-17"
-                                name="answer"
-                                className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                              />
+                      {tRate?.trRatingQuestions?.map((a, i) => (
+                        <div
+                          key={i}
+                          className="px-4 py-3 bg-white space-y-3 sm:p-3"
+                        >
+                          <p className="text-base font-medium text-gray-900">
+                            {a.question}
+                          </p>
+                          {a.trRatingAnswer?.map((b, ind) => (
+                            <div key={ind} className="space-y-2">
+                              <div className="flex items-start">
+                                <div className="flex items-center h-5">
+                                  <input
+                                    type="radio"
+                                    value={`${b.answer}`}
+                                    name={`${b.answer}`}
+                                    checked={container.includes(b.answer)}
+                                    onChange={() =>
+                                      handleChange(
+                                        b.answer,
+                                        a.questionId,
+                                        b.points
+                                      )
+                                    }
+                                    className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                                  />
+                                </div>
+                                <div className="ml-3 text-sm">
+                                  <label className="font-medium text-gray-700">
+                                    {b.answer}
+                                  </label>
+                                </div>
+                              </div>
                             </div>
-                            <div className="ml-3 text-sm">
-                              <label className="font-medium text-gray-700">
-                                0-17
-                              </label>
-                              <p className="text-gray-500">0-17</p>
-                            </div>
-                          </div>
-
-                          <h5>
-                            {value === undefined
-                              ? "Please select your answer"
-                              : `Your answer: ${value}`}
-                          </h5>
+                          ))}
                         </div>
-                      </div>
+                      ))}
                       <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
                         <button
                           type="submit"
+                          onClick={handleRate}
                           className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         >
                           Илгээх
@@ -258,7 +280,6 @@ const TrainingPlayer = () => {
                 <p className="hidden text-white/90 sm:mt-4 sm:block">
                   {trn.description}
                 </p>
-                aaaaaaaaaa
               </div>
             </div>
 

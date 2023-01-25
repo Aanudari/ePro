@@ -173,9 +173,9 @@ function UserErrorThanks() {
               </div>
             )}
             <div className="flex items-center">
-              <div className="inline-block min-w-full overflow-hidden rounded-lg shadow">
+              <div className="inline-block min-w-full overflow-hidden border border-t-2 border:bg-blue-400">
                 <table className="min-w-full leading-normal">
-                  <thead>
+                  <thead className="bg-gray-200">
                     <tr>
                       <th className="px-4 py-3 font-bold">Огноо </th>
                       <th className="px-4 py-3 font-bold">

@@ -32,12 +32,10 @@ function TrainingFiles() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
-        if (res.data.isSuccess == true) {
+          // alert(res.data.resultMessage);
+        } else if (res.data.isSuccess == true) {
           setFiles(res.data.fileNames);
-        }
-        if (
+        } else if (
           res.data.resultMessage === "Unauthorized" ||
           res.data.resultMessage == "Input string was not in a correct format."
         ) {
@@ -128,7 +126,7 @@ function TrainingFiles() {
     });
     setFilteredList(searchList);
   };
-
+  console.log(files);
   return (
     <div className="w-full min-h-[calc(100%-56px)]">
       <div>
@@ -274,7 +272,7 @@ function TrainingFiles() {
               </tr>
             </thead>
             <tbody className="bg-white text-sm">
-              {filteredList
+              {filteredList > 0
                 ? filteredList.map((data, i) => (
                     <tr key={i}>
                       <td className="px-1 py-1 border">{i + 1}</td>

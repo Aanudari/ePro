@@ -8,11 +8,7 @@ function Login() {
   const navigate = useNavigate();
   const adminRoles = ["199", "196"];
   const redirect = (data) => {
-<<<<<<< HEAD
     if (adminRoles.includes(data.role_id)) {
-=======
-    if (data.role_id == "199") {
->>>>>>> complain
       navigate("/home");
     } else {
       navigate("/user-main");

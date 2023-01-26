@@ -14,12 +14,13 @@ function TrainingFiles() {
   const { width } = getWindowDimensions();
   const { TOKEN, activeMenu } = useStateContext();
   const navigate = useNavigate();
-  const [files, setFiles] = useState();
+  const [files, setFiles] = useState([]);
   const [showCreate, setShowCreate] = useState(null);
   const showModalCreate = () => setShowCreate(true);
   const hideModalCreate = () => setShowCreate(null);
   const [showDelete, setShowDelete] = useState(null);
   const hideModalDelete = () => setShowDelete(null);
+  const [filteredList, setFilteredList] = useState(files);
   const [id, setId] = useState();
   useEffect(() => {
     axios({
@@ -30,10 +31,15 @@ function TrainingFiles() {
       url: `${process.env.REACT_APP_URL}/v1/TrainingFile/filelist`,
     })
       .then((res) => {
+<<<<<<< HEAD
         if (res.data.isSuccess == true) {
+=======
+        if (res.data.isSuccess === false) {
+          // alert(res.data.resultMessage);
+        } else if (res.data.isSuccess == true) {
+>>>>>>> complain
           setFiles(res.data.fileNames);
-        }
-        if (
+        } else if (
           res.data.resultMessage === "Unauthorized" ||
           res.data.resultMessage == "Input string was not in a correct format."
         ) {
@@ -115,6 +121,16 @@ function TrainingFiles() {
       })
       .catch((err) => console.log(err));
   };
+  const [searchQuery, setSearchQuery] = useState("");
+  const handleSearch = (event) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+    const searchList = files.filter((item) => {
+      return item.fileName.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+    });
+    setFilteredList(searchList);
+  };
+  console.log(files);
   return (
     <div className="w-full min-h-[calc(100%-56px)]">
       <div>
@@ -183,12 +199,12 @@ function TrainingFiles() {
           centered
         >
           <Modal.Header closeButton>
-            <Modal.Title>Файл устгах</Modal.Title>
+            <span className="text-xl text-black">Файл устгах</span>
           </Modal.Header>
           <Modal.Body>
             <div className="p-6 text-center">
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                Устгах уу?
+                Та файлыг устгахдаа игэлтэй байна уу?
               </h3>
               <button
                 type="button"
@@ -212,68 +228,105 @@ function TrainingFiles() {
       <div className="sm:px-6 w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
-            <p className="focus:outline-none text-base sm:text-sm md:text-md lg:text-md font-bold leading-normal text-gray-800">
+            <p className="focus:outline-none text-base sm:text-sm md:text-xl lg:text-xl font-bold leading-normal text-gray-800">
               Сургалтын файлууд
+              {filteredList?.length > 0 ? `(${filteredList?.length})` : ""}
             </p>
           </div>
         </div>
 
-        <div className="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10">
-          <div className="sm:flex items-center justify-between">
-            <div className="flex items-center"></div>
+        <div className="sm:flex items-center justify-between p-2">
+          <div className="flex items-center sm:justify-between sm:gap-4">
+            <div className="relative hidden sm:block">
+              <input
+                value={searchQuery}
+                onChange={handleSearch}
+                type="text"
+                name="search"
+                className="w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500 flex-1 py-2 px-4 bg-white  text-gray-700 placeholder-gray-400 shadow-sm text-base"
+                placeholder="Файлын нэр"
+              />
+
+              <button
+                type="button"
+                className="absolute top-1/2 right-1 -translate-y-1/2 rounded-md bg-gray-50 p-2 text-gray-600 transition hover:text-gray-700"
+              >
+                <i className="bi bi-search" />
+              </button>
+            </div>
+          </div>
+          <div className="flex flex-col justify-center w-3/4 max-w-sm space-y-3 md:flex-row md:w-full md:space-x-3 md:space-y-0 md:justify-end sm:justify-end">
             <button
-              className="focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 sm:mt-0 inline-flex items-start justify-start px-6 py-3 bg-indigo-700 hover:bg-indigo-600 focus:outline-none rounded 
-               text-white font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              className="flex-shrink-0 px-2 py-2 text-base font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200"
               type="button"
               onClick={showModalCreate}
             >
-              <i className="bi bi-plus text-bold" />
               Файл нэмэх
             </button>
           </div>
-          <div className="mt-3 overflow-x-auto">
-            <table className="items-center w-full bg-transparent border-collapse ">
-              <thead>
-                <tr className="text-sm text-left  bg-gray-200 border-b">
-                  <th className="px-4 py-3 font-bold">no </th>
-                  <th className="px-4 py-3 font-bold">fileName </th>
-                  <th className="px-4 py-3 font-bold">createdAt </th>
-                  <th className="px-4 py-3 font-bold">Action </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white text-sm">
-                {files
-                  ? files.map((data, i) => (
-                      <tr key={i}>
-                        <td className="px-1 py-1 border">{i + 1}</td>
-                        <td className="px-1 py-1 border">{data.fileName}</td>
-                        <td className="px-1 py-1 border">{data.createdAt}</td>
-                        <td className="px-1 py-1 border">
-                          <a
-                            className="text-blue-600 hover:text-black mx-2 text-lg"
-                            data-id={data.filePath}
-                            onClick={() =>
-                              window.open(`http://${data.filePath}`)
-                            }
-                          >
-                            <i className="bi bi-download"></i>
-                          </a>
-                          <a
-                            data-id={data.id}
-                            onClick={showModalDelete}
-                            className="text-rose-400 hover:text-black ml-2 text-lg"
-                          >
-                            <i className="bi bi-trash-fill"></i>
-                          </a>
-                        </td>
-                      </tr>
-                    ))
-                  : null}
-              </tbody>
-            </table>
+        </div>
+        <div className="mt-3 overflow-x-auto">
+          <table className="items-center w-full bg-transparent border-collapse ">
+            <thead>
+              <tr className="text-sm text-left  bg-gray-200 border-b">
+                <th className="px-4 py-3 font-bold">no </th>
+                <th className="px-4 py-3 font-bold">fileName </th>
+                <th className="px-4 py-3 font-bold">createdAt </th>
+                <th className="px-4 py-3 font-bold">Action </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white text-sm">
+              {filteredList > 0
+                ? filteredList.map((data, i) => (
+                    <tr key={i}>
+                      <td className="px-1 py-1 border">{i + 1}</td>
+                      <td className="px-1 py-1 border">{data.fileName}</td>
+                      <td className="px-1 py-1 border">{data.createdAt}</td>
+                      <td className="px-1 py-1 border">
+                        <a
+                          className="text-blue-600 hover:text-black mx-2 text-lg"
+                          data-id={data.filePath}
+                          onClick={() => window.open(`http://${data.filePath}`)}
+                        >
+                          <i className="bi bi-download"></i>
+                        </a>
+                        <a
+                          data-id={data.id}
+                          onClick={showModalDelete}
+                          className="text-rose-400 hover:text-black ml-2 text-lg"
+                        >
+                          <i className="bi bi-trash-fill"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  ))
+                : files?.map((data, i) => (
+                    <tr key={i}>
+                      <td className="px-1 py-1 border">{i + 1}</td>
+                      <td className="px-1 py-1 border">{data.fileName}</td>
+                      <td className="px-1 py-1 border">{data.createdAt}</td>
+                      <td className="px-1 py-1 border">
+                        <a
+                          className="text-blue-600 hover:text-black mx-2 text-lg"
+                          data-id={data.filePath}
+                          onClick={() => window.open(`http://${data.filePath}`)}
+                        >
+                          <i className="bi bi-download"></i>
+                        </a>
+                        <a
+                          data-id={data.id}
+                          onClick={showModalDelete}
+                          className="text-rose-400 hover:text-black ml-2 text-lg"
+                        >
+                          <i className="bi bi-trash-fill"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+            </tbody>
+          </table>
 
-            <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between"></div>
-          </div>
+          <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between"></div>
         </div>
       </div>
       <ToastContainer />

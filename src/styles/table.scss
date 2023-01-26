@@ -1,22 +1,22 @@
-.radio-input {
-	position: absolute !important;
-	top: 15px;
-	left: -20px;
-	width: 20px !important;
-	cursor: pointer;
-}
+// .radio-input {
+// 	position: absolute !important;
+// 	top: 15px;
+// 	left: -20px;
+// 	width: 20px !important;
+// 	cursor: pointer;
+// }
 
-.radio-input:checked::before,
-:checked::before {
-  content: "";
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  background-color: #50a3a2;
-  position: absolute;
-  top: -3px;
-  left: 2px;
-}
+// .radio-input:checked::before,
+// :checked::before {
+//   content: "";
+//   width: 15px;
+//   height: 15px;
+//   border-radius: 50%;
+//   background-color: #50a3a2;
+//   position: absolute;
+//   top: -3px;
+//   left: 2px;
+// }
 
 .width-nav {
   min-width: 250px !important;

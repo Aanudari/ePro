@@ -9,8 +9,7 @@ function UserErrorThanks() {
   const location = useLocation();
   const { TOKEN, deviceId } = useStateContext();
   const navigate = useNavigate();
-  const [currentTab, setCurrentTab] = useState("1");
-  const [complainInfo, setComplainInfo] = useState();
+  const [complainInfo, setComplainInfo] = useState([]);
   const [complain, setComplain] = useState([]);
   useEffect(() => {
     axios({
@@ -59,130 +58,171 @@ function UserErrorThanks() {
       })
       .catch((err) => console.log(err));
   }, []);
+  const [showed, setShowed] = useState(false);
 
-  let color = "blue";
-  const handleTabClick = (e) => {
-    setCurrentTab(e.target.id);
+  let nokori = [];
+  const gotYa = (value) => {
+    nokori.push(value);
   };
-
+  complainInfo?.map((exam) => {
+    if (exam.id == "0") {
+      return gotYa(exam.id);
+    }
+  });
+  const [detector, setDetector] = useState(0);
+  const indexed = complainInfo;
+  let tempo = [complain];
+  for (let index = 0; index < indexed?.length; index++) {
+    const element = indexed[index];
+    let temp = [];
+    for (let i = 0; i < complain?.length; i++) {
+      const el = complain[i];
+      if (el.complain == element.id) {
+        temp.push(el);
+      }
+    }
+    tempo.push(temp);
+  }
+  console.log(indexed);
   return (
     <UserLayout>
-      <div className="flex min-h-screen h-full">
-        <div className="sm:px-6 w-full">
-          <div className="px-4 md:px-10 py-4 md:py-7">
-            <div className="flex items-center justify-between">
-              <p className="focus:outline-none text-base sm:text-sm md:text-md lg:text-md font-bold leading-normal text-gray-800">
-                Алдаа талархал
-              </p>
+      <div className="max-w-screen-xl ml-auto mr-auto">
+        <div className="content">
+          <div className="content-panel">
+            <div className="vertical-tabs">
+              <a
+                onClick={() => {
+                  setDetector(0);
+                }}
+                className={`${detector == 0 && "active"}`}
+              >
+                Бүгд
+              </a>
+              <a
+                onClick={() => {
+                  setDetector(1);
+                }}
+                className={`${detector == 1 && "active"}`}
+              >
+                Бодит гомдол
+              </a>
+              <a
+                onClick={() => {
+                  setDetector(2);
+                }}
+                className={`${detector == 2 && "active"}`}
+              >
+                Бодит бус гомдол
+              </a>
+              <a
+                onClick={() => {
+                  setDetector(3);
+                }}
+                className={`${detector == 3 && "active"}`}
+              >
+                Талархал
+              </a>
             </div>
           </div>
-
-          <div className="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10">
-            <div className="sm:flex items-center justify-between">
-              <div className="flex items-center">
-                <ul
-                  className="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row"
-                  role="tablist"
+          <div className="content-main">
+            {complain.length === 0 ? (
+              <div
+                className={
+                  showed
+                    ? "hidden"
+                    : "mt-2 flex items-center px-4 mb-2 text-gray-800 border-2 border-blue-500 rounded-md jusitfy-between"
+                }
+              >
+                <div className="flex items-center w-full ">
+                  Танд бүртгэл үүсээгүй байна.
+                </div>
+                <button
+                  onClick={(e) => setShowed(true)}
+                  type="button"
+                  className="flex flex-shrink-0 p-2 -mr-1 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 sm:-mr-2"
                 >
-                  {complainInfo
-                    ? complainInfo.map((tab, i) => (
-                        <li
-                          key={i}
-                          className="-mb-px mr-2 last:mr-2 mt-2 flex-auto text-center"
-                        >
-                          <a
-                            className={
-                              "text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " +
-                              (currentTab === `${tab.id}`
-                                ? "text-white bg-" + color + "-600"
-                                : "text-" + color + "-600 bg-white")
-                            }
-                            key={i}
-                            id={tab.id}
-                            disabled={currentTab === `${tab.id}`}
-                            onClick={handleTabClick}
-                          >
-                            {tab.category}
-                          </a>
-                        </li>
-                      ))
-                    : null}
-                </ul>
+                  <span className="sr-only">X</span>
+                  <i className="bi bi-x" />
+                </button>
               </div>
-            </div>
-            <div className="mt-3 overflow-x-auto">
-              <table className="items-center w-full bg-transparent border-collapse ">
-                <thead>
-                  <tr className="text-sm text-left  bg-gray-200 border-b">
-                    <th className="px-4 py-3 font-bold">Огноо </th>
-                    <th className="px-4 py-3 font-bold">
-                      Харьяалагдах хэлтэс{" "}
-                    </th>
-                    <th className="px-4 py-3 font-bold">Ажлын байр </th>
-                    <th className="px-4 py-3 font-bold">Ажилтны нэр </th>
-                    {currentTab === "3" ? (
-                      <th className="px-4 py-3 font-bold">Төрөл </th>
-                    ) : (
-                      <th className="px-4 py-3 font-bold">Гомдлын төрөл </th>
-                    )}
-                    {currentTab === "3" ? (
-                      <th className="px-4 py-3 font-bold">Дэлгэрэнгүй </th>
-                    ) : (
+            ) : (
+              <div
+                className={
+                  showed
+                    ? "hidden"
+                    : "mt-2 flex items-center px-4 mb-2 text-gray-800  border-2 border-blue-500  rounded-md jusitfy-between"
+                }
+              >
+                <div className="flex items-center w-full">
+                  Танд дараах бүртгэл бүртгэгдсэн байна.
+                </div>
+                <button
+                  onClick={(e) => setShowed(true)}
+                  type="button"
+                  className="flex flex-shrink-0 p-2 -mr-1 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 sm:-mr-2"
+                >
+                  <span className="sr-only">X</span>
+                  <i className="bi bi-x" />
+                </button>
+              </div>
+            )}
+            <div className="flex items-center">
+              <div className="inline-block min-w-full overflow-hidden border border-t-2 border:bg-blue-400">
+                <table className="min-w-full leading-normal">
+                  <thead className="bg-gray-200">
+                    <tr>
+                      <th className="px-4 py-3 font-bold">Огноо </th>
                       <th className="px-4 py-3 font-bold">
-                        Гомдлын дэлгэрэнгүй{" "}
+                        Харьяалагдах хэлтэс{" "}
                       </th>
-                    )}
-                    {currentTab === "3" ? (
-                      <th className="px-4 py-3 font-bold">
-                        Бүртгэгдсэн суваг{" "}
-                      </th>
-                    ) : (
-                      <th className="px-4 py-3 font-bold">Журам </th>
-                    )}
-                    {currentTab === "3" ? (
-                      <th className="px-4 py-3 font-bold">Тоогоор</th>
-                    ) : (
-                      <th className="px-4 py-3 font-bold">Алдаа </th>
-                    )}
-                  </tr>
-                </thead>
-                <tbody className="bg-white text-sm">
-                  {complain
-                    ? complain.map((tab, i) => (
-                        <tr
-                          key={i}
-                          className={
-                            currentTab === `${tab.complain}`
-                              ? "focus:outline-none h-16 border border-gray-100 rounded"
-                              : "hidden"
-                          }
-                        >
-                          <td className="px-1 py-1 border">{tab.createdAt}</td>
-                          <td className="px-1 py-1 border">
-                            {tab.departmentName}
-                          </td>
-                          <td className="px-1 py-1 border">{tab.unitName}</td>
-                          <td className="px-1 py-1 border">{tab.firstName}</td>
-                          <td className="px-1 py-1 border">
-                            {tab.complainType}
-                          </td>
-                          <td className="px-1 py-1 border">
-                            {tab.description}
-                          </td>
-                          <td className="px-1 py-1 border">{tab.rule}</td>
-                          <td className="px-1 py-1 border">{tab.too}</td>
-                        </tr>
-                      ))
-                    : null}
-                </tbody>
-              </table>
-
-              <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between"></div>
+                      <th className="px-4 py-3 font-bold">Ажлын байр </th>
+                      <th className="px-4 py-3 font-bold">Ажилтны нэр </th>
+                      {detector === 3 ? (
+                        <th className="px-4 py-3 font-bold">Төрөл </th>
+                      ) : (
+                        <th className="px-4 py-3 font-bold">Гомдлын төрөл </th>
+                      )}
+                      {detector === 3 ? (
+                        <th className="px-4 py-3 font-bold">Дэлгэрэнгүй </th>
+                      ) : (
+                        <th className="px-4 py-3 font-bold">
+                          Гомдлын дэлгэрэнгүй{" "}
+                        </th>
+                      )}
+                      {detector === 3 ? (
+                        <th className="px-4 py-3 font-bold">
+                          Бүртгэгдсэн суваг{" "}
+                        </th>
+                      ) : (
+                        <th className="px-4 py-3 font-bold">Журам </th>
+                      )}
+                      {detector === 3 ? (
+                        <th className="px-4 py-3 font-bold">Тоогоор</th>
+                      ) : (
+                        <th className="px-4 py-3 font-bold">Алдаа </th>
+                      )}
+                    </tr>
+                  </thead>
+                  {tempo[detector]?.map((data, i) => (
+                    <tbody>
+                      <td className="px-1 py-1 border">{data.createdAt}</td>
+                      <td className="px-1 py-1 border">
+                        {data.departmentName}
+                      </td>
+                      <td className="px-1 py-1 border">{data.unitName}</td>
+                      <td className="px-1 py-1 border">{data.firstName}</td>
+                      <td className="px-1 py-1 border">{data.complainType}</td>
+                      <td className="px-1 py-1 border">{data.description}</td>
+                      <td className="px-1 py-1 border">{data.rule}</td>
+                      <td className="px-1 py-1 border">{data.too}</td>
+                    </tbody>
+                  ))}
+                </table>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
       <ToastContainer />
     </UserLayout>
   );

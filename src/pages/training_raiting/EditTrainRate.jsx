@@ -17,28 +17,30 @@ function EditTrainRate() {
   const navigate = useNavigate();
   const { width } = getWindowDimensions();
   const [trains, setTrains] = useState([]);
-  const [trateName, settrateName] = useState();
-  const [trateDesc, settrateDesc] = useState();
+  const [trateName, settrateName] = useState("");
+  const [trateDesc, settrateDesc] = useState("");
   const trainrate = location.state.data;
   const format = "YYYYMMDDHHmmss";
-  const [date1, setDate1] = useState(new Date());
-  const [date2, setDate2] = useState(new Date());
+  const [date1, setDate1] = useState(new Date(trainrate.beginDate));
+  const [date2, setDate2] = useState(new Date(trainrate.expireDate));
   const startDate = moment(date1).format(format);
   const endDate = moment(date2).format(format);
-  const [question, setQuestion] = useState();
-  const [answer, setAnswer] = useState();
-  const [points, setPoints] = useState();
-  const [tID, setTID] = useState();
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
+  const [points, setPoints] = useState("");
+  const [tID, setTID] = useState("");
+  const [tNAME, setTNAME] = useState("");
   const [checkName, setCheckName] = useState(false);
   const [checkDesc, setCheckDesc] = useState(false);
   const [checkQuest, setCheckQuest] = useState(false);
   const [checkAns, setCheckAns] = useState(false);
   const [checkTrain, setCheckTrain] = useState(false);
   const [raw, setRaw] = useState([]);
-  //   const getdate1 = new Date(trainrate.beginDate);
-  //   const getdate2 = new Date(trainrate.expireDate);
+
   const handleTrainId = (item) => {
+    console.log(item);
     setTID(item.id);
+    setTNAME(item.name);
   };
   useEffect(() => {
     axios({
@@ -65,9 +67,10 @@ function EditTrainRate() {
 
   const dataEditTrate = {
     id: `${trainrate.id}`,
-    name: trateName === "" ? trainrate.name : `${trateName}`,
-    description: trateDesc === "" ? trainrate.description : `${trateDesc}`,
-    trainingId: tID === "" ? trainrate.trainingId : `${tID}`,
+    name: `${trateName}` === "" ? trainrate.name : `${trateName}`,
+    description: `${trateDesc}` === "" ? trainrate.description : `${trateDesc}`,
+    trainingId: `${tID}` === "" ? trainrate.trainingId : `${tID}`,
+    trainingName: `${tNAME}` === "" ? trainrate.trainingName : `${tNAME}`,
     beginDate: `${startDate}` === "" ? trainrate.beginDate : `${startDate}`,
     expireDate: `${endDate}` === "" ? trainrate.expireDate : `${endDate}`,
     createdBy: `${trainrate.createdBy}`,
@@ -79,7 +82,6 @@ function EditTrainRate() {
     if (startDate == endDate || startDate > endDate) {
       notification.invalidFileUpload("Эхлэх дуусах хугацаа алдаатай байна.");
     } else {
-      console.log(dataEditTrate);
       axios({
         method: "put",
         headers: {
@@ -87,20 +89,18 @@ function EditTrainRate() {
           "Content-Type": "application/json",
           accept: "text/plain",
         },
-        url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating`,
+        url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating/edit`,
         data: JSON.stringify(dataEditTrate),
       })
         .then((res) => {
-          if (res.data.isSuccess === false) {
-            alert(res.data.resultMessage);
-          }
           if (res.data.isSuccess === true) {
             notification.success(`${res.data.resultMessage}`);
             const timer = setTimeout(() => navigate("/training-rating"), 1000);
             return () => clearTimeout(timer);
           }
-          const timer = setTimeout(() => navigate("/training-rating"), 1000);
-          return () => clearTimeout(timer);
+          if (res.data.isSuccess === false) {
+            // alert(res.data.resultMessage);
+          }
         })
         .catch((err) => console.log(err));
     }
@@ -143,18 +143,15 @@ function EditTrainRate() {
     });
     setRaw(final);
   };
-  const object = trains.find((obj) => obj.id === trainrate.trainingId);
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <Navigation />
 
       <div className="w-full">
-        <div className="px-4 md:px-10 py-4 md:py-7">
-          <div className="flex items-center justify-between">
-            <p className="focus:outline-none text-base sm:text-sm md:text-md lg:text-md font-bold leading-normal text-gray-800">
-              Сургалтын үнэлгээ засварлах
-            </p>
-          </div>
+        <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8">
+          <h1 className="text-xl font-bold text-gray-900 sm:text-xl">
+            Сургалтын үнэлгээ засварлах
+          </h1>
         </div>
 
         <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 mb-6">
@@ -200,7 +197,7 @@ function EditTrainRate() {
                     options={trains}
                     defaultValue={{
                       id: trainrate.trainingId,
-                      name: object?.value,
+                      name: trainrate.trainingName,
                     }}
                     onChange={(item) => {
                       handleTrainId(item);
@@ -331,14 +328,14 @@ function EditTrainRate() {
                     onClick={() => navigate("/training-rating")}
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
                   >
-                    Exit
+                    Болих
                   </button>
                   <button
                     onClick={navigateIndex}
                     type="submit"
                     className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
                   >
-                    Submit
+                    Хадгалах
                   </button>
                 </div>
               </div>

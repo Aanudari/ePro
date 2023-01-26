@@ -55,6 +55,12 @@ function TrainingRating() {
       url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating`,
     })
       .then((res) => {
+<<<<<<< HEAD
+=======
+        if (res.data.isSuccess === false) {
+          // alert(res.data.resultMessage);
+        }
+>>>>>>> complain
         if (res.data.isSuccess === true) {
           setTRate(res.data.trRatingForm);
         }
@@ -76,6 +82,12 @@ function TrainingRating() {
       url: `${process.env.REACT_APP_URL}/v1/Training`,
     })
       .then((res) => {
+<<<<<<< HEAD
+=======
+        if (res.data.isSuccess === false) {
+          // alert(res.data.resultMessage);
+        }
+>>>>>>> complain
         if (res.data.isSuccess === true) {
           setTrains(res.data.trainingList);
         }
@@ -203,7 +215,7 @@ function TrainingRating() {
       })
         .then((res) => {
           if (res.data.isSuccess === false) {
-            alert(res.data.resultMessage);
+            // alert(res.data.resultMessage);
           }
           if (res.data.isSuccess == true) {
             setTrateID(res.data.id);
@@ -321,7 +333,7 @@ function TrainingRating() {
           centered
         >
           <Modal.Header closeButton>
-            <Modal.Title>2. Асуулт нэмэх</Modal.Title>
+            <Modal.Title>Асуулт нэмэх</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div className="space-y-4 grid grid-cols-1 gap-4  sm:grid-cols-1">
@@ -390,17 +402,11 @@ function TrainingRating() {
                     Хариулт нэмэх
                   </button>
                   <button
-                    onClick={() => hideModalQuestion()}
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-                  >
-                    Exit
-                  </button>
-                  <button
                     onClick={submit}
                     type="submit"
                     className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
                   >
-                    Submit
+                    Болсон
                   </button>
                 </div>
               </div>
@@ -429,7 +435,7 @@ function TrainingRating() {
           centered
         >
           <Modal.Header closeButton>
-            <Modal.Title>1. Сургалтын үнэлгээ нэмэх</Modal.Title>
+            <Modal.Title>Сургалтын үнэлгээ нэмэх</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div className="max-w-screen-lg mx-auto">
@@ -453,7 +459,7 @@ function TrainingRating() {
                 </label>
                 <textarea
                   className="px-3 py-2 text-blueGray-600 bg-white text-sm w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                  rows="2"
+                  rows="4"
                   onChange={(e) => {
                     setDescription(e.target.value);
                     setcheckEmpty2(false);
@@ -526,7 +532,7 @@ function TrainingRating() {
                     type="submit"
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                   >
-                    Next
+                    Дараах
                   </button>
                 </div>
               </div>
@@ -555,12 +561,12 @@ function TrainingRating() {
           centered
         >
           <Modal.Header closeButton>
-            <Modal.Title>Сургалтын үнэлгээ устгах</Modal.Title>
+            <span className="text-xl text-black">Сургалтын үнэлгээ устгах</span>
           </Modal.Header>
           <Modal.Body>
             <div className="p-6 text-center">
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                Устгах уу?
+                Та сургалтын үнэлгээг устгахдаа итгэлтэй уу?
               </h3>
               <button
                 type="button"
@@ -601,12 +607,13 @@ function TrainingRating() {
           centered
         >
           <Modal.Header closeButton>
-            <Modal.Title>Асуулт устгах</Modal.Title>
+            <span className="text-xl text-black">Үнэлгээний асуулт устгах</span>
           </Modal.Header>
           <Modal.Body>
             <div className="p-6 text-center">
               <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                Устгах уу?
+                Та сургалтын үнэлгээнд харгалзах асуултыг устгахдаа итгэлтэй
+                байна уу?
               </h3>
               <button
                 type="button"
@@ -630,35 +637,37 @@ function TrainingRating() {
       <div className="sm:px-6 w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
-            <p className="focus:outline-none  sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">
-              Сургалтын үнэлгээ ({`${tRate.length}`})
+            <p className="focus:outline-none text-base sm:text-sm md:text-xl lg:text-xl font-bold leading-normal text-gray-800">
+              Сургалтын үнэлгээ
             </p>
           </div>
         </div>
+
         <div className="sm:flex items-center justify-between p-2">
-          <div className="flex items-center"></div>
-          <div className="flex flex-col justify-center w-3/4 max-w-sm space-y-3 md:flex-row md:w-full md:space-x-3 md:space-y-0">
-            <div className=" relative ">
+          <div className="flex items-center sm:justify-between sm:gap-4">
+            <div className="relative hidden sm:block">
               <input
                 value={searchQuery}
                 onChange={handleSearch}
                 type="text"
                 name="search"
-                className=" rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-                placeholder="Нэрээр хайх"
+                className="w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500 flex-1 py-2 px-4 bg-white  text-gray-700 placeholder-gray-400 shadow-sm text-base"
+                placeholder="Үнэлгээний нэр"
               />
+
+              <button
+                type="button"
+                className="absolute top-1/2 right-1 -translate-y-1/2 rounded-md bg-gray-50 p-2 text-gray-600 transition hover:text-gray-700"
+              >
+                <i className="bi bi-search" />
+              </button>
             </div>
-            <button
-              className="flex-shrink-0 px-4 py-2 text-base font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200"
-              type="submit"
-            >
-              <i className="bi bi-search" />
-            </button>
+          </div>
+          <div className="flex flex-col justify-center w-3/4 max-w-sm space-y-3 md:flex-row md:w-full md:space-x-3 md:space-y-0 md:justify-end sm:justify-end">
             <button
               className="flex-shrink-0 px-2 py-2 text-base font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200"
               onClick={showModalCreate}
             >
-              <i className="bi bi-plus text-bold mr-1" />
               Үнэлгээ нэмэх
             </button>
           </div>
@@ -666,7 +675,7 @@ function TrainingRating() {
 
         {tRate?.map((data, index) => (
           <div key={index} className="p-2">
-            <div className="max-w-full mx-auto overflow-hidden rounded-lg shadow-lg lg:max-w-none lg:flex">
+            <div className="max-w-full mx-auto overflow-hidden border border-t-2 rounded-lg shadow-lg pricing-box lg:max-w-none lg:flex mt-2">
               <div className="w-full px-6 py-8 bg-white  lg:flex-shrink-2 lg:p-12">
                 <h3 className="text-lg font-bold leading-8 text-gray-900 sm:text-lg sm:leading-9 dark:text-white">
                   {data.name}
@@ -674,6 +683,7 @@ function TrainingRating() {
                 <p className="mt-2 text-base leading-6 text-gray-500 dark:text-gray-200">
                   {data.description}
                 </p>
+
                 {data.trRatingQuestions.length > 0 ? (
                   data.trRatingQuestions?.map((question, i) => (
                     <div key={i} className="mt-2">

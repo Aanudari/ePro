@@ -35,11 +35,6 @@ function Training() {
       url: `${process.env.REACT_APP_URL}/v1/Training`,
     })
       .then((res) => {
-<<<<<<< HEAD
-=======
-        if (res.data.isSuccess === false) {
-        }
->>>>>>> complain
         if (res.data.isSuccess === true) {
           setTrains(res.data.trainingList);
         }
@@ -62,11 +57,6 @@ function Training() {
       url: `${process.env.REACT_APP_URL}/v1/Training/category`,
     })
       .then((res) => {
-<<<<<<< HEAD
-=======
-        if (res.data.isSuccess === false) {
-        }
->>>>>>> complain
         if (res.data.isSuccess == true) {
           setCategory(res.data.trainingCatList);
         }

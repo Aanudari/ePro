@@ -31,13 +31,9 @@ function TrainingFiles() {
       url: `${process.env.REACT_APP_URL}/v1/TrainingFile/filelist`,
     })
       .then((res) => {
-<<<<<<< HEAD
-        if (res.data.isSuccess == true) {
-=======
         if (res.data.isSuccess === false) {
           // alert(res.data.resultMessage);
         } else if (res.data.isSuccess == true) {
->>>>>>> complain
           setFiles(res.data.fileNames);
         } else if (
           res.data.resultMessage === "Unauthorized" ||

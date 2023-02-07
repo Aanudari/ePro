@@ -148,6 +148,7 @@ function Exam() {
         console.log(err);
       });
   };
+
   return (
     <div className="px-2 md:px-16 w-full flex justify-center relative pt-20">
       <div className="w-full md:w-4/6">

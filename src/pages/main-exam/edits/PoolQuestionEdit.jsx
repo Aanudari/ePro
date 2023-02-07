@@ -5,6 +5,8 @@ import { useEffect } from "react";
 import DeleteConfirm from "../modal/DeleteComfirm";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ReactImageUploading from "react-images-uploading";
+import { logout } from "../../../service/examService";
 function PoolQuestionEdit({
   data,
   indexed,
@@ -55,20 +57,41 @@ function PoolQuestionEdit({
     });
     setAnswers(temp);
   };
-  const handleDelete = (index) => {
-    let tempo = main.answers;
-    let temp = tempo.filter((item, ind) => {
-      if (index !== ind && tempo.length > 0) {
-        return item;
-      }
-    });
-    main.answers = temp;
-    setAnswers(temp);
+  const handleDelete = (index, obj) => {
+    if (obj.isTrue !== "1") {
+      let tempo = main.answers;
+      let temp = tempo.filter((item, ind) => {
+        if (index !== ind && tempo.length > 0) {
+          return item;
+        }
+      });
+      main.answers = temp;
+      setAnswers(temp);
+    } else {
+      toast.error(
+        "Зөв хариулт устгахгүй !, Утгыг нь засаж болно, Эсвэл өөр хариултыг зөв болго тэгвэл болно.",
+        {
+          position: "bottom-right",
+        }
+      );
+    }
   };
   const addAnswer = () => {
     let tempo = main.answers;
     let blueP = { answer: "", aImgUrl: "", isTrue: "0" };
-    tempo.push(blueP);
+    let toStr = tempo.map((el) => {
+      return JSON.stringify(el);
+    });
+    if (!toStr.includes(JSON.stringify(blueP))) {
+      tempo.push(blueP);
+    } else {
+      toast.info(
+        `${tempo.length}-р хариултдаа утга оруул, Тэгээд дараагийн хариулт үүсгэж болно`,
+        {
+          position: "bottom-right",
+        }
+      );
+    }
     let newSet = tempo.map((el) => {
       return el;
     });
@@ -76,7 +99,7 @@ function PoolQuestionEdit({
   };
   const handleSubmit = (e) => {
     let tri = false;
-    e.preventDefault();
+    // e.preventDefault();
     for (let index = 0; index < main.answers.length; index++) {
       const element = main.answers[index];
       if (element.answer == "") {
@@ -113,6 +136,7 @@ function PoolQuestionEdit({
         .catch((err) => console.log(err));
     }
   };
+  // console.log(main);
   const [imgSide, setImgSide] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const [questionId, setQuestionId] = useState();
@@ -140,6 +164,35 @@ function PoolQuestionEdit({
         console.log(err);
       }),
   ];
+  const deletePicture = (value) => {
+    axios({
+      method: "delete",
+      headers: {
+        Authorization: `${TOKEN}`,
+        accept: "text/plain",
+      },
+      url: `${process.env.REACT_APP_URL}/v1/ExamFile/${value}`,
+    })
+      .then((res) => {
+        console.log(res.data);
+        if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct format."
+        ) {
+          logout();
+        }
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        } else {
+          setTrigger(!trigger);
+          setQimgUrl("");
+          handleSubmit();
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+  // console.log(main);
+  // console.log(main);
   return (
     <div className="h-full">
       <ToastContainer />
@@ -193,7 +246,7 @@ function PoolQuestionEdit({
               : data.status == "NE"
               ? "!bg-opacity-20 !bg-gray-700"
               : null
-          }  bg-gray-50 flex flex-col transition hover:bg-opacity-10 hover:bg-gray-700 rounded-lg  pt-10 `}
+          }  bg-gray-50 flex flex-col transition hover:bg-opacity-10 hover:bg-gray-400 rounded-lg  pt-10 `}
         >
           <div className="flex justify-between gap-2">
             <div className=" w-full flex items-start">
@@ -216,12 +269,12 @@ function PoolQuestionEdit({
                   <div
                     className={`${
                       data.qimgUrl !== ""
-                        ? "border p-2 w-full mt-2 rounded flex justify-center"
+                        ? "border p-2 w-full mt-2 rounded flex justify-center bg-white"
                         : "hidden"
                     }`}
                   >
                     <img
-                      className="h-[400px] mt-2"
+                      className="w-[300px] h-[200px] mt-2"
                       src={`http://${data.qimgUrl}`}
                       alt=""
                     />
@@ -265,21 +318,25 @@ function PoolQuestionEdit({
           <form
             action=""
             onSubmit={(e) => {
+              e.preventDefault();
               handleSubmit(e);
             }}
-            className="flex "
+            className="flex !w-full"
           >
-            <div className="mt-3 ">
+            <div className="mt-3 w-[calc(70%)]">
               {edit
                 ? main.answers.map((item, index) => (
-                    <div key={index} className="flex w-full">
-                      <div className="relative w-[calc(100vw-300px)]">
-                        <h6 className=" font-[400] pl-3 flex items-center">
+                    <div
+                      key={JSON.stringify(item)}
+                      className="flex w-full parent"
+                    >
+                      <div className="relative w-full">
+                        <h6 className=" font-[400] pl-3 flex items-center ">
                           <i
                             onClick={() => {
-                              handleDelete(index);
+                              handleDelete(index, item);
                             }}
-                            className="bi active:text-red-500 bi-trash3 absolute left-[calc(55%)] text-gray-600 child hidden top-[12px]"
+                            className="bi cursor-pointer hover:scale-105 transition-all active:text-red-500 bi-trash3 absolute right-0 text-gray-600 child top-[12px]"
                           ></i>
                           {item.isTrue == "1" ? (
                             <i
@@ -296,7 +353,6 @@ function PoolQuestionEdit({
                               className="bi bi-circle text-xl px-1 text-gray-400"
                             ></i>
                           )}
-
                           <input
                             onChange={(e) => {
                               handleEdit(e.target.value, index);
@@ -304,7 +360,7 @@ function PoolQuestionEdit({
                             defaultValue={item.answer}
                             type="text"
                             className={`outline-none rounded-md ml-2 h-[40px] 
-focus:border-b-[2px] focus:h-[42px] border-teal-500 px-2 text-[14px] w-1/2 font-[400]`}
+focus:border-b-[2px] focus:h-[42px] border-teal-500 px-2 text-[14px] w-[calc(92%)] font-[400]`}
                             autoCorrect="false"
                             spellCheck={false}
                             autoFocus
@@ -328,28 +384,51 @@ focus:border-b-[2px] focus:h-[42px] border-teal-500 px-2 text-[14px] w-1/2 font-
                     </div>
                   ))}
               {edit && (
-                <div className="mt-4">
+                <div className="mt-4 ">
                   <span
                     onClick={() => {
                       addAnswer();
                     }}
-                    className="text-teal-500 hover:text-teal-400 font-[500]"
+                    className="text-teal-500 hover:text-teal-400 font-[500] cursor-pointer"
                   >
                     <i className="bi bi-plus-lg mr-2"></i>
                     Хариулт нэмэх
                   </span>
                 </div>
               )}
-              {imgSide && (
-                <div className="w-[500px] h-[200px] appear-smooth p-2 !bg-white mt-2 rounded p-2">
+              {data.qimgUrl !== "" && edit && (
+                <div className="w-[500px] h-[200px] flex appear-smooth p-2 !bg-white mt-2 rounded p-2">
                   {/* <ImageUploader setImageUrl={setQimgUrl} /> */}
                   <img
                     className="h-full"
                     src={`http://${data.qimgUrl}`}
                     alt=""
                   />
+                  <div>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        deletePicture(data.id);
+                      }}
+                      className="ml-1 bottom-[20px] right-[20px] px-3 hover:bg-teal-600 py-2 bg-teal-500 font-[500] flex justify-center 
+        items-center text-white rounded-lg active:bg-teal-500"
+                    >
+                      <i className="bi bi-trash3 text-lg"></i>
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        // deletePicture(data.id);
+                      }}
+                      className="m-1 bottom-[20px] right-[20px] px-3 hover:bg-teal-600 py-2 bg-teal-500 font-[500] flex justify-center 
+        items-center text-white rounded-lg active:bg-teal-500"
+                    >
+                      <i className="bi bi-arrow-clockwise text-lg"></i>
+                    </button>
+                  </div>
                 </div>
               )}
+              <ReactImageUploading />
             </div>
             {edit && (
               <button

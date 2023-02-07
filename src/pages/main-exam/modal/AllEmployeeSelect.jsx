@@ -2,6 +2,8 @@ import { useStateContext } from "../../../contexts/ContextProvider";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { logout } from "../../../service/examService";
+import Accordion from "react-bootstrap/Accordion";
+import Button from "react-bootstrap/Button";
 
 function AllEmployeeSelect({ setShow, getEmployees, setShowSelect }) {
   const { activeMenu, TOKEN } = useStateContext();
@@ -145,22 +147,26 @@ function AllEmployeeSelect({ setShow, getEmployees, setShowSelect }) {
     bg-black bg-opacity-50 flex items-center justify-center z-20`}
     >
       <div className="bg-gray-200 appear-smooth w-full h-[calc(100%)] relative">
-        <div className="w-full h-12 bg-teal-500 flex justify-between px-4 items-center shadow-sm">
+        <div className="w-full h-12 bg-teal-600 flex justify-between px-4 items-center shadow-sm">
           <div className="flex items-center">
             <div className=" flex justify-between items-center px-4 py-2">
-              <span className="text-white font-[500] text-sm">
+              <span className="text-white font-[500] text-sm mr-2">
                 Сонгох : {chosen.length}/{users?.length}
               </span>
               {chosen.length > 0 && (
-                <span
+                // <span
+
+                //   className="text-white font-[500] text-sm border-[2px] rounded  px-2 py-2 ml-2"
+                // >
+                <Button
                   onClick={() => {
                     setShowSelect(false);
                     getEmployees(chosen);
                   }}
-                  className="text-white font-[500] text-sm border-[2px] rounded  px-2 py-2 ml-2"
+                  variant="dark"
                 >
-                  <button>Хадгалах</button>
-                </span>
+                  Хадгалах
+                </Button>
               )}
             </div>
           </div>
@@ -173,8 +179,61 @@ function AllEmployeeSelect({ setShow, getEmployees, setShowSelect }) {
             ></i>
           </div>
         </div>
-        <div className="w-full h-full overflow-scroll px-2">
-          {main.map((el, ind) => (
+        <div className="w-full h-full overflow-scroll px-4 pt-3">
+          <Accordion flush>
+            {main.map((el, ind) => (
+              <Accordion.Item key={ind} eventKey={`${ind}`}>
+                <Accordion.Header>
+                  <h6 className="text-black text-sm mt-2 flex items-center">
+                    {el[0].unitName}{" "}
+                  </h6>
+                </Accordion.Header>
+                <Accordion.Body>
+                  <h6 className="text-gray-700 text-sm mt-2 flex items-center">
+                    <div
+                      onClick={() => {
+                        bigCollector(ind);
+                      }}
+                      className="mr-2 w-4 h-4 border-[2px] border-gray-400 rounded relative cursor-pointer"
+                    >
+                      {indexDetect.includes(ind) && (
+                        <i className="bi bi-check absolute text-2xl top-[-10px] left-[-6px] text-teal-500 cursor-pointer"></i>
+                      )}
+                    </div>
+                    Бүгдийг сонгох
+                  </h6>
+                  <div className="flex flex-wrap gap-1">
+                    {el?.map((item, index) => (
+                      <div
+                        onClick={() => {
+                          collector(
+                            item.departmentId,
+                            item.unitId,
+                            item.deviceId,
+                            ind
+                          );
+                        }}
+                        key={index}
+                        className={`fea py-2 px-2 font-[400] ${
+                          chosenPre.includes(item.deviceId) &&
+                          "!text-white !bg-teal-500"
+                        } bg-gray-200 h-8 w-[200px] flex relative items-center text-[13px] hover:shadow-teal-500
+              transition-all cursor-pointer rounded text-gray-500 font-[600]`}
+                      >
+                        {chosenPre.includes(item.deviceId) && (
+                          <div className="transition-all">
+                            <i className="bi bi-check2-all mr-2"></i>
+                          </div>
+                        )}
+                        {item.lastName[0]}. {item.firstName}
+                      </div>
+                    ))}
+                  </div>
+                </Accordion.Body>
+              </Accordion.Item>
+            ))}
+          </Accordion>
+          {/* {main.map((el, ind) => (
             <div
               key={ind}
               className="px-3 shadow-sm border-t border-teal-500 px-3 pt-1 pb-5 flex flex-col flex-wrap gap-2 overflow-scroll mt-2 justify-start"
@@ -220,7 +279,7 @@ function AllEmployeeSelect({ setShow, getEmployees, setShowSelect }) {
                 ))}
               </div>
             </div>
-          ))}
+          ))} */}
         </div>
       </div>
     </div>
@@ -228,3 +287,22 @@ function AllEmployeeSelect({ setShow, getEmployees, setShowSelect }) {
 }
 
 export default AllEmployeeSelect;
+
+function Accordian() {
+  return (
+    <Accordion defaultActiveKey="0">
+      <Accordion.Item eventKey="0">
+        <Accordion.Header>Accordion Item #1</Accordion.Header>
+        <Accordion.Body>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+          culpa qui officia deserunt mollit anim id est laborum.
+        </Accordion.Body>
+      </Accordion.Item>
+    </Accordion>
+  );
+}

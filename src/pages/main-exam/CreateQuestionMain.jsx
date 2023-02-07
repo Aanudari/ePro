@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 import ImageUploader from "./SelectOptions/ImageOptions";
 import AnswerCellMain from "./AnswerCellMain";
+import $ from "jquery";
 function CreateQuestionMain({
   question,
   point,
@@ -11,9 +12,17 @@ function CreateQuestionMain({
   qImgUrl,
   handleCreateQuesiton,
 }) {
+  $("scoreInput").keypress(function (e) {
+    var verified = String.fromCharCode(e.which).match(/[^0-9]/);
+    if (verified) {
+      e.preventDefault();
+    }
+  });
   const [length, setLength] = useState();
   const [checked, setChecked] = useState([]);
+
   const handleAnswers = (value) => {
+    value.replace(/[^0-9.]/g, "").replace(/(\..*?)\..*/g, "$1");
     setLength(value);
   };
   const obj = {
@@ -95,7 +104,10 @@ function CreateQuestionMain({
                   className={
                     "custom-validation !appearance-none !border-b-[2px] !border-[#50a3a2] font-[400]"
                   }
+                  id="scoreInput"
                   type="number"
+                  step={2}
+                  max={2}
                   required
                 />
                 <span className="highlight"></span>

@@ -66,19 +66,18 @@ function ExamHeader({
           </select>
         </div>
       </div>
-      {examSummary !== "Ongoing" && (
-        <div
-          onClick={() => {
-            setEditHeader(!editHeader);
-          }}
-          className="h-9 bg-teal-600 rounded-sm px-3 flex items-center font-[400] text-white cursor-pointer active:bg-teal-400 hover:bg-teal-600"
-        >
-          <span className="mr-2 mb-1 font-[400] text-white">Засах</span>
-          <div className="pl-2 h-full flex items-center border-l border-gray-300">
-            <i className="bi bi-ui-checks"></i>
-          </div>
+
+      <div
+        onClick={() => {
+          setEditHeader(!editHeader);
+        }}
+        className="h-9 bg-teal-600 rounded-sm px-3 flex items-center font-[400] text-white cursor-pointer active:bg-teal-400 hover:bg-teal-600"
+      >
+        <span className="mr-2 mb-1 font-[400] text-white">Засах</span>
+        <div className="pl-2 h-full flex items-center border-l border-gray-300">
+          <i className="bi bi-ui-checks"></i>
         </div>
-      )}
+      </div>
     </div>
   );
 }

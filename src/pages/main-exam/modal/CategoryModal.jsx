@@ -129,6 +129,7 @@ function CategoryModal({
         } else {
           setAddAnswer(!addAnswer);
           setTriggerCat(triggerCat);
+          setQImgUrl("");
         }
       })
       .catch((err) => {

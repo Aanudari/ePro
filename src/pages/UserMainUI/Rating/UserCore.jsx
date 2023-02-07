@@ -47,9 +47,6 @@ function UserCore() {
       },
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
         setRating(res.data.ratings);
       })
       .catch((err) => console.log(err));
@@ -81,8 +78,6 @@ function UserCore() {
   return (
     <UserLayout>
       <div className="w-full">
-        {/* <UserNav />
-      <div className="h-[60px]"></div> */}
         <main className="main">
           <div className="responsive-wrapper">
             <div className="main-header">
@@ -166,13 +161,13 @@ function UserCore() {
                           </span>
                           <h3 className="text-[11px] uppercase">{item.name}</h3>
                         </div>
-                        <span>{item.id}</span>
+                        {/* <span>{item.id}</span> */}
                         {/* <label className="toggle">
                         <input type="checkbox" defaultChecked />
                         <span></span>
                       </label> */}
                       </div>
-                      <div className="card-body">
+                      {/* <div className="card-body">
                         <p className="flex flex-col m-0">
                           <span className="font-[400]">
                             <i className="bi bi-circle-half mr-2"></i>
@@ -183,7 +178,7 @@ function UserCore() {
                             {item.expireDate}
                           </span>
                         </p>
-                      </div>
+                      </div> */}
                       <div className="card-footer">
                         {item.isExamTaken.status == "A" ? (
                           <a
@@ -215,7 +210,7 @@ function UserCore() {
                           </div>
                         ) : item.isExamTaken.status == "O" ? (
                           <span className="font-[500] text-[14px]">
-                            No score recorded!
+                            Шалгалт өгөөгүй!
                           </span>
                         ) : item.isExamTaken.status == "P" ? (
                           <a

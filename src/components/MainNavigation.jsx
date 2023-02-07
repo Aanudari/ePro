@@ -52,7 +52,7 @@ function MainNavigation() {
             </li>
             <li
               onClick={() => {
-                navigate("/rating-main");
+                navigate("/rating");
               }}
               className="relative cursor-pointer active:opacity-80 "
             >

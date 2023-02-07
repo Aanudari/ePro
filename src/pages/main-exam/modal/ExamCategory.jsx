@@ -2,6 +2,7 @@ import axios from "axios";
 import { useStateContext } from "../../../contexts/ContextProvider";
 import { useState } from "react";
 import DeleteConfirm from "./DeleteComfirm";
+import EditCategoryModal from "./EditCategoryModal";
 
 function ExamCategory({
   categories,
@@ -40,15 +41,30 @@ function ExamCategory({
       });
   };
   const [confirm, setConfirm] = useState(false);
+  const [editModal, setEditModal] = useState(false);
+  const [key, setKey] = useState("");
+  const handleEditModal = (value) => {
+    setEditModal(true);
+    setKey(value);
+  };
   return (
     <div
       className={`absolute top-[56px] z-10 shadow bg core-bg-g h-[calc(100%-68px)] mb-2 h-full flex  px-3 
-        py-3 gap-2 drop-down ${
+        py-3 gap-2  ${
           activeMenu ? "w-[calc(100%-14px)] left-[7px]" : "w-full left-0"
         } `}
     >
       {confirm && (
         <DeleteConfirm setConfirm={setConfirm} deleteCat={deleteCat} />
+      )}
+      {editModal && (
+        <EditCategoryModal
+          close={setEditModal}
+          index={key}
+          categories={categories}
+          setTrigger={setTrigger}
+          trigger={trigger}
+        />
       )}
       <div className="w-full">
         <button
@@ -99,6 +115,16 @@ function ExamCategory({
                     </div>
                   </div>
                 </div>
+              </div>
+              <div
+                onClick={(index) => {
+                  handleEditModal(category.id);
+                }}
+                className="child top-[15px] mr-4 h-8 w-[50px] bg-gray-700 rounded-full flex 
+                                justify-center text-gray-500 hover:!text-white items-center absolute right-[calc(18%)]
+                                cursor-pointer transition-all"
+              >
+                <i className="bi bi-pencil-square"></i>
               </div>
               <div
                 onClick={() => {

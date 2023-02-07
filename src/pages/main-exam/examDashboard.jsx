@@ -67,7 +67,7 @@ function ExamDash() {
         }
       })
       .catch((err) => console.log(err));
-  }, [trigger, showAddCategory, addAnswer]);
+  }, [trigger, showAddCategory, addAnswer, categoryModal]);
   const [depId, setDepId] = useState();
   const [cModalId, setCModalId] = useState();
 

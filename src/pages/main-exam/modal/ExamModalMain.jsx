@@ -433,7 +433,7 @@ function ExamModalMain({
             userTrigger={userTrigger}
             examSummary={examSummary}
           />
-        ) : examSummary == "Exam over" ? (
+        ) : examSummary == "Exam over" || examSummary == "Ongoing" ? (
           <ExamEditHeader2
             examTri={examTri}
             setExamTri={setExamTri}

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useTimer } from "react-timer-hook";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function MyTimer({ expiryTimestamp, finisher }) {
   const [end, setEnd] = useState(false);
@@ -14,8 +15,14 @@ export default function MyTimer({ expiryTimestamp, finisher }) {
       finisher();
     }
   }, [end]);
+  if (minutes == 3 && seconds == 0) {
+    toast.error("3мин үлдлээ !", {
+      position: "bottom-right",
+    });
+  }
   return (
     <div className="">
+      <ToastContainer />
       <div style={{ fontSize: "15px", color: "white", fontWeight: "500" }}>
         <span style={{ fontSize: "15px", color: "white", fontWeight: "500" }}>
           {minutes}

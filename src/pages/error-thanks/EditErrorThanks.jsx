@@ -110,7 +110,7 @@ function EditErrorThanks() {
                 stroke="currentColor"
                 stroke-width="2"
                 stroke-linejoin="round"
-                stroke-linecap="round"
+                strokeLinecap="round"
               />
             </svg>
             <span className="mx-2">Буцах</span>

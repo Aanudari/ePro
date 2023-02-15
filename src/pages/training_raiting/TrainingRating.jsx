@@ -18,7 +18,7 @@ function TrainingRating() {
   const { width } = getWindowDimensions();
   const [trains, setTrains] = useState([]);
   const [tRate, setTRate] = useState([]);
-  const [filteredList, setFilteredList] = useState(tRate);
+  const [filteredList, setFilteredList] = useState([]);
   const [id, setId] = useState();
   const [showDelete, setShowDelete] = useState(null);
   const hideModalDelete = () => setShowDelete(null);
@@ -54,6 +54,7 @@ function TrainingRating() {
         }
         if (res.data.isSuccess === true) {
           setTRate(res.data.trRatingForm);
+          setFilteredList(res.data.trRatingForm);
         }
         if (
           res.data.resultMessage == "Unauthorized" ||
@@ -192,6 +193,7 @@ function TrainingRating() {
       state: { data: data },
     });
   };
+  console.log(tRate);
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <Navigation />
@@ -415,7 +417,7 @@ function TrainingRating() {
                   stroke="currentColor"
                   stroke-width="2"
                   stroke-linejoin="round"
-                  stroke-linecap="round"
+                  strokeLinecap="round"
                 />
               </svg>
             </button>
@@ -446,147 +448,76 @@ function TrainingRating() {
                 </tr>
               </thead>
 
-              {filteredList.length > 0 ? (
-                filteredList.map((data, index) => (
-                  <tbody>
-                    <tr key={index}>
-                      <td className="px-5 py-3 text-sm bg-white border-b border-gray-200">
-                        <div className="flex items-center">
-                          <div className="ml-3">
-                            <p className="text-gray-900 whitespace-no-wrap">
-                              {index + 1}
-                            </p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-5 py-3 text-sm bg-white border-b border-gray-200">
-                        <p className="text-gray-900 whitespace-no-wrap">
-                          {data.name}
-                        </p>
-                      </td>
-                      <td className="px-5 py-3 text-sm bg-white border-b border-gray-200">
-                        <p className="text-gray-900 whitespace-no-wrap">
-                          {data.trainingName}
-                        </p>
-                      </td>
-                      <td className="px-5 py-3 text-sm bg-white border-b border-gray-200">
-                        {today <= moment(data.endDate).format(format) ? (
-                          <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-500 bg-green-200 rounded-md">
-                            ИДЭВХТЭЙ
-                          </span>
-                        ) : (
-                          <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-500 bg-red-200 rounded-md">
-                            ИДЭВХГҮЙ
-                          </span>
-                        )}
-                        {data.trRatingQuestions.length === 0 ? (
-                          <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-500 bg-red-200 rounded-md mt-2">
-                            Асуулт үүсээгүй
-                          </span>
-                        ) : null}
-                      </td>
-                      <td className="px-5 py-3 text-sm bg-white border-b border-gray-200">
-                        <div className="flex items-center">
-                          <a
-                            className="text-blue-600 hover:text-black mx-2 text-lg"
-                            onClick={() => {
-                              navigateChoosedTRate(data);
-                            }}
-                          >
-                            <i className="bi bi-eye-fill"></i>
-                          </a>
-                          <a
-                            className="text-yellow-600 hover:text-black mx-2 text-lg"
-                            onClick={() => {
-                              handleEdit(data);
-                            }}
-                          >
-                            <i className="bi bi-pencil-square"></i>
-                          </a>
-                          <a
-                            onClick={() => {
-                              showModalDelete(data);
-                            }}
-                            className="text-rose-400 hover:text-black ml-2 text-lg"
-                          >
-                            <i className="bi bi-trash-fill"></i>
-                          </a>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                ))
-              ) : (
+              {filteredList?.map((data, index) => (
                 <tbody>
-                  {tRate?.map((data, index) => (
-                    <tr key={index}>
-                      <td className="px-5 py-3 text-sm bg-white border-b border-gray-200">
-                        <div className="flex items-center">
-                          <div className="ml-3">
-                            <p className="text-gray-900 whitespace-no-wrap">
-                              {index + 1}
-                            </p>
-                          </div>
+                  <tr key={index}>
+                    <td className="px-5 py-3 text-sm bg-white border-b border-gray-200">
+                      <div className="flex items-center">
+                        <div className="ml-3">
+                          <p className="text-gray-900 whitespace-no-wrap">
+                            {index + 1}
+                          </p>
                         </div>
-                      </td>
-                      <td className="px-5 py-3 text-sm bg-white border-b border-gray-200">
-                        <p className="text-gray-900 whitespace-no-wrap">
-                          {data.name}
-                        </p>
-                      </td>
-                      <td className="px-5 py-3 text-sm bg-white border-b border-gray-200">
-                        <p className="text-gray-900 whitespace-no-wrap">
-                          {data.trainingName}
-                        </p>
-                      </td>
-                      <td className="px-5 py-3 text-sm bg-white border-b border-gray-200">
-                        {today <= moment(data.endDate).format(format) ? (
-                          <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-500 bg-green-200 rounded-md">
-                            ИДЭВХТЭЙ
-                          </span>
-                        ) : (
-                          <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-500 bg-red-200 rounded-md">
-                            ИДЭВХГҮЙ
-                          </span>
-                        )}
-                        {data.trRatingQuestions.length === 0 ? (
-                          <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-500 bg-red-200 rounded-md mt-2">
-                            Асуулт үүсээгүй
-                          </span>
-                        ) : null}
-                      </td>
-                      <td className="px-5 py-3 text-sm bg-white border-b border-gray-200">
-                        <div className="flex items-center">
-                          <a
-                            className="text-blue-600 hover:text-black mx-2 text-lg"
-                            onClick={() => {
-                              navigateChoosedTRate(data);
-                            }}
-                          >
-                            <i className="bi bi-eye-fill"></i>
-                          </a>
-                          <a
-                            className="text-yellow-600 hover:text-black mx-2 text-lg"
-                            onClick={() => {
-                              handleEdit(data);
-                            }}
-                          >
-                            <i className="bi bi-pencil-square"></i>
-                          </a>
-                          <a
-                            onClick={() => {
-                              showModalDelete(data);
-                            }}
-                            className="text-rose-400 hover:text-black ml-2 text-lg"
-                          >
-                            <i className="bi bi-trash-fill"></i>
-                          </a>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                      </div>
+                    </td>
+                    <td className="px-5 py-3 text-sm bg-white border-b border-gray-200">
+                      <p className="text-gray-900 whitespace-no-wrap">
+                        {data.name}
+                      </p>
+                    </td>
+                    <td className="px-5 py-3 text-sm bg-white border-b border-gray-200">
+                      <p className="text-gray-900 whitespace-no-wrap">
+                        {data.trainingName}
+                      </p>
+                    </td>
+                    <td className="px-5 py-3 text-sm bg-white border-b border-gray-200">
+                      {moment(today).format(format) >=
+                      moment(data.expireDate).format(format) ? (
+                        <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-500 bg-red-200 rounded-md">
+                          ИДЭВХГҮЙ
+                        </span>
+                      ) : (
+                        <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-500 bg-green-200 rounded-md">
+                          ИДЭВХТЭЙ
+                        </span>
+                      )}
+                      {data.trRatingQuestions.length === 0 ? (
+                        <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-500 bg-red-200 rounded-md mt-2">
+                          Асуулт үүсээгүй
+                        </span>
+                      ) : null}
+                    </td>
+                    <td className="px-5 py-3 text-sm bg-white border-b border-gray-200">
+                      <div className="flex items-center">
+                        <a
+                          className="text-blue-600 hover:text-black mx-2 text-lg"
+                          onClick={() => {
+                            navigateChoosedTRate(data);
+                          }}
+                        >
+                          <i className="bi bi-eye-fill"></i>
+                        </a>
+                        <a
+                          className="text-yellow-600 hover:text-black mx-2 text-lg"
+                          onClick={() => {
+                            handleEdit(data);
+                          }}
+                        >
+                          <i className="bi bi-pencil-square"></i>
+                        </a>
+                        <a
+                          onClick={() => {
+                            showModalDelete(data);
+                          }}
+                          className="text-rose-400 hover:text-black ml-2 text-lg"
+                        >
+                          <i className="bi bi-trash-fill"></i>
+                        </a>
+                      </div>
+                    </td>
+                  </tr>
                 </tbody>
-              )}
+              ))}
             </table>
           </div>
         </div>

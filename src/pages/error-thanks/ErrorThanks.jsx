@@ -12,10 +12,9 @@ import getWindowDimensions from "../../components/SizeDetector";
 
 function ErrorThanks() {
   const { width } = getWindowDimensions();
-  const { TOKEN, activeMenu } = useStateContext();
+  const { TOKEN } = useStateContext();
   const navigate = useNavigate();
-  let color = "blue";
-  const [currentTab, setCurrentTab] = useState("1");
+
   const [complainInfo, setComplainInfo] = useState();
   const [complain, setComplain] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
@@ -24,7 +23,7 @@ function ErrorThanks() {
   const hideModalCreate = () => setShowCreate(null);
   const [showDelete, setShowDelete] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredList, setFilteredList] = useState(complain);
+  const [filteredList, setFilteredList] = useState([]);
   const [trigger, setTrigger] = useState(false);
   const [id, setId] = useState();
   const showModalDelete = (e) => {
@@ -68,6 +67,7 @@ function ErrorThanks() {
         }
         if (res.data.isSuccess == true) {
           setComplain(res.data.complains);
+          setFilteredList(res.data.complains);
         }
         if (
           res.data.resultMessage === "Unauthorized" ||
@@ -130,13 +130,23 @@ function ErrorThanks() {
     setFilteredList(searchList);
     // setCurrentTab(value);
   };
-
-  const handleOptions = (value) => {
-    let filtered = complain.filter((item) => {
-      return item.complain == `${value}`;
-    });
-    setFilteredList(filtered);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const filterByCategory = (filteredData) => {
+    if (!selectedCategory) {
+      return filteredData;
+    }
+    const filteredComplains = filteredData.filter(
+      (tr) => tr.complain === selectedCategory
+    );
+    return filteredComplains;
   };
+  const handleCategoryChange = (event) => {
+    setSelectedCategory(event.target.value);
+  };
+  useEffect(() => {
+    var filteredData = filterByCategory(complain);
+    setFilteredList(filteredData);
+  }, [selectedCategory]);
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <div>
@@ -277,12 +287,8 @@ function ErrorThanks() {
           </div>
 
           <div className="flex flex-col justify-center w-3/4 max-w-sm space-y-3 md:flex-row md:w-full md:space-x-3 md:space-y-0">
-            <select
-              onChange={(e) => {
-                handleOptions(e.target.value);
-              }}
-            >
-              <option>Төрлөөр хайх</option>
+            <select value={selectedCategory} onChange={handleCategoryChange}>
+              <option value="">Бүгд</option>
               {complainInfo?.map((el, i) => (
                 <option key={i} value={`${el.id}`}>
                   {el.category}
@@ -301,7 +307,7 @@ function ErrorThanks() {
                   stroke="currentColor"
                   stroke-width="2"
                   stroke-linejoin="round"
-                  stroke-linecap="round"
+                  strokeLinecap="round"
                 />
               </svg>
             </button>
@@ -358,28 +364,28 @@ function ErrorThanks() {
                         </th>
                         <th className="px-4 py-3 font-bold">Ажлын байр </th>
                         <th className="px-4 py-3 font-bold">Ажилтны нэр </th>
-                        {currentTab === "3" ? (
+                        {selectedCategory === "3" ? (
                           <th className="px-4 py-3 font-bold">Төрөл </th>
                         ) : (
                           <th className="px-4 py-3 font-bold">
                             Гомдлын төрөл{" "}
                           </th>
                         )}
-                        {currentTab === "3" ? (
+                        {selectedCategory === "3" ? (
                           <th className="px-4 py-3 font-bold">Дэлгэрэнгүй </th>
                         ) : (
                           <th className="px-4 py-3 font-bold">
                             Гомдлын дэлгэрэнгүй{" "}
                           </th>
                         )}
-                        {currentTab === "3" ? (
+                        {selectedCategory === "3" ? (
                           <th className="px-4 py-3 font-bold">
                             Бүртгэгдсэн суваг{" "}
                           </th>
                         ) : (
                           <th className="px-4 py-3 font-bold">Журам </th>
                         )}
-                        {currentTab === "3" ? (
+                        {selectedCategory === "3" ? (
                           <th className="px-4 py-3 font-bold">Тоогоор</th>
                         ) : (
                           <th className="px-4 py-3 font-bold">Алдаа </th>
@@ -390,17 +396,7 @@ function ErrorThanks() {
                     </thead>
                     <tbody className="bg-white text-sm">
                       {filteredList.map((tab, i) => (
-                        <tr
-                          key={i}
-                          // className={
-                          //   currentTab === `${tab.complain}`
-                          //     ? "focus:outline-none h-16 border border-gray-100 rounded"
-                          //     : "hidden"
-                          // }
-                          // onChange={() => {
-                          //   setTotalPages(tab.complain);
-                          // }}
-                        >
+                        <tr key={i}>
                           <td className="px-1 py-1 border">{i + 1}</td>
                           <td className="px-1 py-1 border">{tab.createdAt}</td>
                           <td className="px-1 py-1 border">

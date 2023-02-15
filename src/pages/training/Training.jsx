@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useMemo } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Navigation from "../../components/Navigation";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -18,10 +18,10 @@ function Training() {
   const videoRef = useRef(null);
   const [trains, setTrains] = useState([]);
   const [category, setCategory] = useState([]);
+  const [filteredList, setFilteredList] = useState([]);
   const [showDelete, setShowDelete] = useState(null);
   const hideModalDelete = () => setShowDelete(null);
   const [id, setId] = useState();
-
   const [trigger, setTrigger] = useState(false);
   const options = [
     { id: "1", value: "Тэнхим" },
@@ -40,6 +40,7 @@ function Training() {
         }
         if (res.data.isSuccess === true) {
           setTrains(res.data.trainingList);
+          setFilteredList(res.data.trainingList);
         }
         if (
           res.data.resultMessage === "Unauthorized" ||
@@ -74,7 +75,24 @@ function Training() {
       })
       .catch((err) => console.log(err));
   }, [trigger]);
-  const [filteredList, setFilteredList] = useState([]);
+  const today = new Date();
+  const format = "YYYYMMDDHHmmss";
+  function secondsToHms(d) {
+    d = Number(d);
+
+    var h = Math.floor(d / 3600);
+    var m = Math.floor((d % 3600) / 60);
+    var s = Math.floor((d % 3600) % 60);
+
+    return (
+      ("0" + h).slice(-2) +
+      ":" +
+      ("0" + m).slice(-2) +
+      ":" +
+      ("0" + s).slice(-2)
+    );
+  }
+
   const showModalDelete = (e) => {
     setShowDelete(true);
     setId(e.id);
@@ -116,6 +134,7 @@ function Training() {
       state: { data: data },
     });
   };
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const handleSearch = (event) => {
     const query = event.target.value;
@@ -125,32 +144,22 @@ function Training() {
     });
     setFilteredList(searchList);
   };
-  const handleOptions = (value) => {
-    let res = trains.filter((el) => {
-      return value === el.tCatName;
-    });
-    setFilteredList(res);
-  };
-  const today = new Date();
-  function secondsToHms(d) {
-    d = Number(d);
-
-    var h = Math.floor(d / 3600);
-    var m = Math.floor((d % 3600) / 60);
-    var s = Math.floor((d % 3600) % 60);
-
-    return (
-      ("0" + h).slice(-2) +
-      ":" +
-      ("0" + m).slice(-2) +
-      ":" +
-      ("0" + s).slice(-2)
+  const filterByCategory = (filteredData) => {
+    if (!selectedCategory) {
+      return filteredData;
+    }
+    const filteredTrains = filteredData.filter(
+      (tr) => tr.tCatName === selectedCategory
     );
-  }
-
+    return filteredTrains;
+  };
+  const handleCategoryChange = (event) => {
+    setSelectedCategory(event.target.value);
+  };
   useEffect(() => {
-    setFilteredList(trains);
-  }, []);
+    var filteredData = filterByCategory(trains);
+    setFilteredList(filteredData);
+  }, [selectedCategory]);
 
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
@@ -241,12 +250,8 @@ function Training() {
           </div>
 
           <div className="flex flex-col justify-center w-3/4 max-w-sm space-y-3 md:flex-row md:w-full md:space-x-3 md:space-y-0">
-            <select
-              onChange={(e) => {
-                handleOptions(e.target.value);
-              }}
-            >
-              <option>Ангиллаар хайх</option>
+            <select value={selectedCategory} onChange={handleCategoryChange}>
+              <option value="">Бүгд</option>
               {category.map((el, i) => (
                 <option key={i} value={`${el.name}`}>
                   {el.name}
@@ -360,13 +365,15 @@ function Training() {
                         <div className="flex-shrink-0 text-emerald-500 text-lg">
                           <i className="bi bi-calendar-check-fill" />
                         </div>
-                        {today >= data.endDate ? (
-                          <p className="ml-3 text-sm leading-5 text-gray-700 ">
-                            Дуусах хугацаа: {data.endDate}
-                          </p>
-                        ) : (
+
+                        {moment(today).format(format) >=
+                        moment(data.endDate).format(format) ? (
                           <p className="ml-3 text-sm leading-5 text-red-500 ">
                             Дуусах хугацаа: {data.endDate} (Хугацаа дууссан)
+                          </p>
+                        ) : (
+                          <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                            Дуусах хугацаа: {data.endDate}
                           </p>
                         )}
                       </li>

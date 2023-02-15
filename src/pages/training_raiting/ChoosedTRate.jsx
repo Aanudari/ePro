@@ -110,6 +110,7 @@ function ChoosedTRate() {
         if (res.data.isSuccess == true) {
           notification.success(`${res.data.resultMessage}`);
           setIsOpened(false);
+          setRadioFields([]);
           setTrigger(!trigger);
         }
         if (res.data.resultMessage === "Unauthorized") {
@@ -143,6 +144,7 @@ function ChoosedTRate() {
         if (res.data.isSuccess == true) {
           notification.success(`${res.data.resultMessage}`);
           setIsOpened(false);
+          setRadioFields([]);
           setTrigger(!trigger);
         }
         if (res.data.resultMessage === "Unauthorized") {
@@ -167,7 +169,7 @@ function ChoosedTRate() {
                 stroke="currentColor"
                 stroke-width="2"
                 stroke-linejoin="round"
-                stroke-linecap="round"
+                strokeLinecap="round"
               />
             </svg>
             <span className="mx-2">Буцах</span>
@@ -212,7 +214,7 @@ function ChoosedTRate() {
                     stroke="currentColor"
                     stroke-width="2"
                     stroke-linejoin="round"
-                    stroke-linecap="round"
+                    strokeLinecap="round"
                   />
                 </svg>
               </button>

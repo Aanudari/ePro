@@ -30,7 +30,6 @@ function RatedUsers() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          // alert(res.data.resultMessage);
         }
         if (res.data.isSuccess === true) {
           setRatedUsers(res.data.getRatingQuestionAnswers);

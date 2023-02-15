@@ -21,7 +21,6 @@ function UserErrorThanks() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
         }
         if (res.data.isSuccess === true) {
           setComplainInfo(res.data.complainInfos);
@@ -45,13 +44,11 @@ function UserErrorThanks() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
         }
         if (res.data.isSuccess === true) {
           setComplain(res.data.complains);
         }
         if (res.data.isSuccess == false) {
-          alert(`${res.data.resultMessage}`);
           //   const timer = setTimeout(() => navigate(0), 2000);
           //   return () => clearTimeout(timer);
         }

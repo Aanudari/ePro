@@ -21,6 +21,7 @@ function TrainingFiles() {
   const [showDelete, setShowDelete] = useState(null);
   const hideModalDelete = () => setShowDelete(null);
   const [filteredList, setFilteredList] = useState(files);
+  const [trigger, setTrigger] = useState(false);
   const [id, setId] = useState();
   useEffect(() => {
     axios({
@@ -32,7 +33,6 @@ function TrainingFiles() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          // alert(res.data.resultMessage);
         } else if (res.data.isSuccess == true) {
           setFiles(res.data.fileNames);
         } else if (
@@ -43,7 +43,7 @@ function TrainingFiles() {
         }
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [trigger]);
   const showModalDelete = (e) => {
     setShowDelete(true);
     setId(e.currentTarget.dataset.id);
@@ -59,13 +59,11 @@ function TrainingFiles() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
         }
         if (res.data.isSuccess === true) {
           notification.success(`${res.data.resultMessage}`);
           hideModalDelete();
-          const timer = setTimeout(() => navigate(0), 500);
-          return () => clearTimeout(timer);
+          setTrigger(!trigger);
         } else {
           console.log(res.data.resultMessage);
         }
@@ -97,12 +95,11 @@ function TrainingFiles() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
         }
         if (res.data.isSuccess === true) {
           notification.success(`${res.data.resultMessage}`);
-          const timer = setTimeout(() => navigate(0), 500);
-          return () => clearTimeout(timer);
+          setTrigger(!trigger);
+          hideModalCreate();
         }
         if (res.data.resultMessage === "Unauthorized") {
           logout();
@@ -126,7 +123,6 @@ function TrainingFiles() {
     });
     setFilteredList(searchList);
   };
-  console.log(files);
   return (
     <div className="w-full min-h-[calc(100%-56px)]">
       <div>
@@ -225,8 +221,10 @@ function TrainingFiles() {
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
             <p className="focus:outline-none text-base sm:text-sm md:text-xl lg:text-xl font-bold leading-normal text-gray-800">
-              Сургалтын файлууд
-              {filteredList?.length > 0 ? `(${filteredList?.length})` : ""}
+              Сургалтын файлууд{" "}
+              {filteredList?.length > 0
+                ? `(${filteredList?.length})`
+                : `(${files.length})`}
             </p>
           </div>
         </div>
@@ -253,11 +251,20 @@ function TrainingFiles() {
           </div>
           <div className="flex flex-col justify-center w-3/4 max-w-sm space-y-3 md:flex-row md:w-full md:space-x-3 md:space-y-0 md:justify-end sm:justify-end">
             <button
-              className="flex-shrink-0 px-2 py-2 text-base font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200"
-              type="button"
               onClick={showModalCreate}
+              className="bg-blue-600 border border-blue-600 shadow p-2 rounded text-white flex items-center focus:outline-none focus:shadow-outline"
             >
-              Файл нэмэх
+              <span className="mx-2"> Файл нэмэх</span>
+              <svg width="24" height="24" viewBox="0 0 16 16">
+                <path
+                  d="M7 4 L11 8 L7 12"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linejoin="round"
+                  stroke-linecap="round"
+                />
+              </svg>
             </button>
           </div>
         </div>

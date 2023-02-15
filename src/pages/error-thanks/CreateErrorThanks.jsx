@@ -58,7 +58,7 @@ function CreateErrorThanks() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
+          //
         }
         if (res.data.isSuccess == true) {
           setDepartment(res.data.departments);
@@ -82,7 +82,7 @@ function CreateErrorThanks() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
+          //
         }
         if (res.data.isSuccess == true) {
           setOrg(res.data.organizations);
@@ -107,7 +107,6 @@ function CreateErrorThanks() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
         }
         if (res.data.isSuccess == true) {
           setWorkers(res.data.unitDevices);
@@ -176,7 +175,6 @@ function CreateErrorThanks() {
       })
         .then((res) => {
           if (res.data.isSuccess === false) {
-            alert(res.data.resultMessage);
           }
           if (res.data.isSuccess === true) {
             notification.success(`${res.data.resultMessage}`);

@@ -28,15 +28,13 @@ const TrainingPlayer = () => {
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating/${trn.id}`,
+      url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating/${trn.id}/`,
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          // alert(res.data.resultMessage);
         } else if (res.data.isSuccess === true) {
           setTRate(res.data.trainingRatingForm);
-        }
-        if (
+        } else if (
           res.data.resultMessage == "Unauthorized" ||
           res.data.resultMessage == "Input string was not in a correct format."
         ) {
@@ -53,30 +51,34 @@ const TrainingPlayer = () => {
       let duration = ref.duration;
       let progress = (currentTime / duration) * 100;
       // console.log(progress);
+
       if (progress === 100) {
-        axios({
-          method: "post",
-          headers: {
-            Authorization: `${TOKEN}`,
-            "Content-Type": "application/json",
-            accept: "text/plain",
-          },
-          url: `${process.env.REACT_APP_URL}/v1/Training/watch/end`,
-          data: {
-            trainingId: `${trn.id}`,
-          },
-        })
-          .then((res) => {
-            if (res.data.isSuccess === true) {
-              notification.success(`Сургалт дууссан цаг бүртгэгдлээ.`);
-              const timer = setTimeout(() => setShowTRate(true), 500);
-              return () => clearTimeout(timer);
-            }
-            if (res.data.isSuccess === false) {
-              notification.error(`${res.data.resultMessage}`);
-            }
+        if (trn.status === "Үзсэн") {
+        } else {
+          axios({
+            method: "post",
+            headers: {
+              Authorization: `${TOKEN}`,
+              "Content-Type": "application/json",
+              accept: "text/plain",
+            },
+            url: `${process.env.REACT_APP_URL}/v1/Training/watch/end`,
+            data: {
+              trainingId: `${trn.id}`,
+            },
           })
-          .catch((err) => console.log(err));
+            .then((res) => {
+              if (res.data.isSuccess === true) {
+                notification.success(`Сургалт дууссан цаг бүртгэгдлээ.`);
+                const timer = setTimeout(() => setShowTRate(true), 500);
+                return () => clearTimeout(timer);
+              }
+              if (res.data.isSuccess === false) {
+                notification.error(`${res.data.resultMessage}`);
+              }
+            })
+            .catch((err) => console.log(err));
+        }
       }
     }
   };

@@ -40,6 +40,8 @@ function TrainingCategory() {
   const [date2, setDate2] = useState(new Date());
   const startDate = moment(date1).format(format);
   const endDate = moment(date2).format(format);
+  const [trigger, setTrigger] = useState(false);
+
   useEffect(() => {
     axios({
       method: "get",
@@ -50,7 +52,6 @@ function TrainingCategory() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
         }
         if (res.data.isSuccess == true) {
           setDepartment(res.data.departments);
@@ -63,7 +64,7 @@ function TrainingCategory() {
         }
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [trigger]);
   useEffect(() => {
     axios({
       method: "get",
@@ -74,7 +75,6 @@ function TrainingCategory() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
         }
         if (res.data.isSuccess == true) {
           setCategory(res.data.trainingCatList);
@@ -87,7 +87,7 @@ function TrainingCategory() {
         }
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [trigger]);
   const handleOrg = (item) => {
     setDepartmentID(item.id);
   };
@@ -99,10 +99,7 @@ function TrainingCategory() {
     setShowEdit(true);
     setEditData(e);
   };
-  const handleCreate = () => {
-    setShowCreate(true);
-    // setId(e.currentTarget.dataset.id);
-  };
+
   const handleDelete = () => {
     axios({
       method: "delete",
@@ -114,13 +111,11 @@ function TrainingCategory() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
         }
         if (res.data.isSuccess === true) {
           notification.success(`${res.data.resultMessage}`);
           hideModalDelete();
-          const timer = setTimeout(() => navigate(0), 500);
-          return () => clearTimeout(timer);
+          setTrigger(!trigger);
         } else {
           console.log(res.data.resultMessage);
         }
@@ -160,13 +155,12 @@ function TrainingCategory() {
       })
         .then((res) => {
           if (res.data.isSuccess === false) {
-            alert(res.data.resultMessage);
+            //
           }
           if (res.data.isSuccess == true) {
             notification.success(`${res.data.resultMessage}`);
             hideModalCreate();
-            const timer = setTimeout(() => navigate(0), 500);
-            return () => clearTimeout(timer);
+            setTrigger(!trigger);
           }
           if (res.data.resultMessage === "Unauthorized") {
             logout();
@@ -199,14 +193,12 @@ function TrainingCategory() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
         }
         console.log(res.data);
         if (res.data.isSuccess === true) {
           notification.success(`${res.data.resultMessage}`);
           hideModalCreate();
-          const timer = setTimeout(() => navigate(0), 500);
-          return () => clearTimeout(timer);
+          setTrigger(!trigger);
         }
         if (res.data.resultMessage === "Unauthorized") {
           logout();
@@ -328,10 +320,9 @@ function TrainingCategory() {
                 <div className="inline-flex items-end">
                   <button
                     onClick={navigateIndex}
-                    type="submit"
-                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                    className="flex bg-green-600 border border-green-600 shadow px-4 py-2 rounded text-white focus:outline-none focus:shadow-outline"
                   >
-                    Submit
+                    Үүсгэх
                   </button>
                 </div>
               </div>
@@ -432,10 +423,9 @@ function TrainingCategory() {
                 <div className="inline-flex items-end">
                   <button
                     onClick={navigateIndexEdit}
-                    type="submit"
-                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                    className="flex bg-green-600 border border-green-600 shadow px-4 py-2 rounded text-white focus:outline-none focus:shadow-outline"
                   >
-                    Submit
+                    Хадгалах
                   </button>
                 </div>
               </div>
@@ -449,7 +439,9 @@ function TrainingCategory() {
           <div className="flex items-center justify-between">
             <p className="focus:outline-none text-base sm:text-sm md:text-xl lg:text-xl font-bold leading-normal text-gray-800">
               Сургалтын ангилал{" "}
-              {filteredList?.length > 0 ? `(${filteredList?.length})` : ""}
+              {filteredList?.length > 0
+                ? `(${filteredList?.length})`
+                : `(${category.length})`}
             </p>
           </div>
         </div>
@@ -477,11 +469,20 @@ function TrainingCategory() {
             </div>
             <div className="flex flex-col justify-center w-3/4 max-w-sm space-y-3 md:flex-row md:w-full md:space-x-3 md:space-y-0 md:justify-end sm:justify-end">
               <button
-                className="flex-shrink-0 px-2 py-2 text-base font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200"
-                type="button"
                 onClick={showModalCreate}
+                className="bg-blue-600 border border-blue-600 shadow p-2 rounded text-white flex items-center focus:outline-none focus:shadow-outline"
               >
-                Ангилал нэмэх
+                <span className="mx-2">Ангилал нэмэх</span>
+                <svg width="24" height="24" viewBox="0 0 16 16">
+                  <path
+                    d="M7 4 L11 8 L7 12"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linejoin="round"
+                    stroke-linecap="round"
+                  />
+                </svg>
               </button>
             </div>
           </div>

@@ -42,6 +42,8 @@ import Exam from "./pages/UserMainUI/ExamUser/core/Exam";
 import ExamShow from "./pages/UserMainUI/ExamUser/core/ExamShow";
 import EditTrainRate from "./pages/training_raiting/EditTrainRate";
 import RatedUsers from "./pages/training_raiting/RatedUsers";
+import CreateRate from "./pages/training_raiting/CreateRate";
+import ChoosedTRate from "./pages/training_raiting/ChoosedTRate";
 
 function App() {
   const { activeMenu, showTop, roleId } = useStateContext();
@@ -158,6 +160,22 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199, 4]}>
                 <TrainingRating />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/create-rate"
+            element={
+              <ProtectedRoute allowedRoles={[199, 4]}>
+                <CreateRate />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/chosed-trate"
+            element={
+              <ProtectedRoute allowedRoles={[199, 4]}>
+                <ChoosedTRate />
               </ProtectedRoute>
             }
           />

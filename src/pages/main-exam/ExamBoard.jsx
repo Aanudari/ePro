@@ -27,7 +27,8 @@ function ExamBoard({
 
   const [detector, setDetector] = useState(1);
   const [show, setShow] = useState(false);
-
+  const text = "2023-03-04 10:13:07";
+  // console.log(text.split(" ", 1));
   return (
     <div className="min-w-[800px] glass-2 bg-white  shadow py-3 px-4 shadow-sm relative">
       {show && (
@@ -139,7 +140,7 @@ function ExamBoard({
                   exam?.examSummary?.status == "Exam over"
                     ? "text-gray-400 hover:text-teal-600  hover:border-b-teal-500"
                     : exam?.examSummary?.status == "Ongoing"
-                    ? "hover:text-green-600  hover:border-b-green-500 bg-gray-50"
+                    ? "cellt"
                     : "text-gray-400 hover:text-amber-600  hover:border-b-amber-600 bg-amber-100"
                 }
                 font-[600] cursor-pointer `}
@@ -151,16 +152,18 @@ function ExamBoard({
                   {exam.name}
                 </div>
                 <div
-                  className="w-1/4 h-full flex flex-col justify-center items-center text-[11px]
+                  className="w-1/4 h-full flex flex-row gap-3 justify-center items-center text-[11px]
                      uppercase font-[500]"
                 >
-                  <span className="m-0 font-[500]">{exam.startDate}</span>
+                  <span className="m-0 font-[500]">
+                    {exam.startDate.split(" ", 1)}
+                  </span>
                   <span
                     className={`m-0 font-[500] ${
-                      exam?.examSummary?.status == "Ongoing" && "text-red-400"
+                      exam?.examSummary?.status == "Ongoing" && "text-gray-900"
                     }`}
                   >
-                    {exam?.expireDate}
+                    {exam?.expireDate.split(" ", 1)}
                   </span>
                 </div>
                 <div
@@ -170,7 +173,7 @@ function ExamBoard({
                   {exam?.examSummary?.status == "Exam over" ? (
                     "Дууссан"
                   ) : exam?.examSummary?.status == "Ongoing" ? (
-                    <span className="font-[500] text-green-500">Идэвхитэй</span>
+                    <span className="font-[500] text-white">Идэвхитэй</span>
                   ) : (
                     "Хүлээгдэж буй"
                   )}

@@ -20,6 +20,8 @@ function UserErrorThanks() {
       url: `${process.env.REACT_APP_URL}/v1/Complain/complainInfo`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+        }
         if (res.data.isSuccess === true) {
           setComplainInfo(res.data.complainInfos);
         }
@@ -41,11 +43,12 @@ function UserErrorThanks() {
       url: `${process.env.REACT_APP_URL}/v1/Complain/device?deviceId=${deviceId}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+        }
         if (res.data.isSuccess === true) {
           setComplain(res.data.complains);
         }
         if (res.data.isSuccess == false) {
-          alert(`${res.data.resultMessage}`);
           //   const timer = setTimeout(() => navigate(0), 2000);
           //   return () => clearTimeout(timer);
         }

@@ -29,6 +29,8 @@ function RatedUsers() {
       url: `${process.env.REACT_APP_URL}/v1/TrainingReport/training/rated?trainingId=${tr.trainingId}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+        }
         if (res.data.isSuccess === true) {
           setRatedUsers(res.data.getRatingQuestionAnswers);
         }

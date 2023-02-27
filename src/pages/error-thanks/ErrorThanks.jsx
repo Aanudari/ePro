@@ -12,10 +12,9 @@ import getWindowDimensions from "../../components/SizeDetector";
 
 function ErrorThanks() {
   const { width } = getWindowDimensions();
-  const { TOKEN, activeMenu } = useStateContext();
+  const { TOKEN } = useStateContext();
   const navigate = useNavigate();
-  let color = "blue";
-  const [currentTab, setCurrentTab] = useState("1");
+
   const [complainInfo, setComplainInfo] = useState();
   const [complain, setComplain] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
@@ -24,7 +23,8 @@ function ErrorThanks() {
   const hideModalCreate = () => setShowCreate(null);
   const [showDelete, setShowDelete] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredList, setFilteredList] = useState(complain);
+  const [filteredList, setFilteredList] = useState([]);
+  const [trigger, setTrigger] = useState(false);
   const [id, setId] = useState();
   const showModalDelete = (e) => {
     setShowDelete(true);
@@ -41,7 +41,6 @@ function ErrorThanks() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          // alert(res.data.resultMessage);
         }
         if (res.data.isSuccess == true) {
           setComplainInfo(res.data.complainInfos);
@@ -54,7 +53,7 @@ function ErrorThanks() {
         }
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [trigger]);
   useEffect(() => {
     axios({
       method: "get",
@@ -65,10 +64,10 @@ function ErrorThanks() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          // alert(res.data.resultMessage);
         }
         if (res.data.isSuccess == true) {
           setComplain(res.data.complains);
+          setFilteredList(res.data.complains);
         }
         if (
           res.data.resultMessage === "Unauthorized" ||
@@ -78,7 +77,7 @@ function ErrorThanks() {
         }
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [trigger]);
 
   const handleCreate = () => {
     if (selectedOption === null) {
@@ -100,12 +99,11 @@ function ErrorThanks() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
         }
         if (res.data.isSuccess === true) {
           notification.success(`${res.data.resultMessage}`);
-          const timer = setTimeout(() => navigate(0), 500);
-          return () => clearTimeout(timer);
+          setTrigger(!trigger);
+          hideModalDelete();
         } else {
           console.log(res.data.resultMessage);
         }
@@ -132,14 +130,23 @@ function ErrorThanks() {
     setFilteredList(searchList);
     // setCurrentTab(value);
   };
-
-  const handleOptions = (value) => {
-    let filtered = complain.filter((item, i) => {
-      return item.complain == value;
-    });
-    setFilteredList(filtered);
-    setCurrentTab(value);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const filterByCategory = (filteredData) => {
+    if (!selectedCategory) {
+      return filteredData;
+    }
+    const filteredComplains = filteredData.filter(
+      (tr) => tr.complain === selectedCategory
+    );
+    return filteredComplains;
   };
+  const handleCategoryChange = (event) => {
+    setSelectedCategory(event.target.value);
+  };
+  useEffect(() => {
+    var filteredData = filterByCategory(complain);
+    setFilteredList(filteredData);
+  }, [selectedCategory]);
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <div>
@@ -236,6 +243,7 @@ function ErrorThanks() {
               >
                 Тийм
               </button>
+
               <button
                 onClick={hideModalDelete}
                 type="button"
@@ -279,12 +287,8 @@ function ErrorThanks() {
           </div>
 
           <div className="flex flex-col justify-center w-3/4 max-w-sm space-y-3 md:flex-row md:w-full md:space-x-3 md:space-y-0">
-            <select
-              onChange={(e) => {
-                handleOptions(e.target.value);
-              }}
-            >
-              <option>Төрлөөр хайх</option>
+            <select value={selectedCategory} onChange={handleCategoryChange}>
+              <option value="">Бүгд</option>
               {complainInfo?.map((el, i) => (
                 <option key={i} value={`${el.id}`}>
                   {el.category}
@@ -292,10 +296,20 @@ function ErrorThanks() {
               ))}
             </select>
             <button
-              className="flex-shrink-0 px-2 py-2 text-base font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200"
               onClick={showModalCreate}
+              className="bg-blue-700 border border-blue-700 shadow p-2 rounded text-white flex items-center focus:outline-none focus:shadow-outline"
             >
-              Бүртгэл нэмэх
+              <span className="mx-2">Бүртгэл нэмэх</span>
+              <svg width="24" height="24" viewBox="0 0 16 16">
+                <path
+                  d="M7 4 L11 8 L7 12"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linejoin="round"
+                  strokeLinecap="round"
+                />
+              </svg>
             </button>
           </div>
         </div>
@@ -350,28 +364,28 @@ function ErrorThanks() {
                         </th>
                         <th className="px-4 py-3 font-bold">Ажлын байр </th>
                         <th className="px-4 py-3 font-bold">Ажилтны нэр </th>
-                        {currentTab === "3" ? (
+                        {selectedCategory === "3" ? (
                           <th className="px-4 py-3 font-bold">Төрөл </th>
                         ) : (
                           <th className="px-4 py-3 font-bold">
                             Гомдлын төрөл{" "}
                           </th>
                         )}
-                        {currentTab === "3" ? (
+                        {selectedCategory === "3" ? (
                           <th className="px-4 py-3 font-bold">Дэлгэрэнгүй </th>
                         ) : (
                           <th className="px-4 py-3 font-bold">
                             Гомдлын дэлгэрэнгүй{" "}
                           </th>
                         )}
-                        {currentTab === "3" ? (
+                        {selectedCategory === "3" ? (
                           <th className="px-4 py-3 font-bold">
                             Бүртгэгдсэн суваг{" "}
                           </th>
                         ) : (
                           <th className="px-4 py-3 font-bold">Журам </th>
                         )}
-                        {currentTab === "3" ? (
+                        {selectedCategory === "3" ? (
                           <th className="px-4 py-3 font-bold">Тоогоор</th>
                         ) : (
                           <th className="px-4 py-3 font-bold">Алдаа </th>
@@ -381,113 +395,43 @@ function ErrorThanks() {
                       </tr>
                     </thead>
                     <tbody className="bg-white text-sm">
-                      {filteredList.length > 0
-                        ? filteredList.map((tab, i) => (
-                            <tr
-                              key={i}
-                              // className={
-                              //   currentTab === `${tab.complain}`
-                              //     ? "focus:outline-none h-16 border border-gray-100 rounded"
-                              //     : "hidden"
-                              // }
-                              // onChange={() => {
-                              //   setTotalPages(tab.complain);
-                              // }}
+                      {filteredList.map((tab, i) => (
+                        <tr key={i}>
+                          <td className="px-1 py-1 border">{i + 1}</td>
+                          <td className="px-1 py-1 border">{tab.createdAt}</td>
+                          <td className="px-1 py-1 border">
+                            {tab.departmentName}
+                          </td>
+                          <td className="px-1 py-1 border">{tab.unitName}</td>
+                          <td className="px-1 py-1 border">{tab.firstName}</td>
+                          <td className="px-1 py-1 border">
+                            {tab.complainType}
+                          </td>
+                          <td className="px-1 py-1 border">
+                            {tab.description}
+                          </td>
+                          <td className="px-1 py-1 border">{tab.rule}</td>
+                          <td className="px-1 py-1 border">{tab.too}</td>
+                          <td className="px-1 py-1 border">
+                            <a
+                              className="text-yellow-400 hover:text-black mx-2"
+                              data-id={tab}
+                              onClick={() => {
+                                handleEdit(tab);
+                              }}
                             >
-                              <td className="px-1 py-1 border">{i + 1}</td>
-                              <td className="px-1 py-1 border">
-                                {tab.createdAt}
-                              </td>
-                              <td className="px-1 py-1 border">
-                                {tab.departmentName}
-                              </td>
-                              <td className="px-1 py-1 border">
-                                {tab.unitName}
-                              </td>
-                              <td className="px-1 py-1 border">
-                                {tab.firstName}
-                              </td>
-                              <td className="px-1 py-1 border">
-                                {tab.complainType}
-                              </td>
-                              <td className="px-1 py-1 border">
-                                {tab.description}
-                              </td>
-                              <td className="px-1 py-1 border">{tab.rule}</td>
-                              <td className="px-1 py-1 border">{tab.too}</td>
-                              <td className="px-1 py-1 border">
-                                <a
-                                  className="text-yellow-400 hover:text-black mx-2"
-                                  data-id={tab}
-                                  onClick={() => {
-                                    handleEdit(tab);
-                                  }}
-                                >
-                                  <i className="bi bi-pencil-square"></i>
-                                </a>
-                                <a
-                                  data-id={tab.id}
-                                  onClick={showModalDelete}
-                                  className="text-rose-400 hover:text-black ml-2"
-                                >
-                                  <i className="bi bi-trash-fill"></i>
-                                </a>
-                              </td>
-                            </tr>
-                          ))
-                        : complain?.map((tab, i) => (
-                            <tr
-                              key={i}
-                              // className={
-                              //   currentTab === `${tab.complain}`
-                              //     ? "focus:outline-none h-16 border border-gray-100 rounded"
-                              //     : "hidden"
-                              // }
-                              // onChange={() => {
-                              //   setTotalPages(tab.complain);
-                              // }}
+                              <i className="bi bi-pencil-square"></i>
+                            </a>
+                            <a
+                              data-id={tab.id}
+                              onClick={showModalDelete}
+                              className="text-rose-400 hover:text-black ml-2"
                             >
-                              <td className="px-1 py-1 border">{i + 1}</td>
-                              <td className="px-1 py-1 border">
-                                {tab.createdAt}
-                              </td>
-                              <td className="px-1 py-1 border">
-                                {tab.departmentName}
-                              </td>
-                              <td className="px-1 py-1 border">
-                                {tab.unitName}
-                              </td>
-                              <td className="px-1 py-1 border">
-                                {tab.firstName}
-                              </td>
-                              <td className="px-1 py-1 border">
-                                {tab.complainType}
-                              </td>
-                              <td className="px-1 py-1 border">
-                                {tab.description}
-                              </td>
-                              <td className="px-1 py-1 border">{tab.rule}</td>
-                              <td className="px-1 py-1 border">{tab.too}</td>
-                              <td className="px-1 py-1 border">
-                                <a
-                                  className="text-yellow-400 hover:text-black mx-2"
-                                  data-id={tab}
-                                  onClick={() => {
-                                    handleEdit(tab);
-                                  }}
-                                >
-                                  <i className="bi bi-pencil-square"></i>
-                                </a>
-                                <a
-                                  data-id={tab.id}
-                                  onClick={showModalDelete}
-                                  className="text-rose-400 hover:text-black ml-2"
-                                >
-                                  <i className="bi bi-trash-fill"></i>
-                                </a>
-                              </td>
-                            </tr>
-                          ))}
+                              <i className="bi bi-trash-fill"></i>
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </table>
                 </div>

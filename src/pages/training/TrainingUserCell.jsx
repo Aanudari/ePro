@@ -22,6 +22,8 @@ function TrainingUserCell() {
       url: `${process.env.REACT_APP_URL}/v1/TrainingReport/training/watched?trainingId=${selectedTrain.id}`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+        }
         if (res.data.isSuccess == true) {
           setWatchedUsers(res.data.watchedList);
         }
@@ -71,21 +73,37 @@ function TrainingUserCell() {
     const h = Math.floor(d / 3600);
     const m = Math.floor((d % 3600) / 60);
     const s = Math.floor((d % 3600) % 60);
-
     // var hDisplay = h > 0 ? h + (h == 1 ? " цаг, " : " цаг, ") : "";
     // var mDisplay = m > 0 ? m + (m == 1 ? " минут, " : " минут, ") : "";
     // var sDisplay = s > 0 ? s + (s == 1 ? " секунд" : " секунд") : "";
     return `${h}:${m}:${s}`;
   }
-  console.log(secondsToHms(selectedTrain.duration));
   return (
     <div className="w-full min-h-[calc(100%-56px)]">
       <Navigation />
       <div className="sm:px-6 w-full">
+        <button
+          onClick={() => navigate("/training")}
+          className="bg-white border border-white p-2 rounded text-gray-700 flex items-center focus:outline-none focus:shadow-outline mt-4"
+        >
+          <svg width="24" height="24" viewBox="0 0 16 16">
+            <path
+              d="M9 4 L5 8 L9 12"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linejoin="round"
+              strokeLinecap="round"
+            />
+          </svg>
+          <span className="mx-2">Буцах</span>
+        </button>
         <div className="px-4 md:px-10 py-4 md:py-7">
           <h1 className="text-xl font-bold text-gray-900 sm:text-xl">
             Хувиарлагдсан хэрэглэгчид{" "}
-            {filteredList.length > 0 ? `(${filteredList.length})` : ""}
+            {filteredList.length > 0
+              ? `(${filteredList.length})`
+              : `(${watchedUsers.length})`}
           </h1>
           <p className="mt-1.5 text-md text-gray-500">
             <span className="font-bold">Сургалтын нэр:</span>{" "}
@@ -127,13 +145,6 @@ function TrainingUserCell() {
                   </option>
                 ))}
               </select>
-              <button
-                onClick={() => navigate("/training")}
-                className="flex-shrink-0 px-4 py-2 text-base font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-purple-200"
-                type="submit"
-              >
-                Exit
-              </button>
             </div>
           </div>
           <div className="mt-3 overflow-x-auto"></div>
@@ -157,42 +168,12 @@ function TrainingUserCell() {
                       </td>
                       <td className="px-1 py-1 border flex md:justify-center sm:justify-center">
                         {data.hugatsaa === "" ? (
-                          <span className="inline-flex items-center justify-center rounded-full bg-red-100 px-2.5 py-0.5 text-red-700 ">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke-width="1.5"
-                              stroke="currentColor"
-                              className="-ml-1 mr-1.5 h-4 w-4"
-                            >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
-                              />
-                            </svg>
-
-                            <p className="whitespace-nowrap text-sm">Үзээгүй</p>
+                          <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-400 border-2 border-rose-500 rounded-md bg-white rounded-md">
+                            ҮЗЭЭГҮЙ
                           </span>
                         ) : (
-                          <span className="inline-flex items-center justify-center rounded-full bg-emerald-100 px-2.5 py-0.5 text-emerald-700">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke-width="1.5"
-                              stroke="currentColor"
-                              className="-ml-1 mr-1.5 h-4 w-4"
-                            >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                              />
-                            </svg>
-
-                            <p className="whitespace-nowrap text-sm">Үзсэн</p>
+                          <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-400 border-2 border-green-500 rounded-md bg-white rounded-md">
+                            ҮЗСЭН
                           </span>
                         )}
                       </td>
@@ -207,18 +188,12 @@ function TrainingUserCell() {
                       </td>
                       <td className="px-1 py-1 border flex md:justify-center sm:justify-center">
                         {data.hugatsaa === "" ? (
-                          <span className="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-red-700">
-                            <p className="whitespace-nowrap text-sm ">
-                              <i className="bi bi-exclamation-triangle mr-2" />
-                              Үзээгүй
-                            </p>
+                          <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-400 border-2 border-rose-500 rounded-md bg-white rounded-md">
+                            ҮЗЭЭГҮЙ
                           </span>
                         ) : (
-                          <span className="inline-flex items-center justify-center rounded-full bg-emerald-100 px-2.5 py-0.5 text-emerald-700">
-                            <p className="whitespace-nowrap text-sm">
-                              <i className="bi bi-check-circle" />
-                              Үзсэн
-                            </p>
+                          <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-400 border-2 border-green-500 rounded-md bg-white rounded-md">
+                            ҮЗСЭН
                           </span>
                         )}
                       </td>

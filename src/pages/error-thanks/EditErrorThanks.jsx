@@ -36,6 +36,8 @@ function EditErrorThanks() {
       url: `${process.env.REACT_APP_URL}/v1/Complain/complainInfo`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+        }
         if (res.data.isSuccess == true) {
           setComplainInfo(res.data.complainInfos);
         }
@@ -78,7 +80,6 @@ function EditErrorThanks() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
         }
         if (res.data.isSuccess === true) {
           notification.success(`${res.data.resultMessage}`);
@@ -98,6 +99,22 @@ function EditErrorThanks() {
       <Navigation />
       <div className="w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
+          <button
+            onClick={() => navigate("/error-thanks")}
+            className="bg-white border border-white p-2 rounded text-gray-700 flex items-center focus:outline-none focus:shadow-outline"
+          >
+            <svg width="24" height="24" viewBox="0 0 16 16">
+              <path
+                d="M9 4 L5 8 L9 12"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linejoin="round"
+                strokeLinecap="round"
+              />
+            </svg>
+            <span className="mx-2">Буцах</span>
+          </button>
           <div className="flex items-center justify-between">
             <p className="focus:outline-none text-base sm:text-sm md:text-md lg:text-md font-bold leading-normal text-gray-800">
               {chek && chek.category}
@@ -214,17 +231,10 @@ function EditErrorThanks() {
                 <div className="col-span-5 text-right">
                   <div className="inline-flex items-end">
                     <button
-                      onClick={() => navigate("/error-thanks")}
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-                    >
-                      Exit
-                    </button>
-                    <button
                       onClick={navigateIndex}
-                      type="submit"
-                      className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                      className="flex bg-green-600 border border-green-600 shadow px-4 py-2 rounded text-white focus:outline-none focus:shadow-outline"
                     >
-                      Submit
+                      Үүсгэх
                     </button>
                   </div>
                 </div>

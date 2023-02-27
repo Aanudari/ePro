@@ -51,6 +51,8 @@ function EditTrainRate() {
       url: `${process.env.REACT_APP_URL}/v1/Training`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+        }
         if (res.data.isSuccess === true) {
           setTrains(res.data.trainingList);
         }
@@ -99,7 +101,6 @@ function EditTrainRate() {
             return () => clearTimeout(timer);
           }
           if (res.data.isSuccess === false) {
-            // alert(res.data.resultMessage);
           }
         })
         .catch((err) => console.log(err));
@@ -131,6 +132,7 @@ function EditTrainRate() {
       {
         questionId: `${id}`,
         question: `${question}`,
+        questionType: "1",
         trRatingAnswer: tempo,
       },
     ];
@@ -149,6 +151,22 @@ function EditTrainRate() {
 
       <div className="w-full">
         <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8">
+          <button
+            onClick={() => navigate("/training-rating")}
+            className="bg-white border border-white p-2 rounded text-gray-700 flex items-center focus:outline-none focus:shadow-outline mb-2"
+          >
+            <svg width="24" height="24" viewBox="0 0 16 16">
+              <path
+                d="M9 4 L5 8 L9 12"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linejoin="round"
+                strokeLinecap="round"
+              />
+            </svg>
+            <span className="mx-2">Буцах</span>
+          </button>
           <h1 className="text-xl font-bold text-gray-900 sm:text-xl">
             Сургалтын үнэлгээ засварлах
           </h1>
@@ -325,15 +343,8 @@ function EditTrainRate() {
               <div className="mt-4 text-right">
                 <div className="inline-flex items-end">
                   <button
-                    onClick={() => navigate("/training-rating")}
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-                  >
-                    Болих
-                  </button>
-                  <button
                     onClick={navigateIndex}
-                    type="submit"
-                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                    className="flex bg-green-600 border border-green-600 shadow px-4 py-2 rounded text-white focus:outline-none focus:shadow-outline"
                   >
                     Хадгалах
                   </button>

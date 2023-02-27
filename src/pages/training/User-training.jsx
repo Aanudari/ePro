@@ -21,6 +21,8 @@ function UserTraining() {
       url: `${process.env.REACT_APP_URL}/v1/Training`,
     })
       .then((res) => {
+        if (res.data.isSuccess === false) {
+        }
         if (res.data.isSuccess == true) {
           setUserTrain(res.data.trainingList);
         }
@@ -54,39 +56,52 @@ function UserTraining() {
     setChosedTrain(data);
   };
   const showModalTenhim = (data) => {
+    console.log(data);
     setShowReadyTenhim(true);
     setChosedTrain(data);
   };
   const navigatePlayer = () => {
-    axios({
-      method: "post",
-      headers: {
-        Authorization: `${TOKEN}`,
-        "Content-Type": "application/json",
-        accept: "text/plain",
-      },
-      url: `${process.env.REACT_APP_URL}/v1/Training/watch/start`,
-      data: {
-        trainingId: `${chosedTrain.id}`,
-      },
-    })
-      .then((res) => {
-        if (res.data.isSuccess === true) {
-          notification.success(`Сургалт эхэлсэн цаг бүртгэгдлээ.`);
-          const timer = setTimeout(
-            () =>
-              navigate("/player", {
-                state: { data: chosedTrain },
-              }),
-            1000
-          );
-          return () => clearTimeout(timer);
-        }
-        if (res.data.isSuccess === false) {
-          notification.error(`${res.data.resultMessage}`);
-        }
+    if (chosedTrain.status === "Үзсэн") {
+      navigate("/player", {
+        state: { data: chosedTrain },
+      });
+    } else if (chosedTrain.status === "Үзэж байгаа") {
+      navigate("/player", {
+        state: { data: chosedTrain },
+      });
+    } else {
+      axios({
+        method: "post",
+        headers: {
+          Authorization: `${TOKEN}`,
+          "Content-Type": "application/json",
+          accept: "text/plain",
+        },
+        url: `${process.env.REACT_APP_URL}/v1/Training/watch/start`,
+        data: {
+          trainingId: `${chosedTrain.id}`,
+        },
       })
-      .catch((err) => console.log(err));
+        .then((res) => {
+          if (res.data.isSuccess === true) {
+            notification.success(`Сургалт эхэлсэн цаг бүртгэгдлээ.`);
+            const timer = setTimeout(
+              () =>
+                navigate("/player", {
+                  state: { data: chosedTrain },
+                }),
+              1000
+            );
+            return () => clearTimeout(timer);
+          } else if (
+            res.data.resultMessage == "Unauthorized" ||
+            res.data.resultMessage == "Input string was not in a correct divat."
+          ) {
+            logout();
+          }
+        })
+        .catch((err) => console.log(err));
+    }
   };
 
   let nokori = [];
@@ -182,6 +197,9 @@ function UserTraining() {
                       <p className="hidden text-white/90 sm:mt-4 sm:block">
                         {chosedTrain?.description}
                       </p>
+                    </div>
+                    <div>
+                      <button>Үнэлгээ өгөх</button>
                     </div>
                   </div>
 
@@ -333,7 +351,7 @@ function UserTraining() {
                                 ИДЭВХТЭЙ
                               </span>
 
-                              {data.status === "Үзээгүй" ? (
+                              {/* {data.status === "Үзээгүй" ? (
                                 <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-400 border-2 border-rose-500 rounded-md bg-white rounded-md">
                                   ҮЗЭЭГҮЙ
                                 </span>
@@ -343,9 +361,9 @@ function UserTraining() {
                                 </span>
                               ) : (
                                 <span className="flex items-center px-2 py-1 text-xs font-semibold text-amber-400 border-2 border-amber-500 rounded-md bg-white rounded-md">
-                                  ҮЗЭЖ БАЙНА
+                                  ҮЗЭЖ БАЙГАА{" "}
                                 </span>
-                              )}
+                              )} */}
                             </div>
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center">
@@ -408,11 +426,11 @@ function UserTraining() {
                         ) : (
                           <div className="w-full mt-4 p-4 border border-2 block bg-white shadow-md hover:shadow-2xl rounded-lg overflow-hidden">
                             <div className="flex items-center justify-between mb-4 space-x-12">
-                              <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-500 bg-red-200 rounded-md">
+                              <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-500 bg-red-200 rounded-md">
                                 ИДЭВХГҮЙ
                               </span>
 
-                              {data.status === "Үзээгүй" ? (
+                              {/* {data.status === "Үзээгүй" ? (
                                 <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-400 border-2 border-rose-500 rounded-md bg-white rounded-md">
                                   ҮЗЭЭГҮЙ
                                 </span>
@@ -424,7 +442,7 @@ function UserTraining() {
                                 <span className="flex items-center px-2 py-1 text-xs font-semibold text-amber-400 border-2 border-amber-500 rounded-md bg-white rounded-md">
                                   ҮЗЭЖ ДУУСГААГҮЙ
                                 </span>
-                              )}
+                              )} */}
                             </div>
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center">
@@ -627,18 +645,25 @@ function UserTraining() {
                                 ИДЭВХТЭЙ
                               </span>
 
-                              {data.status === "Үзээгүй" ? (
-                                <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-400 border-2 border-rose-500 rounded-md bg-white rounded-md">
-                                  ҮЗЭЭГҮЙ
-                                </span>
-                              ) : data.status === "Үзсэн" ? (
-                                <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-400 border-2 border-green-500 rounded-md bg-white rounded-md">
-                                  ҮЗСЭН
-                                </span>
+                              {data.sessionType === "1" ? (
+                                ""
                               ) : (
-                                <span className="flex items-center px-2 py-1 text-xs font-semibold text-amber-400 border-2 border-amber-500 rounded-md bg-white rounded-md">
-                                  ҮЗЭЖ БАЙНА
-                                </span>
+                                <div>
+                                  {" "}
+                                  {data.status === "Үзээгүй" ? (
+                                    <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-400 border-2 border-rose-500 rounded-md bg-white rounded-md">
+                                      ҮЗЭЭГҮЙ
+                                    </span>
+                                  ) : data.status === "Үзсэн" ? (
+                                    <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-400 border-2 border-green-500 rounded-md bg-white rounded-md">
+                                      ҮЗСЭН
+                                    </span>
+                                  ) : (
+                                    <span className="flex items-center px-2 py-1 text-xs font-semibold text-amber-400 border-2 border-amber-500 rounded-md bg-white rounded-md">
+                                      ҮЗЭЖ БАЙНА
+                                    </span>
+                                  )}
+                                </div>
                               )}
                             </div>
                             <div className="flex items-center justify-between mb-2">
@@ -718,18 +743,25 @@ function UserTraining() {
                                 ИДЭВХГҮЙ
                               </span>
 
-                              {data.status === "Үзээгүй" ? (
-                                <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-400 border-2 border-rose-500 rounded-md bg-white rounded-md">
-                                  ҮЗЭЭГҮЙ
-                                </span>
-                              ) : data.status === "Үзсэн" ? (
-                                <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-400 border-2 border-green-500 rounded-md bg-white rounded-md">
-                                  ҮЗСЭН
-                                </span>
+                              {data.sessionType === "1" ? (
+                                ""
                               ) : (
-                                <span className="flex items-center px-2 py-1 text-xs font-semibold text-amber-400 border-2 border-amber-500 rounded-md bg-white rounded-md">
-                                  ҮЗЭЖ ДУУСГААГҮЙ
-                                </span>
+                                <div>
+                                  {" "}
+                                  {data.status === "Үзээгүй" ? (
+                                    <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-400 border-2 border-rose-500 rounded-md bg-white rounded-md">
+                                      ҮЗЭЭГҮЙ
+                                    </span>
+                                  ) : data.status === "Үзсэн" ? (
+                                    <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-400 border-2 border-green-500 rounded-md bg-white rounded-md">
+                                      ҮЗСЭН
+                                    </span>
+                                  ) : (
+                                    <span className="flex items-center px-2 py-1 text-xs font-semibold text-amber-400 border-2 border-amber-500 rounded-md bg-white rounded-md">
+                                      ҮЗЭЖ БАЙНА
+                                    </span>
+                                  )}
+                                </div>
                               )}
                             </div>
                             <div className="flex items-center justify-between mb-2">

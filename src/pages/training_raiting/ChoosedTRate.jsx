@@ -22,6 +22,7 @@ function ChoosedTRate() {
   const [isOpened, setIsOpened] = useState(false);
   function createQ() {
     setIsOpened((wasOpened) => !wasOpened);
+    setRadioFields([]);
   }
   const [question, setQuestion] = useState("");
   const [radioFields, setRadioFields] = useState([{ answer: "", points: "" }]);

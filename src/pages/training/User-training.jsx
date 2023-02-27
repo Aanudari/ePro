@@ -93,9 +93,11 @@ function UserTraining() {
               1000
             );
             return () => clearTimeout(timer);
-          }
-          if (res.data.isSuccess === false) {
-            notification.error(`${res.data.resultMessage}`);
+          } else if (
+            res.data.resultMessage == "Unauthorized" ||
+            res.data.resultMessage == "Input string was not in a correct divat."
+          ) {
+            logout();
           }
         })
         .catch((err) => console.log(err));
@@ -195,6 +197,9 @@ function UserTraining() {
                       <p className="hidden text-white/90 sm:mt-4 sm:block">
                         {chosedTrain?.description}
                       </p>
+                    </div>
+                    <div>
+                      <button>Үнэлгээ өгөх</button>
                     </div>
                   </div>
 

@@ -10,50 +10,95 @@ import getWindowDimensions from "../../components/SizeDetector";
 import { Modal } from "react-bootstrap";
 
 const TrainingPlayer = () => {
-  const { width } = getWindowDimensions();
   const location = useLocation();
-  const { TOKEN, deviceId } = useStateContext();
+  const { TOKEN } = useStateContext();
   const navigate = useNavigate();
-  const [isPlaying, setIsPlaying] = useState(false);
   const videoRef = useRef(null);
   const trn = location.state.data;
   const [showTRate, setShowTRate] = useState(null);
   const hideModalTRate = () => setShowTRate(null);
   const [showGiveRate, setShowGiveRate] = useState(null);
   const hideModalGiveRate = () => setShowGiveRate(null);
-  const [tRate, setTRate] = useState();
+  const [tRate, setTRate] = useState([]);
+  const [q1, setQ1] = useState();
+  const [q2, setQ2] = useState();
   useEffect(() => {
     axios({
       method: "get",
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating/${trn.id}/`,
+      url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating`,
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
         } else if (res.data.isSuccess === true) {
-          setTRate(res.data.trainingRatingForm);
+          console.log(res.data);
+          const findRate = res.data.trRatingForm.find((item) => {
+            return item.trainingId === trn.id;
+          });
+          setTRate(findRate);
         } else if (
           res.data.resultMessage == "Unauthorized" ||
-          res.data.resultMessage == "Input string was not in a correct format."
+          res.data.resultMessage == "Input string was not in a correct divat."
         ) {
           logout();
         }
       })
       .catch((err) => console.log(err));
   }, []);
-
+  useEffect(() => {
+    axios({
+      method: "get",
+      headers: {
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating/${trn.id}/1`,
+    })
+      .then((res) => {
+        if (res.data.isSuccess === false) {
+        } else if (res.data.isSuccess === true) {
+          console.log(res.data);
+          setQ1(res.data.trainingRatingForm.trRatingQuestions);
+        } else if (
+          res.data.resultMessage == "Unauthorized" ||
+          res.data.resultMessage == "Input string was not in a correct divat."
+        ) {
+          logout();
+        }
+      })
+      .catch((err) => console.log(err));
+  }, []);
+  useEffect(() => {
+    axios({
+      method: "get",
+      headers: {
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating/${trn.id}/2`,
+    })
+      .then((res) => {
+        if (res.data.isSuccess === false) {
+        } else if (res.data.isSuccess === true) {
+          setQ2(res.data.trainingRatingForm.trRatingQuestions);
+        } else if (
+          res.data.resultMessage == "Unauthorized" ||
+          res.data.resultMessage == "Input string was not in a correct divat."
+        ) {
+          logout();
+        }
+      })
+      .catch((err) => console.log(err));
+  }, []);
   const onTimeUpdate = () => {
     let ref = videoRef.current;
     if (ref) {
       let currentTime = ref.currentTime;
       let duration = ref.duration;
       let progress = (currentTime / duration) * 100;
-      // console.log(progress);
-
       if (progress === 100) {
         if (trn.status === "Үзсэн") {
+          setShowTRate(true);
         } else {
           axios({
             method: "post",
@@ -72,9 +117,12 @@ const TrainingPlayer = () => {
                 notification.success(`Сургалт дууссан цаг бүртгэгдлээ.`);
                 const timer = setTimeout(() => setShowTRate(true), 500);
                 return () => clearTimeout(timer);
-              }
-              if (res.data.isSuccess === false) {
-                notification.error(`${res.data.resultMessage}`);
+              } else if (
+                res.data.resultMessage == "Unauthorized" ||
+                res.data.resultMessage ==
+                  "Input string was not in a correct divat."
+              ) {
+                logout();
               }
             })
             .catch((err) => console.log(err));
@@ -82,65 +130,66 @@ const TrainingPlayer = () => {
       }
     }
   };
-  const [chosen, setChosen] = useState();
-  let temp = [];
-  const rate = {
-    trainingId: `${trn?.id}`,
-    ratingId: `${tRate?.id}`,
-    trRateQuestion: chosen,
-  };
-  for (let index = 0; index < tRate?.trRatingQuestions.length; index++) {
-    const element = tRate?.trRatingQuestions[index];
-    let arr = {
-      questionId: element.questionId,
-      answer: "",
-      points: "",
-    };
-    temp.push(arr);
-  }
-
-  const [container, setContainer] = useState([]);
-  useEffect(() => {
-    let arr = [];
-    for (let index = 0; index < chosen?.length; index++) {
-      const element = chosen[index];
-      arr.push(element.answer);
-    }
-    setContainer(arr);
-  }, [chosen]);
-
-  function handleChange(answer, questionId, points) {
-    let tempo = chosen.map((item) => {
-      if (item.questionId === questionId) {
-        return { ...item, answer: answer, points: points };
-      } else {
-        return item;
-      }
+  const [answers1, setAnswers1] = useState({});
+  const [answers2, setAnswers2] = useState({});
+  const hanldeSubmit = (e) => {
+    e.preventDefault();
+    const formattedData1 = Object.keys(answers1).map((key) => {
+      return {
+        questionId: key,
+        answerId: answers1[key].answerId,
+        answer: answers1[key].answer,
+        points: answers1[key].points,
+      };
     });
-    setChosen(tempo);
-  }
-  const handleRate = () => {
-    axios({
-      method: "post",
-      headers: {
-        Authorization: `${TOKEN}`,
-        "Content-Type": "application/json",
-        accept: "text/plain",
-      },
-      url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating/rate`,
-      data: JSON.stringify(rate),
-    })
-      .then((res) => {
-        if (res.data.isSuccess === true) {
+    const formattedData2 = Object.keys(answers2).map((key) => ({
+      questionId: key,
+      answerId: "",
+      answer: answers2[key],
+      points: "",
+    }));
+    const mergedArray = [...formattedData1, ...formattedData2];
+    const result = mergedArray.reduce((acc, curr) => {
+      const key = curr.questionId;
+      if (!acc[key]) {
+        acc[key] = { ...curr };
+      } else {
+        acc[key] = { ...acc[key], ...curr };
+      }
+      return acc;
+    }, {});
+    const mergedArrayByKey = Object.values(result);
+    const t_data = {
+      trainingId: `${trn.id}`,
+      ratingId: `${tRate.id}`,
+      trRateQuestion: mergedArrayByKey,
+    };
+    if (mergedArrayByKey.length != tRate.trRatingQuestions.length) {
+      notification.error("Хариулт дутуу байна.");
+    } else {
+      axios({
+        method: "post",
+        headers: {
+          Authorization: `${TOKEN}`,
+          "Content-Type": "application/json",
+          accept: "text/plain",
+        },
+        url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating/rate`,
+        data: JSON.stringify(t_data),
+      }).then((res) => {
+        if (res.data.isSuccess == true) {
           notification.success(`${res.data.resultMessage}`);
-          const timer = setTimeout(() => navigate("/user-training"), 1000);
+          const timer = setTimeout(() => {
+            hideModalGiveRate();
+            navigate("/user-training");
+          }, 1500);
           return () => clearTimeout(timer);
         }
-        if (res.data.isSuccess === false) {
-          notification.error(`${res.data.resultMessage}`);
+        if (res.data.resultMessage === "Unauthorized") {
+          logout();
         }
-      })
-      .catch((err) => console.log(err));
+      });
+    }
   };
 
   return (
@@ -175,7 +224,6 @@ const TrainingPlayer = () => {
                 type="button"
                 onClick={() => {
                   setShowGiveRate(true);
-                  setChosen(temp);
                   hideModalTRate(true);
                 }}
                 className="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-green-300  font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
@@ -199,70 +247,98 @@ const TrainingPlayer = () => {
             <Modal.Title>Сургалтанд үнэлгээ өгөх</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <div className="flex items-center justify-center">
-              <div className="w-full bg-white  mx-auto ">
-                <img
-                  src="https://cdn.dribbble.com/users/4958643/screenshots/15528764/media/8c6506430319bd0ba093f8b20a4a395d.png"
-                  className="h-56 w-full rounded-md object-cover"
-                />
-                <div className="relative block p-2">
-                  <div className="p-2">
-                    <h3 className="mt-2 text-lg font-bold text-gray-900">
-                      {tRate?.name}
-                    </h3>
-                    <p className="mt-2 hidden text-md sm:block">
-                      {tRate?.description}
-                    </p>
-                  </div>
+            <div className="w-full bg-white  mx-auto ">
+              <div className="relative block">
+                <div>
+                  <h3 className="mt-2 text-lg font-bold text-gray-900">
+                    {tRate?.name}
+                  </h3>
+                  <p className="mt-2 hidden text-md sm:block">
+                    {tRate?.description}
+                  </p>
+                </div>
 
-                  <div className="md:mt-0 md:col-span-2 border border-t-4 bg:gray-600  shadow-xl">
-                    <div className="shadow overflow-hidden sm:rounded-md">
-                      {tRate?.trRatingQuestions?.map((a, i) => (
+                <div className="md:mt-0 md:col-span-2 border border-t-4 bg:gray-600  shadow-xl">
+                  <div className="shadow overflow-hidden sm:rounded-md">
+                    <div className="bg-gray-200 px-4">
+                      <p>Section 1</p>
+                    </div>
+                    {q1?.map((question, i) => {
+                      return (
                         <div
-                          key={i}
+                          key={question?.questionId}
                           className="px-4 py-3 bg-white space-y-3 sm:p-3"
                         >
                           <p className="text-base font-medium text-gray-900">
-                            {a.question}
+                            {i + 1}. {question?.question}
                           </p>
-                          {a.trRatingAnswer?.map((b, ind) => (
-                            <div key={ind} className="space-y-2">
-                              <div className="flex items-start">
-                                <div className="flex items-center h-5">
-                                  <input
-                                    type="radio"
-                                    value={`${b.answer}`}
-                                    name={`${b.answer}`}
-                                    checked={container.includes(b.answer)}
-                                    onChange={() =>
-                                      handleChange(
-                                        b.answer,
-                                        a.questionId,
-                                        b.points
-                                      )
-                                    }
-                                    className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                                  />
-                                </div>
-                                <div className="ml-3 text-sm">
-                                  <label className="font-medium text-gray-700">
-                                    {b.answer}
-                                  </label>
+
+                          {question?.trRatingAnswer?.map((answer, i) => {
+                            return (
+                              <div key={i} className="space-y-2">
+                                <div className="flex items-start">
+                                  <div className="flex items-center h-5">
+                                    <label className="font-medium text-gray-700">
+                                      <input
+                                        className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded mr-2"
+                                        type="radio"
+                                        name={question?.questionId}
+                                        onChange={(e) =>
+                                          setAnswers1((prevData) => ({
+                                            ...prevData,
+                                            [question?.questionId]: answer,
+                                          }))
+                                        }
+                                      />
+                                      {answer.answer}
+                                    </label>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          ))}
+                            );
+                          })}
                         </div>
-                      ))}
-                      <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                        <button
-                          type="submit"
-                          onClick={handleRate}
-                          className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      );
+                    })}
+                    <div className="bg-gray-200 px-4">
+                      <p>Section 2</p>
+                    </div>
+                    {q2?.map((question, i) => {
+                      return (
+                        <div
+                          key={question?.questionId}
+                          className="px-4 py-3 bg-white space-y-3 sm:p-3"
                         >
-                          Илгээх
-                        </button>
-                      </div>
+                          <p className="text-base font-medium text-gray-900">
+                            {i + 1}. {question?.question}
+                          </p>
+                          <div className="space-y-2">
+                            <input
+                              type="text"
+                              className="px-4 py-2 text-blueGray-600 bg-white text-md w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500 placeholder-gray-400"
+                              name={question?.questionId}
+                              onChange={(e) =>
+                                setAnswers2((prevData) => ({
+                                  ...prevData,
+                                  [question?.questionId]: e.target.value,
+                                }))
+                              }
+                              placeholder="Хариулт"
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
+                    <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                      <button
+                        className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        type="button"
+                        onClick={(e) => {
+                          hanldeSubmit(e);
+                        }}
+                      >
+                        Submit
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -271,6 +347,7 @@ const TrainingPlayer = () => {
           </Modal.Body>
         </Modal>
       </div>
+
       <div className="max-w-screen-xl ml-auto mr-auto">
         <div className="mx-auto max-w-screen-2xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -355,7 +432,6 @@ const TrainingPlayer = () => {
           </div>
         </div>
       </div>
-
       <ToastContainer />
     </UserLayout>
   );

@@ -217,7 +217,7 @@ function AllEmployeeSelect({ setShow, getEmployees, setShowSelect }) {
                         className={`fea py-2 px-2 font-[400] ${
                           chosenPre.includes(item.deviceId) &&
                           "!text-white !bg-teal-500"
-                        } bg-gray-200 h-8 w-[200px] flex relative items-center text-[13px] hover:shadow-teal-500
+                        } bg-gray-200 h-8 w-[200px] flex relative items-center text-[13px] hover:bg-gray-300
               transition-all cursor-pointer rounded text-gray-500 font-[600]`}
                       >
                         {chosenPre.includes(item.deviceId) && (
@@ -233,53 +233,6 @@ function AllEmployeeSelect({ setShow, getEmployees, setShowSelect }) {
               </Accordion.Item>
             ))}
           </Accordion>
-          {/* {main.map((el, ind) => (
-            <div
-              key={ind}
-              className="px-3 shadow-sm border-t border-teal-500 px-3 pt-1 pb-5 flex flex-col flex-wrap gap-2 overflow-scroll mt-2 justify-start"
-            >
-              <h6
-                onClick={() => {
-                  bigCollector(ind);
-                }}
-                className="text-black text-sm mt-2 flex items-center"
-              >
-                {el[0].unitName}{" "}
-                <div className="ml-2 w-4 h-4 border-[2px] border-gray-400 rounded relative">
-                  {indexDetect.includes(ind) && (
-                    <i className="bi bi-check absolute text-2xl top-[-10px] left-[-6px] text-teal-500"></i>
-                  )}
-                </div>
-              </h6>
-              <div className="flex flex-wrap gap-1">
-                {el?.map((item, index) => (
-                  <div
-                    onClick={() => {
-                      collector(
-                        item.departmentId,
-                        item.unitId,
-                        item.deviceId,
-                        ind
-                      );
-                    }}
-                    key={index}
-                    className={`fea py-2 px-2 font-[400] ${
-                      chosenPre.includes(item.deviceId) &&
-                      "!text-white !bg-teal-500"
-                    } bg-gray-400 h-8 w-[200px] flex relative items-center text-[13px] hover:shadow-teal-500
-              transition-all cursor-pointer`}
-                  >
-                    {chosenPre.includes(item.deviceId) && (
-                      <div className="transition-all">
-                        <i className="bi bi-check2-all mr-2"></i>
-                      </div>
-                    )}
-                    {item.lastName[0]}. {item.firstName}
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))} */}
         </div>
       </div>
     </div>
@@ -287,22 +240,3 @@ function AllEmployeeSelect({ setShow, getEmployees, setShowSelect }) {
 }
 
 export default AllEmployeeSelect;
-
-function Accordian() {
-  return (
-    <Accordion defaultActiveKey="0">
-      <Accordion.Item eventKey="0">
-        <Accordion.Header>Accordion Item #1</Accordion.Header>
-        <Accordion.Body>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
-        </Accordion.Body>
-      </Accordion.Item>
-    </Accordion>
-  );
-}

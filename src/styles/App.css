@@ -6,9 +6,6 @@
 .tahoma {
   font-family: "tahoma";
 }
-* {
-  /* font-family: "tahoma" !important; */
-}
 
 table,
 th,
@@ -62,14 +59,14 @@ a {
 }
 
 .cellt {
-  background-color: #206c98;
-  border: none;
+  background-color: #008080;
+  /* border: none !important; */
   color: white;
-  margin: 4px 2px;
   opacity: 0.9;
   transition: 0.3s;
   cursor: pointer;
-  z-index: 1;
+  border-bottom: 1px solid white;
+  z-index: 0 !important;
 }
 
 .cellt:hover {

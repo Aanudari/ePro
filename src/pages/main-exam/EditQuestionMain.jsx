@@ -1,6 +1,6 @@
 function EditQuestionMain({ question, imgSide, setImgSide }) {
   return (
-    <div className="h-full w-full px-4 flex flex-col gap-4 pt-4 drop-smooth overflow-scroll bg-white rounded">
+    <div className="h-full w-full px-4 flex flex-col gap-4 pt-4 drop-smooth overflow-scroll bg-white rounded ">
       <div className="flex justify-between w-full items-center">
         <h6 className="text-[13px] m-0">Оноо: {question.points}</h6>
         <i

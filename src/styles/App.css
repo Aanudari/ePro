@@ -364,3 +364,29 @@ input::-webkit-inner-spin-button {
 .accordion-button:hover {
   box-shadow: 0 0 5px silver !important;
 }
+
+.offcanvas-header {
+  background-color: #009797 !important;
+  height: 56px !important;
+}
+
+.offcanvas-body {
+  background-color: #00b8b8 !important;
+}
+
+.cus-height {
+  height: 100px !important;
+}
+.modal-header {
+  background-color: #009797 !important;
+  border-radius: 0 !important;
+  border: none !important;
+}
+.modal-body {
+  /* background-color: #00b8b8 !important; */
+}
+.modal-footer {
+  background-color: #009797 !important;
+  border-radius: 0 !important;
+  border: none !important;
+}

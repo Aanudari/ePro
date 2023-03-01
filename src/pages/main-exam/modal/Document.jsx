@@ -137,7 +137,9 @@ function Document({ setShowReport, id }) {
   return (
     <div
       className={`fixed ${
-        activeMenu ? "w-[calc(100%-250px)] left-[250px]" : "w-full left-0"
+        activeMenu
+          ? "w-[calc(100%-250px)] left-[250px] z-20"
+          : "w-full left-0 z-20"
       }  
          !bg-black top-[56px] h-[calc(100%-56px)] !bg-opacity-50  flex justify-end`}
     >

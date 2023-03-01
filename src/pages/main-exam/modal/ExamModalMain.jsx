@@ -371,7 +371,7 @@ function ExamModalMain({
           ? "top-[56px] left-[250px] w-[calc(100%-250px)] h-[calc(100%-56px)]"
           : "w-full h-full top-[56px] left-0"
       } 
-        bg-black bg-opacity-50 flex justify-center items-center
+        bg-black bg-opacity-50 flex justify-center items-center z-20
         `}
     >
       {confirm && (

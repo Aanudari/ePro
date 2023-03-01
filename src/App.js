@@ -3,6 +3,7 @@ import "./styles/styles.scss";
 import "./styles/core.scss";
 import "./styles/modal.scss";
 import "./styles/validation.css";
+import "./styles/cus_buttons.scss";
 import "react-datepicker/dist/react-datepicker.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/core/Login";
@@ -43,6 +44,7 @@ import ExamShow from "./pages/UserMainUI/ExamUser/core/ExamShow";
 import EditTrainRate from "./pages/training_raiting/EditTrainRate";
 import RatedUsers from "./pages/training_raiting/RatedUsers";
 import Rating from "./pages/rating/Rating";
+import CertainTemplate from "./pages/rating/belongTemplate/CertainTemplate";
 
 // fonts
 // import "src/fonts/Tahoma_Regular_font.ttf";
@@ -69,6 +71,7 @@ function App() {
   const { activeMenu, showTop, roleId, TOKEN } = useStateContext();
   const { width } = getWindowDimensions();
   const queryClient = new QueryClient();
+
   // useEffect(() => {
   //   const api = () => {
   //     axios({
@@ -348,6 +351,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199, 196, 1, 4, 188]}>
                 <Rating />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/template"
+            element={
+              <ProtectedRoute allowedRoles={[199, 196, 1, 4, 188]}>
+                <CertainTemplate />
               </ProtectedRoute>
             }
           />

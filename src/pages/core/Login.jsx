@@ -45,6 +45,7 @@ function Login() {
             redirect(res.data);
             setisAuthenticated(true);
             localStorage.setItem("token", res.data.token);
+            window.location.reload();
           } else {
             setalert(true);
           }

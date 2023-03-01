@@ -113,9 +113,9 @@ function ExamBoard({
           onClick={() => {
             setShow(true);
           }}
-          className="w-1/4 h-full border-[1px] hover:bg-teal-600 hover:text-white transition-all !border-teal-500 rounded cursor-pointer flex justify-center items-center text-teal-600 text-[11px] uppercase font-bold mr-2"
+          className="w-1/4 p-0 custom-btn btn-13 h-full border-[1px]  transition-all !border-teal-500 rounded cursor-pointer flex justify-center items-center text-teal-700 text-[11px] uppercase font-bold mr-2"
         >
-          <i className="bi bi-plus text-lg text-md mr-2"></i>
+          <i className="bi bi-plus text-lg text-md mr-2 "></i>
           Шалгалт үүсгэх
         </div>
       </div>
@@ -192,10 +192,10 @@ function ExamBoard({
                     handleExamModal(exam.id);
                   }}
                   className="w-1/4 h-full flex justify-between items-center text-[11px] cursor-pointer
-                     uppercase font-[500] bg-green-500 !text-white active:bg-green-500 hover:bg-green-600"
+                     uppercase font-[500] custom-btn btn-5 p-0 rounded-none"
                 >
-                  <div className="w-full flex justify-center items-center font-[500]">
-                    <span className="font-[500]">
+                  <div className="w-full flex justify-center items-center font-[500] ">
+                    <span className="!font-[700]">
                       {exam?.examSummary?.taken}/{exam?.examSummary?.total}
                     </span>
                   </div>
@@ -209,7 +209,7 @@ function ExamBoard({
                     setShowReport(true);
                     handleExamModal(exam.id);
                   }}
-                  className="w-1/4 h-full flex justify-between items-center text-[11px] cursor-pointer
+                  className="w-1/4 h-full flex justify-between items-center text-[11px] cursor-pointer custom-btn btn-13 p-0 rounded-none
                                uppercase font-[500] bg-teal-500 !text-white active:bg-teal-500 hover:bg-teal-600"
                 >
                   <div className="w-full flex justify-center items-center font-[500]">
@@ -225,8 +225,8 @@ function ExamBoard({
                     setShowReport(true);
                     handleExamModal(exam.id);
                   }}
-                  className="w-1/4 h-full flex justify-between items-center text-[11px] cursor-pointer
-                               uppercase font-[500] bg-amber-500 !text-white active:bg-amber-500 hover:bg-amber-600"
+                  className="w-1/4 h-full flex justify-between items-center text-[11px] cursor-pointer custom-btn btn-14 p-0
+                               uppercase font-[500] bg-amber-500 rounded-none active:bg-amber-500 hover:bg-amber-600"
                 >
                   <div className="w-full flex justify-center items-center font-[500]">
                     NOT YET ...

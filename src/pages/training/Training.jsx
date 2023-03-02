@@ -160,7 +160,7 @@ function Training() {
     var filteredData = filterByCategory(trains);
     setFilteredList(filteredData);
   }, [selectedCategory]);
-
+  console.log(trains);
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <div>
@@ -277,9 +277,230 @@ function Training() {
           </div>
         </div>
 
-        {filteredList.map((data, index) => (
+        <div className="flex flex-wrap -mx-4">
+          {filteredList.map((data, index) => (
+            <div key={index} className="w-full sm:w-1/2 md:w-1/2 xl:w-1/2 p-4 ">
+              <a className="block bg-white shadow-md hover:shadow-xl hover:shadow-indigo-500/60 rounded-lg overflow-hidden ">
+                <div className="relative pb-48 overflow-hidden">
+                  {data.fileUrl?.slice(-4) === ".mp4" ? (
+                    <div>
+                      <video
+                        className="absolute inset-0 h-full w-full object-cover"
+                        ref={videoRef}
+                        width="100%"
+                        // height="100%"
+
+                        controls
+                      >
+                        <source
+                          src={`http://` + `${data.fileUrl}`}
+                          type="video/mp4"
+                        />
+                      </video>
+                    </div>
+                  ) : data.fileUrl.slice(-4) === ".png" ||
+                    data.fileUrl.slice(-4) === "jpeg" ||
+                    data.fileUrl.slice(-4) === ".jpg" ||
+                    data.fileUrl.slice(-4) === ".png" ||
+                    data.fileUrl.slice(-4) === ".gif" ? (
+                    <div className="flex justify-center">
+                      <img
+                        className="absolute inset-0 h-full w-full object-cover"
+                        src={`http://` + `${data.fileUrl}`}
+                      />
+                    </div>
+                  ) : data.fileUrl.slice(-4) === ".mp3" ? (
+                    <div className="absolute inset-0 h-full w-full object-cover">
+                      <audio controlsList="nodownload" controls>
+                        <source
+                          src={`http://` + `${data.fileUrl}`}
+                          type="audio/mpeg"
+                        />
+                      </audio>
+                    </div>
+                  ) : data.fileUrl.slice(-4) === "xlsx" ||
+                    data.fileUrl.slice(-4) === ".pdf" ||
+                    data.fileUrl.slice(-4) === "docx" ||
+                    data.fileUrl.slice(-4) === "pptx" ? (
+                    <p className="mt-4 text-sm leading-5">
+                      <span className="block font-medium text-gray-500 ">
+                        <i className="bi bi-play-circle-fill" /> Файлын нэр:
+                      </span>
+                      <span className="inline-block font-medium text-gray-500  ">
+                        {data.fileUrl?.slice(29)}
+                      </span>
+                    </p>
+                  ) : (
+                    <div className="text-black text-md border-2 border-blue-500  rounded-md ">
+                      <div className="flex justify-center">
+                        {data.fileUrl.slice(29)}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="p-4">
+                  {moment(today).format(format) >=
+                  moment(data.endDate).format(format) ? (
+                    <span className="inline-block px-2 py-1 leading-none bg-red-200 text-red-800 rounded-full font-semibold uppercase tracking-wide text-xs">
+                      ИДЭВХГҮЙ
+                    </span>
+                  ) : (
+                    <span className="inline-block px-2 py-1 leading-none bg-green-200 text-green-800 rounded-full font-semibold uppercase tracking-wide text-xs">
+                      ИДЭВХТЭЙ
+                    </span>
+                  )}
+                  <div
+                    className="text-black cursor-pointer"
+                    onClick={() => {
+                      showModalView(data);
+                    }}
+                  >
+                    <p className="mt-2 mb-2 font-bold ">{data.name}</p>
+
+                    {data.description === "" ? (
+                      ""
+                    ) : (
+                      <p className="text-sm">{data.description}</p>
+                    )}
+                  </div>
+                </div>
+                <div>
+                  <ul className="grid gap-x-8 grid-cols-2 flex">
+                    <li className="flex items-start">
+                      <div className="flex-shrink-0 text-emerald-500 text-lg">
+                        <i className="bi bi-card-checklist" />
+                      </div>
+                      <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                        Ангилал: {data.tCatName}
+                      </p>
+                    </li>
+                    {data.teacher === "" ? (
+                      ""
+                    ) : (
+                      <li className="flex items-start ">
+                        <div className="flex-shrink-0 text-emerald-500 text-lg">
+                          <i className="bi bi-person-video3" />
+                        </div>
+                        <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                          Багш: {data.teacher}
+                        </p>
+                      </li>
+                    )}
+
+                    <li className="flex items-start ">
+                      <div className="flex-shrink-0 text-emerald-500 text-lg">
+                        <i className="bi bi-signpost-split-fill" />
+                      </div>
+                      <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                        {
+                          options?.find((obj) => obj.id === data.sessionType)
+                            .value
+                        }
+                      </p>
+                    </li>
+                    {data.location === "" ? (
+                      ""
+                    ) : (
+                      <li className="flex items-start ">
+                        <div className="flex-shrink-0 text-emerald-500 text-lg">
+                          <i className="bi bi-pin-map-fill" />
+                        </div>
+                        <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                          Байршил: {data.location}
+                        </p>
+                      </li>
+                    )}
+                    {data.startDate === "" ? (
+                      ""
+                    ) : (
+                      <li className="flex items-start ">
+                        <div className="flex-shrink-0 text-emerald-500 text-lg">
+                          <i className="bi bi-calendar-check" />
+                        </div>
+
+                        <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                          Эхлэх хугацаа: {data.startDate}
+                        </p>
+                      </li>
+                    )}
+
+                    {data.endDate === "" ? (
+                      ""
+                    ) : (
+                      <li className="flex items-start ">
+                        <div className="flex-shrink-0 text-emerald-500 text-lg">
+                          <i className="bi bi-calendar-check-fill" />
+                        </div>
+
+                        {moment(today).format(format) >=
+                        moment(data.endDate).format(format) ? (
+                          <p className="ml-3 text-sm leading-5 text-red-500 ">
+                            Дуусах хугацаа: {data.endDate} (Хугацаа дууссан)
+                          </p>
+                        ) : (
+                          <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                            Дуусах хугацаа: {data.endDate}
+                          </p>
+                        )}
+                      </li>
+                    )}
+
+                    {data.duration === "" ? (
+                      ""
+                    ) : (
+                      <li className="flex items-start ">
+                        <div className="flex-shrink-0 text-emerald-500 text-lg">
+                          <i className="bi bi-clock-history" />
+                        </div>
+                        <p className="ml-3 text-sm leading-5 text-gray-700 ">
+                          Үргэлжлэх хугацаа: {secondsToHms(data.duration)}
+                        </p>
+                      </li>
+                    )}
+                  </ul>
+                </div>
+                <div className="p-2 flex items-center ">
+                  <TrainingProgressCell data={data} />
+                </div>
+
+                <div className="p-2 border-t border-b text-xs text-gray-700">
+                  <div className="text-right">
+                    <div className="inline-flex items-end">
+                      <button
+                        data-id={data}
+                        onClick={() => {
+                          handleEdit(data);
+                        }}
+                        className="mr-2 group flex items-center justify-between rounded-lg border border-current px-4 py-2 text-indigo-600 transition-colors hover:bg-indigo-600 hover:text-white  focus:outline-none focus:ring active:bg-indigo-500"
+                        type="button"
+                      >
+                        {" "}
+                        <i className="bi bi-pencil-square mr-1" />
+                        <span className="font-bold text-xs">Засварлах</span>
+                      </button>
+                      <button
+                        type="button"
+                        data-id={data}
+                        onClick={() => {
+                          showModalDelete(data);
+                        }}
+                        className="group flex items-center justify-between rounded-lg border border-current px-4 py-2 text-red-600 transition-colors hover:bg-red-600 hover:text-white  focus:outline-none focus:ring active:bg-red-500"
+                      >
+                        <i className="bi bi-trash-fill mr-1" />
+                        <span className="font-bold text-xs"> Устгах</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+          ))}
+        </div>
+
+        {/* {filteredList.map((data, index) => (
           <div key={index} className="p-2">
-            <div className="max-w-full mx-auto overflow-hidden border border-t-4 rounded-lg shadow-lg pricing-box lg:max-w-none lg:flex mt-2">
+            <div className=" max-w-full mx-auto overflow-hidden border border-t-4 rounded-lg shadow-lg pricing-box lg:max-w-none lg:flex mt-2 hover:border-blue-500 transition duration-500 ease-in-out transform hover:translate-x-2 hover:translate-y-2">
               <div className="w-full px-6 py-8 bg-white  lg:flex-shrink-2 lg:p-12">
                 <h3 className="text-xl  leading-8 text-gray-800 sm:text-xl sm:leading-9 ">
                   {data.name}
@@ -300,7 +521,7 @@ function Training() {
                     <div className="flex-1 border-t-2 border-gray-200"></div>
                   </div>
                   <ul className="mt-2 lg:grid lg:grid-cols-2 lg:col-gap-8 lg:row-gap-5">
-                    <li className="flex items-start lg:col-span-1">
+                    <li className="flex items-start ">
                       <div className="flex-shrink-0 text-emerald-500 text-lg">
                         <i className="bi bi-card-checklist" />
                       </div>
@@ -456,11 +677,43 @@ function Training() {
                         />
                       </video>
                     </div>
+                  ) : data.fileUrl.slice(-4) === ".png" ||
+                    data.fileUrl.slice(-4) === "jpeg" ||
+                    data.fileUrl.slice(-4) === ".jpg" ||
+                    data.fileUrl.slice(-4) === ".png" ||
+                    data.fileUrl.slice(-4) === ".gif" ? (
+                    <div className="flex justify-center">
+                      <img
+                        className="h-full rounded-xl"
+                        src={`http://` + `${data.fileUrl}`}
+                      />
+                    </div>
+                  ) : data.fileUrl.slice(-4) === ".mp3" ? (
+                    <div className="flex justify-center">
+                      <audio controlsList="nodownload" controls>
+                        <source
+                          src={`http://` + `${data.fileUrl}`}
+                          type="audio/mpeg"
+                        />
+                      </audio>
+                    </div>
+                  ) : data.fileUrl.slice(-4) === "xlsx" ||
+                    data.fileUrl.slice(-4) === ".pdf" ||
+                    data.fileUrl.slice(-4) === "docx" ||
+                    data.fileUrl.slice(-4) === "pptx" ? (
+                    <p className="mt-4 text-sm leading-5">
+                      <span className="block font-medium text-gray-500 ">
+                        <i className="bi bi-play-circle-fill" /> Файлын нэр:
+                      </span>
+                      <span className="inline-block font-medium text-gray-500  ">
+                        {data.fileUrl?.slice(29)}
+                      </span>
+                    </p>
                   ) : (
-                    <div className="rounded border-l-4 border-red-500 bg-red-50 p-4">
-                      <strong className="block font-medium text-red-700">
-                        Файл хавсаргаагүй байна.
-                      </strong>
+                    <div className="text-black text-md border-2 border-blue-500  rounded-md ">
+                      <div className="flex justify-center">
+                        {data.fileUrl.slice(29)}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -479,7 +732,7 @@ function Training() {
               </div>
             </div>
           </div>
-        ))}
+        ))} */}
       </div>
 
       <ToastContainer />

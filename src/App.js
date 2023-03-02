@@ -42,8 +42,8 @@ import Exam from "./pages/UserMainUI/ExamUser/core/Exam";
 import ExamShow from "./pages/UserMainUI/ExamUser/core/ExamShow";
 import EditTrainRate from "./pages/training_raiting/EditTrainRate";
 import RatedUsers from "./pages/training_raiting/RatedUsers";
-import CreateRate from "./pages/training_raiting/CreateRate";
 import ChoosedTRate from "./pages/training_raiting/ChoosedTRate";
+import RatingReport from "./pages/training_raiting/RatingReport";
 
 function App() {
   const { activeMenu, showTop, roleId } = useStateContext();
@@ -164,10 +164,10 @@ function App() {
             }
           />
           <Route
-            path="/create-rate"
+            path="/rating-report"
             element={
               <ProtectedRoute allowedRoles={[199, 4]}>
-                <CreateRate />
+                <RatingReport />
               </ProtectedRoute>
             }
           />

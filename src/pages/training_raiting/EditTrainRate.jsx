@@ -27,7 +27,7 @@ function EditTrainRate() {
   const endDate = moment(date2).format(format);
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
-  const [points, setPoints] = useState("");
+  const [questionType, setQuestionType] = useState("");
   const [tID, setTID] = useState("");
   const [tNAME, setTNAME] = useState("");
   const [checkName, setCheckName] = useState(false);
@@ -81,6 +81,7 @@ function EditTrainRate() {
   };
   const navigateIndex = (e) => {
     e.preventDefault();
+    console.log(dataEditTrate);
     if (startDate == endDate || startDate > endDate) {
       notification.invalidFileUpload("Эхлэх дуусах хугацаа алдаатай байна.");
     } else {
@@ -110,10 +111,10 @@ function EditTrainRate() {
   useEffect(() => {
     setRaw(trainrate?.trRatingQuestions);
   }, []);
-  const collector = (question, answer, point, id, answerId) => {
+  const collector = (question, answer, id, answerId, questionType) => {
     setQuestion(question);
     setAnswer(answer);
-    setPoints(point);
+    setQuestionType(questionType);
     let single = raw.filter((item) => {
       return item.questionId == id;
     });
@@ -122,7 +123,7 @@ function EditTrainRate() {
         return {
           ...el,
           answer: answer,
-          points: point != undefined ? point : el.points,
+          points: "",
         };
       } else {
         return el;
@@ -132,7 +133,7 @@ function EditTrainRate() {
       {
         questionId: `${id}`,
         question: `${question}`,
-        questionType: "1",
+        questionType: `${questionType}`,
         trRatingAnswer: tempo,
       },
     ];
@@ -145,6 +146,7 @@ function EditTrainRate() {
     });
     setRaw(final);
   };
+  console.log(trainrate);
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <Navigation />
@@ -160,8 +162,8 @@ function EditTrainRate() {
                 d="M9 4 L5 8 L9 12"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinejoin="round"
                 strokeLinecap="round"
               />
             </svg>
@@ -277,8 +279,8 @@ function EditTrainRate() {
                         collector(
                           e.target.value,
                           answer,
-                          points,
-                          quest.questionId
+                          quest.questionId,
+                          quest.questionType
                         );
                         //    setcheckEmptyname(false);
                       }}
@@ -303,7 +305,6 @@ function EditTrainRate() {
                             collector(
                               question,
                               e.target.value,
-                              points,
                               quest.questionId,
                               ans.answerId
                             );

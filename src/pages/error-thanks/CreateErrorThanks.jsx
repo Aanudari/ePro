@@ -196,8 +196,24 @@ function CreateErrorThanks() {
       <Navigation />
       <div className="w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
+          <button
+            onClick={() => navigate("/error-thanks")}
+            className="border border-white p-2 rounded text-gray-700 flex items-center focus:outline-none focus:shadow-outline"
+          >
+            <svg width="24" height="24" viewBox="0 0 16 16">
+              <path
+                d="M9 4 L5 8 L9 12"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinejoin="round"
+                strokeLinecap="round"
+              />
+            </svg>
+            <span className="mx-2">Буцах</span>
+          </button>
           <div className="flex items-center justify-between">
-            <p className="focus:outline-none text-base sm:text-sm md:text-md lg:text-md font-bold leading-normal text-gray-800">
+            <p className="focus:outline-none text-base sm:text-sm md:text-xl lg:text-xl font-bold leading-normal text-gray-800">
               {type}
             </p>
           </div>
@@ -395,12 +411,6 @@ function CreateErrorThanks() {
                 </div>
                 <div className="col-span-5 text-right">
                   <div className="inline-flex items-end">
-                    <button
-                      onClick={() => navigate("/error-thanks")}
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-                    >
-                      Exit
-                    </button>
                     <button
                       onClick={navigateIndex}
                       type="submit"

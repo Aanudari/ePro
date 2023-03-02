@@ -1,7 +1,6 @@
 import axios from "axios";
 
 let token = localStorage.getItem("token");
-console.log(token);
 const instance = axios.create({
   baseURL: process.env.REACT_APP_URL,
   headers: {

@@ -30,7 +30,7 @@ function ExamBoard({
   const text = "2023-03-04 10:13:07";
   // console.log(text.split(" ", 1));
   return (
-    <div className="min-w-[800px] glass-2 bg-white  shadow py-3 px-4 shadow-sm relative">
+    <div className="min-w-[800px] bg-white shadow py-3 px-4 shadow-sm">
       {show && (
         <CreateaExamForm
           closeForm={setShow}
@@ -38,65 +38,76 @@ function ExamBoard({
           setExamTri={setExamTri}
         />
       )}
-      <div className="flex w-full mb-2">
-        <div
-          onClick={() => {
-            setDetector(0);
-          }}
-          className={`w-[150px] ${
-            detector == 0
-              ? "bg-teal-700 hover:!bg-teal-700 shadow"
-              : "bg-teal-500"
-          } h-9  hover:bg-teal-600 active:bg-teal-700 hover:mt-[-2px]   flex items-center justify-center font-[500] uppercase  
+      <div className="flex">
+        <div className="flex w-full mb-2">
+          <div
+            onClick={() => {
+              setDetector(0);
+            }}
+            className={`w-[150px] ${
+              detector == 0
+                ? "bg-teal-700 hover:!bg-teal-700 shadow"
+                : "bg-teal-500"
+            } h-9  hover:bg-teal-600 active:bg-teal-700 hover:mt-[-2px]   flex items-center justify-center font-[500] uppercase  
           text-white text-[11px] cursor-pointer transition-all`}
-        >
-          Бүгд
+          >
+            Бүгд
+          </div>
+          <div
+            onClick={() => {
+              setDetector(1);
+            }}
+            className={`w-[150px] ${
+              detector == 1
+                ? "bg-teal-700 hover:!bg-teal-700 shadow"
+                : "bg-teal-500"
+            } h-9  hover:bg-teal-600 active:bg-teal-700 hover:mt-[-2px]   flex items-center justify-center font-[500] uppercase  
+          text-white text-[11px] cursor-pointer transition-all ml-1`}
+          >
+            Идэвхитэй
+            <i className="bi bi-check2-circle ml-1"></i>
+          </div>
+          <div
+            onClick={() => {
+              setDetector(2);
+            }}
+            className={`w-[150px] ${
+              detector == 2
+                ? "bg-teal-700 hover:!bg-teal-700 shadow"
+                : "bg-teal-500"
+            } h-9  hover:bg-teal-600 active:bg-teal-700 hover:mt-[-2px]   flex items-center justify-center font-[500] uppercase  
+          text-white text-[11px] cursor-pointer transition-all ml-1`}
+          >
+            Дууссан
+            <i className="bi bi-hourglass-bottom ml-2"></i>
+          </div>
+          <div
+            onClick={() => {
+              setDetector(3);
+            }}
+            className={`w-[150px] ${
+              detector == 3
+                ? "bg-teal-700 hover:!bg-teal-700 shadow"
+                : "bg-teal-500"
+            } h-9  hover:bg-teal-600 active:bg-teal-700 hover:mt-[-2px]   flex items-center justify-center font-[500] uppercase  
+          text-white text-[11px] cursor-pointer transition-all ml-1`}
+          >
+            Эхлээгүй
+            <i className="bi bi-alarm-fill ml-2"></i>
+          </div>
         </div>
         <div
           onClick={() => {
-            setDetector(1);
+            setShow(true);
           }}
-          className={`w-[150px] ${
-            detector == 1
-              ? "bg-teal-700 hover:!bg-teal-700 shadow"
-              : "bg-teal-500"
-          } h-9  hover:bg-teal-600 active:bg-teal-700 hover:mt-[-2px]   flex items-center justify-center font-[500] uppercase  
-          text-white text-[11px] cursor-pointer transition-all ml-1`}
+          className="w-1/4 h-9 p-0 custom-btn btn-13 h-full border-[1px]  transition-all !border-teal-500 rounded cursor-pointer flex justify-center items-center text-teal-700 text-[11px] uppercase font-bold mr-2"
         >
-          Идэвхитэй
-          <i className="bi bi-check2-circle ml-1"></i>
-        </div>
-        <div
-          onClick={() => {
-            setDetector(2);
-          }}
-          className={`w-[150px] ${
-            detector == 2
-              ? "bg-teal-700 hover:!bg-teal-700 shadow"
-              : "bg-teal-500"
-          } h-9  hover:bg-teal-600 active:bg-teal-700 hover:mt-[-2px]   flex items-center justify-center font-[500] uppercase  
-          text-white text-[11px] cursor-pointer transition-all ml-1`}
-        >
-          Дууссан
-          <i className="bi bi-hourglass-bottom ml-2"></i>
-        </div>
-        <div
-          onClick={() => {
-            setDetector(3);
-          }}
-          className={`w-[150px] ${
-            detector == 3
-              ? "bg-teal-700 hover:!bg-teal-700 shadow"
-              : "bg-teal-500"
-          } h-9  hover:bg-teal-600 active:bg-teal-700 hover:mt-[-2px]   flex items-center justify-center font-[500] uppercase  
-          text-white text-[11px] cursor-pointer transition-all ml-1`}
-        >
-          Эхлээгүй
-          <i className="bi bi-alarm-fill ml-2"></i>
+          <i className="bi bi-vector-pen text-lg text-md mr-2 "></i>
+          Шалгалт үүсгэх
         </div>
       </div>
 
-      <div className="w-full h-8 flex gap-1">
+      {/* <div className="w-full h-8 flex gap-1">
         <div className="w-1/4 h-full flex justify-center items-center bg-teal-500 text-white text-[11px] uppercase font-[500]">
           Нэр
         </div>
@@ -118,8 +129,8 @@ function ExamBoard({
           <i className="bi bi-plus text-lg text-md mr-2 "></i>
           Шалгалт үүсгэх
         </div>
-      </div>
-      <div className="!h-[calc(100vh-188px)] w-full overflow-scroll mt-2 border-b">
+      </div> */}
+      <div className="!h-[calc(100vh-156px)] w-full overflow-scroll mt-2 border-b">
         {exams &&
           temp[detector]?.map((exam, index) => (
             <div key={index} className="h-14 w-full flex border-b">
@@ -155,12 +166,13 @@ function ExamBoard({
                   className="w-1/4 h-full flex flex-row gap-3 justify-center items-center text-[11px]
                      uppercase font-[500]"
                 >
-                  <span className="m-0 font-[500]">
+                  <span className="m-0 font-[600]">
                     {exam.startDate.split(" ", 1)}
                   </span>
                   <span
                     className={`m-0 font-[500] ${
-                      exam?.examSummary?.status == "Ongoing" && "text-gray-900"
+                      exam?.examSummary?.status == "Ongoing" &&
+                      "text-gray-900 font-[700]"
                     }`}
                   >
                     {exam?.expireDate.split(" ", 1)}
@@ -173,16 +185,21 @@ function ExamBoard({
                   {exam?.examSummary?.status == "Exam over" ? (
                     "Дууссан"
                   ) : exam?.examSummary?.status == "Ongoing" ? (
-                    <span className="font-[500] text-white">Идэвхитэй</span>
+                    <div className="px-2 py-1 rounded-md shadow bg-white">
+                      <span className="!font-[700] text-red-500 text-[9px]">
+                        Идэвхитэй{" "}
+                        <i className="bi bi-check2-circle ml-1 text-[12px]"></i>
+                      </span>
+                    </div>
                   ) : (
-                    "Хүлээгдэж буй"
+                    "Эхлээгүй ..."
                   )}
                 </div>
                 <div
                   className="w-1/4 h-full flex justify-center items-center text-[11px]
                      uppercase font-[500]"
                 >
-                  {exam?.duration} мин {exam?.id}
+                  {exam?.duration} мин
                 </div>
               </div>
               {exam?.examSummary?.status == "Ongoing" ? (
@@ -229,7 +246,7 @@ function ExamBoard({
                                uppercase font-[500] bg-amber-500 rounded-none active:bg-amber-500 hover:bg-amber-600"
                 >
                   <div className="w-full flex justify-center items-center font-[500]">
-                    NOT YET ...
+                    ХҮЛЭЭГДЭЖ БУЙ
                   </div>
                   <div className="h-full min-w-[50px] border-l flex justify-center items-center">
                     <i className="bi bi-alarm-fill text-[16px]"></i>

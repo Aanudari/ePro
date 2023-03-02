@@ -168,13 +168,13 @@ function CreateExamForm({ closeForm, examTri, setExamTri }) {
     >
       <ToastContainer />
       {show && <GetQuestionIdsFromCategory setShow={setShow} getIds={getIds} />}
-      <div className="shrink w-[calc(85%)] h-[600px] bg-white flex flex-col ">
-        <div className="w-full min-h-[50px] bg-gray-700 flex justify-end px-3 flex items-center ">
+      <div className="shrink w-[calc(85%)] h-[600px] bg-white flex flex-col rounded">
+        <div className="w-full min-h-[50px] bg-teal-700 flex justify-end px-3 flex items-center rounded-t">
           <i
             onClick={() => {
               closeForm(false);
             }}
-            className="bi bi-x text-white text-3xl cursor-pointer"
+            className="bi bi-x text-white text-3xl cursor-pointer hover:scale-110 hover:mt-[-3px]"
           ></i>
         </div>
         <div className="w-full h-full relative p-2 flex flex-col justify-between">
@@ -272,7 +272,7 @@ function CreateExamForm({ closeForm, examTri, setExamTri }) {
                   </div>
                 </div>
                 <div className="h-full w-full md:w-1/2 pr-0 flex flex-col justify-between">
-                  <div>
+                  <div className="relative z-10">
                     <div className="flex flex-col ">
                       <span className="font-[500] text-gray-500/80  text-[17.5px]">
                         Нээх цаг :
@@ -290,7 +290,7 @@ function CreateExamForm({ closeForm, examTri, setExamTri }) {
                         dateFormat="yyyy-MM-dd h:mm aa"
                       />
                     </div>
-                    <div className="flex flex-col mt-3">
+                    <div className="flex flex-col mt-3 ">
                       <span className="font-[500] text-gray-500/80 text-[17.5px]">
                         Хаах цаг :
                       </span>
@@ -313,7 +313,7 @@ function CreateExamForm({ closeForm, examTri, setExamTri }) {
                       onClick={() => {
                         setShowSelect(true);
                       }}
-                      className="px-3 hover:bg-green-700 py-2 bg-green-600 font-[500] 
+                      className="px-3 hover:bg-teal-700 py-2 bg-teal-600 font-[500] 
                       flex justify-center items-center text-white rounded mt-4 w-[200px]"
                     >
                       Нийт: {allEmployee?.length} ажилтан
@@ -324,7 +324,7 @@ function CreateExamForm({ closeForm, examTri, setExamTri }) {
                         setShowSelect(true);
                       }}
                       className="px-3 hover:bg-teal-600 py-2 bg-teal-600 font-[500] 
-                      flex justify-center cursor-pointer items-center text-white rounded hover:bg-teal-700 mt-4 w-[200px]"
+                      flex justify-center cursor-pointer items-center text-white rounded hover:bg-teal-700 mt-4 w-[200px] custom-btn btn-13 rounded-none"
                     >
                       Ажилтан сонгох
                     </div>
@@ -334,7 +334,7 @@ function CreateExamForm({ closeForm, examTri, setExamTri }) {
                       onClick={(e) => {
                         handleCreateQuestions(e);
                       }}
-                      className="px-3 hover:bg-green-700 py-2 bg-green-600 font-[500] 
+                      className="px-3 hover:bg-teal-700 py-2 bg-teal-600 font-[500] 
                     flex justify-center items-center text-white rounded mt-4 w-[200px]"
                     >
                       Нийт: {AllQuestions?.length} Асуулт
@@ -345,7 +345,7 @@ function CreateExamForm({ closeForm, examTri, setExamTri }) {
                         handleCreateQuestions(e);
                       }}
                       className="px-3 hover:bg-teal-600 py-2 bg-teal-600 font-[500] 
-                      flex justify-center cursor-pointer items-center text-white rounded hover:bg-teal-700 mt-4 w-[200px]"
+                      flex justify-center cursor-pointer items-center text-white rounded hover:bg-teal-700 mt-4 w-[200px] custom-btn btn-13 rounded-none"
                     >
                       Асуулт сонгох
                     </div>
@@ -361,8 +361,8 @@ function CreateExamForm({ closeForm, examTri, setExamTri }) {
               onClick={() => {
                 handleCreateExam();
               }}
-              className="h-12 flex items-center justify-center bg-green-600 text-white font-[500] rounded
-          cursor-pointer hover:bg-green-700 active:bg-green-600"
+              className="h-12 flex items-center justify-center bg-teal-600 text-white font-[500]
+          cursor-pointer hover:!text-gray-900 active:bg-teal-600 custom-btn btn-16 rounded-none !w-full"
             >
               Шалгалт үүсгэх
             </div>

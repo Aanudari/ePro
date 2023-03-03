@@ -9,12 +9,14 @@ import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
 import { logout } from "../../service/examService";
 import getWindowDimensions from "../../components/SizeDetector";
-
+import Pagination from "../../service/Pagination";
 function ErrorThanks() {
   const { width } = getWindowDimensions();
   const { TOKEN } = useStateContext();
   const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [recordsPerPage] = useState(10);
   const [complainInfo, setComplainInfo] = useState();
   const [complain, setComplain] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
@@ -68,6 +70,7 @@ function ErrorThanks() {
         if (res.data.isSuccess == true) {
           setComplain(res.data.complains);
           setFilteredList(res.data.complains);
+          setLoading(false);
         }
         if (
           res.data.resultMessage === "Unauthorized" ||
@@ -128,6 +131,7 @@ function ErrorThanks() {
       return item.firstName.toLowerCase().indexOf(query.toLowerCase()) !== -1;
     });
     setFilteredList(searchList);
+    setLoading(false);
     // setCurrentTab(value);
   };
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -146,7 +150,15 @@ function ErrorThanks() {
   useEffect(() => {
     var filteredData = filterByCategory(complain);
     setFilteredList(filteredData);
+    setLoading(false);
   }, [selectedCategory]);
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  const currentRecords = filteredList.slice(
+    indexOfFirstRecord,
+    indexOfLastRecord
+  );
+  const nPages = Math.ceil(filteredList.length / recordsPerPage);
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <div>
@@ -318,41 +330,7 @@ function ErrorThanks() {
           <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg border-1">
             <div className="flex-auto px-4 lg:px-10 py-10 pt-0 bg-white">
               <div className="mt-4">
-                <div className="sm:flex items-center justify-between">
-                  {/* <div className="flex items-center">
-                    <ul
-                      className="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row"
-                      role="tablist"
-                    >
-                      {complainInfo
-                        ? complainInfo.map((tab, i) => (
-                            <li
-                              // onClick={() => {
-                              //   setStatus(tab.id);
-                              // }}
-                              key={i}
-                              className="-mb-px mr-2 last:mr-2 mt-2 flex-auto text-center"
-                            >
-                              <a
-                                className={
-                                  "text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal " +
-                                  (currentTab === `${tab.id}`
-                                    ? "text-white bg-" + color + "-600"
-                                    : "text-" + color + "-600 bg-white")
-                                }
-                                key={i}
-                                id={tab.id}
-                                disabled={currentTab === `${tab.id}`}
-                               
-                              >
-                                {tab.category}
-                              </a>
-                            </li>
-                          ))
-                        : null}
-                    </ul>
-                  </div> */}
-                </div>
+                <div className="sm:flex items-center justify-between"></div>
                 <div className="mt-3 overflow-x-auto">
                   <table className="items-center w-full bg-transparent border-collapse ">
                     <thead>
@@ -395,7 +373,7 @@ function ErrorThanks() {
                       </tr>
                     </thead>
                     <tbody className="bg-white text-sm">
-                      {filteredList.map((tab, i) => (
+                      {currentRecords.map((tab, i) => (
                         <tr key={i}>
                           <td className="px-1 py-1 border">{i + 1}</td>
                           <td className="px-1 py-1 border">{tab.createdAt}</td>
@@ -434,6 +412,13 @@ function ErrorThanks() {
                       ))}
                     </tbody>
                   </table>
+                  <div className="mt-3">
+                    <Pagination
+                      nPages={nPages}
+                      currentPage={currentPage}
+                      setCurrentPage={setCurrentPage}
+                    />
+                  </div>
                 </div>
               </div>
             </div>

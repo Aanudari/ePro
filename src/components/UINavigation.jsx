@@ -49,7 +49,7 @@ export default function UINavigation() {
                 }}
               >
                 {" "}
-                Бүртгэл{" "}
+                Алдаа бүртгэл{" "}
               </a>
             </nav>
             <div className="header-navigation-actions">

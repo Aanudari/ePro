@@ -50,6 +50,8 @@ import CertainTemplate from "./pages/rating/belongTemplate/CertainTemplate";
 // import "src/fonts/Tahoma_Regular_font.ttf";
 // import "src/fonts/TAHOMA_0.TTF";
 // import "src/fonts/TAHOMAB0.TTF";
+import ChoosedTRate from "./pages/training_raiting/ChoosedTRate";
+import RatingReport from "./pages/training_raiting/RatingReport";
 
 function App() {
   document.addEventListener(
@@ -201,6 +203,22 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199, 196, 4]}>
                 <TrainingRating />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/rating-report"
+            element={
+              <ProtectedRoute allowedRoles={[199, 4]}>
+                <RatingReport />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/chosed-trate"
+            element={
+              <ProtectedRoute allowedRoles={[199, 4]}>
+                <ChoosedTRate />
               </ProtectedRoute>
             }
           />

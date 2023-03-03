@@ -193,7 +193,11 @@ function TrainingRating() {
       state: { data: data },
     });
   };
-  console.log(tRate);
+  const navigateRatingReport = (data) => {
+    navigate("/rating-report", {
+      state: { data: data },
+    });
+  };
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <Navigation />
@@ -317,7 +321,7 @@ function TrainingRating() {
                     type="submit"
                     className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                   >
-                    Submit
+                    Дараах
                   </button>
                 </div>
               </div>
@@ -415,8 +419,8 @@ function TrainingRating() {
                   d="M7 4 L11 8 L7 12"
                   fill="none"
                   stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linejoin="round"
+                  strokeWidth="2"
+                  strokeLinejoin="round"
                   strokeLinecap="round"
                 />
               </svg>
@@ -447,11 +451,10 @@ function TrainingRating() {
                   </th>
                 </tr>
               </thead>
-
-              {filteredList?.map((data, index) => (
-                <tbody>
-                  <tr key={index}>
-                    <td className="px-5 py-3 text-sm bg-white border-b border-gray-200">
+              <tbody>
+                {filteredList?.map((data, index) => (
+                  <tr key={index} className="hover:bg-gray-100 ">
+                    <td className="px-5 py-3 text-sm  border-b ">
                       <div className="flex items-center">
                         <div className="ml-3">
                           <p className="text-gray-900 whitespace-no-wrap">
@@ -460,17 +463,22 @@ function TrainingRating() {
                         </div>
                       </div>
                     </td>
-                    <td className="px-5 py-3 text-sm bg-white border-b border-gray-200">
+                    <td
+                      className="px-5 py-3 text-sm  border-b cursor-pointer"
+                      onClick={() => {
+                        navigateRatingReport(data);
+                      }}
+                    >
                       <p className="text-gray-900 whitespace-no-wrap">
                         {data.name}
                       </p>
                     </td>
-                    <td className="px-5 py-3 text-sm bg-white border-b border-gray-200">
+                    <td className="px-5 py-3 text-sm  border-b ">
                       <p className="text-gray-900 whitespace-no-wrap">
                         {data.trainingName}
                       </p>
                     </td>
-                    <td className="px-5 py-3 text-sm bg-white border-b border-gray-200">
+                    <td className="px-5 py-3 text-sm  border-b ">
                       {moment(today).format(format) >=
                       moment(data.expireDate).format(format) ? (
                         <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-500 bg-red-200 rounded-md">
@@ -487,7 +495,7 @@ function TrainingRating() {
                         </span>
                       ) : null}
                     </td>
-                    <td className="px-5 py-3 text-sm bg-white border-b border-gray-200">
+                    <td className="px-5 py-3 text-sm  border-b ">
                       <div className="flex items-center">
                         <a
                           className="text-blue-600 hover:text-black mx-2 text-lg"
@@ -495,8 +503,9 @@ function TrainingRating() {
                             navigateChoosedTRate(data);
                           }}
                         >
-                          <i className="bi bi-eye-fill"></i>
+                          <i className="bi bi-question-circle-fill"></i>
                         </a>
+
                         <a
                           className="text-yellow-600 hover:text-black mx-2 text-lg"
                           onClick={() => {
@@ -516,8 +525,8 @@ function TrainingRating() {
                       </div>
                     </td>
                   </tr>
-                </tbody>
-              ))}
+                ))}
+              </tbody>
             </table>
           </div>
         </div>

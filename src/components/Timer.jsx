@@ -16,8 +16,15 @@ export default function MyTimer({ expiryTimestamp, finisher }) {
     }
   }, [end]);
   if (minutes == 3 && seconds == 0) {
-    toast.error("3мин үлдлээ !", {
-      position: "bottom-right",
+    toast.error("3 мин үлдлээ !!!", {
+      position: "top-center",
+      autoClose: false,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
     });
   }
   return (

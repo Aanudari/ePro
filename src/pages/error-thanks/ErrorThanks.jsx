@@ -305,8 +305,8 @@ function ErrorThanks() {
                   d="M7 4 L11 8 L7 12"
                   fill="none"
                   stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linejoin="round"
+                  strokeWidth="2"
+                  strokeLinejoin="round"
                   strokeLinecap="round"
                 />
               </svg>

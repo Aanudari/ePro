@@ -83,9 +83,7 @@ function ChoosedTRate() {
     } else if (
       radioFields.length === 0 ||
       radioFields[0].answer.length === 0 ||
-      radioFields[0].points.length === 0 ||
-      radioFields[0].answer.length === 0 ||
-      radioFields[0].points.length === 0
+      radioFields[0].answer.length === 0
     ) {
       axios({
         method: "post",
@@ -168,8 +166,8 @@ function ChoosedTRate() {
                 d="M9 4 L5 8 L9 12"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinejoin="round"
                 strokeLinecap="round"
               />
             </svg>
@@ -213,8 +211,8 @@ function ChoosedTRate() {
                     d="M7 4 L11 8 L7 12"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linejoin="round"
+                    strokeWidth="2"
+                    strokeLinejoin="round"
                     strokeLinecap="round"
                   />
                 </svg>
@@ -260,20 +258,7 @@ function ChoosedTRate() {
                                       value={form.answer}
                                     />
                                   </div>
-                                  <div>
-                                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                      Оноо
-                                    </label>
-                                    <input
-                                      name="points"
-                                      type="number"
-                                      className="px-3 py-2 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                                      onChange={(event) =>
-                                        handleRadioChange(event, index)
-                                      }
-                                      value={form.points}
-                                    />
-                                  </div>
+
                                   <div>
                                     <button
                                       onClick={() => removeRadioFields(index)}

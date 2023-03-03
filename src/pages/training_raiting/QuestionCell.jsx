@@ -142,9 +142,6 @@ function QuestionCell({ q, setTrigger }) {
                       <span className="block text-sm mr-4 font-bold">
                         {a.answer}
                       </span>
-                      <span className="block text-sm font-bold text-green-400">
-                        / {a.points} оноо /
-                      </span>
                     </div>
                   ))}
                 </div>

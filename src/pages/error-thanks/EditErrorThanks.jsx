@@ -149,55 +149,93 @@ function EditErrorThanks() {
                     />
                   </div>
                 </div>
-                <div className="md:col-span-2">
-                  {chek?.id === "3" ? (
+
+                {chek?.id === "3" ? (
+                  <div className="md:col-span-2">
                     <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                       Бүртгэгдсэн суваг{" "}
                     </label>
-                  ) : (
+
+                    <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
+                      <input
+                        className="outline-none  w-full rounded bg-gray-50 h-10 block p-2"
+                        defaultValue={data.rule}
+                        type="text"
+                        onChange={(e) => {
+                          setRule(e.target.value);
+                          // setcheckEmpty2(false);
+                        }}
+
+                        // id={checkEmpty2 === true ? "border-red" : null}
+                      />
+                    </div>
+                  </div>
+                ) : chek?.id === "2" ? (
+                  ""
+                ) : (
+                  <div className="md:col-span-2">
                     <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                       Журам
                     </label>
-                  )}
 
-                  <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                    <input
-                      className="outline-none  w-full rounded bg-gray-50 h-10 block p-2"
-                      defaultValue={data.rule}
-                      type="text"
-                      onChange={(e) => {
-                        setRule(e.target.value);
-                        // setcheckEmpty2(false);
-                      }}
-                      // id={checkEmpty2 === true ? "border-red" : null}
-                    />
+                    <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
+                      <input
+                        className="outline-none  w-full rounded bg-gray-50 h-10 block p-2"
+                        defaultValue={data.rule}
+                        type="text"
+                        onChange={(e) => {
+                          setRule(e.target.value);
+                          // setcheckEmpty2(false);
+                        }}
+
+                        // id={checkEmpty2 === true ? "border-red" : null}
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
 
-                <div className="md:col-span-1">
-                  {chek?.id === "3" ? (
+                {chek?.id === "3" ? (
+                  <div className="md:col-span-1">
                     <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                       Тоогоор
                     </label>
-                  ) : (
+                    <Select
+                      options={options}
+                      defaultValue={data.too}
+                      onChange={(item) => {
+                        handleToo(item);
+                        // setcheckEmpty3(false);
+                      }}
+                      // id={checkEmpty3 === true ? "border-red" : null}
+                      className="outline-none  w-full rounded bg-gray-50"
+                      getOptionLabel={(option) => option.value}
+                      getOptionValue={(option) => option.value}
+                    />
+                  </div>
+                ) : chek?.id === "2" ? (
+                  <div className="md:col-span-1">
                     <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                      Алдаа
+                      Сануулга
                     </label>
-                  )}
+                    <Select
+                      options={options}
+                      defaultValue={data.too}
+                      onChange={(item) => {
+                        handleToo(item);
+                        // setcheckEmpty3(false);
+                      }}
+                      // id={checkEmpty3 === true ? "border-red" : null}
+                      className="outline-none  w-full rounded bg-gray-50"
+                      getOptionLabel={(option) => option.value}
+                      getOptionValue={(option) => option.value}
+                    />
+                  </div>
+                ) : (
+                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                    Алдаа
+                  </label>
+                )}
 
-                  <Select
-                    options={options}
-                    defaultValue={data.too}
-                    onChange={(item) => {
-                      handleToo(item);
-                      // setcheckEmpty3(false);
-                    }}
-                    // id={checkEmpty3 === true ? "border-red" : null}
-                    className="outline-none  w-full rounded bg-gray-50"
-                    getOptionLabel={(option) => option.value}
-                    getOptionValue={(option) => option.value}
-                  />
-                </div>
                 <div className="md:col-span-5">
                   {chek?.id === "3" ? (
                     <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">

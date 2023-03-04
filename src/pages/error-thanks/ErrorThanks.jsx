@@ -159,6 +159,7 @@ function ErrorThanks() {
     indexOfLastRecord
   );
   const nPages = Math.ceil(filteredList.length / recordsPerPage);
+
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <div>
@@ -272,156 +273,159 @@ function ErrorThanks() {
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
             <p className="focus:outline-none text-base sm:text-sm md:text-xl lg:text-xl font-bold leading-normal text-gray-800">
-              Алдаа талархал
+              Алдаа талархал бүртгэл
             </p>
           </div>
         </div>
+        <div className="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10">
+          <div className="sm:flex items-center justify-between p-2">
+            <div className="flex items-center sm:justify-between sm:gap-4">
+              <div className="relative hidden sm:block">
+                <input
+                  value={searchQuery}
+                  onChange={handleSearch}
+                  type="text"
+                  name="search"
+                  className="w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500 flex-1 py-2 px-4 bg-white  text-gray-700 placeholder-gray-400 shadow-sm text-base"
+                  placeholder="Ажилтны нэр"
+                />
 
-        <div className="sm:flex items-center justify-between p-2">
-          <div className="flex items-center sm:justify-between sm:gap-4">
-            <div className="relative hidden sm:block">
-              <input
-                value={searchQuery}
-                onChange={handleSearch}
-                type="text"
-                name="search"
-                className="w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500 flex-1 py-2 px-4 bg-white  text-gray-700 placeholder-gray-400 shadow-sm text-base"
-                placeholder="Ажилтны нэр"
-              />
+                <button
+                  type="button"
+                  className="absolute top-1/2 right-1 -translate-y-1/2 rounded-md bg-gray-50 p-2 text-gray-600 transition hover:text-gray-700"
+                >
+                  <i className="bi bi-search" />
+                </button>
+              </div>
+            </div>
 
+            <div className="flex flex-col justify-center w-3/4 max-w-sm space-y-3 md:flex-row md:w-full md:space-x-3 md:space-y-0">
               <button
-                type="button"
-                className="absolute top-1/2 right-1 -translate-y-1/2 rounded-md bg-gray-50 p-2 text-gray-600 transition hover:text-gray-700"
+                onClick={showModalCreate}
+                className="bg-blue-700 border border-blue-700 shadow p-2 rounded text-white flex items-center focus:outline-none focus:shadow-outline"
               >
-                <i className="bi bi-search" />
+                <span className="mx-2">Бүртгэл нэмэх</span>
+                <svg width="24" height="24" viewBox="0 0 16 16">
+                  <path
+                    d="M7 4 L11 8 L7 12"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinejoin="round"
+                    strokeLinecap="round"
+                  />
+                </svg>
               </button>
             </div>
           </div>
-
-          <div className="flex flex-col justify-center w-3/4 max-w-sm space-y-3 md:flex-row md:w-full md:space-x-3 md:space-y-0">
-            <select value={selectedCategory} onChange={handleCategoryChange}>
-              <option value="">Бүгд</option>
-              {complainInfo?.map((el, i) => (
-                <option key={i} value={`${el.id}`}>
-                  {el.category}
-                </option>
-              ))}
-            </select>
-            <button
-              onClick={showModalCreate}
-              className="bg-blue-700 border border-blue-700 shadow p-2 rounded text-white flex items-center focus:outline-none focus:shadow-outline"
-            >
-              <span className="mx-2">Бүртгэл нэмэх</span>
-              <svg width="24" height="24" viewBox="0 0 16 16">
-                <path
-                  d="M7 4 L11 8 L7 12"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinejoin="round"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </button>
-          </div>
         </div>
 
-        <div className="w-full px-4 mx-auto mt-2">
-          <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg border-1">
-            <div className="flex-auto px-4 lg:px-10 py-10 pt-0 bg-white">
-              <div className="mt-4">
-                <div className="sm:flex items-center justify-between"></div>
-                <div className="mt-3 overflow-x-auto">
-                  <table className="items-center w-full bg-transparent border-collapse ">
-                    <thead>
-                      <tr className="text-sm text-left  bg-gray-200 border-b">
-                        <th className="px-4 py-3 font-bold">№ </th>
-                        <th className="px-4 py-3 font-bold">Огноо </th>
-                        <th className="px-4 py-3 font-bold">
-                          Харьяалагдах хэлтэс{" "}
-                        </th>
-                        <th className="px-4 py-3 font-bold">Ажлын байр </th>
-                        <th className="px-4 py-3 font-bold">Ажилтны нэр </th>
-                        {selectedCategory === "3" ? (
-                          <th className="px-4 py-3 font-bold">Төрөл </th>
-                        ) : (
-                          <th className="px-4 py-3 font-bold">
-                            Гомдлын төрөл{" "}
-                          </th>
-                        )}
-                        {selectedCategory === "3" ? (
-                          <th className="px-4 py-3 font-bold">Дэлгэрэнгүй </th>
-                        ) : (
-                          <th className="px-4 py-3 font-bold">
-                            Гомдлын дэлгэрэнгүй{" "}
-                          </th>
-                        )}
-                        {selectedCategory === "3" ? (
-                          <th className="px-4 py-3 font-bold">
-                            Бүртгэгдсэн суваг{" "}
-                          </th>
-                        ) : (
-                          <th className="px-4 py-3 font-bold">Журам </th>
-                        )}
-                        {selectedCategory === "3" ? (
-                          <th className="px-4 py-3 font-bold">Тоогоор</th>
-                        ) : (
-                          <th className="px-4 py-3 font-bold">Алдаа </th>
-                        )}
+        <div className="mt-4">
+          <table className="items-center w-full bg-transparent border-collapse ">
+            <thead>
+              <tr className="text-sm text-left  bg-gray-200 border-b">
+                <th className="px-4 py-3 font-bold">
+                  Бүртгэл
+                  <select
+                    value={selectedCategory}
+                    onChange={handleCategoryChange}
+                  >
+                    <option value="">Бүгд</option>
+                    {complainInfo?.map((el, i) => (
+                      <option key={i} value={`${el.id}`}>
+                        {el.category}
+                      </option>
+                    ))}
+                  </select>
+                </th>
+                <th className="px-4 py-3 font-bold">Он</th>
+                <th className="px-4 py-3 font-bold">Улирал</th>
+                <th className="px-4 py-3 font-bold">Огноо</th>
+                <th className="px-4 py-3 font-bold">Харьяалагдах хэлтэс </th>
+                <th className="px-4 py-3 font-bold">Ажлын байр </th>
+                <th className="px-4 py-3 font-bold">Ажилтны нэр </th>
+                {selectedCategory === "3" ? (
+                  <th className="px-4 py-3 font-bold">Төрөл </th>
+                ) : (
+                  <th className="px-4 py-3 font-bold">Гомдлын төрөл </th>
+                )}
+                {selectedCategory === "3" ? (
+                  <th className="px-4 py-3 font-bold">Дэлгэрэнгүй </th>
+                ) : (
+                  <th className="px-4 py-3 font-bold">Гомдлын дэлгэрэнгүй </th>
+                )}
+                {selectedCategory === "3" ? (
+                  <th className="px-4 py-3 font-bold">Бүртгэгдсэн суваг </th>
+                ) : selectedCategory === "2" ? (
+                  ""
+                ) : (
+                  <th className="px-4 py-3 font-bold">Журам </th>
+                )}
+                {selectedCategory === "3" ? (
+                  <th className="px-4 py-3 font-bold">Тоогоор</th>
+                ) : selectedCategory === "2" ? (
+                  <th className="px-4 py-3 font-bold">Сануулга </th>
+                ) : (
+                  <th className="px-4 py-3 font-bold">Алдаа </th>
+                )}
 
-                        <th className="px-4 py-3 font-bold">Action </th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white text-sm">
-                      {currentRecords.map((tab, i) => (
-                        <tr key={i}>
-                          <td className="px-1 py-1 border">{i + 1}</td>
-                          <td className="px-1 py-1 border">{tab.createdAt}</td>
-                          <td className="px-1 py-1 border">
-                            {tab.departmentName}
-                          </td>
-                          <td className="px-1 py-1 border">{tab.unitName}</td>
-                          <td className="px-1 py-1 border">{tab.firstName}</td>
-                          <td className="px-1 py-1 border">
-                            {tab.complainType}
-                          </td>
-                          <td className="px-1 py-1 border">
-                            {tab.description}
-                          </td>
-                          <td className="px-1 py-1 border">{tab.rule}</td>
-                          <td className="px-1 py-1 border">{tab.too}</td>
-                          <td className="px-1 py-1 border">
-                            <a
-                              className="text-yellow-400 hover:text-black mx-2"
-                              data-id={tab}
-                              onClick={() => {
-                                handleEdit(tab);
-                              }}
-                            >
-                              <i className="bi bi-pencil-square"></i>
-                            </a>
-                            <a
-                              data-id={tab.id}
-                              onClick={showModalDelete}
-                              className="text-rose-400 hover:text-black ml-2"
-                            >
-                              <i className="bi bi-trash-fill"></i>
-                            </a>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                  <div className="mt-3">
-                    <Pagination
-                      nPages={nPages}
-                      currentPage={currentPage}
-                      setCurrentPage={setCurrentPage}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+                <th className="px-4 py-3 font-bold">Action </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white text-sm">
+              {currentRecords.map((tab, i) => (
+                <tr key={i}>
+                  {complainInfo.map((obj) => {
+                    if (obj.id === tab.complain) {
+                      return (
+                        <td className="px-1 py-1 border">{obj.category}</td>
+                      );
+                    }
+                  })}
+
+                  <td className="px-1 py-1 border">{tab.createdAt}</td>
+                  <td className="px-1 py-1 border">{tab.createdAt}</td>
+                  <td className="px-1 py-1 border">{tab.createdAt}</td>
+                  <td className="px-1 py-1 border">{tab.departmentName}</td>
+                  <td className="px-1 py-1 border">{tab.unitName}</td>
+                  <td className="px-1 py-1 border">{tab.firstName}</td>
+                  <td className="px-1 py-1 border">{tab.complainType}</td>
+                  <td className="px-1 py-1 border">{tab.description}</td>
+                  {selectedCategory === "2" ? (
+                    ""
+                  ) : (
+                    <td className="px-1 py-1 border">{tab.rule}</td>
+                  )}
+
+                  <td className="px-1 py-1 border">{tab.too}</td>
+                  <td className="px-1 py-1 border">
+                    <a
+                      className="text-yellow-400 hover:text-black mx-2"
+                      data-id={tab}
+                      onClick={() => {
+                        handleEdit(tab);
+                      }}
+                    >
+                      <i className="bi bi-pencil-square"></i>
+                    </a>
+                    <a
+                      data-id={tab.id}
+                      onClick={showModalDelete}
+                      className="text-rose-400 hover:text-black ml-2"
+                    >
+                      <i className="bi bi-trash-fill"></i>
+                    </a>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="mt-3">
+            <Pagination
+              nPages={nPages}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
           </div>
         </div>
       </div>

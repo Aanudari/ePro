@@ -144,23 +144,17 @@ function CreateErrorThanks() {
     e.preventDefault();
     if (departmentID.length === 0) {
       setcheckEmpty1(true);
-    }
-    if (orgID.length === 0) {
+    } else if (orgID.length === 0) {
       setcheckEmpty2(true);
-    }
-    if (workersID.length === 0) {
+    } else if (workersID.length === 0) {
       setcheckEmpty3(true);
-    }
-    if (complainType.length === 0) {
+    } else if (complainType.length === 0) {
       setcheckEmpty4(true);
-    }
-    if (desc.length === 0) {
+    } else if (desc.length === 0) {
       setcheckEmpty5(true);
-    }
-    if (rule.length === 0) {
+    } else if (rule.length === 0) {
       setcheckEmpty6(true);
-    }
-    if (tooVAl.length === 0) {
+    } else if (tooVAl.length === 0) {
       setcheckEmpty7(true);
     } else {
       axios({
@@ -331,27 +325,39 @@ function CreateErrorThanks() {
                     </div>
                   </div>
                   <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      {typeid === "3" ? (
+                    {typeid === "3" ? (
+                      <div className="relative w-full mb-3">
                         <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                           Бүртгэгдсэн суваг{" "}
                         </label>
-                      ) : (
+                        <input
+                          className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                          type="text"
+                          onChange={(e) => {
+                            setRule(e.target.value);
+                            setcheckEmpty6(false);
+                          }}
+                          id={checkEmpty6 === true ? "border-red" : null}
+                        />
+                      </div>
+                    ) : typeid === "2" ? (
+                      ""
+                    ) : (
+                      <div className="relative w-full mb-3">
                         <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                           Журам
                         </label>
-                      )}
-
-                      <input
-                        className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                        type="text"
-                        onChange={(e) => {
-                          setRule(e.target.value);
-                          setcheckEmpty6(false);
-                        }}
-                        id={checkEmpty6 === true ? "border-red" : null}
-                      />
-                    </div>
+                        <input
+                          className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                          type="text"
+                          onChange={(e) => {
+                            setRule(e.target.value);
+                            setcheckEmpty6(false);
+                          }}
+                          id={checkEmpty6 === true ? "border-red" : null}
+                        />
+                      </div>
+                    )}
                   </div>
 
                   <div className="w-full lg:w-6/12 px-4">
@@ -359,6 +365,10 @@ function CreateErrorThanks() {
                       {typeid === "3" ? (
                         <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                           Тоогоор
+                        </label>
+                      ) : typeid === "2" ? (
+                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                          Сануулга
                         </label>
                       ) : (
                         <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">

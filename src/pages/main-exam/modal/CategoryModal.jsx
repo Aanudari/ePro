@@ -190,10 +190,10 @@ function CategoryModal({
 
   return (
     <div
-      className={`fixed z-20 ${
+      className={`fixed w-full z-20 h-[calc(100vh-56px)] ${
         activeMenu
-          ? "top-[56px] left-[250px] w-[calc(100%-250px)] h-[calc(100%-56px)]"
-          : "w-full h-full top-[25px] left-0"
+          ? "top-[56px] left-[250px] w-[calc(100%-250px)] "
+          : "top-[56px] w-full h-full top-[25px] left-0"
       } 
             bg-black bg-opacity-50 flex justify-center items-center
             `}
@@ -201,9 +201,19 @@ function CategoryModal({
       <ToastContainer />
       {examState ? (
         <div className="w-screen h-screen flex justify-center items-center gap-2 ">
-          <div className="w-[calc(90%)] shrink h-[calc(90%)] bg-white flex flex-col ">
-            <div className="w-full min-h-[50px] bg-gray-700 flex justify-between px-3 ">
-              <button
+          <div
+            // style={{
+            //   background:
+            //     "url(https://img.freepik.com/free-photo/abstract-grunge-decorative-relief-navy-blue-stucco-wall-texture-wide-angle-rough-colored-background_1258-28311.jpg?w=2000)",
+            // }}
+            style={{
+              background:
+                "url(https://wallup.net/wp-content/uploads/2016/01/259906-wavy_lines-abstract-blue.jpg)",
+            }}
+            className="w-[calc(100%)] shrink h-[calc(100vh-56px)] bg-white flex flex-col "
+          >
+            <div className="w-full min-h-[60px] flex items-center justify-between px-3 glass shadow">
+              <div
                 onClick={() => {
                   setAddAnswer(!addAnswer);
                   setCreateExam(false);
@@ -213,38 +223,26 @@ function CategoryModal({
                 className="w-[20px] h-full "
               >
                 {addAnswer ? (
-                  <i className="bi bi-x-circle text-sky-500 text-2xl font-[500]"></i>
+                  <button className="custom-btn btn-13 w-[150px] mt-2">
+                    Буцах
+                  </button>
                 ) : (
-                  <i className="bi bi-plus-circle text-white text-2xl font-[500]"></i>
-                )}
-              </button>
-
-              <div>
-                {data?.length !== undefined && (
-                  <button
-                    onClick={() => {
-                      setCreateExam(!createExam);
-                      setAddAnswer(false);
-
-                      setAnswers();
-                    }}
-                    className="w-[20px] h-full "
-                  >
-                    {createExam && !addAnswer && data?.length !== undefined ? (
-                      <i className="bi bi-bookmark-x text-sky-500 text-2xl font-[500] "></i>
-                    ) : (
-                      <i className="bi bi-bookmark-plus text-white text-2xl font-[500] "></i>
-                    )}
+                  // <i className="bi bi-plus-circle text-white text-2xl font-[500]"></i>
+                  <button className="custom-btn btn-13 w-[150px] mt-2">
+                    Асуулт нэмэх
                   </button>
                 )}
+              </div>
+
+              <div>
                 <button
                   onClick={() => {
                     setCategoryModal(false);
                     setAddAnswer(false);
                   }}
-                  className="w-[20px] h-full ml-5 "
+                  className="custom-btn btn-14 w-[150px] mt-1 rounded-none"
                 >
-                  <i className="bi bi-x-lg text-red-500 text-2xl font-[500]"></i>
+                  Хаах
                 </button>
               </div>
             </div>
@@ -266,14 +264,14 @@ function CategoryModal({
                 />
               </div>
             ) : (
-              <div className="w-full h-full px-5 overflow-scroll py-5">
-                <div className="">
+              <div className="w-full px-5 overflow-scroll pt-5 pb-5 flex justify-center ">
+                <div className="w-[900px]">
                   {data?.length > 0 ? (
                     data.map((question, ind) => (
                       <PoolQuestionEdit
                         setTrigger={setTrigger}
                         trigger={trigger}
-                        key={ind}
+                        key={JSON.stringify(question)}
                         data={question}
                         indexed={ind}
                         handleCheck={handleCheck}

@@ -194,7 +194,7 @@ function PoolQuestionEdit({
   // console.log(main);
   // console.log(main);
   return (
-    <div className="h-full">
+    <div className="">
       <ToastContainer />
       <div
         className={`border-t-[5px] border-l border-r border-[#50a3a2] rounded-lg relative `}
@@ -225,12 +225,12 @@ function PoolQuestionEdit({
             <i className="bi bi-lock-fill text-xl"></i>
           </button>
         ) : null}
-        {data.status == "SE" && !createExam ? (
+        {data.status == "SE" && !createExam && edit ? (
           <button
             onClick={() => {
               deleteQuestion(data.id);
             }}
-            className="absolute top-[15px] right-[calc(20%)] px-2 py-1s bg-red-500 font-[500] flex justify-center 
+            className="absolute bottom-[25px] right-[calc(25%)] px-2 py-1s bg-red-500 font-[500] flex justify-center 
         items-center text-white rounded-lg "
           >
             <i className="bi bi-trash3 text-lg"></i>
@@ -242,11 +242,11 @@ function PoolQuestionEdit({
           }}
           className={`w-full shadow-md py-3 px-3 font-[400] ${
             edit
-              ? "!bg-opacity-10 !bg-gray-700"
+              ? "bg-gray-500 bg-opacity-90"
               : data.status == "NE"
-              ? "!bg-opacity-20 !bg-gray-700"
+              ? "bg-gray-200"
               : null
-          }  bg-gray-50 flex flex-col transition hover:bg-opacity-10 hover:bg-gray-400 rounded-lg  pt-10 `}
+          }  bg-gray-50 flex flex-col transition rounded-lg  pt-10 `}
         >
           <div className="flex justify-between gap-2">
             <div className=" w-full flex items-start">
@@ -304,12 +304,12 @@ function PoolQuestionEdit({
                 />
               </div>
             ) : (
-              <div className="h-[42px] flex items-start">
-                <span className="mb-0 font-[400] text-[15px] mt-[1px]">
-                  Оноо:
-                </span>
-                <span className="mb-0 font-[500] text-[16px] ml-1">
+              <div className="h-[32px] flex items-start mt-1 rounded-full border px-3 flex items-center bg-teal-500 text-white">
+                <span className="mb-0 font-[400] text-[15px]">
                   {data.points}
+                </span>
+                <span className="mb-0 font-[400] text-[15px] mt-0 ml-1">
+                  оноо
                 </span>
               </div>
             )}
@@ -336,7 +336,7 @@ function PoolQuestionEdit({
                             onClick={() => {
                               handleDelete(index, item);
                             }}
-                            className="bi cursor-pointer hover:scale-105 transition-all active:text-red-500 bi-trash3 absolute right-0 text-gray-600 child top-[12px]"
+                            className="bi cursor-pointer hover:scale-105 transition-all active:text-red-500 bi-trash3 absolute right-[-10px] text-gray-600 child top-[12px]"
                           ></i>
                           {item.isTrue == "1" ? (
                             <i

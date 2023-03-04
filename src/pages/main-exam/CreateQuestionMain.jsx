@@ -61,7 +61,7 @@ function CreateQuestionMain({
     handleObject();
   }, [length]);
   return (
-    <div className="w-full h-full pt-4 overflow-scroll px-4">
+    <div className="w-full h-full pt-4 overflow-scroll px-4 bg-white pb-20">
       <div className="w-full">
         <div className="group w-full">
           <input

@@ -94,7 +94,7 @@ function ExamEditHeader2({
         if (res.data.isSuccess === false) {
           alert(res.data.resultMessage);
         }
-        setExamModal(false);
+        // setExamModal(false);
         setExamTri(!examTri);
         setUserTrigger(!userTrigger);
       })
@@ -116,7 +116,7 @@ function ExamEditHeader2({
   };
   return (
     <div
-      className="h-40 overflow-hidden appear-smooth-height w-full px-2 uppercase bg-gray-600 text-white  flex items-center 
+      className="h-40 overflow-hidden appear-smooth-height w-full px-2 uppercase bg-teal-700 text-white  flex items-center 
           shadow justify-between px-4"
     >
       <div className="font-[500] text-[14px] h-full flex items-center gap-3">

@@ -197,7 +197,7 @@ function PoolQuestionEdit({
     <div className="">
       <ToastContainer />
       <div
-        className={`border-t-[5px] border-l border-r border-[#50a3a2] rounded-lg relative `}
+        className={`border-t-[6px] border-l-[2px] border-r-[2px] border-[#50a3a2] rounded-lg relative bg-[#50a3a2]`}
       >
         {confirm && (
           <DeleteConfirm setConfirm={setConfirm} deleteCat={actualDelete} />
@@ -246,7 +246,7 @@ function PoolQuestionEdit({
               : data.status == "NE"
               ? "bg-gray-200"
               : null
-          }  bg-gray-50 flex flex-col transition rounded-lg  pt-10 `}
+          }  bg-gray-50 flex flex-col transition rounded-lg pt-10 `}
         >
           <div className="flex justify-between gap-2">
             <div className=" w-full flex items-start">

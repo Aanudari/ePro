@@ -193,14 +193,14 @@ function CategoryModal({
       className={`fixed w-full z-20 h-[calc(100vh-56px)] ${
         activeMenu
           ? "top-[56px] left-[250px] w-[calc(100%-250px)] "
-          : "top-[56px] w-full h-full top-[25px] left-0"
+          : "top-[56px] w-full  left-0"
       } 
             bg-black bg-opacity-50 flex justify-center items-center
             `}
     >
       <ToastContainer />
       {examState ? (
-        <div className="w-screen h-screen flex justify-center items-center gap-2 ">
+        <div className="w-screen h-[calc(100vh-56px)] flex justify-center items-center gap-2 ">
           <div
             // style={{
             //   background:
@@ -209,6 +209,7 @@ function CategoryModal({
             style={{
               background:
                 "url(https://wallup.net/wp-content/uploads/2016/01/259906-wavy_lines-abstract-blue.jpg)",
+              backgroundSize: "cover",
             }}
             className="w-[calc(100%)] shrink h-[calc(100vh-56px)] bg-white flex flex-col "
           >
@@ -234,20 +235,20 @@ function CategoryModal({
                 )}
               </div>
 
-              <div>
+              <div className="mr-5">
                 <button
                   onClick={() => {
                     setCategoryModal(false);
                     setAddAnswer(false);
                   }}
-                  className="custom-btn btn-14 w-[150px] mt-1 rounded-none"
+                  className="text-white font-[500] text-[20px] hover:text-[22px] "
                 >
-                  Хаах
+                  <i class="bi bi-x-lg"></i>
                 </button>
               </div>
             </div>
             {addAnswer ? (
-              <div className="w-full h-full overflow-scroll">
+              <div className="w-full h-full ">
                 {/* CREATE QUESTION !!!
                             CREATE QUESTION !!!
                             CREATE QUESTION !!!
@@ -290,12 +291,18 @@ function CategoryModal({
             )}
             {addAnswer && (
               <div
-                onClick={submitQuestion}
-                className="w-full h-14 bg-gray-600 hover:bg-gray-700 cursor-pointer flex 
-                justify-center items-center font-[500] text-sky-500
-                "
+                className={` ${
+                  activeMenu ? "w-[calc(100vw-250px)]" : "w-full"
+                } h-16 px-3 rounded-none 
+                 items-center font-[500] text-sky-500 fixed bottom-0 z-20 flex justify-end
+                `}
               >
-                Асуулт үүсгэх
+                <button
+                  onClick={submitQuestion}
+                  className="custom-btn btn-13 uppercase"
+                >
+                  Асуулт үүсгэх
+                </button>
               </div>
             )}
             {createExam &&

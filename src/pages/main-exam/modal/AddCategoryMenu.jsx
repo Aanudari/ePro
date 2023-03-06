@@ -106,8 +106,8 @@ function AddCategoryMenu({ setShowAddCategory, trigger, setTrigger }) {
         `}
     >
       <ToastContainer />
-      <div className="shrink w-[calc(85%)] h-[600px] bg-white flex flex-col ">
-        <div className="w-full min-h-[50px] bg-gray-700 flex justify-between items-center px-3">
+      <div className="shrink w-[calc(85%)] h-[calc(80%)] bg-white flex flex-col rounded-lg">
+        <div className="w-full min-h-[50px] bg-teal-700 flex justify-between items-center px-3 rounded-t shadow">
           <h5 className="text-white m-0 text-[17px]">Категори нэмэх</h5>
           <button
             onClick={() => {
@@ -119,7 +119,7 @@ function AddCategoryMenu({ setShowAddCategory, trigger, setTrigger }) {
           </button>
         </div>
 
-        <div className="h-full w-full px-3 overflow-scroll flex justify-center items-center pt-20">
+        <div className="h-[calc(100%)] w-full px-3 overflow-scroll flex justify-center items-center pt-20">
           <div className="w-1/2 h-1/2">
             <div className="group w-full">
               <input

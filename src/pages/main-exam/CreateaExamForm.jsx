@@ -168,8 +168,22 @@ function CreateExamForm({ closeForm, examTri, setExamTri }) {
     >
       <ToastContainer />
       {show && <GetQuestionIdsFromCategory setShow={setShow} getIds={getIds} />}
-      <div className="shrink w-[calc(85%)] h-[600px] bg-white flex flex-col rounded">
-        <div className="w-full min-h-[50px] bg-teal-700 flex justify-end px-3 flex items-center rounded-t">
+      <div className="shrink w-[calc(85%)] h-[calc(80%)] bg-white flex flex-col rounded">
+        <div className="w-full min-h-[50px] bg-teal-700 flex justify-between px-3 flex items-center rounded-t">
+          {AllQuestions?.length > 0 && allEmployee?.length > 0 ? (
+            <div
+              onClick={() => {
+                handleCreateExam();
+              }}
+              className="h-9 flex items-center justify-center bg-teal-600 text-white font-[500]
+          cursor-pointer  active:bg-teal-600 rounded hover:bg-teal-500 uppercase text-[13px] w-[250px]"
+            >
+              <i className="bi bi-vector-pen text-lg text-md mr-2 "></i>
+              Шалгалт үүсгэх
+            </div>
+          ) : (
+            <div></div>
+          )}
           <i
             onClick={() => {
               closeForm(false);
@@ -356,17 +370,6 @@ function CreateExamForm({ closeForm, examTri, setExamTri }) {
             </form>
             <div></div>
           </div>
-          {AllQuestions?.length > 0 && allEmployee?.length > 0 && (
-            <div
-              onClick={() => {
-                handleCreateExam();
-              }}
-              className="h-12 flex items-center justify-center bg-teal-600 text-white font-[500]
-          cursor-pointer hover:!text-gray-900 active:bg-teal-600 custom-btn btn-16 rounded-none !w-full"
-            >
-              Шалгалт үүсгэх
-            </div>
-          )}
         </div>
       </div>
     </div>

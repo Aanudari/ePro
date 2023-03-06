@@ -379,32 +379,35 @@ function ExamModalMain({
       )}
       <div className="shrink w-[calc(100%)] h-[calc(100%)] bg-white flex flex-col relative shadow ">
         <div
-          className={`w-full min-h-[50px] bg-gray-800 flex justify-between px-3`}
+          className={`w-full min-h-[50px] bg-teal-800 flex justify-between px-3`}
         >
-          {examSummary == "Ongoing" && (
-            <div className="text-white min-h-[50px] flex items-center font-[500] text-sm">
-              Статус :
-              <span className="text-green-500 font-[500] ml-2">
-                Идэвхитэй <i className="bi bi-check2-circle ml-1"></i>
-              </span>
-            </div>
-          )}
-          {examSummary == "Not yet" && (
-            <div className="text-white min-h-[50px] flex items-center font-[500] text-sm">
-              Статус :
-              <span className="text-amber-400 font-[500] ml-2">
-                Editable <i className="bi bi-alarm-fill ml-1"></i>
-              </span>
-            </div>
-          )}
-          {examSummary == "Exam over" && (
-            <div className="text-white min-h-[50px] flex items-center font-[500] text-sm">
-              Статус :
-              <span className="text-gray-400 font-[500] ml-2">
-                Дууссан <i className="bi bi-hourglass-bottom ml-1"></i>
-              </span>
-            </div>
-          )}
+          <div className="flex gap-5 h-full items-center">
+            {examSummary == "Ongoing" && (
+              <div className="text-white min-h-[50px] flex items-center font-[500] text-sm">
+                Статус :
+                <span className="text-green-500 font-[500] ml-2">
+                  Идэвхитэй <i className="bi bi-check2-circle ml-1"></i>
+                </span>
+              </div>
+            )}
+            {examSummary == "Not yet" && (
+              <div className="text-white min-h-[50px] flex items-center font-[500] text-sm">
+                Статус :
+                <span className="text-amber-400 font-[500] ml-2">
+                  Editable <i className="bi bi-alarm-fill ml-1"></i>
+                </span>
+              </div>
+            )}
+            {examSummary == "Exam over" && (
+              <div className="text-white min-h-[50px] flex items-center font-[500] text-sm">
+                Статус :
+                <span className="text-gray-400 font-[500] ml-2">
+                  Дууссан <i className="bi bi-hourglass-bottom ml-1"></i>
+                </span>
+              </div>
+            )}
+          </div>
+
           <div className="flex justify-end items-center min-h-[50px]  mr-3">
             {examSummary == "Not yet" && (
               <button
@@ -458,8 +461,15 @@ function ExamModalMain({
             setUserTrigger={setUserTrigger}
           />
         )}
-        <div className="w-full h-full px-10 py-2 overflow-scroll">
-          <div className="h-full pt-2">
+        <div
+          style={{
+            background:
+              "url(https://wallup.net/wp-content/uploads/2016/01/259906-wavy_lines-abstract-blue.jpg)",
+            backgroundSize: "cover",
+          }}
+          className="w-full h-full px-10 py-2 overflow-scroll flex justify-center"
+        >
+          <div className="h-full pt-2 w-[900px]">
             {data &&
               data[0]?.questionList?.map((question, index) => (
                 //  QUESTION !!!
@@ -467,7 +477,7 @@ function ExamModalMain({
                 //  QUESTION !!!
                 <div
                   key={index}
-                  className={`mt-3 border-t-[5px] border-l border-r border-[#50a3a2] rounded-lg realtive `}
+                  className={`mt-3 border-t-[5px] border-l border-r border-[#50a3a2] rounded-lg realtive bg-white`}
                 >
                   <div
                     className={`w-full py-3 px-3 font-[400] flex flex-col

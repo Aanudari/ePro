@@ -61,8 +61,8 @@ function CreateQuestionMain({
     handleObject();
   }, [length]);
   return (
-    <div className="w-full h-full pt-4 overflow-scroll px-4">
-      <div className="w-full">
+    <div className="w-full h-screen flex justify-center items-center  pb-20">
+      <div className="w-5/6 h-full bg-white px-5 pt-4 overflow-scroll pb-20">
         <div className="group w-full">
           <input
             className={

@@ -54,22 +54,6 @@ import ChoosedTRate from "./pages/training_raiting/ChoosedTRate";
 import RatingReport from "./pages/training_raiting/RatingReport";
 
 function App() {
-  document.addEventListener(
-    "keydown",
-    (event) => {
-      if (
-        event.keyCode == 83 &&
-        (navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey)
-      ) {
-        event.preventDefault();
-        doSomethingElse();
-      }
-    },
-    false
-  );
-  const doSomethingElse = () => {
-    alert("Ctrl + S combination ашиглахын хориглов !");
-  };
   const { activeMenu, showTop, roleId, TOKEN } = useStateContext();
   const { width } = getWindowDimensions();
   const queryClient = new QueryClient();

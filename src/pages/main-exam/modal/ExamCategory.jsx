@@ -66,15 +66,15 @@ function ExamCategory({
           trigger={trigger}
         />
       )}
-      <div className="w-full">
-        <button
-          onClick={() => {
-            setShowAddCategory(!showAddCategory);
-          }}
-          className="px-3 py-2 text-white uppercare bg-teal-300 hover:shadow-white"
-        >
-          <i className="bi bi-plus-circle"></i>
-        </button>
+      <button
+        onClick={() => {
+          setShowAddCategory(!showAddCategory);
+        }}
+        className="px-3 py-2 text-white uppercare bg-teal-300 hover:shadow-white h-12 mt-1"
+      >
+        <i className="bi bi-plus-circle"></i>
+      </button>
+      <div className="w-full h-full overflow-scroll pr-2">
         {categories?.length > 0 ? (
           categories.map((category, index) => (
             <div key={index} className="relative parent ">

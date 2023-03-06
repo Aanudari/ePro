@@ -149,7 +149,7 @@ function ExamBoard({
                 }
                 className={`w-full h-14 flex gap-1 border-b ${
                   exam?.examSummary?.status == "Exam over"
-                    ? "text-gray-400 hover:text-teal-600  hover:border-b-teal-500"
+                    ? "custom-btn btn-11 bg-gray-50 shadow-none hover:bg-gray-200"
                     : exam?.examSummary?.status == "Ongoing"
                     ? "cellt"
                     : "text-gray-400 hover:text-amber-600  hover:border-b-amber-600 bg-amber-100"
@@ -157,7 +157,7 @@ function ExamBoard({
                 font-[600] cursor-pointer `}
               >
                 <div
-                  className="w-1/4 h-full flex justify-start pl-2 items-center text-[11px]
+                  className="w-1/4 h-full flex justify-start pl-10 items-center text-[11px]
                      uppercase font-[500]"
                 >
                   {exam.name}
@@ -183,7 +183,10 @@ function ExamBoard({
                      uppercase font-[500]"
                 >
                   {exam?.examSummary?.status == "Exam over" ? (
-                    "Дууссан"
+                    <div className="uppercase font-[500] h-full flex items-center">
+                      <div className="h-[8px] w-[8px] bg-teal-500 rounded-full mr-2 mb-[2px]"></div>
+                      Дууссан
+                    </div>
                   ) : exam?.examSummary?.status == "Ongoing" ? (
                     <div className="px-2 py-1 rounded-md shadow bg-white">
                       <span className="!font-[700] text-red-500 text-[9px]">

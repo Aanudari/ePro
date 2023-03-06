@@ -77,30 +77,30 @@ function GetQuestionIdsFromCategory({ setShow, getIds }) {
 top-[56px] fixed  h-[calc(100%-56px)] 
 bg-black bg-opacity-50 flex items-center justify-center z-20`}
     >
-      <div className="bg-gray-200 appear-smooth w-full h-[calc(100%)] relative pb-10">
-        <div className="w-full h-12 bg-teal-500 flex justify-between px-4 items-center shadow-sm">
+      <div
+        style={{
+          background:
+            "url(https://wallup.net/wp-content/uploads/2016/01/259906-wavy_lines-abstract-blue.jpg)",
+        }}
+        className="bg-gray-200 appear-smooth w-full h-[calc(100%)] relative pb-10"
+      >
+        <div className="w-full h-12 bg-teal-600 flex justify-between px-4 items-center shadow-sm">
           <div className="flex items-center">
             <div className=" flex justify-between items-center px-4 py-2">
               <span className="text-white font-[500] text-sm">
                 Сонгосон : {questionIds.length}/10
               </span>
               {questionIds.length > 0 && (
-                <span
+                <button
+                  className="text-white cursor-pointer font-[400] text-md transition-all ml-2 fixed bottom-[20px] 
+                  right-[20px] shadow z-20 custom-btn btn-13 w-[150px] text-center rounded-none"
                   onClick={() => {
+                    getIds(questionIds);
                     setShow(false);
-                    //   getEmployees(chosen);
                   }}
-                  className="text-white cursor-pointer bg-teal-600 font-[400] text-md transition-all px-4 py-3 ml-2 fixed bottom-0 
-                  hover:bg-teal-700 hover:!bottom-[5px] hover:right-[5px] right-0 shadow z-20"
                 >
-                  <button
-                    onClick={() => {
-                      getIds(questionIds);
-                    }}
-                  >
-                    {questionIds.length}/ Хадгалах
-                  </button>
-                </span>
+                  {questionIds.length}/ Хадгалах
+                </button>
               )}
             </div>
           </div>
@@ -114,7 +114,7 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
           </div>
         </div>
         {selected.length > 0 ? (
-          <div className="h-full px-4 py-1 overflow-scroll ">
+          <div className="h-full px-4 py-1 overflow-scroll flex flex-col items-center">
             <div className=" flex gap-2 h-16 items-center">
               <div
                 onClick={() => {
@@ -126,16 +126,21 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
                 <i className="bi bi-backspace mr-2"></i>Буцах
               </div>
               <div
-                className={`px-3 h-16 py-2 ${
-                  catStatus == "O" ? "bg-gray-400" : "bg-teal-500"
-                } font-[500] flex justify-center  items-center text-white  
+                className={`px-3  font-[500] flex justify-start  items-center text-white  
                 w-full`}
               >
-                {catName}
+                <div className="group !bg-gray-200 mt-4">
+                  <input
+                    type=""
+                    className="!bg-gray-200 text-black font-[500]"
+                  />
+                  <span className="highlight !bg-gray-200"></span>
+                  <span className="bar !bg-gray-200"></span>
+                </div>
               </div>
             </div>
             <div
-              className="mt-4 pb-16
+              className="mt-4 pb-16 w-[900px]
             "
             >
               {questions?.map((question, index) => (
@@ -151,7 +156,7 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
             </div>
           </div>
         ) : (
-          <div className="px-4">
+          <div className="px-4 bg-white w-full h-full pt-2 overflow-scroll">
             {categories?.map((category, index) => (
               <div key={index} className="relative parent ">
                 <div
@@ -159,7 +164,7 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
                     //   setCategoryModal(true);
                     selectCatId(category.id, category.name, category.status);
                   }}
-                  className={`w-full text-white mt-1 h-16  shadow-sm ${
+                  className={`w-full text-white mb-1 h-16  shadow-sm ${
                     category.status == "A"
                       ? "bg-teal-400 hover:bg-teal-500 cursor-pointer"
                       : "bg-gray-400"

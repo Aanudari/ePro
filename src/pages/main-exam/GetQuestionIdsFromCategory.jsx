@@ -92,17 +92,25 @@ function GetQuestionIdsFromCategory({ setShow, getIds }) {
       const j = Math.floor(Math.random() * (i + 1));
       [copyArr[i], copyArr[j]] = [copyArr[j], copyArr[i]];
     }
-    let arr = []
+    let arr = [...copyArr.slice(0, value)];
     // Return the first `numItems` items from the shuffled array
-    if (questionIds.length < 1) {
-      setQuestionIds(copyArr.slice(0, value));
-    } else {
-      for (let index = 0; index < questionIds.length; index++) {
-        const element = questionIds[index];
-        
-      }
-      // setQuestionIds((prev) => [...prev, ...copyArr.slice(0, value)]);
+    // if (questionIds.length < 1) {
+    //   setQuestionIds(copyArr.slice(0, value));
+    // } else {
+    for (let index = 0; index < questionIds.length; index++) {
+      const element = questionIds[index];
+      arr.push(element);
     }
+    //   }
+    let unique = [...new Set(arr)];
+    setQuestionIds(unique);
+    // if (value < unique.length) {
+    //   let x = unique.slice(unique.length - value);
+    //   setQuestionIds(x);
+    // } else {
+    //   setQuestionIds(unique);
+    // }
+    // }
   };
   // console.log(questionIds);
   const [showModal, setShowModal] = useState(false);
@@ -215,7 +223,12 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
         ) : (
           <div className="px-4 bg-white w-full h-full pt-2 overflow-scroll">
             {categories?.map((category, index) => (
-              <div key={index} className="relative parent ">
+              <div
+                key={index}
+                className={`relative parent ${
+                  category.status == "O" && "hidden"
+                }`}
+              >
                 <div
                   onClick={() => {
                     //   setCategoryModal(true);

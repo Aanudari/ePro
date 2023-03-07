@@ -52,12 +52,28 @@ import CertainTemplate from "./pages/rating/belongTemplate/CertainTemplate";
 // import "src/fonts/TAHOMAB0.TTF";
 import ChoosedTRate from "./pages/training_raiting/ChoosedTRate";
 import RatingReport from "./pages/training_raiting/RatingReport";
-
+import { useEffect } from "react";
+import axios from "axios";
+import { logout } from "./service/examService";
 function App() {
   const { activeMenu, showTop, roleId, TOKEN } = useStateContext();
   const { width } = getWindowDimensions();
   const queryClient = new QueryClient();
-
+  useEffect(() => {
+    axios({
+      method: "get",
+      headers: {
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/User`,
+    })
+      .then((res) => {
+        if (res.data.errorCode === 401) {
+          logout();
+        }
+      })
+      .catch((err) => console.log(err));
+  });
   // useEffect(() => {
   //   const api = () => {
   //     axios({

@@ -69,6 +69,43 @@ function GetQuestionIdsFromCategory({ setShow, getIds }) {
       })
       .catch((err) => console.log(err));
   }, [selected]);
+  let ids = [
+    {
+      name: "Асуултын тоо сонгох",
+      label: "Асуултын тоо сонгох",
+    },
+  ];
+  let container = [];
+  for (let index = 0; index < questions?.length; index++) {
+    const element = questions[index];
+    ids.push({
+      name: element.id,
+      label: index + 1,
+    });
+    container.push(element.id);
+  }
+  const pickRandomNumbers = (value) => {
+    let copyArr = container.slice();
+
+    // Shuffle the copy array using the Fisher-Yates algorithm
+    for (let i = copyArr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copyArr[i], copyArr[j]] = [copyArr[j], copyArr[i]];
+    }
+    let arr = []
+    // Return the first `numItems` items from the shuffled array
+    if (questionIds.length < 1) {
+      setQuestionIds(copyArr.slice(0, value));
+    } else {
+      for (let index = 0; index < questionIds.length; index++) {
+        const element = questionIds[index];
+        
+      }
+      // setQuestionIds((prev) => [...prev, ...copyArr.slice(0, value)]);
+    }
+  };
+  // console.log(questionIds);
+  const [showModal, setShowModal] = useState(false);
   return (
     <div
       className={`${
@@ -84,6 +121,16 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
         }}
         className="bg-gray-200 appear-smooth w-full h-[calc(100%)] relative pb-10"
       >
+        {showModal && (
+          <NotiModal
+            length={questionIds.length}
+            setShowModal={setShowModal}
+            showModal={showModal}
+            getIds={getIds}
+            questionIds={questionIds}
+            setShow={setShow}
+          />
+        )}
         <div className="w-full h-12 bg-teal-600 flex justify-between px-4 items-center shadow-sm">
           <div className="flex items-center">
             <div className=" flex justify-between items-center px-4 py-2">
@@ -92,14 +139,19 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
               </span>
               {questionIds.length > 0 && (
                 <button
-                  className="text-white cursor-pointer font-[400] text-md transition-all ml-2 fixed bottom-[20px] 
-                  right-[20px] shadow z-20 custom-btn btn-13 w-[150px] text-center rounded-none"
+                  className="custom-btn btn-13 ml-4 h-11"
                   onClick={() => {
-                    getIds(questionIds);
-                    setShow(false);
+                    // if (questionIds.length < 10) {
+                    //   alert(
+                    //     "Шалтгалт үүсгэхэд хамгийн багадаа 10 асуулттай байхыг санал болгож байна"
+                    //   );
+                    // }
+                    setShowModal(true);
+                    // getIds(questionIds);
+                    // setShow(false);
                   }}
                 >
-                  {questionIds.length}/ Хадгалах
+                  Хадгалах
                 </button>
               )}
             </div>
@@ -129,14 +181,19 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
                 className={`px-3  font-[500] flex justify-start  items-center text-white  
                 w-full`}
               >
-                <div className="group !bg-gray-200 mt-4">
-                  <input
-                    type=""
-                    className="!bg-gray-200 text-black font-[500]"
-                  />
-                  <span className="highlight !bg-gray-200"></span>
-                  <span className="bar !bg-gray-200"></span>
-                </div>
+                <select
+                  onChange={(e) => {
+                    pickRandomNumbers(e.target.value);
+                  }}
+                  name=""
+                  id=""
+                >
+                  {ids.map((id, indexOfIds) => (
+                    <option key={indexOfIds} value={JSON.stringify(id.label)}>
+                      {id.label}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
             <div
@@ -207,3 +264,53 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
 }
 
 export default GetQuestionIdsFromCategory;
+
+function NotiModal({
+  length,
+  showModal,
+  setShowModal,
+  getIds,
+  questionIds,
+  setShow,
+}) {
+  return (
+    <div
+      className="glass rounded-t absolute h-full w-full top-0 left-0 flex items-center
+                        justify-center !shadow-none z-20"
+    >
+      <div
+        className="w-[500px] h-[200px] bg-white rounded flex flex-col
+                        justify-between p-4 shadow"
+      >
+        <div className="w-full flex justify-center">
+          <i className="bi bi-emoji-smile text-3xl text-teal-500"></i>
+        </div>
+        <span className="font-[400] text-center">
+          Нийт {length}-н асуулттай шалгалт үүснэ. "OK" товчийг дарснаар асуулт
+          сонгох цэсээс гархийг анхаарна уу.
+        </span>
+        <div className="flex justify-end">
+          <button
+            onClick={() => {
+              getIds(questionIds);
+              setShow(false);
+            }}
+            className=" px-3 py-2 bg-teal-500 font-[500] flex justify-center 
+        items-center text-white rounded-lg ml-2"
+          >
+            OK
+          </button>
+          <button
+            onClick={() => {
+              setShowModal(false);
+            }}
+            className=" px-3 py-2 bg-gray-400 font-[500] flex justify-center 
+        items-center text-white rounded-lg ml-2"
+          >
+            Буцах
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}

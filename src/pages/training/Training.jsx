@@ -276,7 +276,7 @@ function Training() {
         <div className="flex flex-wrap -mx-4">
           {filteredList.map((data, index) => (
             <div key={index} className="w-full sm:w-1/2 md:w-1/2 xl:w-1/2 p-4 ">
-              <article class="rounded-xl bg-white p-3 shadow-lg hover:shadow-xl hover:transform hover:scale-105 duration-300 ">
+              <article className="rounded-xl bg-white p-3 shadow-lg hover:shadow-xl hover:transform hover:scale-105 duration-300 ">
                 <a>
                   <div className="relative pb-48 overflow-hidden">
                     {data.fileUrl?.slice(-4) === ".mp4" ? (

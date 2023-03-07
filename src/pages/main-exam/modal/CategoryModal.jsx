@@ -243,7 +243,7 @@ function CategoryModal({
                   }}
                   className="text-white font-[500] text-[20px] hover:text-[22px] "
                 >
-                  <i class="bi bi-x-lg"></i>
+                  <i className="bi bi-x-lg"></i>
                 </button>
               </div>
             </div>

@@ -84,6 +84,11 @@ function ExamDash() {
   const [showReport, setShowReport] = useState(false);
   const [showDocument, setShowDocument] = useState(false);
   const [showActiveExamDetail, setShowActiveExamDetail] = useState(false);
+  let examNames = [];
+  for (let index = 0; index < data?.length; index++) {
+    const element = data[index];
+    examNames.push(element.name.toLowerCase());
+  }
   return (
     <div className="w-full min-h-screen bg-teal-500 relative">
       {loading && <Loading />}
@@ -112,6 +117,7 @@ function ExamDash() {
             setShowDocument={setShowDocument}
             examTri={examTri}
             setExamTri={setExamTri}
+            examNames={examNames}
           />
           {imgStatus && (
             <ImageBoard imgStatus={imgStatus} setImgStatus={setImgStatus} />

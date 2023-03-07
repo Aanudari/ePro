@@ -47,6 +47,7 @@ function ExamCategory({
     setEditModal(true);
     setKey(value);
   };
+  // console.log(categories);
   return (
     <div
       className={`absolute top-[56px] z-10 shadow bg core-bg-g h-[calc(100%-68px)] mb-2 h-full flex  px-3 
@@ -98,12 +99,23 @@ function ExamCategory({
                     {category.departmentName}
                   </h6>
                 </div>
-                <div className="flex justify-between w-[calc(60%)]">
-                  <div className="flex flex-col justify-center">
-                    <h6 className="font-[500] text-[12px] uppercase">
-                      {category.name}
-                    </h6>
+                <div className="flex justify-between w-[calc(70%)]">
+                  <div className="flex items-center gap-20 w-[calc(70%)]">
+                    <div className="flex flex-col justify-center items-start w-[180px]">
+                      {/* <h6 className="font-[500] text-[12px] uppercase">
+                        Эхлэх: {category.startDate}
+                      </h6> */}
+                      <h6 className="font-[500] text-[12px] uppercase">
+                        Дуусах: {category.endDate}
+                      </h6>
+                    </div>
+                    <div className="flex flex-row justify-center">
+                      <h6 className="font-[500] text-[12px] uppercase">
+                        {category.name}
+                      </h6>
+                    </div>
                   </div>
+
                   <div className="flex justify-center items-center">
                     <div
                       className="h-8 w-[100px] bg-gray-700 rounded-full flex 

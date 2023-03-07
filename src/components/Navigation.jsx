@@ -43,7 +43,7 @@ function Navigation() {
   const handleSubmit = () => {
     navigate("/search-result");
   };
-
+  const mainUser = JSON.parse(localStorage.getItem("user"));
   return (
     <div className="relative cus-index bg-[rgb(32, 73, 90)] ">
       <div className="h-14"></div>
@@ -142,26 +142,12 @@ function Navigation() {
                 <Menu.Item>
                   {({ active }) => (
                     <a
-                      href="#"
                       className={classNames(
                         active ? "bg-gray-100" : "",
                         "block px-4 py-2 text-sm text-gray-700"
                       )}
                     >
-                      Цэс 1
-                    </a>
-                  )}
-                </Menu.Item>
-                <Menu.Item>
-                  {({ active }) => (
-                    <a
-                      href="#"
-                      className={classNames(
-                        active ? "bg-gray-100" : "",
-                        "block px-4 py-2 text-sm text-gray-700"
-                      )}
-                    >
-                      Цэс 2
+                      {mainUser.first_name[0]}. {mainUser.last_name}
                     </a>
                   )}
                 </Menu.Item>
@@ -174,10 +160,11 @@ function Navigation() {
                       href="#"
                       className={classNames(
                         active ? "bg-gray-100" : "",
-                        "block px-4 py-2 text-sm text-gray-700"
+                        "block px-4 py-2 text-sm text-gray-700 text-end"
                       )}
                     >
                       Гарах
+                      <i className="bi bi-door-closed-fill"></i>
                     </a>
                   )}
                 </Menu.Item>

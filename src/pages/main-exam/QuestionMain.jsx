@@ -38,7 +38,9 @@ function QuestionMain({ data, indexed, ids, remover, collector }) {
             <h6 className="mb-0 mt-1 ml-2 font-[400]">{data.question}</h6>
           </div> */}
           <div className="w-full">
-            <h6 className="mb-0 mt-1 ml-2 font-[400]">{data.question}</h6>
+            <h6 className="mb-0 mt-1 ml-2 font-[400]">
+              <strong>{indexed + 1}.</strong> {data.question}
+            </h6>
             <div
               className={`${
                 data.qimgUrl !== ""

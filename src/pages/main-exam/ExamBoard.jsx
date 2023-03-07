@@ -10,6 +10,7 @@ function ExamBoard({
   setShowDocument,
   examTri,
   setExamTri,
+  examNames,
 }) {
   let tempo = ["Ongoing", "Exam over", "Not yet"];
   let temp = [exams];
@@ -24,11 +25,31 @@ function ExamBoard({
     }
     temp.push(arr);
   }
-
+  // console.log(examNames);
   const [detector, setDetector] = useState(1);
   const [show, setShow] = useState(false);
-  const text = "2023-03-04 10:13:07";
-  // console.log(text.split(" ", 1));
+  let final = [];
+  const monthsObj = exams
+    ? temp[detector].reduce((acc, item) => {
+        const [date, time] = item.startDate.split(" "); // Split the date and time
+        const [year, month] = date.split("-");
+
+        if (!acc[month]) {
+          acc[month] = { month: month, items: [] };
+        }
+
+        acc[month].items.push(item);
+
+        return acc;
+      }, {})
+    : "";
+
+  const monthsArr = Object.values(monthsObj);
+  monthsArr.forEach((month) => {
+    final.push(month.month);
+    final.push(month.items);
+  });
+  // console.log(final);
   return (
     <div className="min-w-[800px] bg-white shadow py-3 px-4 shadow-sm">
       {show && (
@@ -36,6 +57,7 @@ function ExamBoard({
           closeForm={setShow}
           examTri={examTri}
           setExamTri={setExamTri}
+          examNames={examNames}
         />
       )}
       <div className="flex">
@@ -132,132 +154,156 @@ function ExamBoard({
       </div> */}
       <div className="!h-[calc(100vh-156px)] w-full overflow-scroll mt-2 border-b">
         {exams &&
-          temp[detector]?.map((exam, index) => (
-            <div key={index} className="h-14 w-full flex border-b">
-              <div
-                onClick={
-                  exam?.examSummary?.status !== "Ongoing"
-                    ? () => {
-                        setExamModal(true);
-                        handleExamModal(exam.id, exam.examSummary.status);
-                      }
-                    : () => {
-                        // setShowReport(true);
-                        setExamModal(true);
-                        handleExamModal(exam.id, exam.examSummary.status);
-                      }
-                }
-                className={`w-full h-14 flex gap-1 border-b ${
-                  exam?.examSummary?.status == "Exam over"
-                    ? "custom-btn btn-11 bg-gray-50 shadow-none hover:bg-gray-200"
-                    : exam?.examSummary?.status == "Ongoing"
-                    ? "cellt"
-                    : "text-gray-400 hover:text-amber-600  hover:border-b-amber-600 bg-amber-100"
-                }
-                font-[600] cursor-pointer `}
-              >
-                <div
-                  className="w-1/4 h-full flex justify-start pl-10 items-center text-[11px]
-                     uppercase font-[500]"
-                >
-                  {exam.name}
-                </div>
-                <div
-                  className="w-1/4 h-full flex flex-row gap-3 justify-center items-center text-[11px]
-                     uppercase font-[500]"
-                >
-                  <span className="m-0 font-[600]">
-                    {exam.startDate.split(" ", 1)}
-                  </span>
-                  <span
-                    className={`m-0 font-[500] ${
-                      exam?.examSummary?.status == "Ongoing" &&
-                      "text-gray-900 font-[700]"
-                    }`}
+          final.map((certainItem, certainIndex) => {
+            if (certainIndex % 2 == 1) {
+              // console.log(certainItem);
+              return certainItem.map((exam, index) => (
+                <div key={index} className="h-14 w-full flex  mt-[2px]">
+                  <div
+                    onClick={
+                      exam?.examSummary?.status !== "Ongoing"
+                        ? () => {
+                            setExamModal(true);
+                            handleExamModal(exam.id, exam.examSummary.status);
+                          }
+                        : () => {
+                            // setShowReport(true);
+                            setExamModal(true);
+                            handleExamModal(exam.id, exam.examSummary.status);
+                          }
+                    }
+                    className={`w-full h-14 flex gap-1 ${
+                      exam?.examSummary?.status == "Exam over"
+                        ? "custom-btn btn-11 bg-gray-100 shadow-none hover:bg-gray-200 bg-opacity-50 "
+                        : exam?.examSummary?.status == "Ongoing"
+                        ? "cellt "
+                        : "custom-btn btn-11 bg-amber-200 shadow-none hover:bg-amber-200 bg-opacity-50 px-2"
+                    }
+                    font-[600] cursor-pointer `}
                   >
-                    {exam?.expireDate.split(" ", 1)}
-                  </span>
-                </div>
-                <div
-                  className="w-1/4 h-full flex justify-center items-center text-[11px]
-                     uppercase font-[500]"
-                >
-                  {exam?.examSummary?.status == "Exam over" ? (
-                    <div className="uppercase font-[500] h-full flex items-center">
-                      <div className="h-[8px] w-[8px] bg-teal-500 rounded-full mr-2 mb-[2px]"></div>
-                      Дууссан
+                    <div
+                      className="w-1/4 h-full flex justify-start pl-10 items-center text-[11px]
+                         uppercase font-[500]"
+                    >
+                      {exam.name}
                     </div>
-                  ) : exam?.examSummary?.status == "Ongoing" ? (
-                    <div className="px-2 py-1 rounded-md shadow bg-white">
-                      <span className="!font-[700] text-red-500 text-[9px]">
-                        Идэвхитэй{" "}
-                        <i className="bi bi-check2-circle ml-1 text-[12px]"></i>
+                    <div
+                      className="w-1/4 h-full flex flex-row gap-3 justify-center items-center text-[11px]
+                         uppercase font-[500]"
+                    >
+                      <span className="m-0 font-[600]">
+                        {exam.startDate.split(" ", 1)}
+                      </span>
+                      <span
+                        className={`m-0 font-[500] ${
+                          exam?.examSummary?.status == "Ongoing" &&
+                          "text-gray-900 font-[700]"
+                        }`}
+                      >
+                        {exam?.expireDate.split(" ", 1)}
                       </span>
                     </div>
+                    <div
+                      className="w-1/4 h-full flex justify-center items-center text-[11px]
+                         uppercase font-[500]"
+                    >
+                      {exam?.examSummary?.status == "Exam over" ? (
+                        <div className="uppercase font-[500] h-full flex items-center">
+                          <div className="h-[8px] w-[8px] bg-teal-500 rounded-full mr-2 mb-[2px]"></div>
+                          Дууссан
+                        </div>
+                      ) : exam?.examSummary?.status == "Ongoing" ? (
+                        <div className="px-2 py-1 rounded-md shadow bg-white">
+                          <span className="!font-[700] text-red-500 text-[9px]">
+                            <i className="bi bi-check2-circle mr-1 text-[12px]"></i>
+                            Идэвхитэй{" "}
+                          </span>
+                        </div>
+                      ) : (
+                        <div className="uppercase font-[500] h-full flex items-center">
+                          <div className="h-[8px] w-[8px] bg-yellow-500 rounded-full mr-2 mb-[2px] flex items-center justify-center">
+                            {/* <div className="h-[8px] w-[8px] bg-gray-100 rounded-full"></div> */}
+                          </div>
+                          Эхлээгүй
+                        </div>
+                      )}
+                    </div>
+                    <div
+                      className="w-1/4 h-full flex justify-center items-center text-[11px]
+                         uppercase font-[500]"
+                    >
+                      {exam?.duration} мин
+                    </div>
+                  </div>
+                  {exam?.examSummary?.status == "Ongoing" ? (
+                    <div
+                      onClick={() => {
+                        setShowReport(true);
+                        handleExamModal(exam.id);
+                      }}
+                      className="w-1/4 h-full flex justify-between items-center text-[11px] cursor-pointer
+                         uppercase font-[500] custom-btn btn-5 p-0 rounded-none"
+                    >
+                      <div className="w-full flex justify-center items-center font-[500] ">
+                        <span className="!font-[700]">
+                          {exam?.examSummary?.taken}/{exam?.examSummary?.total}
+                        </span>
+                      </div>
+                      <div className="h-full min-w-[50px] border-l flex justify-center items-center">
+                        <i className="bi bi-check2-circle text-[20px]"></i>
+                      </div>
+                    </div>
+                  ) : exam?.examSummary?.status == "Exam over" ? (
+                    <div
+                      onClick={() => {
+                        setShowReport(true);
+                        handleExamModal(exam.id);
+                      }}
+                      className="w-1/4 h-full flex justify-between items-center text-[11px] cursor-pointer custom-btn btn-13 p-0 rounded-none
+                                   uppercase font-[500] bg-teal-500 !text-white active:bg-teal-500 hover:bg-teal-600"
+                    >
+                      <div className="w-full flex justify-center items-center font-[500]">
+                        Тайлан
+                      </div>
+                      <div className="h-full min-w-[50px] border-l flex justify-center items-center">
+                        <i className="bi bi-file-earmark-bar-graph text-[16px]"></i>
+                      </div>
+                    </div>
                   ) : (
-                    "Эхлээгүй ..."
+                    <div
+                      onClick={() => {
+                        setShowReport(true);
+                        handleExamModal(exam.id);
+                      }}
+                      className="w-1/4 h-full flex justify-between items-center text-[11px] cursor-pointer custom-btn btn-14 p-0
+                                   uppercase font-[500] bg-amber-500 rounded-none active:bg-amber-500 hover:bg-amber-600"
+                    >
+                      <div className="w-full flex justify-center items-center font-[500]">
+                        ХҮЛЭЭГДЭЖ БУЙ
+                      </div>
+                      <div className="h-full min-w-[50px] border-l flex justify-center items-center">
+                        <i className="bi bi-alarm-fill text-[16px]"></i>
+                      </div>
+                    </div>
                   )}
                 </div>
-                <div
-                  className="w-1/4 h-full flex justify-center items-center text-[11px]
-                     uppercase font-[500]"
-                >
-                  {exam?.duration} мин
-                </div>
-              </div>
-              {exam?.examSummary?.status == "Ongoing" ? (
-                <div
-                  onClick={() => {
-                    setShowReport(true);
-                    handleExamModal(exam.id);
-                  }}
-                  className="w-1/4 h-full flex justify-between items-center text-[11px] cursor-pointer
-                     uppercase font-[500] custom-btn btn-5 p-0 rounded-none"
-                >
-                  <div className="w-full flex justify-center items-center font-[500] ">
-                    <span className="!font-[700]">
-                      {exam?.examSummary?.taken}/{exam?.examSummary?.total}
+              ));
+            } else {
+              return (
+                <div key={certainIndex} className="w-full my-2">
+                  <div className="bg-gray-100 text-gray-500 px-3 py-1 rounded text-[12px] w-[100px]">
+                    <span className="font-[500]">
+                      {" "}
+                      <i className="bi bi-arrow-down-short"></i>
+                    </span>
+                    <span className="font-[500]">
+                      {certainItem.replace(/0/g, "")}-р сар{" "}
                     </span>
                   </div>
-                  <div className="h-full min-w-[50px] border-l flex justify-center items-center">
-                    <i className="bi bi-check2-circle text-[20px]"></i>
-                  </div>
                 </div>
-              ) : exam?.examSummary?.status == "Exam over" ? (
-                <div
-                  onClick={() => {
-                    setShowReport(true);
-                    handleExamModal(exam.id);
-                  }}
-                  className="w-1/4 h-full flex justify-between items-center text-[11px] cursor-pointer custom-btn btn-13 p-0 rounded-none
-                               uppercase font-[500] bg-teal-500 !text-white active:bg-teal-500 hover:bg-teal-600"
-                >
-                  <div className="w-full flex justify-center items-center font-[500]">
-                    Тайлан
-                  </div>
-                  <div className="h-full min-w-[50px] border-l flex justify-center items-center">
-                    <i className="bi bi-file-earmark-bar-graph text-[16px]"></i>
-                  </div>
-                </div>
-              ) : (
-                <div
-                  onClick={() => {
-                    setShowReport(true);
-                    handleExamModal(exam.id);
-                  }}
-                  className="w-1/4 h-full flex justify-between items-center text-[11px] cursor-pointer custom-btn btn-14 p-0
-                               uppercase font-[500] bg-amber-500 rounded-none active:bg-amber-500 hover:bg-amber-600"
-                >
-                  <div className="w-full flex justify-center items-center font-[500]">
-                    ХҮЛЭЭГДЭЖ БУЙ
-                  </div>
-                  <div className="h-full min-w-[50px] border-l flex justify-center items-center">
-                    <i className="bi bi-alarm-fill text-[16px]"></i>
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
+              );
+            }
+          })}
       </div>
     </div>
   );

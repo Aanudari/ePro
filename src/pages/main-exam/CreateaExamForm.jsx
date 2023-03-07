@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useStateContext } from "../../contexts/ContextProvider";
 import DatePicker from "react-datepicker";
 import AllEmployeeSelect from "./modal/AllEmployeeSelect";
 import axios from "axios";
 import GetQuestionIdsFromCategory from "./GetQuestionIdsFromCategory";
 import { ToastContainer, toast } from "react-toastify";
-import { notification } from "../../service/toast.js";
+
 import "react-toastify/dist/ReactToastify.css";
-function CreateExamForm({ closeForm, examTri, setExamTri }) {
+function CreateExamForm({ closeForm, examTri, setExamTri, examNames }) {
   const [showSelect, setShowSelect] = useState(false);
   const [allEmployee, setAllEmployee] = useState();
   const getEmployees = (employees) => {
@@ -155,6 +155,12 @@ function CreateExamForm({ closeForm, examTri, setExamTri }) {
         console.log(err);
       });
   };
+  const [nameError, setNameError] = useState(false);
+  const handleNameCheck = (e) => {
+    if (examNames.includes(e.target.value.toLowerCase())) {
+      setNameError(true);
+    }
+  };
 
   return (
     <div
@@ -207,21 +213,34 @@ function CreateExamForm({ closeForm, examTri, setExamTri }) {
                             "
               >
                 <div className="pl-10 w-1/2">
-                  <div className="group">
+                  <div className="group relative">
                     <input
                       className={noti_examName ? "custom-validation" : ""}
                       onChange={(e) => {
                         setExam_name(e.target.value);
                         setNoti_examName(false);
+                        setNameError(false);
+                      }}
+                      onBlur={(e) => {
+                        handleNameCheck(e);
                       }}
                       type="text"
                     />
+                    {nameError && (
+                      <div className="flex flex-col justify-center items-center absolute">
+                        <div className="arrow-up "></div>
+                        <div className=" bg-[#fd1f1f] rounded h-12 z-20 flex items-center font-[400] text-white px-2 text-[14px]">
+                          Шалгалтын нэр давхардаж байна !
+                        </div>
+                      </div>
+                    )}
                     {noti_examName && (
                       <i
                         className="bi bi-exclamation-lg text-2xl text-red-500
                                     animate-bounce absolute top-[10px] left-[-15px]"
                       ></i>
                     )}
+
                     <span className="highlight"></span>
                     <span className="bar "></span>
                     <label className="">Шалгалтын нэр</label>

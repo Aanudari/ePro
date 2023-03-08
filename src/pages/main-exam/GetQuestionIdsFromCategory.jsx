@@ -86,34 +86,16 @@ function GetQuestionIdsFromCategory({ setShow, getIds }) {
     });
     container.push(element.id);
   }
+  const [catId, setCatId] = useState("");
   const pickRandomNumbers = (value) => {
     let value2 = value.target.value;
     let copyArr = container.slice();
-
-    // Shuffle the copy array using the Fisher-Yates algorithm
     for (let i = copyArr.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [copyArr[i], copyArr[j]] = [copyArr[j], copyArr[i]];
     }
     let arr = [...copyArr.slice(0, value2)];
-    // Return the first `numItems` items from the shuffled array
-    // if (questionIds.length < 1) {
-    //   setQuestionIds(copyArr.slice(0, value));
-    // } else {
-    // for (let index = 0; index < questionIds.length; index++) {
-    //   const element = questionIds[index];
-    //   arr.push(element);
-    // }
-    // //   }
-    // let unique = [...new Set(arr)];
     setQuestionIds(arr);
-    // if (value < unique.length) {
-    //   let x = unique.slice(unique.length - value);
-    //   setQuestionIds(x);
-    // } else {
-    //   setQuestionIds(unique);
-    // }
-    // }
   };
   // console.log(questionIds);
   const [showModal, setShowModal] = useState(false);
@@ -141,7 +123,7 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
             setShow={setShow}
           />
         )}
-        <div className="w-full h-12 bg-teal-600 flex justify-between px-4 items-center shadow-sm">
+        <div className="w-full h-14 bg-teal-600 flex justify-between px-4 items-center shadow-sm">
           <div className="flex items-center">
             <div className=" flex justify-between items-center px-4 py-2">
               <span className="text-white font-[500] text-sm">
@@ -151,14 +133,7 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
                 <button
                   className="custom-btn btn-13 ml-4 h-11"
                   onClick={() => {
-                    // if (questionIds.length < 10) {
-                    //   alert(
-                    //     "Шалтгалт үүсгэхэд хамгийн багадаа 10 асуулттай байхыг санал болгож байна"
-                    //   );
-                    // }
                     setShowModal(true);
-                    // getIds(questionIds);
-                    // setShow(false);
                   }}
                 >
                   Хадгалах
@@ -242,7 +217,7 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
               >
                 <div
                   onClick={() => {
-                    //   setCategoryModal(true);
+                    setCatId(category.id);
                     selectCatId(category.id, category.name, category.status);
                   }}
                   className={`w-full text-white mb-1 h-16  shadow-sm ${

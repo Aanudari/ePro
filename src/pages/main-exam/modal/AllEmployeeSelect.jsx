@@ -147,7 +147,7 @@ function AllEmployeeSelect({ setShow, getEmployees, setShowSelect }) {
     bg-black bg-opacity-50 flex items-center justify-center z-20`}
     >
       <div className="bg-gray-200 appear-smooth w-full h-[calc(100%)] relative">
-        <div className="w-full h-12 bg-teal-600 flex justify-between px-4 items-center shadow-sm">
+        <div className="w-full h-14 bg-teal-600 flex justify-between px-4 items-center shadow-sm">
           <div className="flex items-center">
             <div className=" flex justify-between items-center px-4 py-2">
               <span className="text-white font-[500] text-sm mr-2">
@@ -158,15 +158,15 @@ function AllEmployeeSelect({ setShow, getEmployees, setShowSelect }) {
 
                 //   className="text-white font-[500] text-sm border-[2px] rounded  px-2 py-2 ml-2"
                 // >
-                <Button
+                <button
                   onClick={() => {
                     setShowSelect(false);
                     getEmployees(chosen);
                   }}
-                  variant="dark"
+                  className={"custom-btn btn-13"}
                 >
                   Хадгалах
-                </Button>
+                </button>
               )}
             </div>
           </div>

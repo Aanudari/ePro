@@ -3,7 +3,22 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { logout } from "../../../service/examService";
 
-function AllEmployeeSelectEdit({ setShow, getEmployees, getUsers }) {
+function AllEmployeeSelectEdit({
+  setShow,
+  getEmployees,
+  getUsers,
+  datestring,
+  datestring2,
+  duration,
+  rechosen,
+  tempo,
+  setExamTri,
+  examTri,
+  setUserTrigger,
+  userTrigger,
+  name,
+  chosenId,
+}) {
   const [chosen, setChosen] = useState([]);
   const [chosenPre, setChosenPre] = useState([]);
   const { activeMenu, TOKEN } = useStateContext();
@@ -81,7 +96,7 @@ function AllEmployeeSelectEdit({ setShow, getEmployees, getUsers }) {
       });
       setChosenPre(filtered);
       let filtered2 = chosen.filter((item) => {
-        return item.deviceId !== dev;
+        return parseInt(item.deviceId) !== dev;
       });
       setChosen(filtered2);
     } else {
@@ -143,6 +158,49 @@ function AllEmployeeSelectEdit({ setShow, getEmployees, getUsers }) {
     }
   };
   // console.log(chosen);
+
+  const handleSubmit = () => {
+    let tempo = [];
+    for (let index = 0; index < chosen.length; index++) {
+      let element = chosen[index];
+      let data = {
+        department: element.department,
+        unitId: element.unitId,
+        deviceId: `${element.deviceId}`,
+      };
+      tempo.push(data);
+    }
+    let schema = {
+      id: `${chosenId}`,
+      examName: `${name}`,
+      startDate: `${datestring}`,
+      expireDate: `${datestring2}`,
+      duration: duration,
+      devices: tempo,
+    };
+    axios({
+      method: "put",
+      headers: {
+        Authorization: `${TOKEN}`,
+        "Content-Type": "application/json",
+        accept: "text/plain",
+      },
+      url: `${process.env.REACT_APP_URL}/v1/ExamNew/edit`,
+      data: JSON.stringify(schema),
+    })
+      .then((res) => {
+        // console.log(res.data);
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        } else {
+          setExamTri(!examTri);
+          setUserTrigger(!userTrigger);
+          setShow(false);
+        }
+        // setExamModal(false);
+      })
+      .catch((err) => console.log(err));
+  };
   return (
     <div
       className={`${
@@ -152,22 +210,22 @@ function AllEmployeeSelectEdit({ setShow, getEmployees, getUsers }) {
     bg-black bg-opacity-50 flex items-center justify-center z-20`}
     >
       <div className="bg-gray-200 appear-smooth w-full h-[calc(100%)] relative">
-        <div className="w-full h-12 bg-teal-500 flex justify-between px-4 items-center shadow-sm">
+        <div className="w-full h-14 bg-teal-500 flex justify-between px-4 items-center shadow-sm">
           <div className="flex items-center">
             <div className=" flex justify-between items-center px-4 py-2">
               <span className="text-white font-[500] text-sm">
-                Сонгох : {chosen.length}/{users?.length}
+                Сонгосон : {chosen.length}/{users?.length}
               </span>
               {chosen.length > 0 && (
-                <span
+                <button
                   onClick={() => {
-                    setShow(false);
-                    getEmployees(chosen);
+                    // getEmployees(chosen);
+                    handleSubmit();
                   }}
-                  className="text-white font-[500] text-sm border-[2px] rounded  px-2 py-2 ml-2"
+                  className="custom-btn btn-13 w-[120px] ml-3"
                 >
-                  <button>Хадгалах</button>
-                </span>
+                  <span className="font-[500] text-[15px]">Хадгалах</span>
+                </button>
               )}
             </div>
           </div>
@@ -186,7 +244,8 @@ function AllEmployeeSelectEdit({ setShow, getEmployees, getUsers }) {
               key={ind}
               className="px-3 shadow-sm border-t border-teal-500 px-3 pt-1 pb-5 flex flex-col flex-wrap gap-2 overflow-scroll mt-2 justify-start"
             >
-              <h6
+              <h6></h6>
+              {/* <h6
                 onClick={() => {
                   bigCollector(ind);
                 }}
@@ -198,7 +257,7 @@ function AllEmployeeSelectEdit({ setShow, getEmployees, getUsers }) {
                     <i className="bi bi-check absolute text-2xl top-[-10px] left-[-6px] text-teal-500"></i>
                   )}
                 </div>
-              </h6>
+              </h6> */}
               <div className="flex flex-wrap gap-1">
                 {el?.map((item, index) => (
                   <div

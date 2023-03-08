@@ -33,24 +33,24 @@ function UserCore() {
       })
       .catch((err) => console.log(err));
   }, []);
-  useEffect(() => {
-    axios({
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${TOKEN}`,
-      },
-      url: `${process.env.REACT_APP_URL}/v1/Rating/${deviceId}`,
-      data: {
-        startDate: "",
-        endDate: "",
-      },
-    })
-      .then((res) => {
-        setRating(res.data.ratings);
-      })
-      .catch((err) => console.log(err));
-  }, []);
+  // useEffect(() => {
+  //   axios({
+  //     method: "post",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: `${TOKEN}`,
+  //     },
+  //     url: `${process.env.REACT_APP_URL}/v1/Rating/${deviceId}`,
+  //     data: {
+  //       startDate: "",
+  //       endDate: "",
+  //     },
+  //   })
+  //     .then((res) => {
+  //       setRating(res.data.ratings);
+  //     })
+  //     .catch((err) => console.log(err));
+  // }, []);
   // const [nokori, setNokori] = useState([]);
   let nokori = [];
   const gotYa = (value) => {
@@ -96,9 +96,9 @@ function UserCore() {
               <a className="cursor-pointer">API</a>
             </div>
             <div className="flex gap-[5px] flex-wrap">
-              {rating?.map((element, index) => {
+              {/* {rating?.map((element, index) => {
                 return <RatingCellDes data={element} key={index} />;
-              })}
+              })} */}
             </div>
             <div className="content">
               <div className="content-panel">

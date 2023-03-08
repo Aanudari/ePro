@@ -1,7 +1,7 @@
 import AnswerCell from "./AnswerCell";
 import { useState } from "react";
 import { useEffect } from "react";
-function QuestionCell({ data, collector }) {
+function QuestionCell({ data, collector, checker, setCount, count }) {
   const [answer, setAnswer] = useState();
   const [tempo, setTempo] = useState([
     {
@@ -21,8 +21,9 @@ function QuestionCell({ data, collector }) {
     };
     setTempo([data]);
     setAnswer(id);
+    setCount((prev) => [...prev, checker]);
   };
-
+  // console.log(data.id);
   useEffect(() => {
     collector(question, data.id);
   }, [tempo]);

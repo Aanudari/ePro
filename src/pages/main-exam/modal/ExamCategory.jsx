@@ -106,7 +106,7 @@ function ExamCategory({
                         Эхлэх: {category.startDate}
                       </h6> */}
                       <h6 className="font-[500] text-[12px] uppercase">
-                        Дуусах: {category.endDate}
+                        Дуусах: {category.endDate.split(" ", 1)}
                       </h6>
                     </div>
                     <div className="flex flex-row justify-center">

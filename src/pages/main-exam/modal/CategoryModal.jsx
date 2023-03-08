@@ -7,6 +7,7 @@ import { logout } from "../../../service/examService";
 import PoolQuestionEdit from "../edits/PoolQuestionEdit";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import bg from "../../../assets/background-blue.jpg";
 function CategoryModal({
   setCategoryModal,
   id,
@@ -207,8 +208,7 @@ function CategoryModal({
             //     "url(https://img.freepik.com/free-photo/abstract-grunge-decorative-relief-navy-blue-stucco-wall-texture-wide-angle-rough-colored-background_1258-28311.jpg?w=2000)",
             // }}
             style={{
-              background:
-                "url(https://wallup.net/wp-content/uploads/2016/01/259906-wavy_lines-abstract-blue.jpg)",
+              background: `url(${bg})`,
               backgroundSize: "cover",
             }}
             className="w-[calc(100%)] shrink h-[calc(100vh-56px)] bg-white flex flex-col "

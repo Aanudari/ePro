@@ -13,6 +13,7 @@ import Document from "./modal/Document";
 import DocumentFinishedExam from "./modal/DocumentFinishedExam";
 import { logout } from "../../service/examService";
 import Loading from "../../components/Loading";
+import SearhModal from "./modal/SearchModal";
 function ExamDash() {
   const [examModalId, setexamModalId] = useState();
   const [categoryModal, setCategoryModal] = useState(false);
@@ -85,10 +86,16 @@ function ExamDash() {
   const [showDocument, setShowDocument] = useState(false);
   const [showActiveExamDetail, setShowActiveExamDetail] = useState(false);
   let examNames = [];
+  let examWithIds = [];
   for (let index = 0; index < data?.length; index++) {
     const element = data[index];
     examNames.push(element.name.toLowerCase());
+    examWithIds.push({
+      name: element.name.toLowerCase(),
+      id: element.id.toLowerCase(),
+    });
   }
+  const [showSearch, setShowSearch] = useState(false);
   return (
     <div className="w-full min-h-screen bg-teal-500 relative">
       {loading && <Loading />}
@@ -138,6 +145,8 @@ function ExamDash() {
           setImgStatus={setImgStatus}
           showCategoryMenu={showCategoryMenu}
           setShowCategoryMenu={setShowCategoryMenu}
+          setShowSearch={setShowSearch}
+          showSearch={showSearch}
         />
       </div>
       {categoryModal && (
@@ -168,6 +177,16 @@ function ExamDash() {
           setTrigger={setTrigger}
           showAddCategory={showAddCategory}
           setShowAddCategory={setShowAddCategory}
+        />
+      )}
+      {showSearch && (
+        <SearhModal
+          exams={data && data}
+          showSearch={showSearch}
+          setShowSearch={setShowSearch}
+          setExamModal={setExamModal}
+          handleExamModal={handleExamModal}
+          setShowReport={setShowReport}
         />
       )}
     </div>

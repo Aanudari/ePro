@@ -3,6 +3,8 @@ import { logout } from "../../service/examService";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import QuestionMain from "./QuestionMain";
+import bg from "../../assets/background-blue.jpg";
+import Select from "react-select";
 function GetQuestionIdsFromCategory({ setShow, getIds }) {
   const { activeMenu, TOKEN } = useStateContext();
   const [categories, setCategories] = useState();
@@ -85,6 +87,7 @@ function GetQuestionIdsFromCategory({ setShow, getIds }) {
     container.push(element.id);
   }
   const pickRandomNumbers = (value) => {
+    let value2 = value.target.value;
     let copyArr = container.slice();
 
     // Shuffle the copy array using the Fisher-Yates algorithm
@@ -92,17 +95,25 @@ function GetQuestionIdsFromCategory({ setShow, getIds }) {
       const j = Math.floor(Math.random() * (i + 1));
       [copyArr[i], copyArr[j]] = [copyArr[j], copyArr[i]];
     }
-    let arr = []
+    let arr = [...copyArr.slice(0, value2)];
     // Return the first `numItems` items from the shuffled array
-    if (questionIds.length < 1) {
-      setQuestionIds(copyArr.slice(0, value));
-    } else {
-      for (let index = 0; index < questionIds.length; index++) {
-        const element = questionIds[index];
-        
-      }
-      // setQuestionIds((prev) => [...prev, ...copyArr.slice(0, value)]);
-    }
+    // if (questionIds.length < 1) {
+    //   setQuestionIds(copyArr.slice(0, value));
+    // } else {
+    // for (let index = 0; index < questionIds.length; index++) {
+    //   const element = questionIds[index];
+    //   arr.push(element);
+    // }
+    // //   }
+    // let unique = [...new Set(arr)];
+    setQuestionIds(arr);
+    // if (value < unique.length) {
+    //   let x = unique.slice(unique.length - value);
+    //   setQuestionIds(x);
+    // } else {
+    //   setQuestionIds(unique);
+    // }
+    // }
   };
   // console.log(questionIds);
   const [showModal, setShowModal] = useState(false);
@@ -116,8 +127,7 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
     >
       <div
         style={{
-          background:
-            "url(https://wallup.net/wp-content/uploads/2016/01/259906-wavy_lines-abstract-blue.jpg)",
+          background: `url(${bg})`,
         }}
         className="bg-gray-200 appear-smooth w-full h-[calc(100%)] relative pb-10"
       >
@@ -167,33 +177,42 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
         </div>
         {selected.length > 0 ? (
           <div className="h-full px-4 py-1 overflow-scroll flex flex-col items-center">
-            <div className=" flex gap-2 h-16 items-center">
+            <div className=" flex gap-2 h-16 items-center justify-between w-[900px]">
               <div
                 onClick={() => {
                   setSelected([]);
                 }}
-                className="px-3 h-10 hover:bg-teal-600 py-2 bg-teal-600 font-[500] rounded
+                className="px-3 h-9 custom-btn btn-13 hover:bg-teal-600 py-2 bg-teal-600 font-[500] rounded
                     shadow-md text-sm  flex justify-center cursor-pointer items-center text-white  hover:bg-teal-700 w-[200px]"
               >
                 <i className="bi bi-backspace mr-2"></i>Буцах
               </div>
-              <div
-                className={`px-3  font-[500] flex justify-start  items-center text-white  
+              <div className="flex justify-end w-[340px] gap-0">
+                <div
+                  className={`font-[500] flex justify-end  items-center text-white  
                 w-full`}
-              >
-                <select
-                  onChange={(e) => {
-                    pickRandomNumbers(e.target.value);
-                  }}
-                  name=""
-                  id=""
                 >
-                  {ids.map((id, indexOfIds) => (
-                    <option key={indexOfIds} value={JSON.stringify(id.label)}>
-                      {id.label}
-                    </option>
-                  ))}
-                </select>
+                  <label>
+                    <select
+                      onChange={(e) => {
+                        pickRandomNumbers(e);
+                      }}
+                      name=""
+                      id=""
+                      // disabled
+                      className="cursor-pointer"
+                    >
+                      {ids.map((id, indexOfIds) => (
+                        <option
+                          key={indexOfIds}
+                          value={JSON.stringify(id.label)}
+                        >
+                          {id.label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
               </div>
             </div>
             <div
@@ -215,7 +234,12 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
         ) : (
           <div className="px-4 bg-white w-full h-full pt-2 overflow-scroll">
             {categories?.map((category, index) => (
-              <div key={index} className="relative parent ">
+              <div
+                key={index}
+                className={`relative parent ${
+                  category.status == "O" && "hidden"
+                }`}
+              >
                 <div
                   onClick={() => {
                     //   setCategoryModal(true);

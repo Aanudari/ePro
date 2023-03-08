@@ -118,15 +118,18 @@ function Navigation() {
           >
             <i className="bi bi-bell text-white"></i>
           </button>
-          <Menu as="div" className="relative ml-3">
-            <div>
-              <Menu.Button className="flex rounded-full !bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+          <Menu as="div" className="relative ml-3 h-full">
+            <div className="h-full w-full">
+              <Menu.Button className="flex h-full rounded-full !bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                 <span className="sr-only">Open user menu</span>
                 <img
                   className="h-10 w-10 rounded-full"
                   src="user2.png"
                   alt=""
                 />
+                <div className="text-white flex h-full items-center px-2 w-full">
+                  {mainUser.first_name[0]}. {mainUser.last_name}
+                </div>
               </Menu.Button>
             </div>
             <Transition
@@ -139,7 +142,7 @@ function Navigation() {
               leaveTo="transform opacity-0 scale-95"
             >
               <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                <Menu.Item>
+                {/* <Menu.Item>
                   {({ active }) => (
                     <a
                       className={classNames(
@@ -150,7 +153,7 @@ function Navigation() {
                       {mainUser.first_name[0]}. {mainUser.last_name}
                     </a>
                   )}
-                </Menu.Item>
+                </Menu.Item> */}
                 <Menu.Item>
                   {({ active }) => (
                     <a

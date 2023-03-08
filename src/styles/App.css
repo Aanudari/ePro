@@ -59,13 +59,14 @@ a {
 }
 
 .cellt {
-  background-color: #008080;
+  background-color: teal;
   /* border: none !important; */
   color: white;
   opacity: 0.9;
   transition: 0.3s;
   cursor: pointer;
   z-index: 0 !important;
+  border-radius: 5px;
 }
 
 .cellt:hover {

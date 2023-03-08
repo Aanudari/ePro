@@ -7,6 +7,7 @@ import EditQuestionMenu from "../edits/EditQuestionMenu";
 import { logout } from "../../../service/examService";
 import ExamEditHeader2 from "../ExamEditHeader2";
 import DeleteConfirm from "./DeleteComfirm";
+import bg from "../../../assets/background-blue.jpg";
 function ExamModalMain({
   setExamModal,
   id,
@@ -370,14 +371,46 @@ function ExamModalMain({
       const element = data[0].questionList[index];
       arr.push(element.id);
     }
-    console.log(arr);
+    let filtered = arr.filter((item) => {
+      return item !== value;
+    });
+    let main = [];
+    for (let index = 0; index < filtered.length; index++) {
+      const element = filtered[index];
+      main.push({
+        id: `${element}`,
+      });
+    }
+    let final = {
+      varId: `${data[0].id}`,
+      varName: `${data[0].name}`,
+      questionIds: main,
+    };
+    axios({
+      method: "put",
+      headers: {
+        Authorization: `${TOKEN}`,
+        "Content-Type": "application/json",
+        accept: "text/plain",
+      },
+      url: `${process.env.REACT_APP_URL}/v1/ExamNew/edit/variant`,
+      data: JSON.stringify(final),
+    })
+      .then((res) => {
+        if (res.data.isSuccess === false) {
+          alert(res.data.resultMessage);
+        }
+        setTrigger2(!trigger2);
+        setArr([]);
+      })
+      .catch((err) => console.log(err));
   };
   return (
     <div
       className={`fixed ${
         activeMenu
           ? "top-[56px] left-[250px] w-[calc(100%-250px)] h-[calc(100%-56px)]"
-          : "w-full h-full top-[56px] left-0"
+          : "w-full h-[calc(100vh-56px)] top-[56px] left-0"
       } 
         bg-black bg-opacity-50 flex justify-center items-center z-20
         `}
@@ -471,8 +504,7 @@ function ExamModalMain({
         )}
         <div
           style={{
-            background:
-              "url(https://wallup.net/wp-content/uploads/2016/01/259906-wavy_lines-abstract-blue.jpg)",
+            background: `url(${bg})`,
             backgroundSize: "cover",
           }}
           className="w-full h-full px-10 py-2 overflow-scroll flex justify-center"
@@ -484,7 +516,7 @@ function ExamModalMain({
                 //  QUESTION !!!
                 //  QUESTION !!!
                 <div
-                  key={index}
+                  key={JSON.stringify(question)}
                   className={`mt-3 border-t-[5px] border-l border-r border-[#50a3a2] rounded-lg realtive bg-white`}
                 >
                   {" "}
@@ -746,7 +778,7 @@ function ExamModalMain({
       )}
 
       <div
-        className={`h-screen  shadow bg-white transition ${
+        className={`h-full relative shadow bg-white transition ${
           sideQuestions
             ? " w-[600px] from-left2"
             : count > 0
@@ -754,7 +786,7 @@ function ExamModalMain({
             : "w-0"
         }  overflow-scroll shadow  flex flex-col justify-between`}
       >
-        <div className="px-2 py-2">
+        <div className="px-2 py-2 ">
           <div className="h-[30px]"></div>
           {!showQuestions ? (
             <h6 className="text-teal-600 text-[14px] flex justify-between">
@@ -838,7 +870,7 @@ function ExamModalMain({
             </span>
           )}
         </div>
-        <div className="h-[80px] bg-white shadow flex items-start w-full justify-between px-3 pt-3">
+        <div className="h-[60px] shadow flex items-center w-full justify-between px-3 pt-3 pb-2">
           {showQuestions && (
             <div
               onClick={() => {
@@ -858,12 +890,10 @@ function ExamModalMain({
               onClick={() => {
                 handleAddQuestion();
               }}
-              className="h-[30px] min-w-[150px] bg-teal-500 rounded-sm px-3 flex items-center font-[400] text-white
+              className="h-[30px] min-w-[90px] bg-teal-500 rounded-sm px-3 flex items-center font-[400] text-white
                             cursor-pointer active:bg-teal-400 hover:bg-teal-600"
             >
-              <span className="mr-2 mb-1 font-[400] text-white">
-                Асуулт нэмэх
-              </span>
+              <span className="mr-2 mb-1 font-[400] text-white">Нэмэх</span>
               <div className="pl-2 h-full flex items-center border-l border-gray-300">
                 <i className="bi bi-ui-checks"></i>
               </div>

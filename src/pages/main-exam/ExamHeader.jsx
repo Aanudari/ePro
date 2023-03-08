@@ -9,6 +9,7 @@ function ExamHeader({
   userTrigger,
   examSummary,
 }) {
+  // console.log(chosen);
   const [data, setData] = useState();
   const { TOKEN } = useStateContext();
   useEffect(() => {

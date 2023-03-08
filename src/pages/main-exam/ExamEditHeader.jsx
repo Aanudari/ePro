@@ -16,7 +16,6 @@ function ExamEditHeader({
   setUserTrigger,
 }) {
   const [initial, setInitial] = useState();
-
   useEffect(() => {
     axios({
       method: "get",
@@ -50,6 +49,7 @@ function ExamEditHeader({
     };
     tempo.push(temp);
   }
+  // console.log(tempo);
   const [value, setValue] = useState(new Date(chosen[0].startDate));
   const [selectV, setSelectV] = useState(new Date(chosen[0].expireDate));
   var datestring =

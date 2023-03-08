@@ -51,7 +51,7 @@ function ExamBoard({
   });
   // console.log(final);
   return (
-    <div className="min-w-[800px] bg-white shadow py-3 px-4 shadow-sm">
+    <div className="min-w-[800px] bg-white shadow py-3 px-4 shadow-sm rounded-md">
       {show && (
         <CreateaExamForm
           closeForm={setShow}
@@ -152,7 +152,7 @@ function ExamBoard({
           Шалгалт үүсгэх
         </div>
       </div> */}
-      <div className="!h-[calc(100vh-156px)] w-full overflow-scroll mt-2 border-b">
+      <div className="!h-[calc(100vh-156px)] w-full overflow-scroll mt-2 border-b pr-1">
         {exams &&
           final.map((certainItem, certainIndex) => {
             if (certainIndex % 2 == 1) {
@@ -241,8 +241,8 @@ function ExamBoard({
                         setShowReport(true);
                         handleExamModal(exam.id);
                       }}
-                      className="w-1/4 h-full flex justify-between items-center text-[11px] cursor-pointer
-                         uppercase font-[500] custom-btn btn-5 p-0 rounded-none"
+                      className="w-[calc(25%-2.5px)] h-full flex justify-between items-center text-[11px] cursor-pointer
+                         uppercase font-[500] custom-btn btn-5 rounded-none "
                     >
                       <div className="w-full flex justify-center items-center font-[500] ">
                         <span className="!font-[700]">

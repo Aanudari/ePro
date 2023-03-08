@@ -9,6 +9,15 @@ function AllEmployeeSelectEdit({ setShow, getEmployees, getUsers }) {
   const { activeMenu, TOKEN } = useStateContext();
   const [users, setUsers] = useState();
   useEffect(() => {
+    setChosen(getUsers);
+    let tempo = [];
+    for (let index = 0; index < getUsers.length; index++) {
+      const element = getUsers[index];
+      tempo.push(parseInt(element.deviceId));
+    }
+    setChosenPre(tempo);
+  }, []);
+  useEffect(() => {
     axios({
       method: "get",
       headers: {

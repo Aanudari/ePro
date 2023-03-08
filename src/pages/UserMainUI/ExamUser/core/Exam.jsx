@@ -56,8 +56,9 @@ function Exam() {
     temp.push(dat);
   }
   const [questions, setQuestions] = useState([]);
-  // console.log(questions);
+  const [count, setCount] = useState([]);
   const collector = (props) => {
+    // console.log(props);
     setQuestions((prev) => [
       ...prev,
       { point: props.point, id: props.questionId },
@@ -148,21 +149,27 @@ function Exam() {
         console.log(err);
       });
   };
-
   return (
     <div className="px-2 md:px-16 w-full flex justify-center relative pt-20">
       <div className="w-full md:w-4/6">
         {data?.questionList.map((item, i) => (
-          <QuestionCell collector={collector} key={i} data={item} />
+          <QuestionCell
+            setCount={setCount}
+            collector={collector}
+            checker={item.id}
+            key={i}
+            data={item}
+          />
         ))}
       </div>
       <ExamHeader
-        data={tempo}
+        data={count}
         finisher={finisher}
         minute={variant?.leftMinutes}
         second={variant?.leftSeconds}
         examName={variant?.examName}
         creater={variant?.createdBy}
+        length={data?.questionList.length}
       />
     </div>
   );

@@ -31,7 +31,7 @@ function ExamEditHeader({
         }
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [examTri, userTrigger]);
   const { TOKEN } = useStateContext();
   function addZero(i) {
     if (i < 10) {
@@ -94,7 +94,7 @@ function ExamEditHeader({
         if (res.data.isSuccess === false) {
           alert(res.data.resultMessage);
         }
-        setExamModal(false);
+        // setExamModal(false);
         setExamTri(!examTri);
         setUserTrigger(!userTrigger);
       })
@@ -205,6 +205,17 @@ function ExamEditHeader({
           getEmployees={getEmployees}
           setShow={setShow}
           getUsers={initial}
+          datestring={datestring}
+          datestring2={datestring2}
+          duration={duration}
+          rechosen={rechosen}
+          tempo={tempo}
+          setExamTri={setExamTri}
+          examTri={setExamTri}
+          setUserTrigger={setUserTrigger}
+          userTrigger={userTrigger}
+          name={name}
+          chosenId={chosen[0].id}
         />
       )}
     </div>

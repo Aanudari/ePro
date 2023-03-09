@@ -176,7 +176,7 @@ function CreateExamForm({ closeForm, examTri, setExamTri, examNames }) {
       {show && <GetQuestionIdsFromCategory setShow={setShow} getIds={getIds} />}
       <div className="shrink w-[calc(85%)] h-[calc(80%)] bg-white flex flex-col rounded">
         <div className="w-full min-h-[50px] bg-teal-700 flex justify-between px-3 flex items-center rounded-t">
-          {AllQuestions?.length > 0 && allEmployee?.length > 0 ? (
+          {AllQuestions?.length > 0 && allEmployee?.length > 0 && !nameError ? (
             <div
               onClick={() => {
                 handleCreateExam();

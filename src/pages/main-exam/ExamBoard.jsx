@@ -302,7 +302,7 @@ function ExamBoard({
                         setSmallMenuid(0);
                       }}
                       id={"clickbox"}
-                      className="absolute right-[calc(22%-120px)] shrink z-20 w-[120px] border top-[12px] border bg-gray-100 rounded"
+                      className="absolute right-[calc(22%-120px)] shrink z-10 w-[120px] border top-[12px] border bg-gray-100 rounded"
                     >
                       {/* <i className="bi bi-three-dots-vertical text-md text-gray-600"></i> */}
                       <div

@@ -136,7 +136,6 @@ function CopyModal({
                                     animate-bounce absolute top-[10px] left-[-15px]"
                 ></i>
               )}
-
               <span className="highlight"></span>
               <span className="bar "></span>
               <label className="!font-[500]">Шалгалтын нэр</label>

@@ -53,7 +53,11 @@ function ExamBoard({
   const [showAddition, setShowAddition] = useState(false);
   const handleSmallMenu = (value) => {
     // console.log(value);
-    setSmallMenuid(value);
+    if (smallMenuid == value) {
+      setSmallMenuid(0);
+    } else {
+      setSmallMenuid(value);
+    }
   };
 
   const [copyModal, setCopyModal] = useState(false);

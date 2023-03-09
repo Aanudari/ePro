@@ -169,7 +169,7 @@ function CreateExamForm({ closeForm, examTri, setExamTri, examNames }) {
           ? "top-[56px] left-[250px] w-[calc(100%-250px)] h-[calc(100%-56px)]"
           : "w-full h-full top-[25px] left-0"
       } 
-        bg-black bg-opacity-50 flex justify-center items-center z-top
+        bg-black bg-opacity-50 flex justify-center items-center z-top z-20
         `}
     >
       <ToastContainer />

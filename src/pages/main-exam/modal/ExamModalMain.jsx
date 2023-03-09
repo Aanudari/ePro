@@ -824,7 +824,10 @@ function ExamModalMain({
                   handleGetCategories(item.id);
                   setShowQuestions(true);
                 }}
-                className="h-10 w-full bg-teal-500 mb-1 flex items-center pl-3 justify-between shadow-sm cursor-pointer hover:bg-teal-600 "
+                className={`h-10 w-full bg-teal-500 mb-1 flex items-center 
+                pl-3 justify-between shadow-sm cursor-pointer hover:bg-teal-600 ${
+                  item.status !== "A" && "hidden"
+                }`}
               >
                 <span className="font-[500] text-white text-[12px]">
                   {item.name}

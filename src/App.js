@@ -52,9 +52,10 @@ import CertainTemplate from "./pages/rating/belongTemplate/CertainTemplate";
 // import "src/fonts/TAHOMAB0.TTF";
 import ChoosedTRate from "./pages/training_raiting/ChoosedTRate";
 import RatingReport from "./pages/training_raiting/RatingReport";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { logout } from "./service/examService";
+import Countdown from "./components/CountDown";
 function App() {
   const { activeMenu, showTop, roleId, TOKEN } = useStateContext();
   const { width } = getWindowDimensions();
@@ -74,6 +75,17 @@ function App() {
       })
       .catch((err) => console.log(err));
   });
+
+  // function resetLogoutTimer() {
+  //   clearTimeout(logoutTimer);
+  //   logoutTimer = setTimeout(() => {
+  //     localStorage.removeItem('loginTime');
+  //     // add your logout logic here
+  //   }, timeoutInMilliseconds);
+  // }
+
+  // window.addEventListener('mousemove', resetLogoutTimer);
+  // window.addEventListener('keypress', resetLogoutTimer);
   // useEffect(() => {
   //   const api = () => {
   //     axios({
@@ -96,7 +108,7 @@ function App() {
     <BrowserRouter>
       <div className="flex w-full relative">
         {showTop ? (
-          <div className="fixed w-full h-screen bg-black top-z right-0"></div>
+          <div className="fixed w-full h-screen bg-black top-z right-0 relative"></div>
         ) : null}
         {/* {activeMenu && roleId === "199" && width > 768 ? <SideNavigation /> : null} */}
         {activeMenu && adminRoles.includes(roleId) ? <MainNavigation /> : null}

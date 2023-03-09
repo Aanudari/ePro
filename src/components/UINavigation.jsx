@@ -6,6 +6,7 @@ export default function UINavigation() {
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const mainUser = JSON.parse(localStorage.getItem("user"));
   return (
     <div className="">
       <div className="h-[60px]"></div>
@@ -53,7 +54,7 @@ export default function UINavigation() {
                 Бүртгэл{" "}
               </a>
             </nav>
-            <div className="header-navigation-actions">
+            <div className="header-navigation-actions relative">
               {/* <a href="#" className="button">
               <i className="ph-lightning-bold"></i>
               <span>Upgrade now</span>
@@ -72,17 +73,21 @@ export default function UINavigation() {
               >
                 <img src="user2.png" alt="" />
               </a>
+              <div className="text-[#404089] flex px-2 font-[400]">
+                {mainUser.first_name[0]}. {mainUser.last_name}
+              </div>
+              {show && (
+                <div
+                  onClick={logout}
+                  className="fixed cursor-pointer bg-gray-100 text-sm top-12 shadow-md font-[400] rounded px-3 py-2  z-20"
+                >
+                  <i className="bi bi-box-arrow-left mr-2"></i>
+                  Гарах
+                </div>
+              )}
             </div>
           </div>
-          {show && (
-            <div
-              onClick={logout}
-              className="fixed cursor-pointer bg-gray-100 text-sm top-12 shadow-md font-[400] rounded px-3 py-2 right-[60px] z-20"
-            >
-              <i className="bi bi-box-arrow-left mr-2"></i>
-              Гарах
-            </div>
-          )}
+
           <a
             onClick={() => {
               setShowMenu(!showMenu);

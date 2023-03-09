@@ -106,8 +106,6 @@ function CreateQuestionMain({
                   }
                   id="scoreInput"
                   type="number"
-                  step={2}
-                  max={2}
                   required
                 />
                 <span className="highlight"></span>

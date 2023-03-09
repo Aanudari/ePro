@@ -7,6 +7,7 @@ import getWindowDimensions from "./SizeDetector";
 import MobileBar from "./MobileBar";
 import { Menu, Transition } from "@headlessui/react";
 import { logout } from "../service/examService";
+import Countdown from "./CountDown";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -43,6 +44,12 @@ function Navigation() {
   const handleSubmit = () => {
     navigate("/search-result");
   };
+  const [count, setCount] = useState(5);
+  const [showCount, setShowCount] = useState(false);
+  let logoutTimer = setTimeout(() => {
+    localStorage.removeItem("loginTime");
+    logout();
+  }, 1800000);
   const mainUser = JSON.parse(localStorage.getItem("user"));
   return (
     <div className="relative cus-index bg-[rgb(32, 73, 90)] ">
@@ -106,9 +113,11 @@ function Navigation() {
               />
             </form>
           </div>
+          {showCount && <Countdown count={count} setCount={setCount} />}
         </div>
         <div className="w-[260px] flex justify-center rounded-md cursor-pointer m-2 call-call">
           {/* Notification */}
+
           <button
             onClick={() => {
               navigate("/notification");

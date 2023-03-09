@@ -101,12 +101,25 @@ function ExamCategory({
                 </div>
                 <div className="flex justify-between w-[calc(70%)]">
                   <div className="flex items-center gap-20 w-[calc(70%)]">
-                    <div className="flex flex-col justify-center items-start w-[180px]">
+                    <div className="flex justify-between items-start w-[200px] ">
                       {/* <h6 className="font-[500] text-[12px] uppercase">
                         Эхлэх: {category.startDate}
                       </h6> */}
-                      <h6 className="font-[500] text-[12px] uppercase">
-                        Дуусах: {category.endDate.split(" ", 1)}
+                      <h6 className=" flex items-center">
+                        {category.status == "A" && (
+                          <i className="bi bi-hourglass-top text-lg mb-[-5px] mr-1"></i>
+                        )}
+                        <span className="mt-1 font-[500] text-[12px] uppercase">
+                          {category.startDate.split(" ", 1)}
+                        </span>
+                      </h6>
+                      <h6 className=" flex items-center">
+                        {category.status == "A" && (
+                          <i className="bi bi-hourglass-bottom text-lg mb-[-5px] mr-1"></i>
+                        )}
+                        <span className="mt-1 font-[500] text-[12px] uppercase">
+                          {category.endDate.split(" ", 1)}
+                        </span>
                       </h6>
                     </div>
                     <div className="flex flex-row justify-center">

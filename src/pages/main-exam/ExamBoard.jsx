@@ -262,11 +262,17 @@ function ExamBoard({
                       className="w-1/4 h-full flex justify-between items-center text-[11px] cursor-pointer custom-btn btn-13 p-0 rounded-none
                                    uppercase font-[500] bg-teal-500 !text-white active:bg-teal-500 hover:bg-teal-600"
                     >
-                      <div className="w-full flex justify-center items-center font-[500]">
-                        Тайлан
+                      <div className="w-full h-full flex justify-center gap-4 items-center">
+                        <div className="font-[500] text-[12px] ">
+                          {exam?.examSummary?.taken}/{exam?.examSummary?.total}
+                        </div>
                       </div>
                       <div className="h-full min-w-[50px] border-l flex justify-center items-center">
-                        <i className="bi bi-file-earmark-bar-graph text-[16px]"></i>
+                        {/* <i className="bi bi-file-earmark-bar-graph text-[16px]"></i>
+                         */}
+                        <div className=" font-[500] text-[12px] w-[20px] flex justify-center">
+                          {exam?.examSummary?.avgScore}%
+                        </div>
                       </div>
                     </div>
                   ) : (

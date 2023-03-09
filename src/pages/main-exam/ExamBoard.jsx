@@ -1,5 +1,6 @@
 import { useState } from "react";
 import CreateaExamForm from "./CreateaExamForm";
+import CopyModal from "./modal/CopyExamModal";
 
 function ExamBoard({
   exams,
@@ -37,9 +38,7 @@ function ExamBoard({
         if (!acc[month]) {
           acc[month] = { month: month, items: [] };
         }
-
         acc[month].items.push(item);
-
         return acc;
       }, {})
     : "";
@@ -50,6 +49,14 @@ function ExamBoard({
     final.push(month.items);
   });
   // console.log(final);
+  const [smallMenuid, setSmallMenuid] = useState(0);
+  const [showAddition, setShowAddition] = useState(false);
+  const handleSmallMenu = (value) => {
+    // console.log(value);
+    setSmallMenuid(value);
+  };
+
+  const [copyModal, setCopyModal] = useState(false);
   return (
     <div className="min-w-[800px] bg-white shadow py-3 px-4 shadow-sm rounded-md">
       {show && (
@@ -58,6 +65,16 @@ function ExamBoard({
           examTri={examTri}
           setExamTri={setExamTri}
           examNames={examNames}
+        />
+      )}
+      {copyModal && (
+        <CopyModal
+          setCopyModal={setCopyModal}
+          setSmallMenuid={setSmallMenuid}
+          id={smallMenuid}
+          examNames={examNames}
+          setExamTri={setExamTri}
+          examTri={examTri}
         />
       )}
       <div className="flex">
@@ -128,37 +145,13 @@ function ExamBoard({
           Шалгалт үүсгэх
         </div>
       </div>
-
-      {/* <div className="w-full h-8 flex gap-1">
-        <div className="w-1/4 h-full flex justify-center items-center bg-teal-500 text-white text-[11px] uppercase font-[500]">
-          Нэр
-        </div>
-        <div className="w-1/4 h-full flex justify-center items-center bg-teal-500 text-white text-[11px] uppercase font-[500]">
-          эхлэх, дуусах
-        </div>
-        <div className="w-1/4 h-full flex justify-center items-center bg-teal-500 text-white text-[11px] uppercase font-[500]">
-          Статус
-        </div>
-        <div className="w-1/4 h-full flex justify-center items-center bg-teal-500 text-white text-[11px] uppercase font-[500]">
-          Хугацаа
-        </div>
-        <div
-          onClick={() => {
-            setShow(true);
-          }}
-          className="w-1/4 p-0 custom-btn btn-13 h-full border-[1px]  transition-all !border-teal-500 rounded cursor-pointer flex justify-center items-center text-teal-700 text-[11px] uppercase font-bold mr-2"
-        >
-          <i className="bi bi-plus text-lg text-md mr-2 "></i>
-          Шалгалт үүсгэх
-        </div>
-      </div> */}
       <div className="!h-[calc(100vh-156px)] w-full overflow-scroll mt-2 border-b pr-1">
         {exams &&
           final.map((certainItem, certainIndex) => {
             if (certainIndex % 2 == 1) {
               // console.log(certainItem);
               return certainItem.map((exam, index) => (
-                <div key={index} className="h-14 w-full flex  mt-[2px]">
+                <div key={index} className="h-14 w-full flex mt-[2px] relative">
                   <div
                     onClick={
                       exam?.examSummary?.status !== "Ongoing"
@@ -179,7 +172,7 @@ function ExamBoard({
                         ? "cellt "
                         : "custom-btn btn-11 bg-amber-200 shadow-none hover:bg-amber-200 bg-opacity-50 px-2"
                     }
-                    font-[600] cursor-pointer `}
+                    font-[600]  `}
                   >
                     <div
                       className="w-1/4 h-full flex justify-start pl-10 items-center text-[11px]
@@ -230,7 +223,7 @@ function ExamBoard({
                     </div>
                     <div
                       className="w-1/4 h-full flex justify-center items-center text-[11px]
-                         uppercase font-[500]"
+                         uppercase font-[500] relative"
                     >
                       {exam?.duration} мин
                     </div>
@@ -250,7 +243,10 @@ function ExamBoard({
                         </span>
                       </div>
                       <div className="h-full min-w-[50px] border-l flex justify-center items-center">
-                        <i className="bi bi-check2-circle text-[20px]"></i>
+                        {/* <i className="bi bi-check2-circle text-[20px]"></i> */}
+                        <div className=" font-[500] text-[12px] w-[20px] flex justify-center">
+                          {exam?.examSummary?.avgScore}%
+                        </div>
                       </div>
                     </div>
                   ) : exam?.examSummary?.status == "Exam over" ? (
@@ -289,6 +285,43 @@ function ExamBoard({
                       </div>
                       <div className="h-full min-w-[50px] border-l flex justify-center items-center">
                         <i className="bi bi-alarm-fill text-[16px]"></i>
+                      </div>
+                    </div>
+                  )}
+                  <div
+                    onClick={() => {
+                      handleSmallMenu(exam.id);
+                    }}
+                    className="absolute right-[calc(22%)] top-[12px] bg-gray-200 rounded-full px-2 py-1"
+                  >
+                    <i className="bi bi-three-dots-vertical text-md text-gray-600"></i>
+                  </div>
+                  {smallMenuid === exam.id && (
+                    <div
+                      onBlur={() => {
+                        setSmallMenuid(0);
+                      }}
+                      id={"clickbox"}
+                      className="absolute right-[calc(22%-120px)] shrink z-20 w-[120px] border top-[12px] border bg-gray-100 rounded"
+                    >
+                      {/* <i className="bi bi-three-dots-vertical text-md text-gray-600"></i> */}
+                      <div
+                        onClick={() => {
+                          setCopyModal(true);
+                        }}
+                        className="h-[30px] w-full !p-0 !m-0 bg-white hover:!bg-gray-200 flex items-center text-gray-500 text-[13px] px-3 font-[500] border-t rounded-t"
+                      >
+                        <i className="bi bi-clipboard2-check mr-2"></i>
+                        Copy
+                      </div>
+                      <div className="h-[30px] w-full !p-0 !m-0 bg-white hover:!bg-gray-200 flex items-center text-gray-500 text-[13px] px-3 font-[500] border-t"></div>
+                      <div
+                        onClick={() => {
+                          setSmallMenuid(0);
+                        }}
+                        className="h-[30px] w-full !p-0 !m-0 bg-white hover:!bg-gray-200 flex items-center text-gray-500 text-[13px] px-3 font-[500] border-t rounded-b"
+                      >
+                        <i className="bi bi-x-circle mr-2"></i>Xаах
                       </div>
                     </div>
                   )}

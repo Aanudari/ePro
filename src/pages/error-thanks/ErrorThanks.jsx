@@ -274,7 +274,12 @@ function ErrorThanks() {
     var filteredData = filterByDivision(complain);
     setFilteredList(filteredData);
   }, [selectedDivision]);
+  // const [activeTab, setActiveTab] = useState(1);
 
+  // const filteredData = complain.filter(
+  //   (item) => item.complain === activeTab.toString()
+  // );
+  // console.log(filteredData.length);
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <div>
@@ -384,6 +389,20 @@ function ErrorThanks() {
         </Modal>
       </div>
       <Navigation />
+      {/* <div>
+        <ul>
+          {complainInfo.map((item) => (
+            <li key={item.id} onClick={() => setActiveTab(item.id)}>
+              {item.category}
+            </li>
+          ))}
+        </ul>
+        <div>
+          {filteredData.map((item) => (
+            <div key={item.id}>{item.complainType}</div>
+          ))}
+        </div>
+      </div> */}
       <div className="mx-auto max-w-screen-xl px-4 py-8 sm:py-12 sm:px-6 lg:px-8">
         <div className="sm:flex sm:items-center sm:justify-between">
           <div className="text-center sm:text-left">

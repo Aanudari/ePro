@@ -155,7 +155,7 @@ function Document({ setShowReport, id }) {
         {showDetail && <ShowExamResultDetail setShow={setShowDetail} id={id} />}
         <div className="h-full">
           <h6 className="text-teal-600 text-[14px] flex justify-between mx-3 py-3">
-            <span className="font-[500]">
+            <span className="font-[500] flex items-center">
               <i className="bi bi-caret-down-square-fill mr-2"></i>
               Шалгалтын статус
             </span>
@@ -163,17 +163,19 @@ function Document({ setShowReport, id }) {
               onClick={() => {
                 setShowDetail(true);
               }}
-              className="font-[500] cursor-pointer hover:mt-[-2px] transition-all hover:text-teal-700"
+              className="font-[500] cursor-pointer custom-btn btn-13 transition-all "
             >
               <i className="bi bi-info-square  mr-2"></i>
               Ерөнхий
             </span>
-            <i
+            <span
               onClick={() => {
                 setShowReport(false);
               }}
-              className="bi bi-x-circle cursor-pointer"
-            ></i>
+              className="custom-btn btn-13"
+            >
+              <i className="bi bi-x-circle cursor-pointer"></i>
+            </span>
           </h6>
           <div className="h-[calc(100%-70px)] overflow-scroll pb-2">
             <div className=" w-full px-3">

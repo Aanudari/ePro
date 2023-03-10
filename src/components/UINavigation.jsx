@@ -13,12 +13,17 @@ export default function UINavigation() {
       <header className="header w-[375px] md:w-full fixed top-0">
         <div className="header-content responsive-wrapper">
           <div className="header-logo">
-            <a href="#">
+            <a
+              onClick={() => {
+                navigate("/user-main");
+              }}
+              className="cursor-pointer"
+            >
               <div>
-                <img src="https://assets.codepen.io/285131/untitled-ui-icon.svg" />
+                <img src="logo.png" className="h-12 rounded-full" />
               </div>
               {/* <img src="https://assets.codepen.io/285131/untitled-ui.svg" /> */}
-              <h6 className="text-black text-xl ml-2 vietnam-pro mb-0">
+              <h6 className="text-[#404089] text-xl ml-2 vietnam-pro mb-0">
                 E-PRO
               </h6>
             </a>
@@ -29,11 +34,20 @@ export default function UINavigation() {
               <a
                 className="cursor-pointer"
                 onClick={() => {
-                  navigate("/user-main");
+                  navigate("/user-exam");
                 }}
               >
                 {" "}
-                Home{" "}
+                Шалгалт{" "}
+              </a>
+              <a
+                className="cursor-pointer"
+                onClick={() => {
+                  navigate("/user-rating");
+                }}
+              >
+                {" "}
+                Үнэлгээ{" "}
               </a>
               <a
                 className="cursor-pointer"

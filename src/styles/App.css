@@ -398,3 +398,7 @@ input::-webkit-inner-spin-button {
   border-radius: 0 !important;
   border: none !important;
 }
+html {
+  overflow-y: scroll !important;
+  overflow-y: overlay !important;
+}

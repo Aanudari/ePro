@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { logout } from "../../service/examService";
 import QuestionCellAdminMain from "./Cell/QuestionCellAdminMain";
+import bg from "../../assets/background-blue.jpg";
 
 function ShowExamResultDetail({ setShow, id }) {
   const { activeMenu, TOKEN } = useStateContext();
@@ -39,9 +40,12 @@ function ShowExamResultDetail({ setShow, id }) {
         activeMenu ? " left-[250px] w-[calc(100%-250px)]" : "left-0 w-full"
       } 
 top-[56px] fixed  h-[calc(100%-56px)] 
-bg-black bg-opacity-50 flex items-center justify-center`}
+bg-black bg-opacity-50 flex items-center justify-center z-20`}
     >
-      <div className="bg-gray-200 appear-smooth w-full h-[calc(100%)] relative ">
+      <div
+        style={{ background: `url(${bg})` }}
+        className="appear-smooth w-full h-[calc(100%)] relative pb-20"
+      >
         <div className="w-full h-12 bg-teal-500 flex justify-between px-4 items-center shadow">
           <div className="flex items-center">
             <div className=" flex justify-start px-4 py-2">
@@ -73,10 +77,12 @@ bg-black bg-opacity-50 flex items-center justify-center`}
             ></i>
           </div>
         </div>
-        <div className="px-20 h-[calc(100%)] overflow-scroll pb-20 ">
-          {data?.map((el, index) => (
-            <QuestionCellAdminMain data={el} key={index} />
-          ))}
+        <div className="h-[calc(100%)] overflow-scroll pb-20 w-full flex justify-center">
+          <div className="w-[900px]">
+            {data?.map((el, index) => (
+              <QuestionCellAdminMain data={el} key={index} />
+            ))}
+          </div>
         </div>
       </div>
     </div>

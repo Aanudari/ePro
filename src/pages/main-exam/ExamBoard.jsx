@@ -61,6 +61,14 @@ function ExamBoard({
   };
 
   const [copyModal, setCopyModal] = useState(false);
+
+  // function handleKeyPress(event) {
+  //   if (event.ctrlKey && event.key === "f") {
+
+  //   }
+  // }
+  // document.addEventListener("keydown", handleKeyPress);
+
   return (
     <div className="min-w-[800px] bg-white shadow py-3 px-4 shadow-sm rounded-md">
       {show && (

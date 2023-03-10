@@ -22,7 +22,7 @@ function CategoryModal({
   const [data, setData] = useState();
 
   const [trigger, setTrigger] = useState(false);
-
+  // console.log(data);
   useEffect(() => {
     axios({
       method: "get",

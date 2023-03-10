@@ -1,15 +1,17 @@
 import AnswerCellAdmin from "./AnswerCellAdmin";
 import { useState } from "react";
-function QuestionCellAdmin({ data }) {
+function QuestionCellAdmin({ data, index }) {
   const [check, setCheck] = useState(false);
   return (
     <div
       className={`p-4 my-4 rounded shadow-sm border ${
-        check ? "bg-green-100" : "bg-red-100"
+        check ? "bg-green-200" : "bg-red-200"
       } `}
     >
       <p className=" flex justify-between">
-        <span className="font-[500] text-[14px]">{data.questionName}</span>
+        <span className="font-[500] text-[15px]">
+          {index + 1}. {data.questionName}
+        </span>
         <span className="font-[500]">
           {data.points + " "}
           оноо

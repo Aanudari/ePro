@@ -80,26 +80,6 @@ function UserCore() {
       <div className="w-full">
         <main className="main">
           <div className="responsive-wrapper">
-            <div className="main-header">
-              <h1>Үнэлгээ</h1>
-              <div className="search">
-                <input type="text" placeholder="Search" />
-                <button type="submit">
-                  <i className="ph-magnifying-glass-bold"></i>
-                </button>
-              </div>
-            </div>
-            <div className="horizontal-tabs">
-              <a className="cursor-pointer">Нийт</a>
-              <a className="cursor-pointer">Мессеж</a>
-              <a className="cursor-pointer">Password</a>
-              <a className="cursor-pointer">API</a>
-            </div>
-            <div className="flex gap-[5px] flex-wrap">
-              {/* {rating?.map((element, index) => {
-                return <RatingCellDes data={element} key={index} />;
-              })} */}
-            </div>
             <div className="content">
               <div className="content-panel">
                 <div className="vertical-tabs">
@@ -146,7 +126,7 @@ function UserCore() {
                     className={`${detector == 4 && "active"}`}
                     href="#"
                   >
-                    In process
+                    Эхлүүлсэн
                   </a>
                 </div>
               </div>
@@ -205,7 +185,7 @@ function UserCore() {
                                   : "!text-red-500"
                               } `}
                             >
-                              {item.isExamTaken.score}%
+                              Шалгалтын дүн: {item.isExamTaken.score}%
                             </span>
                           </div>
                         ) : item.isExamTaken.status == "O" ? (
@@ -242,7 +222,7 @@ function UserCore() {
                     {examName}
                   </span>
                   <p className="text-gray-600 text-[15px] font-[500] m-0">
-                    Та энэ шалгалтыг өгөх дөө итгэлтэй байна уу. ?
+                    Та энэ шалгалтыг эхлүүлэхдээ итгэлтэй байна уу. ?
                   </p>
                 </div>
                 <div className="flex justify-end items-end">

@@ -56,6 +56,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { logout } from "./service/examService";
 import Countdown from "./components/CountDown";
+import RatingUser from "./pages/UserMainUI/Rating/RatingUser";
+import UserHome from "./pages/UserMainUI/UserHome";
 function App() {
   const { activeMenu, showTop, roleId, TOKEN } = useStateContext();
   const { width } = getWindowDimensions();
@@ -353,10 +355,18 @@ function App() {
             }
           />
           <Route
-            path="/user-main"
+            path="/user-exam"
             element={
               <ProtectedRoute allowedRoles={[199, 196, 1, 4, 188]}>
                 <UserCore />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/user-main"
+            element={
+              <ProtectedRoute allowedRoles={[199, 196, 1, 4, 188]}>
+                <UserHome />
               </ProtectedRoute>
             }
           />
@@ -389,6 +399,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199, 196, 1, 4, 188]}>
                 <CertainTemplate />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/user-rating"
+            element={
+              <ProtectedRoute allowedRoles={[199, 196, 1, 4, 188]}>
+                <RatingUser />
               </ProtectedRoute>
             }
           />

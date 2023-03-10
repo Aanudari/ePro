@@ -174,7 +174,7 @@ function ChoosedTRate() {
             <span className="mx-2">Буцах</span>
           </button>
           <div className="flex items-center justify-between">
-            <p className="focus:outline-none text-base sm:text-sm md:text-xl lg:text-xl font-bold leading-normal text-gray-800">
+            <p className="focus:outline-none text-base sm:text-sm md:text-sm lg:text-sm font-bold leading-normal text-gray-800">
               Үнэлгээний асуултууд
             </p>
           </div>

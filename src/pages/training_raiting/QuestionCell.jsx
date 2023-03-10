@@ -76,13 +76,13 @@ function QuestionCell({ q, setTrigger }) {
         centered
       >
         <Modal.Header closeButton>
-          <span className="text-xl text-black">Асуулт устгах устгах</span>
+          <span className="text-sm text-black">Асуулт устгах устгах</span>
         </Modal.Header>
         <Modal.Body>
           <div className="p-6 text-center">
-            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+            <p className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
               Та асуултыг устгахдаа итгэлтэй уу?
-            </h3>
+            </p>
             <button
               type="button"
               onClick={handleDelete}

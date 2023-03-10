@@ -188,14 +188,14 @@ function Training() {
         >
           <Modal.Header closeButton>
             <Modal.Title>
-              <span className="text-xl text-black">Сургалт устгах</span>
+              <span className="text-sm text-black">Сургалт устгах</span>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div className="p-6 text-center">
-              <h3 className="mb-5 text-lg font-normal text-gray-500 ">
+              <p className="mb-5 text-sm font-normal text-gray-500 ">
                 Та сургалтыг устгахдаа итгэлтэй байна уу?
-              </h3>
+              </p>
               <button
                 type="button"
                 onClick={handleDelete}
@@ -219,7 +219,7 @@ function Training() {
       <div className="sm:px-6 w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
-            <p className="focus:outline-none text-base sm:text-sm md:text-xl lg:text-xl font-bold leading-normal text-gray-800">
+            <p className="focus:outline-none text-base sm:text-sm md:text-sm lg:text-sm font-bold leading-normal text-gray-800">
               Сургалтууд{" "}
               {filteredList.length > 0
                 ? `(${filteredList.length})`
@@ -280,7 +280,7 @@ function Training() {
         <div className="flex flex-wrap -mx-4">
           {filteredList.map((data, index) => (
             <div key={index} className="w-full sm:w-1/2 md:w-1/2 xl:w-1/2 p-4 ">
-              <article class="rounded-xl bg-white p-3 shadow-lg hover:shadow-xl hover:transform hover:scale-105 duration-300 ">
+              <article className="rounded-xl bg-white p-3 shadow-lg hover:shadow-xl hover:transform hover:scale-105 duration-300 ">
                 <a>
                   <div className="relative pb-48 overflow-hidden">
                     {data.fileUrl?.slice(-4) === ".mp4" ? (
@@ -332,7 +332,7 @@ function Training() {
                         </span>
                       </p>
                     ) : (
-                      <div className="text-black text-md border-2 border-blue-500  rounded-md ">
+                      <div className="text-black text-sm border-2 border-blue-500  rounded-md ">
                         <div className="flex justify-center">
                           {data.fileUrl.slice(29)}
                         </div>
@@ -369,7 +369,7 @@ function Training() {
                   <div>
                     <ul className="grid gap-x-8 grid-cols-2 flex">
                       <li className="flex items-start">
-                        <div className="flex-shrink-0 text-emerald-500 text-lg">
+                        <div className="flex-shrink-0 text-emerald-500 text-sm">
                           <i className="bi bi-card-checklist" />
                         </div>
                         <p className="ml-3 text-sm leading-5 text-gray-700 ">
@@ -380,7 +380,7 @@ function Training() {
                         ""
                       ) : (
                         <li className="flex items-start ">
-                          <div className="flex-shrink-0 text-emerald-500 text-lg">
+                          <div className="flex-shrink-0 text-emerald-500 text-sm">
                             <i className="bi bi-person-video3" />
                           </div>
                           <p className="ml-3 text-sm leading-5 text-gray-700 ">
@@ -390,7 +390,7 @@ function Training() {
                       )}
 
                       <li className="flex items-start ">
-                        <div className="flex-shrink-0 text-emerald-500 text-lg">
+                        <div className="flex-shrink-0 text-emerald-500 text-sm">
                           <i className="bi bi-signpost-split-fill" />
                         </div>
                         <p className="ml-3 text-sm leading-5 text-gray-700 ">
@@ -404,7 +404,7 @@ function Training() {
                         ""
                       ) : (
                         <li className="flex items-start ">
-                          <div className="flex-shrink-0 text-emerald-500 text-lg">
+                          <div className="flex-shrink-0 text-emerald-500 text-sm">
                             <i className="bi bi-pin-map-fill" />
                           </div>
                           <p className="ml-3 text-sm leading-5 text-gray-700 ">
@@ -416,7 +416,7 @@ function Training() {
                         ""
                       ) : (
                         <li className="flex items-start ">
-                          <div className="flex-shrink-0 text-emerald-500 text-lg">
+                          <div className="flex-shrink-0 text-emerald-500 text-sm">
                             <i className="bi bi-calendar-check" />
                           </div>
 
@@ -430,7 +430,7 @@ function Training() {
                         ""
                       ) : (
                         <li className="flex items-start ">
-                          <div className="flex-shrink-0 text-emerald-500 text-lg">
+                          <div className="flex-shrink-0 text-emerald-500 text-sm">
                             <i className="bi bi-calendar-check-fill" />
                           </div>
 
@@ -451,7 +451,7 @@ function Training() {
                         ""
                       ) : (
                         <li className="flex items-start ">
-                          <div className="flex-shrink-0 text-emerald-500 text-lg">
+                          <div className="flex-shrink-0 text-emerald-500 text-sm">
                             <i className="bi bi-clock-history" />
                           </div>
                           <p className="ml-3 text-sm leading-5 text-gray-700 ">

@@ -10,10 +10,10 @@ const Pagination = ({ nPages, currentPage, setCurrentPage }) => {
     if (currentPage !== 1) setCurrentPage(currentPage - 1);
   };
   return (
-    <nav>
-      <ul className="pagination justify-content-center">
+    <div>
+      <ul className="pagination justify-content-center text-xs">
         <li className="page-item">
-          <a className="page-link" onClick={prevPage}>
+          <a className="page-link " onClick={prevPage}>
             Өмнөх
           </a>
         </li>
@@ -33,7 +33,7 @@ const Pagination = ({ nPages, currentPage, setCurrentPage }) => {
           </a>
         </li>
       </ul>
-    </nav>
+    </div>
   );
 };
 

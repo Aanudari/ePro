@@ -169,9 +169,9 @@ function EditTrainRate() {
             </svg>
             <span className="mx-2">Буцах</span>
           </button>
-          <h1 className="text-xl font-bold text-gray-900 sm:text-xl">
+          <p className="text-sm font-bold text-gray-900 sm:text-sm">
             Сургалтын үнэлгээ засварлах
-          </h1>
+          </p>
         </div>
 
         <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 mb-6">

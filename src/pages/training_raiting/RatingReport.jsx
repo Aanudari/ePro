@@ -100,7 +100,7 @@ function RatingReport() {
         </button>
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
-            <p className="focus:outline-none text-base sm:text-sm md:text-xl lg:text-xl font-bold leading-normal text-gray-800">
+            <p className="focus:outline-none text-base sm:text-sm md:text-sm lg:text-sm font-bold leading-normal text-gray-800">
               Үнэлгээний тайлан
             </p>
           </div>
@@ -218,9 +218,9 @@ function RatingReport() {
                     </div>
                     {data.answerResults2.map((a, i) => (
                       <p key={i} className="relative mt-4 text-gray-500">
-                        <span className="text-xl">&ldquo;</span>
+                        <span className="text-sm">&ldquo;</span>
                         {a.answerName}
-                        <span className="text-xl">&rdquo;</span>
+                        <span className="text-sm">&rdquo;</span>
                       </p>
                     ))}
                   </div>

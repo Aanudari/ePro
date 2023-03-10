@@ -227,7 +227,7 @@ function EditTraining() {
                   </span>
                 </p>
               ) : (
-                <div className="text-black text-md border-2 border-blue-500  rounded-md ">
+                <div className="text-black text-sm border-2 border-blue-500  rounded-md ">
                   <div className="flex justify-center">{fileUrl.slice(29)}</div>
                 </div>
               )}
@@ -368,9 +368,9 @@ function EditTraining() {
             <span className="mx-2">Буцах</span>
           </button>
           <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8">
-            <h1 className="text-xl font-bold text-gray-900 sm:text-xl">
+            <p className="text-sm font-bold text-gray-900 sm:text-sm">
               Сургалт засварлах
-            </h1>
+            </p>
           </div>
         </div>
 
@@ -475,7 +475,7 @@ function EditTraining() {
                                 </span>
                               </p>
                             ) : (
-                              <div className="text-black text-md border-2 border-blue-500  rounded-md ">
+                              <div className="text-black text-sm border-2 border-blue-500  rounded-md ">
                                 <div className="flex justify-center">
                                   {train.fileUrl.slice(29)}
                                 </div>

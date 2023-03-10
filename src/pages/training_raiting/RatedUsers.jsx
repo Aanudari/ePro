@@ -57,9 +57,9 @@ function RatedUsers() {
       <Navigation />
       <div className="sm:px-6 w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
-          <h1 className="text-xl font-bold text-gray-900 sm:text-xl">
+          <p className="text-sm font-bold text-gray-900 sm:text-sm">
             Үнэлгээ хийгдсэн эсэх
-          </h1>
+          </p>
         </div>
 
         <div className="sm:flex items-center justify-between p-2">

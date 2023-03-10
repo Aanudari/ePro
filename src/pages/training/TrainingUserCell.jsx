@@ -99,13 +99,13 @@ function TrainingUserCell() {
           <span className="mx-2">Буцах</span>
         </button>
         <div className="px-4 md:px-10 py-4 md:py-7">
-          <h1 className="text-xl font-bold text-gray-900 sm:text-xl">
+          <p className="text-sm font-bold text-gray-900 sm:text-sm">
             Хувиарлагдсан хэрэглэгчид{" "}
             {filteredList.length > 0
               ? `(${filteredList.length})`
               : `(${watchedUsers.length})`}
-          </h1>
-          <p className="mt-1.5 text-md text-gray-500">
+          </p>
+          <p className="mt-1.5 text-sm text-gray-500">
             <span className="font-bold">Сургалтын нэр:</span>{" "}
             {selectedTrain.name} 🚀
           </p>

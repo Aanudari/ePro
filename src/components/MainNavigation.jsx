@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
-
+import { useStateContext } from "../contexts/ContextProvider";
 function MainNavigation() {
   const navigate = useNavigate();
+  const { activeMenu } = useStateContext();
   return (
     <div className="relative width-nav">
       <div className="core fixed">
@@ -60,80 +61,6 @@ function MainNavigation() {
                 <i className="bi bi-bar-chart-line absolute top-[17px] left-[17px]"></i>
                 <span>Үнэлгээ</span>
               </a>
-              {/* <ul>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/rating");
-                    }}
-                  >
-                    Үнэлгээ үүсгэх
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/complain");
-                    }}
-                  >
-                    Complain
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/telesales");
-                    }}
-                  >
-                    Telesales
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/online");
-                    }}
-                  >
-                    Online
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/branch");
-                    }}
-                  >
-                    Branch
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/installer");
-                    }}
-                  >
-                    Installer
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/care");
-                    }}
-                  >
-                    Care
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/bank");
-                    }}
-                  >
-                    Bank
-                  </a>
-                </li>
-              </ul> */}
             </li>
             <li>
               <a>

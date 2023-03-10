@@ -188,7 +188,7 @@ function MobileBar() {
                 </li>
               </ul>
             </li>
-            {/* <li>
+            <li>
               <a
                 onClick={() => {
                   navigate("/calendar");
@@ -197,7 +197,7 @@ function MobileBar() {
                 <i className="bi bi-calendar-check absolute top-[17px] left-[17px]"></i>
                 <span>Calendar</span>
               </a>
-            </li> */}
+            </li>
             <li>
               <a
                 onClick={() => {

@@ -169,7 +169,7 @@ function Workers({ setShow, getEmployees, reSetEmployee }) {
               onClick={() => {
                 setShow(false);
               }}
-              className="bi bi-x-lg text-xl cursor-pointer hover:scale-105"
+              className="bi bi-x-lg text-sm cursor-pointer hover:scale-105"
             ></i>
           </div>
         </div>
@@ -179,7 +179,7 @@ function Workers({ setShow, getEmployees, reSetEmployee }) {
               key={ind}
               className="px-3 shadow-sm border-t border-teal-500 px-3 pt-1 pb-5 flex flex-col flex-wrap gap-2 overflow-scroll mt-2 justify-start"
             >
-              <h6
+              <p
                 onClick={() => {
                   bigCollector(ind);
                 }}
@@ -188,10 +188,10 @@ function Workers({ setShow, getEmployees, reSetEmployee }) {
                 {el[0].unitName}{" "}
                 <div className="ml-2 w-4 h-4 border-[2px] border-gray-400 rounded relative">
                   {indexDetect.includes(ind) && (
-                    <i className="bi bi-check absolute text-2xl top-[-10px] left-[-6px] text-teal-500"></i>
+                    <i className="bi bi-check absolute text-sm top-[-10px] left-[-6px] text-teal-500"></i>
                   )}
                 </div>
-              </h6>
+              </p>
               <div className="flex flex-wrap gap-1">
                 {el?.map((item, index) => (
                   <div

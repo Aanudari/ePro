@@ -352,13 +352,13 @@ function TrainingCategory() {
           centered
         >
           <Modal.Header closeButton>
-            <span className="text-xl text-black">Ангилал устгах</span>
+            <span className="text-sm text-black">Ангилал устгах</span>
           </Modal.Header>
           <Modal.Body>
             <div className="p-6 text-center">
-              <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+              <p className="mb-5 text-sm font-normal text-gray-500 dark:text-gray-400">
                 Та сургалтын ангиллыг устгахдаа итгэлтэй байна уу?
-              </h3>
+              </p>
               <button
                 type="button"
                 onClick={handleDelete}
@@ -437,7 +437,7 @@ function TrainingCategory() {
       <div className="sm:px-6 w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
-            <p className="focus:outline-none text-base sm:text-sm md:text-xl lg:text-xl font-bold leading-normal text-gray-800">
+            <p className="focus:outline-none text-base sm:text-sm md:text-sm lg:text-sm font-bold leading-normal text-gray-800">
               Сургалтын ангилал{" "}
               {filteredList?.length > 0
                 ? `(${filteredList?.length})`
@@ -509,7 +509,7 @@ function TrainingCategory() {
                         <td className="px-1 py-1 border">{data.createdAt}</td>
                         <td className="px-1 py-1 border">
                           <a
-                            className="text-yellow-600 hover:text-black mx-2 text-lg"
+                            className="text-yellow-600 hover:text-black mx-2 text-sm"
                             data-id={data}
                             onClick={() => {
                               handleEdit(data);
@@ -520,7 +520,7 @@ function TrainingCategory() {
                           <a
                             data-id={data.id}
                             onClick={showModalDelete}
-                            className="text-rose-400 hover:text-black ml-2 text-lg"
+                            className="text-rose-400 hover:text-black ml-2 text-sm"
                           >
                             <i className="bi bi-trash-fill"></i>
                           </a>
@@ -536,7 +536,7 @@ function TrainingCategory() {
                         <td className="px-1 py-1 border">{data.createdAt}</td>
                         <td className="px-1 py-1 border">
                           <a
-                            className="text-yellow-600 hover:text-black mx-2 text-lg"
+                            className="text-yellow-600 hover:text-black mx-2 text-sm"
                             data-id={data}
                             onClick={() => {
                               handleEdit(data);
@@ -547,7 +547,7 @@ function TrainingCategory() {
                           <a
                             data-id={data.id}
                             onClick={showModalDelete}
-                            className="text-rose-400 hover:text-black ml-2 text-lg"
+                            className="text-rose-400 hover:text-black ml-2 text-sm"
                           >
                             <i className="bi bi-trash-fill"></i>
                           </a>

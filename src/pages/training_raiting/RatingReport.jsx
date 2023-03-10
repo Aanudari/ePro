@@ -100,7 +100,7 @@ function RatingReport() {
         </button>
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
-            <p className="focus:outline-none text-base sm:text-sm md:text-xl lg:text-xl font-bold leading-normal text-gray-800">
+            <p className="focus:outline-none text-base sm:text-sm md:text-sm lg:text-sm font-bold leading-normal text-gray-800">
               Үнэлгээний тайлан
             </p>
           </div>
@@ -117,7 +117,10 @@ function RatingReport() {
               <div className="p-2 text-gray-600 bg-white rounded-lg shadow-lg">
                 <p className="font-body text-black">Үнэлгээ өгсөн хүний тоо</p>
                 <a className="text-blue-500 font-body hover:text-gray-800">
-                  <i className="bi bi-people" /> ????
+                  <i className="bi bi-people" />{" "}
+                  {questionResults.totalResponse === null
+                    ? 0
+                    : questionResults.totalResponse}
                 </a>
               </div>
             </div>
@@ -191,7 +194,7 @@ function RatingReport() {
         </div>
         <div>
           <div className="flex items-center bg-gray-300 px-5 py-2 mb-2 text-lg font-medium text-gray-600 border border-blue-500  jusitfy-between">
-            <div className="flex items-center w-full">Section 1</div>
+            <div className="flex items-center w-full">Section 2</div>
           </div>
 
           <div className="mx-auto max-w-screen-xl px-2 py-12 sm:px-6 lg:px-8">
@@ -215,9 +218,9 @@ function RatingReport() {
                     </div>
                     {data.answerResults2.map((a, i) => (
                       <p key={i} className="relative mt-4 text-gray-500">
-                        <span className="text-xl">&ldquo;</span>
+                        <span className="text-sm">&ldquo;</span>
                         {a.answerName}
-                        <span className="text-xl">&rdquo;</span>
+                        <span className="text-sm">&rdquo;</span>
                       </p>
                     ))}
                   </div>

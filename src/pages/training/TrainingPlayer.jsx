@@ -216,9 +216,9 @@ const TrainingPlayer = () => {
                   src="https://cdn.dribbble.com/users/4203996/screenshots/13798629/media/17b9900902d71c9bd115d52b1e43eff2.gif"
                 />
               </div>
-              <h3 className="mt-2 mb-4 text-xl font-semibold text-gray-500 ">
+              <p className="mt-2 mb-4 text-sm font-semibold text-gray-500 ">
                 Та сургалтыг амжилттай үзэж дууслаа. Сургалтанд үнэлгээ өгнө үү.
-              </h3>
+              </p>
 
               <button
                 type="button"
@@ -250,10 +250,10 @@ const TrainingPlayer = () => {
             <div className="w-full bg-white  mx-auto ">
               <div className="relative block">
                 <div>
-                  <h3 className="mt-2 text-lg font-bold text-gray-900">
+                  <p className="mt-2 text-sm font-bold text-gray-900">
                     {tRate?.name}
-                  </h3>
-                  <p className="mt-2 hidden text-md sm:block">
+                  </p>
+                  <p className="mt-2 hidden text-sm sm:block">
                     {tRate?.description}
                   </p>
                 </div>
@@ -315,7 +315,7 @@ const TrainingPlayer = () => {
                           <div className="space-y-2">
                             <input
                               type="text"
-                              className="px-4 py-2 text-blueGray-600 bg-white text-md w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500 placeholder-gray-400"
+                              className="px-4 py-2 text-blueGray-600 bg-white text-sm w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500 placeholder-gray-400"
                               name={question?.questionId}
                               onChange={(e) =>
                                 setAnswers2((prevData) => ({
@@ -353,9 +353,9 @@ const TrainingPlayer = () => {
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div className="bg-blue-600 p-8 md:p-12 lg:px-16 lg:py-24">
               <div className="mx-auto max-w-xl text-center">
-                <h2 className="text-2xl font-bold text-white md:text-3xl">
+                <p className="text-sm font-bold text-white md:text-sm">
                   {trn.name}
-                </h2>
+                </p>
                 <p className="hidden text-white/90 sm:mt-4 sm:block">
                   {trn.description}
                 </p>
@@ -403,8 +403,8 @@ const TrainingPlayer = () => {
                 trn.fileUrl.slice(-4) === ".pdf" ||
                 trn.fileUrl.slice(-4) === "docx" ||
                 trn.fileUrl.slice(-4) === "pptx" ? (
-                <p className="flex justify-center w-full  items-center mx-auto  text-md ">
-                  <span className="text-md  block  text-gray-500 ">
+                <p className="flex justify-center w-full  items-center mx-auto  text-sm ">
+                  <span className="text-sm  block  text-gray-500 ">
                     <i className="bi bi-play-circle-fill font-bold">
                       {" "}
                       Файлын нэр:
@@ -414,7 +414,7 @@ const TrainingPlayer = () => {
                     {trn.fileUrl.slice(29)}
                   </span>
                   <a
-                    className="text-blue-600 hover:text-black mx-2 text-lg"
+                    className="text-blue-600 hover:text-black mx-2 text-sm"
                     data-id={trn.fileUrl}
                     onClick={() => window.open(`http://${trn.fileUrl}`)}
                   >

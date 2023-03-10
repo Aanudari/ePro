@@ -187,7 +187,7 @@ function CreateTraining() {
                   </span>
                 </p>
               ) : (
-                <div className="text-black text-md border-2 border-blue-500  rounded-md ">
+                <div className="text-black text-sm border-2 border-blue-500  rounded-md ">
                   <div className="flex justify-center">{fileUrl.slice(29)}</div>
                 </div>
               )}
@@ -246,7 +246,6 @@ function CreateTraining() {
       notification.error("Эхлэх дуусах хугацаа алдаатай байна.");
       setCheckEmptyDate(true);
     } else {
-      console.log(JSON.stringify(dataFULL));
       axios({
         method: "post",
         headers: {
@@ -316,9 +315,9 @@ function CreateTraining() {
           </Modal.Header>
           <Modal.Body>
             <div className="p-6 text-center">
-              <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+              <p className="mb-5 text-sm font-normal text-gray-500 dark:text-gray-400">
                 Устгах уу?
-              </h3>
+              </p>
               <button
                 type="button"
                 onClick={handleDelete}
@@ -356,7 +355,7 @@ function CreateTraining() {
             <span className="mx-2">Буцах</span>
           </button>
           <div className="flex items-center justify-between">
-            <p className="focus:outline-none text-base sm:text-sm md:text-xl lg:text-xl font-bold leading-normal text-gray-800">
+            <p className="focus:outline-none text-base sm:text-sm md:text-sm lg:text-sm font-bold leading-normal text-gray-800">
               Сургалт үүсгэх
             </p>
           </div>

@@ -152,9 +152,9 @@ function UserTraining() {
           </Modal.Header>
           <Modal.Body>
             <div className="p-6 text-center">
-              <h3 className="mb-5 text-lg font-normal text-gray-500 ">
+              <p className="mb-5 text-sm font-normal text-gray-500 ">
                 Та сургалтыг эхлүүлэх гэж байна.
-              </h3>
+              </p>
               <button
                 type="button"
                 onClick={navigatePlayer}
@@ -191,9 +191,9 @@ function UserTraining() {
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                   <div className="bg-blue-600 p-8 md:p-12 lg:px-16 lg:py-24">
                     <div className="mx-auto max-w-xl text-center">
-                      <h2 className="text-2xl font-bold text-white md:text-3xl">
+                      <p className="text-sm font-bold text-white md:text-sm">
                         {chosedTrain?.name}
-                      </h2>
+                      </p>
                       <p className="hidden text-white/90 sm:mt-4 sm:block">
                         {chosedTrain?.description}
                       </p>
@@ -232,8 +232,8 @@ function UserTraining() {
                       chosedTrain?.fileUrl.slice(-4) === ".pdf" ||
                       chosedTrain?.fileUrl.slice(-4) === "docx" ||
                       chosedTrain?.fileUrl.slice(-4) === "pptx" ? (
-                      <p className="flex justify-center w-full  items-center mx-auto  text-md ">
-                        <span className="text-md  block  text-gray-500 ">
+                      <p className="flex justify-center w-full  items-center mx-auto  text-sm ">
+                        <span className="text-sm  block  text-gray-500 ">
                           <i className="bi bi-play-circle-fill font-bold">
                             {" "}
                             Файлын нэр:
@@ -243,7 +243,7 @@ function UserTraining() {
                           {chosedTrain?.fileUrl.slice(29)}
                         </span>
                         <a
-                          className="text-blue-600 hover:text-black mx-2 text-lg"
+                          className="text-blue-600 hover:text-black mx-2 text-sm"
                           data-id={chosedTrain?.fileUrl}
                           onClick={() =>
                             window.open(`http://${chosedTrain?.fileUrl}`)
@@ -368,7 +368,7 @@ function UserTraining() {
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center">
                                 <div className="flex flex-col">
-                                  <span className="font-bold text-black text-md dark:text-white">
+                                  <span className="font-bold text-black text-sm dark:text-white">
                                     {data.name}
                                   </span>
                                   <span className="text-sm text-gray-500 dark:text-white">
@@ -447,7 +447,7 @@ function UserTraining() {
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center">
                                 <div className="flex flex-col">
-                                  <span className="font-bold text-black text-md dark:text-white">
+                                  <span className="font-bold text-black text-sm dark:text-white">
                                     {data.name}
                                   </span>
                                   <span className="text-sm text-gray-500 dark:text-white">
@@ -515,7 +515,7 @@ function UserTraining() {
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center">
                                 <div className="flex flex-col">
-                                  <span className="font-bold text-black text-md dark:text-white">
+                                  <span className="font-bold text-black text-sm dark:text-white">
                                     {data.name}
                                   </span>
                                   <span className="text-sm text-gray-500 dark:text-white">
@@ -594,7 +594,7 @@ function UserTraining() {
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center">
                                 <div className="flex flex-col">
-                                  <span className="font-bold text-black text-md dark:text-white">
+                                  <span className="font-bold text-black text-sm dark:text-white">
                                     {data.name}
                                   </span>
                                   <span className="text-sm text-gray-500 dark:text-white">
@@ -669,7 +669,7 @@ function UserTraining() {
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center">
                                 <div className="flex flex-col">
-                                  <span className="font-bold text-black text-md dark:text-white">
+                                  <span className="font-bold text-black text-sm dark:text-white">
                                     {data.name}
                                   </span>
                                   <span className="text-sm text-gray-500 dark:text-white">
@@ -767,7 +767,7 @@ function UserTraining() {
                             <div className="flex items-center justify-between mb-2">
                               <div className="flex items-center">
                                 <div className="flex flex-col">
-                                  <span className="font-bold text-black text-md dark:text-white">
+                                  <span className="font-bold text-black text-sm dark:text-white">
                                     {data.name}
                                   </span>
                                   <span className="text-sm text-gray-500 dark:text-white">

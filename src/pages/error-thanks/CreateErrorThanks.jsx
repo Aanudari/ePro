@@ -18,9 +18,6 @@ function CreateErrorThanks() {
   const format = "YYYYMMDDHHmmss";
   const [startDate, setStartDate] = useState(new Date());
   const dateTime1 = moment(startDate).format(format);
-  const [department, setDepartment] = useState();
-  const [org, setOrg] = useState();
-  const [workers, setWorkers] = useState();
   const options = [
     { value: "1" },
     { value: "2" },
@@ -28,40 +25,44 @@ function CreateErrorThanks() {
     { value: "4" },
     { value: "5" },
   ];
-  const [selectedOptiondepartment, setSelectedOptiondepartment] =
-    useState(null);
-  const [selectedOptionorg, setSelectedOptionorg] = useState(null);
-  const [selectedOptionWorkers, setSelectedOptionWorkers] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
-  const [checkEmpty1, setcheckEmpty1] = useState(false);
-  const [checkEmpty2, setcheckEmpty2] = useState(false);
-  const [checkEmpty3, setcheckEmpty3] = useState(false);
-  const [checkEmpty4, setcheckEmpty4] = useState(false);
-  const [checkEmpty5, setcheckEmpty5] = useState(false);
-  const [checkEmpty6, setcheckEmpty6] = useState(false);
-  const [checkEmpty7, setcheckEmpty7] = useState(false);
-
-  const [departmentID, setDepartmentID] = useState("");
-  const [orgID, setOrgID] = useState("");
-  const [workersID, setWorkersID] = useState("");
+  const [checkEmpty1, setCheckEmpty1] = useState(false);
+  const [checkEmpty2, setCheckEmpty2] = useState(false);
+  const [checkEmpty3, setCheckEmpty3] = useState(false);
+  const [checkEmpty4, setCheckEmpty4] = useState(false);
+  const [checkEmpty5, setCheckEmpty5] = useState(false);
+  const [checkEmpty6, setCheckEmpty6] = useState(false);
+  const [checkEmpty7, setCheckEmpty7] = useState(false);
+  const [checkEmpty8, setCheckEmpty8] = useState(false);
+  const [checkEmpty9, setCheckEmpty9] = useState(false);
+  const [depId, setDepId] = useState("");
+  const [divId, setDivId] = useState("");
+  const [unitId, setUnitId] = useState("");
+  const [alba, setAlba] = useState([]);
+  const [selectedOptionAlba, setSelectedOptionAlba] = useState(null);
+  const [heltes, setHeltes] = useState([]);
+  const [selectedOptionHeltes, setSelectedOptionHeltes] = useState(null);
+  const [negj, setNegj] = useState([]);
+  const [selectedOptionNegj, setSelectedOptionNegj] = useState(null);
+  const [ajiltan, setAjiltan] = useState([]);
+  const [selectedOptionAjiltan, setSelectedOptionAjiltan] = useState(null);
   const [tooVAl, setTooVal] = useState("");
+  const [ajiltanID, setAjiltanID] = useState("");
   const [complainType, setComplainType] = useState("");
   const [rule, setRule] = useState("");
   const [desc, setDescription] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   useEffect(() => {
     axios({
       method: "get",
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `${process.env.REACT_APP_URL}/v1/User/department`,
+      url: `${process.env.REACT_APP_URL}/v1/ComplainReport/getListData/1`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-          //
-        }
         if (res.data.isSuccess == true) {
-          setDepartment(res.data.departments);
+          setAlba(res.data.listData);
         }
         if (
           res.data.resultMessage === "Unauthorized" ||
@@ -71,22 +72,24 @@ function CreateErrorThanks() {
         }
       })
       .catch((err) => console.log(err));
-  }, []);
-  const handleOrg = (item) => {
+  }, [
+    selectedOptionAlba,
+    selectedOptionHeltes,
+    selectedOptionNegj,
+    selectedOptionAjiltan,
+  ]);
+  const handleHeltes = (item) => {
+    setDepId(item.id);
     axios({
       method: "get",
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `${process.env.REACT_APP_URL}/v1/User/org/${item.id}`,
+      url: `${process.env.REACT_APP_URL}/v1/ComplainReport/getListData/2?depId=${item.id}`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-          //
-        }
         if (res.data.isSuccess == true) {
-          setOrg(res.data.organizations);
-          setDepartmentID(item.id);
+          setHeltes(res.data.listData);
         }
         if (
           res.data.resultMessage === "Unauthorized" ||
@@ -97,20 +100,18 @@ function CreateErrorThanks() {
       })
       .catch((err) => console.log(err));
   };
-  const handleWorkers = (item) => {
+  const handleNegj = (item) => {
+    setDivId(item.id);
     axios({
       method: "get",
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `${process.env.REACT_APP_URL}/v1/User/unit/devices?unitId=${item.id}`,
+      url: `${process.env.REACT_APP_URL}/v1/ComplainReport/getListData/3?depId=${depId}&divId=${item.id}`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-        }
         if (res.data.isSuccess == true) {
-          setWorkers(res.data.unitDevices);
-          setOrgID(item.id);
+          setNegj(res.data.listData);
         }
         if (
           res.data.resultMessage === "Unauthorized" ||
@@ -121,47 +122,73 @@ function CreateErrorThanks() {
       })
       .catch((err) => console.log(err));
   };
-  const handleWorkersID = (item) => {
-    setWorkersID(item.deviceId);
+  const handleAjiltan = (item) => {
+    setUnitId(item.id);
+    axios({
+      method: "get",
+      headers: {
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/ComplainReport/getListData/4?depId=${depId}&divId=${divId}&unitId=${item.id}`,
+    })
+      .then((res) => {
+        if (res.data.isSuccess == true) {
+          setAjiltan(res.data.listData);
+        }
+        if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct format."
+        ) {
+          logout();
+        }
+      })
+      .catch((err) => console.log(err));
   };
   const handleToo = (item) => {
     setTooVal(item.value);
   };
+  const handleAjiltanID = (item) => {
+    setAjiltanID(item.id);
+  };
+  const [num, setNum] = useState("");
 
+  const handleNumChange = (event) => {
+    const limit = 8;
+    setNum(event.target.value.slice(0, limit));
+  };
   const data = {
-    department: `${departmentID}`,
-    unit: `${orgID}`,
-    deviceId: `${workersID}`,
-    complain: `${location.state.type.id}`,
+    department: `${depId}`,
+    divsionId: `${divId}`,
+    unit: `${unitId}`,
+    deviceId: `${ajiltanID}`,
+    complain: `${typeid}`,
     complainType: `${complainType}`,
     description: `${desc}`,
     rule: `${rule}`,
     too: `${tooVAl}`,
     createdDate: `${dateTime1}`,
+    phoneNo: `${phoneNumber}`,
+    isSolved: "",
+    solvedDescription: "",
   };
-
   const navigateIndex = (e) => {
     e.preventDefault();
-    if (departmentID.length === 0) {
-      setcheckEmpty1(true);
-    }
-    if (orgID.length === 0) {
-      setcheckEmpty2(true);
-    }
-    if (workersID.length === 0) {
-      setcheckEmpty3(true);
-    }
-    if (complainType.length === 0) {
-      setcheckEmpty4(true);
-    }
-    if (desc.length === 0) {
-      setcheckEmpty5(true);
-    }
     if (rule.length === 0) {
-      setcheckEmpty6(true);
-    }
-    if (tooVAl.length === 0) {
-      setcheckEmpty7(true);
+      setCheckEmpty7(true);
+    } else if (depId.length === 0) {
+      setCheckEmpty1(true);
+    } else if (divId.length === 0) {
+      setCheckEmpty2(true);
+    } else if (unitId.length === 0) {
+      setCheckEmpty3(true);
+    } else if (ajiltanID.length === 0) {
+      setCheckEmpty4(true);
+    } else if (complainType.length === 0) {
+      setCheckEmpty5(true);
+    } else if (desc.length === 0) {
+      setCheckEmpty9(true);
+    } else if (tooVAl.length === 0) {
+      setCheckEmpty8(true);
     } else {
       axios({
         method: "post",
@@ -174,257 +201,318 @@ function CreateErrorThanks() {
         data: JSON.stringify(data),
       })
         .then((res) => {
-          if (res.data.isSuccess === false) {
-          }
           if (res.data.isSuccess === true) {
             notification.success(`${res.data.resultMessage}`);
-            const timer = setTimeout(() => navigate("/error-thanks"), 500);
+            const timer = setTimeout(() => navigate("/error-thanks"), 1000);
             return () => clearTimeout(timer);
+          } else if (res.data.resultMessage === "Unauthorized") {
+            logout();
           } else {
             console.log(res.data.resultMessage);
-          }
-          if (res.data.resultMessage === "Unauthorized") {
-            logout();
           }
         })
         .catch((err) => console.log(err));
     }
   };
+  const navigateIndex1 = (e) => {
+    e.preventDefault();
 
+    if (depId.length === 0) {
+      setCheckEmpty1(true);
+    } else if (divId.length === 0) {
+      setCheckEmpty2(true);
+    } else if (unitId.length === 0) {
+      setCheckEmpty3(true);
+    } else if (ajiltanID.length === 0) {
+      setCheckEmpty4(true);
+    } else if (complainType.length === 0) {
+      setCheckEmpty5(true);
+    } else if (desc.length === 0) {
+      setCheckEmpty9(true);
+    } else if (tooVAl.length === 0) {
+      setCheckEmpty8(true);
+    } else if (phoneNumber.length === 0 || phoneNumber.length < 8) {
+      setCheckEmpty6(true);
+    } else {
+      console.log(data);
+      axios({
+        method: "post",
+        headers: {
+          Authorization: `${TOKEN}`,
+          "Content-Type": "application/json",
+          accept: "text/plain",
+        },
+        url: `${process.env.REACT_APP_URL}/v1/Complain/add`,
+        data: JSON.stringify(data),
+      })
+        .then((res) => {
+          if (res.data.isSuccess === true) {
+            notification.success(`${res.data.resultMessage}`);
+            const timer = setTimeout(() => navigate("/error-thanks"), 1000);
+            return () => clearTimeout(timer);
+          } else if (res.data.resultMessage === "Unauthorized") {
+            logout();
+          } else {
+            console.log(res.data.resultMessage);
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+  };
   return (
-    <div className="w-full h-screen bg-gray-50">
+    <div className="w-full min-h-[calc(100%-56px)] ">
       <Navigation />
-      <div className="w-full">
-        <div className="px-4 md:px-10 py-4 md:py-7">
-          <button
-            onClick={() => navigate("/error-thanks")}
-            className="border border-white p-2 rounded text-gray-700 flex items-center focus:outline-none focus:shadow-outline"
-          >
-            <svg width="24" height="24" viewBox="0 0 16 16">
-              <path
-                d="M9 4 L5 8 L9 12"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinejoin="round"
-                strokeLinecap="round"
-              />
-            </svg>
-            <span className="mx-2">Буцах</span>
-          </button>
-          <div className="flex items-center justify-between">
-            <p className="focus:outline-none text-base sm:text-sm md:text-xl lg:text-xl font-bold leading-normal text-gray-800">
-              {type}
-            </p>
+      <div className="mx-auto max-w-screen-xl px-4 py-8 sm:py-12 sm:px-6 lg:px-8">
+        <div className="sm:flex sm:items-center sm:justify-between">
+          <div className="text-left">
+            <a
+              onClick={() => navigate("/error-thanks")}
+              className="text-sm font-bold text-gray-900 sm:text-sm"
+            >
+              <i className="bi bi-backspace" />
+              <span className="mx-2">Буцах</span>
+            </a>
+
+            <p className="text-sm font-bold text-gray-900">✍️ {type} бүртгэх</p>
           </div>
         </div>
-        <div className="w-full px-4 mx-auto mt-0">
-          <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg border-1">
-            <div className="flex-auto px-4 lg:px-10 py-10 pt-0 bg-white">
-              <div className="mt-4">
-                <div className="flex flex-wrap">
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                        Огноо
-                      </label>
-                      <DatePicker
-                        className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                        selected={startDate}
-                        onChange={(date) => setStartDate(date)}
-                        selectsStart
-                        startDate={startDate}
-                        dateFormat="yyyy, MM сарын dd"
-                      />
-                    </div>
-                  </div>
 
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                        Харьяалагдах хэлтэс
-                      </label>
-                      <Select
-                        className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                        options={department}
-                        defaultValue={selectedOptiondepartment}
-                        onChange={(item) => {
-                          handleOrg(item);
-                          setcheckEmpty1(false);
-                        }}
-                        id={checkEmpty1 === true ? "border-red" : null}
-                        noOptionsMessage={({ inputValue }) =>
-                          !inputValue && "Сонголт хоосон байна"
-                        }
-                        getOptionLabel={(option) => option.name}
-                        getOptionValue={(option) => option.id}
-                      />
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                        Ажлын байр
-                      </label>
-                      <Select
-                        className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                        options={org}
-                        defaultValue={selectedOptionorg}
-                        onChange={(item) => {
-                          handleWorkers(item);
-                          setcheckEmpty2(false);
-                        }}
-                        id={checkEmpty2 === true ? "border-red" : null}
-                        noOptionsMessage={({ inputValue }) =>
-                          !inputValue && "Сонголт хоосон байна"
-                        }
-                        getOptionLabel={(option) => option.name}
-                        getOptionValue={(option) => option.id}
-                      />
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                        Ажилтны нэр
-                      </label>
-                      <Select
-                        className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                        options={workers}
-                        defaultValue={selectedOptionWorkers}
-                        onChange={(item) => {
-                          handleWorkersID(item);
-                          setcheckEmpty3(false);
-                        }}
-                        id={checkEmpty3 === true ? "border-red" : null}
-                        noOptionsMessage={({ inputValue }) =>
-                          !inputValue && "Сонголт хоосон байна"
-                        }
-                        getOptionLabel={(option) => option.firstName}
-                        getOptionValue={(option) => option.deviceId}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="flex flex-wrap">
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      {typeid === "3" ? (
-                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                          Төрөл
-                        </label>
-                      ) : (
-                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                          Гомдлын төрөл
-                        </label>
-                      )}
-
-                      <input
-                        type="text"
-                        className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                        onChange={(e) => {
-                          setComplainType(e.target.value);
-                          setcheckEmpty4(false);
-                        }}
-                        id={checkEmpty4 === true ? "border-red" : null}
-                      />
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      {typeid === "3" ? (
-                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                          Бүртгэгдсэн суваг{" "}
-                        </label>
-                      ) : (
-                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                          Журам
-                        </label>
-                      )}
-
-                      <input
-                        className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                        type="text"
-                        onChange={(e) => {
-                          setRule(e.target.value);
-                          setcheckEmpty6(false);
-                        }}
-                        id={checkEmpty6 === true ? "border-red" : null}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      {typeid === "3" ? (
-                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                          Тоогоор
-                        </label>
-                      ) : (
-                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                          Алдааны тоо
-                        </label>
-                      )}
-
-                      <Select
-                        placeholder="Алдааны тоо"
-                        options={options}
-                        defaultValue={selectedOption}
-                        onChange={(item) => {
-                          handleToo(item);
-                          setcheckEmpty7(false);
-                        }}
-                        id={checkEmpty7 === true ? "border-red" : null}
-                        className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                        noOptionsMessage={({ inputValue }) =>
-                          !inputValue && "Сонголт хоосон байна"
-                        }
-                        getOptionLabel={(option) => option.value}
-                        getOptionValue={(option) => option.value}
-                      />
-                    </div>
-                  </div>
-                  <div className="w-full lg:w-6/12 px-4">
-                    <div className="relative w-full mb-3">
-                      {" "}
-                      {typeid === "3" ? (
-                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                          Дэлгэрэнгүй
-                        </label>
-                      ) : (
-                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                          Гомдлын дэлгэрэнгүй
-                        </label>
-                      )}
-                      <textarea
-                        rows="4"
-                        className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                        type="text"
-                        onChange={(e) => {
-                          setDescription(e.target.value);
-                          setcheckEmpty5(false);
-                        }}
-                        id={checkEmpty5 === true ? "border-red" : null}
-                      />
-                    </div>
-                  </div>
-                </div>
-                <div className="col-span-5 text-right">
-                  <div className="inline-flex items-end">
-                    <button
-                      onClick={navigateIndex}
-                      type="submit"
-                      className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                    >
-                      Submit
-                    </button>
-                  </div>
-                </div>
+        <div className="rounded-lg bg-white p-4 shadow-lg border-2 lg:col-span-3 lg:p-12 mt-4">
+          <div className="flex -mx-2">
+            <div className="w-1/3 sm:w-full px-2 ">
+              <div className="relative w-full mb-3">
+                <label className="block font-bold text-gray-600 text-sm  mb-2">
+                  Алба
+                </label>
+                <Select
+                  className="text-sm  w-full rounded-lg  outline-none focus:border-indigo-500"
+                  options={alba}
+                  defaultValue={selectedOptionAlba}
+                  onChange={(item) => {
+                    handleHeltes(item);
+                    setCheckEmpty1(false);
+                  }}
+                  id={checkEmpty1 === true ? "border-red" : null}
+                  noOptionsMessage={({ inputValue }) =>
+                    !inputValue && "Сонголт хоосон байна"
+                  }
+                  getOptionLabel={(option) => option.name}
+                  getOptionValue={(option) => option.id}
+                />
               </div>
+              <div className="relative w-full mb-3">
+                <label className="block font-bold  text-gray-600 text-sm  mb-2">
+                  Хэлтэс
+                </label>
+                <Select
+                  className="text-sm  w-full rounded-lg  outline-none focus:border-indigo-500"
+                  options={heltes}
+                  defaultValue={selectedOptionHeltes}
+                  onChange={(item) => {
+                    handleNegj(item);
+                    setCheckEmpty2(false);
+                  }}
+                  id={checkEmpty2 === true ? "border-red" : null}
+                  noOptionsMessage={({ inputValue }) =>
+                    !inputValue && "Сонголт хоосон байна"
+                  }
+                  getOptionLabel={(option) => option.name}
+                  getOptionValue={(option) => option.id}
+                />
+              </div>
+              <div className="relative w-full mb-3">
+                <label className="block font-bold  text-gray-600 text-sm  mb-2">
+                  Ажлын байр
+                </label>
+                <Select
+                  className="text-sm  w-full rounded-lg  outline-none focus:border-indigo-500"
+                  options={negj}
+                  defaultValue={selectedOptionNegj}
+                  onChange={(item) => {
+                    handleAjiltan(item);
+                    setCheckEmpty3(false);
+                  }}
+                  id={checkEmpty3 === true ? "border-red" : null}
+                  noOptionsMessage={({ inputValue }) =>
+                    !inputValue && "Сонголт хоосон байна"
+                  }
+                  getOptionLabel={(option) => option.name}
+                  getOptionValue={(option) => option.id}
+                />
+              </div>
+              <div className="relative w-full mb-3">
+                <label className="block font-bold  text-gray-600 text-sm  mb-2">
+                  Ажилтны нэр
+                </label>
+                <Select
+                  className="text-sm  w-full rounded-lg  outline-none focus:border-indigo-500"
+                  options={ajiltan}
+                  defaultValue={selectedOptionAjiltan}
+                  onChange={(item) => {
+                    handleAjiltanID(item);
+                    setCheckEmpty4(false);
+                  }}
+                  id={checkEmpty4 === true ? "border-red" : null}
+                  noOptionsMessage={({ inputValue }) =>
+                    !inputValue && "Сонголт хоосон байна"
+                  }
+                  getOptionLabel={(option) => option.name}
+                  getOptionValue={(option) => option.id}
+                />
+              </div>
+            </div>
+            <div className="w-1/3 sm:w-full px-2  ">
+              <div className="relative w-full mb-3">
+                <label className="block font-bold  text-gray-600 text-sm  mb-2">
+                  Огноо
+                </label>
+                <DatePicker
+                  className="px-3 py-2 text-gray-600 bg-white text-sm w-full rounded-lg border border-gray-200 outline-none focus:border-indigo-500"
+                  selected={startDate}
+                  onChange={(date) => setStartDate(date)}
+                  selectsStart
+                  startDate={startDate}
+                  dateFormat="yyyy, MM сарын dd"
+                />
+              </div>
+
+              <div className="relative w-full mb-3">
+                {typeid === "3" ? (
+                  <label className="block font-bold  text-gray-600 text-sm  mb-2">
+                    Төрөл
+                  </label>
+                ) : (
+                  <label className="block font-bold  text-gray-600 text-sm  mb-2">
+                    Гомдлын төрөл
+                  </label>
+                )}
+
+                <textarea
+                  rows="4"
+                  className="px-3 py-3 text-gray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                  type="text"
+                  onChange={(e) => {
+                    setComplainType(e.target.value);
+                    setCheckEmpty5(false);
+                  }}
+                  id={checkEmpty5 === true ? "border-red" : null}
+                />
+              </div>
+            </div>
+            <div className="w-1/3 sm:w-full px-2  ">
+              <div className="relative w-full mb-3">
+                {typeid === "3" ? (
+                  <label className="block font-bold  text-gray-600 text-sm  mb-2">
+                    Тоогоор
+                  </label>
+                ) : typeid === "2" ? (
+                  <label className="block font-bold  text-gray-600 text-sm  mb-2">
+                    Алдааны тоо
+                  </label>
+                ) : (
+                  <label className="block font-bold  text-gray-600 text-sm  mb-2">
+                    Алдааны тоо
+                  </label>
+                )}
+
+                <Select
+                  placeholder={
+                    typeid === "3" ? "Талархалын тоо" : "Алдааны тоо"
+                  }
+                  options={options}
+                  defaultValue={selectedOption}
+                  onChange={(item) => {
+                    handleToo(item);
+                    setCheckEmpty8(false);
+                  }}
+                  id={checkEmpty8 === true ? "border-red" : null}
+                  className="text-sm  w-full rounded-lg  outline-none focus:border-indigo-500"
+                  noOptionsMessage={({ inputValue }) =>
+                    !inputValue && "Сонголт хоосон байна"
+                  }
+                  getOptionLabel={(option) => option.value}
+                  getOptionValue={(option) => option.value}
+                />
+              </div>
+              {typeid === "3" ? (
+                <div className="relative w-full mb-3">
+                  <label className="block font-bold  text-gray-600 text-sm  mb-2">
+                    Бүртгэгдсэн суваг{" "}
+                  </label>
+                  <textarea
+                    rows="3"
+                    className="px-3 py-3 text-gray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                    type="text"
+                    onChange={(e) => {
+                      setRule(e.target.value);
+                      setCheckEmpty7(false);
+                    }}
+                    id={checkEmpty7 === true ? "border-red" : null}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
+              {typeid === "3" ? (
+                ""
+              ) : (
+                <div className="relative w-full mb-3">
+                  <label className="block font-bold  text-gray-600 text-sm  mb-2">
+                    Холбогдох дугаар
+                  </label>
+                  <input
+                    type="number"
+                    value={num}
+                    className="px-3 py-2 text-gray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                    onChange={(e) => {
+                      setPhoneNumber(e.target.value);
+                      setCheckEmpty6(false);
+                      handleNumChange(e);
+                    }}
+                    id={checkEmpty6 === true ? "border-red" : null}
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="w-full sm:w-full px-2  ">
+            <div className="relative w-full mb-3">
+              {" "}
+              {typeid === "3" ? (
+                <label className="block font-bold  text-gray-600 text-sm  mb-2">
+                  Дэлгэрэнгүй
+                </label>
+              ) : (
+                <label className="block font-bold  text-gray-600 text-sm  mb-2">
+                  Гомдлын дэлгэрэнгүй
+                </label>
+              )}
+              <textarea
+                rows="4"
+                className="px-3 py-3 text-gray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                type="text"
+                onChange={(e) => {
+                  setDescription(e.target.value);
+                  setCheckEmpty9(false);
+                }}
+                id={checkEmpty9 === true ? "border-red" : null}
+              />
+            </div>
+          </div>
+          <div className="col-span-5 text-right">
+            <div className="inline-flex items-end">
+              <button
+                onClick={type === "Талархал" ? navigateIndex : navigateIndex1}
+                type="submit"
+                className="block font-bold rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-green-700 focus:outline-none focus:ring"
+              >
+                Submit
+              </button>
             </div>
           </div>
         </div>
       </div>
+
       <ToastContainer />
     </div>
   );

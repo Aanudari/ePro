@@ -350,13 +350,13 @@ function TrainingRating() {
           centered
         >
           <Modal.Header closeButton>
-            <span className="text-xl text-black">Сургалтын үнэлгээ устгах</span>
+            <span className="text-sm text-black">Сургалтын үнэлгээ устгах</span>
           </Modal.Header>
           <Modal.Body>
             <div className="p-6 text-center">
-              <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+              <p className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
                 Та сургалтын үнэлгээг устгахдаа итгэлтэй уу?
-              </h3>
+              </p>
               <button
                 type="button"
                 onClick={handleDelete}
@@ -379,7 +379,7 @@ function TrainingRating() {
       <div className="sm:px-6 w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
-            <p className="focus:outline-none text-base sm:text-sm md:text-xl lg:text-xl font-bold leading-normal text-gray-800">
+            <p className="focus:outline-none text-base sm:text-sm md:text-sm lg:text-sm font-bold leading-normal text-gray-800">
               Сургалтын үнэлгээ{" "}
               {filteredList.length > 0
                 ? `(${filteredList.length})`

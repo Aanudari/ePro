@@ -41,6 +41,7 @@ function CategoryModal({
       })
       .catch((err) => console.log(err));
   }, [addAnswer, trigger]);
+  // console.log(data);
   const [answers, setAnswers] = useState(false);
   const [question, setQuestion] = useState("");
   const [point, setPoint] = useState("");

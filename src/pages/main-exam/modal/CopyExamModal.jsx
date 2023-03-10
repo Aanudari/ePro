@@ -61,10 +61,11 @@ function CopyModal({
         "Content-Type": "application/json",
         Authorization: `${TOKEN}`,
       },
-      url: `${process.env.REACT_APP_URL}/v1/ExamNew/copyExam/${id}`,
+      url: `${process.env.REACT_APP_URL}/v1/ExamNew/copyExam/`,
       data: schema,
     })
       .then((res) => {
+        // console.log(res.data);
         if (res.data.isSuccess === false) {
           toast.error(res.data.resultMessage, {
             position: "bottom-right",

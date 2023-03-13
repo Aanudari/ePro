@@ -61,10 +61,11 @@ function CopyModal({
         "Content-Type": "application/json",
         Authorization: `${TOKEN}`,
       },
-      url: `${process.env.REACT_APP_URL}/v1/ExamNew/copyExam/${id}`,
+      url: `${process.env.REACT_APP_URL}/v1/ExamNew/copyExam/`,
       data: schema,
     })
       .then((res) => {
+        // console.log(res.data);
         if (res.data.isSuccess === false) {
           toast.error(res.data.resultMessage, {
             position: "bottom-right",
@@ -83,7 +84,7 @@ function CopyModal({
       className={`fixed ${
         activeMenu
           ? "top-[56px] left-[250px] w-[calc(100%-250px)] h-[calc(100%-56px)]"
-          : "w-full h-full top-[25px] left-0"
+          : "w-full h-full top-[56px] left-0"
       } 
       bg-black bg-opacity-50 flex justify-center items-center z-top z-20
       `}

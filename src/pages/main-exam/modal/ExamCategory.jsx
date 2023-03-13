@@ -3,6 +3,7 @@ import { useStateContext } from "../../../contexts/ContextProvider";
 import { useState } from "react";
 import DeleteConfirm from "./DeleteComfirm";
 import EditCategoryModal from "./EditCategoryModal";
+import SearchModalQuestion from "./SearchModalQuestion";
 
 function ExamCategory({
   categories,
@@ -47,6 +48,7 @@ function ExamCategory({
     setEditModal(true);
     setKey(value);
   };
+  const [show, setShow] = useState(false);
   // console.log(categories);
   return (
     <div
@@ -67,6 +69,7 @@ function ExamCategory({
           trigger={trigger}
         />
       )}
+      {show && <SearchModalQuestion show={show} setShow={setShow} />}
       <button
         onClick={() => {
           setShowAddCategory(!showAddCategory);
@@ -169,14 +172,22 @@ function ExamCategory({
           </div>
         )}
       </div>
-      <div className="min-w-[50px] max-w-[50px] ml-2">
+      <div className="min-w-[50px] max-w-[50px] ml-2 flex flex-col gap-4">
         <button
-          className="p-2 hover:scale-110 transition"
+          className="hover:scale-110 transition bg-teal-500 text-gray-200 rounded-full h-[50px] w-[50px]"
           onClick={() => {
             setShowCategoryMenu(false);
           }}
         >
           <i className="bi bi-x-lg text-2xl"></i>
+        </button>
+        <button
+          className="hover:scale-110 transition bg-teal-500 text-gray-200 rounded-full h-[50px] w-[50px]"
+          onClick={() => {
+            setShow(true);
+          }}
+        >
+          <i className="bi bi-search text-xl"></i>
         </button>
       </div>
     </div>

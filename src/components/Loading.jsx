@@ -7,7 +7,7 @@ function Loading() {
       className={`fixed custom-index-2 ${
         activeMenu
           ? "top-[56px] left-[250px] w-[calc(100%-250px)] h-[calc(100%-56px)]"
-          : "w-full h-full top-[25px] left-0"
+          : "w-full h-full top-[56px] left-0"
       } 
            flex justify-center items-center bg-gray-500 bg-opacity-10
           `}

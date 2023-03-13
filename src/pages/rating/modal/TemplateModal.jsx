@@ -3,9 +3,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { logout } from "../../../service/examService";
 import RatingCategoryAdd from "./RatingCategoryAdd";
+import bg from "../../../assets/background-blue.jpg";
 function TemplateModal({ setShow, id, categoryName }) {
   const { activeMenu, TOKEN } = useStateContext();
   const [data, setData] = useState();
+  const [trigger, setTrigger] = useState(false);
   useEffect(() => {
     axios({
       method: "get",
@@ -19,13 +21,12 @@ function TemplateModal({ setShow, id, categoryName }) {
         if (res.data.errorCode == 401) {
           logout();
         } else {
-          setData(res.data);
+          setData(res.data.categories);
         }
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [trigger]);
   const [showModal, setShowModal] = useState(false);
-  //   console.log(data);
 
   return (
     <div
@@ -42,9 +43,16 @@ function TemplateModal({ setShow, id, categoryName }) {
           id={id}
           setShowModal={setShowModal}
           showModal={showModal}
+          setTrigger={setTrigger}
+          trigger={trigger}
         />
       )}
-      <div className="shrink w-[calc(100%)] h-[calc(100%)] bg-white flex flex-col">
+      <div
+        style={{
+          background: `url(${bg})`,
+        }}
+        className="shrink w-[calc(100%)] h-[calc(100%)] bg-white flex flex-col items-center"
+      >
         <div className="w-full min-h-[50px] bg-teal-600 flex justify-between items-center px-3  gap-2 relative">
           <button
             onClick={() => {
@@ -75,12 +83,15 @@ function TemplateModal({ setShow, id, categoryName }) {
             <i className="bi bi-x-lg text-white text-2xl font-[500]"></i>
           </button>
         </div>
-        <div className="h-full w-full rounded-b-lg p-3">
+        <div className="h-screen w-[900px] bg-white p-3">
           {data?.length > 0 ? (
             data.map((item, index) => {
               return (
-                <div className="w-full " key={JSON.stringify(item + index)}>
-                  {JSON.stringify(item)}
+                <div
+                  className="w-full flex  justify-center"
+                  key={JSON.stringify(item + index)}
+                >
+                  <div className=" h-full">{JSON.stringify(item)}</div>
                 </div>
               );
             })

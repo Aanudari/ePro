@@ -93,7 +93,6 @@ function Template() {
       data: JSON.stringify(dataEdit),
     })
       .then((res) => {
-        console.log(res.data);
         if (res.data.isSuccess === false) {
           toast.error(res.data.resultMessage, {
             position: "bottom-right",

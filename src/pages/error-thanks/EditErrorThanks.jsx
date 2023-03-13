@@ -159,7 +159,7 @@ function EditErrorThanks() {
     <div className="w-full min-h-[calc(100%-56px)] ">
       <Navigation />
 
-      <div className="mx-auto max-w-screen-xl px-4 py-8 sm:py-12 sm:px-6 lg:px-8">
+      <div className="px-4 py-4">
         <div className="sm:flex sm:items-center sm:justify-between">
           <div className="text-left">
             <a

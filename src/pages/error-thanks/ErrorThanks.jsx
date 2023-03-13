@@ -11,6 +11,8 @@ import { logout } from "../../service/examService";
 import getWindowDimensions from "../../components/SizeDetector";
 import Pagination from "../../service/Pagination";
 import Dropdown from "react-bootstrap/Dropdown";
+import * as XLSX from "xlsx";
+
 function ErrorThanks() {
   const { width } = getWindowDimensions();
   const { TOKEN } = useStateContext();
@@ -25,10 +27,11 @@ function ErrorThanks() {
   const hideModalCreate = () => setShowCreate(null);
   const [showDelete, setShowDelete] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredList, setFilteredList] = useState([]);
   const [trigger, setTrigger] = useState(false);
-
   const [id, setId] = useState();
+  const [activeTab, setActiveTab] = useState("1");
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   useEffect(() => {
     axios({
       method: "get",
@@ -65,7 +68,7 @@ function ErrorThanks() {
         }
         if (res.data.isSuccess == true) {
           setComplain(res.data.complains);
-          setFilteredList(res.data.complains);
+          setFilteredData(res.data.complains);
         }
         if (
           res.data.resultMessage === "Unauthorized" ||
@@ -76,13 +79,22 @@ function ErrorThanks() {
       })
       .catch((err) => console.log(err));
   }, [trigger]);
-  const nPages = Math.ceil(filteredList.length / recordsPerPage);
+  useEffect(() => {
+    localStorage.setItem("activeTab", activeTab);
+  }, [activeTab]);
+
+  useEffect(() => {
+    const filteredData = complain.filter(
+      (item) => item.complain === activeTab.toString()
+    );
+    setFilteredData(filteredData);
+  }, [activeTab]);
+  const nPages = Math.ceil(filteredData.length / recordsPerPage);
   const showModalDelete = (e) => {
     setShowDelete(true);
     setId(e.currentTarget.dataset.id);
   };
   const hideModalDelete = () => setShowDelete(null);
-  const [selectedCategory, setSelectedCategory] = useState("1");
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedSeason, setSelectedSeason] = useState("");
   const [selectedDivision, setSelectedDivision] = useState("");
@@ -123,7 +135,7 @@ function ErrorThanks() {
   const uniqueDivisionNames = [...new Set(divisionNames)];
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = filteredList.slice(
+  const currentRecords = filteredData.slice(
     indexOfFirstRecord,
     indexOfLastRecord
   );
@@ -136,45 +148,17 @@ function ErrorThanks() {
       });
     }
   };
-  const handleDelete = () => {
-    axios({
-      method: "delete",
-      headers: {
-        Authorization: `${TOKEN}`,
-        accept: "text/plain",
-      },
-      url: `${process.env.REACT_APP_URL}/v1/Complain/delete?id=${id}`,
-    })
-      .then((res) => {
-        if (res.data.isSuccess === false) {
-        }
-        if (res.data.isSuccess === true) {
-          notification.success(`${res.data.resultMessage}`);
-          setTrigger(!trigger);
-          hideModalDelete();
-        } else {
-          console.log(res.data.resultMessage);
-        }
-        if (
-          res.data.resultMessage === "Unauthorized" ||
-          res.data.resultMessage === "Input string was not in a correct format."
-        ) {
-          logout();
-        }
-      })
-      .catch((err) => console.log(err));
-  };
   const handleEdit = (tab) => {
     navigate("/edit-error-thanks", {
       state: { data: tab },
     });
   };
   const filterByCategory = (filteredData) => {
-    if (!selectedCategory) {
+    if (!activeTab) {
       return filteredData;
     }
     const filteredComplains = filteredData.filter(
-      (tr) => tr.complain === selectedCategory
+      (tr) => tr.complain === activeTab
     );
     return filteredComplains;
   };
@@ -238,16 +222,14 @@ function ErrorThanks() {
     });
     return filteredComplains;
   };
-  const handleCategoryChange = (tab) => {
-    setSelectedCategory(tab.id);
-  };
+
   const handleSearch = (event) => {
     const query = event.target.value;
     setSearchQuery(query);
     const searchList = complain.filter((item) => {
       return item.firstName.toLowerCase().indexOf(query.toLowerCase()) !== -1;
     });
-    setFilteredList(searchList);
+    setFilteredData(searchList);
   };
   const handleYearChange = (y) => {
     setSelectedYear(y);
@@ -260,26 +242,86 @@ function ErrorThanks() {
   };
   useEffect(() => {
     var filteredData = filterByCategory(complain);
-    setFilteredList(filteredData);
-  }, [selectedCategory]);
+    setFilteredData(filteredData);
+  }, [activeTab]);
   useEffect(() => {
     var filteredData = filterByYear(complain);
-    setFilteredList(filteredData);
+    setFilteredData(filteredData);
   }, [selectedYear]);
   useEffect(() => {
     var filteredData = filterBySeason(complain);
-    setFilteredList(filteredData);
+    setFilteredData(filteredData);
   }, [selectedSeason]);
   useEffect(() => {
     var filteredData = filterByDivision(complain);
-    setFilteredList(filteredData);
+    setFilteredData(filteredData);
   }, [selectedDivision]);
-  // const [activeTab, setActiveTab] = useState(1);
 
-  // const filteredData = complain.filter(
-  //   (item) => item.complain === activeTab.toString()
-  // );
-  // console.log(filteredData.length);
+  const handleCheckboxChange = (itemId) => {
+    if (selectedIds.includes(itemId)) {
+      setSelectedIds(selectedIds.filter((id) => id !== itemId));
+    } else {
+      setSelectedIds([...selectedIds, itemId]);
+    }
+  };
+  const deleteSelectedItems = () => {
+    for (const id of selectedIds) {
+      axios({
+        method: "delete",
+        headers: {
+          Authorization: `${TOKEN}`,
+          accept: "text/plain",
+        },
+        url: `${process.env.REACT_APP_URL}/v1/Complain/delete?id=${id}`,
+      })
+        .then((res) => {
+          if (res.data.isSuccess === true) {
+            notification.success(`${res.data.resultMessage}`);
+            setTrigger(!trigger);
+            hideModalDelete();
+          } else {
+            console.log(res.data.resultMessage);
+          }
+          if (
+            res.data.resultMessage === "Unauthorized" ||
+            res.data.resultMessage ===
+              "Input string was not in a correct format."
+          ) {
+            logout();
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+  };
+  const handleSelectAll = (event) => {
+    const isChecked = event.target.checked;
+    if (isChecked) {
+      setSelectedIds(filteredData.map((item) => item.id));
+    } else {
+      setSelectedIds([]);
+    }
+  };
+  const handleDownloadClick = () => {
+    const worksheet = XLSX.utils.table_to_sheet(
+      document.getElementById("table")
+    );
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    const fileBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+    const fileName = "filtered_data.xlsx";
+    const blob = new Blob([fileBuffer], { type: "application/octet-stream" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <div>
@@ -371,7 +413,7 @@ function ErrorThanks() {
               </p>
               <button
                 type="button"
-                onClick={handleDelete}
+                onClick={deleteSelectedItems}
                 className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
               >
                 Тийм
@@ -389,24 +431,11 @@ function ErrorThanks() {
         </Modal>
       </div>
       <Navigation />
-      {/* <div>
-        <ul>
-          {complainInfo.map((item) => (
-            <li key={item.id} onClick={() => setActiveTab(item.id)}>
-              {item.category}
-            </li>
-          ))}
-        </ul>
-        <div>
-          {filteredData.map((item) => (
-            <div key={item.id}>{item.complainType}</div>
-          ))}
-        </div>
-      </div> */}
-      <div className="mx-auto max-w-screen-xl px-4 py-8 sm:py-12 sm:px-6 lg:px-8">
+
+      <div className="px-4 py-4">
         <div className="sm:flex sm:items-center sm:justify-between">
           <div className="text-center sm:text-left">
-            <p className="font-bold text-sm text-gray-900">Алдаа талархал</p>
+            <p className="font-bold text-md text-gray-900">Алдаа талархал</p>
           </div>
 
           <div className="flex flex-col gap-4 sm:mt-0 sm:flex-row sm:items-center">
@@ -434,430 +463,476 @@ function ErrorThanks() {
                 type="submit"
                 className="absolute inset-y-0 right-0 rounded-r-lg p-2 text-gray-600"
               >
-                <span className="sr-only">Submit Search</span>
-                <svg
-                  className="h-5 w-5"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    clipRule="evenodd"
-                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                    fillRule="evenodd"
-                  ></path>
-                </svg>
+                <i className="bi bi-search" />
               </button>
             </div>
-          </div>
-
-          <div className="flex flex-col gap-4 sm:mt-0 sm:flex-row sm:items-center">
-            <button
-              className="mt-2 inline-flex items-center justify-center rounded-lg  border-2 border-gray-400 px-3 py-1 text-gray-600 transition hover:bg-green-600 hover:text-white focus:outline-none focus:ring"
-              type="button"
-            >
-              <span className="text-sm font-medium">Excel татах</span>
-              <i className="bi bi-file-arrow-down ml-2 " />
-            </button>
           </div>
         </div>
         <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 ">
           <div className="mt-4">
             <ul className="flex flex-wrap -mb-px">
-              {complainInfo?.map((tab, i) => (
+              {complainInfo.map((item) => (
                 <li
-                  key={i}
-                  id={tab.id}
-                  disabled={selectedCategory === `${tab.id}`}
-                  onClick={() => {
-                    handleCategoryChange(tab);
-                  }}
+                  key={item.id}
+                  onClick={() => setActiveTab(item.id)}
                   className="mr-2"
                 >
                   <p
                     className={
-                      selectedCategory === `${tab.id}`
+                      activeTab === `${item.id}`
                         ? "inline-block p-2 font-bold text-purple-600 border-b-2 border-purple-600 rounded-t-lg active "
                         : "inline-block p-2 font-bold border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 "
                     }
                   >
-                    {tab.category}
+                    {item.category}{" "}
+                    {/* {activeTab === item.id ? `${filteredData.length}` : ""} */}
                   </p>
                 </li>
               ))}
             </ul>
           </div>
         </div>
+        <div className="sm:flex sm:items-center sm:justify-between">
+          <div className="text-center sm:text-left">
+            <Dropdown
+              alignstart="true"
+              className="d-inline mx-2"
+              autoClose="outside"
+            >
+              <Dropdown.Toggle variant="primary" className="mt-2" size="sm">
+                Оноор ялгах
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={() => handleYearChange()} value="All">
+                  <p className="block items-center font-bold rounded-lg text-sm text-gray-600 hover:border-gray-300 hover:text-blue-600">
+                    Бүгд
+                  </p>
+                </Dropdown.Item>
+                {uniqueYears.map((year) => (
+                  <Dropdown.Item
+                    onClick={() => handleYearChange(year)}
+                    key={year}
+                    value={year}
+                  >
+                    <p className="block items-center font-bold rounded-lg text-sm text-gray-600 hover:border-gray-300 hover:text-blue-600">
+                      {year}
+                    </p>
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+            <Dropdown
+              alignstart="true"
+              className="d-inline mx-2"
+              autoClose="outside"
+            >
+              <Dropdown.Toggle variant="success" className="mt-2" size="sm">
+                Улиралаар ялгах
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={() => handleSeasonChange()} value="All">
+                  <p className="block items-center font-bold rounded-lg text-sm text-gray-600 hover:border-gray-300 hover:text-blue-600">
+                    Бүгд
+                  </p>
+                </Dropdown.Item>
+                {uniqueSeasons.map((season) => (
+                  <Dropdown.Item
+                    onClick={() => handleSeasonChange(season)}
+                    key={season}
+                    value={season}
+                  >
+                    <p className="block items-center font-bold rounded-lg text-sm text-gray-600 hover:border-gray-300 hover:text-blue-600">
+                      {season}
+                    </p>
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+            <Dropdown
+              alignstart="true"
+              className="d-inline mx-2"
+              autoClose="outside"
+            >
+              <Dropdown.Toggle variant="warning" className="mt-2" size="sm">
+                Хэлтэсээр ялгах
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  onClick={() => handleDivisionChange()}
+                  value="All"
+                >
+                  <p className="block items-center font-bold rounded-lg text-sm text-gray-600 hover:border-gray-300 hover:text-blue-600">
+                    Бүгд
+                  </p>
+                </Dropdown.Item>
+                {uniqueDivisionNames.map((divisionNames) => (
+                  <Dropdown.Item
+                    onClick={() => handleDivisionChange(divisionNames)}
+                    key={divisionNames}
+                    value={divisionNames}
+                  >
+                    <p className="block items-center font-bold rounded-lg text-sm text-gray-600 hover:border-gray-300 hover:text-blue-600">
+                      {divisionNames}
+                    </p>
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
 
-        <Dropdown
-          alignstart="true"
-          className="d-inline mx-2"
-          autoClose="outside"
-        >
-          <Dropdown.Toggle variant="primary" className="mt-2" size="sm">
-            Оноор ялгах
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            {uniqueYears.map((year) => (
-              <Dropdown.Item
-                onClick={() => handleYearChange(year)}
-                key={year}
-                value={year}
-              >
-                <p className="block items-center font-bold rounded-lg text-sm text-gray-600 hover:border-gray-300 hover:text-blue-600">
-                  {year}
-                </p>
-              </Dropdown.Item>
-            ))}
-          </Dropdown.Menu>
-        </Dropdown>
-        <Dropdown
-          alignstart="true"
-          className="d-inline mx-2"
-          autoClose="outside"
-        >
-          <Dropdown.Toggle variant="success" className="mt-2" size="sm">
-            Улиралаар ялгах
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            {uniqueSeasons.map((season) => (
-              <Dropdown.Item
-                onClick={() => handleSeasonChange(season)}
-                key={season}
-                value={season}
-              >
-                <p className="block items-center font-bold rounded-lg text-sm text-gray-600 hover:border-gray-300 hover:text-blue-600">
-                  {season}
-                </p>
-              </Dropdown.Item>
-            ))}
-          </Dropdown.Menu>
-        </Dropdown>
-        <Dropdown
-          alignstart="true"
-          className="d-inline mx-2"
-          autoClose="outside"
-        >
-          <Dropdown.Toggle variant="warning" className="mt-2" size="sm">
-            Хэлтэсээр ялгах
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            {uniqueDivisionNames.map((divisionNames) => (
-              <Dropdown.Item
-                onClick={() => handleDivisionChange(divisionNames)}
-                key={divisionNames}
-                value={divisionNames}
-              >
-                <p className="block items-center font-bold rounded-lg text-sm text-gray-600 hover:border-gray-300 hover:text-blue-600">
-                  {divisionNames}
-                </p>
-              </Dropdown.Item>
-            ))}
-          </Dropdown.Menu>
-        </Dropdown>
-        <div className="overflow-x-auto mt-4">
-          <table className="text-sm min-w-full divide-y-2 divide-gray-200 text-sm">
-            <thead>
-              {selectedCategory === "1" ? (
-                <tr className="text-xs text-left  bg-gray-200 border-b">
-                  <th className="px-2 py-2 font-bold"></th>
-                  <th className="px-2 py-2 font-bold">Он</th>
-                  <th className="px-2 py-2 font-bold">Улирал </th>
-                  <th className="px-2 py-2 font-bold">Огноо </th>
-                  <th className="px-2 py-2 font-bold">Харьяалагдах хэлтэс</th>
+          <div className="flex flex-col gap-2 sm:mt-0 sm:flex-row sm:items-center">
+            <button
+              onClick={showModalDelete}
+              className="mt-2 items-center px-2 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md"
+            >
+              <i className="bi bi-trash mr-1" />
+              Delete
+            </button>
+            <button
+              onClick={handleDownloadClick}
+              className="mt-2 items-center px-2 py-2 bg-green-700 hover:bg-green-800 text-white text-sm font-medium rounded-md"
+            >
+              <i className="bi bi-file-excel mr-1 " />
+              Download
+            </button>
+          </div>
+        </div>
+        <div className="overflow-x-auto">
+          <div className="mt-4 bg-gray-100 flex items-center justify-center bg-gray-100 font-sans">
+            <table
+              id="table"
+              className="text-sm min-w-full break-words shadow-sm"
+            >
+              <thead className="bg-gray-600  uppercase text-sm leading-normal">
+                {activeTab === "1" ? (
+                  <tr className="text-xs text-left text-white border-b">
+                    <th className="px-2 py-2 font-bold">
+                      <input
+                        type="checkbox"
+                        onChange={handleSelectAll}
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                        checked={selectedIds.length === filteredData.length}
+                      />
+                    </th>
+                    <th className="px-2 py-2 font-bold">Он</th>
+                    <th className="px-2 py-2 font-bold">Улирал </th>
+                    <th className="px-2 py-2 font-bold">Огноо </th>
+                    <th className="px-2 py-2 font-bold">Харьяалагдах хэлтэс</th>
 
-                  <th className="px-2 py-2 font-bold">Ажлын байр </th>
-                  <th className="px-2 py-2 font-bold">Ажилтны нэр </th>
-                  <th className="px-2 py-2 font-bold">Гомдлын төрөл</th>
-                  <th className="px-2 py-2 font-bold">Холбогдох дугаар </th>
-                  <th className="px-2 py-2 font-bold">Гомдлын дэлгэрэнгүй</th>
-                  <th className="px-2 py-2 font-bold">Шийдвэрлэсэн эсэх</th>
-                  <th className="px-2 py-2 font-bold">Шийдвэрлэсэн хариу</th>
-                  <th className="px-2 py-2 font-bold">Алдаа </th>
-                  <th className="px-2 py-2 font-bold"></th>
-                </tr>
-              ) : selectedCategory === "2" ? (
-                <tr className="text-xs text-left  bg-gray-200 border-b">
-                  <th className="px-2 py-2 font-bold"></th>
-                  <th className="px-2 py-2 font-bold">Он</th>
-                  <th className="px-2 py-2 font-bold">Улирал </th>
-                  <th className="px-2 py-2 font-bold">Огноо </th>
-                  <th className="px-2 py-2 font-bold">Харьяалагдах хэлтэс</th>
+                    <th className="px-2 py-2 font-bold">Ажлын байр </th>
+                    <th className="px-2 py-2 font-bold">Ажилтны нэр </th>
+                    <th className="px-2 py-2 font-bold">Гомдлын төрөл</th>
+                    <th className="px-2 py-2 font-bold">Холбогдох дугаар </th>
+                    <th className="px-2 py-2 font-bold">Гомдлын дэлгэрэнгүй</th>
+                    <th className="px-2 py-2 font-bold">Шийдвэрлэсэн эсэх</th>
+                    <th className="px-2 py-2 font-bold">Шийдвэрлэсэн хариу</th>
+                    <th className="px-2 py-2 font-bold">Алдаа </th>
+                    {/* <th className="px-2 py-2 font-bold"></th> */}
+                  </tr>
+                ) : activeTab === "2" ? (
+                  <tr className="text-xs text-left  bg-gray-200 border-b">
+                    <th className="px-2 py-2 font-bold">
+                      <input
+                        type="checkbox"
+                        onChange={handleSelectAll}
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                        checked={selectedIds.length === filteredData.length}
+                      />
+                    </th>
+                    <th className="px-2 py-2 font-bold">Он</th>
+                    <th className="px-2 py-2 font-bold">Улирал </th>
+                    <th className="px-2 py-2 font-bold">Огноо </th>
+                    <th className="px-2 py-2 font-bold">Харьяалагдах хэлтэс</th>
 
-                  <th className="px-2 py-2 font-bold">Ажлын байр </th>
-                  <th className="px-2 py-2 font-bold">Ажилтны нэр </th>
-                  <th className="px-2 py-2 font-bold">Гомдлын төрөл</th>
-                  <th className="px-2 py-2 font-bold">Холбогдох дугаар </th>
-                  <th className="px-2 py-2 font-bold">Гомдлын дэлгэрэнгүй</th>
-                  <th className="px-2 py-2 font-bold">Шийдвэрлэсэн эсэх</th>
-                  <th className="px-2 py-2 font-bold">Алдаа </th>
-                  <th className="px-2 py-2 font-bold"></th>
-                </tr>
-              ) : (
-                <tr className="text-xs text-left  bg-gray-200 border-b">
-                  <th className="px-2 py-2 font-bold"></th>
-                  <th className="px-2 py-2 font-bold">Он </th>
-                  <th className="px-2 py-2 font-bold">Улирал </th>
-                  <th className="px-2 py-2 font-bold">Огноо </th>
-                  <th className="px-2 py-2 font-bold">Харьяалагдах хэлтэс</th>
+                    <th className="px-2 py-2 font-bold">Ажлын байр </th>
+                    <th className="px-2 py-2 font-bold">Ажилтны нэр </th>
+                    <th className="px-2 py-2 font-bold">Гомдлын төрөл</th>
+                    <th className="px-2 py-2 font-bold">Холбогдох дугаар </th>
+                    <th className="px-2 py-2 font-bold">Гомдлын дэлгэрэнгүй</th>
+                    <th className="px-2 py-2 font-bold">Шийдвэрлэсэн эсэх</th>
+                    <th className="px-2 py-2 font-bold">Алдаа </th>
+                    {/* <th className="px-2 py-2 font-bold"></th> */}
+                  </tr>
+                ) : (
+                  <tr className="text-xs text-left  bg-gray-200 border-b">
+                    <th className="px-2 py-2 font-bold">
+                      <input
+                        type="checkbox"
+                        onChange={handleSelectAll}
+                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                        checked={selectedIds.length === filteredData.length}
+                      />
+                    </th>
+                    <th className="px-2 py-2 font-bold">Он </th>
+                    <th className="px-2 py-2 font-bold">Улирал </th>
+                    <th className="px-2 py-2 font-bold">Огноо </th>
+                    <th className="px-2 py-2 font-bold">Харьяалагдах хэлтэс</th>
 
-                  <th className="px-2 py-2 font-bold">Ажлын байр </th>
-                  <th className="px-2 py-2 font-bold">Ажилтны нэр </th>
-                  <th className="px-2 py-2 font-bold">Төрөл</th>
-                  <th className="px-2 py-2 font-bold">Дэлгэрэнгүй </th>
-                  <th className="px-2 py-2 font-bold">Бүртгэгдсэн суваг</th>
-                  <th className="px-2 py-2 font-bold">Тоогоор </th>
-                  <th className="px-2 py-2 font-bold"></th>
-                </tr>
-              )}
-            </thead>
-            <tbody className="bg-white text-sm">
-              {currentRecords.map(
-                (tab, i) =>
-                  selectedCategory === `${tab.complain}` &&
-                  (tab.complain === "1" ? (
-                    <tr
-                      key={i}
-                      className="border-b border-gray-200 hover:bg-gray-100"
-                    >
-                      <td className="px-1 py-1 border">{i + 1}</td>
-                      <td className="px-1 py-1 border">
-                        {new Date(tab.createdAt).getFullYear()}
-                      </td>
-                      <td className="px-1 py-1 border">
-                        {new Date(tab.createdAt).getMonth() === 1 ||
-                        new Date(tab.createdAt).getMonth() === 2 ||
-                        new Date(tab.createdAt).getMonth() === 3
-                          ? "1-р улирал"
-                          : new Date(tab.createdAt).getMonth() === 4 ||
-                            new Date(tab.createdAt).getMonth() === 5 ||
-                            new Date(tab.createdAt).getMonth() === 6
-                          ? "2-р улирал"
-                          : new Date(tab.createdAt).getMonth() === 7 ||
-                            new Date(tab.createdAt).getMonth() === 8 ||
-                            new Date(tab.createdAt).getMonth() === 9
-                          ? "3-р улирал"
-                          : new Date(tab.createdAt).getMonth() === 10 ||
-                            new Date(tab.createdAt).getMonth() === 11 ||
-                            new Date(tab.createdAt).getMonth() === 12
-                          ? "4-р улирал"
-                          : ""}
-                      </td>
-                      <td className="px-1 py-1 border">
-                        {new Date(tab.createdAt).toLocaleString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                        })}
-                      </td>
-                      <td className="px-1 py-1 border">{tab.divisionName}</td>
-                      <td className="px-1 py-1 border">{tab.unitName}</td>
-                      <td className="px-1 py-1 border">{tab.firstName}</td>
-                      <td className="px-1 py-1 border">{tab.complainType}</td>
-                      <td className="px-1 py-1 border">{tab.phoneNo}</td>
-                      <td className="px-1 py-1 border">{tab.description}</td>
-                      <td className="px-1 py-1 border ">
-                        {tab.isSolved === "" ? (
-                          <span className="px-2 py-2  text-xs text-yellow-600 ">
-                            pending
-                          </span>
-                        ) : (
-                          tab.isSolved
-                        )}
-                      </td>
-                      <td className="px-1 py-1 border">
-                        {tab.solvedDescription === "" ? (
-                          <span className="px-2 py-2  text-xs  text-yellow-600 ">
-                            pending
-                          </span>
-                        ) : (
-                          tab.solvedDescription
-                        )}
-                      </td>
-                      <td className="px-1 py-1 border">{tab.too}</td>
-                      <td className="px-1 py-1 border">
-                        <a
-                          className="text-yellow-400 hover:text-black mx-2"
-                          data-id={tab}
+                    <th className="px-2 py-2 font-bold">Ажлын байр </th>
+                    <th className="px-2 py-2 font-bold">Ажилтны нэр </th>
+                    <th className="px-2 py-2 font-bold">Төрөл</th>
+                    <th className="px-2 py-2 font-bold">Дэлгэрэнгүй </th>
+                    <th className="px-2 py-2 font-bold">Бүртгэгдсэн суваг</th>
+                    <th className="px-2 py-2 font-bold">Тоогоор </th>
+                    {/* <th className="px-2 py-2 font-bold"></th> */}
+                  </tr>
+                )}
+              </thead>
+              <tbody className="bg-white text-sm">
+                {currentRecords.map(
+                  (item) =>
+                    activeTab === `${item.complain}` &&
+                    (item.complain === "1" ? (
+                      <tr
+                        onClick={() => {
+                          handleEdit(item);
+                        }}
+                        key={item.id}
+                        className="border-b border-gray-200 hover:bg-gray-200 cursor-pointer"
+                      >
+                        <td className="px-1 py-1 border">
+                          <input
+                            type="checkbox"
+                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                            onChange={() => handleCheckboxChange(item.id)}
+                            checked={selectedIds.includes(item.id)}
+                          />
+                        </td>
+                        <td className="px-1 py-1 border">
+                          {new Date(item.createdAt).getFullYear()}
+                        </td>
+                        <td className="px-1 py-1 border">
+                          {new Date(item.createdAt).getMonth() === 1 ||
+                          new Date(item.createdAt).getMonth() === 2 ||
+                          new Date(item.createdAt).getMonth() === 3
+                            ? "1-р улирал"
+                            : new Date(item.createdAt).getMonth() === 4 ||
+                              new Date(item.createdAt).getMonth() === 5 ||
+                              new Date(item.createdAt).getMonth() === 6
+                            ? "2-р улирал"
+                            : new Date(item.createdAt).getMonth() === 7 ||
+                              new Date(item.createdAt).getMonth() === 8 ||
+                              new Date(item.createdAt).getMonth() === 9
+                            ? "3-р улирал"
+                            : new Date(item.createdAt).getMonth() === 10 ||
+                              new Date(item.createdAt).getMonth() === 11 ||
+                              new Date(item.createdAt).getMonth() === 12
+                            ? "4-р улирал"
+                            : ""}
+                        </td>
+                        <td className="px-1 py-1 border">
+                          {new Date(item.createdAt).toLocaleString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                          })}
+                        </td>
+                        <td className="px-1 py-1 border">
+                          {item.divisionName}
+                        </td>
+                        <td className="px-1 py-1 border">{item.unitName}</td>
+                        <td className="px-1 py-1 border">{item.firstName}</td>
+                        <td className="px-1 py-1 border">
+                          {item.complainType}
+                        </td>
+                        <td className="px-1 py-1 border">{item.phoneNo}</td>
+                        <td className="px-1 py-1 border">{item.description}</td>
+                        <td className="px-1 py-1 border ">
+                          {item.isSolved === "" ? (
+                            <span className="px-2 py-2  text-xs text-yellow-600 ">
+                              pending
+                            </span>
+                          ) : (
+                            item.isSolved
+                          )}
+                        </td>
+                        <td className="px-1 py-1 border">
+                          {item.solvedDescription === "" ? (
+                            <span className="px-2 py-2  text-xs  text-yellow-600 ">
+                              pending
+                            </span>
+                          ) : (
+                            item.solvedDescription
+                          )}
+                        </td>
+                        <td className="px-1 py-1 border">{item.too}</td>
+                        {/* <td className="px-1 py-1 border">
+                        <button
+                          data-id={item}
                           onClick={() => {
-                            handleEdit(tab);
+                            handleEdit(item);
                           }}
+                          className="px-2 py-1 bg-orange-500 rounded-md text-white outline-none focus:ring-4 shadow-lg "
                         >
-                          <i className="bi bi-pencil-square"></i>
-                        </a>
-                        <a
-                          data-id={tab.id}
-                          onClick={showModalDelete}
-                          className="text-rose-400 hover:text-black ml-2"
-                        >
-                          <i className="bi bi-trash-fill"></i>
-                        </a>
-                      </td>
-                    </tr>
-                  ) : tab.complain === "2" ? (
-                    <tr
-                      key={i}
-                      className="border-b border-gray-200 hover:bg-gray-100"
-                    >
-                      <td className="px-1 py-1 border">{i + 1}</td>
-                      <td className="px-1 py-1 border">
-                        {new Date(tab.createdAt).getFullYear()}
-                      </td>
-                      <td className="px-1 py-1 border">
-                        {new Date(tab.createdAt).getMonth() === 1 ||
-                        new Date(tab.createdAt).getMonth() === 2 ||
-                        new Date(tab.createdAt).getMonth() === 3
-                          ? "1-р улирал"
-                          : new Date(tab.createdAt).getMonth() === 4 ||
-                            new Date(tab.createdAt).getMonth() === 5 ||
-                            new Date(tab.createdAt).getMonth() === 6
-                          ? "2-р улирал"
-                          : new Date(tab.createdAt).getMonth() === 7 ||
-                            new Date(tab.createdAt).getMonth() === 8 ||
-                            new Date(tab.createdAt).getMonth() === 9
-                          ? "3-р улирал"
-                          : new Date(tab.createdAt).getMonth() === 10 ||
-                            new Date(tab.createdAt).getMonth() === 11 ||
-                            new Date(tab.createdAt).getMonth() === 12
-                          ? "4-р улирал"
-                          : ""}
-                      </td>
-                      <td className="px-1 py-1 border">
-                        {new Date(tab.createdAt).toLocaleString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                        })}
-                      </td>
-                      <td className="px-1 py-1 border">{tab.divisionName}</td>
-                      <td className="px-1 py-1 border">{tab.unitName}</td>
-                      <td className="px-1 py-1 border">{tab.firstName}</td>
-                      <td className="px-1 py-1 border">{tab.complainType}</td>
-                      <td className="px-1 py-1 border">{tab.phoneNo}</td>
-                      <td className="px-1 py-1 border">{tab.description}</td>
-                      <td className="px-1 py-1 border ">
-                        {tab.isSolved === "" ? (
-                          <span className="px-2 py-2  text-xs text-yellow-600 ">
-                            pending
-                          </span>
-                        ) : (
-                          tab.isSolved
-                        )}
-                      </td>
-                      {/* <td className="px-1 py-1 border">
-                            {tab.solvedDescription === "" ? (
+                          <i className="bi bi-pencil-square" />
+                        </button>
+                      </td> */}
+                      </tr>
+                    ) : item.complain === "2" ? (
+                      <tr
+                        key={item.id}
+                        onClick={() => {
+                          handleEdit(item);
+                        }}
+                        className="border-b border-gray-200 hover:bg-gray-100"
+                      >
+                        <td className="px-1 py-1 border">
+                          <input
+                            type="checkbox"
+                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                            onChange={() => handleCheckboxChange(item.id)}
+                            checked={selectedIds.includes(item.id)}
+                          />
+                        </td>
+                        <td className="px-1 py-1 border">
+                          {new Date(item.createdAt).getFullYear()}
+                        </td>
+                        <td className="px-1 py-1 border">
+                          {new Date(item.createdAt).getMonth() === 1 ||
+                          new Date(item.createdAt).getMonth() === 2 ||
+                          new Date(item.createdAt).getMonth() === 3
+                            ? "1-р улирал"
+                            : new Date(item.createdAt).getMonth() === 4 ||
+                              new Date(item.createdAt).getMonth() === 5 ||
+                              new Date(item.createdAt).getMonth() === 6
+                            ? "2-р улирал"
+                            : new Date(item.createdAt).getMonth() === 7 ||
+                              new Date(item.createdAt).getMonth() === 8 ||
+                              new Date(item.createdAt).getMonth() === 9
+                            ? "3-р улирал"
+                            : new Date(item.createdAt).getMonth() === 10 ||
+                              new Date(item.createdAt).getMonth() === 11 ||
+                              new Date(item.createdAt).getMonth() === 12
+                            ? "4-р улирал"
+                            : ""}
+                        </td>
+                        <td className="px-1 py-1 border">
+                          {new Date(item.createdAt).toLocaleString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                          })}
+                        </td>
+                        <td className="px-1 py-1 border">
+                          {item.divisionName}
+                        </td>
+                        <td className="px-1 py-1 border">{item.unitName}</td>
+                        <td className="px-1 py-1 border">{item.firstName}</td>
+                        <td className="px-1 py-1 border">
+                          {item.complainType}
+                        </td>
+                        <td className="px-1 py-1 border">{item.phoneNo}</td>
+                        <td className="px-1 py-1 border">{item.description}</td>
+                        <td className="px-1 py-1 border ">
+                          {item.isSolved === "" ? (
+                            <span className="px-2 py-2  text-xs text-yellow-600 ">
+                              pending
+                            </span>
+                          ) : (
+                            item.isSolved
+                          )}
+                        </td>
+                        {/* <td className="px-1 py-1 border">
+                            {item.solvedDescription === "" ? (
                               <span className="px-2 py-2  text-xs  text-yellow-600 ">
                                 pending
                               </span>
                             ) : (
-                              tab.solvedDescription
+                              item.solvedDescription
                             )}
                           </td> */}
-                      <td className="px-1 py-1 border">{tab.too}</td>
-                      <td className="px-1 py-1 border">
+                        <td className="px-1 py-1 border">{item.too}</td>
+                        {/* <td className="px-1 py-1 border">
                         <a
                           className="text-yellow-400 hover:text-black mx-2"
-                          data-id={tab}
+                          data-id={item}
                           onClick={() => {
-                            handleEdit(tab);
+                            handleEdit(item);
                           }}
                         >
                           <i className="bi bi-pencil-square"></i>
                         </a>
-                        <a
-                          data-id={tab.id}
-                          onClick={showModalDelete}
-                          className="text-rose-400 hover:text-black ml-2"
-                        >
-                          <i className="bi bi-trash-fill"></i>
-                        </a>
-                      </td>
-                    </tr>
-                  ) : (
-                    <tr
-                      key={i}
-                      className="border-b border-gray-200 hover:bg-gray-100"
-                    >
-                      <td className="px-1 py-1 border">{i + 1}</td>
-                      <td className="px-1 py-1 border">
-                        {new Date(tab.createdAt).getFullYear()}
-                      </td>
-                      <td className="px-1 py-1 border">
-                        {new Date(tab.createdAt).getMonth() === 1 ||
-                        new Date(tab.createdAt).getMonth() === 2 ||
-                        new Date(tab.createdAt).getMonth() === 3
-                          ? "1-р улирал"
-                          : new Date(tab.createdAt).getMonth() === 4 ||
-                            new Date(tab.createdAt).getMonth() === 5 ||
-                            new Date(tab.createdAt).getMonth() === 6
-                          ? "2-р улирал"
-                          : new Date(tab.createdAt).getMonth() === 7 ||
-                            new Date(tab.createdAt).getMonth() === 8 ||
-                            new Date(tab.createdAt).getMonth() === 9
-                          ? "3-р улирал"
-                          : new Date(tab.createdAt).getMonth() === 10 ||
-                            new Date(tab.createdAt).getMonth() === 11 ||
-                            new Date(tab.createdAt).getMonth() === 12
-                          ? "4-р улирал"
-                          : ""}
-                      </td>
-                      <td className="px-1 py-1 border">
-                        {new Date(tab.createdAt).toLocaleString("en-US", {
-                          month: "short",
-                          day: "numeric",
-                        })}
-                      </td>
-                      <td className="px-1 py-1 border">{tab.divisionName}</td>
-                      <td className="px-1 py-1 border">{tab.unitName}</td>
-                      <td className="px-1 py-1 border">{tab.firstName}</td>
-                      <td className="px-1 py-1 border">{tab.complainType}</td>
-                      <td className="px-1 py-1 border">{tab.description}</td>
-                      <td className="px-1 py-1 border">{tab.rule}</td>
-                      <td className="px-1 py-1 border">{tab.too}</td>
-                      <td className="px-1 py-1 border">
+                      </td> */}
+                      </tr>
+                    ) : (
+                      <tr
+                        key={item.id}
+                        onClick={() => {
+                          handleEdit(item);
+                        }}
+                        className="border-b border-gray-200 hover:bg-gray-100"
+                      >
+                        <td className="px-1 py-1 border">
+                          <input
+                            type="checkbox"
+                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                            onChange={() => handleCheckboxChange(item.id)}
+                            checked={selectedIds.includes(item.id)}
+                          />
+                        </td>
+                        <td className="px-1 py-1 border">
+                          {new Date(item.createdAt).getFullYear()}
+                        </td>
+                        <td className="px-1 py-1 border">
+                          {new Date(item.createdAt).getMonth() === 1 ||
+                          new Date(item.createdAt).getMonth() === 2 ||
+                          new Date(item.createdAt).getMonth() === 3
+                            ? "1-р улирал"
+                            : new Date(item.createdAt).getMonth() === 4 ||
+                              new Date(item.createdAt).getMonth() === 5 ||
+                              new Date(item.createdAt).getMonth() === 6
+                            ? "2-р улирал"
+                            : new Date(item.createdAt).getMonth() === 7 ||
+                              new Date(item.createdAt).getMonth() === 8 ||
+                              new Date(item.createdAt).getMonth() === 9
+                            ? "3-р улирал"
+                            : new Date(item.createdAt).getMonth() === 10 ||
+                              new Date(item.createdAt).getMonth() === 11 ||
+                              new Date(item.createdAt).getMonth() === 12
+                            ? "4-р улирал"
+                            : ""}
+                        </td>
+                        <td className="px-1 py-1 border">
+                          {new Date(item.createdAt).toLocaleString("en-US", {
+                            month: "short",
+                            day: "numeric",
+                          })}
+                        </td>
+                        <td className="px-1 py-1 border">
+                          {item.divisionName}
+                        </td>
+                        <td className="px-1 py-1 border">{item.unitName}</td>
+                        <td className="px-1 py-1 border">{item.firstName}</td>
+                        <td className="px-1 py-1 border">
+                          {item.complainType}
+                        </td>
+                        <td className="px-1 py-1 border">{item.description}</td>
+                        <td className="px-1 py-1 border">{item.rule}</td>
+                        <td className="px-1 py-1 border">{item.too}</td>
+                        {/* <td className="px-1 py-1 border">
                         <a
                           className="text-yellow-400 hover:text-black mx-2"
-                          data-id={tab}
+                          data-id={item}
                           onClick={() => {
-                            handleEdit(tab);
+                            handleEdit(item);
                           }}
                         >
                           <i className="bi bi-pencil-square"></i>
                         </a>
-                        <a
-                          data-id={tab.id}
-                          onClick={showModalDelete}
-                          className="text-rose-400 hover:text-black ml-2"
-                        >
-                          <i className="bi bi-trash-fill"></i>
-                        </a>
-                      </td>
-                    </tr>
-                  ))
-              )}
-            </tbody>
-          </table>
-        </div>
-        <div className="mt-3">
-          <Pagination
-            nPages={nPages}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-          />
+                      </td> */}
+                      </tr>
+                    ))
+                )}
+              </tbody>
+            </table>
+          </div>
+          <div className="mt-3">
+            <Pagination
+              nPages={nPages}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
+          </div>
         </div>
       </div>
-
-      {/* <div className="sm:flex items-center justify-between p-2">
-          <div className="flex flex-col justify-center w-3/4 max-w-sm space-y-3 md:flex-row md:w-full md:space-x-3 md:space-y-0">
-            <select value={selectedCategory} onChange={handleCategoryChange}>
-              <option value="">Бүгд</option>
-              {complainInfo?.map((el, i) => (
-                <option key={i} value={`${el.id}`}>
-                  {el.category}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div> */}
-
       <ToastContainer />
     </div>
   );

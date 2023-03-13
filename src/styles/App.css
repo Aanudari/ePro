@@ -379,7 +379,7 @@ input::-webkit-inner-spin-button {
 }
 
 .offcanvas-body {
-  background-color: #00b8b8 !important;
+  background-color: white;
 }
 
 .cus-height {
@@ -401,4 +401,10 @@ input::-webkit-inner-spin-button {
 html {
   overflow-y: scroll !important;
   overflow-y: overlay !important;
+}
+
+.custom-placeholder ::placeholder {
+  color: black !important;
+  font-size: 14px;
+  font-weight: 500;
 }

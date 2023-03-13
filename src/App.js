@@ -44,12 +44,6 @@ import ExamShow from "./pages/UserMainUI/ExamUser/core/ExamShow";
 import EditTrainRate from "./pages/training_raiting/EditTrainRate";
 import RatedUsers from "./pages/training_raiting/RatedUsers";
 import Rating from "./pages/rating/Rating";
-import CertainTemplate from "./pages/rating/belongTemplate/CertainTemplate";
-
-// fonts
-// import "src/fonts/Tahoma_Regular_font.ttf";
-// import "src/fonts/TAHOMA_0.TTF";
-// import "src/fonts/TAHOMAB0.TTF";
 import ChoosedTRate from "./pages/training_raiting/ChoosedTRate";
 import RatingReport from "./pages/training_raiting/RatingReport";
 import { useEffect, useState } from "react";
@@ -391,14 +385,6 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199, 196, 1, 4, 188]}>
                 <Rating />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/template"
-            element={
-              <ProtectedRoute allowedRoles={[199, 196, 1, 4, 188]}>
-                <CertainTemplate />
               </ProtectedRoute>
             }
           />

@@ -20,6 +20,7 @@ function DeleteConfirm({ setConfirm, deleteCat }) {
             <button
               onClick={() => {
                 deleteCat();
+                setConfirm(false);
               }}
               className="px-3 py-2 border rounded mt-2 mb-1 font-[500] text-[14px] text-gray-600 hover:bg-rose-500
           hover:text-white hover:!border-rose-500 transition-all"

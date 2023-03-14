@@ -24,7 +24,7 @@ function Rating() {
   ];
   return (
     <RatingLayout>
-      <div className="w-full h-full flex flex-col bg-gray-50">
+      <div className="w-full h-[calc(100vh-56px)] flex flex-col bg-gray-50">
         <div className="w-full h-14 px-3 flex gap-4 items-center justify-start bg-teal-500 shadow">
           {header.map((item, index) => {
             return (

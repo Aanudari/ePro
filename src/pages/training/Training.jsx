@@ -156,7 +156,7 @@ function Training() {
     var filteredData = filterByCategory(trains);
     setFilteredList(filteredData);
   }, [selectedCategory]);
-  console.log(trains);
+  console.log(JSON.stringify(category));
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <div>

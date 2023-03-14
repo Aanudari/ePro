@@ -4,6 +4,7 @@ import "./styles/core.scss";
 import "./styles/modal.scss";
 import "./styles/validation.css";
 import "./styles/cus_buttons.scss";
+import "./styles/template.scss";
 import "react-datepicker/dist/react-datepicker.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/core/Login";

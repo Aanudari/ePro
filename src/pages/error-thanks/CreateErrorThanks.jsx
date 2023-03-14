@@ -150,11 +150,13 @@ function CreateErrorThanks() {
   const handleAjiltanID = (item) => {
     setAjiltanID(item.id);
   };
-  const [num, setNum] = useState("");
 
   const handleNumChange = (event) => {
     const limit = 8;
-    setNum(event.target.value.slice(0, limit));
+    const inputNum = event.target.value.slice(0, limit);
+    if (inputNum.length <= limit) {
+      setPhoneNumber(inputNum);
+    }
   };
   const data = {
     department: `${depId}`,
@@ -231,7 +233,7 @@ function CreateErrorThanks() {
       setCheckEmpty9(true);
     } else if (tooVAl.length === 0) {
       setCheckEmpty8(true);
-    } else if (phoneNumber.length === 0 || phoneNumber.length < 8) {
+    } else if (phoneNumber.length === 0) {
       setCheckEmpty6(true);
     } else {
       console.log(data);
@@ -461,10 +463,9 @@ function CreateErrorThanks() {
                   </label>
                   <input
                     type="number"
-                    value={num}
+                    value={phoneNumber}
                     className="px-3 py-2 text-gray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
                     onChange={(e) => {
-                      setPhoneNumber(e.target.value);
                       setCheckEmpty6(false);
                       handleNumChange(e);
                     }}

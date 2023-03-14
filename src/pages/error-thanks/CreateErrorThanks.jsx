@@ -190,9 +190,8 @@ function CreateErrorThanks() {
     createdDate: `${dateTime1}`,
     phoneNo: `${phoneNumber}`,
     isSolved: `${isSolved}`,
-    solvedDesctiption: `${solvedDescription}`,
+    solvedDescription: `${solvedDescription}`,
   };
-
   const navigateIndex = (e) => {
     e.preventDefault();
     if (selectedAlba === null) {
@@ -220,7 +219,7 @@ function CreateErrorThanks() {
           accept: "text/plain",
         },
         url: `${process.env.REACT_APP_URL}/v1/Complain/add`,
-        data: JSON.stringify(data),
+        data: data,
       })
         .then((res) => {
           if (res.data.isSuccess === true) {
@@ -236,7 +235,6 @@ function CreateErrorThanks() {
         .catch((err) => console.log(err));
     }
   };
-
   const navigateIndex1 = (e) => {
     e.preventDefault();
     if (selectedAlba === null) {
@@ -264,7 +262,7 @@ function CreateErrorThanks() {
           accept: "text/plain",
         },
         url: `${process.env.REACT_APP_URL}/v1/Complain/add`,
-        data: JSON.stringify(data),
+        data: data,
       })
         .then((res) => {
           if (res.data.isSuccess === true) {

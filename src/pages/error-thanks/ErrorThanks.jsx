@@ -320,6 +320,9 @@ function ErrorThanks() {
     link.click();
     document.body.removeChild(link);
   };
+  const niitAldaa = filteredData?.filter((item) => {
+    if (item.complain === activeTab) return item;
+  });
 
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
@@ -621,7 +624,14 @@ function ErrorThanks() {
                     <th className="px-2 py-2 font-bold">Гомдлын дэлгэрэнгүй</th>
                     <th className="px-2 py-2 font-bold">Шийдвэрлэсэн эсэх</th>
                     <th className="px-2 py-2 font-bold">Шийдвэрлэсэн хариу</th>
-                    <th className="px-2 py-2 font-bold">Алдаа </th>
+                    <th className="px-2 py-2 font-bold">
+                      Алдаа
+                      <span className="px-2 py-1 text-xs rounded text-white  bg-purple-600 font-medium ml-2">
+                        {niitAldaa
+                          .map((item) => parseInt(item.too))
+                          .reduce((acc, val) => acc + val, 0)}
+                      </span>
+                    </th>
                     <th className="px-2 py-2 font-bold"></th>
                   </tr>
                 ) : activeTab === "2" ? (
@@ -645,7 +655,14 @@ function ErrorThanks() {
                     <th className="px-2 py-2 font-bold">Холбогдох дугаар </th>
                     <th className="px-2 py-2 font-bold">Гомдлын дэлгэрэнгүй</th>
                     <th className="px-2 py-2 font-bold">Шийдвэрлэсэн эсэх</th>
-                    <th className="px-2 py-2 font-bold">Алдаа </th>
+                    <th className="px-2 py-2 font-bold">
+                      Алдаа
+                      <span className="px-2 py-1 text-xs rounded text-white  bg-purple-600 font-medium ml-2">
+                        {niitAldaa
+                          .map((item) => parseInt(item.too))
+                          .reduce((acc, val) => acc + val, 0)}
+                      </span>
+                    </th>
                     <th className="px-2 py-2 font-bold"></th>
                   </tr>
                 ) : (
@@ -668,7 +685,14 @@ function ErrorThanks() {
                     <th className="px-2 py-2 font-bold">Төрөл</th>
                     <th className="px-2 py-2 font-bold">Дэлгэрэнгүй </th>
                     <th className="px-2 py-2 font-bold">Бүртгэгдсэн суваг</th>
-                    <th className="px-2 py-2 font-bold">Тоогоор </th>
+                    <th className="px-2 py-2 font-bold">
+                      Тоогоор
+                      <span className="px-2 py-1 text-xs rounded text-white  bg-purple-600 font-medium ml-2">
+                        {niitAldaa
+                          .map((item) => parseInt(item.too))
+                          .reduce((acc, val) => acc + val, 0)}
+                      </span>
+                    </th>
                     <th className="px-2 py-2 font-bold"></th>
                   </tr>
                 )}
@@ -753,7 +777,7 @@ function ErrorThanks() {
                             onClick={() => {
                               handleEdit(item);
                             }}
-                            class="px-2 py-2 bg-gray-200 uppercase focus:outline-none focus:text-indigo-600 text-xs w-full hover:bg-indigo-700 rounded-md cursor-pointer hover:text-white"
+                            className="px-2 py-2 bg-gray-200 uppercase focus:outline-none focus:text-indigo-600 text-xs w-full hover:bg-indigo-700 rounded-md cursor-pointer hover:text-white"
                           >
                             Edit
                           </button>
@@ -835,7 +859,7 @@ function ErrorThanks() {
                             onClick={() => {
                               handleEdit(item);
                             }}
-                            class="px-2 py-2 bg-gray-200 uppercase focus:outline-none focus:text-indigo-600 text-xs w-full hover:bg-indigo-700 rounded-md cursor-pointer hover:text-white"
+                            className="px-2 py-2 bg-gray-200 uppercase focus:outline-none focus:text-indigo-600 text-xs w-full hover:bg-indigo-700 rounded-md cursor-pointer hover:text-white"
                           >
                             Edit
                           </button>
@@ -899,7 +923,7 @@ function ErrorThanks() {
                             onClick={() => {
                               handleEdit(item);
                             }}
-                            class="px-2 py-2 bg-gray-200 uppercase focus:outline-none focus:text-indigo-600 text-xs w-full hover:bg-indigo-700 rounded-md cursor-pointer hover:text-white"
+                            className="px-2 py-2 bg-gray-200 uppercase focus:outline-none focus:text-indigo-600 text-xs w-full hover:bg-indigo-700 rounded-md cursor-pointer hover:text-white"
                           >
                             Edit
                           </button>

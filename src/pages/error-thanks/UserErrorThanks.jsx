@@ -71,6 +71,7 @@ function UserErrorThanks() {
     var filteredData = complain.filter((item) => item.complain === activeTab);
     setFilteredData(filteredData);
   }, [filteredData]);
+
   return (
     <UserLayout>
       <div className="max-w-screen-xl ml-auto mr-auto">

@@ -1,8 +1,14 @@
+import RatingBoard from "../controllers/RatingBoard";
+import RatingController from "../controllers/RatingController";
+import { useState } from "react";
+
 function RatingMain() {
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <div className="w-full bg-teal-500 p-3 flex gap-2 transition-all">
-      <div className="w-[calc(90%)] bg-white h-full rounded shadow shadow-inner"></div>
-      <div className="w-[calc(10%)] bg-white h-full rounded"></div>
+      <RatingBoard showModal={showModal} setShowModal={setShowModal} />
+      <RatingController setShowModal={setShowModal} />
     </div>
   );
 }

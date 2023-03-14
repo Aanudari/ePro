@@ -1,7 +1,7 @@
 function RatingController({ setShowModal }) {
   return (
     <div
-      className="max-w-[calc(9%)] min-w-[calc(9%)] h-full ml-2 bg-white shadow-sm rounded-md
+      className="max-w-[calc(9%)] min-w-[calc(9%)] h-[calc(100vh-140px)] ml-2 bg-white shadow-sm rounded-md
         px-4 py-3 flex flex-col justify-between"
     >
       <button

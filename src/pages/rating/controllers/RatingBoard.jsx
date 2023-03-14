@@ -54,17 +54,20 @@ function RatingBoard({ showModal, setShowModal }) {
   }));
 
   return (
-    <div className="w-[calc(90%)] bg-white h-full rounded shadow shadow-inner">
+    <div className="w-[calc(90%)] bg-white p-2 h-full">
       {showModal && <CreateRatingModal setShowModal={setShowModal} />}
-      <div className="p-3 h-full w-full rounded">
+      <div className="h-[calc(100vh-160px)] overflow-scroll py-2">
         {result.map((month, ind) => {
           return (
-            <div key={ind} className="w-full">
-              {month.items.length > 0 && (
-                <div className="text-gray-500 text-[13px] px-2 py-1 rounded bg-gray-300 w-[100px] font-[400] mb-1 text-gray-500">
-                  {month.monthYear}
-                </div>
-              )}
+            <div key={ind} className=" w-full my-2 px-3">
+              <div>
+                {month.items.length > 0 && (
+                  <div className="bg-gray-100 text-gray-500 px-3 py-1 rounded text-[12px] w-[150px] font-[500]">
+                    {month.monthYear}
+                  </div>
+                )}
+              </div>
+
               <div>
                 {month.items.map((item, index) => {
                   return (

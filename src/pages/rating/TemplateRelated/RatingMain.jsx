@@ -6,7 +6,7 @@ function RatingMain() {
   const [showModal, setShowModal] = useState(false);
 
   return (
-    <div className="w-full bg-teal-500 p-3 flex gap-2 transition-all">
+    <div className="w-full h-full bg-teal-500 p-3 flex gap-2 transition-all">
       <RatingBoard showModal={showModal} setShowModal={setShowModal} />
       <RatingController setShowModal={setShowModal} />
     </div>

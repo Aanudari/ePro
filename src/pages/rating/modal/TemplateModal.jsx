@@ -4,6 +4,7 @@ import axios from "axios";
 import { logout } from "../../../service/examService";
 import RatingCategoryAdd from "./RatingCategoryAdd";
 import bg from "../../../assets/background-blue.jpg";
+import TemplateCategoryCell from "../TemplateRelated/TemplateCategoryCell";
 function TemplateModal({ setShow, id, categoryName }) {
   const { activeMenu, TOKEN } = useStateContext();
   const [data, setData] = useState();
@@ -58,7 +59,7 @@ function TemplateModal({ setShow, id, categoryName }) {
             onClick={() => {
               setShowModal(true);
             }}
-            className="custom-btn min-w-[180px] bg-teal-500 hover:bg-teal-400 active:bg-teal-600 h-10 text-[14px] flex items-center justify-center"
+            className="custom-btn min-w-[80px] md:min-w-[120px] lg:min-w-[180px] bg-teal-500 hover:bg-teal-400 active:bg-teal-600 h-10 text-[14px] flex items-center justify-center"
           >
             <i className="bi bi-plus-circle-dotted text-lg mr-2"></i>
             Категори
@@ -83,16 +84,15 @@ function TemplateModal({ setShow, id, categoryName }) {
             <i className="bi bi-x-lg text-white text-2xl font-[500]"></i>
           </button>
         </div>
-        <div className="h-screen w-[900px] bg-white p-3">
+        <div className="h-screen w-[300px] md:w-[600px] lg:w-[900px] bg-white p-3">
           {data?.length > 0 ? (
             data.map((item, index) => {
               return (
-                <div
-                  className="w-full flex  justify-center"
+                <TemplateCategoryCell
                   key={JSON.stringify(item + index)}
-                >
-                  <div className=" h-full">{JSON.stringify(item)}</div>
-                </div>
+                  item={item}
+                  index={index}
+                />
               );
             })
           ) : (

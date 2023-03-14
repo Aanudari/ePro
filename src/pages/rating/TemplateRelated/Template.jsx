@@ -29,8 +29,8 @@ function Template() {
   useEffect(() => {
     tempAPI.getTemaplates().then((res) => {
       if (res.data.errCode === 401) {
-        logout();
         alert(res.data.resultMessage);
+        logout();
       } else {
         setTemps(res.data.templates);
       }

@@ -46,6 +46,7 @@ function Navigation() {
   };
   const [count, setCount] = useState(5);
   const [showCount, setShowCount] = useState(false);
+
   let logoutTimer = setTimeout(() => {
     localStorage.removeItem("loginTime");
     logout();

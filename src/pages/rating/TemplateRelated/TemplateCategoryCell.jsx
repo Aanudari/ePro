@@ -9,7 +9,7 @@ function TemplateCategoryCell({ item, index }) {
       <div className="grow basis-1/5 p-1 h-full w-3/4 bg-red-100">{item.categoryPoint + " " }</div>
       </div>
       <div className="w-full h-full bg-red-200">
-        {item.subCategories.map((element, i) => (
+        {item?.subCategories?.map((element, i) => (
           <TemplateSubCategoryCell
             element={element}
             key={JSON.stringify(item + i)}

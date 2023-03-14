@@ -74,7 +74,16 @@ function MainNavigation() {
                       navigate("/training");
                     }}
                   >
-                    Сургалтууд
+                    Онлайн сургалт
+                  </a>
+                </li>
+                <li>
+                  <a
+                    onClick={() => {
+                      navigate("/training");
+                    }}
+                  >
+                    Нийтлэл
                   </a>
                 </li>
                 <li>

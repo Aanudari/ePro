@@ -597,13 +597,10 @@ function ErrorThanks() {
         </div>
         <div className="overflow-x-auto">
           <div className="mt-4 bg-gray-100 flex items-center justify-center bg-gray-100 font-sans">
-            <table
-              id="table"
-              className="text-sm min-w-full break-words shadow-sm"
-            >
-              <thead className="bg-gray-600  uppercase text-sm leading-normal">
+            <table id="table" className=" min-w-full break-words shadow-sm">
+              <thead className="bg-gray-600  uppercase text-xs leading-normal">
                 {activeTab === "1" ? (
-                  <tr className="text-xs text-left text-white border-b">
+                  <tr className=" text-left text-white border-b">
                     <th className="px-2 py-2 font-bold">
                       <input
                         type="checkbox"
@@ -676,7 +673,7 @@ function ErrorThanks() {
                   </tr>
                 )}
               </thead>
-              <tbody className="bg-white text-sm">
+              <tbody className="bg-white text-xs">
                 {currentRecords.map(
                   (item) =>
                     activeTab === `${item.complain}` &&

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import DatePicker from "react-datepicker";
 import Navigation from "../../components/Navigation";
 import { useStateContext } from "../../contexts/ContextProvider";
@@ -35,23 +35,21 @@ function CreateErrorThanks() {
   const [checkEmpty7, setCheckEmpty7] = useState(false);
   const [checkEmpty8, setCheckEmpty8] = useState(false);
   const [checkEmpty9, setCheckEmpty9] = useState(false);
-  const [depId, setDepId] = useState("");
-  const [divId, setDivId] = useState("");
-  const [unitId, setUnitId] = useState("");
   const [alba, setAlba] = useState([]);
-  const [selectedOptionAlba, setSelectedOptionAlba] = useState(null);
   const [heltes, setHeltes] = useState([]);
-  const [selectedOptionHeltes, setSelectedOptionHeltes] = useState(null);
   const [negj, setNegj] = useState([]);
-  const [selectedOptionNegj, setSelectedOptionNegj] = useState(null);
   const [ajiltan, setAjiltan] = useState([]);
-  const [selectedOptionAjiltan, setSelectedOptionAjiltan] = useState(null);
+  const [selectedAlba, setSelectedAlba] = useState(null);
+  const [selectedHeltes, setSelectedHeltes] = useState(null);
+  const [selectedNegj, setSelectedNegj] = useState(null);
+  const [selectedAjiltan, setSelectedAjiltan] = useState(null);
   const [tooVAl, setTooVal] = useState("");
-  const [ajiltanID, setAjiltanID] = useState("");
   const [complainType, setComplainType] = useState("");
   const [rule, setRule] = useState("");
   const [desc, setDescription] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [isSolved, setIsSolved] = useState("");
+  const [solvedDescription, setsolvedDescription] = useState("");
   useEffect(() => {
     axios({
       method: "get",
@@ -72,85 +70,106 @@ function CreateErrorThanks() {
         }
       })
       .catch((err) => console.log(err));
-  }, [
-    selectedOptionAlba,
-    selectedOptionHeltes,
-    selectedOptionNegj,
-    selectedOptionAjiltan,
-  ]);
-  const handleHeltes = (item) => {
-    setDepId(item.id);
-    axios({
-      method: "get",
-      headers: {
-        Authorization: `${TOKEN}`,
-      },
-      url: `${process.env.REACT_APP_URL}/v1/ComplainReport/getListData/2?depId=${item.id}`,
-    })
-      .then((res) => {
-        if (res.data.isSuccess == true) {
-          setHeltes(res.data.listData);
-        }
-        if (
-          res.data.resultMessage === "Unauthorized" ||
-          res.data.resultMessage === "Input string was not in a correct format."
-        ) {
-          logout();
-        }
+  }, []);
+  useEffect(() => {
+    if (selectedAlba) {
+      axios({
+        method: "get",
+        headers: {
+          Authorization: `${TOKEN}`,
+        },
+        url: `${process.env.REACT_APP_URL}/v1/ComplainReport/getListData/2?depId=${selectedAlba.id}`,
       })
-      .catch((err) => console.log(err));
+        .then((res) => {
+          if (res.data.isSuccess == true) {
+            setHeltes(res.data.listData);
+          }
+          if (
+            res.data.resultMessage === "Unauthorized" ||
+            res.data.resultMessage ===
+              "Input string was not in a correct format."
+          ) {
+            logout();
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [selectedAlba]);
+  useEffect(() => {
+    if (selectedHeltes) {
+      axios({
+        method: "get",
+        headers: {
+          Authorization: `${TOKEN}`,
+        },
+        url: `${process.env.REACT_APP_URL}/v1/ComplainReport/getListData/3?depId=${selectedAlba.id}&divId=${selectedHeltes.id}`,
+      })
+        .then((res) => {
+          if (res.data.isSuccess == true) {
+            setNegj(res.data.listData);
+          }
+          if (
+            res.data.resultMessage === "Unauthorized" ||
+            res.data.resultMessage ===
+              "Input string was not in a correct format."
+          ) {
+            logout();
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [selectedHeltes]);
+  useEffect(() => {
+    if (selectedNegj) {
+      axios({
+        method: "get",
+        headers: {
+          Authorization: `${TOKEN}`,
+        },
+        url: `${process.env.REACT_APP_URL}/v1/ComplainReport/getListData/4?depId=${selectedAlba.id}&divId=${selectedHeltes.id}&unitId=${selectedNegj.id}`,
+      })
+        .then((res) => {
+          if (res.data.isSuccess == true) {
+            setAjiltan(res.data.listData);
+          }
+          if (
+            res.data.resultMessage === "Unauthorized" ||
+            res.data.resultMessage ===
+              "Input string was not in a correct format."
+          ) {
+            logout();
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [selectedNegj]);
+
+  const handleAlba = (item) => {
+    setSelectedAlba(item);
+    setSelectedHeltes(null);
+    setSelectedNegj(null);
+    setSelectedAjiltan(null);
+    setCheckEmpty1(false);
+  };
+
+  const handleHeltes = (item) => {
+    setSelectedHeltes(item);
+    setSelectedNegj(null);
+    setSelectedAjiltan(null);
+    setCheckEmpty2(false);
   };
   const handleNegj = (item) => {
-    setDivId(item.id);
-    axios({
-      method: "get",
-      headers: {
-        Authorization: `${TOKEN}`,
-      },
-      url: `${process.env.REACT_APP_URL}/v1/ComplainReport/getListData/3?depId=${depId}&divId=${item.id}`,
-    })
-      .then((res) => {
-        if (res.data.isSuccess == true) {
-          setNegj(res.data.listData);
-        }
-        if (
-          res.data.resultMessage === "Unauthorized" ||
-          res.data.resultMessage === "Input string was not in a correct format."
-        ) {
-          logout();
-        }
-      })
-      .catch((err) => console.log(err));
+    setSelectedNegj(item);
+    setSelectedAjiltan(null);
+    setCheckEmpty3(false);
   };
   const handleAjiltan = (item) => {
-    setUnitId(item.id);
-    axios({
-      method: "get",
-      headers: {
-        Authorization: `${TOKEN}`,
-      },
-      url: `${process.env.REACT_APP_URL}/v1/ComplainReport/getListData/4?depId=${depId}&divId=${divId}&unitId=${item.id}`,
-    })
-      .then((res) => {
-        if (res.data.isSuccess == true) {
-          setAjiltan(res.data.listData);
-        }
-        if (
-          res.data.resultMessage === "Unauthorized" ||
-          res.data.resultMessage === "Input string was not in a correct format."
-        ) {
-          logout();
-        }
-      })
-      .catch((err) => console.log(err));
+    setSelectedAjiltan(item);
+    setCheckEmpty4(false);
   };
   const handleToo = (item) => {
     setTooVal(item.value);
   };
-  const handleAjiltanID = (item) => {
-    setAjiltanID(item.id);
-  };
-
   const handleNumChange = (event) => {
     const limit = 8;
     const inputNum = event.target.value.slice(0, limit);
@@ -159,10 +178,10 @@ function CreateErrorThanks() {
     }
   };
   const data = {
-    department: `${depId}`,
-    divsionId: `${divId}`,
-    unit: `${unitId}`,
-    deviceId: `${ajiltanID}`,
+    department: `${selectedAlba?.id}`,
+    divsionId: `${selectedHeltes?.id}`,
+    unit: `${selectedNegj?.id}`,
+    deviceId: `${selectedAjiltan?.id}`,
     complain: `${typeid}`,
     complainType: `${complainType}`,
     description: `${desc}`,
@@ -170,21 +189,22 @@ function CreateErrorThanks() {
     too: `${tooVAl}`,
     createdDate: `${dateTime1}`,
     phoneNo: `${phoneNumber}`,
-    isSolved: "",
-    solvedDescription: "",
+    isSolved: `${isSolved}`,
+    solvedDesctiption: `${solvedDescription}`,
   };
+
   const navigateIndex = (e) => {
     e.preventDefault();
-    if (rule.length === 0) {
-      setCheckEmpty7(true);
-    } else if (depId.length === 0) {
+    if (selectedAlba === null) {
       setCheckEmpty1(true);
-    } else if (divId.length === 0) {
+    } else if (selectedHeltes === null) {
       setCheckEmpty2(true);
-    } else if (unitId.length === 0) {
+    } else if (selectedNegj === null) {
       setCheckEmpty3(true);
-    } else if (ajiltanID.length === 0) {
+    } else if (selectedAjiltan === null) {
       setCheckEmpty4(true);
+    } else if (rule.length === 0) {
+      setCheckEmpty7(true);
     } else if (complainType.length === 0) {
       setCheckEmpty5(true);
     } else if (desc.length === 0) {
@@ -216,16 +236,16 @@ function CreateErrorThanks() {
         .catch((err) => console.log(err));
     }
   };
+
   const navigateIndex1 = (e) => {
     e.preventDefault();
-
-    if (depId.length === 0) {
+    if (selectedAlba === null) {
       setCheckEmpty1(true);
-    } else if (divId.length === 0) {
+    } else if (selectedHeltes === null) {
       setCheckEmpty2(true);
-    } else if (unitId.length === 0) {
+    } else if (selectedNegj === null) {
       setCheckEmpty3(true);
-    } else if (ajiltanID.length === 0) {
+    } else if (selectedAjiltan === null) {
       setCheckEmpty4(true);
     } else if (complainType.length === 0) {
       setCheckEmpty5(true);
@@ -236,7 +256,6 @@ function CreateErrorThanks() {
     } else if (phoneNumber.length === 0) {
       setCheckEmpty6(true);
     } else {
-      console.log(data);
       axios({
         method: "post",
         headers: {
@@ -261,9 +280,11 @@ function CreateErrorThanks() {
         .catch((err) => console.log(err));
     }
   };
+
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <Navigation />
+
       <div className="px-4 py-4">
         <div className="sm:flex sm:items-center sm:justify-between">
           <div className="text-left">
@@ -288,11 +309,8 @@ function CreateErrorThanks() {
                 <Select
                   className="text-sm  w-full rounded-lg  outline-none focus:border-indigo-500"
                   options={alba}
-                  defaultValue={selectedOptionAlba}
-                  onChange={(item) => {
-                    handleHeltes(item);
-                    setCheckEmpty1(false);
-                  }}
+                  value={selectedAlba}
+                  onChange={handleAlba}
                   id={checkEmpty1 === true ? "border-red" : null}
                   noOptionsMessage={({ inputValue }) =>
                     !inputValue && "Сонголт хоосон байна"
@@ -308,11 +326,8 @@ function CreateErrorThanks() {
                 <Select
                   className="text-sm  w-full rounded-lg  outline-none focus:border-indigo-500"
                   options={heltes}
-                  defaultValue={selectedOptionHeltes}
-                  onChange={(item) => {
-                    handleNegj(item);
-                    setCheckEmpty2(false);
-                  }}
+                  value={selectedHeltes}
+                  onChange={handleHeltes}
                   id={checkEmpty2 === true ? "border-red" : null}
                   noOptionsMessage={({ inputValue }) =>
                     !inputValue && "Сонголт хоосон байна"
@@ -328,11 +343,8 @@ function CreateErrorThanks() {
                 <Select
                   className="text-sm  w-full rounded-lg  outline-none focus:border-indigo-500"
                   options={negj}
-                  defaultValue={selectedOptionNegj}
-                  onChange={(item) => {
-                    handleAjiltan(item);
-                    setCheckEmpty3(false);
-                  }}
+                  value={selectedNegj}
+                  onChange={handleNegj}
                   id={checkEmpty3 === true ? "border-red" : null}
                   noOptionsMessage={({ inputValue }) =>
                     !inputValue && "Сонголт хоосон байна"
@@ -348,11 +360,8 @@ function CreateErrorThanks() {
                 <Select
                   className="text-sm  w-full rounded-lg  outline-none focus:border-indigo-500"
                   options={ajiltan}
-                  defaultValue={selectedOptionAjiltan}
-                  onChange={(item) => {
-                    handleAjiltanID(item);
-                    setCheckEmpty4(false);
-                  }}
+                  value={selectedAjiltan}
+                  onChange={handleAjiltan}
                   id={checkEmpty4 === true ? "border-red" : null}
                   noOptionsMessage={({ inputValue }) =>
                     !inputValue && "Сонголт хоосон байна"
@@ -377,6 +386,25 @@ function CreateErrorThanks() {
                 />
               </div>
 
+              {typeid === "3" ? (
+                ""
+              ) : (
+                <div className="relative w-full mb-3">
+                  <label className="block font-bold  text-gray-600 text-sm  mb-2">
+                    Холбогдох дугаар
+                  </label>
+                  <input
+                    type="number"
+                    value={phoneNumber}
+                    className="px-3 py-2 text-gray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                    onChange={(e) => {
+                      setCheckEmpty6(false);
+                      handleNumChange(e);
+                    }}
+                    id={checkEmpty6 === true ? "border-red" : null}
+                  />
+                </div>
+              )}
               <div className="relative w-full mb-3">
                 {typeid === "3" ? (
                   <label className="block font-bold  text-gray-600 text-sm  mb-2">
@@ -459,22 +487,39 @@ function CreateErrorThanks() {
               ) : (
                 <div className="relative w-full mb-3">
                   <label className="block font-bold  text-gray-600 text-sm  mb-2">
-                    Холбогдох дугаар
+                    Шийдвэрлэсэн эсэх
                   </label>
-                  <input
-                    type="number"
-                    value={phoneNumber}
-                    className="px-3 py-2 text-gray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                  <textarea
+                    rows="3"
+                    className="px-3 py-3 text-gray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                    type="text"
                     onChange={(e) => {
-                      setCheckEmpty6(false);
-                      handleNumChange(e);
+                      setIsSolved(e.target.value);
                     }}
-                    id={checkEmpty6 === true ? "border-red" : null}
                   />
                 </div>
               )}
+
+              {typeid === "1" ? (
+                <div className="relative w-full mb-3">
+                  <label className="block font-bold  text-gray-600 text-sm  mb-2">
+                    Шийдвэрлэсэн хариу
+                  </label>
+                  <textarea
+                    rows="3"
+                    className="px-3 py-3 text-gray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                    type="text"
+                    onChange={(e) => {
+                      setsolvedDescription(e.target.value);
+                    }}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
+
           <div className="w-full sm:w-full px-2  ">
             <div className="relative w-full mb-3">
               {" "}
@@ -499,6 +544,7 @@ function CreateErrorThanks() {
               />
             </div>
           </div>
+
           <div className="col-span-5 text-right">
             <div className="inline-flex items-end">
               <button

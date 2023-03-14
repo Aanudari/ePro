@@ -52,7 +52,7 @@ function TemplateModal({ setShow, id, categoryName }) {
         style={{
           background: `url(${bg})`,
         }}
-        className="shrink w-[calc(100%)] h-[calc(100%)] bg-white flex flex-col items-center"
+        className="shrink w-[calc(100%)] h-[calc(100%)] bg-white flex flex-col items-center justify-center"
       >
         <div className="w-full min-h-[50px] bg-teal-600 flex justify-between items-center px-3  gap-2 relative">
           <button
@@ -85,6 +85,7 @@ function TemplateModal({ setShow, id, categoryName }) {
           </button>
         </div>
         <div className="h-screen w-[300px] md:w-[600px] lg:w-[900px] bg-white p-3">
+          <div className="text-gray-500 px-3 py-1 rounded text-[18px]"> Шалгалтын үнэлгээ </div>
           {data?.length > 0 ? (
             data.map((item, index) => {
               return (

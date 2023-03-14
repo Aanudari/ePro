@@ -9,14 +9,17 @@ function Rating() {
     {
       title: "Үнэлгээ",
       stats: 0,
+      icon: "bi-vector-pen",
     },
     {
       title: "Загвар",
       stats: 1,
+      icon: "bi-plus-circle",
     },
     {
       title: "Сэтгэгдэл",
       stats: 2,
+      icon: "bi-chat-left-quote",
     },
   ];
   return (
@@ -30,8 +33,9 @@ function Rating() {
                 onClick={() => {
                   setStats(item.stats);
                 }}
-                className="custom-btn btn-13 w-[100px]"
+                className={`custom-btn btn-13 w-[120px]`}
               >
+                <i className={`bi ${item.icon} mr-1`}></i>
                 <span className="font-[500]">{item.title}</span>
               </button>
             );

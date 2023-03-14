@@ -28,7 +28,7 @@ function ErrorThanks() {
   const [showDelete, setShowDelete] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [trigger, setTrigger] = useState(false);
-  const [id, setId] = useState();
+
   const [activeTab, setActiveTab] = useState("1");
   const [selectedIds, setSelectedIds] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -92,7 +92,6 @@ function ErrorThanks() {
   const nPages = Math.ceil(filteredData.length / recordsPerPage);
   const showModalDelete = (e) => {
     setShowDelete(true);
-    setId(e.currentTarget.dataset.id);
   };
   const hideModalDelete = () => setShowDelete(null);
   const [selectedYear, setSelectedYear] = useState("");
@@ -485,7 +484,6 @@ function ErrorThanks() {
                     }
                   >
                     {item.category}{" "}
-                    {/* {activeTab === item.id ? `${filteredData.length}` : ""} */}
                   </p>
                 </li>
               ))}
@@ -627,10 +625,10 @@ function ErrorThanks() {
                     <th className="px-2 py-2 font-bold">Шийдвэрлэсэн эсэх</th>
                     <th className="px-2 py-2 font-bold">Шийдвэрлэсэн хариу</th>
                     <th className="px-2 py-2 font-bold">Алдаа </th>
-                    {/* <th className="px-2 py-2 font-bold"></th> */}
+                    <th className="px-2 py-2 font-bold"></th>
                   </tr>
                 ) : activeTab === "2" ? (
-                  <tr className="text-xs text-left  bg-gray-200 border-b">
+                  <tr className="text-xs text-left text-white border-b">
                     <th className="px-2 py-2 font-bold">
                       <input
                         type="checkbox"
@@ -651,10 +649,10 @@ function ErrorThanks() {
                     <th className="px-2 py-2 font-bold">Гомдлын дэлгэрэнгүй</th>
                     <th className="px-2 py-2 font-bold">Шийдвэрлэсэн эсэх</th>
                     <th className="px-2 py-2 font-bold">Алдаа </th>
-                    {/* <th className="px-2 py-2 font-bold"></th> */}
+                    <th className="px-2 py-2 font-bold"></th>
                   </tr>
                 ) : (
-                  <tr className="text-xs text-left  bg-gray-200 border-b">
+                  <tr className="text-xs text-left text-white border-b">
                     <th className="px-2 py-2 font-bold">
                       <input
                         type="checkbox"
@@ -674,7 +672,7 @@ function ErrorThanks() {
                     <th className="px-2 py-2 font-bold">Дэлгэрэнгүй </th>
                     <th className="px-2 py-2 font-bold">Бүртгэгдсэн суваг</th>
                     <th className="px-2 py-2 font-bold">Тоогоор </th>
-                    {/* <th className="px-2 py-2 font-bold"></th> */}
+                    <th className="px-2 py-2 font-bold"></th>
                   </tr>
                 )}
               </thead>
@@ -684,11 +682,8 @@ function ErrorThanks() {
                     activeTab === `${item.complain}` &&
                     (item.complain === "1" ? (
                       <tr
-                        onClick={() => {
-                          handleEdit(item);
-                        }}
                         key={item.id}
-                        className="border-b border-gray-200 hover:bg-gray-200 cursor-pointer"
+                        className="border-b border-gray-200 hover:bg-gray-200"
                       >
                         <td className="px-1 py-1 border">
                           <input
@@ -755,24 +750,21 @@ function ErrorThanks() {
                           )}
                         </td>
                         <td className="px-1 py-1 border">{item.too}</td>
-                        {/* <td className="px-1 py-1 border">
-                        <button
-                          data-id={item}
-                          onClick={() => {
-                            handleEdit(item);
-                          }}
-                          className="px-2 py-1 bg-orange-500 rounded-md text-white outline-none focus:ring-4 shadow-lg "
-                        >
-                          <i className="bi bi-pencil-square" />
-                        </button>
-                      </td> */}
+                        <td className="px-1 py-1 border">
+                          <button
+                            data-id={item}
+                            onClick={() => {
+                              handleEdit(item);
+                            }}
+                            class="px-2 py-2 bg-gray-200 uppercase focus:outline-none focus:text-indigo-600 text-xs w-full hover:bg-indigo-700 rounded-md cursor-pointer hover:text-white"
+                          >
+                            Edit
+                          </button>
+                        </td>
                       </tr>
                     ) : item.complain === "2" ? (
                       <tr
                         key={item.id}
-                        onClick={() => {
-                          handleEdit(item);
-                        }}
                         className="border-b border-gray-200 hover:bg-gray-100"
                       >
                         <td className="px-1 py-1 border">
@@ -840,24 +832,21 @@ function ErrorThanks() {
                             )}
                           </td> */}
                         <td className="px-1 py-1 border">{item.too}</td>
-                        {/* <td className="px-1 py-1 border">
-                        <a
-                          className="text-yellow-400 hover:text-black mx-2"
-                          data-id={item}
-                          onClick={() => {
-                            handleEdit(item);
-                          }}
-                        >
-                          <i className="bi bi-pencil-square"></i>
-                        </a>
-                      </td> */}
+                        <td className="px-1 py-1 border">
+                          <button
+                            data-id={item}
+                            onClick={() => {
+                              handleEdit(item);
+                            }}
+                            class="px-2 py-2 bg-gray-200 uppercase focus:outline-none focus:text-indigo-600 text-xs w-full hover:bg-indigo-700 rounded-md cursor-pointer hover:text-white"
+                          >
+                            Edit
+                          </button>
+                        </td>
                       </tr>
                     ) : (
                       <tr
                         key={item.id}
-                        onClick={() => {
-                          handleEdit(item);
-                        }}
                         className="border-b border-gray-200 hover:bg-gray-100"
                       >
                         <td className="px-1 py-1 border">
@@ -907,17 +896,17 @@ function ErrorThanks() {
                         <td className="px-1 py-1 border">{item.description}</td>
                         <td className="px-1 py-1 border">{item.rule}</td>
                         <td className="px-1 py-1 border">{item.too}</td>
-                        {/* <td className="px-1 py-1 border">
-                        <a
-                          className="text-yellow-400 hover:text-black mx-2"
-                          data-id={item}
-                          onClick={() => {
-                            handleEdit(item);
-                          }}
-                        >
-                          <i className="bi bi-pencil-square"></i>
-                        </a>
-                      </td> */}
+                        <td className="px-1 py-1 border">
+                          <button
+                            data-id={item}
+                            onClick={() => {
+                              handleEdit(item);
+                            }}
+                            class="px-2 py-2 bg-gray-200 uppercase focus:outline-none focus:text-indigo-600 text-xs w-full hover:bg-indigo-700 rounded-md cursor-pointer hover:text-white"
+                          >
+                            Edit
+                          </button>
+                        </td>
                       </tr>
                     ))
                 )}

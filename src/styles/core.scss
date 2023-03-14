@@ -426,6 +426,14 @@ select::-ms-expand {
   animation: from-left2;
   animation-duration: 0.5s;
 }
+.from-left3{
+  animation: from-left3;
+  animation-duration: 0.5s;
+}
+.from-left4{
+  animation: from-left4;
+  animation-duration: 0.5s;
+}
 .to-left {
   animation: to-left;
   animation-duration: 0.5s;
@@ -454,6 +462,22 @@ select::-ms-expand {
   }
   to {
     width: 600px;
+  }
+}
+@keyframes from-left3{
+  from{
+    width: 0;
+  }
+  to{
+    width: 80%;
+  }
+}
+@keyframes from-left4{
+  from{
+    width: 0;
+  }
+  to{
+    width: 20%;
   }
 }
 

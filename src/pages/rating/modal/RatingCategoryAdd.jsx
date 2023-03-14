@@ -1,7 +1,14 @@
 import { useStateContext } from "../../../contexts/ContextProvider";
 import { useState } from "react";
 import axios from "axios";
-function RatingCategoryAdd({ showModal, setShowModal, id }) {
+import { logout } from "../../../service/examService";
+function RatingCategoryAdd({
+  showModal,
+  setShowModal,
+  id,
+  trigger,
+  setTrigger,
+}) {
   const { activeMenu, TOKEN } = useStateContext();
   const [children, setChildren] = useState([]);
   const [catName, setCatName] = useState("");
@@ -54,7 +61,12 @@ function RatingCategoryAdd({ showModal, setShowModal, id }) {
       data: schema,
     })
       .then((res) => {
-        console.log(res.data);
+        if (res.data.errorCode == 401) {
+          logout();
+        } else {
+          setTrigger(!trigger);
+          setShowModal(false);
+        }
       })
       .catch((err) => {
         console.log(err);

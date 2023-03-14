@@ -390,9 +390,7 @@ input::-webkit-inner-spin-button {
   border-radius: 0 !important;
   border: none !important;
 }
-.modal-body {
-  /* background-color: #00b8b8 !important; */
-}
+
 .modal-footer {
   background-color: #009797 !important;
   border-radius: 0 !important;

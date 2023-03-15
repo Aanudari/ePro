@@ -145,14 +145,13 @@ function RatingCategoryAdd({
             </button>
           </div>
           <div className="flex gap-4">
-            {total == 100 && (
-              <button
-                onClick={handleSubmit}
-                className="custom-btn bg-teal-500 hover:bg-teal-600 active:bg-teal-400 text-[13px]"
-              >
-                Хадгалах
-              </button>
-            )}
+            <button
+              onClick={handleSubmit}
+              className="custom-btn bg-teal-500 hover:bg-teal-600 active:bg-teal-400 text-[13px]"
+            >
+              Хадгалах
+            </button>
+
             <button
               onClick={() => {
                 setShowModal(false);
@@ -180,7 +179,7 @@ function RatingCategoryAdd({
         <div className="h-full w-full rounded-b-lg p-3">
           {" "}
           <form
-            className="h-[480px]  relative overflow-scroll"
+            className="h-[400px]  relative overflow-scroll"
             onSubmit={handleSubmit}
           >
             {renderChildren()}

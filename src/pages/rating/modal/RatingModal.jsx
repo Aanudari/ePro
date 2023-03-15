@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import bg from "../../../assets/bg.jpg";
 import SelectSubCategoryCell from "../TemplateRelated/SelectSubCategoryCell";
+import SelectCategoryCell from "../TemplateRelated/SelectCategoryCell";
 function RatingModal({ showModal, setShowModal, ratingId, deviceId }) {
   const { activeMenu, TOKEN } = useStateContext();
   const [data, setData] = useState();
@@ -27,7 +28,61 @@ function RatingModal({ showModal, setShowModal, ratingId, deviceId }) {
       })
       .catch((err) => console.log(err));
   }, []);
-  // console.log(categoryList);
+  const [list, setList] = useState([]);
+  const final = {
+    ratingId: ratingId,
+    deviceId: deviceId,
+    categoryList: [],
+  };
+  // console.log(final);
+  useEffect(() => {
+    let raw = [];
+
+    for (let index = 0; index < categoryList?.length; index++) {
+      const element = categoryList[index];
+      let cat = [];
+      let temp = {
+        categoryId: element.categoryId,
+        subCategories: cat,
+      };
+      for (let j = 0; j < element.subCategories.length; j++) {
+        const el = element.subCategories[j];
+        let tempo = {
+          subCategoryId: el.subCategoryId,
+          score: el.subCatUserScore,
+        };
+        cat.push(tempo);
+      }
+      raw.push(temp);
+    }
+    setList(raw);
+  }, []);
+
+  // setList(raw);
+  const handleSubmit = () => {
+    // console.log(JSON.stringify(raw));
+  };
+  // const handleSubmit = () => {
+  //       axios({
+  //     method: "post",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: TOKEN,
+  //     },
+  //     url: `${process.env.REACT_APP_URL}/v1/Rating/role/${temp[0].id}`,
+  //     data: time,
+  //   })
+  //     .then((res) => {
+  //       if (res.data.isSuccess === false) {
+  //         alert(res.data.resultMessage);
+  //       }
+  //       setStatusData(res.data.result);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }
+
   return (
     <div
       className={`fixed ${
@@ -36,53 +91,50 @@ function RatingModal({ showModal, setShowModal, ratingId, deviceId }) {
         bg-black bg-opacity-50 flex justify-center items-center z-20 h-full
         `}
     >
-      <div className="shrink w-[calc(100%)] h-[calc(100%)] bg-white flex flex-col items-center ">
+      <div
+        style={{ background: `url(${bg})` }}
+        className="shrink w-[calc(100%)] h-[calc(100%)] bg-white flex flex-col items-center "
+      >
         <div className="w-full min-h-[56px] bg-teal-600 flex justify-between items-center px-3  gap-2 relative">
           <div className="flex h-full items-center gap-2">
             <span className="font-[500] text-[15px] text-white">
               Үнэлгээ хийх цэс
             </span>{" "}
           </div>
-          <button
-            onClick={() => {
-              setShowModal(false);
-            }}
-            className="w-[20px] h-full "
-          >
-            <i className="bi bi-x-lg text-white text-2xl font-[500] "></i>
-          </button>
+          <div className="flex h-full flex gap-5  py-[6px]">
+            <button
+              onClick={() => {
+                handleSubmit();
+              }}
+              className=" custom-btn
+             btn-20 active:mt-[2px]"
+            >
+              Хадгалах
+            </button>
+            <button
+              onClick={() => {
+                setShowModal(false);
+              }}
+              className="w-[20px] h-full "
+            >
+              <i className="bi bi-x-lg text-white text-2xl font-[500] "></i>
+            </button>
+          </div>
         </div>
-        <div
-          style={{ background: `url(${bg})` }}
-          className="w-full h-full flex items-center flex-col"
-        >
-          <div className="w-[900px] bg-white h-full p-3">
+        <div className="w-full h-full flex items-center flex-col overflow-scroll justify-center">
+          <div className="w-[900px] px-3 pt-5 h-full">
             {categoryList?.map((category, index) => {
-              // console.log(category);
               return (
-                <div key={JSON.stringify(category + index)} className="mb-2">
-                  <div className="w-full rounded-t-lg bg-teal-600 px-3 py-2 flex justify-between text-white ">
-                    <div className="text-[15px] font-[500] py-1">
-                      {category.categoryName}
-                    </div>
-                    <div>{category.catMaxScore}%</div>
-                  </div>
-                  <div className="min-h-[100px] bg-gray-200 rounded-b-lg p-2">
-                    {category.subCategories.map((element, i) => {
-                      return (
-                        <SelectSubCategoryCell
-                          i={i}
-                          element={element}
-                          key={i}
-                        />
-                      );
-                    })}
-                  </div>
-                </div>
+                <SelectCategoryCell
+                  key={JSON.stringify(category + index)}
+                  category={category}
+                  index={index}
+                />
               );
             })}
           </div>
         </div>
+        {/* <div className="h-16 glass w-full">Хадгалах</div> */}
       </div>
     </div>
   );

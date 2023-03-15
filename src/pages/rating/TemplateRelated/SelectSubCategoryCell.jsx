@@ -1,4 +1,5 @@
-function SelectSubCategoryCell({ i, element }) {
+import { useState } from "react";
+function SelectSubCategoryCell({ i, element, handleInputChange }) {
   const container = [
     {
       value: 0,
@@ -12,6 +13,15 @@ function SelectSubCategoryCell({ i, element }) {
     };
     container.push(arr);
   }
+  const options = container.map((item, index) => {
+    return (
+      <option key={index} value={`${item.value}`} className={""}>
+        {item.point}
+      </option>
+    );
+  });
+  const [pointValue, setPointValue] = useState("0");
+  // console.log(pointValue);
   return (
     <div
       key={i}
@@ -21,20 +31,16 @@ function SelectSubCategoryCell({ i, element }) {
         {element.subCategoryName}
       </div>
       <div className="h-full flex items-start">
-        <select name="" id="" className="w-[80px] ">
-          {container.map((item, index) => {
-            return (
-              <option value={`${item.value}`} className={""}>
-                {item.point}
-              </option>
-            );
-          })}
+        <select
+          onChange={(e) => {
+            setPointValue(e.target.value);
+            handleInputChange(i, e);
+          }}
+          value={pointValue}
+          className="w-[80px] "
+        >
+          {options}
         </select>
-        {/* <input
-            type="text"
-            className="w-[calc(30px)] text-center text-[13px]"
-          /> */}
-        {/* <span className="text-[13px]">%</span> */}
       </div>
     </div>
   );

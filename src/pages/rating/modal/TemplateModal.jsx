@@ -93,6 +93,8 @@ function TemplateModal({ setShow, id, categoryName }) {
                   key={JSON.stringify(item + index)}
                   item={item}
                   index={index}
+                  trigger={trigger}
+                  setTrigger={setTrigger}
                 />
               );
             })

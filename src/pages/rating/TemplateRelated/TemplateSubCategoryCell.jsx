@@ -1,10 +1,11 @@
 function TemplateSubCategoryCell({ element }) {
-  return <div className="flex">
-            <div className="text-center text-base from-left3 bg-white w-4/5 h-full  flex flex-col justify-between  text-gray-500 px-3 py-1 shadow text-[15px]">{element.subcategoryName}</div> 
-            <div className="text-center text-base from-left4 bg-white w-1/5 h-full  flex flex-col justify-between  text-gray-500 px-3 py-1 shadow text-[15px]">{element.subcategoryPoint + "%"}</div> 
-         </div>
-  
 
-}
+  return <div className="border py-1 px-2 flex justify-between items-center bg-white rounded mt-[2px]">
+            <div className="text-[13px] font-[400] w-[calc(90%)]">{element.subcategoryName}</div> 
+            <div className="h-full flex items-start"><div className="bg-[#50a3a2] p-2 rounded text-white w-[calc(40px)]"> {element.subcategoryPoint + "%"} </div></div> 
+         </div>
+
+
+}  
 
 export default TemplateSubCategoryCell;

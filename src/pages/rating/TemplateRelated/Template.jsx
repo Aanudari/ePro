@@ -6,6 +6,7 @@ import axios from "axios";
 import { useStateContext } from "../../../contexts/ContextProvider";
 import DeleteConfirm from "../../main-exam/modal/DeleteComfirm";
 import TemplateModal from "../modal/TemplateModal";
+import bg from "../../../assets/bg.jpg";
 
 function Template() {
   const [temps, setTemps] = useState();
@@ -148,7 +149,10 @@ function Template() {
   const [showModal, setShowModal] = useState(false);
   const [templateId, setTemplateId] = useState();
   return (
-    <div className="p-3 w-full h-full">
+    <div
+      style={{ background: `url(${bg})` }}
+      className="p-3 w-full h-full bg-gray-200"
+    >
       {showConfirm && (
         <DeleteConfirm
           setConfirm={setShowConfirm}
@@ -173,7 +177,7 @@ function Template() {
           >
             <div className="group">
               <input
-                className={"!text-[14px] font-[500]"}
+                className={"!text-[14px] font-[500] glass text-white"}
                 onChange={(e) => {
                   setValue(e.target.value);
                 }}
@@ -194,7 +198,10 @@ function Template() {
             )}
           </form>
         </div>
-        <div className="h-[480px] shadow-inner rounded w-full rounded-b p-2 flex flex-col items-center overflow-scroll">
+        <div
+          // style={{ background: `url(${bg})` }}
+          className="h-[480px] glass shadow-inner rounded w-full rounded-b p-2 flex flex-col items-center overflow-scroll"
+        >
           {temps?.length > 0 ? (
             temps.map((element, index) => {
               // console.log(element);

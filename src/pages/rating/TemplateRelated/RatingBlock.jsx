@@ -3,6 +3,7 @@ import Offcanvas from "react-bootstrap/Offcanvas";
 import { useStateContext } from "../../../contexts/ContextProvider";
 import axios from "axios";
 import { logout } from "../../../service/examService";
+import RatingModal from "../modal/RatingModal";
 function RatingBlock({ item }) {
   const { TOKEN } = useStateContext();
   const [ratingId, setRatingId] = useState(0);
@@ -33,6 +34,8 @@ function RatingBlock({ item }) {
       .catch((err) => console.log(err));
   }, [ratingId]);
   // console.log(data);
+  const [showModal, setShowModal] = useState(false);
+  const [deviceId, setDeviceId] = useState(0);
   return (
     <>
       <div
@@ -45,11 +48,11 @@ function RatingBlock({ item }) {
         <div className="py-3 px-4 w-full flex justify-between items-start ">
           <div className="font-[500] h-full items-center ">
             {item.ratingName}
-            <span className="absolute px-2 py-1 text-[11px] rounded bottom-2 left-5 bg-gray-500 text-white font-[400]">
+            <span className="absolute px-2 py-1 text-[11px] rounded bottom-2 left-5 bg-gray-500 text-white font-[500]">
               {item.createdBy}
             </span>
           </div>
-          <div className="font-[500] absolute top-[15px] right-1/4 w-[70px] flex h-[40px] items-center justify-between">
+          <div className="font-[500] absolute top-[15px] right-[calc(10%)] w-[70px] flex h-[40px] items-center justify-between">
             {score === Infinity ? 0 : score}%
             {score === 100 ? (
               <div
@@ -61,7 +64,7 @@ function RatingBlock({ item }) {
             ) : (
               <div
                 className="transition-all z-10 rounded-full py-[5px] px-[9px] 
-                  bg-gray-400  cursor-pointer"
+                  bg-gray-500  cursor-pointer"
               >
                 <i className="bi bi-arrow-repeat text-xl text-white mb-[2px]"></i>
               </div>
@@ -80,22 +83,43 @@ function RatingBlock({ item }) {
       </div>
 
       <Offcanvas placement="end" show={show} onHide={handleClose}>
+        {showModal && (
+          <RatingModal
+            setShowModal={setShowModal}
+            showModal={showModal}
+            deviceId={deviceId}
+            ratingId={ratingId}
+          />
+        )}
+
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>
-            <span className="font-[500] text-white">
-              Үнэлгээнд хамаарагдах:{" "}
-            </span>
+            <div className="font-[500] text-white text-[16px] container-header-text">
+              {item.ratingName}:{" "}
+            </div>
           </Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
           {data?.map((user, index) => {
             return (
               <div
+                onClick={() => {
+                  setShowModal(true);
+                  setDeviceId(user.deviceId);
+                }}
                 key={index}
-                className="btn-13 py-2 px-3 hover:shadow  text-gray-600 w-full my-1 rounded relative cursor-pointer hover:text-white mt-1 flex flex-col"
+                className="btn-20 py-2 px-3 hover:shadow text-[13px] flex justify-between items-center text-gray-600 w-full my-1 rounded relative cursor-pointer hover:text-white mt-1 "
               >
-                <span className="font-[400]">{user.deviceName}</span>
-                <span className="font-[400]">{user.unitName}</span>
+                <div className="flex flex-col">
+                  <span className="font-[400]">{user.deviceName}</span>
+                  <span className="font-[400]">{user.unitName}</span>
+                </div>
+                <div>
+                  {" "}
+                  <span className="font-[400]">
+                    {user.score == "" ? "0" : user.score}%
+                  </span>
+                </div>
               </div>
             );
           })}
@@ -106,5 +130,3 @@ function RatingBlock({ item }) {
 }
 
 export default RatingBlock;
-
-function ContainerCanvas() {}

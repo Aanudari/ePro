@@ -506,3 +506,10 @@ html {
 
   border-bottom: 5px solid #fd1f1f;
 }
+
+.container-header-text {
+  width: 300px; /* set a fixed width for the container */
+  overflow: hidden; /* hide any overflowing content */
+  white-space: nowrap; /* prevent line breaks */
+  text-overflow: ellipsis; /* show ellipsis when text overflows */
+}

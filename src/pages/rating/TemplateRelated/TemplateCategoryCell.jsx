@@ -1,7 +1,7 @@
 import TemplateSubCategoryCell from "./TemplateSubCategoryCell";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useStateContext } from "./contexts/ContextProvider";
+// import { useStateContext } from "./contexts/ContextProvider";
 
 
   function TemplateCategoryCell({ item, index }) {

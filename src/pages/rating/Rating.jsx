@@ -1,5 +1,5 @@
 import RatingLayout from "./RatingLayout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Template from "./TemplateRelated/Template";
 import RatingMain from "./TemplateRelated/RatingMain";
 import RatingComment from "./TemplateRelated/RatingComment";

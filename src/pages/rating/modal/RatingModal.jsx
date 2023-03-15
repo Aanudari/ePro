@@ -35,27 +35,32 @@ function RatingModal({ showModal, setShowModal, ratingId, deviceId }) {
     categoryList: [],
   };
   // console.log(final);
-  let raw = [];
-  for (let index = 0; index < categoryList?.length; index++) {
-    const element = categoryList[index];
-    let cat = [];
-    let temp = {
-      categoryId: element.categoryId,
-      subCategories: cat,
-    };
-    for (let j = 0; j < element.subCategories.length; j++) {
-      const el = element.subCategories[j];
-      let tempo = {
-        subCategoryId: el.subCategoryId,
-        score: el.subCatUserScore,
+  useEffect(() => {
+    let raw = [];
+
+    for (let index = 0; index < categoryList?.length; index++) {
+      const element = categoryList[index];
+      let cat = [];
+      let temp = {
+        categoryId: element.categoryId,
+        subCategories: cat,
       };
-      cat.push(tempo);
+      for (let j = 0; j < element.subCategories.length; j++) {
+        const el = element.subCategories[j];
+        let tempo = {
+          subCategoryId: el.subCategoryId,
+          score: el.subCatUserScore,
+        };
+        cat.push(tempo);
+      }
+      raw.push(temp);
     }
-    raw.push(temp);
-  }
+    setList(raw);
+  }, []);
+
   // setList(raw);
   const handleSubmit = () => {
-    console.log(JSON.stringify(raw));
+    // console.log(JSON.stringify(raw));
   };
   // const handleSubmit = () => {
   //       axios({
@@ -96,7 +101,7 @@ function RatingModal({ showModal, setShowModal, ratingId, deviceId }) {
               Үнэлгээ хийх цэс
             </span>{" "}
           </div>
-          <div className="flex h-full flex gap-5 p-1">
+          <div className="flex h-full flex gap-5  py-[6px]">
             <button
               onClick={() => {
                 handleSubmit();

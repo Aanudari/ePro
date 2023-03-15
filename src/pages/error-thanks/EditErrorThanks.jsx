@@ -61,6 +61,8 @@ function EditErrorThanks() {
     setRule(data.rule);
     setDescription(data.description);
     setPhoneNumber(data.phoneNo);
+    setIsSolved(data.isSolved);
+    setsolvedDescription(data.solvedDescription);
   }, []);
   let chek = [...complainInfo].find((c) => c.id === data.complain);
   const handleToo = (item) => {
@@ -68,7 +70,10 @@ function EditErrorThanks() {
   };
   const handleNumChange = (event) => {
     const limit = 8;
-    setPhoneNumber(event.target.value.slice(0, limit));
+    const inputNum = event.target.value.slice(0, limit);
+    if (inputNum.length <= limit) {
+      setPhoneNumber(inputNum);
+    }
   };
   const editData = {
     id: `${data.id}`,
@@ -118,7 +123,6 @@ function EditErrorThanks() {
         .catch((err) => console.log(err));
     }
   };
-
   const navigateIndex1 = (e) => {
     e.preventDefault();
     if (complainType.length === 0) {
@@ -296,6 +300,7 @@ function EditErrorThanks() {
 
                 <textarea
                   rows="3"
+                  defaultValue={data.isSolved}
                   className="px-3 py-3 text-gray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
                   type="text"
                   onChange={(e) => {
@@ -312,6 +317,7 @@ function EditErrorThanks() {
                   </label>
                   <textarea
                     rows="3"
+                    defaultValue={data.solvedDescription}
                     className="px-3 py-3 text-gray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
                     type="text"
                     onChange={(e) => {

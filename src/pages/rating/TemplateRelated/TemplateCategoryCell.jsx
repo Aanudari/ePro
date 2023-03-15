@@ -30,44 +30,18 @@ import axios from "axios";
     <div className="mt-1 justify-center flex-col shadow">
       <div className="flex justify-center bg-gray-100 hover:bg-gray-200 shadow ">
         <div
-          className="w-4/5 from-left3 border text-center font-bold text-lg  h-full p-1 justify-between"
+          className="w-full rounded-t-lg bg-teal-600 px-3 py-2 flex justify-between text-white"
           onClick={handleClick}
         >
-          {item.categoryName}{" "}
-        </div>
-        <div className="w-1/5 from-left4 border text-center font-bold text-lg  h-full p-1 justify-between">
-          {" "}
-          {item.categoryPoint + " %"}{" "}
-          <i
-            className="bi bi-three-dots-vertical text-lg ml-7 relative"
-            onClick={showOptions}
-          >
-            {showOption && (
-              <>
-                <div className="absolute -left-5 z-50">
-                  <div className="bg-gray-200 hover:bg-gray-300 w-200 p-2 border"> 
-                    <div className="flex"  onClick={()=>{setDeleteCategory(!deleteCategory)}} /*дарангуут delete category geed api duudah uuniig usestate ашиглана. */> 
-                      <i class="bi bi-trash inline-block mr-2"></i>
-                        Устгах
-                    </div>
-                    
-                  </div>
-                  <div className="bg-gray-200 hover:bg-gray-300 w-200 p-2 border">
-                    <div className="flex" /* onClick={} */>     
-                      <i class="bi bi-plus-circle inline-block mr-2 left-0"></i>
-                        Нэмэх 
-                    </div>
-                    
-                     </div>
-                </div>
-              </>
-            )}
-          </i>
+          <div className="text-[15px] font-[500] py-1">
+            {item.categoryName}
+          </div>
+          {item.categoryPoint + " %"}
         </div>
       </div>
 
       {showSub && (
-        <div className="w-full h-full ">
+        <div className="min-h-[50px] bg-gray-200 rounded-b-lg p-2">
           {item?.subCategories?.map((element, i) => (
             <TemplateSubCategoryCell
               element={element}

@@ -3,7 +3,7 @@ import { useState } from "react";
 import AllEmployeeSelect from "../../main-exam/modal/AllEmployeeSelect";
 import TemplateSelectModal from "./TemplateSelect";
 import axios from "axios";
-function CreateRatingModal({ setShowModal }) {
+function CreateRatingModal({ setShowModal, trigger, setTrigger }) {
   const { activeMenu, TOKEN } = useStateContext();
   const [showUsers, setShowUsers] = useState(false);
   const [allEmployee, setAllEmployee] = useState();
@@ -43,6 +43,7 @@ function CreateRatingModal({ setShowModal }) {
           alert(res.data.resultMessage);
         }
         setShowModal(false);
+        setTrigger(!trigger);
       })
       .catch((err) => {
         console.log(err);

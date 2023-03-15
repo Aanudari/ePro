@@ -8,6 +8,7 @@ import moment from "moment";
 function RatingBoard({ showModal, setShowModal }) {
   const { TOKEN } = useStateContext();
   const [data, setData] = useState();
+  const [trigger, setTrigger] = useState(false);
   useEffect(() => {
     axios({
       method: "get",
@@ -25,7 +26,7 @@ function RatingBoard({ showModal, setShowModal }) {
         }
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [trigger]);
 
   // create an object for each month, with an empty array as the value
   const months = {};
@@ -55,7 +56,13 @@ function RatingBoard({ showModal, setShowModal }) {
 
   return (
     <div className="w-[calc(90%)] bg-white p-2 h-full">
-      {showModal && <CreateRatingModal setShowModal={setShowModal} />}
+      {showModal && (
+        <CreateRatingModal
+          setTrigger={setTrigger}
+          trigger={trigger}
+          setShowModal={setShowModal}
+        />
+      )}
       <div className="h-[calc(100vh-160px)] overflow-scroll py-2">
         {result.map((month, ind) => {
           return (

@@ -85,7 +85,6 @@ function TemplateModal({ setShow, id, categoryName }) {
           </button>
         </div>
         <div className="h-screen w-[300px] md:w-[600px] lg:w-[900px] bg-white p-3">
-          {/* <div className="text-gray-500 px-3 py-1 rounded text-[18px]"> Шалгалтын үнэлгээ </div> */}
           {data?.length > 0 ? (
             data.map((item, index) => {
               return (

@@ -217,7 +217,7 @@ function Template() {
                       setTemplateId(element.templateId);
                       setShowModal(true);
                     }}
-                    className="border-t border-b border-l border-r custom-btn btn-13 border-black shadow bg-white w-[800px]
+                    className="border-t border-b border-l border-r btn-20 rounded px-3 py-2 shadow text-gray-600 hover:text-white w-[800px]
                 relative parent"
                   >
                     {collected.includes(element.templateId) ? (

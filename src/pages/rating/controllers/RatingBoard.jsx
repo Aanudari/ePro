@@ -24,7 +24,7 @@ function RatingBoard({ showModal, setShowModal, data, setTrigger, trigger }) {
   }));
 
   return (
-    <div className="w-[calc(90%)] bg-white p-2 h-full">
+    <div className="w-[calc(90%)] bg-white p-2 h-full rounded">
       {showModal && (
         <CreateRatingModal
           setTrigger={setTrigger}

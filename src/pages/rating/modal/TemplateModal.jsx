@@ -84,24 +84,26 @@ function TemplateModal({ setShow, id, categoryName }) {
             <i className="bi bi-x-lg text-white text-2xl font-[500]"></i>
           </button>
         </div>
-        <div className="h-screen w-[300px] md:w-[600px] lg:w-[900px] bg-white p-3">
-          {data?.length > 0 ? (
-            data.map((item, index) => {
-              return (
-                <TemplateCategoryCell
-                  key={JSON.stringify(item + index)}
-                  item={item}
-                  index={index}
-                  trigger={trigger}
-                  setTrigger={setTrigger}
-                />
-              );
-            })
-          ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <img src="/notfound.webp" alt="" className="h-[calc(50%)]" />
-            </div>
-          )}
+        <div className="w-full h-[calc(100vh-100px)]  overflow-scroll flex justify-center">
+          <div className="  w-[300px] md:w-[600px]  lg:w-[900px] p-3">
+            {data?.length > 0 ? (
+              data.map((item, index) => {
+                return (
+                  <TemplateCategoryCell
+                    key={JSON.stringify(item + index)}
+                    item={item}
+                    index={index}
+                    trigger={trigger}
+                    setTrigger={setTrigger}
+                  />
+                );
+              })
+            ) : (
+              <div className="w-full bg-white h-full flex items-center justify-center">
+                <img src="/notfound.webp" alt="" className="h-[calc(40%)]" />
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

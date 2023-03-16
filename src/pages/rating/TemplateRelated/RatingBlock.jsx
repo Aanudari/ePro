@@ -4,14 +4,15 @@ import { useStateContext } from "../../../contexts/ContextProvider";
 import axios from "axios";
 import { logout } from "../../../service/examService";
 import RatingModal from "../modal/RatingModal";
-function RatingBlock({ item }) {
+function RatingBlock({ item, trigger, setTrigger }) {
   const { TOKEN } = useStateContext();
   const [ratingId, setRatingId] = useState(0);
   const [data, setData] = useState();
   const score =
-    (parseInt(item.adminInfo.totalUser) * 100) /
-    parseInt(item.adminInfo.ratedUser);
+    (parseInt(item.adminInfo.ratedUser) * 100) /
+    parseInt(item.adminInfo.totalUser);
   const [show, setShow] = useState(false);
+  const [recallList, setRecallList] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -32,10 +33,11 @@ function RatingBlock({ item }) {
         }
       })
       .catch((err) => console.log(err));
-  }, [ratingId]);
+  }, [ratingId, recallList]);
   // console.log(data);
   const [showModal, setShowModal] = useState(false);
   const [deviceId, setDeviceId] = useState(0);
+  const [certainUser, setCertainUser] = useState();
   return (
     <>
       <div
@@ -53,7 +55,7 @@ function RatingBlock({ item }) {
             </span>
           </div>
           <div className="font-[500] absolute top-[15px] right-[calc(10%)] w-[70px] flex h-[40px] items-center justify-between">
-            {score === Infinity ? 0 : score}%
+            {score === Infinity ? 0 : Math.round(score)}%
             {score === 100 ? (
               <div
                 className="transition-all z-10 rounded-full py-[5px] px-[9px] 
@@ -89,6 +91,11 @@ function RatingBlock({ item }) {
             showModal={showModal}
             deviceId={deviceId}
             ratingId={ratingId}
+            trigger={trigger}
+            setTrigger={setTrigger}
+            recallList={recallList}
+            setRecallList={setRecallList}
+            user={certainUser}
           />
         )}
 
@@ -101,15 +108,28 @@ function RatingBlock({ item }) {
         </Offcanvas.Header>
         <Offcanvas.Body>
           {data?.map((user, index) => {
+            // console.log(user);
             return (
               <div
                 onClick={() => {
                   setShowModal(true);
                   setDeviceId(user.deviceId);
+                  setCertainUser(user);
                 }}
                 key={index}
-                className="btn-20 py-2 px-3 hover:shadow text-[13px] flex justify-between items-center text-gray-600 w-full my-1 rounded relative cursor-pointer hover:text-white mt-1 "
+                className={`${
+                  user.score == "" ? "bg-gray-300" : "btn-20 "
+                } py-2 px-3 hover:shadow text-[13px] flex justify-between items-center text-gray-600 
+                w-full my-1 rounded relative cursor-pointer hover:text-white mt-1 `}
               >
+                {user.score == "100" && (
+                  <div
+                    className="absolute w-[25px] left-[-11px] rounded-full text-white h-[25px]  flex items-center justify-center 
+                bg-[#FF7F50]"
+                  >
+                    <i className="bi bi-check2-circle text-md"></i>
+                  </div>
+                )}
                 <div className="flex flex-col">
                   <span className="font-[400]">{user.deviceName}</span>
                   <span className="font-[400]">{user.unitName}</span>

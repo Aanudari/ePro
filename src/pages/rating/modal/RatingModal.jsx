@@ -3,12 +3,22 @@ import { logout } from "../../../service/examService";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import bg from "../../../assets/bg.jpg";
-import SelectSubCategoryCell from "../TemplateRelated/SelectSubCategoryCell";
 import SelectCategoryCell from "../TemplateRelated/SelectCategoryCell";
-function RatingModal({ showModal, setShowModal, ratingId, deviceId }) {
+function RatingModal({
+  showModal,
+  setShowModal,
+  ratingId,
+  deviceId,
+  trigger,
+  setTrigger,
+  recallList,
+  setRecallList,
+  user,
+}) {
   const { activeMenu, TOKEN } = useStateContext();
   const [data, setData] = useState();
   const [categoryList, setCategoryList] = useState();
+  const [recall, setRecall] = useState(false);
   useEffect(() => {
     axios({
       method: "get",
@@ -27,62 +37,74 @@ function RatingModal({ showModal, setShowModal, ratingId, deviceId }) {
         }
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [trigger, recall]);
   const [list, setList] = useState([]);
+  let raw = [];
+
+  for (let index = 0; index < categoryList?.length; index++) {
+    const element = categoryList[index];
+    let cat = [];
+    let temp = {
+      categoryId: element.categoryId,
+      subCategories: cat,
+    };
+    for (let j = 0; j < element.subCategories.length; j++) {
+      const el = element.subCategories[j];
+      let tempo = {
+        subCategoryId: el.subCategoryId,
+        score: el.subCatUserScore == "" ? "0" : el.subCatUserScore,
+      };
+      cat.push(tempo);
+    }
+    raw.push(temp);
+  }
+  const [children, setChildren] = useState([]);
+
   const final = {
     ratingId: ratingId,
     deviceId: deviceId,
-    categoryList: [],
+    categoryList: children,
   };
-  // console.log(final);
-  useEffect(() => {
-    let raw = [];
-
-    for (let index = 0; index < categoryList?.length; index++) {
-      const element = categoryList[index];
-      let cat = [];
-      let temp = {
-        categoryId: element.categoryId,
-        subCategories: cat,
-      };
-      for (let j = 0; j < element.subCategories.length; j++) {
-        const el = element.subCategories[j];
-        let tempo = {
-          subCategoryId: el.subCategoryId,
-          score: el.subCatUserScore,
-        };
-        cat.push(tempo);
-      }
-      raw.push(temp);
-    }
-    setList(raw);
-  }, []);
-
-  // setList(raw);
   const handleSubmit = () => {
-    // console.log(JSON.stringify(raw));
+    // console.log(final);
+    axios({
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: TOKEN,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/RatingNew/doRating`,
+      data: final,
+    })
+      .then((res) => {
+        if (res.data.errorCode == 401) {
+          logout();
+        } else {
+          setTrigger(!trigger);
+          setRecall(!recall);
+          setRecallList(!recallList);
+          setShowModal(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
-  // const handleSubmit = () => {
-  //       axios({
-  //     method: "post",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: TOKEN,
-  //     },
-  //     url: `${process.env.REACT_APP_URL}/v1/Rating/role/${temp[0].id}`,
-  //     data: time,
-  //   })
-  //     .then((res) => {
-  //       if (res.data.isSuccess === false) {
-  //         alert(res.data.resultMessage);
-  //       }
-  //       setStatusData(res.data.result);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }
-
+  const handleSelect = (cat, sub, value) => {
+    let newChildren = children.length === 0 ? raw : children;
+    let temp = newChildren.map((element, index) => {
+      return element.categoryId == cat
+        ? {
+            ...element,
+            subCategories: element.subCategories.map((el, i) => {
+              return el.subCategoryId == sub ? { ...el, score: value } : el;
+            }),
+          }
+        : element;
+    });
+    setChildren(temp);
+  };
+  // console.log(user);
   return (
     <div
       className={`fixed ${
@@ -96,9 +118,12 @@ function RatingModal({ showModal, setShowModal, ratingId, deviceId }) {
         className="shrink w-[calc(100%)] h-[calc(100%)] bg-white flex flex-col items-center "
       >
         <div className="w-full min-h-[56px] bg-teal-600 flex justify-between items-center px-3  gap-2 relative">
-          <div className="flex h-full items-center gap-2">
-            <span className="font-[500] text-[15px] text-white">
-              Үнэлгээ хийх цэс
+          <div className="flex flex-col h-full items-start justify-center">
+            <span className="font-[500] text-[13px] text-white m-0">
+              Ажлийн байр : {user.unitName}
+            </span>{" "}
+            <span className="font-[500] text-[13px] text-white m-0">
+              {user.deviceName}
             </span>{" "}
           </div>
           <div className="flex h-full flex gap-5  py-[6px]">
@@ -129,6 +154,7 @@ function RatingModal({ showModal, setShowModal, ratingId, deviceId }) {
                   key={JSON.stringify(category + index)}
                   category={category}
                   index={index}
+                  handleSelect={handleSelect}
                 />
               );
             })}

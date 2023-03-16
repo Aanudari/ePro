@@ -50,6 +50,8 @@ function RatingBoard({ showModal, setShowModal, data, setTrigger, trigger }) {
                     <RatingBlock
                       item={item}
                       key={JSON.stringify(item + index)}
+                      trigger={trigger}
+                      setTrigger={setTrigger}
                     />
                   );
                 })}

@@ -1,12 +1,5 @@
 import SelectSubCategoryCell from "./SelectSubCategoryCell";
-import { useState } from "react";
-function SelectCategoryCell({ category, index }) {
-  const [children, setChildren] = useState(category);
-  const handleInputChange = (index, event) => {
-    let newChildren = children;
-    newChildren.subCategories[index].subCatUserScore = event.target.value;
-    setChildren(newChildren);
-  };
+function SelectCategoryCell({ category, index, handleSelect }) {
   return (
     <div className="mb-2">
       <div className="w-full rounded-t-lg bg-teal-600 px-3 py-2 flex justify-between text-white ">
@@ -22,7 +15,8 @@ function SelectCategoryCell({ category, index }) {
               i={i}
               element={element}
               key={i}
-              handleInputChange={handleInputChange}
+              handleSelect={handleSelect}
+              catIndex={category.categoryId}
             />
           );
         })}

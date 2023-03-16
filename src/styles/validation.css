@@ -1,7 +1,68 @@
 .custom-validation {
-    border-bottom: 1px solid red !important;
+  border-bottom: 1px solid red !important;
 }
 .custom-validation2 {
-    border-bottom: 1px solid red !important;
-    color: red;
+  border-bottom: 1px solid red !important;
+  color: red;
+}
+
+.popover-arrow {
+  display: hidden !important;
+}
+
+.custom-select-container {
+  position: relative;
+  width: 200px;
+  font-size: 16px;
+}
+
+.custom-select {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.arrow {
+  width: 0;
+  height: 0;
+  border-top: 6px solid #000;
+  border-right: 6px solid transparent;
+  border-left: 6px solid transparent;
+  transition: transform 0.2s ease-in-out;
+}
+
+.arrow.open {
+  transform: rotate(180deg);
+}
+
+.selected-option {
+  margin-right: 10px;
+}
+
+.options-container {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.option {
+  display: block;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.option:hover {
+  background-color: #f5f5f5;
 }

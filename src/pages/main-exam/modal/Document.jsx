@@ -134,6 +134,7 @@ function Document({ setShowReport, id }) {
         console.log(err);
       });
   };
+  // console.log(users);
   return (
     <div
       className={`fixed ${
@@ -192,35 +193,42 @@ function Document({ setShowReport, id }) {
                       }
                       className={`py-2 px-3 w-full ${
                         user.status == "C"
-                          ? "bg-emerald-500 cursor-pointer hover:bg-emerald-600 transition-all shadow-emerald-500"
+                          ? "custom-btn !bg-emerald-500"
                           : user.status == "P"
-                          ? "bg-teal-700"
-                          : "bg-teal-500"
-                      } border-b mb-1 shadow-sm hover:border-b hover:shadow-lg hover:border-teal-400
+                          ? "custom-btn btn-20 cursor-auto"
+                          : "custom-btn btn-20 cursor-auto"
+                      } border-b mb-1 hover:text-gray-700 shadow-sm hover:border-b hover:shadow-lg hover:border-teal-400
                     flex justify-between items-center`}
                     >
-                      <div className="flex flex-col h-full justify-between  ">
+                      <div className="flex flex-col h-full justify-between  pl-4 relative">
+                        {user.continueCount != "" && (
+                          <div className="p-2 text-[13px] rounded-full bg-rose-500 font-[400] absolute left-[-26px] top-[12px] w-[20px] h-[20px] text-white flex items-center justify-center">
+                            {user.continueCount}
+                          </div>
+                        )}
                         <span className="text-[13px] font-[400] m-0">
                           {user.deviceName}
                         </span>
-                        <span className="text-white rounded-full text-[12px] py-1 mr-1 font-[400] m-0">
+                        <span className="rounded-full text-[12px] py-1 mr-1 font-[400] m-0">
                           {user.unitName}
                         </span>
                       </div>
 
                       {user.status == "Not started" ? (
-                        <span className="flex items-center justify-center bg-red-400 text-white px-3 rounded-full text-[13px] h-7  font-[400]">
-                          Шалгалт өгөөгүй
+                        <span className="flex items-center justify-center bg-rose-500  px-3 rounded-full text-[13px] h-7  font-[400]">
+                          <i className="bi bi-exclamation-circle text-md mr-2"></i>{" "}
+                          Өгөөгүй
                         </span>
                       ) : user.status == "C" ? (
                         <div className="flex">
-                          <span className="flex items-center justify-center bg-white text-black px-3 rounded-full text-[13px] h-7  font-[400]">
+                          <span className="flex items-center justify-center px-3 rounded-full text-[13px] h-7  font-[400]">
                             {user.score}%
                           </span>
                         </div>
                       ) : (
-                        <span className="flex items-center justify-center bg-amber-600 text-white px-3 rounded-full text-[13px] h-7  font-[400]">
-                          Шалгалт эхлүүлсэн ...
+                        <span className="flex items-center justify-center bg-emerald-600 px-[11px] rounded-full text-[13px] h-7  font-[400]">
+                          <i className="bi bi-exclamation-circle  text-md mr-2"></i>{" "}
+                          Эхлүүлсэн
                         </span>
                       )}
                     </div>
@@ -230,15 +238,15 @@ function Document({ setShowReport, id }) {
                           setUserID(user.deviceId);
                           setConfirm(true);
                         }}
-                        className="bg-rose-500 transition-all hover:bg-rose-600 cursor-pointer border-l mb-1 w-[50px] flex items-center justify-center border-b"
+                        className="bg-rose-500 rounded transition-all hover:bg-rose-600 cursor-pointer border-l mb-1 w-[50px] flex items-center justify-center border-b"
                       >
-                        <i className="bi bi-eraser-fill text-xl text-white mr-2"></i>
+                        <i className="bi bi-eraser-fill text-xl text-white "></i>
                       </div>
                     )}
                     {confirm && (
                       <div
                         className="bg-gray-200 rounded-t absolute h-full w-full top-0 left-0 flex items-center
-                        justify-center !shadow-none "
+                        justify-center !shadow-none z-20"
                       >
                         <div
                           className="w-[500px] h-[200px] bg-white rounded flex flex-col

@@ -31,7 +31,7 @@ function RatingMain() {
   }, [trigger]);
   // console.log(data);
   return (
-    <div className="w-full h-[calc(100vh-112px)] bg-teal-500 p-3 flex gap-2 transition-all">
+    <div className="w-full h-[calc(100vh-112px)] bg-teal-500 p-3 flex gap-2 transition-all ">
       <RatingBoard
         showModal={showModal}
         setShowModal={setShowModal}

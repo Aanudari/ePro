@@ -38,6 +38,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
   const [certainUser, setCertainUser] = useState();
   return (
     <>
+      <div></div>
       <div
         onClick={() => {
           setRatingId(item.ratingId);
@@ -107,7 +108,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
         </Offcanvas.Header>
         <Offcanvas.Body>
           {data?.map((user, index) => {
-            // console.log(user);
+            console.log(user);
             return (
               <div
                 onClick={() => {

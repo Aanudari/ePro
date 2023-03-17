@@ -13,7 +13,6 @@ function RatingBlock({ item, trigger, setTrigger }) {
     parseInt(item.adminInfo.totalUser);
   const [show, setShow] = useState(false);
   const [recallList, setRecallList] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   useEffect(() => {
@@ -34,7 +33,6 @@ function RatingBlock({ item, trigger, setTrigger }) {
       })
       .catch((err) => console.log(err));
   }, [ratingId, recallList]);
-  // console.log(data);
   const [showModal, setShowModal] = useState(false);
   const [deviceId, setDeviceId] = useState(0);
   const [certainUser, setCertainUser] = useState();
@@ -45,10 +43,11 @@ function RatingBlock({ item, trigger, setTrigger }) {
           setRatingId(item.ratingId);
           handleShow();
         }}
-        className=" btn-13 hover:shadow text-gray-600 w-full my-1 rounded relative cursor-pointer hover:text-white"
+        className="btn-13 hover:shadow text-gray-600 w-full my-1
+         rounded relative cursor-pointer hover:text-white"
       >
         <div className="py-3 px-4 w-full flex justify-between items-start ">
-          <div className="font-[500] h-full items-center ">
+          <div className="font-[500] h-full items-center w-[calc(70%)] container-header-text2">
             {item.ratingName}
             <span className="absolute px-2 py-1 text-[11px] rounded bottom-2 left-5 bg-gray-500 text-white font-[500]">
               {item.createdBy}

@@ -3,7 +3,13 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import Button from "react-bootstrap/Button";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Popover from "react-bootstrap/Popover";
-function SelectSubCategoryCell({ i, element, handleSelect, catIndex }) {
+function SelectSubCategoryCell({
+  i,
+  element,
+  handleSelect,
+  catIndex,
+  collector,
+}) {
   const container = [
     {
       value: 0,
@@ -38,38 +44,41 @@ function SelectSubCategoryCell({ i, element, handleSelect, catIndex }) {
     parseInt((element.subCatUserScore * 100) / element.subCatMaxScore)
   );
   return (
-    <div
-      key={i}
-      className="border py-1 px-2 flex justify-between items-center bg-white rounded mt-[2px]"
-    >
-      <div className="text-[13px] font-[400] w-[calc(90%)] ">
-        {element.subCategoryName}
-      </div>
-
-      <div className="h-full flex items-start flex-col gap-1">
-        <select
-          onChange={(e) => {
-            setPointValue(e.target.value);
-            setProgress((e.target.value * 100) / element.subCatMaxScore);
-            handleSelect(catIndex, element.subCategoryId, e.target.value);
+    <div className="w-full rounded mt-2">
+      <div className="w-full h-1 rounded-t bg-gray-300 relative">
+        <div
+          style={{
+            width: `${
+              Math.round(progress) == undefined ? 0 : Math.round(progress)
+            }%`,
           }}
-          value={pointValue}
-          className="w-[80px] "
-        >
-          {options}
-        </select>
-        {/* <OverlayTrigger trigger="click" placement="right" overlay={popover}>
+          className={`h-1 bg-teal-500 rounded-t absolute`}
+        ></div>
+      </div>
+      <div
+        key={i}
+        className="border py-1 px-2 flex justify-between items-center bg-white rounded-b"
+      >
+        <div className="text-[13px] font-[400] w-[calc(90%)] ">
+          {element.subCategoryName}
+        </div>
+
+        <div className="h-full flex items-start flex-col gap-1">
+          <select
+            onChange={(e) => {
+              setPointValue(e.target.value);
+              setProgress((e.target.value * 100) / element.subCatMaxScore);
+              handleSelect(catIndex, element.subCategoryId, e.target.value);
+              collector(e.target.value, element.subCategoryId);
+            }}
+            value={pointValue}
+            className="w-[80px] "
+          >
+            {options}
+          </select>
+          {/* <OverlayTrigger trigger="click" placement="right" overlay={popover}>
           <button className=" btn-20 h-10">click</button>
         </OverlayTrigger> */}
-        <div className="w-[80px] h-2 rounded bg-gray-300 relative">
-          <div
-            style={{
-              width: `${
-                Math.round(progress) == undefined ? 0 : Math.round(progress)
-              }%`,
-            }}
-            className={`h-2 bg-emerald-600 rounded absolute`}
-          ></div>
         </div>
       </div>
     </div>

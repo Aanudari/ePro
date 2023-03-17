@@ -1,16 +1,12 @@
-import { useEffect, useState } from "react";
 import CreateRatingModal from "../modal/CreateRatingModal";
-import axios from "axios";
-import { useStateContext } from "../../../contexts/ContextProvider";
-import { logout } from "../../../service/examService";
 import RatingBlock from "../TemplateRelated/RatingBlock";
 import moment from "moment";
+import { useStateContext } from "../../../contexts/ContextProvider";
 function RatingBoard({ showModal, setShowModal, data, setTrigger, trigger }) {
   const months = {};
-  let date = "01/11/1992"; // string
   for (let i = 0; i < 12; i++) {
-    const month = moment(new Date(date)).month(i).format("MMMM");
-    const year = moment(new Date(date)).year(2023).month(i).format("YYYY");
+    const month = moment().month(i).format("MMMM");
+    const year = moment().year(2023).month(i).format("YYYY");
     months[`${month} ${year}`] = [];
   }
   for (let index = 0; index < data?.length; index++) {
@@ -22,9 +18,13 @@ function RatingBoard({ showModal, setShowModal, data, setTrigger, trigger }) {
     monthYear,
     items,
   }));
-
+  const { activeMenu } = useStateContext();
   return (
-    <div className="w-[calc(90%)] bg-white p-2 h-full rounded">
+    <div
+      className={`w-[calc(100vw-${
+        activeMenu ? "400px" : "200px"
+      })] bg-white p-2 h-full rounded`}
+    >
       {showModal && (
         <CreateRatingModal
           setTrigger={setTrigger}
@@ -32,7 +32,7 @@ function RatingBoard({ showModal, setShowModal, data, setTrigger, trigger }) {
           setShowModal={setShowModal}
         />
       )}
-      <div className="h-[calc(100vh-160px)] overflow-scroll py-2">
+      <div className="h-[calc(100vh-160px)] overflow-scroll py-2 ">
         {result.map((month, ind) => {
           return (
             <div key={ind} className=" w-full my-2 px-3">

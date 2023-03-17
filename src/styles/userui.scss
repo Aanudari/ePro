@@ -513,3 +513,9 @@ html {
   white-space: nowrap; /* prevent line breaks */
   text-overflow: ellipsis; /* show ellipsis when text overflows */
 }
+
+.container-header-text2 {
+  overflow: hidden; /* hide any overflowing content */
+  white-space: nowrap; /* prevent line breaks */
+  text-overflow: ellipsis; /* show ellipsis when text overflows */
+}

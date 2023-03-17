@@ -29,6 +29,7 @@ function RatingMain() {
       })
       .catch((err) => console.log(err));
   }, [trigger]);
+  // console.log(data);
   return (
     <div className="w-full h-[calc(100vh-112px)] bg-teal-500 p-3 flex gap-2 transition-all">
       <RatingBoard

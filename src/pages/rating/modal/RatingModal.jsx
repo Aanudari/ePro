@@ -120,10 +120,14 @@ function RatingModal({
         <div className="w-full min-h-[56px] bg-teal-600 flex justify-between items-center px-3  gap-2 relative">
           <div className="flex flex-col h-full items-start justify-center">
             <span className="font-[500] text-[13px] text-white m-0">
-              Ажлийн байр : {user.unitName}
+              <i className="font-[500] text-[13px] text-white m-0">
+                {user.deviceName}
+              </i>
             </span>{" "}
-            <span className="font-[500] text-[13px] text-white m-0">
-              {user.deviceName}
+            <span className="m-0">
+              <i className="font-[500] text-[13px] text-white m-0">
+                Ажлийн байр : {user.unitName}
+              </i>
             </span>{" "}
           </div>
           <div className="flex h-full flex gap-5  py-[6px]">

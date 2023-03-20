@@ -4,6 +4,8 @@ import { useStateContext } from "../../../contexts/ContextProvider";
 import axios from "axios";
 import { logout } from "../../../service/examService";
 import RatingModal from "../modal/RatingModal";
+import CommentModal from "../modal/CommentModal";
+
 function RatingBlock({ item, trigger, setTrigger }) {
   const { TOKEN } = useStateContext();
   const [ratingId, setRatingId] = useState(0);
@@ -36,6 +38,8 @@ function RatingBlock({ item, trigger, setTrigger }) {
   const [showModal, setShowModal] = useState(false);
   const [deviceId, setDeviceId] = useState(0);
   const [certainUser, setCertainUser] = useState();
+  const [modalShow, setModalShow] = useState(false);
+  const [conversationId, setConversationId] = useState("0");
   return (
     <>
       <div
@@ -97,7 +101,13 @@ function RatingBlock({ item, trigger, setTrigger }) {
             user={certainUser}
           />
         )}
-
+        {modalShow && (
+          <CommentModal
+            modalShow={modalShow}
+            setModalShow={setModalShow}
+            conversationId={conversationId}
+          />
+        )}
         <Offcanvas.Header closeButton>
           <Offcanvas.Title>
             <div className="font-[500] text-white text-[16px] container-header-text">
@@ -109,35 +119,46 @@ function RatingBlock({ item, trigger, setTrigger }) {
           {data?.map((user, index) => {
             console.log(user);
             return (
-              <div
-                onClick={() => {
-                  setShowModal(true);
-                  setDeviceId(user.deviceId);
-                  setCertainUser(user);
-                }}
-                key={index}
-                className={`${
-                  user.score == "" ? "bg-gray-300" : "btn-20 "
-                } py-2 px-3 hover:shadow text-[13px] flex justify-between items-center text-gray-600 
+              <div key={JSON.stringify(user + index)} className="flex h-16">
+                <div
+                  onClick={() => {
+                    setShowModal(true);
+                    setDeviceId(user.deviceId);
+                    setCertainUser(user);
+                  }}
+                  key={index}
+                  className={`${
+                    user.score == "" ? "bg-gray-300" : "btn-20 "
+                  } py-2 px-3 hover:shadow text-[13px] flex justify-between items-center text-gray-600 
                 w-full my-1 rounded relative cursor-pointer hover:text-white mt-1 `}
-              >
-                {user.score == "100" && (
-                  <div
-                    className="absolute w-[25px] left-[-11px] rounded-full text-white h-[25px]  flex items-center justify-center 
+                >
+                  {user.score == "100" && (
+                    <div
+                      className="absolute w-[25px] left-[-11px] rounded-full text-white h-[25px]  flex items-center justify-center 
                 bg-[#FF7F50]"
-                  >
-                    <i className="bi bi-check2-circle text-md"></i>
+                    >
+                      <i className="bi bi-check2-circle text-md"></i>
+                    </div>
+                  )}
+                  <div className="flex flex-col">
+                    <span className="font-[400]">{user.deviceName}</span>
+                    <span className="font-[400]">{user.unitName}</span>
                   </div>
-                )}
-                <div className="flex flex-col">
-                  <span className="font-[400]">{user.deviceName}</span>
-                  <span className="font-[400]">{user.unitName}</span>
+                  <div>
+                    {" "}
+                    <span className="font-[400]">
+                      {user.score == "" ? "0" : user.score}%
+                    </span>
+                  </div>
                 </div>
-                <div>
-                  {" "}
-                  <span className="font-[400]">
-                    {user.score == "" ? "0" : user.score}%
-                  </span>
+                <div
+                  onClick={() => {
+                    setModalShow(true);
+                    setConversationId(user.conversationId);
+                  }}
+                  className="w-[50px] h-14 rounded cursor-pointer hover:text-white ml-1 bg-gray-400 hover:bg-gray-500 text-gray-200 my-1 flex items-center justify-center"
+                >
+                  <i className="bi bi-chat-dots"></i>
                 </div>
               </div>
             );

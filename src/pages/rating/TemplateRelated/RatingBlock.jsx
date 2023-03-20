@@ -159,6 +159,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
                   className="w-[50px] h-14 rounded cursor-pointer hover:text-white ml-1 bg-gray-400 hover:bg-gray-500 text-gray-200 my-1 flex items-center justify-center"
                 >
                   <i className="bi bi-chat-dots"></i>
+                  {user.unseenCommentCount}
                 </div>
               </div>
             );

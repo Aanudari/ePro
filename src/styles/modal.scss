@@ -38,12 +38,12 @@
   &.you {
     float: left;
     color: var(--white);
-    background-color: var(--blue);
+    background-color: #3eb6a5;
     align-self: flex-start;
     animation-name: slideFromLeft;
     &:before {
       left: -3px;
-      background-color: var(--blue);
+      background-color: #3eb6a5;
     }
   }
   &.me {

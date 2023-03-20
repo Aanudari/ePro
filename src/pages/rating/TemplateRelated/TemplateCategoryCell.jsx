@@ -38,8 +38,8 @@ function TemplateCategoryCell({ item, index, trigger, setTrigger }) {
     setShowOption(!showOption);
   }
   return (
-    <div className="mt-1 justify-center flex-col shadow">
-      <div className="flex justify-center bg-gray-100 hover:bg-gray-200 shadow ">
+    <div className="mt-1 justify-center flex-col">
+      <div className="flex justify-center">
         <div
           className="w-full rounded-t-lg bg-teal-600 px-3 py-2 flex justify-between text-white"
           onClick={handleClick}
@@ -48,7 +48,7 @@ function TemplateCategoryCell({ item, index, trigger, setTrigger }) {
           <div className="flex items-center">
             {item.categoryPoint + " %"}{" "}
             <div
-              className="bi bi-x ml-2 text-[24px] text-red-300 z-50 hover:cursor-pointer"
+              className="bi bi-x ml-2 text-[24px] z-50 hover:cursor-pointer"
               onClick={handleDelete}
             >
               {" "}

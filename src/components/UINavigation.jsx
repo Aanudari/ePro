@@ -88,7 +88,7 @@ export default function UINavigation() {
                 <img src="user2.png" alt="" />
               </a>
               <div className="text-[#404089] flex px-2 font-[400]">
-                {mainUser.first_name[0]}. {mainUser.last_name}
+                {mainUser.last_name[0]}. {mainUser.first_name}
               </div>
               {show && (
                 <div

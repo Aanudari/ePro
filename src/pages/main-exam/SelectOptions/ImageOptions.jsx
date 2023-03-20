@@ -88,7 +88,7 @@ export default function ImageUploader({ setImageUrl }) {
         onChange={onChange}
         maxNumber={maxNumber}
         dataURLKey="data_url"
-        acceptType={["jpg"]}
+        acceptType={["jpg", "gif", "png"]}
       >
         {({
           imageList,

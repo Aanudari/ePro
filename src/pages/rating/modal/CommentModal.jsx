@@ -2,11 +2,19 @@ import { useStateContext } from "../../../contexts/ContextProvider";
 import { useState, useEffect, useRef } from "react";
 import { logout } from "../../../service/examService";
 import axios from "axios";
-
-function CommentModal({ modalShow, setModalShow, conversationId }) {
+import Modal from "react-bootstrap/Modal";
+import ImageUploading from "react-images-uploading";
+function CommentModal({
+  modalShow,
+  setModalShow,
+  conversationId,
+  recallChild,
+  setRecallChild,
+}) {
   const { activeMenu, TOKEN } = useStateContext();
   const [comments, setComments] = useState();
   const [trigger, setTrigger] = useState(false);
+  const [show, setShow] = useState(false);
   // console.log(modalShow);
   // console.log(conversationId);
 
@@ -32,28 +40,44 @@ function CommentModal({ modalShow, setModalShow, conversationId }) {
           logout();
         } else {
           setComments(res.data.commentList);
+          setRecallChild(!recallChild);
         }
       })
       .catch((err) => console.log(err));
   }, [trigger]);
   const [value, setValue] = useState("");
+  // console.log(comments);
   const submitComment = () => {
     axios({
       method: "post",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "multipart/form-data",
         Authorization: TOKEN,
+        accept: "text/plain",
       },
       url: `${process.env.REACT_APP_URL}/v1/RatingNew/doComment?conversationId=${conversationId}&comment=${value}`,
+      data: images,
     })
       .then((res) => {
+        console.log(images[0]);
         // console.log(res.data);
         setTrigger(!trigger);
         setValue("");
+        setImages([]);
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+  // console.log(comments);
+  const [images, setImages] = useState([]);
+  const [modalImg, setModalImg] = useState();
+  const maxNumber = 69;
+  // console.log(images);
+  const onChange = (imageList, addUpdateIndex) => {
+    // data for submit
+    // console.log(imageList, addUpdateIndex);
+    setImages(imageList);
   };
   return (
     <div
@@ -93,14 +117,33 @@ function CommentModal({ modalShow, setModalShow, conversationId }) {
             ref={scrollableRef}
           >
             {comments?.map((comment, index) => {
+              // console.log(comment);
               return (
                 <div
                   key={index}
-                  className={`bubble ${
-                    comment.commentType === "1" ? "me" : "you"
-                  }`}
+                  className={`bubble ${comment.isYou === "1" ? "me" : "you"}`}
                 >
                   {comment.comment}
+                  {comment.commentImg != "" && (
+                    <div
+                      onClick={() => {
+                        setShow(true);
+                        setModalImg(comment.commentImg);
+                      }}
+                      className="mt-2 rounded bg-white"
+                    >
+                      <img
+                        className="w-[400px] rounded border cursor-pointer hover:shadow"
+                        src={`http://${comment.commentImg}`}
+                        alt=""
+                      />
+                    </div>
+                  )}
+                  <ImageModal
+                    img={modalImg}
+                    show={show}
+                    onHide={() => setShow(false)}
+                  />
                 </div>
               );
             })}
@@ -111,7 +154,7 @@ function CommentModal({ modalShow, setModalShow, conversationId }) {
                 e.preventDefault();
                 submitComment();
               }}
-              className="h-full w-full"
+              className="h-full w-full relative flex"
               action=""
             >
               <input
@@ -123,11 +166,64 @@ function CommentModal({ modalShow, setModalShow, conversationId }) {
                 className="rounded h-full text-[14px] px-2 font-[400] w-full"
                 autoFocus
               />
-              <button type="submit"></button>
+              <button type="button" className="">
+                {/* Илгээх */}
+              </button>
             </form>
-            <button className="bg-[#52b5a5] hover:bg-teal-600 px-3 rounded text-white font-[500] text-[14px]">
-              Илгээх
-            </button>
+            <div className="rounded bg-gray-400 p-1 top-[4px]  right-[calc(1%)] ml-2 flex items-center justify-center h-full">
+              <div className="">
+                <ImageUploading
+                  multiple
+                  value={images}
+                  onChange={onChange}
+                  maxNumber={maxNumber}
+                  dataURLKey="data_url"
+                >
+                  {({
+                    imageList,
+                    onImageUpload,
+                    onImageRemoveAll,
+                    onImageUpdate,
+                    onImageRemove,
+                    isDragging,
+                    dragProps,
+                  }) => (
+                    // write your building UI
+                    <div className="upload__image-wrapper">
+                      <button
+                        style={isDragging ? { color: "red" } : undefined}
+                        onClick={onImageUpload}
+                        {...dragProps}
+                      >
+                        {imageList.length == 0 && (
+                          <i className="bi bi-upload text-white"></i>
+                        )}
+                      </button>
+                      &nbsp;
+                      {imageList.map((image, index) => (
+                        <div key={index} className="image-item">
+                          <img src={image["data_url"]} alt="" width="100" />
+                          <div className="image-item__btn-wrapper flex">
+                            <button
+                              onClick={() => onImageUpdate(index)}
+                              className="px-2 py-1 rounded-full bg-emerald-500"
+                            >
+                              <i className="bi bi-arrow-counterclockwise text-white"></i>
+                            </button>
+                            <button
+                              className="px-2 py-1 rounded-full bg-rose-500"
+                              onClick={() => onImageRemove(index)}
+                            >
+                              <i className="bi bi-trash3-fill text-white"></i>
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </ImageUploading>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -136,3 +232,20 @@ function CommentModal({ modalShow, setModalShow, conversationId }) {
 }
 
 export default CommentModal;
+
+function ImageModal(props) {
+  const { activeMenu } = useStateContext();
+  return (
+    <Modal
+      {...props}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+      // style={{minHeight: "400px"}}
+    >
+      {/* <Modal.Body style={{ background: "none" }}> */}
+      <img src={`http://${props.img}`} alt="" />
+      {/* </Modal.Body> */}
+    </Modal>
+  );
+}

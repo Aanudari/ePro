@@ -401,3 +401,10 @@ html {
   font-size: 14px;
   font-weight: 500;
 }
+.modal-body {
+  background-color: none !important;
+  border: none !important;
+}
+.modal-content {
+  border: none !important;
+}

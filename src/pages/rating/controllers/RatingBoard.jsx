@@ -32,7 +32,7 @@ function RatingBoard({ showModal, setShowModal, data, setTrigger, trigger }) {
           setShowModal={setShowModal}
         />
       )}
-      <div className="h-[calc(100vh-160px)] overflow-scroll py-2 ">
+      <div className="w-full h-[calc(100vh-160px)] overflow-scroll py-2 ">
         {result.map((month, ind) => {
           return (
             <div key={ind} className=" w-full my-2 px-3">

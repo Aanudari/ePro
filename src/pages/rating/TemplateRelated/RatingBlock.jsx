@@ -38,13 +38,12 @@ function RatingBlock({ item, trigger, setTrigger }) {
   const [certainUser, setCertainUser] = useState();
   return (
     <>
-      <div></div>
       <div
         onClick={() => {
           setRatingId(item.ratingId);
           handleShow();
         }}
-        className="btn-13 hover:shadow text-gray-600 w-full my-1
+        className="btn-13 hover:shadow text-gray-600 my-1
          rounded relative cursor-pointer hover:text-white"
       >
         <div className="py-3 px-4 w-full flex justify-between items-start ">

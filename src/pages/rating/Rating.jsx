@@ -41,7 +41,7 @@ function Rating() {
             );
           })}
         </div>
-        <div className="w-full h-full flex bg-white ">
+        <div className="w-full h-full flex ">
           {stats === 0 && <RatingMain />}
           {stats === 1 && <Template />}
           {stats === 2 && <RatingComment />}

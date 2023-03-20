@@ -17,6 +17,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
   const [recallList, setRecallList] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const [recallChild, setRecallChild] = useState(false);
   useEffect(() => {
     axios({
       method: "get",
@@ -34,7 +35,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
         }
       })
       .catch((err) => console.log(err));
-  }, [ratingId, recallList]);
+  }, [ratingId, recallList, recallChild]);
   const [showModal, setShowModal] = useState(false);
   const [deviceId, setDeviceId] = useState(0);
   const [certainUser, setCertainUser] = useState();
@@ -106,6 +107,8 @@ function RatingBlock({ item, trigger, setTrigger }) {
             modalShow={modalShow}
             setModalShow={setModalShow}
             conversationId={conversationId}
+            recallChild={recallChild}
+            setRecallChild={setRecallChild}
           />
         )}
         <Offcanvas.Header closeButton>
@@ -117,7 +120,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
         </Offcanvas.Header>
         <Offcanvas.Body>
           {data?.map((user, index) => {
-            console.log(user);
+            // console.log(user);
             return (
               <div key={JSON.stringify(user + index)} className="flex h-16">
                 <div
@@ -143,6 +146,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
                   <div className="flex flex-col">
                     <span className="font-[400]">{user.deviceName}</span>
                     <span className="font-[400]">{user.unitName}</span>
+                    <span className="font-[400]">{user.conversationId}</span>
                   </div>
                   <div>
                     {" "}
@@ -155,11 +159,16 @@ function RatingBlock({ item, trigger, setTrigger }) {
                   onClick={() => {
                     setModalShow(true);
                     setConversationId(user.conversationId);
+                    // setRecallChild(!recallChild);
                   }}
-                  className="w-[50px] h-14 rounded cursor-pointer hover:text-white ml-1 bg-gray-400 hover:bg-gray-500 text-gray-200 my-1 flex items-center justify-center"
+                  className="w-[50px] relative h-14 rounded cursor-pointer hover:text-white ml-1 bg-gray-400 hover:bg-gray-500 text-gray-200 my-1 flex items-center justify-center"
                 >
                   <i className="bi bi-chat-dots"></i>
-                  {user.unseenCommentCount}
+                  {user.unseenCommentCount !== "0" && (
+                    <div className="text-[11px] rounded-full top-[-10px] right-[-10px] bg-red-500 px-2 py-[2px] absolute">
+                      {user.unseenCommentCount}
+                    </div>
+                  )}
                 </div>
               </div>
             );

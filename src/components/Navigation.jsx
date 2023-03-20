@@ -138,7 +138,7 @@ function Navigation() {
                   alt=""
                 />
                 <div className="text-white flex h-full items-center px-2 w-full">
-                  {mainUser.first_name[0]}. {mainUser.last_name}
+                  {mainUser.last_name[0]}. {mainUser.first_name}
                 </div>
               </Menu.Button>
             </div>

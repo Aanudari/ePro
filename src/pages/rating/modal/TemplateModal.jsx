@@ -9,6 +9,7 @@ function TemplateModal({ setShow, id, categoryName }) {
   const { activeMenu, TOKEN } = useStateContext();
   const [data, setData] = useState();
   const [trigger, setTrigger] = useState(false);
+
   useEffect(() => {
     axios({
       method: "get",
@@ -27,9 +28,38 @@ function TemplateModal({ setShow, id, categoryName }) {
       })
       .catch((err) => console.log(err));
   }, [trigger]);
+
+  /* test by mb */
+  useEffect(() => {
+    axios({
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/RatingTemplateNew/getTemplateInfo/${id}`,
+    })
+      .then((res) => {
+        if (res.data.errorCode == 401) {
+          logout();
+        } else {
+          setData(res.data.categories);
+          setDataBuffer(res.data.categories);
+        }
+      })
+      .catch((err) => console.log(err));
+  }, []);
+/* test by mb */
   const [showModal, setShowModal] = useState(false);
 
-  return (
+  {/* test by mb  */}
+  const [dataBuffer, setDataBuffer] = useState([]);
+  {/* END test by mb END */}
+
+
+  return ( 
+
+    <>
     <div
       className={`fixed ${
         activeMenu
@@ -64,6 +94,11 @@ function TemplateModal({ setShow, id, categoryName }) {
             <i className="bi bi-plus-circle-dotted text-lg mr-2"></i>
             Категори
           </button>
+
+          {/* test by mb  */}
+            {/* <div> {'and the ID is:' + {id} + JSON.stringify(data) + "\n" + JSON.stringify(dataBuffer)} </div> */}
+          {/* END test by mb  */}
+
           <div
             onClick={() => {
               setShowModal(true);
@@ -91,6 +126,12 @@ function TemplateModal({ setShow, id, categoryName }) {
                 return (
                   <TemplateCategoryCell
                     key={JSON.stringify(item + index)}
+
+                    /* test by mb */
+                    setDataBuffer={setDataBuffer}
+                    dataBuffer={dataBuffer}
+                    /* END test by mb */
+
                     item={item}
                     index={index}
                     trigger={trigger}
@@ -107,6 +148,7 @@ function TemplateModal({ setShow, id, categoryName }) {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

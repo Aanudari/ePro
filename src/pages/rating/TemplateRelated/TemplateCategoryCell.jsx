@@ -5,11 +5,12 @@ import { useStateContext } from "../../../contexts/ContextProvider";
 
 ///v1/Training/category/delete
 
-function TemplateCategoryCell({ item, index, trigger, setTrigger }) {
+function TemplateCategoryCell({ item, index, trigger, setTrigger, /* test by mb */ dataBuffer, setDataBuffer  }) {
   const [showSub, setShowSub] = useState(true);
   const [showOption, setShowOption] = useState(false);
   const [deleteCategory, setDeleteCategory] = useState(false); // Used only for rendering and useEffect triggering, study different ways it could wor.
   const { data, TOKEN } = useStateContext();
+  const newDataBuffer = [...dataBuffer];
 
   /* UNDER CONSTRUCTION */
 
@@ -38,6 +39,7 @@ function TemplateCategoryCell({ item, index, trigger, setTrigger }) {
     setShowOption(!showOption);
   }
   return (
+    
     <div className="mt-1 justify-center flex-col">
       <div className="flex justify-center">
         <div
@@ -61,6 +63,12 @@ function TemplateCategoryCell({ item, index, trigger, setTrigger }) {
         <div className="min-h-[50px] bg-gray-200 rounded-b-lg p-2 mb-2">
           {item?.subCategories?.map((element, i) => (
             <TemplateSubCategoryCell
+              /* test by mb */
+              newDataBuffer={newDataBuffer}
+              item={item}
+              setDataBuffer={setDataBuffer}
+              dataBuffer={dataBuffer}
+              /* END test by mb */
               element={element}
               key={JSON.stringify(item + i)}
             />

@@ -24,34 +24,17 @@ function TemplateModal({ setShow, id, categoryName }) {
           logout();
         } else {
           setData(res.data.categories);
+          setDataBuffer(res.data.categories);
         }
       })
       .catch((err) => console.log(err));
   }, [trigger]);
 
-  /* test by mb */
-  useEffect(() => {
-    axios({
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${TOKEN}`,
-      },
-      url: `${process.env.REACT_APP_URL}/v1/RatingTemplateNew/getTemplateInfo/${id}`,
-    })
-      .then((res) => {
-        if (res.data.errorCode == 401) {
-          logout();
-        } else {
-          setData(res.data.categories);
-          setDataBuffer(res.data.categories);
-        }
-      })
-      .catch((err) => console.log(err));
-  }, []);
-/* test by mb */
-  const [showModal, setShowModal] = useState(false);
 
+
+  /* test by mb */
+  const [showModal, setShowModal] = useState(false);
+  const [isChanged, setIsChanged] = useState(false);
   {/* test by mb  */}
   const [dataBuffer, setDataBuffer] = useState([]);
   {/* END test by mb END */}
@@ -60,6 +43,8 @@ function TemplateModal({ setShow, id, categoryName }) {
   return ( 
 
     <>
+    
+
     <div
       className={`fixed ${
         activeMenu
@@ -94,10 +79,8 @@ function TemplateModal({ setShow, id, categoryName }) {
             <i className="bi bi-plus-circle-dotted text-lg mr-2"></i>
             Категори
           </button>
-
-          {/* test by mb  */}
-            {/* <div> {'and the ID is:' + {id} + JSON.stringify(data) + "\n" + JSON.stringify(dataBuffer)} </div> */}
-          {/* END test by mb  */}
+          
+          
 
           <div
             onClick={() => {
@@ -119,8 +102,23 @@ function TemplateModal({ setShow, id, categoryName }) {
             <i className="bi bi-x-lg text-white text-2xl font-[500]"></i>
           </button>
         </div>
+        
+        
+          {/* END test by mb  */}
         <div className="w-full h-[calc(100vh-100px)]  overflow-scroll flex justify-center">
           <div className="  w-[300px] md:w-[600px]  lg:w-[900px] p-3">
+          {
+            isChanged &&
+            (
+            <button
+                className="custom-btn min-w-[80px] md:min-w-[120px] lg:min-w-[180px] bg-teal-500 hover:bg-teal-400 active:bg-teal-600 h-10 text-[14px] flex items-center justify-center"
+                onClick={()=>{setIsChanged(false);
+                }}
+              >
+                Хадгалах
+            </button>
+            )
+          }
             {data?.length > 0 ? (
               data.map((item, index) => {
                 return (
@@ -136,6 +134,7 @@ function TemplateModal({ setShow, id, categoryName }) {
                     index={index}
                     trigger={trigger}
                     setTrigger={setTrigger}
+                    setIsChanged={setIsChanged}
                   />
                 );
               })

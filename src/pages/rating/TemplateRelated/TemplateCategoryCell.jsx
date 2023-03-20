@@ -5,7 +5,7 @@ import { useStateContext } from "../../../contexts/ContextProvider";
 
 ///v1/Training/category/delete
 
-function TemplateCategoryCell({ item, index, trigger, setTrigger, /* test by mb */ dataBuffer, setDataBuffer  }) {
+function TemplateCategoryCell({ setIsChanged, item, index, trigger, setTrigger, /* test by mb */ dataBuffer, setDataBuffer  }) {
   const [showSub, setShowSub] = useState(true);
   const [showOption, setShowOption] = useState(false);
   const [deleteCategory, setDeleteCategory] = useState(false); // Used only for rendering and useEffect triggering, study different ways it could wor.
@@ -64,6 +64,7 @@ function TemplateCategoryCell({ item, index, trigger, setTrigger, /* test by mb 
           {item?.subCategories?.map((element, i) => (
             <TemplateSubCategoryCell
               /* test by mb */
+              setIsChanged={setIsChanged}
               newDataBuffer={newDataBuffer}
               item={item}
               setDataBuffer={setDataBuffer}

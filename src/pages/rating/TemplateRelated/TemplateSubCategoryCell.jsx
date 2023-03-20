@@ -3,7 +3,8 @@ function TemplateSubCategoryCell({
   /* test by mb */ dataBuffer,
   setDataBuffer,
   item,
-  newDataBuffer
+  newDataBuffer,
+  setIsChanged
 }) {
   /*test by mb*/
   
@@ -31,6 +32,7 @@ function TemplateSubCategoryCell({
     //setDataBuffer(newDataBuffer); //this works.
     console.log("our new data buffer is:" + newDataBuffer);
     console.log("our new data buffer is:" + JSON.stringify(newDataBuffer));
+    setIsChanged(true);
   }
 
   function handleNumberInput(event) {

@@ -25,22 +25,26 @@ function TemplateModal({ setShow, id, categoryName }) {
         } else {
           setData(res.data.categories);
           setDataBuffer(res.data.categories);
+          newDataBuffer = [...dataBuffer];
         }
       })
       .catch((err) => console.log(err));
   }, [trigger]);
 
-  /* test by mb */
+
   const [showModal, setShowModal] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
-  {
-    /* test by mb  */
-  }
   const [dataBuffer, setDataBuffer] = useState([]);
-  let dataApi = [];
-  {
-    /* END test by mb END */
+
+  let newDataBuffer = [];
+  if (typeof dataBuffer[Symbol.iterator] === "function") {
+    newDataBuffer = [...dataBuffer];
+  } else {
+    console.error("Error: dataBuffer is not iterable.");
+    newDataBuffer = []; // Handle the error by setting newDataBuffer to an empty array, or another default value.
   }
+
+  let dataApi = []; // used in hadgalah api call 
 
   return (
     <>
@@ -108,41 +112,51 @@ function TemplateModal({ setShow, id, categoryName }) {
                   className="custom-btn min-w-[80px] md:min-w-[120px] lg:min-w-[180px] bg-teal-500 hover:bg-teal-400 active:bg-teal-600 h-10 text-[14px] flex items-center justify-center"
                   onClick={() => {
                     setIsChanged(false);
-
-                    dataBuffer.map((inside) => {
-                      dataApi = {
-                        idEdit: true,
-                        templateId: id,
-                        categoryId: inside.categoryId,
-                        categoryName: inside.categoryName,
-                        subCategories: inside.subCategories,
-                      };
-
-                      axios({
-                        method: "post",
-                        headers: {
-                          Authorization: `${TOKEN}`,
-                          "Content-Type": "application/json",
-                          accept: "text/plain",
-                        },
-                        url: `${process.env.REACT_APP_URL}/v1/RatingTemplateNew/category`,
-                        data: dataApi,
-                      })
-                        .then((res) => {
-                          console.log(res);
-                          setTrigger(!trigger);
+                    try {
+                      newDataBuffer.map((inside) => {
+                        console.log(
+                          "The inside is  " +
+                            JSON.stringify(inside.subCategories)
+                        );
+                        const newSubcategories = inside.subCategories.map(
+                          ({ subcategoryId, ...subcategory }) => subcategory
+                        );
+                        console.log(JSON.stringify(newSubcategories));
+                        dataApi = {
+                          isEdit: Boolean(true),
+                          templateId: `${id}`,
+                          categoryId: `${inside.categoryId}`,
+                          categoryName: `${inside.categoryName}`,
+                          subCategories: newSubcategories,
+                        };
+                        axios({
+                          method: "post",
+                          headers: {
+                            Authorization: `${TOKEN}`,
+                            "Content-Type": "application/json",
+                            accept: "text/json",
+                          },
+                          url: `${process.env.REACT_APP_URL}/v1/RatingTemplateNew/category`,
+                          data: JSON.stringify(dataApi),
                         })
-                        .catch();
-                    });
-                    console.log(
-                      "DATA API IS: " + JSON.stringify(dataApi) + "\n"
-                    );
+                          .then((res) => {
+                            console.log(res);
+                            setTrigger(!trigger);
+                          })
+                          .catch((err) => {
+                            console.log(err);
+                          });
+                      });
+                    } catch (e) {
+                      console.error(e.message);
+                    }
                   }}
                 >
                   Хадгалах
                 </button>
               )}
               {/*  test by mb  */}
+
               {data?.length > 0 ? (
                 data.map((item, index) => {
                   return (
@@ -158,6 +172,7 @@ function TemplateModal({ setShow, id, categoryName }) {
                       trigger={trigger}
                       setTrigger={setTrigger}
                       setIsChanged={setIsChanged}
+                      newDataBuffer={newDataBuffer}
                     />
                   );
                 })

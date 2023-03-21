@@ -31,22 +31,10 @@ function TemplateModal({ setShow, id, categoryName }) {
       .catch((err) => console.log(err));
   }, [trigger]);
 
-  /* test by mb */
+
   const [showModal, setShowModal] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
-
-  {
-    /* test by mb  */
-  }
   const [dataBuffer, setDataBuffer] = useState([]);
-
- /*  let newDataBuffer = [];
-  try {
-    newDataBuffer = [...dataBuffer];
-  } catch (e) {
-    console.error("Error: ", e);
-    newDataBuffer = []; // Handle the error by setting newDataBuffer to an empty array, or another default value.
-  } */
 
   let newDataBuffer = [];
   if (typeof dataBuffer[Symbol.iterator] === "function") {
@@ -56,10 +44,7 @@ function TemplateModal({ setShow, id, categoryName }) {
     newDataBuffer = []; // Handle the error by setting newDataBuffer to an empty array, or another default value.
   }
 
-  let dataApi = [];
-  {
-    /* END test by mb END */
-  }
+  let dataApi = []; // used in hadgalah api call 
 
   return (
     <>
@@ -143,10 +128,6 @@ function TemplateModal({ setShow, id, categoryName }) {
                           categoryId: `${inside.categoryId}`,
                           categoryName: `${inside.categoryName}`,
                           subCategories: newSubcategories,
-
-                          //`${inside.subCategories}`
-                          //JSON.stringify(inside.subCategories)
-                          //subCategories: [{"subcategoryName":"bayfsadffsdfasfdraa","subcategoryPoint":"100"}]
                         };
                         axios({
                           method: "post",

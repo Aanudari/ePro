@@ -28,10 +28,11 @@ function TemplateSubCategoryCell({
     //     "and the event.target.value is" +
     //     event.target.innerText
     // );
-    subcategory.subcategoryName = event.target.innerText;
+    subcategory.subcategoryName = event.target.innerText + ' ';
     //setDataBuffer(newDataBuffer); //this works.
-    // console.log("our new data buffer is:" + newDataBuffer);
-    // console.log("our new data buffer is:" + JSON.stringify(newDataBuffer));
+   //  console.log("our new data buffer is:" + newDataBuffer);
+    console.log("our new data buffer is:" + JSON.stringify(newDataBuffer));
+    //setDataBuffer(newDataBuffer);
     setIsChanged(true);
   }
 

@@ -5,12 +5,12 @@ import { useStateContext } from "../../../contexts/ContextProvider";
 
 ///v1/Training/category/delete
 
-function TemplateCategoryCell({ setIsChanged, item, index, trigger, setTrigger, /* test by mb */ dataBuffer, setDataBuffer  }) {
+function TemplateCategoryCell({ newDataBuffer, setIsChanged, item, index, trigger, setTrigger, /* test by mb */ dataBuffer, setDataBuffer  }) {
   const [showSub, setShowSub] = useState(true);
   const [showOption, setShowOption] = useState(false);
   const [deleteCategory, setDeleteCategory] = useState(false); // Used only for rendering and useEffect triggering, study different ways it could wor.
   const { data, TOKEN } = useStateContext();
-  const newDataBuffer = [...dataBuffer];
+  
 
   /* UNDER CONSTRUCTION */
 
@@ -46,11 +46,13 @@ function TemplateCategoryCell({ setIsChanged, item, index, trigger, setTrigger, 
           className="w-full rounded-t-lg bg-teal-600 px-3 py-2 flex justify-between text-white"
           onClick={handleClick}
         >
+          
           <div className="text-[15px] font-[500] py-1">{item.categoryName}</div>
+          
           <div className="flex items-center">
             {item.categoryPoint + " %"}{" "}
             <div
-              className="bi bi-x ml-2 text-[24px] z-50 hover:cursor-pointer"
+              className="bi bi-x ml-2 text-[24px] hover: cursor-pointer text-red-100 "
               onClick={handleDelete}
             >
               {" "}
@@ -61,6 +63,7 @@ function TemplateCategoryCell({ setIsChanged, item, index, trigger, setTrigger, 
 
       {showSub && (
         <div className="min-h-[50px] bg-gray-200 rounded-b-lg p-2 mb-2">
+          <i className="bi bi-plus-circle-dotted text-lg mr-2 flex justify-end hover: cursor-pointer"></i>
           {item?.subCategories?.map((element, i) => (
             <TemplateSubCategoryCell
               /* test by mb */

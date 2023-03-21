@@ -20,11 +20,7 @@ function RatingBoard({ showModal, setShowModal, data, setTrigger, trigger }) {
   }));
   const { activeMenu } = useStateContext();
   return (
-    <div
-      className={`w-[calc(100vw-${
-        activeMenu ? "400px" : "200px"
-      })] bg-white p-2 h-full rounded`}
-    >
+    <div className={`w-[calc(100vw-420px)] bg-white p-2 h-full rounded`}>
       {showModal && (
         <CreateRatingModal
           setTrigger={setTrigger}

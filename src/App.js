@@ -56,6 +56,7 @@ import { logout } from "./service/examService";
 import Countdown from "./components/CountDown";
 import RatingUser from "./pages/UserMainUI/Rating/RatingUser";
 import UserHome from "./pages/UserMainUI/UserHome";
+import RatingUserShow from "./pages/UserMainUI/Rating/RatingUserShow";
 function App() {
   const { activeMenu, showTop, roleId, TOKEN } = useStateContext();
   const { width } = getWindowDimensions();
@@ -397,6 +398,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199, 196, 1, 4, 188]}>
                 <RatingUser />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/user-rating-detail"
+            element={
+              <ProtectedRoute allowedRoles={[199, 196, 1, 4, 188]}>
+                <RatingUserShow />
               </ProtectedRoute>
             }
           />

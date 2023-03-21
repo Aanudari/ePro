@@ -26,6 +26,7 @@ function Document({ setShowReport, id }) {
       })
       .catch((err) => console.log(err));
   }, [trigger]);
+  // console.log(data);
   useEffect(() => {
     axios({
       method: "get",
@@ -83,6 +84,25 @@ function Document({ setShowReport, id }) {
       })
       .catch((err) => console.log(err));
   }, [selected]);
+  const [excelUrl, setExcelUrl] = useState("");
+  // console.log(excelUrl);
+  useEffect(() => {
+    axios({
+      method: "get",
+      headers: {
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/ReportDownload/reportDownloader/1/${id}`,
+    })
+      .then((res) => {
+        if (res.data.resultMessage === "Unauthorized") {
+          logout();
+        } else {
+          setExcelUrl(res.data.excelFile);
+        }
+      })
+      .catch((err) => console.log(err));
+  }, [selected]);
 
   const [finalScore, setfinalScore] = useState();
   const { activeMenu } = useStateContext();
@@ -135,6 +155,7 @@ function Document({ setShowReport, id }) {
       });
   };
   // console.log(users);
+  // console.log(excelUrl);
   return (
     <div
       className={`fixed ${
@@ -156,10 +177,16 @@ function Document({ setShowReport, id }) {
         {showDetail && <ShowExamResultDetail setShow={setShowDetail} id={id} />}
         <div className="h-full">
           <h6 className="text-teal-600 text-[14px] flex justify-between mx-3 py-3">
-            <span className="font-[500] flex items-center">
-              <i className="bi bi-caret-down-square-fill mr-2"></i>
-              Шалгалтын статус
-            </span>
+            {excelUrl != "" && (
+              <a
+                href={`${excelUrl}`}
+                download
+                className="font-[500] cursor-pointer custom-btn btn-13 transition-all "
+              >
+                <i className="bi bi-filetype-xlsx  mr-2"></i>
+                Excel татах
+              </a>
+            )}
             <span
               onClick={() => {
                 setShowDetail(true);

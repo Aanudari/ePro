@@ -146,7 +146,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
                   <div className="flex flex-col">
                     <span className="font-[400]">{user.deviceName}</span>
                     <span className="font-[400]">{user.unitName}</span>
-                    <span className="font-[400]">{user.conversationId}</span>
+                    {/* <span className="font-[400]">{user.conversationId}</span> */}
                   </div>
                   <div>
                     {" "}

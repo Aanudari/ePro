@@ -368,7 +368,7 @@ function UserTraining() {
             return (
               activeTab === `${data.sessionType}` &&
               (data.sessionType === "1" ? (
-                <div className="mx-auto mt-4  ">
+                <div className="mx-auto mt-4 " key={i}>
                   <div className="p-2 flex cursor-pointer border-t border-b text-xs text-gray-700">
                     <div
                     // onClick={() => {
@@ -456,8 +456,8 @@ function UserTraining() {
                   </div>
                 </div>
               ) : (
-                <div className="mx-auto mt-4">
-                  <div key={i} className="flex cursor-pointer">
+                <div className="mx-auto mt-4" key={JSON.stringify(data + i)}>
+                  <div className="flex cursor-pointer">
                     <video
                       className="object-fill h-32 w-64 mr-4 shadow-md rounded-lg"
                       ref={videoRef}

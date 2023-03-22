@@ -32,7 +32,7 @@ function OnlineTraining() {
     { id: "1", value: "Тэнхим" },
     { id: "2", value: "Онлайн" },
   ];
-  console.log(trains);
+
   useEffect(() => {
     axios({
       method: "get",
@@ -127,8 +127,6 @@ function OnlineTraining() {
           notification.success(`${res.data.resultMessage}`);
           hideModalDelete();
           setTrigger(!trigger);
-        } else {
-          console.log(res.data.resultMessage);
         }
         if (
           res.data.resultMessage === "Unauthorized" ||

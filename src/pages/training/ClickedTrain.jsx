@@ -164,7 +164,7 @@ function ClickedTrain() {
       </div>
       <Navigation />
       <div className="w-full">
-        <div class="px-4 py-2">
+        <div className="px-4 py-2">
           <a
             onClick={() => {
               location.state.item === "schedule"
@@ -176,16 +176,16 @@ function ClickedTrain() {
             <i className="bi bi-backspace" />
             <span className="mx-2">Буцах</span>
           </a>
-          <div class="flex flex-col mx-auto md:flex-row mt-2">
-            <div class="w-full md:w-2/3">
+          <div className="flex flex-col mx-auto md:flex-row mt-2">
+            <div className="w-full md:w-2/3">
               {location.state.item === "schedule" ? (
-                <span class="rounded-md bg-gray-200 px-2.5 py-0.5 text-sm text-gray-600 font-bold mr-1">
+                <span className="rounded-md bg-gray-200 px-2.5 py-0.5 text-sm text-gray-600 font-bold mr-1">
                   {timeSince(new Date(train.createdAt))}
                 </span>
               ) : (
                 ""
               )}
-              <span class="rounded-md bg-purple-200 px-2.5 py-0.5 text-sm text-purple-600 font-bold ">
+              <span className="rounded-md bg-purple-200 px-2.5 py-0.5 text-sm text-purple-600 font-bold ">
                 {train.tCatName}
               </span>
               {location.state.item === "schedule" ? (
@@ -254,17 +254,17 @@ function ClickedTrain() {
                 </video>
               )}
             </div>
-            <div class="w-full  md:w-1/3 ml-4 border border-t-4 rounded-lg shadow-sm">
+            <div className="w-full  md:w-1/3 ml-4 border border-t-4 rounded-lg shadow-sm">
               <div className="p-4">
-                <a class="relative block">
+                <a className="relative block">
                   <img
                     alt="profil"
                     src="https://banner2.cleanpng.com/20180617/qjv/kisspng-computer-icons-course-teacher-education-school-cisco-5b265ef5104173.7669610515292413330666.jpg"
-                    class="mx-auto object-cover rounded-full h-10 w-10 "
+                    className="mx-auto object-cover rounded-full h-10 w-10 "
                   />
                 </a>
-                <div class="flex flex-col items-center ml-2 ">
-                  <span class="dark:text-white font-semibold">
+                <div className="flex flex-col items-center ml-2 ">
+                  <span className="dark:text-white font-semibold">
                     {train.teacher === "" ? "" : train.teacher}
                   </span>
                 </div>
@@ -279,33 +279,33 @@ function ClickedTrain() {
                   )}
                 </div>
 
-                <div class="border-t border-gray-200">
-                  <div class="px-2 py-2 bg-gray-50 sm:grid sm:grid-cols-3 sm:gap-4 ">
-                    <p class="text-sm font-medium text-gray-500">Байршил</p>
-                    <p class="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                <div className="border-t border-gray-200">
+                  <div className="px-2 py-2 bg-gray-50 sm:grid sm:grid-cols-3 sm:gap-4 ">
+                    <p className="text-sm font-medium text-gray-500">Байршил</p>
+                    <p className="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                       {train.location === "" ? " " : train.location}
                     </p>
                   </div>
-                  <div class="px-2 py-2 bg-white sm:grid sm:grid-cols-3 sm:gap-4 ">
-                    <p class="text-sm font-medium text-gray-500">
+                  <div className="px-2 py-2 bg-white sm:grid sm:grid-cols-3 sm:gap-4 ">
+                    <p className="text-sm font-medium text-gray-500">
                       Эхлэх хугацаа
                     </p>
-                    <p class="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                    <p className="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                       {train.startDate === "" ? " " : train.startDate}
                     </p>
                   </div>
-                  <div class="px-2 py-2 bg-gray-50 sm:grid sm:grid-cols-3 sm:gap-4 ">
-                    <p class="text-sm font-medium text-gray-500">
+                  <div className="px-2 py-2 bg-gray-50 sm:grid sm:grid-cols-3 sm:gap-4 ">
+                    <p className="text-sm font-medium text-gray-500">
                       Дуусах хугацаа
                     </p>
 
                     {moment(today).format(format) >=
                     moment(train.endDate).format(format) ? (
-                      <p class="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      <p className="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                         Дуусах хугацаа: {train.endDate} (Хугацаа дууссан)
                       </p>
                     ) : (
-                      <p class="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      <p className="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                         Дуусах хугацаа: {train.endDate}
                       </p>
                     )}

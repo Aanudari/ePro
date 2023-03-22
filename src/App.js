@@ -67,15 +67,15 @@ function App() {
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `${process.env.REACT_APP_URL}/v1/User`,
+      url: `${process.env.REACT_APP_URL}/v1/User/checkToken`,
     })
       .then((res) => {
-        if (res.data.errorCode === 401) {
+        if (res.data.errorCode === 401 && TOKEN != null) {
           logout();
         }
       })
       .catch((err) => console.log(err));
-  });
+  }, []);
 
   // function resetLogoutTimer() {
   //   clearTimeout(logoutTimer);

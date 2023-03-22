@@ -408,3 +408,14 @@ html {
 .modal-content {
   border: none !important;
 }
+
+.offcanvas {
+  z-index: 9898989898 !important;
+}
+
+.text-container {
+  width: 200px !important;
+  white-space: nowrap; /* Prevent line breaks */
+  overflow: hidden; /* Hide overflow */
+  text-overflow: ellipsis; /* Show ellipsis */
+}

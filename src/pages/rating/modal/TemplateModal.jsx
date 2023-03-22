@@ -35,12 +35,13 @@ function TemplateModal({ setShow, id, categoryName }) {
   const [isChanged, setIsChanged] = useState(false);
   const [dataBuffer, setDataBuffer] = useState([]);
 
-  let newDataBuffer = [];
-  if (typeof dataBuffer[Symbol.iterator] === "function") {
-    newDataBuffer = [...dataBuffer];
+  let newDataBuffer = {};
+  if (dataBuffer === null || typeof dataBuffer[Symbol.iterator] !== "function") {
+    console.error("Error: ДАТАБУФФЕР ЧИНЬ ХООСОН БАЙНА");
+    newDataBuffer = [];
+    setDataBuffer([]); // Handle the error by setting newDataBuffer to an empty array, or another default value.
   } else {
-    console.error("Error: dataBuffer is not iterable.");
-    newDataBuffer = []; // Handle the error by setting newDataBuffer to an empty array, or another default value.
+    newDataBuffer = [...dataBuffer];
   }
 
   let dataApi = []; // used in hadgalah api call

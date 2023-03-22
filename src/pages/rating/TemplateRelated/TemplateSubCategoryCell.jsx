@@ -5,7 +5,12 @@ function TemplateSubCategoryCell({
   item,
   newDataBuffer,
   setIsChanged,
+  givenSubCategoryId
 }) {
+
+
+
+
 
 
   function handleTextInput(event) {
@@ -17,8 +22,9 @@ function TemplateSubCategoryCell({
     const subcategory = category.subCategories.find(
       (subcategory) => subcategory.subcategoryId === element.subcategoryId
     );
-    subcategory.subcategoryName = event.target.innerText + ' ';
+    subcategory.subcategoryName = event.target.innerText + ' '; //null handling using this nbsq
 
+    console.log("our ITEM is :" + JSON.stringify(item) + "\nour ELEMENT is:" + JSON.stringify(element) +"\n");
     console.log("our new data buffer is:" + JSON.stringify(newDataBuffer));
 
     setIsChanged(true);
@@ -34,8 +40,9 @@ function TemplateSubCategoryCell({
       (subcategory) => subcategory.subcategoryId === element.subcategoryId
     );
 
-    subcategory.subcategoryPoint = event.target.innerText;
-
+    subcategory.subcategoryPoint = event.target.innerText + ' '; //null handling using this nbsq
+    
+    setIsChanged(true);
   }
 
   return (

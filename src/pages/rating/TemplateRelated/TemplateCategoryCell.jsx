@@ -1,8 +1,8 @@
 import TemplateSubCategoryCell from "./TemplateSubCategoryCell";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { useStateContext } from "../../../contexts/ContextProvider";
-
+import NewTemplateSubCategoryCell from "./NewTemplateSubCategoryCell"
 ///v1/Training/category/delete
 
 function TemplateCategoryCell({ newDataBuffer, setIsChanged, item, index, trigger, setTrigger, /* test by mb */ dataBuffer, setDataBuffer  }) {
@@ -10,7 +10,13 @@ function TemplateCategoryCell({ newDataBuffer, setIsChanged, item, index, trigge
   const [showOption, setShowOption] = useState(false);
   const [deleteCategory, setDeleteCategory] = useState(false); // Used only for rendering and useEffect triggering, study different ways it could wor.
   const { data, TOKEN } = useStateContext();
-  
+  const [newComponents, setnewComponents] = useState({});
+  const [components, setComponents] = useState([]);
+  let givenSubCategoryId = 0;
+  let highestSubCategoryId = 0; 
+  const setComp = useCallback(() => {
+    setComponents([...components, <NewTemplateSubCategoryCell givenSubCategoryId={givenSubCategoryId} catId={item.categoryId} item={item} newDataBuffer={newDataBuffer} setIsChanged={setIsChanged}/>]);
+  }, [components, setIsChanged, trigger]);
 
   /* UNDER CONSTRUCTION */
 
@@ -38,6 +44,27 @@ function TemplateCategoryCell({ newDataBuffer, setIsChanged, item, index, trigge
   function showOptions() {
     setShowOption(!showOption);
   }
+  function AddSubcategory(){
+    console.log("just added a new category");
+    return <div> new test and stuff  </div>
+  }
+    
+
+    const AddComponent = () => {
+      for(const category of newDataBuffer){
+        for(const subcategory of category.subCategories){
+          if(subcategory.subcategoryId >= highestSubCategoryId){
+            highestSubCategoryId = subcategory.subcategoryId;
+          }
+        }
+      }
+      givenSubCategoryId = parseInt(highestSubCategoryId) + 1;
+    setComp();
+      
+      
+    };
+    
+
   return (
     
     <div className="mt-1 justify-center flex-col">
@@ -63,7 +90,15 @@ function TemplateCategoryCell({ newDataBuffer, setIsChanged, item, index, trigge
 
       {showSub && (
         <div className="min-h-[50px] bg-gray-200 rounded-b-lg p-2 mb-2">
-          <i className="bi bi-plus-circle-dotted text-lg mr-2 flex justify-end hover: cursor-pointer"></i>
+          <i className="bi bi-plus-circle-dotted text-lg mr-2 flex justify-end hover: cursor-pointer" onClick={AddComponent}></i> {/* plus button */}
+
+          {/* mbtest */}
+          {components}
+
+          
+
+          {/* mbtest */}
+
           {item?.subCategories?.map((element, i) => (
             <TemplateSubCategoryCell
               /* test by mb */

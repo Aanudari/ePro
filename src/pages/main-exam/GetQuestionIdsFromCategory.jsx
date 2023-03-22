@@ -86,9 +86,10 @@ function GetQuestionIdsFromCategory({ setShow, getIds }) {
     });
     container.push(element.id);
   }
-  const [catId, setCatId] = useState("");
-  console.log(catId);
-  const pickRandomNumbers = (value) => {
+  const [catId, setCatId] = useState();
+  // console.log(catId);
+  const [certain, setCertain] = useState([]);
+  const pickRandomNumbers = (value, categoryId) => {
     let value2 = value.target.value;
     let copyArr = container.slice();
     for (let i = copyArr.length - 1; i > 0; i--) {
@@ -96,11 +97,18 @@ function GetQuestionIdsFromCategory({ setShow, getIds }) {
       [copyArr[i], copyArr[j]] = [copyArr[j], copyArr[i]];
     }
     let arr = [...copyArr.slice(0, value2)];
-
-    setQuestionIds(arr);
+    setQuestionIds((prev) => [...prev, ...arr]);
+    let tempo = {
+      catId: categoryId,
+      count: value2,
+    };
+    setCertain((prev) => [...prev, tempo]);
   };
-  // console.log(questionIds);
+  // console.log(certain);
+  const [showMenu, setShowMenu] = useState([]);
   const [showModal, setShowModal] = useState(false);
+
+  // console.log(questionIds);
   return (
     <div
       className={`${
@@ -133,12 +141,28 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
               </span>
               {questionIds.length > 0 && (
                 <button
-                  className="custom-btn btn-13 ml-4 h-11"
+                  className="px-3 rounded font-[500] text-white bg-teal-700 hover:bg-teal-500 hover:shadow w-[130px] 
+                  flex items-center justify-center ml-4 h-11"
                   onClick={() => {
                     setShowModal(true);
                   }}
                 >
+                  <i className="bi bi-clipboard-check-fill mr-2 text-lg"></i>
                   Хадгалах
+                </button>
+              )}
+              {questionIds.length > 0 && (
+                <button
+                  className="px-3 rounded font-[500] text-white bg-rose-600 hover:bg-rose-500 hover:shadow w-[130px] 
+                  flex items-center justify-center ml-4 h-11"
+                  onClick={() => {
+                    setQuestionIds([]);
+                    setShowMenu([]);
+                    setCertain([]);
+                  }}
+                >
+                  <i className="bi bi-arrow-repeat mr-2 text-lg"></i>
+                  Reset
                 </button>
               )}
             </div>
@@ -154,7 +178,7 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
         </div>
         {selected.length > 0 ? (
           <div className="h-full px-4 py-1 overflow-scroll flex flex-col items-center">
-            <div className=" flex gap-2 h-16 items-center justify-between w-[900px]">
+            <div className=" flex gap-2 h-16 items-center justify-between w-[900px] mt-4">
               <div
                 onClick={() => {
                   setSelected([]);
@@ -164,31 +188,56 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
               >
                 <i className="bi bi-backspace mr-2"></i>Буцах
               </div>
-              <div className="flex justify-end w-[340px] gap-0">
+              <div className="flex justify-end w-[340px] gap-0 ">
                 <div
                   className={`font-[500] flex justify-end  items-center text-white  
                 w-full`}
                 >
-                  <label>
-                    <select
-                      onChange={(e) => {
-                        pickRandomNumbers(e);
-                      }}
-                      name=""
-                      id=""
-                      // disabled
-                      className="cursor-pointer"
-                    >
-                      {ids.map((id, indexOfIds) => (
-                        <option
-                          key={indexOfIds}
-                          value={JSON.stringify(id.label)}
-                        >
-                          {id.label}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
+                  {!showMenu.includes(catId) ? (
+                    <label>
+                      <select
+                        onChange={(e) => {
+                          pickRandomNumbers(e, catId);
+                          setShowMenu((prev) => [...prev, catId]);
+                        }}
+                        name=""
+                        id=""
+                        // disabled
+                        className="cursor-pointer"
+                      >
+                        {ids.map((id, indexOfIds) => (
+                          <option
+                            key={indexOfIds}
+                            value={JSON.stringify(id.label)}
+                          >
+                            {id.label}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  ) : (
+                    <label>
+                      <select
+                        name=""
+                        id=""
+                        disabled
+                        className="disabled-select"
+                      >
+                        {certain.map((item, index) => {
+                          return (
+                            item.catId == catId && (
+                              <option
+                                key={index}
+                                value={JSON.stringify(item.count)}
+                              >
+                                {item.count}
+                              </option>
+                            )
+                          );
+                        })}
+                      </select>
+                    </label>
+                  )}
                 </div>
               </div>
             </div>
@@ -219,7 +268,7 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
               >
                 <div
                   onClick={() => {
-                    setCatId((prev) => [...prev, category.id]);
+                    setCatId(category.id);
                     selectCatId(category.id, category.name, category.status);
                   }}
                   className={`w-full text-white mb-1 h-16  shadow-sm ${
@@ -240,9 +289,6 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
                   <div className="flex justify-between w-[calc(70%)]">
                     <div className="flex items-center gap-20 w-[calc(70%)]">
                       <div className="flex justify-between items-start w-[200px] ">
-                        {/* <h6 className="font-[500] text-[12px] uppercase">
-                        Эхлэх: {category.startDate}
-                      </h6> */}
                         <h6 className=" flex items-center">
                           {category.status == "A" && (
                             <i className="bi bi-hourglass-top text-lg mb-[-5px] mr-1"></i>

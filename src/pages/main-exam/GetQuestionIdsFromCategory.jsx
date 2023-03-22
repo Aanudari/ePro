@@ -87,6 +87,7 @@ function GetQuestionIdsFromCategory({ setShow, getIds }) {
     container.push(element.id);
   }
   const [catId, setCatId] = useState("");
+  console.log(catId);
   const pickRandomNumbers = (value) => {
     let value2 = value.target.value;
     let copyArr = container.slice();
@@ -95,6 +96,7 @@ function GetQuestionIdsFromCategory({ setShow, getIds }) {
       [copyArr[i], copyArr[j]] = [copyArr[j], copyArr[i]];
     }
     let arr = [...copyArr.slice(0, value2)];
+
     setQuestionIds(arr);
   };
   // console.log(questionIds);
@@ -217,7 +219,7 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
               >
                 <div
                   onClick={() => {
-                    setCatId(category.id);
+                    setCatId((prev) => [...prev, category.id]);
                     selectCatId(category.id, category.name, category.status);
                   }}
                   className={`w-full text-white mb-1 h-16  shadow-sm ${

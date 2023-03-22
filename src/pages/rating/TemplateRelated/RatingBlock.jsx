@@ -49,7 +49,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
           handleShow();
         }}
         className="btn-13 hover:shadow text-gray-600 my-1
-         rounded relative cursor-pointer hover:text-white"
+         rounded relative cursor-pointer hover:text-white !w-full"
       >
         <div className="py-3 px-4 w-full flex justify-between items-start ">
           <div className="font-[500] h-full items-center w-[calc(70%)] container-header-text2">

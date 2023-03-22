@@ -4,6 +4,7 @@ import NotiCell from "../../components/sub-components/NotiCell";
 import UserSub from "../../components/sub-components/UserSub";
 import axios from "axios";
 import Select from "react-select";
+import { useStateContext } from "../../contexts/ContextProvider";
 const options = [
   { value: "chocolate", label: "Chocolate" },
   { value: "strawberry", label: "Strawberry" },
@@ -14,11 +15,13 @@ function Notification() {
   const [selectedOption, setSelectedOption] = useState(options[0]);
   const [pageStatus, setpageStatus] = useState("1");
   const [users, setUsers] = useState();
+  const { TOKEN } = useStateContext();
   useEffect(() => {
     axios({
       method: "get",
       headers: {
         "Content-Type": "application/json",
+        Authorization: TOKEN,
       },
       url: `${process.env.REACT_APP_URL}/v1/User`,
     })

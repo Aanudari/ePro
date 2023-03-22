@@ -419,3 +419,13 @@ html {
   overflow: hidden; /* Hide overflow */
   text-overflow: ellipsis; /* Show ellipsis */
 }
+
+.disabled-select {
+  background: rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important;
+  backdrop-filter: blur(5px) !important;
+  -webkit-backdrop-filter: blur(5px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  text-align: center !important;
+  cursor: not-allowed !important;
+}

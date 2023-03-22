@@ -1,5 +1,5 @@
 import { useStateContext } from "../../../contexts/ContextProvider";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { logout } from "../../../service/examService";
 import RatingCategoryAdd from "./RatingCategoryAdd";
@@ -85,7 +85,10 @@ function TemplateModal({ setShow, id, categoryName }) {
           </button>
         </div>
         <div className="h-screen w-[300px] md:w-[600px] lg:w-[900px] bg-white p-3">
-          <div className="text-gray-500 px-3 py-1 rounded text-[18px]"> Шалгалтын үнэлгээ </div>
+          <div className="text-gray-500 px-3 py-1 rounded text-[18px]">
+            {" "}
+            Шалгалтын үнэлгээ{" "}
+          </div>
           {data?.length > 0 ? (
             data.map((item, index) => {
               return (

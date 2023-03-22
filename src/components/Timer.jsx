@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+
 import { useTimer } from "react-timer-hook";
 import { toast, ToastContainer } from "react-toastify";
 

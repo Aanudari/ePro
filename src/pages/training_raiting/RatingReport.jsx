@@ -9,12 +9,7 @@ import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
 import moment from "moment";
 import { logout } from "../../service/examService";
-import { Pagination, Scrollbar, A11y } from "swiper";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
+
 function RatingReport() {
   const location = useLocation();
   const { TOKEN } = useStateContext();
@@ -77,7 +72,6 @@ function RatingReport() {
 
   const type1Arr = separatedArr["1"];
   const type2Arr = separatedArr["2"];
-
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <Navigation />
@@ -118,9 +112,9 @@ function RatingReport() {
                 <p className="font-body text-black">Үнэлгээ өгсөн хүний тоо</p>
                 <a className="text-blue-500 font-body hover:text-gray-800">
                   <i className="bi bi-people" />{" "}
-                  {questionResults.totalResponse === null
+                  {questionResults[0]?.responseCount === ""
                     ? 0
-                    : questionResults.totalResponse}
+                    : questionResults[0]?.responseCount}
                 </a>
               </div>
             </div>
@@ -149,7 +143,7 @@ function RatingReport() {
           </div>
 
           <div className="mx-auto max-w-screen-xl px-2 py-12 sm:px-6 lg:px-8">
-            <Swiper
+            {/* <Swiper
               modules={[Pagination, Scrollbar, A11y]}
               spaceBetween={50}
               slidesPerView={3}
@@ -189,7 +183,7 @@ function RatingReport() {
               ))}
 
               <div className="swiper-pagination !relative !bottom-0 mt-12"></div>
-            </Swiper>
+            </Swiper> */}
           </div>
         </div>
         <div>
@@ -198,7 +192,7 @@ function RatingReport() {
           </div>
 
           <div className="mx-auto max-w-screen-xl px-2 py-12 sm:px-6 lg:px-8">
-            <Swiper
+            {/* <Swiper
               modules={[Pagination, Scrollbar, A11y]}
               spaceBetween={50}
               slidesPerView={3}
@@ -227,7 +221,7 @@ function RatingReport() {
                 </SwiperSlide>
               ))}
               <div className="swiper-pagination !relative !bottom-0 mt-12"></div>
-            </Swiper>
+            </Swiper> */}
           </div>
         </div>
       </div>

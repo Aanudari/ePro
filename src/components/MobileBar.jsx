@@ -153,7 +153,7 @@ function MobileBar() {
                 <li>
                   <a
                     onClick={() => {
-                      navigate("/training");
+                      navigate("/online-training");
                     }}
                   >
                     Онлайн сургалт
@@ -162,10 +162,10 @@ function MobileBar() {
                 <li>
                   <a
                     onClick={() => {
-                      navigate("/training");
+                      navigate("/training-schedule");
                     }}
                   >
-                    Нийтлэл
+                    Сургалтын хуваарь
                   </a>
                 </li>
                 <li>

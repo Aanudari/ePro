@@ -941,13 +941,17 @@ function ErrorThanks() {
               </tbody>
             </table>
           </div>
-          <div className="mt-3">
-            <Pagination
-              nPages={nPages}
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-            />
-          </div>
+          {filteredData.length > 9 ? (
+            <div className="mt-3">
+              <Pagination
+                nPages={nPages}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+              />
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </div>
       <ToastContainer />

@@ -2,7 +2,7 @@ import Navigation from "../../components/Navigation";
 import RatingControll from "./RatingControll";
 import RatingHeader from "./RatingHeader";
 import RatingTemplates from "./RatingTemplates";
-import { useState } from "react";
+import React, { useState } from "react";
 import CreateRatingTemplate from "./modal/CreateRatingTemplate";
 
 function RatingCore() {

@@ -1,5 +1,5 @@
 import { useStateContext } from "../../../contexts/ContextProvider";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { logout } from "../../../service/examService";
 import axios from "axios";
 import ShowExamResult from "./ShowExamResult";

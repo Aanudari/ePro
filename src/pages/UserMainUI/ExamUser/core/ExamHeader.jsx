@@ -1,5 +1,5 @@
 import MyTimer from "../../../../components/Timer";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 function ExamHeader({
   finisher,
   minute,

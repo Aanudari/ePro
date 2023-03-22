@@ -268,6 +268,7 @@ body {
     height: 48px;
     padding: 0 0.25rem;
     font-weight: 500;
+    font-size: 14px;
     color: inherit;
     border-bottom: 3px solid transparent;
     text-decoration: none;
@@ -505,4 +506,38 @@ html {
   border-right: 5px solid transparent;
 
   border-bottom: 5px solid #fd1f1f;
+}
+
+.container-header-text {
+  width: 300px; /* set a fixed width for the container */
+  overflow: hidden; /* hide any overflowing content */
+  white-space: nowrap; /* prevent line breaks */
+  text-overflow: ellipsis; /* show ellipsis when text overflows */
+}
+
+.container-header-text2 {
+  overflow: hidden; /* hide any overflowing content */
+  white-space: nowrap; /* prevent line breaks */
+  text-overflow: ellipsis; /* show ellipsis when text overflows */
+}
+
+$bg: #edf2f0;
+
+$neu-1: #ecf0f3;
+$neu-2: #d1d9e6;
+
+$white: #f9f9f9;
+$gray: #a0a5a8;
+$black: #181818;
+
+$purple: #4b70e2;
+
+$transition: 1.25s;
+
+.inset-shadow {
+  box-shadow: inset 2px 2px 4px $neu-2, inset -2px -2px 4px $white;
+  transition: 0.25s ease;
+}
+.inset-shadow:hover {
+  box-shadow: inset 4px 4px 4px $neu-2, inset -4px -4px 4px $white;
 }

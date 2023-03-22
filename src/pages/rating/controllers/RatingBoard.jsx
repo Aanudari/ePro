@@ -1,61 +1,26 @@
-import React, { useEffect, useState } from "react";
 import CreateRatingModal from "../modal/CreateRatingModal";
-import axios from "axios";
-import { useStateContext } from "../../../contexts/ContextProvider";
-import { logout } from "../../../service/examService";
 import RatingBlock from "../TemplateRelated/RatingBlock";
 import moment from "moment";
-function RatingBoard({ showModal, setShowModal }) {
-  const { TOKEN } = useStateContext();
-  const [data, setData] = useState();
-  const [trigger, setTrigger] = useState(false);
-  useEffect(() => {
-    axios({
-      method: "get",
-      headers: {
-        Authorization: `${TOKEN}`,
-      },
-      url: `${process.env.REACT_APP_URL}/v1/RatingNew/getListRating`,
-    })
-      .then((res) => {
-        if (res.data.isSuccess == true) {
-          setData(res.data.ratings);
-        }
-        if (res.data.resultMessage === "Unauthorized") {
-          logout();
-        }
-      })
-      .catch((err) => console.log(err));
-  }, [trigger]);
-
-  // create an object for each month, with an empty array as the value
+import { useStateContext } from "../../../contexts/ContextProvider";
+function RatingBoard({ showModal, setShowModal, data, setTrigger, trigger }) {
   const months = {};
-  let date = "01/11/1992"; // string
   for (let i = 0; i < 12; i++) {
-    const month = moment(new Date(date)).month(i).format("MMMM");
-    const year = moment(new Date(date)).year(2023).month(i).format("YYYY");
+    const month = moment().month(i).format("MMMM");
+    const year = moment().year(2023).month(i).format("YYYY");
     months[`${month} ${year}`] = [];
   }
-
-  // loop through the original data and add each item to the corresponding month's array
-  // for (const item of data2) {
-  //   const monthYear = moment(item.createdDate).format("MMMM YYYY");
-  //   months[monthYear].push(item);
-  // }
   for (let index = 0; index < data?.length; index++) {
     const element = data[index];
     const monthYear = moment(element.createdDate).format("MMMM YYYY");
     months[monthYear].push(element);
   }
-
-  // convert the object to an array of 12 objects
   const result = Object.entries(months).map(([monthYear, items]) => ({
     monthYear,
     items,
   }));
-
+  const { activeMenu } = useStateContext();
   return (
-    <div className="w-[calc(90%)] bg-white p-2 h-full">
+    <div className={`w-[calc(100vw-420px)] bg-white p-2 h-full rounded`}>
       {showModal && (
         <CreateRatingModal
           setTrigger={setTrigger}
@@ -63,7 +28,7 @@ function RatingBoard({ showModal, setShowModal }) {
           setShowModal={setShowModal}
         />
       )}
-      <div className="h-[calc(100vh-160px)] overflow-scroll py-2">
+      <div className="w-full h-[calc(100vh-160px)] overflow-scroll py-2 ">
         {result.map((month, ind) => {
           return (
             <div key={ind} className=" w-full my-2 px-3">
@@ -81,6 +46,8 @@ function RatingBoard({ showModal, setShowModal }) {
                     <RatingBlock
                       item={item}
                       key={JSON.stringify(item + index)}
+                      trigger={trigger}
+                      setTrigger={setTrigger}
                     />
                   );
                 })}

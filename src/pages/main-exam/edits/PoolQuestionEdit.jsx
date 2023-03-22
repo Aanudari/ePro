@@ -7,6 +7,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ReactImageUploading from "react-images-uploading";
 import { logout } from "../../../service/examService";
+import Offcanvas from "react-bootstrap/Offcanvas";
 function PoolQuestionEdit({
   data,
   indexed,
@@ -174,7 +175,7 @@ function PoolQuestionEdit({
       url: `${process.env.REACT_APP_URL}/v1/ExamFile/${value}`,
     })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         if (
           res.data.resultMessage === "Unauthorized" ||
           res.data.resultMessage === "Input string was not in a correct format."
@@ -191,14 +192,68 @@ function PoolQuestionEdit({
       })
       .catch((err) => console.log(err));
   };
+  const [list, setList] = useState();
+  const [showList, setShowList] = useState(false);
   // console.log(main);
   // console.log(main);
+  const getLockedQuestionExams = (value) => {
+    axios({
+      method: "get",
+      headers: {
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/ExamNew/getExamInfo/${value}`,
+    })
+      .then((res) => {
+        if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct format."
+        ) {
+          logout();
+        } else {
+          setList(res.data.examinfos);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
+  // console.log(list);
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   return (
-    <div className="">
+    <div>
       <ToastContainer />
       <div
         className={`border-t-[6px] border-l-[2px] border-r-[2px] border-[#50a3a2] rounded-lg relative bg-[#50a3a2]`}
       >
+        <Offcanvas
+          style={{ width: "300px" }}
+          placement="end"
+          show={show}
+          onHide={handleClose}
+          responsive="lg"
+        >
+          <Offcanvas.Header closeButton>
+            <Offcanvas.Title>
+              <div className="text-white font-[500] text-[15px] text-container">
+                {data.question}
+              </div>
+            </Offcanvas.Title>
+          </Offcanvas.Header>
+          <Offcanvas.Body>
+            {list?.map((item, index) => {
+              return (
+                <div
+                  key={index}
+                  className="text-white text-sm px-3 rounded py-2 bg-teal-500 font-[400] mt-2 w-full"
+                >
+                  {item.examName}
+                </div>
+              );
+            })}
+          </Offcanvas.Body>
+        </Offcanvas>
         {confirm && (
           <DeleteConfirm setConfirm={setConfirm} deleteCat={actualDelete} />
         )}
@@ -219,7 +274,11 @@ function PoolQuestionEdit({
         ) : null}
         {data.status == "NE" && !createExam ? (
           <button
-            className="absolute bottom-[20px] right-[20px] px-3 py-2 bg-teal-500 font-[500] flex justify-center 
+            onClick={() => {
+              getLockedQuestionExams(data.id);
+              handleShow();
+            }}
+            className="absolute active:bg-teal-400 bottom-[20px] right-[20px] px-3 py-2 bg-teal-500 font-[500] flex justify-center 
         items-center text-white rounded-lg "
           >
             <i className="bi bi-lock-fill text-xl"></i>

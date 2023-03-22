@@ -17,6 +17,7 @@ function AllEmployeeSelect({ setShow, getEmployees, setShowSelect }) {
       url: `${process.env.REACT_APP_URL}/v1/User`,
     })
       .then((res) => {
+        // console.log(res.data);
         setUsers(res.data.result);
         if (res.data.resultMessage === "Unauthorized") {
           logout();

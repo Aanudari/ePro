@@ -38,6 +38,7 @@ import "react-toastify/dist/ReactToastify.css";
 import RatingCore from "./pages/ratingMain/RatingCore";
 import EditTraining from "./pages/training/Edit-training";
 import UserTraining from "./pages/training/User-training";
+import ClickedTrain from "./pages/training/ClickedTrain";
 import TrainingPlayer from "./pages/training/TrainingPlayer";
 import RatingIndividual from "./pages/ratingMain/RatingIndivdual";
 import UserCore from "./pages/UserMainUI/Rating/UserCore";
@@ -57,8 +58,7 @@ import { logout } from "./service/examService";
 import Countdown from "./components/CountDown";
 import RatingUser from "./pages/UserMainUI/Rating/RatingUser";
 import UserHome from "./pages/UserMainUI/UserHome";
-import ClickedTrain from "./pages/training/ClickedTrain";
-
+import RatingUserShow from "./pages/UserMainUI/Rating/RatingUserShow";
 function App() {
   const { activeMenu, showTop, roleId, TOKEN } = useStateContext();
   const { width } = getWindowDimensions();
@@ -70,15 +70,15 @@ function App() {
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `${process.env.REACT_APP_URL}/v1/User`,
+      url: `${process.env.REACT_APP_URL}/v1/User/checkToken`,
     })
       .then((res) => {
-        if (res.data.errorCode === 401) {
+        if (res.data.errorCode === 401 && TOKEN != null) {
           logout();
         }
       })
       .catch((err) => console.log(err));
-  });
+  }, []);
 
   // function resetLogoutTimer() {
   //   clearTimeout(logoutTimer);
@@ -411,6 +411,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199, 196, 1, 4, 188]}>
                 <RatingUser />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/user-rating-detail"
+            element={
+              <ProtectedRoute allowedRoles={[199, 196, 1, 4, 188]}>
+                <RatingUserShow />
               </ProtectedRoute>
             }
           />

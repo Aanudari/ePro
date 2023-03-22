@@ -12,6 +12,7 @@
     7px 7px 20px 0px rgba(0, 0, 0, 0.1), 4px 4px 5px 0px rgba(0, 0, 0, 0.1);
   // box-shadow: 0 0 2px silver;
   outline: none;
+  user-select: none;
 }
 
 /* 1 */
@@ -669,6 +670,7 @@
   background-image: linear-gradient(315deg, #89d8d3 0%, #03c8a8 74%);
   border: none;
   z-index: 1;
+  user-select: none;
 }
 .btn-13:after {
   position: absolute;
@@ -1008,4 +1010,5 @@
   background-image: linear-gradient(315deg, #89d8d3 0%, #03c8a8 74%);
   border: none;
   z-index: 1;
+  user-select: none;
 }

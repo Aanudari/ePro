@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useStateContext } from "../../../contexts/ContextProvider";
 import axios from "axios";
 import ShowSubCategory from "./ShowSubCategory";

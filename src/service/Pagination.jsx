@@ -11,24 +11,26 @@ const Pagination = ({ nPages, currentPage, setCurrentPage }) => {
   };
   return (
     <div>
-      <ul className="pagination justify-content-center text-xs">
+      <ul className="pagination justify-content-center text-xs  ">
         <li className="page-item">
-          <a className="page-link " onClick={prevPage}>
+          <a className="page-link text-gray-600" onClick={prevPage}>
             Өмнөх
           </a>
         </li>
         {pageNumbers.map((pgNumber) => (
           <li
             key={pgNumber}
-            className={`page-item ${currentPage == pgNumber ? "active" : ""} `}
+            className={`page-item text-gray-600 ${
+              currentPage == pgNumber ? "active" : ""
+            } `}
           >
-            <a onClick={() => setCurrentPage(pgNumber)} className="page-link">
+            <a onClick={() => setCurrentPage(pgNumber)} className="page-link ">
               {pgNumber}
             </a>
           </li>
         ))}
         <li className="page-item">
-          <a className="page-link" onClick={nextPage}>
+          <a className="page-link text-gray-600" onClick={nextPage}>
             Дараах
           </a>
         </li>

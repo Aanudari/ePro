@@ -477,9 +477,9 @@ function ErrorThanks() {
         <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 ">
           <div className="mt-4">
             <ul className="flex flex-wrap -mb-px">
-              {complainInfo.map((item) => (
+              {complainInfo.map((item, custom) => (
                 <li
-                  key={item.id}
+                  key={JSON.stringify(item + custom)}
                   onClick={() => setActiveTab(item.id)}
                   className="mr-2"
                 >
@@ -549,10 +549,10 @@ function ErrorThanks() {
                     Бүгд
                   </p>
                 </Dropdown.Item>
-                {uniqueSeasons.map((season) => (
+                {uniqueSeasons.map((season, indexD) => (
                   <Dropdown.Item
                     onClick={() => handleSeasonChange(season)}
-                    key={season}
+                    key={JSON.stringify(season + indexD)}
                     value={season}
                   >
                     <p className="block items-center font-bold rounded-lg text-sm text-gray-600 hover:border-gray-300 hover:text-blue-600">
@@ -579,10 +579,10 @@ function ErrorThanks() {
                     Бүгд
                   </p>
                 </Dropdown.Item>
-                {uniqueDivisionNames.map((divisionNames) => (
+                {uniqueDivisionNames.map((divisionNames, indexF) => (
                   <Dropdown.Item
                     onClick={() => handleDivisionChange(divisionNames)}
-                    key={divisionNames}
+                    key={JSON.stringify(divisionNames + indexF)}
                     value={divisionNames}
                   >
                     <p className="block items-center font-bold rounded-lg text-sm text-gray-600 hover:border-gray-300 hover:text-blue-600">
@@ -706,11 +706,11 @@ function ErrorThanks() {
               </thead>
               <tbody className="bg-white text-xs">
                 {currentRecords.map(
-                  (item) =>
+                  (item, i) =>
                     activeTab === `${item.complain}` &&
                     (item.complain === "1" ? (
                       <tr
-                        key={item.id}
+                        key={JSON.stringify(item + i)}
                         className="border-b border-gray-200 hover:bg-gray-200"
                       >
                         <td className="px-1 py-1 border">
@@ -792,7 +792,7 @@ function ErrorThanks() {
                       </tr>
                     ) : item.complain === "2" ? (
                       <tr
-                        key={item.id}
+                        key={JSON.stringify(item + i)}
                         className="border-b border-gray-200 hover:bg-gray-100"
                       >
                         <td className="px-1 py-1 border">
@@ -941,13 +941,17 @@ function ErrorThanks() {
               </tbody>
             </table>
           </div>
-          <div className="mt-3">
-            <Pagination
-              nPages={nPages}
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-            />
-          </div>
+          {filteredData.length > 9 ? (
+            <div className="mt-3">
+              <Pagination
+                nPages={nPages}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+              />
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </div>
       <ToastContainer />

@@ -13,7 +13,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/core/Login";
 import Home from "./pages/core/Home";
 import { useStateContext } from "./contexts/ContextProvider";
-import Training from "./pages/training/Training";
+import OnlineTraining from "./pages/training/OnlineTraining";
+import TrainingSchedule from "./pages/training/TrainingSchedule";
 import TrainingFiles from "./pages/training/TrainingFiles";
 import TrainingCategory from "./pages/training/TrainingCategory";
 import CreateTraining from "./pages/training/create-training";
@@ -37,6 +38,7 @@ import "react-toastify/dist/ReactToastify.css";
 import RatingCore from "./pages/ratingMain/RatingCore";
 import EditTraining from "./pages/training/Edit-training";
 import UserTraining from "./pages/training/User-training";
+import ClickedTrain from "./pages/training/ClickedTrain";
 import TrainingPlayer from "./pages/training/TrainingPlayer";
 import RatingIndividual from "./pages/ratingMain/RatingIndivdual";
 import UserCore from "./pages/UserMainUI/Rating/UserCore";
@@ -50,7 +52,7 @@ import RatedUsers from "./pages/training_raiting/RatedUsers";
 import Rating from "./pages/rating/Rating";
 import ChoosedTRate from "./pages/training_raiting/ChoosedTRate";
 import RatingReport from "./pages/training_raiting/RatingReport";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { logout } from "./service/examService";
 import Countdown from "./components/CountDown";
@@ -61,6 +63,7 @@ function App() {
   const { activeMenu, showTop, roleId, TOKEN } = useStateContext();
   const { width } = getWindowDimensions();
   const queryClient = new QueryClient();
+
   useEffect(() => {
     axios({
       method: "get",
@@ -151,10 +154,27 @@ function App() {
             }
           />
           <Route
-            path="/training"
+            path="/online-training"
             element={
               <ProtectedRoute allowedRoles={[199, 196]}>
-                <Training />
+                <OnlineTraining />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/training-schedule"
+            element={
+              <ProtectedRoute allowedRoles={[199, 196]}>
+                <TrainingSchedule />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/clicked-train"
+            element={
+              <ProtectedRoute allowedRoles={[199, 196]}>
+                <ClickedTrain />
               </ProtectedRoute>
             }
           />
@@ -175,14 +195,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/training-list"
-            element={
-              <ProtectedRoute allowedRoles={[199, 196]}>
-                <Training />
-              </ProtectedRoute>
-            }
-          />
+
           <Route
             path="/edit-training"
             element={

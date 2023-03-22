@@ -12,6 +12,7 @@ function TrainingUserCell() {
   const selectedTrain = location.state.data;
   const [watchedUsers, setWatchedUsers] = useState([]);
   const navigate = useNavigate();
+
   useEffect(() => {
     axios({
       method: "get",
@@ -82,33 +83,32 @@ function TrainingUserCell() {
     <div className="w-full min-h-[calc(100%-56px)]">
       <Navigation />
       <div className="sm:px-6 w-full">
-        <button
-          onClick={() => navigate("/training")}
-          className="bg-white border border-white p-2 rounded text-gray-700 flex items-center focus:outline-none focus:shadow-outline mt-4"
-        >
-          <svg width="24" height="24" viewBox="0 0 16 16">
-            <path
-              d="M9 4 L5 8 L9 12"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinejoin="round"
-              strokeLinecap="round"
-            />
-          </svg>
-          <span className="mx-2">Буцах</span>
-        </button>
         <div className="px-4 md:px-10 py-4 md:py-7">
+          <a
+            onClick={() => {
+              location.state.item === "schedule"
+                ? navigate("/training-schedule")
+                : navigate("/online-training");
+            }}
+            className="text-sm font-bold text-gray-900 sm:text-sm cursor-pointer"
+          >
+            <i className="bi bi-backspace" />
+            <span className="mx-2">Буцах</span>
+          </a>
           <p className="text-sm font-bold text-gray-900 sm:text-sm">
             Хувиарлагдсан хэрэглэгчид{" "}
             {filteredList.length > 0
               ? `(${filteredList.length})`
               : `(${watchedUsers.length})`}
           </p>
-          <p className="mt-1.5 text-sm text-gray-500">
-            <span className="font-bold">Сургалтын нэр:</span>{" "}
-            {selectedTrain.name} 🚀
-          </p>
+          {location.state.item === "schedule" ? (
+            ""
+          ) : (
+            <p className="mt-1.5 text-sm text-gray-500">
+              <span className="font-bold">Сургалтын нэр:</span>{" "}
+              {selectedTrain.name} 🚀
+            </p>
+          )}
         </div>
 
         <div className="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10">

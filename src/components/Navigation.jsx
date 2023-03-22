@@ -1,7 +1,6 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { useStateContext } from "../contexts/ContextProvider";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import axios from "axios";
 import getWindowDimensions from "./SizeDetector";
 import MobileBar from "./MobileBar";

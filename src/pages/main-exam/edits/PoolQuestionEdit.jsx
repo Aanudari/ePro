@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useStateContext } from "../../../contexts/ContextProvider";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import DeleteConfirm from "../modal/DeleteComfirm";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

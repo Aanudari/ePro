@@ -70,7 +70,7 @@ function UserErrorThanks() {
   useEffect(() => {
     var filteredData = complain.filter((item) => item.complain === activeTab);
     setFilteredData(filteredData);
-  }, [filteredData]);
+  }, [activeTab]);
 
   return (
     <UserLayout>
@@ -300,13 +300,17 @@ function UserErrorThanks() {
               </tbody>
             </table>
           </div>
-          <div className="mt-3">
-            <Pagination
-              nPages={nPages}
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-            />
-          </div>
+          {currentRecords.length > 9 ? (
+            <div className="mt-3">
+              <Pagination
+                nPages={nPages}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+              />
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </div>
 

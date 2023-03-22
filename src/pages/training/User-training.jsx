@@ -1,5 +1,5 @@
 import UserLayout from "../../components/UserLayout";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -8,10 +8,19 @@ import { logout } from "../../service/examService";
 import { Modal } from "react-bootstrap";
 import { notification } from "../../service/toast";
 import moment from "moment";
+import Pagination from "../../service/Pagination";
 function UserTraining() {
   const { TOKEN, deviceId } = useStateContext();
   const navigate = useNavigate();
   const [userTrain, setUserTrain] = useState([]);
+  const [activeTab, setActiveTab] = useState("2");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [recordsPerPage] = useState(10);
+  const [filteredData, setFilteredData] = useState([]);
+  const options = [
+    { id: "2", value: "Онлайн сургалт" },
+    { id: "1", value: "Сургалтын хуваарь" },
+  ];
   useEffect(() => {
     axios({
       method: "get",
@@ -35,7 +44,14 @@ function UserTraining() {
       })
       .catch((err) => console.log(err));
   }, []);
-  const [showed, setShowed] = useState(false);
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  const currentRecords = filteredData.slice(
+    indexOfFirstRecord,
+    indexOfLastRecord
+  );
+  const nPages = Math.ceil(filteredData.length / recordsPerPage);
+  const videoRef = useRef(null);
   function secondsToHms(d) {
     d = Number(d);
     var h = Math.floor(d / 3600);
@@ -104,36 +120,59 @@ function UserTraining() {
     }
   };
 
-  let nokori = [];
-  const gotYa = (value) => {
-    nokori.push(value);
-  };
-  userTrain?.map((exam) => {
-    if (exam.sessionType == "0") {
-      return gotYa(exam.sessionType);
-    }
-  });
-  const [detector, setDetector] = useState(0);
-  const indexed = [
-    { id: "1", value: "Тэнхим" },
-    { id: "2", value: "Онлайн" },
-  ];
-  let tempo = [userTrain];
-  for (let index = 0; index < indexed?.length; index++) {
-    const element = indexed[index];
-    let temp = [];
-    for (let i = 0; i < userTrain?.length; i++) {
-      const el = userTrain[i];
-      if (el.sessionType == element.id) {
-        temp.push(el);
-      }
-    }
-    tempo.push(temp);
-  }
   const today = new Date();
   const format = "YYYYMMDDHHmmss";
   const nowdateTime = moment(today).format(format);
+  function formatDuration(duration) {
+    const hours = Math.floor(duration / 3600);
+    const minutes = Math.floor((duration - hours * 3600) / 60);
+    const seconds = duration - hours * 3600 - minutes * 60;
 
+    let result = "";
+    if (hours > 0) {
+      result += `${Math.round(hours)} цаг `;
+    }
+    if (minutes > 0) {
+      result += `${Math.round(minutes)} мин `;
+    }
+    if (seconds > 0) {
+      result += `${Math.round(seconds)} сек `;
+    }
+
+    return result;
+  }
+  useEffect(() => {
+    var filteredData = userTrain.filter(
+      (item) => item.sessionType === activeTab
+    );
+    setFilteredData(filteredData);
+  }, [activeTab]);
+  function timeSince(date) {
+    var seconds = Math.floor((new Date() - date) / 1000);
+
+    var interval = seconds / 31536000;
+
+    if (interval > 1) {
+      return Math.floor(interval) + " жилийн өмнө";
+    }
+    interval = seconds / 2592000;
+    if (interval > 1) {
+      return Math.floor(interval) + " сарын өмнө";
+    }
+    interval = seconds / 86400;
+    if (interval > 1) {
+      return Math.floor(interval) + " өдрийн өмнө";
+    }
+    interval = seconds / 3600;
+    if (interval > 1) {
+      return Math.floor(interval) + " цагийн өмнө";
+    }
+    interval = seconds / 60;
+    if (interval > 1) {
+      return Math.floor(interval) + " минутын өмнө";
+    }
+    return Math.floor(seconds) + " секундын өмнө";
+  }
   return (
     <UserLayout>
       <div>
@@ -266,558 +305,236 @@ function UserTraining() {
           </Modal.Body>
         </Modal>
       </div>
+
       <div className="max-w-screen-xl ml-auto mr-auto">
-        <div className="content">
-          <div className="content-panel">
-            <div className="vertical-tabs">
-              <a
-                onClick={() => {
-                  setDetector(0);
-                }}
-                className={`${detector == 0 && "active"}`}
-              >
-                Бүгд
-              </a>
-              <a
-                onClick={() => {
-                  setDetector(1);
-                }}
-                className={`${detector == 1 && "active"}`}
-              >
-                Тэнхим
-              </a>
-              <a
-                onClick={() => {
-                  setDetector(2);
-                }}
-                className={`${detector == 2 && "active"}`}
-              >
-                Онлайн
-              </a>
+        <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 ">
+          {userTrain.length === 0 ? (
+            <p className="flex items-center w-full font-semibold text-sm p-4">
+              Танд сургалт хувиарлагдаагүй байна.
+            </p>
+          ) : (
+            <p className="flex items-center w-full font-semibold text-sm p-4">
+              Танд дараах сургалтууд хувиарлагдсан байна.
+            </p>
+          )}
+          <div className="flex items-center justify-between">
+            <div className="text-center text-left">
+              <div className="relative">
+                <input
+                  // value={searchQuery}
+                  // onChange={handleSearch}
+                  className="h-10 px-6 py-2  rounded-lg border-2 border-gray-400 outline-none focus:border-indigo-500  pr-10 text-sm placeholder-gray-400 focus:z-10"
+                  placeholder="Сургалтын нэрээр хайх..."
+                  type="text"
+                />
+
+                <button
+                  type="submit"
+                  className="absolute inset-y-0 right-0 rounded-r-lg p-2 text-gray-600"
+                >
+                  <i className="bi bi-search" />
+                </button>
+              </div>
             </div>
           </div>
-          <div className="content-main">
-            {userTrain.length === 0 ? (
-              <div
-                className={
-                  showed
-                    ? "hidden"
-                    : "mt-2 flex items-center px-4 mb-2 text-gray-800 border-2 border-blue-500 rounded-md jusitfy-between"
-                }
-              >
-                <div className="flex items-center w-full ">
-                  Танд сургалт хувиарлагдаагүй байна.
-                </div>
-                <button
-                  onClick={(e) => setShowed(true)}
-                  type="button"
-                  className="flex flex-shrink-0 p-2 -mr-1 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 sm:-mr-2"
+
+          <div className="mt-4">
+            <ul className="flex flex-wrap -mb-px">
+              {options.map((item) => (
+                <li
+                  key={item.id}
+                  onClick={() => setActiveTab(item.id)}
+                  className="mr-2"
                 >
-                  <span className="sr-only">X</span>
-                  <i className="bi bi-x" />
-                </button>
-              </div>
-            ) : (
-              <div
-                className={
-                  showed
-                    ? "hidden"
-                    : "mt-2 flex items-center px-4 mb-2 text-gray-800  border-2 border-blue-500  rounded-md jusitfy-between"
-                }
-              >
-                <div className="flex items-center w-full">
-                  Танд дараах сургалтууд хувиарлагдсан байна.
-                </div>
-                <button
-                  onClick={(e) => setShowed(true)}
-                  type="button"
-                  className="flex flex-shrink-0 p-2 -mr-1 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 sm:-mr-2"
-                >
-                  <span className="sr-only">X</span>
-                  <i className="bi bi-x" />
-                </button>
-              </div>
-            )}
-            <div className="flex items-center">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {tempo[detector]?.map((data, i) => (
-                  <div key={i} className="mx-auto w-full">
-                    {detector === 1 && data.duration === "" ? (
-                      <div>
-                        {nowdateTime <= moment(data.endDate).format(format) ? (
-                          <div className="w-full mt-4 p-4 border border-2 block bg-white shadow-md hover:shadow-2xl rounded-lg overflow-hidden">
-                            <div className="flex items-center justify-between mb-4 space-x-12">
-                              <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-500 bg-green-200 rounded-md">
-                                ИДЭВХТЭЙ
-                              </span>
-
-                              {/* {data.status === "Үзээгүй" ? (
-                                <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-400 border-2 border-rose-500 rounded-md bg-white rounded-md">
-                                  ҮЗЭЭГҮЙ
-                                </span>
-                              ) : data.status === "Үзсэн" ? (
-                                <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-400 border-2 border-green-500 rounded-md bg-white rounded-md">
-                                  ҮЗСЭН
-                                </span>
-                              ) : (
-                                <span className="flex items-center px-2 py-1 text-xs font-semibold text-amber-400 border-2 border-amber-500 rounded-md bg-white rounded-md">
-                                  ҮЗЭЖ БАЙГАА{" "}
-                                </span>
-                              )} */}
-                            </div>
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="flex items-center">
-                                <div className="flex flex-col">
-                                  <span className="font-bold text-black text-sm dark:text-white">
-                                    {data.name}
-                                  </span>
-                                  <span className="text-sm text-gray-500 dark:text-white">
-                                    {data.description}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex items-center justify-between ">
-                              <div className="flex items-center">
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
-                                  Багш:
-                                </span>
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md">
-                                  {data.teacher}
-                                </span>
-                              </div>
-                            </div>
-                            <div className="flex items-center justify-between ">
-                              {data.duration === "" ? (
-                                ""
-                              ) : (
-                                <div className="flex items-center">
-                                  <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
-                                    Үргэлжлэх хугацаа:
-                                  </span>
-                                  <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md ">
-                                    {secondsToHms(data.duration)}
-                                  </span>
-                                </div>
-                              )}
-                            </div>
-                            <div className="flex items-center justify-between ">
-                              <div className="flex items-center">
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
-                                  Байршил:
-                                </span>
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md ">
-                                  {data.location}
-                                </span>
-                              </div>
-                            </div>
-                            <div className="flex items-center mt-4">
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  showModalTenhim(data);
-                                }}
-                                className="py-2 text-sm bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-400 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-400 text-center  font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
-                              >
-                                Сургалт харах
-                              </button>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="w-full mt-4 p-4 border border-2 block bg-white shadow-md hover:shadow-2xl rounded-lg overflow-hidden">
-                            <div className="flex items-center justify-between mb-4 space-x-12">
-                              <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-500 bg-red-200 rounded-md">
-                                ИДЭВХГҮЙ
-                              </span>
-
-                              {/* {data.status === "Үзээгүй" ? (
-                                <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-400 border-2 border-rose-500 rounded-md bg-white rounded-md">
-                                  ҮЗЭЭГҮЙ
-                                </span>
-                              ) : data.status === "Үзсэн" ? (
-                                <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-400 border-2 border-green-500 rounded-md bg-white rounded-md">
-                                  ҮЗСЭН
-                                </span>
-                              ) : (
-                                <span className="flex items-center px-2 py-1 text-xs font-semibold text-amber-400 border-2 border-amber-500 rounded-md bg-white rounded-md">
-                                  ҮЗЭЖ ДУУСГААГҮЙ
-                                </span>
-                              )} */}
-                            </div>
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="flex items-center">
-                                <div className="flex flex-col">
-                                  <span className="font-bold text-black text-sm dark:text-white">
-                                    {data.name}
-                                  </span>
-                                  <span className="text-sm text-gray-500 dark:text-white">
-                                    {data.description}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex items-center justify-between ">
-                              <div className="flex items-center">
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
-                                  Багш:
-                                </span>
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md">
-                                  {data.teacher}
-                                </span>
-                              </div>
-                            </div>
-                            <div className="flex items-center justify-between ">
-                              <div className="flex items-center">
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
-                                  Үргэлжлэх хугацаа:
-                                </span>
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md ">
-                                  {secondsToHms(data.duration)}
-                                </span>
-                              </div>
-                            </div>
-                            <div className="flex items-center justify-between ">
-                              <div className="flex items-center">
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
-                                  Байршил:
-                                </span>
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md ">
-                                  {data.location}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    ) : detector === 2 && data.duration !== "" ? (
-                      <div>
-                        {nowdateTime <= moment(data.endDate).format(format) ? (
-                          <div className="w-full mt-4 p-4 border border-2 block bg-white shadow-md hover:shadow-2xl rounded-lg overflow-hidden">
-                            <div className="flex items-center justify-between mb-4 space-x-12">
-                              <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-500 bg-green-200 rounded-md">
-                                ИДЭВХТЭЙ
-                              </span>
-
-                              {data.status === "Үзээгүй" ? (
-                                <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-400 border-2 border-rose-500 rounded-md bg-white rounded-md">
-                                  ҮЗЭЭГҮЙ
-                                </span>
-                              ) : data.status === "Үзсэн" ? (
-                                <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-400 border-2 border-green-500 rounded-md bg-white rounded-md">
-                                  ҮЗСЭН
-                                </span>
-                              ) : (
-                                <span className="flex items-center px-2 py-1 text-xs font-semibold text-amber-400 border-2 border-amber-500 rounded-md bg-white rounded-md">
-                                  ҮЗЭЖ БАЙНА
-                                </span>
-                              )}
-                            </div>
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="flex items-center">
-                                <div className="flex flex-col">
-                                  <span className="font-bold text-black text-sm dark:text-white">
-                                    {data.name}
-                                  </span>
-                                  <span className="text-sm text-gray-500 dark:text-white">
-                                    {data.description}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex items-center justify-between ">
-                              <div className="flex items-center">
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
-                                  Багш:
-                                </span>
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md">
-                                  {data.teacher}
-                                </span>
-                              </div>
-                            </div>
-                            <div className="flex items-center justify-between ">
-                              {data.duration === "" ? (
-                                ""
-                              ) : (
-                                <div className="flex items-center">
-                                  <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
-                                    Үргэлжлэх хугацаа:
-                                  </span>
-                                  <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md ">
-                                    {secondsToHms(data.duration)}
-                                  </span>
-                                </div>
-                              )}
-                            </div>
-                            <div className="flex items-center justify-between ">
-                              <div className="flex items-center">
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
-                                  Байршил:
-                                </span>
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md ">
-                                  {data.location}
-                                </span>
-                              </div>
-                            </div>
-                            <div className="flex items-center mt-4">
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  showModalReady(data);
-                                }}
-                                className="py-2 text-sm bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-400 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-400 text-center  font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
-                              >
-                                Сургалт үзэх
-                              </button>
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="w-full mt-4 p-4 border border-2 block bg-white shadow-md hover:shadow-2xl rounded-lg overflow-hidden">
-                            <div className="flex items-center justify-between mb-4 space-x-12">
-                              <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-500 bg-red-200 rounded-md">
-                                ИДЭВХГҮЙ
-                              </span>
-
-                              {data.status === "Үзээгүй" ? (
-                                <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-400 border-2 border-rose-500 rounded-md bg-white rounded-md">
-                                  ҮЗЭЭГҮЙ
-                                </span>
-                              ) : data.status === "Үзсэн" ? (
-                                <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-400 border-2 border-green-500 rounded-md bg-white rounded-md">
-                                  ҮЗСЭН
-                                </span>
-                              ) : (
-                                <span className="flex items-center px-2 py-1 text-xs font-semibold text-amber-400 border-2 border-amber-500 rounded-md bg-white rounded-md">
-                                  ҮЗЭЖ ДУУСГААГҮЙ
-                                </span>
-                              )}
-                            </div>
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="flex items-center">
-                                <div className="flex flex-col">
-                                  <span className="font-bold text-black text-sm dark:text-white">
-                                    {data.name}
-                                  </span>
-                                  <span className="text-sm text-gray-500 dark:text-white">
-                                    {data.description}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex items-center justify-between ">
-                              <div className="flex items-center">
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
-                                  Багш:
-                                </span>
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md">
-                                  {data.teacher}
-                                </span>
-                              </div>
-                            </div>
-                            <div className="flex items-center justify-between ">
-                              <div className="flex items-center">
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
-                                  Үргэлжлэх хугацаа:
-                                </span>
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md ">
-                                  {secondsToHms(data.duration)}
-                                </span>
-                              </div>
-                            </div>
-                            <div className="flex items-center justify-between ">
-                              <div className="flex items-center">
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
-                                  Байршил:
-                                </span>
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md ">
-                                  {data.location}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <div>
-                        {nowdateTime <= moment(data.endDate).format(format) ? (
-                          <div className="w-full mt-4 p-4 border border-2 block bg-white shadow-md hover:shadow-2xl rounded-lg overflow-hidden">
-                            <div className="flex items-center justify-between mb-4 space-x-12">
-                              <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-500 bg-green-200 rounded-md">
-                                ИДЭВХТЭЙ
-                              </span>
-
-                              {data.sessionType === "1" ? (
-                                ""
-                              ) : (
-                                <div>
-                                  {" "}
-                                  {data.status === "Үзээгүй" ? (
-                                    <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-400 border-2 border-rose-500 rounded-md bg-white rounded-md">
-                                      ҮЗЭЭГҮЙ
-                                    </span>
-                                  ) : data.status === "Үзсэн" ? (
-                                    <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-400 border-2 border-green-500 rounded-md bg-white rounded-md">
-                                      ҮЗСЭН
-                                    </span>
-                                  ) : (
-                                    <span className="flex items-center px-2 py-1 text-xs font-semibold text-amber-400 border-2 border-amber-500 rounded-md bg-white rounded-md">
-                                      ҮЗЭЖ БАЙНА
-                                    </span>
-                                  )}
-                                </div>
-                              )}
-                            </div>
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="flex items-center">
-                                <div className="flex flex-col">
-                                  <span className="font-bold text-black text-sm dark:text-white">
-                                    {data.name}
-                                  </span>
-                                  <span className="text-sm text-gray-500 dark:text-white">
-                                    {data.description}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex items-center justify-between ">
-                              <div className="flex items-center">
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
-                                  Багш:
-                                </span>
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md">
-                                  {data.teacher}
-                                </span>
-                              </div>
-                            </div>
-                            <div className="flex items-center justify-between ">
-                              {data.duration === "" ? (
-                                ""
-                              ) : (
-                                <div className="flex items-center">
-                                  <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
-                                    Үргэлжлэх хугацаа:
-                                  </span>
-                                  <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md ">
-                                    {secondsToHms(data.duration)}
-                                  </span>
-                                </div>
-                              )}
-                            </div>
-                            <div className="flex items-center justify-between ">
-                              <div className="flex items-center">
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
-                                  Байршил:
-                                </span>
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md ">
-                                  {data.location}
-                                </span>
-                              </div>
-                            </div>
-                            <div className="flex items-center mt-4">
-                              {data.duration === "" ? (
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    showModalTenhim(data);
-                                  }}
-                                  className="py-2 text-sm bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-400 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-400 text-center  font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
-                                >
-                                  Сургалт харах
-                                </button>
-                              ) : (
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    showModalReady(data);
-                                  }}
-                                  className="py-2 text-sm bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-400 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-400 text-center  font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
-                                >
-                                  Сургалт үзэх
-                                </button>
-                              )}
-                            </div>
-                          </div>
-                        ) : (
-                          <div className="w-full mt-4 p-4 border border-2 block bg-white shadow-md hover:shadow-2xl rounded-lg overflow-hidden">
-                            <div className="flex items-center justify-between mb-4 space-x-12">
-                              <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-500 bg-red-200 rounded-md">
-                                ИДЭВХГҮЙ
-                              </span>
-
-                              {data.sessionType === "1" ? (
-                                ""
-                              ) : (
-                                <div>
-                                  {" "}
-                                  {data.status === "Үзээгүй" ? (
-                                    <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-400 border-2 border-rose-500 rounded-md bg-white rounded-md">
-                                      ҮЗЭЭГҮЙ
-                                    </span>
-                                  ) : data.status === "Үзсэн" ? (
-                                    <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-400 border-2 border-green-500 rounded-md bg-white rounded-md">
-                                      ҮЗСЭН
-                                    </span>
-                                  ) : (
-                                    <span className="flex items-center px-2 py-1 text-xs font-semibold text-amber-400 border-2 border-amber-500 rounded-md bg-white rounded-md">
-                                      ҮЗЭЖ БАЙНА
-                                    </span>
-                                  )}
-                                </div>
-                              )}
-                            </div>
-                            <div className="flex items-center justify-between mb-2">
-                              <div className="flex items-center">
-                                <div className="flex flex-col">
-                                  <span className="font-bold text-black text-sm dark:text-white">
-                                    {data.name}
-                                  </span>
-                                  <span className="text-sm text-gray-500 dark:text-white">
-                                    {data.description}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="flex items-center justify-between ">
-                              <div className="flex items-center">
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
-                                  Багш:
-                                </span>
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md">
-                                  {data.teacher}
-                                </span>
-                              </div>
-                            </div>
-                            <div className="flex items-center justify-between ">
-                              <div className="flex items-center">
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
-                                  Үргэлжлэх хугацаа:
-                                </span>
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md ">
-                                  {secondsToHms(data.duration)}
-                                </span>
-                              </div>
-                            </div>
-                            <div className="flex items-center justify-between ">
-                              <div className="flex items-center">
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black ">
-                                  Байршил:
-                                </span>
-                                <span className="flex items-center px-2 py-1 text-sm font-semibold text-black bg-yellow-100 rounded-md ">
-                                  {data.location}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
+                  <p
+                    className={
+                      activeTab === `${item.id}`
+                        ? "inline-block p-2 font-bold text-purple-600 border-b-2 border-purple-600 rounded-t-lg active "
+                        : "inline-block p-2 font-bold border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 "
+                    }
+                  >
+                    {item.value}
+                  </p>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
-      </div>
+        <div className="overflow-x-auto p-2">
+          {currentRecords.map((data, i) => {
+            const startDate = new Date(data.startDate);
+            const endDate = new Date(data.endDate);
+            const duration = endDate.getTime() - startDate.getTime();
+            return (
+              activeTab === `${data.sessionType}` &&
+              (data.sessionType === "1" ? (
+                <div className="mx-auto mt-4 " key={i}>
+                  <div className="p-2 flex cursor-pointer border-t border-b text-xs text-gray-700">
+                    <div
+                    // onClick={() => {
+                    //   clickView(data);
+                    // }}
+                    >
+                      {data.fileUrl.slice(-4) === ".png" ||
+                      data.fileUrl.slice(-4) === "jpeg" ||
+                      data.fileUrl.slice(-4) === ".jpg" ||
+                      data.fileUrl.slice(-4) === ".png" ||
+                      data.fileUrl.slice(-4) === ".gif" ? (
+                        <div className="flex justify-center">
+                          <img
+                            className="object-fill h-32 w-full mr-4 shadow-md rounded-lg"
+                            src={`http://` + `${data.fileUrl}`}
+                          />
+                        </div>
+                      ) : data.fileUrl.slice(-4) === ".mp3" ? (
+                        <div className="object-fill h-32 w-full mr-4 shadow-md rounded-lg">
+                          <audio controlsList="nodownload" controls>
+                            <source
+                              src={`http://` + `${data.fileUrl}`}
+                              type="audio/mpeg"
+                            />
+                          </audio>
+                        </div>
+                      ) : data.fileUrl.slice(-4) === "xlsx" ||
+                        data.fileUrl.slice(-4) === ".pdf" ||
+                        data.fileUrl.slice(-4) === "docx" ||
+                        data.fileUrl.slice(-4) === "pptx" ? (
+                        <div className="object-fill h-32 w-auto  mr-4 shadow-md rounded-lg">
+                          <p className="p-4 text-sm leading-5  ">
+                            <span className="block font-medium text-gray-500 ">
+                              <i className="bi bi-file-earmark-arrow-down-fill" />{" "}
+                              Файлын нэр:
+                            </span>
+                            <span className="inline-block font-medium text-gray-500  ">
+                              {data.fileUrl?.slice(29)}
+                            </span>
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="object-fill h-32 w-auto  mr-4 shadow-md rounded-lg">
+                          <div className="flex justify-center">
+                            {data.fileUrl.slice(29)}
+                          </div>
+                        </div>
+                      )}
+                    </div>
 
+                    <div className="flex flex-col justify-center  p-1">
+                      <p className="text-xs font-semibold text-gray-600">
+                        {data.teacher}
+                        {/* {timeSinceD(duration)} */}
+                      </p>
+                      <p className="text-sm font-bold">{data.name}</p>
+
+                      <div className="flex space-x-4 text-sm">
+                        <a className="flex items-start text-gray-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
+                          <div className="mr-2">
+                            <i className="bi bi-card-text" />
+                          </div>
+                          <p className="font-semibold">
+                            {timeSince(new Date(data.createdAt))}
+                          </p>
+                        </a>
+                        {moment(today).format(format) >=
+                        moment(data.endDate).format(format) ? (
+                          <a className="flex items-start text-red-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
+                            <div className="mr-2">
+                              <i className="bi bi-calendar2-x" />
+                            </div>
+                            <p className="font-semibold">ИДЭВХГҮЙ</p>
+                          </a>
+                        ) : (
+                          <a className="flex items-start text-green-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
+                            <div className="mr-2">
+                              <i className="bi bi-calendar-check" />
+                            </div>
+                            <p className="font-semibold">ИДЭВХТЭЙ</p>
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="mx-auto mt-4" key={JSON.stringify(data + i)}>
+                  <div className="flex cursor-pointer">
+                    <video
+                      className="object-fill h-32 w-64 mr-4 shadow-md rounded-lg"
+                      ref={videoRef}
+                      // onClick={() => {
+                      //   clickView(data);
+                      // }}
+                    >
+                      <source
+                        src={`http://` + `${data.fileUrl}`}
+                        type="video/mp4"
+                      />
+                    </video>
+                    <div className="flex flex-col justify-center  p-1">
+                      <p className="text-xs font-semibold text-gray-600">
+                        {data.teacher} * {timeSince(new Date(data.createdAt))}
+                      </p>
+                      <p className="text-sm font-bold">{data.name}</p>
+
+                      <div className="flex space-x-4 text-sm">
+                        <a className="flex items-start text-gray-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
+                          <div className="mr-2">
+                            <i className="bi bi-camera-video" />
+                          </div>
+                          <p className="font-semibold">
+                            {formatDuration(data.duration)}
+                          </p>
+                        </a>
+
+                        {moment(today).format(format) >=
+                        moment(data.endDate).format(format) ? (
+                          <a className="flex items-start text-red-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
+                            <div className="mr-2">
+                              <i className="bi bi-calendar2-x" />
+                            </div>
+                            <p className="font-semibold">ИДЭВХГҮЙ</p>
+                          </a>
+                        ) : (
+                          <a className="flex items-start text-green-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
+                            <div className="mr-2">
+                              <i className="bi bi-calendar-check" />
+                            </div>
+                            <p className="font-semibold">ИДЭВХТЭЙ</p>
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {currentRecords.length > 3 ? (
+                    <div className="mt-3">
+                      <Pagination
+                        nPages={nPages}
+                        currentPage={currentPage}
+                        setCurrentPage={setCurrentPage}
+                      />
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </div>
+              ))
+            );
+          })}
+        </div>
+
+        {currentRecords.length > 9 ? (
+          <div className="mt-3">
+            <Pagination
+              nPages={nPages}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+            />
+          </div>
+        ) : (
+          ""
+        )}
+      </div>
       <ToastContainer />
     </UserLayout>
   );

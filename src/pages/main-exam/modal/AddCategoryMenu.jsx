@@ -1,6 +1,6 @@
 import { useStateContext } from "../../../contexts/ContextProvider";
 import { useState } from "react";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import DepartmentSelect from "../SelectOptions/DepartmentSelect";
 import DatePicker from "react-datepicker";

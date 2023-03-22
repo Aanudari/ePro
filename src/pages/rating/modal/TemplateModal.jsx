@@ -1,5 +1,5 @@
 import { useStateContext } from "../../../contexts/ContextProvider";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { logout } from "../../../service/examService";
 import RatingCategoryAdd from "./RatingCategoryAdd";
@@ -31,7 +31,6 @@ function TemplateModal({ setShow, id, categoryName }) {
       .catch((err) => console.log(err));
   }, [trigger]);
 
-
   const [showModal, setShowModal] = useState(false);
   const [isChanged, setIsChanged] = useState(false);
   const [dataBuffer, setDataBuffer] = useState([]);
@@ -44,7 +43,7 @@ function TemplateModal({ setShow, id, categoryName }) {
     newDataBuffer = []; // Handle the error by setting newDataBuffer to an empty array, or another default value.
   }
 
-  let dataApi = []; // used in hadgalah api call 
+  let dataApi = []; // used in hadgalah api call
 
   return (
     <>

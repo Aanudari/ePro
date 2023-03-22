@@ -44,6 +44,7 @@ function EditTraining() {
   const object = options.find((obj) => obj.id === train.sessionType);
   const [emp, setEmp] = useState([]);
   const [chosedDelete, setChosedDelete] = useState(0);
+
   useEffect(() => {
     axios({
       method: "get",
@@ -144,7 +145,7 @@ function EditTraining() {
             "Сургалт эхэлсэн тул засвар хийх боломжгүй байна."
           ) {
             notification.error(`${res.data.resultMessage}`);
-            const timer = setTimeout(() => navigate("/training"), 2000);
+            const timer = setTimeout(() => navigate("/online-training"), 2000);
             return () => clearTimeout(timer);
           }
         }
@@ -180,7 +181,7 @@ function EditTraining() {
               <input
                 type="file"
                 onChange={handleFileSelectAnother}
-                className="px-3 py-3 text-blueGray-600 bg-white text-sm w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                className="px-3 py-2 text-blueGray-600 bg-white text-sm w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
               />
             </div>
           ) : chosedDelete === 2 ? (
@@ -204,7 +205,7 @@ function EditTraining() {
                 fileUrl.slice(-4) === ".gif" ? (
                 <div className="flex justify-center">
                   <img
-                    className="h-24 rounded-xl"
+                    className="h-64 rounded-xl"
                     src={`http://` + `${fileUrl}`}
                   />
                 </div>
@@ -236,7 +237,7 @@ function EditTraining() {
                   <button
                     onClick={() => handleDelete()}
                     type="button"
-                    className="py-2 px-6  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+                    className="py-2 px-2  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
                   >
                     Устгах
                   </button>
@@ -269,7 +270,7 @@ function EditTraining() {
     duration: duration === "" ? train.duration : `${duration}`,
     teacher: `${teacher}` === "" ? train.teacher : `${teacher}`,
     tCategory: `${tCategory}` === "" ? train.tCategory : `${tCategory}`,
-    sessionType: `${sessionType}` === "" ? train.sessionType : `${sessionType}`,
+    sessionType: locationn.state.item === "schedule" ? "1" : "2",
     startDate: `${startDate}` === "" ? train.startDate : `${startDate}`,
     endDate: `${endDate}` === "" ? train.endDate : `${endDate}`,
     location: `${location}` === "" ? train.location : `${location}`,
@@ -329,7 +330,7 @@ function EditTraining() {
         .then((res) => {
           if (res.data.isSuccess === true) {
             notification.success(`${res.data.resultMessage}`);
-            const timer = setTimeout(() => navigate("/training"), 1000);
+            const timer = setTimeout(() => navigate("/online-training"), 1000);
             return () => clearTimeout(timer);
           }
           if (res.data.isSuccess === false) {
@@ -338,7 +339,10 @@ function EditTraining() {
               "Сургалт эхэлсэн тул засвар хийх боломжгүй байна."
             ) {
               notification.error(`${res.data.resultMessage}`);
-              const timer = setTimeout(() => navigate("/training"), 2000);
+              const timer = setTimeout(
+                () => navigate("/online-training"),
+                2000
+              );
               return () => clearTimeout(timer);
             }
           }
@@ -349,304 +353,282 @@ function EditTraining() {
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <Navigation />
-      <div className="w-full">
-        <div className="px-4 md:px-10 py-4 md:py-7">
-          <button
-            onClick={() => navigate("/training")}
-            className="bg-white border border-white p-2 rounded text-gray-700 flex items-center focus:outline-none focus:shadow-outline"
-          >
-            <svg width="24" height="24" viewBox="0 0 16 16">
-              <path
-                d="M9 4 L5 8 L9 12"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinejoin="round"
-                strokeLinecap="round"
-              />
-            </svg>
-            <span className="mx-2">Буцах</span>
-          </button>
-          <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8">
-            <p className="text-sm font-bold text-gray-900 sm:text-sm">
-              Сургалт засварлах
+      <div className="px-4 py-4">
+        <div className="sm:flex sm:items-center sm:justify-between">
+          <div className="text-left">
+            <a
+              // onClick={() => {
+              //   locationn.state.item === "schedule"
+              //     ? navigate("/training-schedule")
+              //     : navigate("/online-training");
+              // }}
+              onClick={() =>
+                navigate("/clicked-train", {
+                  state: { data: train, item: locationn.state.item },
+                })
+              }
+              className="text-sm font-bold text-gray-900 sm:text-sm cursor-pointer"
+            >
+              <i className="bi bi-backspace" />
+              <span className="mx-2">Буцах</span>
+            </a>
+            <p className="text-sm font-bold text-gray-900">
+              {" "}
+              {locationn.state.item === "schedule"
+                ? "Сургалтын хуваарь өөрчлөх"
+                : "Сургалт өөрчлөх"}
             </p>
           </div>
         </div>
 
-        <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 mb-6">
-          <div className="rounded-lg bg-white p-8 shadow-lg lg:col-span-3 lg:p-12">
-            <div className="space-y-4">
+        <div className="rounded-lg bg-white p-4 shadow-lg border-2 lg:col-span-3 lg:p-12 mt-4">
+          <div className="w-full sm:w-full px-2  ">
+            <div className="relative w-full mb-3">
+              <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                Нэр
+              </label>
+              <input
+                type="text"
+                defaultValue={train.name}
+                onChange={(e) => {
+                  setName(e.target.value);
+                  setcheckEmptyname(false);
+                }}
+                id={checkEmptyname === true ? "border-red" : null}
+                className="px-3 py-2 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+              />
+            </div>
+            <div className="relative w-full mb-3">
+              <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                Дэлгэрэнгүй
+              </label>
+              <textarea
+                className="px-3 py-2 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                rows="8"
+                defaultValue={train.description}
+                onChange={(e) => {
+                  setdescription(e.target.value);
+                  setcheckEmptydescription(false);
+                }}
+                id={checkEmptydescription === true ? "border-red" : null}
+              ></textarea>
+            </div>
+            <div className="relative w-full mb-3">
+              {" "}
+              <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                Файл
+              </label>
               <div>
-                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                  Нэр
-                </label>
-                <input
-                  type="text"
-                  defaultValue={train.name}
-                  onChange={(e) => {
-                    setName(e.target.value);
-                    setcheckEmptyname(false);
-                  }}
-                  id={checkEmptyname === true ? "border-red" : null}
-                  className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                />
-              </div>
-              <div>
-                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                  Дэлгэрэнгүй
-                </label>
-                <textarea
-                  className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                  rows="8"
-                  defaultValue={train.description}
-                  onChange={(e) => {
-                    setdescription(e.target.value);
-                    setcheckEmptydescription(false);
-                  }}
-                  id={checkEmptydescription === true ? "border-red" : null}
-                ></textarea>
-              </div>
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-1  flex items-center">
-                <div>
-                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                    Файл
-                  </label>
+                {chosedDelete === 0 ? (
                   <div>
-                    {chosedDelete === 0 ? (
+                    {" "}
+                    {train.fileId === "" ? (
                       <div>
-                        {" "}
-                        {train.fileId === "" ? (
-                          <div>
-                            <input
-                              type="file"
-                              onChange={handleFileSelect}
-                              className="px-3 py-3 text-blueGray-600 bg-white text-sm w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                        <input
+                          type="file"
+                          onChange={handleFileSelect}
+                          className="px-3 py-2 text-blueGray-600 bg-white text-sm w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                        />
+                      </div>
+                    ) : (
+                      <div className="text-center w-full mx-auto py-2 px-2 sm:px-6 lg:py-16 lg:px-8 z-20">
+                        {train.fileUrl.slice(-4) === ".mp4" ? (
+                          <video
+                            className="items-center w-1/2 mx-auto py-12 px-12 sm:px-2 lg:py-2 lg:px-2 z-10"
+                            onLoadedMetadata={handleProgress}
+                            ref={videoRef}
+                            // width="20%"
+                            // height="100%"
+                            id="myVideo"
+                            controls
+                          >
+                            <source
+                              src={`http://` + `${train.fileUrl}`}
+                              type="video/mp4"
+                            />
+                          </video>
+                        ) : train.fileUrl.slice(-4) === ".png" ||
+                          train.fileUrl.slice(-4) === "jpeg" ||
+                          train.fileUrl.slice(-4) === ".jpg" ||
+                          train.fileUrl.slice(-4) === ".png" ||
+                          train.fileUrl.slice(-4) === ".gif" ? (
+                          <div className="flex justify-center">
+                            <img
+                              className="h-64 rounded-xl"
+                              src={`http://` + `${train.fileUrl}`}
                             />
                           </div>
+                        ) : train.fileUrl.slice(-4) === ".mp3" ? (
+                          <div className="flex justify-center">
+                            <audio controlsList="nodownload" controls>
+                              <source
+                                src={`http://` + `${train.fileUrl}`}
+                                type="audio/mpeg"
+                              />
+                            </audio>
+                          </div>
+                        ) : train.fileUrl.slice(-4) === "xlsx" ||
+                          train.fileUrl.slice(-4) === ".pdf" ||
+                          train.fileUrl.slice(-4) === "docx" ||
+                          train.fileUrl.slice(-4) === "pptx" ? (
+                          <p className="mt-4 text-sm leading-5">
+                            <span className="block font-medium text-gray-500 ">
+                              <i className="bi bi-play-circle-fill" /> Файлын
+                              нэр:
+                            </span>
+                            <span className="inline-block font-medium text-gray-500  ">
+                              {train.fileUrl?.slice(29)}
+                            </span>
+                          </p>
                         ) : (
-                          <div className="text-center w-full mx-auto py-2 px-2 sm:px-6 lg:py-16 lg:px-8 z-20">
-                            {train.fileUrl.slice(-4) === ".mp4" ? (
-                              <video
-                                className="items-center w-1/2 mx-auto py-12 px-12 sm:px-2 lg:py-2 lg:px-2 z-10"
-                                onLoadedMetadata={handleProgress}
-                                ref={videoRef}
-                                // width="20%"
-                                // height="100%"
-                                id="myVideo"
-                                controls
-                              >
-                                <source
-                                  src={`http://` + `${train.fileUrl}`}
-                                  type="video/mp4"
-                                />
-                              </video>
-                            ) : train.fileUrl.slice(-4) === ".png" ||
-                              train.fileUrl.slice(-4) === "jpeg" ||
-                              train.fileUrl.slice(-4) === ".jpg" ||
-                              train.fileUrl.slice(-4) === ".png" ||
-                              train.fileUrl.slice(-4) === ".gif" ? (
-                              <div className="flex justify-center">
-                                <img
-                                  className="h-24 rounded-xl"
-                                  src={`http://` + `${train.fileUrl}`}
-                                />
-                              </div>
-                            ) : train.fileUrl.slice(-4) === ".mp3" ? (
-                              <div className="flex justify-center">
-                                <audio controlsList="nodownload" controls>
-                                  <source
-                                    src={`http://` + `${train.fileUrl}`}
-                                    type="audio/mpeg"
-                                  />
-                                </audio>
-                              </div>
-                            ) : train.fileUrl.slice(-4) === "xlsx" ||
-                              train.fileUrl.slice(-4) === ".pdf" ||
-                              train.fileUrl.slice(-4) === "docx" ||
-                              train.fileUrl.slice(-4) === "pptx" ? (
-                              <p className="mt-4 text-sm leading-5">
-                                <span className="block font-medium text-gray-500 ">
-                                  <i className="bi bi-play-circle-fill" />{" "}
-                                  Файлын нэр:
-                                </span>
-                                <span className="inline-block font-medium text-gray-500  ">
-                                  {train.fileUrl?.slice(29)}
-                                </span>
-                              </p>
-                            ) : (
-                              <div className="text-black text-sm border-2 border-blue-500  rounded-md ">
-                                <div className="flex justify-center">
-                                  {train.fileUrl.slice(29)}
-                                </div>
-                              </div>
-                            )}
-                            <div className="lg:mt-0 lg:flex-shrink-0">
-                              <div className="mt-2 inline-flex rounded-md shadow">
-                                <button
-                                  onClick={() => handleDeleteSelected()}
-                                  type="button"
-                                  className="py-2 px-6  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
-                                >
-                                  Устгах
-                                </button>
-                              </div>
+                          <div className="text-black text-sm border-2 border-blue-500  rounded-md ">
+                            <div className="flex justify-center">
+                              {train.fileUrl.slice(29)}
                             </div>
                           </div>
                         )}
-                      </div>
-                    ) : (
-                      <div>
-                        <Diceroll />
+                        <div className="lg:mt-0 lg:flex-shrink-0">
+                          <div className="mt-2 inline-flex rounded-md shadow">
+                            <button
+                              onClick={() => handleDeleteSelected()}
+                              type="button"
+                              className="py-2 px-2 text-xs bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+                            >
+                              Устгах
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     )}
                   </div>
-                </div>
-              </div>
-              <div className="grid grid-cols-1 gap-4  sm:grid-cols-3">
-                <div>
-                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                    Сургалт орох багшийн нэр
-                  </label>
-                  <input
-                    type="text"
-                    defaultValue={train.teacher}
-                    onChange={(e) => {
-                      setteacher(e.target.value);
-                      setcheckEmptyteacher(false);
-                    }}
-                    id={checkEmptyteacher === true ? "border-red" : null}
-                    className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                    Ангилал
-                  </label>
-                  <Select
-                    className="px-2 py-2 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                    options={category}
-                    defaultValue={{
-                      id: train.tCategory,
-                      name: train.tCatName,
-                    }}
-                    onChange={(item) => {
-                      handleTrainingCategoryId(item);
-                      setcheckEmptytCategory(false);
-                    }}
-                    id={checkEmptytCategory === true ? "border-red" : null}
-                    noOptionsMessage={({ inputValue }) =>
-                      !inputValue && "Сонголт хоосон байна"
-                    }
-                    getOptionLabel={(option) => option.name}
-                    getOptionValue={(option) => option.id}
-                  />
-                </div>
-
-                <div>
-                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                    Онлайн/Тэнхим
-                  </label>
-                  <Select
-                    className="px-2 py-2 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                    options={options}
-                    defaultValue={{
-                      id: train.sessionType,
-                      value: object.value,
-                    }}
-                    onChange={(item) => {
-                      handleTrainingType(item);
-                      setcheckEmptysessionType(false);
-                    }}
-                    id={checkEmptysessionType === true ? "border-red" : null}
-                    noOptionsMessage={({ inputValue }) =>
-                      !inputValue && "Сонголт хоосон байна"
-                    }
-                    getOptionLabel={(option) => option.value}
-                    getOptionValue={(option) => option.id}
-                  />
-                </div>
-              </div>
-              <div className="grid grid-cols-1 gap-4 text-center sm:grid-cols-3">
-                <div>
-                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                    startDate
-                  </label>
-                  <DatePicker
-                    className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                    selected={date1}
-                    onChange={(date) => setDate1(date)}
-                    showTimeSelect
-                    timeFormat="HH:mm"
-                    timeIntervals={15}
-                    selectsStart
-                    startDate={date1}
-                    dateFormat="yyyy.MM.dd, HH:mm:ss"
-                  />
-                </div>
-                <div>
-                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                    endDate
-                  </label>
-                  <DatePicker
-                    className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                    selected={date2}
-                    onChange={(date) => setDate2(date)}
-                    showTimeSelect
-                    timeFormat="HH:mm"
-                    timeIntervals={15}
-                    selectsStart
-                    startDate={date2}
-                    dateFormat="yyyy.MM.dd, HH:mm"
-                  />
-                </div>
-                <div>
-                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                    Байршил
-                  </label>
-                  <input
-                    type="text"
-                    className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                    defaultValue={train.location}
-                    onChange={(e) => {
-                      setlocation(e.target.value);
-                      setcheckEmptylocation(false);
-                    }}
-                    id={checkEmptylocation === true ? "border-red" : null}
-                  />
-                </div>
-              </div>
-              <div className="grid grid-cols-1 gap-4 text-center sm:grid-cols-3">
-                <button
-                  onClick={() => {
-                    setShow(true);
-                  }}
-                  type="submit"
-                  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-2 rounded"
-                >
-                  Ажилтан сонгох {emp?.length}
-                </button>
-
-                {show && (
-                  <Workers
-                    setShow={setShow}
-                    getEmployees={getEmployees}
-                    // reSetEmployee={reSet}
-                  />
+                ) : (
+                  <div>
+                    <Diceroll />
+                  </div>
                 )}
               </div>
+            </div>
+            <div className="relative w-full mb-3">
+              <button
+                onClick={() => {
+                  setShow(true);
+                }}
+                type="submit"
+                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-2 rounded"
+              >
+                Ажилтан сонгох {emp?.length}
+              </button>
 
-              <div className="mt-4 text-right">
-                <div className="inline-flex items-end">
-                  <button
-                    onClick={navigateIndex}
-                    className="flex bg-green-600 border border-green-600 shadow px-4 py-2 rounded text-white focus:outline-none focus:shadow-outline"
-                  >
-                    Хадгалах
-                  </button>
-                </div>
+              {show && (
+                <Workers
+                  setShow={setShow}
+                  getEmployees={getEmployees}
+                  // reSetEmployee={reSet}
+                />
+              )}
+            </div>
+          </div>
+          <div className="flex -mx-2">
+            <div className="w-1/3 sm:w-full px-2  ">
+              <div className="relative w-full mb-3">
+                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                  Сургалт орох багшийн нэр
+                </label>
+                <input
+                  type="text"
+                  defaultValue={train.teacher}
+                  onChange={(e) => {
+                    setteacher(e.target.value);
+                    setcheckEmptyteacher(false);
+                  }}
+                  id={checkEmptyteacher === true ? "border-red" : null}
+                  className="px-3 py-2 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                />
               </div>
+              <div className="relative w-full mb-3">
+                {" "}
+                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                  Ангилал
+                </label>
+                <Select
+                  className="text-sm  w-full rounded-lg  outline-none focus:border-indigo-500"
+                  options={category}
+                  defaultValue={{
+                    id: train.tCategory,
+                    name: train.tCatName,
+                  }}
+                  onChange={(item) => {
+                    handleTrainingCategoryId(item);
+                    setcheckEmptytCategory(false);
+                  }}
+                  id={checkEmptytCategory === true ? "border-red" : null}
+                  noOptionsMessage={({ inputValue }) =>
+                    !inputValue && "Сонголт хоосон байна"
+                  }
+                  getOptionLabel={(option) => option.name}
+                  getOptionValue={(option) => option.id}
+                />
+              </div>
+            </div>
+            <div className="w-1/3 sm:w-full px-2  ">
+              <div className="relative w-full mb-3">
+                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                  startDate
+                </label>
+                <DatePicker
+                  className="px-3 py-2 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                  selected={date1}
+                  onChange={(date) => setDate1(date)}
+                  showTimeSelect
+                  timeFormat="HH:mm"
+                  timeIntervals={15}
+                  selectsStart
+                  startDate={date1}
+                  dateFormat="yyyy.MM.dd, HH:mm:ss"
+                />
+              </div>
+              <div className="relative w-full mb-3">
+                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                  endDate
+                </label>
+                <DatePicker
+                  className="px-3 py-2 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                  selected={date2}
+                  onChange={(date) => setDate2(date)}
+                  showTimeSelect
+                  timeFormat="HH:mm"
+                  timeIntervals={15}
+                  selectsStart
+                  startDate={date2}
+                  dateFormat="yyyy.MM.dd, HH:mm"
+                />
+              </div>
+              <div className="relative w-full mb-3">
+                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                  Байршил
+                </label>
+                <input
+                  type="text"
+                  className="px-3 py-2 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                  defaultValue={train.location}
+                  onChange={(e) => {
+                    setlocation(e.target.value);
+                    setcheckEmptylocation(false);
+                  }}
+                  id={checkEmptylocation === true ? "border-red" : null}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="col-span-5 text-right">
+            <div className="inline-flex items-end">
+              <button
+                onClick={navigateIndex}
+                type="submit"
+                className="block font-bold rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-green-700 focus:outline-none focus:ring"
+              >
+                Хадгалах
+              </button>
             </div>
           </div>
         </div>

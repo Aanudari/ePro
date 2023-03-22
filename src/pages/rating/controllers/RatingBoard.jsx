@@ -11,7 +11,11 @@ function RatingBoard({ showModal, setShowModal, data, setTrigger, trigger }) {
   }
   for (let index = 0; index < data?.length; index++) {
     const element = data[index];
-    const monthYear = moment(element.createdDate).format("MMMM YYYY");
+    // console.log(element.createdDate);
+    const monthYear = moment(
+      element.createdDate,
+      "MM/DD/YYYY hh:mm:ss AA"
+    ).format("MMMM YYYY");
     months[monthYear].push(element);
   }
   const result = Object.entries(months).map(([monthYear, items]) => ({

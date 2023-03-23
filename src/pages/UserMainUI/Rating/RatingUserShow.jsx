@@ -49,22 +49,26 @@ function RatingUserShow() {
   const [modalImg, setModalImg] = useState();
   //   console.log(categories);
   useEffect(() => {
-    axios({
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${TOKEN}`,
-      },
-      url: `${process.env.REACT_APP_URL}/v1/RatingNew/GetComments/${conversationId}`,
-    })
-      .then((res) => {
-        if (res.data.errorCode == 401) {
-          logout();
-        } else {
-          setComments(res.data.commentList);
-        }
+    setTimeout(() => {
+      axios({
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${TOKEN}`,
+        },
+        url: `${process.env.REACT_APP_URL}/v1/RatingNew/GetComments/${conversationId}`,
       })
-      .catch((err) => console.log(err));
+        .then((res) => {
+          setTrigger(!trigger);
+          if (res.data.errorCode == 401) {
+            logout();
+          } else {
+            setComments(res.data.commentList);
+          }
+          // console.log(res.data);
+        })
+        .catch((err) => console.log(err));
+    }, 5000);
   }, [trigger]);
   useEffect(() => {
     const scrollable = scrollableRef.current;
@@ -73,13 +77,35 @@ function RatingUserShow() {
     }
   });
   const [success, setSuccess] = useState(false);
-
+  const [value, setValue] = useState("");
   useEffect(() => {
     const timer = setTimeout(() => {
       setSuccess(false);
     }, 3000);
     return () => clearTimeout(timer);
   }, [success]);
+  const submitComment = () => {
+    axios({
+      method: "post",
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: TOKEN,
+        accept: "text/plain",
+      },
+      url: `${process.env.REACT_APP_URL}/v1/RatingNew/doComment?conversationId=${conversationId}&comment=${value}`,
+      // data: images,
+    })
+      .then((res) => {
+        // console.log(images[0]);
+        // console.log(res.data);
+        setTrigger(!trigger);
+        setValue("");
+        // setImages([]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <UserLayout>
       <main className="main min-h-[calc(100vh-60px)]">
@@ -185,11 +211,20 @@ function RatingUserShow() {
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
+                    submitComment();
                   }}
-                  className="flex w-full justify-between"
+                  className="flex w-full justify-between gap-2"
                   action=""
                 >
-                  <input type="text" className=" h-[30px]" autoFocus />
+                  <input
+                    type="text"
+                    className=" w-full py-1 rounded h-10 bg-gray-100"
+                    autoFocus
+                    value={value}
+                    onChange={(e) => {
+                      setValue(e.target.value);
+                    }}
+                  />
 
                   <button
                     type="submit"

@@ -27,23 +27,26 @@ function CommentModal({
     }
   });
   useEffect(() => {
-    axios({
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${TOKEN}`,
-      },
-      url: `${process.env.REACT_APP_URL}/v1/RatingNew/GetComments/${conversationId}`,
-    })
-      .then((res) => {
-        if (res.data.errorCode == 401) {
-          logout();
-        } else {
-          setComments(res.data.commentList);
-          setRecallChild(!recallChild);
-        }
+    setTimeout(() => {
+      axios({
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${TOKEN}`,
+        },
+        url: `${process.env.REACT_APP_URL}/v1/RatingNew/GetComments/${conversationId}`,
       })
-      .catch((err) => console.log(err));
+        .then((res) => {
+          setTrigger(!trigger);
+          if (res.data.errorCode == 401) {
+            logout();
+          } else {
+            setComments(res.data.commentList);
+            setRecallChild(!recallChild);
+          }
+        })
+        .catch((err) => console.log(err));
+    }, 5000);
   }, [trigger]);
   const [value, setValue] = useState("");
   // console.log(comments);

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { logout } from "../../../service/examService";
 import tempAPI from "../../../service/templateAPI";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import { useStateContext } from "../../../contexts/ContextProvider";
 import DeleteConfirm from "../../main-exam/modal/DeleteComfirm";
@@ -39,6 +39,7 @@ function Template() {
   }, [trigger]);
   // console.log(temps);
   const handleAddtemplate = (e) => {
+    // console.log("message");
     // e.preventDefault();
     axios({
       method: "post",
@@ -50,6 +51,7 @@ function Template() {
       data: JSON.stringify(data),
     })
       .then((res) => {
+        console.log(res.data);
         if (res.data.isSuccess === false) {
           toast.error(res.data.resultMessage, {
             position: "bottom-right",
@@ -153,6 +155,7 @@ function Template() {
       style={{ background: `url(${bg})` }}
       className="p-3 w-full h-full bg-gray-200"
     >
+      <ToastContainer />
       {showConfirm && (
         <DeleteConfirm
           setConfirm={setShowConfirm}

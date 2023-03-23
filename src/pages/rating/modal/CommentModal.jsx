@@ -96,6 +96,8 @@ function CommentModal({
         className="w-full h-full relative "
       ></div>
       <div className="w-[calc(60%)] h-[calc(60%)] shrink bg-white flex flex-col items-center rounded-[22px] absolute ">
+        <ImageModal img={modalImg} show={show} onHide={() => setShow(false)} />
+
         <div
           onBlur={() => {
             setModalShow(false);
@@ -139,14 +141,14 @@ function CommentModal({
                       />
                     </div>
                   )}
-                  <ImageModal
-                    img={modalImg}
-                    show={show}
-                    onHide={() => setShow(false)}
-                  />
                 </div>
               );
             })}
+            <ImageModal
+              img={modalImg}
+              show={show}
+              onHide={() => setShow(false)}
+            />
           </div>
           <div className=" w-full min-h-[60px] bg-gray-200 rounded-b-[20px] px-3 py-[10px] flex gap-2">
             <form
@@ -241,7 +243,6 @@ function ImageModal(props) {
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
-      // style={{minHeight: "400px"}}
     >
       {/* <Modal.Body style={{ background: "none" }}> */}
       <img src={`http://${props.img}`} alt="" />

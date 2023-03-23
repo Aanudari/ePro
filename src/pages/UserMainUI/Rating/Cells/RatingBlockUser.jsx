@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 function RatingBlockUser({ item }) {
   const { deviceId } = useStateContext();
   const navigate = useNavigate();
-  console.log(item);
+  // console.log(item);
   return (
     <article className="card">
       <div className="card-header">

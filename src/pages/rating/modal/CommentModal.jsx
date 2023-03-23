@@ -59,7 +59,7 @@ function CommentModal({
       data: images,
     })
       .then((res) => {
-        console.log(images[0]);
+        // console.log(images[0]);
         // console.log(res.data);
         setTrigger(!trigger);
         setValue("");
@@ -95,7 +95,7 @@ function CommentModal({
         }}
         className="w-full h-full relative "
       ></div>
-      <div className="w-[calc(60%)] h-[calc(60%)] shrink bg-white flex flex-col items-center rounded-[22px] absolute ">
+      <div className="w-[calc(60%)] h-[calc(60%)] bg-white flex flex-col items-center rounded-[22px] absolute ">
         <ImageModal img={modalImg} show={show} onHide={() => setShow(false)} />
 
         <div

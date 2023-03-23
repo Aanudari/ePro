@@ -21,6 +21,7 @@ function RatingUserShow() {
   const [categories, setCategories] = useState();
   const [trigger, setTrigger] = useState(false);
   const [show, setShow] = useState(false);
+  const [main, setMain] = useState();
   useEffect(() => {
     axios({
       method: "get",
@@ -30,6 +31,7 @@ function RatingUserShow() {
       url: `${process.env.REACT_APP_URL}/v1/RatingNew/GetRatingDevice/${deviceId}/${ratingId}`,
     })
       .then((res) => {
+        setMain(res.data);
         if (res.data.isSuccess == true) {
           // console.log(res.data);
           setCategories(res.data.categoryList);
@@ -82,10 +84,34 @@ function RatingUserShow() {
     <UserLayout>
       <main className="main min-h-[calc(100vh-60px)]">
         <div className="responsive-wrapper relative">
-          <div className="pb-20">
+          <div className="bg-[#ecf0f3] rounded-[20px] p-4 mt-4 shadow-md">
+            <div className="flex justify-between">
+              <h6 className="mt-2">
+                Статус:{" "}
+                {main?.userStatus === "N" ? (
+                  <span className="mb-0 ml-1 md:ml-2 font-[400] px-3 py-2 bg-white rounded">
+                    Батлаагүй
+                  </span>
+                ) : (
+                  <span className="mb-0 ml-1 md:ml-2 font-[400] px-3 py-2 bg-white rounded">
+                    Баталгаажсан
+                  </span>
+                )}
+              </h6>
+            </div>
+          </div>
+          <div className="pb-10">
             {categories?.map((category, index) => {
               return <UserRatingCategory category={category} key={index} />;
             })}
+          </div>
+          <div
+            onClick={() => {
+              setSuccess(true);
+            }}
+            className="font-[500] text-center flex items-center justify-center text-white h-10 md:h-14 bg-emerald-500 cursor-pointer hover:bg-emerald-400 p-2 rounded mb-10"
+          >
+            Үнэлгээ зөвшөөрөх
           </div>
           {!chatWindow && (
             <div
@@ -107,14 +133,7 @@ function RatingUserShow() {
             <div className="w-full md:w-[300px] fixed bottom-0 right-0 md:right-10 shadow h-[360px] rounded-t bg-white">
               <div className="h-14 bg-blue-700 rounded-t shadow w-full flex justify-between items-center px-3">
                 <div className="font-[500] text-white">{ratedBy}</div>
-                <div
-                  onClick={() => {
-                    setSuccess(true);
-                  }}
-                  className="font-[500] text-white bg-teal-500 cursor-pointer hover:bg-teal-400 p-2 rounded"
-                >
-                  Зөвшөөрөх
-                </div>
+
                 <div>
                   <i
                     onClick={() => {

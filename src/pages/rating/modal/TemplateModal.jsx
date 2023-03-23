@@ -36,7 +36,10 @@ function TemplateModal({ setShow, id, categoryName }) {
   const [dataBuffer, setDataBuffer] = useState([]);
 
   let newDataBuffer = {};
-  if (dataBuffer === null || typeof dataBuffer[Symbol.iterator] !== "function") {
+  if (
+    dataBuffer === null ||
+    typeof dataBuffer[Symbol.iterator] !== "function"
+  ) {
     console.error("Error: ДАТАБУФФЕР ЧИНЬ ХООСОН БАЙНА");
     newDataBuffer = [];
     setDataBuffer([]); // Handle the error by setting newDataBuffer to an empty array, or another default value.

@@ -52,7 +52,7 @@ function SelectSubCategoryCell({
               Math.round(progress) == undefined ? 0 : Math.round(progress)
             }%`,
           }}
-          className={`h-1 bg-teal-500 rounded-t absolute`}
+          className={`h-1 bg-teal-500 rounded-t absolute transition-all`}
         ></div>
       </div>
       <div

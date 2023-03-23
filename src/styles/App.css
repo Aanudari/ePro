@@ -429,3 +429,42 @@ html {
   text-align: center !important;
   cursor: not-allowed !important;
 }
+
+.fill {
+  animation: fill;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes fill {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+.parent-2 {
+  position: relative;
+}
+
+.child-2 {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+}
+
+.parent-2:hover .child-2 {
+  display: block;
+}
+
+.triangle {
+  width: 0;
+  height: 0;
+  margin-left: 20px;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 10px solid #ffff00;
+}

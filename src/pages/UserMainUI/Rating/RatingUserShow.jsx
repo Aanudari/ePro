@@ -80,7 +80,7 @@ function RatingUserShow() {
   }, [success]);
   return (
     <UserLayout>
-      <main className="main  min-h-[calc(100vh-60px)]">
+      <main className="main min-h-[calc(100vh-60px)]">
         <div className="responsive-wrapper relative">
           <div className="pb-20">
             {categories?.map((category, index) => {
@@ -104,7 +104,7 @@ function RatingUserShow() {
           {success && <ModalSuccess />}
 
           {chatWindow && (
-            <div className="w-full md:w-[300px] fixed bottom-0 right-0 md:right-10 shrink shadow h-[360px] rounded-t bg-white">
+            <div className="w-full md:w-[300px] fixed bottom-0 right-0 md:right-10 shadow h-[360px] rounded-t bg-white">
               <div className="h-14 bg-blue-700 rounded-t shadow w-full flex justify-between items-center px-3">
                 <div className="font-[500] text-white">{ratedBy}</div>
                 <div
@@ -125,7 +125,7 @@ function RatingUserShow() {
                 </div>
               </div>
               <div
-                className="h-[248px]  shadow-inner px-2 pt-1 overflow-scroll scrollable"
+                className="h-[248px] !break-words w-full md:w-[300px] shadow-inner px-2 pt-1 overflow-scroll scrollable"
                 ref={scrollableRef}
               >
                 {comments?.map((comment, index) => {
@@ -133,7 +133,7 @@ function RatingUserShow() {
                   return (
                     <div
                       key={index}
-                      className={`bubble ${
+                      className={`bubble max-w-[260px] ${
                         comment.isYou === "1" ? "me" : "you-blue"
                       }`}
                     >

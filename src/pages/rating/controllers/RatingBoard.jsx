@@ -2,6 +2,7 @@ import CreateRatingModal from "../modal/CreateRatingModal";
 import RatingBlock from "../TemplateRelated/RatingBlock";
 import moment from "moment";
 import { useStateContext } from "../../../contexts/ContextProvider";
+import bg from "../../../assets/bg.jpg";
 function RatingBoard({ showModal, setShowModal, data, setTrigger, trigger }) {
   const months = {};
   for (let i = 0; i < 12; i++) {
@@ -24,7 +25,7 @@ function RatingBoard({ showModal, setShowModal, data, setTrigger, trigger }) {
   }));
   const { activeMenu } = useStateContext();
   return (
-    <div className={`w-[calc(100vw-420px)] bg-white p-2 h-full rounded`}>
+    <div className={`w-[calc(100vw-420px)] p-2 h-full rounded `}>
       {showModal && (
         <CreateRatingModal
           setTrigger={setTrigger}
@@ -38,7 +39,7 @@ function RatingBoard({ showModal, setShowModal, data, setTrigger, trigger }) {
             <div key={ind} className=" w-full my-2 px-3">
               <div>
                 {month.items.length > 0 && (
-                  <div className="bg-gray-100 text-gray-500 px-3 py-1 rounded text-[12px] w-[150px] font-[500]">
+                  <div className="glass text-white px-3 py-1 rounded text-[12px] w-[150px] font-[500]">
                     {month.monthYear}
                   </div>
                 )}

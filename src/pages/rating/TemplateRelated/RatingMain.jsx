@@ -5,6 +5,7 @@ import { useStateContext } from "../../../contexts/ContextProvider";
 import axios from "axios";
 import { logout } from "../../../service/examService";
 import RatingSearchModal from "../modal/RatingSearchModal";
+import bg from "../../../assets/bg.jpg";
 function RatingMain() {
   const [showModal, setShowModal] = useState(false);
   const { TOKEN } = useStateContext();
@@ -31,7 +32,10 @@ function RatingMain() {
   }, [trigger]);
   // console.log(data);
   return (
-    <div className="w-full h-[calc(100vh-112px)] bg-teal-500 p-3 flex gap-2 transition-all ">
+    <div
+      style={{ background: `url(${bg})` }}
+      className="w-full  h-[calc(100vh-112px)] p-3 flex gap-2 transition-all relative "
+    >
       <RatingBoard
         showModal={showModal}
         setShowModal={setShowModal}

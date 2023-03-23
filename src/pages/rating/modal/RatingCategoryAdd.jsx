@@ -122,7 +122,7 @@ function RatingCategoryAdd({
       keysPressed.includes(49)
     ) {
       calculated >= 100
-        ? toast.error("Катенгорийн дээд оноо 100 байна", {
+        ? toast.error("Категорийн дээд оноо 100 байна", {
             position: "bottom-right",
           })
         : addChild();
@@ -140,7 +140,7 @@ function RatingCategoryAdd({
           <ToastContainer />
           <input
             type="text"
-            className="p-2 font-[500] bg-white rounded px-2 text-gray-600 w-full"
+            className="p-2 font-[400] text-[14px] bg-white rounded px-2 text-gray-600 w-full"
             placeholder="Enter value"
             value={child.subcategoryName}
             onChange={(e) => {
@@ -196,7 +196,7 @@ function RatingCategoryAdd({
           <div className="flex gap-2">
             {calculated != 100 && (
               <button
-                className="custom-btn bg-teal-500 hover:bg-teal-600 active:bg-teal-400 text-[13px] parent-2"
+                className="custom-btn mt-2 h-10 bg-teal-500 hover:bg-teal-600 active:bg-teal-400 text-[13px] parent-2"
                 onClick={addChild}
               >
                 Нэмэх
@@ -208,18 +208,27 @@ function RatingCategoryAdd({
                 </div>
               </button>
             )}
-            <button
-              className="custom-btn border-none shadow-none  text-[13px]"
+            <div
+              className="custom-btn border-none shadow-none  text-[17px] relative h-full flex gap-1 items-center"
               // onClick={addChild}
             >
-              Total: {calculated}/100
-            </button>
+              Оноо:{" "}
+              <span
+                className={`${
+                  calculated > 100 && "px-2 py-1 m-0 rounded bg-[#ff0000] "
+                } font-[500]`}
+              >
+                {calculated > 100 && <i className="bi bi-exclamation-lg"></i>}
+                {calculated}
+              </span>
+              <span className="m-0 font-[500]">/100</span>
+            </div>
           </div>
           <div className="flex gap-4">
             {calculated == 100 && (
               <button
                 onClick={handleSubmit}
-                className="custom-btn bg-teal-500 hover:bg-teal-600 active:bg-teal-400 text-[13px]"
+                className="custom-btn mt-2 h-10 bg-teal-500 hover:bg-teal-600 active:bg-teal-400 text-[13px]"
               >
                 Хадгалах
               </button>
@@ -239,7 +248,7 @@ function RatingCategoryAdd({
           <div className="flex gap-2 w-full custom-placeholder">
             <input
               type="text"
-              className="p-2 font-[500] bg-gray-50 rounded px-3 w-full"
+              className="py-2 text-[16px] font-[400]  rounded px-3 w-full "
               placeholder="Категори нэр"
               value={catName}
               onChange={(e) => {
@@ -256,12 +265,6 @@ function RatingCategoryAdd({
             onSubmit={handleSubmit}
           >
             {renderChildren()}
-            {/* <button
-              className="w-full h-12 custom-btn bg-emerald-500 bottom-0 absolute"
-              type="submit"
-            >
-              Хадгалах
-            </button> */}
           </form>
         </div>
       </div>

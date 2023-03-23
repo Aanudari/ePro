@@ -52,7 +52,7 @@ function RatingModal({
       const el = element.subCategories[j];
       let tempo = {
         subCategoryId: el.subCategoryId,
-        score: el.subCatUserScore == "" ? "0" : el.subCatUserScore,
+        score: el.subCatUserScore == "" ? "" : el.subCatUserScore,
       };
       cat.push(tempo);
     }

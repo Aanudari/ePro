@@ -27,23 +27,26 @@ function CommentModal({
     }
   });
   useEffect(() => {
-    axios({
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${TOKEN}`,
-      },
-      url: `${process.env.REACT_APP_URL}/v1/RatingNew/GetComments/${conversationId}`,
-    })
-      .then((res) => {
-        if (res.data.errorCode == 401) {
-          logout();
-        } else {
-          setComments(res.data.commentList);
-          setRecallChild(!recallChild);
-        }
+    setTimeout(() => {
+      axios({
+        method: "get",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${TOKEN}`,
+        },
+        url: `${process.env.REACT_APP_URL}/v1/RatingNew/GetComments/${conversationId}`,
       })
-      .catch((err) => console.log(err));
+        .then((res) => {
+          setTrigger(!trigger);
+          if (res.data.errorCode == 401) {
+            logout();
+          } else {
+            setComments(res.data.commentList);
+            setRecallChild(!recallChild);
+          }
+        })
+        .catch((err) => console.log(err));
+    }, 5000);
   }, [trigger]);
   const [value, setValue] = useState("");
   // console.log(comments);
@@ -59,7 +62,7 @@ function CommentModal({
       data: images,
     })
       .then((res) => {
-        console.log(images[0]);
+        // console.log(images[0]);
         // console.log(res.data);
         setTrigger(!trigger);
         setValue("");
@@ -95,7 +98,7 @@ function CommentModal({
         }}
         className="w-full h-full relative "
       ></div>
-      <div className="w-[calc(60%)] h-[calc(60%)] shrink bg-white flex flex-col items-center rounded-[22px] absolute ">
+      <div className="w-[calc(60%)] h-[calc(60%)] bg-white flex flex-col items-center rounded-[22px] absolute ">
         <ImageModal img={modalImg} show={show} onHide={() => setShow(false)} />
 
         <div

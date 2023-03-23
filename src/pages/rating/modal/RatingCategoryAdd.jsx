@@ -131,7 +131,6 @@ function RatingCategoryAdd({
 
   const renderChildren = () => {
     return children.map((child, index) => {
-      // console.log(child);
       return (
         <div
           className="bg-gray-200 px-2 pt-2 pb-2 rounded flex flex-col mt-1 py-2 relative parent"
@@ -154,11 +153,6 @@ function RatingCategoryAdd({
               type="number"
               className="p-2 font-[500] bg-white rounded px-2 text-gray-600 w-[50px] mt-2"
               placeholder="Enter value"
-              // onBlur={(e) => {
-              //   e.target.value == "" && total < 100
-              //     ? setTotal(total + 0)
-              //     : setTotal(total + parseInt(e.target.value));
-              // }}
               value={child.subcategoryPoint}
               onChange={(e) => {
                 handleInputChangePoint(index, e);

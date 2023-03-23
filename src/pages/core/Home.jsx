@@ -1,6 +1,10 @@
 import Navigation from "../../components/Navigation";
+import useWindowDimensions from "../../components/SizeDetector";
 
 function Home() {
+  const { width, height } = useWindowDimensions();
+  console.log(width);
+  console.log(height);
   return (
     <div className="w-full bg-[#50a3a2]">
       <Navigation />

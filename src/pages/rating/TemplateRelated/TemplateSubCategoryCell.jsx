@@ -8,11 +8,6 @@ function TemplateSubCategoryCell({
   givenSubCategoryId
 }) {
 
-
-
-
-
-
   function handleTextInput(event) {
 
     const category = newDataBuffer.find(

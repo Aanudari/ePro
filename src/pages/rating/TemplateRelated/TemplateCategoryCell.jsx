@@ -14,9 +14,9 @@ function TemplateCategoryCell({ newDataBuffer, setIsChanged, item, index, trigge
   const [components, setComponents] = useState([]);
   let givenSubCategoryId = 0;
   let highestSubCategoryId = 0; 
-  const setComp = useCallback(() => {
+  /* const setComp = useCallback(() => {
     setComponents([...components, <NewTemplateSubCategoryCell givenSubCategoryId={givenSubCategoryId} catId={item.categoryId} item={item} newDataBuffer={newDataBuffer} setIsChanged={setIsChanged}/>]);
-  }, [components, setIsChanged, trigger]);
+  }, [components, setIsChanged, trigger]); */
 
   /* UNDER CONSTRUCTION */
 
@@ -48,8 +48,6 @@ function TemplateCategoryCell({ newDataBuffer, setIsChanged, item, index, trigge
     console.log("just added a new category");
     return <div> new test and stuff  </div>
   }
-    
-
     const AddComponent = () => {
       for(const category of newDataBuffer){
         for(const subcategory of category.subCategories){
@@ -59,12 +57,10 @@ function TemplateCategoryCell({ newDataBuffer, setIsChanged, item, index, trigge
         }
       }
       givenSubCategoryId = parseInt(highestSubCategoryId) + 1;
-    setComp();
-      
-      
+      console.log("inside the SubCategoryId: " + givenSubCategoryId);
+      setComponents([...components, <NewTemplateSubCategoryCell givenSubCategoryId={givenSubCategoryId} catId={item.categoryId} item={item} newDataBuffer={newDataBuffer} setIsChanged={setIsChanged} />]);    
     };
-    
-
+  
   return (
     
     <div className="mt-1 justify-center flex-col">
@@ -91,14 +87,7 @@ function TemplateCategoryCell({ newDataBuffer, setIsChanged, item, index, trigge
       {showSub && (
         <div className="min-h-[50px] bg-gray-200 rounded-b-lg p-2 mb-2">
           <i className="bi bi-plus-circle-dotted text-lg mr-2 flex justify-end hover: cursor-pointer" onClick={AddComponent}></i> {/* plus button */}
-
-          {/* mbtest */}
           {components}
-
-          
-
-          {/* mbtest */}
-
           {item?.subCategories?.map((element, i) => (
             <TemplateSubCategoryCell
               /* test by mb */

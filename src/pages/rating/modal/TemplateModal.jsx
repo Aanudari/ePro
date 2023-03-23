@@ -173,6 +173,7 @@ function TemplateModal({ setShow, id, categoryName }) {
                       setTrigger={setTrigger}
                       setIsChanged={setIsChanged}
                       newDataBuffer={newDataBuffer}
+
                     />
                   );
                 })

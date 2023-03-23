@@ -18,7 +18,6 @@ function NewTemplateSubCategoryCell({
   };
   console.log("the push doesn't work so here's to see newDatabuffer" + newDataBuffer.categoryId + "\n");
   newDataBuffer[0].subCategories.push(newSubCategory);
-  setIsChanged(true);
   //newDataBuffer.subCategories.push(newSubCategory);
   /*END adding a subcategory blank with the plus button */
 
@@ -72,18 +71,15 @@ return(
       </div>
       <div className="h-full flex items-start">
         <div className="flex bg-[#50a3a2] p-2 rounded text-white w-[calc(40px)]">
-          {" "}
           <div
             suppressContentEditableWarning="true"
             contentEditable="true"
             onInput={handleNumberInput}
           >
-            
           {"0"} {/* percentage input */}
-            
-          </div>{" "}
+          </div>
           %
-        </div>{" "}
+        </div>
       </div>
     </div>
   </>

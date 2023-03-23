@@ -8,6 +8,7 @@ import UserRatingCategory from "./Cells/UserRatingCategory";
 import useWindowDimensions from "../../../components/SizeDetector";
 import Modal from "react-bootstrap/Modal";
 import ModalSuccess from "./modal/ModalSuccess";
+import { toast, ToastContainer } from "react-toastify";
 
 function RatingUserShow() {
   const scrollableRef = useRef(null);
@@ -106,24 +107,57 @@ function RatingUserShow() {
         console.log(err);
       });
   };
+
+  const handleAgreement = () => {
+    axios({
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: TOKEN,
+        accept: "text/plain",
+      },
+      url: `${process.env.REACT_APP_URL}/v1/RatingNew/confirmRating/${conversationId}`,
+      // data: images,
+    })
+      .then((res) => {
+        // console.log(res.data);
+        if (res.data.isSuccess == true) {
+          setSuccess(true);
+        } else {
+          toast.info(JSON.stringify(res.data.resultMessage), {
+            position: "bottom-right",
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <UserLayout>
+      <ToastContainer />
       <main className="main min-h-[calc(100vh-60px)]">
         <div className="responsive-wrapper relative">
           <div className="bg-[#ecf0f3] rounded-[20px] p-4 mt-4 shadow-md">
             <div className="flex justify-between">
-              <h6 className="mt-2">
-                Статус:{" "}
+              <div className="mt-2 w-full flex">
+                <h6>Статус: </h6>
                 {main?.userStatus === "N" ? (
-                  <span className="mb-0 ml-1 md:ml-2 font-[400] px-3 py-2 bg-white rounded">
-                    Батлаагүй
-                  </span>
+                  <div className="w-full">
+                    <span className="mb-0 ml-1 md:ml-2 font-[400] px-3 py-2 bg-white rounded">
+                      Батлаагүй
+                    </span>
+                    <span className="ml-2">
+                      Та дэлгэцийн доор байрлах "Үнэлгээ зөвшөөрөх" товчийг дарж
+                      үнэлгээгээ баталгаажуулна уу.
+                    </span>
+                  </div>
                 ) : (
                   <span className="mb-0 ml-1 md:ml-2 font-[400] px-3 py-2 bg-white rounded">
                     Баталгаажсан
                   </span>
                 )}
-              </h6>
+              </div>
             </div>
           </div>
           <div className="pb-10">
@@ -133,7 +167,7 @@ function RatingUserShow() {
           </div>
           <div
             onClick={() => {
-              setSuccess(true);
+              handleAgreement();
             }}
             className="font-[500] text-center flex items-center justify-center text-white h-10 md:h-14 bg-emerald-500 cursor-pointer hover:bg-emerald-400 p-2 rounded mb-10"
           >

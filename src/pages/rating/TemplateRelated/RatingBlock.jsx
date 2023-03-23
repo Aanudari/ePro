@@ -131,11 +131,17 @@ function RatingBlock({ item, trigger, setTrigger }) {
                   }}
                   key={index}
                   className={`${
-                    user.score == "" ? "bg-gray-300" : "btn-20 "
+                    user.adminStatus == "C" && user.userStatus == "Y"
+                      ? "btn-20 "
+                      : user.adminStatus == "C" && user.userStatus == "N"
+                      ? "btn-20 "
+                      : user.adminStatus == "P"
+                      ? "btn-25"
+                      : "bg-gray-200"
                   } py-2 px-3 hover:shadow text-[13px] flex justify-between items-center text-gray-600 
                 w-full my-1 rounded relative cursor-pointer hover:text-white mt-1 `}
                 >
-                  {user.score == "100" && (
+                  {user.adminStatus == "C" && user.userStatus == "Y" && (
                     <div
                       className="absolute w-[25px] left-[-11px] rounded-full text-white h-[25px]  flex items-center justify-center 
                 bg-[#FF7F50]"
@@ -150,9 +156,11 @@ function RatingBlock({ item, trigger, setTrigger }) {
                   </div>
                   <div>
                     {" "}
-                    <span className="font-[400]">
-                      {user.score == "" ? "0" : user.score}%
-                    </span>
+                    {user.adminStatus !== "P" && (
+                      <span className="font-[400]">
+                        {user.score == "" ? "" : user.score + "%"}
+                      </span>
+                    )}
                   </div>
                 </div>
                 <div

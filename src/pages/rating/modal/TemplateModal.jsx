@@ -112,7 +112,7 @@ function TemplateModal({ setShow, id, categoryName }) {
               {/*  test by mb  */}
               {isChanged && (
                 <button
-                  className="custom-btn min-w-[80px] md:min-w-[120px] lg:min-w-[180px] bg-teal-500 hover:bg-teal-400 active:bg-teal-600 h-10 text-[14px] flex items-center justify-center"
+                  className="absolute right-200-px custom-btn min-w-[80px] md:min-w-[120px] lg:min-w-[180px] bg-teal-500 hover:bg-teal-400 active:bg-teal-600 h-10 text-[14px] flex items-center justify-center"
                   onClick={() => {
                     setIsChanged(false);
                     try {
@@ -176,6 +176,7 @@ function TemplateModal({ setShow, id, categoryName }) {
                       setTrigger={setTrigger}
                       setIsChanged={setIsChanged}
                       newDataBuffer={newDataBuffer}
+
                     />
                   );
                 })

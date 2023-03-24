@@ -120,7 +120,7 @@ function TemplateEditModal({ setShowModal, trigger, setTrigger }) {
                 onClick={() => {
                   setaddCategory(!addCategory);
                 }}
-                className="bi bi-plus-circle text-xl text-white cursor-pointer"
+                className="bi bi-folder-plus text-xl text-white cursor-pointer"
               ></i>
               <div className=" flex justify-start px-4 py-2">
                 <span className="text-white font-[500] text-sm">

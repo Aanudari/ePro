@@ -1,3 +1,5 @@
+import { useMemo, useState } from "react";
+
 function NewTemplateSubCategoryCell({
   catId,
   subcatId,
@@ -10,37 +12,35 @@ function NewTemplateSubCategoryCell({
   givenSubCategoryId
 }){
 
-  /*adding a subcategory blank with the plus button */
-  const newSubCategory = {
-    "subcategoryId": givenSubCategoryId,
-    "subcategoryName": " ",
-    "subcategoryPoint": " "
-  };
-  console.log("the push doesn't work so here's to see newDatabuffer" + newDataBuffer.categoryId + "\n");
-  newDataBuffer[0].subCategories.push(newSubCategory);
-  setIsChanged(true);
-  //newDataBuffer.subCategories.push(newSubCategory);
-  /*END adding a subcategory blank with the plus button */
-
-    /* JSON.stringify(item) + "something"; */
-/*     const subcategory = item.find(
-      (category) => category.subcategoryId === catId
+    
+/*    const newSubCategory =
+      //"subcategoryId": givenSubCategoryId,
+      {
+        subcategoryId: givenSubCategoryId,
+        subcategoryName: "Энийг оруулах",
+        subcategoryPoint: "Дүн",
+      }; */
+    const newSubCategory = useMemo(
+      () => ({
+        subcategoryId: givenSubCategoryId,
+        subcategoryName: "Энийг оруулах",
+        subcategoryPoint: "Дүн",
+      }),
+      [givenSubCategoryId]
     );
- */
-    function handleTextInput(event) {
+    // const [addData, setAddData] = useState()
+    newDataBuffer[0].subCategories.push(newSubCategory); 
+    console.log(newDataBuffer[0].subCategories)
+    //setIsChanged(true); 
 
+    function handleTextInput(event) {
       const category = newDataBuffer.find(
         (category) => category.categoryId === catId
       );
-  
       const subcategory = category.subCategories.find(
         (subcategory) => subcategory.subcategoryId === givenSubCategoryId
       );
-      subcategory.subcategoryName = event.target.innerText + ' '; //null handling using this nbsq
-  
-      console.log("our ITEM is :" + JSON.stringify(item) + "\nour ELEMENT is:" + JSON.stringify(element) +"\n");
-      console.log("our new data buffer is:" + JSON.stringify(newDataBuffer));
-  
+      subcategory.subcategoryName = event.target.innerText + ' '; //null handling using this nbs
       setIsChanged(true);
     }
   
@@ -49,41 +49,46 @@ function NewTemplateSubCategoryCell({
       const category = newDataBuffer.find(
         (category) => category.categoryId === catId
       );
-  
       const subcategory = category.subCategories.find(
         (subcategory) => subcategory.subcategoryId === givenSubCategoryId
       );
-  
       subcategory.subcategoryPoint = event.target.innerText + ' '; //null handling using this nbsq
-      
       setIsChanged(true);
     }
     
 return(
     <>
-    <div className="border py-1 px-2 flex justify-between items-center bg-white rounded mt-[2px]">
+    <div className="mt-1 py-1 px-2 bg-white hover:bg-gray-100 hover:shadow hover:bg-gray flex justify-between items-center  rounded mt-[2px] ">
       <div
-        className="text-[13px] font-[400] w-[calc(90%)]"
+        className="text-[13px] font-[400] w-[calc(90%)] "
         suppressContentEditableWarning="true"
         contentEditable="true"
         onInput={handleTextInput}
       >
-       {"adee"} {/* text input */}
+        {/* {"Ретурн"} */}
       </div>
       <div className="h-full flex items-start">
-        <div className="flex bg-[#50a3a2] p-2 rounded text-white w-[calc(40px)]">
-          {" "}
+        <div className="flex bg-[#50a3a2] p-2 rounded text-white w-[calc(40px)] hover:bg-[#50a3a3] hover:shadow">
           <div
             suppressContentEditableWarning="true"
             contentEditable="true"
             onInput={handleNumberInput}
           >
+            {"100"}
             
-          {"0"} {/* percentage input */}
-            
-          </div>{" "}
+          </div>
           %
-        </div>{" "}
+        </div>
+        <i 
+          className="bi bi-trash text-2xl text-red-200 rounded hover:bg-gray-200 shadow ml-2 hover:text-red-400"
+          onClick={(event) => {
+            const parentElement = event.target.parentNode;
+            const grandparentElement = parentElement.parentNode;
+            if (grandparentElement) {
+              grandparentElement.remove();
+            }
+          }}>
+          </i>
       </div>
     </div>
   </>

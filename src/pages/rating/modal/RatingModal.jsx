@@ -104,7 +104,6 @@ function RatingModal({
     });
     setChildren(temp);
   };
-  // console.log(user);
   return (
     <div
       className={`fixed ${
@@ -164,7 +163,6 @@ function RatingModal({
             })}
           </div>
         </div>
-        {/* <div className="h-16 glass w-full">Хадгалах</div> */}
       </div>
     </div>
   );

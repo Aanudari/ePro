@@ -74,10 +74,7 @@ function TemplateCategoryCell({
   }
 
   function addTheComponent() {
-
   // setTriggerComp(!triggerComp);
-
-    
     console.log("A dotor orj irlee"); 
     for (const category of newDataBuffer) {
       for (const subcategory of category.subCategories) {
@@ -86,9 +83,7 @@ function TemplateCategoryCell({
         }
       }
     }
-  
     givenSubCategoryId = parseInt(highestSubCategoryId) + 1;
-
     setComponents([
       ...components,
       <NewTemplateSubCategoryCell
@@ -100,9 +95,6 @@ function TemplateCategoryCell({
         setIsChanged={setIsChanged}
       />,
     ]);
-
-
-
   }
 
   return (

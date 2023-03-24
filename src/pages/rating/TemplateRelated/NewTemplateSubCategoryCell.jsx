@@ -1,3 +1,5 @@
+import { useMemo, useState } from "react";
+
 function NewTemplateSubCategoryCell({
   catId,
   subcatId,
@@ -11,27 +13,26 @@ function NewTemplateSubCategoryCell({
 }){
 
     
-  const newSubCategory =
+/*    const newSubCategory =
       //"subcategoryId": givenSubCategoryId,
       {
         subcategoryId: givenSubCategoryId,
         subcategoryName: "Энийг оруулах",
         subcategoryPoint: "Дүн",
-      };
-
-  newDataBuffer[0].subCategories.push(newSubCategory);
-  //setIsChanged(true); 
-
-/*     console.log("addTheComponent dotorh newdatabuffer " + JSON.stringify(newDataBuffer));
-    console.log("\n addTheComponent dotorh component \n\n\n" + JSON.stringify(components) + "\n"); */
-
-
-
-    /* JSON.stringify(item) + "something"; */
-/*     const subcategory = item.find(
-      (category) => category.subcategoryId === catId
+      }; */
+    const newSubCategory = useMemo(
+      () => ({
+        subcategoryId: givenSubCategoryId,
+        subcategoryName: "Энийг оруулах",
+        subcategoryPoint: "Дүн",
+      }),
+      [givenSubCategoryId]
     );
- */
+    // const [addData, setAddData] = useState()
+    newDataBuffer[0].subCategories.push(newSubCategory); 
+    console.log(newDataBuffer[0].subCategories)
+    //setIsChanged(true); 
+
     function handleTextInput(event) {
       const category = newDataBuffer.find(
         (category) => category.categoryId === catId
@@ -64,7 +65,7 @@ return(
         contentEditable="true"
         onInput={handleTextInput}
       >
-        {"Return дотор байгаа юм"}
+        {/* {"Ретурн"} */}
       </div>
       <div className="h-full flex items-start">
         <div className="flex bg-[#50a3a2] p-2 rounded text-white w-[calc(40px)] hover:bg-[#50a3a3] hover:shadow">
@@ -73,7 +74,7 @@ return(
             contentEditable="true"
             onInput={handleNumberInput}
           >
-            {"Return-ийн дотор байгаа тоо"}
+            {"100"}
             
           </div>
           %

@@ -6,6 +6,7 @@ import { logout } from "../../../service/examService";
 import RatingModal from "../modal/RatingModal";
 import CommentModal from "../modal/CommentModal";
 import { toast, ToastContainer } from "react-toastify";
+import DeleteConfirm from "../../main-exam/modal/DeleteComfirm";
 
 function RatingBlock({ item, trigger, setTrigger }) {
   const { TOKEN } = useStateContext();
@@ -42,7 +43,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
   const [certainUser, setCertainUser] = useState();
   const [modalShow, setModalShow] = useState(false);
   const [conversationId, setConversationId] = useState("0");
-  let count = 0;
+  const [confirm, setConfirm] = useState(false);
   const handleDelete = () => {
     axios({
       method: "get",
@@ -53,7 +54,6 @@ function RatingBlock({ item, trigger, setTrigger }) {
       url: `${process.env.REACT_APP_URL}/v1/RatingNew/deleteRating/${item.ratingId}`,
     })
       .then((res) => {
-        count = count + 1;
         if (res.data.isSuccess) {
           setRecallList(!recallList);
         } else {
@@ -67,6 +67,9 @@ function RatingBlock({ item, trigger, setTrigger }) {
   return (
     <>
       <div className="w-full relative flex parent gap-2">
+        {confirm && (
+          <DeleteConfirm deleteCat={handleDelete} setConfirm={setConfirm} />
+        )}
         <div
           onClick={() => {
             setRatingId(item.ratingId);
@@ -114,7 +117,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
         </div>
         <div
           onClick={() => {
-            handleDelete();
+            setConfirm(true);
           }}
           className="child transition-all z-10 rounded-full py-[5px] px-[9px] 
                   bg-gray-300  active:bg-gray-400 cursor-pointer

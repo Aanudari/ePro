@@ -30,8 +30,8 @@ function QuestionCell({ data, collector, checker, setCount, count }) {
   return (
     <div className="p-3 my-3 rounded shadow-sm border bg-white">
       <p className=" flex justify-between">
-        <span className="font-[500] text-[14px]">{data.question}</span>
-        <span className="font-[500]">
+        <span className="font-[500] text-[15px]">{data.question}</span>
+        <span className="font-[500] w-[80px] ml-2">
           {data.points + " "}
           оноо
         </span>

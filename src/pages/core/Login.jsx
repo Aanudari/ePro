@@ -11,7 +11,7 @@ function Login() {
     if (adminRoles.includes(data.role_id)) {
       navigate("/home");
     } else {
-      navigate("/user-main");
+      navigate("/user-exam");
     }
     setUser(data);
   };

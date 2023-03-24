@@ -12,7 +12,7 @@ function ExamHeaderShow() {
         </div>
         <nav
           onClick={() => {
-            navigate("/user-main");
+            navigate("/user-exam");
           }}
           className="header-navigation-links bg-teal-500 px-3 my-2 rounded cursor-pointer"
         >

@@ -51,7 +51,6 @@ function Template() {
       data: JSON.stringify(data),
     })
       .then((res) => {
-        console.log(res.data);
         if (res.data.isSuccess === false) {
           toast.error(res.data.resultMessage, {
             position: "bottom-right",
@@ -74,14 +73,8 @@ function Template() {
   };
   const [valueEdit, setValueEdit] = useState("");
   const dataEdit = {
-    isEdit: true,
     templateId: collected[0],
     templateName: valueEdit,
-    categories: [
-      {
-        categoryId: "",
-      },
-    ],
   };
 
   const handleEdittemplate = (e) => {
@@ -92,7 +85,7 @@ function Template() {
         "Content-Type": "application/json",
         Authorization: TOKEN,
       },
-      url: `${process.env.REACT_APP_URL}/v1/RatingTemplateNew/createTemplate`,
+      url: `${process.env.REACT_APP_URL}/v1/RatingTemplateNew/editTemplateName`,
       data: JSON.stringify(dataEdit),
     })
       .then((res) => {
@@ -109,6 +102,7 @@ function Template() {
           });
         } else {
           setTrigger(!trigger);
+          setCollected([]);
           setValue("");
         }
       })
@@ -212,14 +206,9 @@ function Template() {
                 <div
                   key={JSON.stringify(element.templateName + index)}
                   className=" mt-2 w-[calc(85%)]
-                  relative parent flex gap-2 cursor-pointer"
+                  relative parent flex gap-2 "
                 >
                   <div
-                    onClick={() => {
-                      setCategoryName(element.templateName);
-                      setTemplateId(element.templateId);
-                      setShowModal(true);
-                    }}
                     className="border-t border-b border-l border-r btn-20 rounded px-3 py-2 shadow text-gray-600 hover:text-white w-[calc(85%-60px)]
                 relative parent"
                   >
@@ -242,9 +231,17 @@ function Template() {
                           type={"text"}
                           autoFocus
                         />
+                        <button type="submit"></button>
                       </form>
                     ) : (
-                      <div className="p-2 font-[500] uppercase flex justify-between">
+                      <div
+                        onClick={() => {
+                          setCategoryName(element.templateName);
+                          setTemplateId(element.templateId);
+                          setShowModal(true);
+                        }}
+                        className="p-2 cursor-pointer font-[500] uppercase flex justify-between"
+                      >
                         <span className="font-[500]">
                           {element.templateName}
                         </span>

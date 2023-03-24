@@ -1,6 +1,6 @@
 import { useStateContext } from "../contexts/ContextProvider";
 import { Navigate } from "react-router-dom";
-
+import { logout } from "../service/examService";
 export const ProtectedRoute = ({ children, allowedRoles }) => {
   const { user, roleId } = useStateContext();
   if (!user) {
@@ -14,6 +14,14 @@ export const ProtectedRoute = ({ children, allowedRoles }) => {
         Танд энэ хуудас руу хандах эрх олгогдоогүй байна!
       </span>
       <i className="bi bi-emoji-frown text-2xl"></i>
+      <button
+        onClick={() => {
+          logout();
+        }}
+        className="custom-btn btn-13 mt-10"
+      >
+        Гарах
+      </button>
     </div>
   );
 };

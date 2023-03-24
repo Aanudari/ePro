@@ -19,7 +19,7 @@ export default function QuestionCorrectionShow() {
             setGameFinished(false);
             sessionStorage.clear();
             // navigate("/levelone-ui-take-exam")
-            navigate("/user-main");
+            navigate("/user-exam");
             window.location.reload();
           }}
           className="question-button w-full shadow"

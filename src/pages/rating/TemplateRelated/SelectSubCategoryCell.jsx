@@ -30,15 +30,6 @@ function SelectSubCategoryCell({
       </option>
     );
   });
-  const popover = (
-    <Popover id="popover-basic">
-      <Popover.Header as="h3">Popover right</Popover.Header>
-      <Popover.Body>
-        And here's some <strong>amazing</strong> content. It's very engaging.
-        right?
-      </Popover.Body>
-    </Popover>
-  );
   const [pointValue, setPointValue] = useState(element.subCatUserScore);
   const [progress, setProgress] = useState(
     parseInt((element.subCatUserScore * 100) / element.subCatMaxScore)

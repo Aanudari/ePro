@@ -23,6 +23,7 @@ function RatingUserShow() {
   const [trigger, setTrigger] = useState(false);
   const [show, setShow] = useState(false);
   const [main, setMain] = useState();
+  const [reload, setReload] = useState(false);
   useEffect(() => {
     axios({
       method: "get",
@@ -43,7 +44,7 @@ function RatingUserShow() {
         }
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [reload]);
   //   console.log(categories);
   const [chatWindow, setchatWindow] = useState(false);
   const [comments, setComments] = useState();
@@ -120,6 +121,7 @@ function RatingUserShow() {
       // data: images,
     })
       .then((res) => {
+        setReload(!reload);
         // console.log(res.data);
         if (res.data.isSuccess == true) {
           setSuccess(true);
@@ -165,7 +167,7 @@ function RatingUserShow() {
               return <UserRatingCategory category={category} key={index} />;
             })}
           </div>
-          {main?.userStatus !== "N" && (
+          {main?.userStatus == "N" && (
             <div
               onClick={() => {
                 handleAgreement();

@@ -6,14 +6,11 @@ import NewTemplateSubCategoryCell from "./NewTemplateSubCategoryCell";
 ///v1/Training/category/delete
 
 function TemplateCategoryCell({
-  newDataBuffer,
-  setIsChanged,
   item,
   index,
   trigger,
   setTrigger,
-  /* test by mb */ dataBuffer,
-  setDataBuffer,
+  templateId,
 }) {
   const [showSub, setShowSub] = useState(true);
   const [showOption, setShowOption] = useState(false);
@@ -22,29 +19,32 @@ function TemplateCategoryCell({
   const [newComponents, setnewComponents] = useState({});
   const [components, setComponents] = useState([]);
   const [triggerComp, setTriggerComp] = useState(false);
-
-
-
-
-  const count = useRef(0);
-
+  const [catName, setCatName] = useState(item.categoryName);
+  // console.log(catName);
+  let copy = [];
+  // console.log(item.subCategories);
+  for (let index = 0; index < item.subCategories.length; index++) {
+    const element = item.subCategories[index];
+    let tempo = {
+      subcategoryName: element.subcategoryName,
+      subcategoryPoint: element.subcategoryPoint,
+    };
+    copy.push(tempo);
+  }
+  const [modified, setModified] = useState([]);
+  const [isEdit, setIsEdit] = useState(false);
 
   useEffect(() => {
-    /* A */
-    /* */
-  }, [triggerComp]);
-  
-
-
-
-  let givenSubCategoryId = 0;
-  let highestSubCategoryId = 0;
-  /* const setComp = useCallback(() => {
-    setComponents([...components, <NewTemplateSubCategoryCell givenSubCategoryId={givenSubCategoryId} catId={item.categoryId} item={item} newDataBuffer={newDataBuffer} setIsChanged={setIsChanged}/>]);
-  }, [components, setIsChanged, trigger]); */
-
-  /* UNDER CONSTRUCTION */
-
+    setModified(copy);
+  }, [isEdit]);
+  let final = {
+    isEdit: true,
+    templateId: templateId,
+    categoryId: item.categoryId,
+    categoryName: catName,
+    subCategories: modified,
+  };
+  // console.log(final);
   function handleDelete() {
     axios({
       method: "post",
@@ -61,50 +61,90 @@ function TemplateCategoryCell({
       })
       .catch((err) => console.log(err));
   }
-
-  function handleClick() {
-    setShowSub(!showSub);
-  }
-  function showOptions() {
-    setShowOption(!showOption);
-  }
-  function AddSubcategory() {
-    console.log("just added a new category");
-    return <div> new test and stuff </div>;
-  }
-
-  function addTheComponent() {
-  // setTriggerComp(!triggerComp);
-    console.log("A dotor orj irlee"); 
-    for (const category of newDataBuffer) {
-      for (const subcategory of category.subCategories) {
-        if (subcategory.subcategoryId >= highestSubCategoryId) {
-          highestSubCategoryId = subcategory.subcategoryId;
-        }
+  const handleSubCategory = (value, point, id) => {
+    let tempo = modified.map((item, index) => {
+      // index === id
+      //   ?  { ...item, subcategoryName: value, subcategoryPoint: point }
+      //   : item;
+      if (index == id) {
+        return { ...item, subcategoryName: value, subcategoryPoint: point };
+      } else {
+        return item;
       }
-    }
-    givenSubCategoryId = parseInt(highestSubCategoryId) + 1;
-    setComponents([
-      ...components,
-      <NewTemplateSubCategoryCell
-        //key={givenSubCategoryId}
-        givenSubCategoryId={givenSubCategoryId}
-        catId={item.categoryId}
-        item={item}
-        newDataBuffer={newDataBuffer}
-        setIsChanged={setIsChanged}
-      />,
-    ]);
-  }
-
+    });
+    setModified(tempo);
+  };
+  const handleSubmit = () => {
+    axios({
+      method: "post",
+      headers: {
+        Authorization: `${TOKEN}`,
+        "Content-Type": "application/json",
+        accept: "text/json",
+      },
+      url: `${process.env.REACT_APP_URL}/v1/RatingTemplateNew/category`,
+      data: final,
+    })
+      .then((res) => {
+        console.log(res.data);
+        setTrigger(!trigger);
+        setIsEdit(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <div className="mt-1 justify-center flex-col">
       <div className="flex justify-center">
         <div
           className="w-full rounded-t-lg bg-teal-600 px-3 py-2 flex justify-between text-white "
-          onClick={handleClick}
+          // onClick={handleClick}
         >
-          <div className="text-[15px] font-[500] py-1 focus:bg-white-25 focus:bg-gray-500 focus:shadow focus:rounded hover:text-black-500 hover:bg-white-100" contentEditable="true" suppressContentEditableWarning="true" >{item.categoryName}</div>
+          {isEdit ? (
+            <button
+              onClick={() => {
+                handleSubmit();
+              }}
+              className="custom-btn btn-13"
+            >
+              <i
+                className="bi bi-vector-pen text-md mr-2"
+                // onClick={addTheComponent}
+              ></i>
+              save
+            </button>
+          ) : (
+            <button
+              onClick={() => {
+                setIsEdit(!isEdit);
+              }}
+              className="custom-btn btn-13"
+            >
+              <i
+                className="bi bi-vector-pen text-md mr-2"
+                // onClick={addTheComponent}
+              ></i>
+              edit
+            </button>
+          )}
+
+          {isEdit ? (
+            <input
+              type="text"
+              value={catName}
+              onChange={(e) => {
+                setCatName(e.target.value);
+              }}
+              className={
+                "text-gray-600 text-[15px] px-2 rounded shadow-inner font-[400]"
+              }
+            />
+          ) : (
+            <div className="text-[15px] font-[500] py-1 focus:bg-white-25 focus:bg-gray-500 focus:shadow focus:rounded hover:text-black-500 hover:bg-white-100">
+              {item.categoryName}
+            </div>
+          )}
 
           <div className="flex items-center ">
             {item.categoryPoint + " %"}{" "}
@@ -120,27 +160,26 @@ function TemplateCategoryCell({
 
       {showSub && (
         <div className="min-h-[50px] bg-gray-200 rounded-b-lg p-2 mb-2">
-          <div className="flex align-end justify-end"> 
-          <i 
-            className="bi bi-folder-plus shadow rounded p-1 text-2xl mr-2 flex justify-end hover:cursor-pointer hover:bg-gray-300 "
-            onClick={addTheComponent}
-          ></i>
-          </div>{" "}
-          {/* plus button */}
-          {components}
-          {item?.subCategories?.map((element, i) => (
-            <TemplateSubCategoryCell
-              /* test by mb */
-              setIsChanged={setIsChanged}
-              newDataBuffer={newDataBuffer}
-              item={item}
-              setDataBuffer={setDataBuffer}
-              dataBuffer={dataBuffer}
-              /* END test by mb */
-              element={element}
-              key={JSON.stringify(item + i)}
-            />
-          ))}
+          <div className="flex align-end justify-end">
+            <i className="bi bi-folder-plus shadow rounded p-1 text-2xl mr-2 flex justify-end hover:cursor-pointer hover:bg-gray-300 "></i>
+          </div>
+          {isEdit
+            ? modified.map((element, i) => (
+                <TemplateSubCategoryCell
+                  catId={item.categoryId}
+                  element={element}
+                  index={i}
+                  key={JSON.stringify(item + i)}
+                  handleSubCategory={handleSubCategory}
+                />
+              ))
+            : item?.subCategories?.map((element, i) => (
+                <TemplateSubCategoryCell
+                  catId={item.categoryId}
+                  element={element}
+                  key={JSON.stringify(item + i)}
+                />
+              ))}
         </div>
       )}
     </div>

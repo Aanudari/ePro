@@ -24,30 +24,30 @@ function TemplateModal({ setShow, id, categoryName }) {
           logout();
         } else {
           setData(res.data.categories);
-          setDataBuffer(res.data.categories);
-          newDataBuffer = [...dataBuffer];
+          // setDataBuffer(res.data.categories);
+          // newDataBuffer = [...dataBuffer];
         }
       })
       .catch((err) => console.log(err));
   }, [trigger]);
 
   const [showModal, setShowModal] = useState(false);
-  const [isChanged, setIsChanged] = useState(false);
-  const [dataBuffer, setDataBuffer] = useState([]);
+  // const [isChanged, setIsChanged] = useState(false);
+  // const [dataBuffer, setDataBuffer] = useState([]);
+  // console.log(data);
+  // let newDataBuffer = {};
+  // if (
+  //   dataBuffer === null ||
+  //   typeof dataBuffer[Symbol.iterator] !== "function"
+  // ) {
+  //   console.error("Error: ДАТАБУФФЕР ЧИНЬ ХООСОН БАЙНА");
+  //   newDataBuffer = [];
+  //   setDataBuffer([]); // Handle the error by setting newDataBuffer to an empty array, or another default value.
+  // } else {
+  //   newDataBuffer = [...dataBuffer];
+  // }
 
-  let newDataBuffer = {};
-  if (
-    dataBuffer === null ||
-    typeof dataBuffer[Symbol.iterator] !== "function"
-  ) {
-    console.error("Error: ДАТАБУФФЕР ЧИНЬ ХООСОН БАЙНА");
-    newDataBuffer = [];
-    setDataBuffer([]); // Handle the error by setting newDataBuffer to an empty array, or another default value.
-  } else {
-    newDataBuffer = [...dataBuffer];
-  }
-
-  let dataApi = []; // used in hadgalah api call
+  // let dataApi = []; // used in hadgalah api call
 
   return (
     <>
@@ -109,74 +109,16 @@ function TemplateModal({ setShow, id, categoryName }) {
 
           <div className="w-full h-[calc(100vh-100px)]  overflow-scroll flex justify-center">
             <div className="  w-[300px] md:w-[600px]  lg:w-[900px] p-3">
-              {/*  test by mb  */}
-              {isChanged && (
-                <button
-                  className="absolute right-200-px custom-btn min-w-[80px] md:min-w-[120px] lg:min-w-[180px] bg-teal-500 hover:bg-teal-400 active:bg-teal-600 h-10 text-[14px] flex items-center justify-center"
-                  onClick={() => {
-                    setIsChanged(false);
-                    try {
-                      newDataBuffer.map((inside) => {
-                        console.log(
-                          "The inside is  " +
-                            JSON.stringify(inside.subCategories)
-                        );
-                        const newSubcategories = inside.subCategories.map(
-                          ({ subcategoryId, ...subcategory }) => subcategory
-                        );
-                        console.log(JSON.stringify(newSubcategories));
-                        dataApi = {
-                          isEdit: Boolean(true),
-                          templateId: `${id}`,
-                          categoryId: `${inside.categoryId}`,
-                          categoryName: `${inside.categoryName}`,
-                          subCategories: newSubcategories,
-                        };
-                        axios({
-                          method: "post",
-                          headers: {
-                            Authorization: `${TOKEN}`,
-                            "Content-Type": "application/json",
-                            accept: "text/json",
-                          },
-                          url: `${process.env.REACT_APP_URL}/v1/RatingTemplateNew/category`,
-                          data: JSON.stringify(dataApi),
-                        })
-                          .then((res) => {
-                            console.log(res);
-                            setTrigger(!trigger);
-                          })
-                          .catch((err) => {
-                            console.log(err);
-                          });
-                      });
-                    } catch (e) {
-                      console.error(e.message);
-                    }
-                  }}
-                >
-                  Хадгалах
-                </button>
-              )}
-              {/*  test by mb  */}
-
               {data?.length > 0 ? (
                 data.map((item, index) => {
                   return (
                     <TemplateCategoryCell
                       key={JSON.stringify(item + index)}
-                      /* test by mb */
-                      setDataBuffer={setDataBuffer}
-                      dataBuffer={dataBuffer}
-                      /* END test by mb */
-
                       item={item}
                       index={index}
                       trigger={trigger}
                       setTrigger={setTrigger}
-                      setIsChanged={setIsChanged}
-                      newDataBuffer={newDataBuffer}
-
+                      templateId={id}
                     />
                   );
                 })

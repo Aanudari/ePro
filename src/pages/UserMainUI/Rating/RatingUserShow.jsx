@@ -165,14 +165,16 @@ function RatingUserShow() {
               return <UserRatingCategory category={category} key={index} />;
             })}
           </div>
-          <div
-            onClick={() => {
-              handleAgreement();
-            }}
-            className="font-[500] text-center flex items-center justify-center text-white h-10 md:h-14 bg-emerald-500 cursor-pointer hover:bg-emerald-400 p-2 rounded mb-10"
-          >
-            Үнэлгээ зөвшөөрөх
-          </div>
+          {main?.userStatus !== "N" && (
+            <div
+              onClick={() => {
+                handleAgreement();
+              }}
+              className="font-[500] text-center flex items-center justify-center text-white h-10 md:h-14 bg-emerald-500 cursor-pointer hover:bg-emerald-400 p-2 rounded mb-10"
+            >
+              Үнэлгээ зөвшөөрөх
+            </div>
+          )}
           {!chatWindow && (
             <div
               onClick={() => {

@@ -30,15 +30,6 @@ function SelectSubCategoryCell({
       </option>
     );
   });
-  const popover = (
-    <Popover id="popover-basic">
-      <Popover.Header as="h3">Popover right</Popover.Header>
-      <Popover.Body>
-        And here's some <strong>amazing</strong> content. It's very engaging.
-        right?
-      </Popover.Body>
-    </Popover>
-  );
   const [pointValue, setPointValue] = useState(element.subCatUserScore);
   const [progress, setProgress] = useState(
     parseInt((element.subCatUserScore * 100) / element.subCatMaxScore)
@@ -52,7 +43,7 @@ function SelectSubCategoryCell({
               Math.round(progress) === undefined ? 0 : Math.round(progress)
             }%`,
           }}
-          className={`h-1 bg-teal-500 rounded-t absolute`}
+          className={`h-1 bg-teal-500 rounded-t absolute transition-all`}
         ></div>
       </div>
       <div

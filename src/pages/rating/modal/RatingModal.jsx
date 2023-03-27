@@ -52,7 +52,7 @@ function RatingModal({
       const el = element.subCategories[j];
       let tempo = {
         subCategoryId: el.subCategoryId,
-        score: el.subCatUserScore === "" ? "0" : el.subCatUserScore,
+        score: el.subCatUserScore == "" ? "" : el.subCatUserScore,
       };
       cat.push(tempo);
     }
@@ -104,7 +104,6 @@ function RatingModal({
     });
     setChildren(temp);
   };
-  // console.log(user);
   return (
     <div
       className={`fixed ${
@@ -164,7 +163,6 @@ function RatingModal({
             })}
           </div>
         </div>
-        {/* <div className="h-16 glass w-full">Хадгалах</div> */}
       </div>
     </div>
   );

@@ -59,6 +59,7 @@ import Countdown from "./components/CountDown";
 import RatingUser from "./pages/UserMainUI/Rating/RatingUser";
 import UserHome from "./pages/UserMainUI/UserHome";
 import RatingUserShow from "./pages/UserMainUI/Rating/RatingUserShow";
+import useWindowDimensions from "./components/SizeDetector";
 function App() {
   const { activeMenu, showTop, roleId, TOKEN } = useStateContext();
   const { width } = getWindowDimensions();
@@ -79,34 +80,6 @@ function App() {
       })
       .catch((err) => console.log(err));
   }, []);
-
-  // function resetLogoutTimer() {
-  //   clearTimeout(logoutTimer);
-  //   logoutTimer = setTimeout(() => {
-  //     localStorage.removeItem('loginTime');
-  //     // add your logout logic here
-  //   }, timeoutInMilliseconds);
-  // }
-
-  // window.addEventListener('mousemove', resetLogoutTimer);
-  // window.addEventListener('keypress', resetLogoutTimer);
-  // useEffect(() => {
-  //   const api = () => {
-  //     axios({
-  //       method: "get",
-  //       headers: {
-  //         Authorization: `${TOKEN}`,
-  //       },
-  //       url: `${process.env.REACT_APP_URL}/v1/Notification/get`,
-  //     })
-  //       .then((res) => {
-  //         console.log(res.data.notifications);
-  //       })
-  //       .catch((err) => console.log(err));
-  //     setTimeout(api, 300000);
-  //   };
-  //   api();
-  // }, []);
   const adminRoles = ["199", "196"];
   return (
     <BrowserRouter>
@@ -115,7 +88,9 @@ function App() {
           <div className="fixed w-full h-screen bg-black top-z right-0 relative"></div>
         ) : null}
         {/* {activeMenu && roleId === "199" && width > 768 ? <SideNavigation /> : null} */}
-        {activeMenu && adminRoles.includes(roleId) ? <MainNavigation /> : null}
+        {activeMenu && adminRoles.includes(roleId) && width > 768 ? (
+          <MainNavigation />
+        ) : null}
 
         <Routes>
           {/*Sidebar аас үсрэх боломжтой үндсэн хуудаснууд */}

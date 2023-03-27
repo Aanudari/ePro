@@ -58,7 +58,11 @@ function CommentMain({
     >
       <div
         className={`h-full w-[400px] bg-gray-100 shadow ${
-          showChatMenu == 1 ? "from-left" : showChatMenu == 2 ? "to-left" : null
+          showChatMenu === 1
+            ? "from-left"
+            : showChatMenu === 2
+            ? "to-left"
+            : null
         }  absolute shadow`}
       >
         <div className="w-full h-12 text-gray-300 bg-gray-700 text-[13px] flex items-center justify-between px-4 ">
@@ -81,7 +85,7 @@ function CommentMain({
             <div
               key={index}
               className={`bubble ${
-                element.user.deviceId == deviceId ? "me" : "you"
+                element.user.deviceId === deviceId ? "me" : "you"
               }`}
             >
               {element.content}
@@ -90,7 +94,7 @@ function CommentMain({
         </div>
         <div className="h-12 w-full z-20">
           <div className="write">
-            <a href="" className="write-link attach"></a>
+            <a className="write-link attach"></a>
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}

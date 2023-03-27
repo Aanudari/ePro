@@ -20,7 +20,7 @@ function TemplateModal({ setShow, id, categoryName }) {
       url: `${process.env.REACT_APP_URL}/v1/RatingTemplateNew/getTemplateInfo/${id}`,
     })
       .then((res) => {
-        if (res.data.errorCode == 401) {
+        if (res.data.errorCode === 401) {
           logout();
         } else {
           setData(res.data.categories);

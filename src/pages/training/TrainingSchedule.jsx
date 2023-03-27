@@ -4,7 +4,6 @@ import { useStateContext } from "../../contexts/ContextProvider";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { Modal } from "react-bootstrap";
-import TrainingProgressCell from "./TrainingProgressCell";
 import moment from "moment";
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
@@ -16,18 +15,21 @@ function TrainingSchedule() {
   const location = useLocation();
   const { TOKEN } = useStateContext();
   const navigate = useNavigate();
-  const videoRef = useRef(null);
+  const today = new Date();
+  const format = "YYYYMMDDHHmmss";
   const [trains, setTrains] = useState([]);
   const [category, setCategory] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
-  const [watched, setWatched] = useState([]);
   const [showDelete, setShowDelete] = useState(null);
   const hideModalDelete = () => setShowDelete(null);
   const [id, setId] = useState();
   const [trigger, setTrigger] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage] = useState(10);
-  const nPages = Math.ceil(filteredList.length / recordsPerPage);
+  const nPages = Math.ceil(filteredList?.length / recordsPerPage);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   useEffect(() => {
     axios({
       method: "get",
@@ -53,23 +55,37 @@ function TrainingSchedule() {
       })
       .catch((err) => console.log(err));
   }, [trigger]);
-  const today = new Date();
-  const format = "YYYYMMDDHHmmss";
-  function secondsToHms(d) {
-    d = Number(d);
+  useEffect(() => {
+    axios({
+      method: "get",
+      headers: {
+        accept: "text/plain",
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/Training/category`,
+    })
+      .then((res) => {
+        if (res.data.isSuccess === true) {
+          setCategory(res.data.trainingCatList);
+        }
+        if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct format."
+        ) {
+          logout();
+        }
+      })
+      .catch((err) => console.log(err));
+  }, [trigger]);
+  const handlePrevSlide = () => {
+    setCurrentSlide(currentSlide - 3);
+  };
+  const handleNextSlide = () => {
+    setCurrentSlide(currentSlide + 3);
+  };
+  const sliderWidth = `${category.length * 70}px`;
+  const sliderTransform = `translateX(-${currentSlide * 70}px)`;
 
-    var h = Math.floor(d / 3600);
-    var m = Math.floor((d % 3600) / 60);
-    var s = Math.floor((d % 3600) % 60);
-
-    return (
-      ("0" + h).slice(-2) +
-      ":" +
-      ("0" + m).slice(-2) +
-      ":" +
-      ("0" + s).slice(-2)
-    );
-  }
   const handleDelete = () => {
     axios({
       method: "delete",
@@ -97,12 +113,22 @@ function TrainingSchedule() {
       })
       .catch((err) => console.log(err));
   };
-  const handleEdit = (data) => {
-    navigate("/edit-training", {
-      state: { data: data },
-    });
+  const handleCategoryChange = (name) => {
+    setSelectedCategory(name);
   };
-  const [searchQuery, setSearchQuery] = useState("");
+  const filterByCategory = (filteredData) => {
+    if (!selectedCategory) {
+      return filteredData;
+    }
+    const filteredTrains = filteredData.filter(
+      (tr) => tr.tCatName === selectedCategory
+    );
+    return filteredTrains;
+  };
+  useEffect(() => {
+    var filteredData = filterByCategory(trains);
+    setFilteredList(filteredData);
+  }, [selectedCategory]);
   const handleSearch = (event) => {
     const query = event.target.value;
     setSearchQuery(query);
@@ -205,7 +231,9 @@ function TrainingSchedule() {
         >
           <Modal.Header closeButton>
             <Modal.Title>
-              <span className="text-sm text-black">Сургалт устгах</span>
+              <p className="text-xl font-normal text-white text-center">
+                Сургалт устгах
+              </p>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -270,8 +298,45 @@ function TrainingSchedule() {
             </div>
           </div>
         </div>
+        <div className="relative mt-4">
+          <div className="overflow-hidden">
+            <div
+              className="flex transition-transform duration-500 ease-in-out"
+              style={{ width: sliderWidth, transform: sliderTransform }}
+            >
+              {category.map((item, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleCategoryChange(item.name)}
+                  className="relative rounded-full px-2 py-2 ml-1 bg-white border border-2 border-gray-200 font-bold text-sm text-black focus:!bg-gray-700 hover:!bg-gray-200 hover:text-white focus:!text-white"
+                >
+                  <div className="whitespace-nowrap text-sm">
+                    🚀 {item.name}
+                  </div>
+                  <div className="absolute duration-300 inset-0 w-full h-full transition-all scale-0 group-hover:scale-100 group-hover:bg-white/30 rounded-2xl pointer-events-none"></div>
+                </button>
+              ))}
+            </div>
+          </div>
+          <button
+            onClick={handlePrevSlide}
+            className={`absolute inset-y-0 left-0 z-10 flex items-center justify-center w-10 h-10 rounded-full ${
+              currentSlide === 0 ? "hidden" : ""
+            } bg-gray-500 text-white`}
+          >
+            <i className="bi bi-chevron-left" />
+          </button>
+          <button
+            onClick={handleNextSlide}
+            className={`absolute inset-y-0 right-0 z-10 flex items-center justify-center w-10 h-10 rounded-full ${
+              currentSlide === Math.ceil(category.length) - 1 ? "hidden" : ""
+            } bg-gray-500 text-white`}
+          >
+            <i className="bi bi-chevron-right" />
+          </button>
+        </div>
         <div className="mx-auto mt-4  ">
-          {filteredList.map((data, index) => {
+          {filteredList?.map((data, index) => {
             const startDate = new Date(data.startDate);
             const endDate = new Date(data.endDate);
             const duration = endDate.getTime() - startDate.getTime();
@@ -352,8 +417,11 @@ function TrainingSchedule() {
                       }}
                       className="flex items-start text-gray-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group"
                     >
-                      <div className="mr-2">
+                      <div className="group  relative flex justify-center  mr-2">
                         <i className="bi bi-eye" />
+                        <span className="absolute top-10 scale-0 transition-all rounded bg-gray-800 p-2 px-8 text-xs text-white group-hover:scale-100">
+                          ✨ Үзсэн.
+                        </span>
                       </div>
                       <p className="font-semibold">
                         {
@@ -384,7 +452,7 @@ function TrainingSchedule() {
               </div>
             );
           })}
-          {filteredList.length > 3 ? (
+          {filteredList.length > 9 ? (
             <div className="mt-3">
               <Pagination
                 nPages={nPages}

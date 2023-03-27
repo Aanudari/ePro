@@ -30,7 +30,7 @@ export default function UINavigation() {
           </div>
           <div className="header-navigation">
             <nav className="header-navigation-links">
-              {/* <a href="#"> Нүүр </a> */}
+              {/* <a > Нүүр </a> */}
               <a
                 className="cursor-pointer"
                 onClick={() => {
@@ -69,14 +69,14 @@ export default function UINavigation() {
               </a>
             </nav>
             <div className="header-navigation-actions relative">
-              {/* <a href="#" className="button">
+              {/* <a  className="button">
               <i className="ph-lightning-bold"></i>
               <span>Upgrade now</span>
             </a> */}
-              <a href="#" className="icon-button">
+              <a className="icon-button">
                 <i className="bi bi-gear-wide"></i>
               </a>
-              <a href="#" className="icon-button">
+              <a className="icon-button">
                 <i className="bi bi-bell-fill"></i>
               </a>
               <a
@@ -106,7 +106,6 @@ export default function UINavigation() {
             onClick={() => {
               setShowMenu(!showMenu);
             }}
-            href="#"
             className="button"
           >
             <i className="ph-list-bold"></i>

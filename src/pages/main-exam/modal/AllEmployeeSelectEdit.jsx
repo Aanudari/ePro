@@ -61,7 +61,7 @@ function AllEmployeeSelectEdit({
     let tempo = [];
     for (let i = 0; i < users.length; i++) {
       const el = users[i];
-      if (element == el.unitName) {
+      if (element === el.unitName) {
         tempo.push(el);
       }
     }

@@ -9,13 +9,13 @@ function SelectCategoryCell({ category, index, handleSelect }) {
     // console.log(element);
     let tempo = {
       score: parseInt(
-        element.subCatUserScore == "" ? 0 : element.subCatUserScore
+        element.subCatUserScore === "" ? 0 : element.subCatUserScore
       ),
       id: element.subCategoryId,
     };
     score =
       score +
-      parseInt(element.subCatUserScore == "" ? 0 : element.subCatUserScore);
+      parseInt(element.subCatUserScore === "" ? 0 : element.subCatUserScore);
     arr.push(tempo);
   }
   const collector = () => {};

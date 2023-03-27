@@ -65,7 +65,7 @@ function Exam() {
     ]);
     if (tempo.length > 0) {
       let dataX = tempo.map((item) => {
-        if (item.questionId == props.questionId) {
+        if (item.questionId === props.questionId) {
           return { ...item, onlyAnswerId: props.onlyAnswerId };
         } else {
           return item;
@@ -74,7 +74,7 @@ function Exam() {
       setTempo(dataX);
     } else {
       let dataX = temp.map((item) => {
-        if (item.questionId == props.questionId) {
+        if (item.questionId === props.questionId) {
           return { ...item, onlyAnswerId: props.onlyAnswerId };
         } else {
           return item;
@@ -90,7 +90,7 @@ function Exam() {
       const element = tempo[index];
       if (element.onlyAnswerId) {
         if (element.onlyAnswerId[0]) {
-          if (element.onlyAnswerId[0].isTrue == "1")
+          if (element.onlyAnswerId[0].isTrue === "1")
             container.push(element.questionId);
         }
       }
@@ -99,7 +99,7 @@ function Exam() {
       const element = container[i];
       for (let j = 0; j < questions.length; j++) {
         const el = questions[j];
-        if (element == el.id) {
+        if (element === el.id) {
           tempNo = tempNo + parseInt(el.point);
           break;
         }

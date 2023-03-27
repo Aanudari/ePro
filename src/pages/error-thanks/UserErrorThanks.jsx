@@ -49,6 +49,7 @@ function UserErrorThanks() {
         }
         if (res.data.isSuccess === true) {
           setComplain(res.data.complains);
+          setFilteredData(res.data.complains);
         }
 
         if (

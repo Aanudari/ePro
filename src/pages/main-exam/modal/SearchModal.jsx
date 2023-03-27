@@ -83,9 +83,9 @@ function SearhModal({
                           }
                     }
                     className={`w-full h-14 flex gap-1 ${
-                      exam?.examSummary?.status == "Exam over"
+                      exam?.examSummary?.status === "Exam over"
                         ? "custom-btn btn-11 bg-gray-200 shadow-none hover:bg-gray-300 bg-opacity-50 "
-                        : exam?.examSummary?.status == "Ongoing"
+                        : exam?.examSummary?.status === "Ongoing"
                         ? "cellt "
                         : "custom-btn btn-11 bg-amber-200 shadow-none hover:bg-amber-200 bg-opacity-50 px-2"
                     }
@@ -106,7 +106,7 @@ function SearhModal({
                       </span>
                       <span
                         className={`m-0 font-[500] ${
-                          exam?.examSummary?.status == "Ongoing" &&
+                          exam?.examSummary?.status === "Ongoing" &&
                           "text-gray-900 font-[700]"
                         }`}
                       >
@@ -117,12 +117,12 @@ function SearhModal({
                       className="w-1/4 h-full flex justify-center items-center text-[11px]
                        uppercase font-[500]"
                     >
-                      {exam?.examSummary?.status == "Exam over" ? (
+                      {exam?.examSummary?.status === "Exam over" ? (
                         <div className="uppercase font-[500] h-full flex items-center">
                           <div className="h-[8px] w-[8px] bg-teal-500 rounded-full mr-2 mb-[2px]"></div>
                           Дууссан
                         </div>
-                      ) : exam?.examSummary?.status == "Ongoing" ? (
+                      ) : exam?.examSummary?.status === "Ongoing" ? (
                         <div className="px-2 py-1 rounded-md shadow bg-white">
                           <span className="!font-[700] text-red-500 text-[9px]">
                             <i className="bi bi-check2-circle mr-1 text-[12px]"></i>
@@ -145,7 +145,7 @@ function SearhModal({
                       {exam?.duration} мин
                     </div>
                   </div>
-                  {exam?.examSummary?.status == "Ongoing" ? (
+                  {exam?.examSummary?.status === "Ongoing" ? (
                     <div
                       onClick={() => {
                         setShowReport(true);
@@ -164,7 +164,7 @@ function SearhModal({
                         <i className="bi bi-check2-circle text-[20px]"></i>
                       </div>
                     </div>
-                  ) : exam?.examSummary?.status == "Exam over" ? (
+                  ) : exam?.examSummary?.status === "Exam over" ? (
                     <div
                       onClick={() => {
                         setShowReport(true);

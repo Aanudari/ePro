@@ -119,7 +119,7 @@ function Document({ setShowReport, id }) {
       url: `${process.env.REACT_APP_URL}/v1/ExamReport/examResult/${id}/${user.deviceId}`,
     })
       .then((res) => {
-        if (res.data.errorCode == 401) {
+        if (res.data.errorCode === 401) {
           logout();
         } else {
           setfinalScore(res.data.score);
@@ -177,7 +177,7 @@ function Document({ setShowReport, id }) {
         {showDetail && <ShowExamResultDetail setShow={setShowDetail} id={id} />}
         <div className="h-full">
           <h6 className="text-teal-600 text-[14px] flex justify-between mx-3 py-3">
-            {excelUrl != "" && (
+            {excelUrl !== "" && (
               <a
                 href={`${excelUrl}`}
                 download
@@ -212,23 +212,23 @@ function Document({ setShowReport, id }) {
                   <div key={index} className="flex">
                     <div
                       onClick={
-                        user.status == "C"
+                        user.status === "C"
                           ? () => {
                               handleResultCertain(user);
                             }
                           : null
                       }
                       className={`py-2 px-3 w-full ${
-                        user.status == "C"
+                        user.status === "C"
                           ? "custom-btn !bg-emerald-500"
-                          : user.status == "P"
+                          : user.status === "P"
                           ? "custom-btn btn-20 cursor-auto"
                           : "custom-btn btn-20 cursor-auto"
                       } border-b mb-1 hover:text-gray-700 shadow-sm hover:border-b hover:shadow-lg hover:border-teal-400
                     flex justify-between items-center`}
                     >
                       <div className="flex flex-col h-full justify-between  pl-4 relative">
-                        {user.continueCount != "" && (
+                        {user.continueCount !== "" && (
                           <div className="p-2 text-[13px] rounded-full bg-rose-500 font-[400] absolute left-[-26px] top-[12px] w-[20px] h-[20px] text-white flex items-center justify-center">
                             {user.continueCount}
                           </div>
@@ -241,12 +241,12 @@ function Document({ setShowReport, id }) {
                         </span>
                       </div>
 
-                      {user.status == "Not started" ? (
+                      {user.status === "Not started" ? (
                         <span className="flex items-center justify-center bg-rose-500  px-3 rounded-full text-[13px] h-7  font-[400]">
                           <i className="bi bi-exclamation-circle text-md mr-2"></i>{" "}
                           Өгөөгүй
                         </span>
-                      ) : user.status == "C" ? (
+                      ) : user.status === "C" ? (
                         <div className="flex">
                           <span className="flex items-center justify-center px-3 rounded-full text-[13px] h-7  font-[400]">
                             {user.score}%
@@ -259,7 +259,7 @@ function Document({ setShowReport, id }) {
                         </span>
                       )}
                     </div>
-                    {user.status == "C" && (
+                    {user.status === "C" && (
                       <div
                         onClick={() => {
                           setUserID(user.deviceId);

@@ -8,7 +8,7 @@ function EditQuestionMenu({
   return (
     <div className="">
       <div className="h-[42px] mt-1 relative parent">
-        {answer.isTrue == "1" ? (
+        {answer.isTrue === "1" ? (
           <i
             onClick={(e) => {
               handleCorrect(answer.id);

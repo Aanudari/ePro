@@ -18,7 +18,7 @@ function GetQuestionIdsFromCategory({ setShow, getIds }) {
       url: `${process.env.REACT_APP_URL}/v1/Pool/Category`,
     })
       .then((res) => {
-        if (res.data.errorCode == 401) {
+        if (res.data.errorCode === 401) {
           logout();
         } else {
           setCategories(res.data.categoryList);
@@ -59,11 +59,11 @@ function GetQuestionIdsFromCategory({ setShow, getIds }) {
         Authorization: `${TOKEN}`,
       },
       url: `${process.env.REACT_APP_URL}/v1/Pool/Question/${
-        selected[0] == undefined ? 0 : selected[0]
+        selected[0] === undefined ? 0 : selected[0]
       }`,
     })
       .then((res) => {
-        if (res.data.errorCode == 401) {
+        if (res.data.errorCode === 401) {
           logout();
         } else {
           setQuestions(res.data.questionList);
@@ -214,7 +214,7 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
               <div
                 key={index}
                 className={`relative parent ${
-                  category.status == "O" && "hidden"
+                  category.status === "O" && "hidden"
                 }`}
               >
                 <div
@@ -223,7 +223,7 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
                     selectCatId(category.id, category.name, category.status);
                   }}
                   className={`w-full text-white mb-1 h-16  shadow-sm ${
-                    category.status == "A"
+                    category.status === "A"
                       ? "bg-teal-400 hover:bg-teal-500 cursor-pointer"
                       : "bg-gray-400"
                   } 
@@ -231,7 +231,7 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
                 >
                   <div className="flex flex-col justify-center ">
                     <h6 className="font-[500] text-[12px] uppercase">
-                      {category.status == "O" && (
+                      {category.status === "O" && (
                         <i className="bi bi-clock-history mr-2 text-lg"></i>
                       )}
                       {category.departmentName}
@@ -244,7 +244,7 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
                         Эхлэх: {category.startDate}
                       </h6> */}
                         <h6 className=" flex items-center">
-                          {category.status == "A" && (
+                          {category.status === "A" && (
                             <i className="bi bi-hourglass-top text-lg mb-[-5px] mr-1"></i>
                           )}
                           <span className="mt-1 font-[500] text-[12px] uppercase">
@@ -252,7 +252,7 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
                           </span>
                         </h6>
                         <h6 className=" flex items-center">
-                          {category.status == "A" && (
+                          {category.status === "A" && (
                             <i className="bi bi-hourglass-bottom text-lg mb-[-5px] mr-1"></i>
                           )}
                           <span className="mt-1 font-[500] text-[12px] uppercase">

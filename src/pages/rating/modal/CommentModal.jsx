@@ -36,7 +36,7 @@ function CommentModal({
       url: `${process.env.REACT_APP_URL}/v1/RatingNew/GetComments/${conversationId}`,
     })
       .then((res) => {
-        if (res.data.errorCode == 401) {
+        if (res.data.errorCode === 401) {
           logout();
         } else {
           setComments(res.data.commentList);
@@ -124,7 +124,7 @@ function CommentModal({
                   className={`bubble ${comment.isYou === "1" ? "me" : "you"}`}
                 >
                   {comment.comment}
-                  {comment.commentImg != "" && (
+                  {comment.commentImg !== "" && (
                     <div
                       onClick={() => {
                         setShow(true);
@@ -195,7 +195,7 @@ function CommentModal({
                         onClick={onImageUpload}
                         {...dragProps}
                       >
-                        {imageList.length == 0 && (
+                        {imageList.length === 0 && (
                           <i className="bi bi-upload text-white"></i>
                         )}
                       </button>

@@ -68,7 +68,7 @@ function QuestionMain({ data, indexed, ids, remover, collector }) {
           {data.answers.map((item, index) => (
             <div key={index} className="">
               <h6 className=" font-[400] pl-3 flex items-center">
-                {item.isTrue == "1" ? (
+                {item.isTrue === "1" ? (
                   <i className="bi bi-check-circle text-xl px-1 text-teal-500"></i>
                 ) : (
                   <i className="bi bi-circle text-xl px-1 text-gray-400"></i>

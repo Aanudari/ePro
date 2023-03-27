@@ -27,7 +27,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
       url: `${process.env.REACT_APP_URL}/v1/RatingNew/getListDeviceRating/${ratingId}`,
     })
       .then((res) => {
-        if (res.data.isSuccess == true) {
+        if (res.data.isSuccess === true) {
           setData(res.data.deviceRatings);
         }
         if (res.data.resultMessage === "Unauthorized") {
@@ -131,11 +131,11 @@ function RatingBlock({ item, trigger, setTrigger }) {
                   }}
                   key={index}
                   className={`${
-                    user.score == "" ? "bg-gray-300" : "btn-20 "
+                    user.score === "" ? "bg-gray-300" : "btn-20 "
                   } py-2 px-3 hover:shadow text-[13px] flex justify-between items-center text-gray-600 
                 w-full my-1 rounded relative cursor-pointer hover:text-white mt-1 `}
                 >
-                  {user.score == "100" && (
+                  {user.score === "100" && (
                     <div
                       className="absolute w-[25px] left-[-11px] rounded-full text-white h-[25px]  flex items-center justify-center 
                 bg-[#FF7F50]"
@@ -151,7 +151,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
                   <div>
                     {" "}
                     <span className="font-[400]">
-                      {user.score == "" ? "0" : user.score}%
+                      {user.score === "" ? "0" : user.score}%
                     </span>
                   </div>
                 </div>

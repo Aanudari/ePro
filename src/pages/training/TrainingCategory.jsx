@@ -53,7 +53,7 @@ function TrainingCategory() {
       .then((res) => {
         if (res.data.isSuccess === false) {
         }
-        if (res.data.isSuccess == true) {
+        if (res.data.isSuccess === true) {
           setDepartment(res.data.departments);
         }
         if (
@@ -76,12 +76,12 @@ function TrainingCategory() {
       .then((res) => {
         if (res.data.isSuccess === false) {
         }
-        if (res.data.isSuccess == true) {
+        if (res.data.isSuccess === true) {
           setCategory(res.data.trainingCatList);
         }
         if (
           res.data.resultMessage === "Unauthorized" ||
-          res.data.resultMessage == "Input string was not in a correct format."
+          res.data.resultMessage === "Input string was not in a correct format."
         ) {
           logout();
         }
@@ -121,7 +121,7 @@ function TrainingCategory() {
         }
         if (
           res.data.resultMessage === "Unauthorized" ||
-          res.data.resultMessage == "Input string was not in a correct format."
+          res.data.resultMessage === "Input string was not in a correct format."
         ) {
           logout();
         }
@@ -136,10 +136,10 @@ function TrainingCategory() {
   };
   const navigateIndex = (e) => {
     e.preventDefault();
-    if (name.length == 0) {
+    if (name.length === 0) {
       setcheckEmpty1(true);
     }
-    if (departmentID.length == 0) {
+    if (departmentID.length === 0) {
       setcheckEmpty2(true);
     } else {
       console.log(data);
@@ -157,7 +157,7 @@ function TrainingCategory() {
           if (res.data.isSuccess === false) {
             //
           }
-          if (res.data.isSuccess == true) {
+          if (res.data.isSuccess === true) {
             notification.success(`${res.data.resultMessage}`);
             hideModalCreate();
             setTrigger(!trigger);

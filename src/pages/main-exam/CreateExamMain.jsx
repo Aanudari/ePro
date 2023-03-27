@@ -43,7 +43,7 @@ function CreateExamMain({
       url: `${process.env.REACT_APP_URL}/v1/User/org/${depId}`,
     })
       .then((res) => {
-        if (res.data.errorCode == 401) {
+        if (res.data.errorCode === 401) {
           logout();
         } else {
           setOptionss(res.data.organizations);

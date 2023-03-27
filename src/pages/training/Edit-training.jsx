@@ -55,12 +55,12 @@ function EditTraining() {
       url: `${process.env.REACT_APP_URL}/v1/Training/category`,
     })
       .then((res) => {
-        if (res.data.isSuccess == true) {
+        if (res.data.isSuccess === true) {
           setCategory(res.data.trainingCatList);
         }
         if (
           res.data.resultMessage === "Unauthorized" ||
-          res.data.resultMessage == "Input string was not in a correct format."
+          res.data.resultMessage === "Input string was not in a correct format."
         ) {
           logout();
         }
@@ -266,7 +266,7 @@ function EditTraining() {
         ? train.fileUrl
         : (`${fileUrl}` === "" && chosedDelete === 1) || 2
         ? `${fileUrl}`
-        : `${fileUrl}`,
+        : `${fileUrl} `,
     duration: duration === "" ? train.duration : `${duration}`,
     teacher: `${teacher}` === "" ? train.teacher : `${teacher}`,
     tCategory: `${tCategory}` === "" ? train.tCategory : `${tCategory}`,
@@ -314,8 +314,10 @@ function EditTraining() {
   };
   const navigateIndex = (e) => {
     e.preventDefault();
-    if (startDate == endDate && startDate > endDate) {
+    if (startDate === endDate && startDate > endDate) {
       notification.invalidFileUpload("Эхлэх дуусах хугацаа алдаатай байна.");
+    } else if (dataFULL.fileUrl.length === 0) {
+      notification.error("Та файл оруулна уу.");
     } else {
       axios({
         method: "put",

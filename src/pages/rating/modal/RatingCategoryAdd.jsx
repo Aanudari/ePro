@@ -61,7 +61,7 @@ function RatingCategoryAdd({
       data: schema,
     })
       .then((res) => {
-        if (res.data.errorCode == 401) {
+        if (res.data.errorCode === 401) {
           logout();
         } else {
           setTrigger(!trigger);
@@ -95,7 +95,7 @@ function RatingCategoryAdd({
               className="p-2 font-[500] bg-white rounded px-2 text-gray-600 w-[50px] mt-2"
               placeholder="Enter value"
               onBlur={(e) => {
-                e.target.value == "" && total < 100
+                e.target.value === "" && total < 100
                   ? setTotal(total + 0)
                   : setTotal(total + parseInt(e.target.value));
               }}

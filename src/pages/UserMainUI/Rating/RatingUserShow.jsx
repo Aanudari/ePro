@@ -30,7 +30,7 @@ function RatingUserShow() {
       url: `${process.env.REACT_APP_URL}/v1/RatingNew/GetRatingDevice/${deviceId}/${ratingId}`,
     })
       .then((res) => {
-        if (res.data.isSuccess == true) {
+        if (res.data.isSuccess === true) {
           // console.log(res.data);
           setCategories(res.data.categoryList);
           //   console.log(res.data);
@@ -56,7 +56,7 @@ function RatingUserShow() {
       url: `${process.env.REACT_APP_URL}/v1/RatingNew/GetComments/${conversationId}`,
     })
       .then((res) => {
-        if (res.data.errorCode == 401) {
+        if (res.data.errorCode === 401) {
           logout();
         } else {
           setComments(res.data.commentList);
@@ -138,7 +138,7 @@ function RatingUserShow() {
                       }`}
                     >
                       {comment.comment}
-                      {comment.commentImg != "" && (
+                      {comment.commentImg !== "" && (
                         <div
                           onClick={() => {
                             setShow(true);

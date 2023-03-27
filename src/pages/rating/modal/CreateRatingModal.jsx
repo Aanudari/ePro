@@ -75,7 +75,9 @@ function CreateRatingModal({ setShowModal, trigger, setTrigger }) {
       )}
       <div className="shrink w-[calc(70%)] h-[calc(70%)] bg-white flex flex-col items-center rounded">
         <div className="w-full min-h-[50px] bg-teal-600 flex justify-between items-center px-3  gap-2 relative rounded-t">
-          {collected != [] && allEmployee != undefined && ratingName != "" ? (
+          {collected !== [] &&
+          allEmployee !== undefined &&
+          ratingName !== "" ? (
             <button
               onClick={submitData}
               className="custom-btn bg-teal-500 hover:bg-teal-400 text-[14px]"

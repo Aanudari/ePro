@@ -15,7 +15,7 @@ export default function MyTimer({ expiryTimestamp, finisher }) {
       finisher();
     }
   }, [end]);
-  if (minutes == 3 && seconds == 0) {
+  if (minutes === 3 && seconds === 0) {
     toast.error("3 мин үлдлээ !!!", {
       position: "top-center",
       autoClose: false,

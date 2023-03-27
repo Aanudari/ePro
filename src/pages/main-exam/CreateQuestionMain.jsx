@@ -46,7 +46,7 @@ function CreateQuestionMain({
       index: index,
     };
     let final = object?.map((item, index) => {
-      return index == newObj.index ? { ...item, answer: newObj.value } : item;
+      return index === newObj.index ? { ...item, answer: newObj.value } : item;
     });
     setObject(final);
   };

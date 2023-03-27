@@ -1,16 +1,16 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, createRef } from "react";
 import Navigation from "../../components/Navigation";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { Modal } from "react-bootstrap";
-import TrainingProgressCell from "./TrainingProgressCell";
 import moment from "moment";
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
 import { logout } from "../../service/examService";
 import getWindowDimensions from "../../components/SizeDetector";
 import Pagination from "../../service/Pagination";
+
 function OnlineTraining() {
   const { width } = getWindowDimensions();
   const location = useLocation();
@@ -19,7 +19,6 @@ function OnlineTraining() {
   const videoRef = useRef(null);
   const [trains, setTrains] = useState([]);
   const [category, setCategory] = useState([]);
-  const [watched, setWatched] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [showDelete, setShowDelete] = useState(null);
   const hideModalDelete = () => setShowDelete(null);
@@ -27,12 +26,17 @@ function OnlineTraining() {
   const [trigger, setTrigger] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage] = useState(10);
-  const nPages = Math.ceil(filteredList.length / recordsPerPage);
-  const options = [
-    { id: "1", value: "Тэнхим" },
-    { id: "2", value: "Онлайн" },
-  ];
-
+  const nPages = Math.ceil(filteredList?.length / recordsPerPage);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const handlePrevSlide = () => {
+    setCurrentSlide(currentSlide - 1);
+  };
+  const handleNextSlide = () => {
+    setCurrentSlide(currentSlide + 1);
+  };
+  const sliderWidth = `${category.length}px`;
+  const sliderTransform = `translateX(-${currentSlide * 70}px)`;
+  const videoRefs = [];
   useEffect(() => {
     axios({
       method: "get",
@@ -48,11 +52,6 @@ function OnlineTraining() {
           );
           setTrains(filteredTrains);
           setFilteredList(filteredTrains);
-          const filteredTrainingDevs =
-            res.data.trainingList[0].trainingDevs.filter(
-              (dev) => dev.status === "Үзсэн"
-            );
-          setWatched(filteredTrainingDevs);
         }
         if (
           res.data.resultMessage === "Unauthorized" ||
@@ -73,12 +72,12 @@ function OnlineTraining() {
       url: `${process.env.REACT_APP_URL}/v1/Training/category`,
     })
       .then((res) => {
-        if (res.data.isSuccess == true) {
+        if (res.data.isSuccess === true) {
           setCategory(res.data.trainingCatList);
         }
         if (
           res.data.resultMessage === "Unauthorized" ||
-          res.data.resultMessage == "Input string was not in a correct format."
+          res.data.resultMessage === "Input string was not in a correct format."
         ) {
           logout();
         }
@@ -166,8 +165,8 @@ function OnlineTraining() {
     );
     return filteredTrains;
   };
-  const handleCategoryChange = (event) => {
-    setSelectedCategory(event.target.value);
+  const handleCategoryChange = (name) => {
+    setSelectedCategory(name);
   };
   useEffect(() => {
     var filteredData = filterByCategory(trains);
@@ -249,7 +248,9 @@ function OnlineTraining() {
         >
           <Modal.Header closeButton>
             <Modal.Title>
-              <span className="text-sm text-black">Сургалт устгах</span>
+              <p className="text-xl font-normal text-white text-center">
+                Сургалт устгах
+              </p>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -316,8 +317,48 @@ function OnlineTraining() {
           </div>
         </div>
 
+        <div className="relative mt-4">
+          <div className="overflow-hidden">
+            <div
+              className="flex transition-transform duration-150 ease-in-out"
+              style={{ width: sliderWidth, transform: sliderTransform }}
+            >
+              {category.map((item, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleCategoryChange(item.name)}
+                  className="relative rounded-full px-2 py-2 ml-1 bg-white border border-2 border-gray-200 font-bold text-sm text-black focus:!bg-gray-700 hover:!bg-gray-200 hover:text-white focus:!text-white"
+                >
+                  <div className="whitespace-nowrap text-sm">
+                    🚀 {item.name}
+                  </div>
+                  <div className="absolute duration-150 inset-0 w-full h-full transition-all scale-0 group-hover:scale-100 group-hover:bg-white/30 rounded-2xl pointer-events-none"></div>
+                </button>
+              ))}
+            </div>
+          </div>
+          <button
+            onClick={handlePrevSlide}
+            className={`absolute inset-y-0 left-0 z-10 flex items-center justify-center w-10 h-10 rounded-full ${
+              currentSlide === 0 ? "hidden" : ""
+            } bg-gray-500 text-white`}
+          >
+            <i className="bi bi-chevron-left" />
+          </button>
+          <button
+            onClick={handleNextSlide}
+            className={`absolute inset-y-0 right-0 z-10 flex items-center justify-center w-10 h-10 rounded-full ${
+              currentSlide === category.length - 1 ? "hidden" : ""
+            } bg-gray-500 text-white`}
+          >
+            <i className="bi bi-chevron-right" />
+          </button>
+        </div>
+
         <div className="mx-auto mt-4">
-          {filteredList.map((data, index) => {
+          {filteredList?.map((data, index) => {
+            const videoRef = createRef();
+            videoRefs[index] = videoRef;
             return (
               <div key={index} className="flex cursor-pointer">
                 <video
@@ -353,13 +394,37 @@ function OnlineTraining() {
                       }}
                       className="flex items-start text-gray-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group"
                     >
-                      <div className="mr-2">
+                      <div className="group  relative flex justify-center  mr-2">
                         <i className="bi bi-eye" />
+                        <span className="absolute top-10 scale-0 transition-all rounded bg-gray-800 p-2 px-8 text-xs text-white group-hover:scale-100">
+                          ✨ Үзсэн.
+                        </span>
                       </div>
                       <p className="font-semibold">
                         {
                           data.trainingDevs.filter(
                             (dev) => dev.status === "Үзсэн"
+                          ).length
+                        }
+                      </p>
+                    </a>
+
+                    <a
+                      onClick={() => {
+                        navigateWatched(data);
+                      }}
+                      className="flex items-start text-gray-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group"
+                    >
+                      <div className="group  relative flex justify-center mr-2">
+                        <i className="bi bi-pause-circle-fill" />
+                        <span className="absolute top-10 scale-0 transition-all rounded bg-gray-800 p-2 px-8 text-xs text-white group-hover:scale-100">
+                          ✨ Үзэж байгаа.
+                        </span>
+                      </div>
+                      <p className="font-semibold">
+                        {
+                          data.trainingDevs.filter(
+                            (dev) => dev.status === "Үзэж байгаа"
                           ).length
                         }
                       </p>
@@ -385,7 +450,7 @@ function OnlineTraining() {
               </div>
             );
           })}
-          {filteredList.length > 3 ? (
+          {filteredList.length > 9 ? (
             <div className="mt-3">
               <Pagination
                 nPages={nPages}

@@ -33,11 +33,11 @@ function TrainingFiles() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-        } else if (res.data.isSuccess == true) {
+        } else if (res.data.isSuccess === true) {
           setFiles(res.data.fileNames);
         } else if (
           res.data.resultMessage === "Unauthorized" ||
-          res.data.resultMessage == "Input string was not in a correct format."
+          res.data.resultMessage === "Input string was not in a correct format."
         ) {
           logout();
         }
@@ -69,7 +69,7 @@ function TrainingFiles() {
         }
         if (
           res.data.resultMessage === "Unauthorized" ||
-          res.data.resultMessage == "Input string was not in a correct format."
+          res.data.resultMessage === "Input string was not in a correct format."
         ) {
           logout();
         }

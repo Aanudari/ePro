@@ -67,7 +67,7 @@ export default function ExamInit() {
     const element = questions?.questionList[index];
     for (let i = 0; i < element.answerList.length; i++) {
       const el = element.answerList[i];
-      if (el.isTrue == "1") {
+      if (el.isTrue === "1") {
         correct.push(el.id);
       }
     }

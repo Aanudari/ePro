@@ -27,7 +27,7 @@ function ExamHeader({
         </h6>
       </div>
       <div className="flex h-[60px]">
-        {minute != undefined && (
+        {minute !== undefined && (
           <nav
             className={`${
               check < 5 ? "!bg-red-500 " : "bg-black"

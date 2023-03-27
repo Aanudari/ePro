@@ -40,7 +40,7 @@ function ExamDash() {
       url: `${process.env.REACT_APP_URL}/v1/ExamNew`,
     })
       .then((res) => {
-        if (res.data.errorCode == 401) {
+        if (res.data.errorCode === 401) {
           logout();
         } else {
           setLoading(false);
@@ -61,7 +61,7 @@ function ExamDash() {
       url: `${process.env.REACT_APP_URL}/v1/Pool/Category`,
     })
       .then((res) => {
-        if (res.data.errorCode == 401) {
+        if (res.data.errorCode === 401) {
           logout();
         } else {
           setCategories(res.data.categoryList);

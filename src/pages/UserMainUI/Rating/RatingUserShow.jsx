@@ -221,7 +221,7 @@ function RatingUserShow() {
                       }`}
                     >
                       {comment.comment}
-                      {comment.commentImg != "" && (
+                      {comment.commentImg !== "" && (
                         <div
                           onClick={() => {
                             setShow(true);

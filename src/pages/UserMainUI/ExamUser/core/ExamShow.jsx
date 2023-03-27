@@ -13,10 +13,10 @@ function ExamShow() {
     const element = data[index];
     if (element.onlyAnswerId) {
       if (element.onlyAnswerId[0]) {
-        if (element.onlyAnswerId[0].isTrue == "1") {
+        if (element.onlyAnswerId[0].isTrue === "1") {
           container.push(element.onlyAnswerId[0].answerId);
         }
-        if (element.onlyAnswerId[0].isTrue == "0") {
+        if (element.onlyAnswerId[0].isTrue === "0") {
           wrong.push(element.onlyAnswerId[0].answerId);
         }
       }

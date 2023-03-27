@@ -10,75 +10,24 @@ function TrainingUserCell() {
   const location = useLocation();
   const { TOKEN, activeMenu } = useStateContext();
   const selectedTrain = location.state.data;
-  const [watchedUsers, setWatchedUsers] = useState([]);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    axios({
-      method: "get",
-      headers: {
-        accept: "text/plain",
-        Authorization: `${TOKEN}`,
-      },
-      url: `${process.env.REACT_APP_URL}/v1/TrainingReport/training/watched?trainingId=${selectedTrain.id}`,
-    })
-      .then((res) => {
-        if (res.data.isSuccess === false) {
-        }
-        if (res.data.isSuccess == true) {
-          setWatchedUsers(res.data.watchedList);
-        }
-        if (
-          res.data.resultMessage === "Unauthorized" ||
-          res.data.resultMessage == "Input string was not in a correct format."
-        ) {
-          logout();
-        }
-      })
-      .catch((err) => console.log(err));
-  }, []);
-  const [filteredList, setFilteredList] = useState(watchedUsers);
+  const [filteredList, setFilteredList] = useState(selectedTrain?.trainingDevs);
   const [searchQuery, setSearchQuery] = useState("");
+
   const handleSearch = (event) => {
     const query = event.target.value;
     setSearchQuery(query);
-    const searchList = watchedUsers.filter((item) => {
-      return item.firstName.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+    const searchList = selectedTrain?.trainingDevs?.filter((item) => {
+      return item.deviceName.toLowerCase().indexOf(query.toLowerCase()) !== -1;
     });
     setFilteredList(searchList);
   };
-  let unique = watchedUsers.filter(
-    (value, index, self) =>
-      index === self.findIndex((t) => t.unit == value.unit)
-  );
-  let mainOption = [
-    {
-      department: "",
-      unit: "Бүгд",
-      lastName: "all_employee",
-      firstName: "all_employee",
-      deviceId: "0000",
-      hugatsaa: "",
-    },
-  ];
-  mainOption.push(...unique);
-
   const handleOptions = (value) => {
-    let filtered = watchedUsers.filter((item, i) => {
-      return item.unit == value;
+    let filtered = selectedTrain.trainingDevs?.filter((item, i) => {
+      return item.unit === value;
     });
     setFilteredList(filtered);
   };
-  function secondsToHms(d) {
-    d = Number(d);
-    const h = Math.floor(d / 3600);
-    const m = Math.floor((d % 3600) / 60);
-    const s = Math.floor((d % 3600) % 60);
-    // var hDisplay = h > 0 ? h + (h == 1 ? " цаг, " : " цаг, ") : "";
-    // var mDisplay = m > 0 ? m + (m == 1 ? " минут, " : " минут, ") : "";
-    // var sDisplay = s > 0 ? s + (s == 1 ? " секунд" : " секунд") : "";
-    return `${h}:${m}:${s}`;
-  }
   return (
     <div className="w-full min-h-[calc(100%-56px)]">
       <Navigation />
@@ -99,7 +48,7 @@ function TrainingUserCell() {
             Хувиарлагдсан хэрэглэгчид{" "}
             {filteredList.length > 0
               ? `(${filteredList.length})`
-              : `(${watchedUsers.length})`}
+              : `(${selectedTrain?.trainingDevs?.length})`}
           </p>
           {location.state.item === "schedule" ? (
             ""
@@ -134,17 +83,17 @@ function TrainingUserCell() {
             </div>
 
             <div className="flex flex-col justify-center w-3/4 max-w-sm space-y-3 md:flex-row md:w-full md:space-x-3 md:space-y-0">
-              <select
+              {/* <select
                 onChange={(e) => {
                   handleOptions(e.target.value);
                 }}
               >
-                {mainOption.map((el, i) => (
-                  <option key={i} value={`${el.unit}`}>
-                    {el.unit}
+                {filterDep.map((el, i) => (
+                  <option key={i} value={`${el.name}`}>
+                    {el.name}
                   </option>
                 ))}
-              </select>
+              </select> */}
             </div>
           </div>
           <div className="mt-3 overflow-x-auto"></div>
@@ -160,40 +109,46 @@ function TrainingUserCell() {
             <tbody className="bg-white text-sm ">
               {filteredList.length > 0
                 ? filteredList.map((data, i) => (
-                    <tr key={i}>
+                    <tr key={data.devId}>
                       <td className="px-1 py-1 border">{i + 1}</td>
-                      <td className="px-1 py-1 border">{data.unit}</td>
-                      <td className="px-1 py-1 border">
-                        {data.lastName[0]}. {data.firstName}
-                      </td>
-                      <td className="px-1 py-1 border flex md:justify-center sm:justify-center">
-                        {data.hugatsaa === "" ? (
-                          <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-400 border-2 border-rose-500 rounded-md bg-white rounded-md">
-                            ҮЗЭЭГҮЙ
+                      <td className="px-1 py-1 border">{data.unitName}</td>
+                      <td className="px-1 py-1 border">{data.deviceName}</td>
+                      <td className="px-1 py-1 border flex md:justify-center sm:justify-center ">
+                        {data.status === "Үзээгүй" ? (
+                          <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-500 border-2 border-red-400 rounded-md bg-white rounded-md">
+                            Үзээгүй
+                          </span>
+                        ) : data.status === "Үзэж байгаа" ? (
+                          <span className="flex items-center px-2 py-1 text-xs font-semibold text-gray-500 border-2 border-gray-400 rounded-md bg-white rounded-md">
+                            Үзэж байгаа
                           </span>
                         ) : (
-                          <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-400 border-2 border-green-500 rounded-md bg-white rounded-md">
-                            ҮЗСЭН
+                          <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-500 border-2 border-green-400 rounded-md bg-white rounded-md">
+                            Үзсэн
                           </span>
                         )}
                       </td>
                     </tr>
                   ))
-                : watchedUsers?.map((data, i) => (
+                : selectedTrain?.trainingDevs?.map((data, i) => (
                     <tr key={i}>
                       <td className="px-1 py-1 border">{i + 1}</td>
-                      <td className="px-1 py-1 border">{data.unit}</td>
+                      <td className="px-1 py-1 border">{data.unitName}</td>
                       <td className="px-1 py-1 border">
-                        {data.lastName[0]}. {data.firstName}
+                        <td className="px-1 py-1 border">{data.deviceName}</td>
                       </td>
                       <td className="px-1 py-1 border flex md:justify-center sm:justify-center">
-                        {data.hugatsaa === "" ? (
-                          <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-400 border-2 border-rose-500 rounded-md bg-white rounded-md">
-                            ҮЗЭЭГҮЙ
+                        {data.status === "Үзээгүй" ? (
+                          <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-500 border-2 border-red-400 rounded-md bg-white rounded-md">
+                            Үзээгүй
+                          </span>
+                        ) : data.status === "Үзэж байгаа" ? (
+                          <span className="flex items-center px-2 py-1 text-xs font-semibold text-gray-500 border-2 border-gray-400 rounded-md bg-white rounded-md">
+                            Үзэж байгаа
                           </span>
                         ) : (
-                          <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-400 border-2 border-green-500 rounded-md bg-white rounded-md">
-                            ҮЗСЭН
+                          <span className="flex items-center px-2 py-1 text-xs font-semibold text-green-500 border-2 border-green-400 rounded-md bg-white rounded-md">
+                            Үзсэн
                           </span>
                         )}
                       </td>

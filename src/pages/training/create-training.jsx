@@ -14,26 +14,18 @@ import getWindowDimensions from "../../components/SizeDetector";
 import Workers from "./Workers";
 function CreateTraining() {
   const { width } = getWindowDimensions();
-  const { TOKEN, activeMenu } = useStateContext();
+  const { TOKEN } = useStateContext();
   const navigate = useNavigate();
   const format = "YYYYMMDDHHmmss";
-  const format1 = "HHmm";
   const [date1, setDate1] = useState(new Date());
   const [date2, setDate2] = useState(new Date());
   const startDate = moment(date1).format(format);
   const endDate = moment(date2).format(format);
   const locationn = useLocation();
-  console.log(locationn.state.item);
   const [category, setCategory] = useState();
   const [selectedOptioncategory, setSelectedOptioncategory] = useState(null);
-  const [selectedOption, setSelectedOption] = useState(null);
-  const options = [
-    { id: "1", value: "Тэнхим" },
-    { id: "2", value: "Онлайн" },
-  ];
   const [checkEmptyname, setcheckEmptyname] = useState(false);
   const [checkEmptydescription, setcheckEmptydescription] = useState(false);
-
   const [checkEmptyteacher, setcheckEmptyteacher] = useState(false);
   const [checkEmptytCategory, setcheckEmptytCategory] = useState(false);
   const [checkEmptysessionType, setcheckEmptysessionType] = useState(false);
@@ -63,12 +55,12 @@ function CreateTraining() {
       url: `${process.env.REACT_APP_URL}/v1/Training/category`,
     })
       .then((res) => {
-        if (res.data.isSuccess == true) {
+        if (res.data.isSuccess === true) {
           setCategory(res.data.trainingCatList);
         }
         if (
           res.data.resultMessage === "Unauthorized" ||
-          res.data.resultMessage == "Input string was not in a correct format."
+          res.data.resultMessage === "Input string was not in a correct format."
         ) {
           logout();
         }
@@ -227,23 +219,19 @@ function CreateTraining() {
     e.preventDefault();
     if (name.length === 0) {
       setcheckEmptyname(true);
-    }
-    if (description.length === 0) {
+    } else if (description.length === 0) {
       setcheckEmptydescription(true);
-    }
-    if (teacher.length === 0) {
+    } else if (teacher.length === 0) {
       setcheckEmptyteacher(true);
-    }
-    if (tCategory.length === 0) {
+    } else if (fileUrl.length === 0) {
+      notification.error("Та файл оруулна уу.");
+    } else if (emp.length === 0) {
+      notification.error("Та Ажилтан сонгоно уу.");
+    } else if (tCategory.length === 0) {
       setcheckEmptytCategory(true);
-    }
-    if (sessionType.length === 0) {
-      setcheckEmptysessionType(true);
-    }
-    if (location.length === 0) {
+    } else if (location.length === 0) {
       setcheckEmptylocation(true);
-    }
-    if (startDate == endDate || startDate > endDate) {
+    } else if (startDate === endDate || startDate > endDate) {
       notification.error("Эхлэх дуусах хугацаа алдаатай байна.");
       setCheckEmptyDate(true);
     } else {
@@ -260,7 +248,11 @@ function CreateTraining() {
         .then((res) => {
           if (res.data.isSuccess === true) {
             notification.success(`${res.data.resultMessage}`);
-            const timer = setTimeout(() => navigate("/online-training"), 500);
+            const timer = setTimeout(() => {
+              locationn.state.item === "schedule"
+                ? navigate("/training-schedule")
+                : navigate("/online-training");
+            }, 500);
             return () => clearTimeout(timer);
           }
           if (res.data.isSuccess === false) {
@@ -270,6 +262,7 @@ function CreateTraining() {
         .catch((err) => console.log(err));
     }
   };
+
   const [show, setShow] = useState(false);
   const getEmployees = (value) => {
     let tempo = [];
@@ -312,7 +305,12 @@ function CreateTraining() {
           centered
         >
           <Modal.Header closeButton>
-            <Modal.Title>Файл устгах</Modal.Title>
+            <Modal.Title>
+              {" "}
+              <p className="text-xl font-normal text-white text-center">
+                Файл устгах
+              </p>
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div className="p-6 text-center">

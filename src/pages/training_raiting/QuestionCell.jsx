@@ -35,8 +35,8 @@ function QuestionCell({ q, setTrigger }) {
         if (res.data.isSuccess === false) {
         }
         if (res.data.isSuccess === true) {
-          notification.success(`${res.data.resultMessage}`);
           setTrigger(true);
+          notification.success(`${res.data.resultMessage}`);
           hideModalDelete();
         } else {
           console.log(res.data.resultMessage);
@@ -103,9 +103,9 @@ function QuestionCell({ q, setTrigger }) {
 
       {q?.map((q, i) => (
         <div key={i} className="mb-2 border-gray-400">
-          <div className="shadow-sm border border-t-4 cursor-pointer bg-white rounded-md flex flex-1 items-center p-4">
+          <div className="shadow-sm border border-t-4 cursor-pointer bg-white rounded-md flex flex-1 items-center p-2">
             <div className="flex-1 pl-1 md:mr-16">
-              <div className="font-medium dark:text-white">{q.question}</div>
+              <div className="font-medium text-sm">{q.question}</div>
               {q.trRatingAnswer.length === 0 ? null : (
                 <div className="text-sm text-gray-600 dark:text-gray-200">
                   Хариултын тоо {q.trRatingAnswer.length}

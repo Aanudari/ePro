@@ -59,7 +59,7 @@ function RatingIndividual() {
       .catch((err) => console.log(err));
   }, []);
   let filtered = content?.filter((item, index) => {
-    return item.deviceId == userId;
+    return item.deviceId === userId;
   });
   const [ratingTotal, setRatingTotal] = useState(0);
   let arr = [];
@@ -82,7 +82,7 @@ function RatingIndividual() {
   const [schema, setSchema] = useState(main);
   const handleSubmit = (category, total, itemId) => {
     let pre = schema.categories.map((item) => {
-      return item.id == itemId
+      return item.id === itemId
         ? { ...item, subCategory: category, points: total }
         : item;
     });

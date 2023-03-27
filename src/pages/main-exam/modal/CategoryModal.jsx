@@ -33,7 +33,7 @@ function CategoryModal({
       url: `${process.env.REACT_APP_URL}/v1/Pool/Question/${id}`,
     })
       .then((res) => {
-        if (res.data.errorCode == 401) {
+        if (res.data.errorCode === 401) {
           logout();
         } else {
           setData(res.data.questionList);
@@ -99,7 +99,7 @@ function CategoryModal({
   const handleCreateQuesiton = (object, correct) => {
     // console.log(object)
     let newArr = object?.map((answer, index) => {
-      return index == correct
+      return index === correct
         ? { ...answer, isTrue: "1" }
         : { ...answer, isTrue: "0" };
     });

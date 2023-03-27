@@ -31,7 +31,7 @@ function SideNavigation() {
                 navigate("/exam-form");
               }}
               className={
-                path == "/exam-form"
+                path === "/exam-form"
                   ? "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold"
                   : "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
               }
@@ -46,7 +46,7 @@ function SideNavigation() {
               navigate("/take-exam");
             }}
             className={
-              path == "/take-exam"
+              path === "/take-exam"
                 ? "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold"
                 : "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
             }
@@ -59,7 +59,7 @@ function SideNavigation() {
               navigate("/exam-result");
             }}
             className={
-              path == "/exam-result"
+              path === "/exam-result"
                 ? "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold"
                 : "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md  transition"
             }
@@ -78,7 +78,7 @@ function SideNavigation() {
               navigate("/dashboard");
             }}
             className={
-              path == "/dashboard"
+              path === "/dashboard"
                 ? "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold"
                 : "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
             }
@@ -91,7 +91,7 @@ function SideNavigation() {
               navigate("/level-one");
             }}
             className={
-              path == "/level-one"
+              path === "/level-one"
                 ? "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold"
                 : "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
             }
@@ -105,7 +105,7 @@ function SideNavigation() {
               navigate("/complain");
             }}
             className={
-              path == "/complain"
+              path === "/complain"
                 ? "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold"
                 : "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
             }
@@ -119,7 +119,7 @@ function SideNavigation() {
               navigate("/telesales");
             }}
             className={
-              path == "/telesales"
+              path === "/telesales"
                 ? "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold"
                 : "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
             }
@@ -132,7 +132,7 @@ function SideNavigation() {
               navigate("/online");
             }}
             className={
-              path == "/online"
+              path === "/online"
                 ? "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold"
                 : "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
             }
@@ -145,7 +145,7 @@ function SideNavigation() {
               navigate("/branch");
             }}
             className={
-              path == "/branch"
+              path === "/branch"
                 ? "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold"
                 : "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
             }
@@ -158,7 +158,7 @@ function SideNavigation() {
               navigate("/installer");
             }}
             className={
-              path == "/installer"
+              path === "/installer"
                 ? "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold"
                 : "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
             }
@@ -171,7 +171,7 @@ function SideNavigation() {
               navigate("/care");
             }}
             className={
-              path == "/care"
+              path === "/care"
                 ? "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold"
                 : "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
             }
@@ -184,7 +184,7 @@ function SideNavigation() {
               navigate("/bank");
             }}
             className={
-              path == "/bank"
+              path === "/bank"
                 ? "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold"
                 : "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
             }
@@ -203,7 +203,7 @@ function SideNavigation() {
               navigate("/calendar");
             }}
             className={
-              path == "/dashboard"
+              path === "/dashboard"
                 ? "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold"
                 : "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
             }
@@ -216,7 +216,7 @@ function SideNavigation() {
               navigate("/create-training");
             }}
             className={
-              path == "/create-training"
+              path === "/create-training"
                 ? "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold"
                 : "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
             }
@@ -229,7 +229,7 @@ function SideNavigation() {
               navigate("/took-training");
             }}
             className={
-              path == "/took-training"
+              path === "/took-training"
                 ? "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold"
                 : "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
             }
@@ -242,7 +242,7 @@ function SideNavigation() {
               navigate("/trainings");
             }}
             className={
-              path == "/trainings"
+              path === "/trainings"
                 ? "w-full h-12 cursor-pointer pl-4 flex items-center rounded-md bg-sky-500 text-white font-bold"
                 : "w-full h-12 cursor-pointer pl-4 hover:bg-gray-100 flex items-center rounded-md transition "
             }

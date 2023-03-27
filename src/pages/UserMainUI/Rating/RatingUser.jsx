@@ -17,7 +17,7 @@ function RatingUser() {
       url: `${process.env.REACT_APP_URL}/v1/RatingNew/getListRating`,
     })
       .then((res) => {
-        if (res.data.isSuccess == true) {
+        if (res.data.isSuccess === true) {
           setData(res.data.ratings);
         }
         if (res.data.resultMessage === "Unauthorized") {

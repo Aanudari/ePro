@@ -43,7 +43,7 @@ function EditErrorThanks() {
       .then((res) => {
         if (res.data.isSuccess === false) {
         }
-        if (res.data.isSuccess == true) {
+        if (res.data.isSuccess === true) {
           setComplainInfo(res.data.complainInfos);
         }
         if (

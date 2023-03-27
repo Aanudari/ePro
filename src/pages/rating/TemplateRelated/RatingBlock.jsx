@@ -29,7 +29,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
       url: `${process.env.REACT_APP_URL}/v1/RatingNew/getListDeviceRating/${ratingId}`,
     })
       .then((res) => {
-        if (res.data.isSuccess == true) {
+        if (res.data.isSuccess === true) {
           setData(res.data.deviceRatings);
         }
         if (res.data.resultMessage === "Unauthorized") {

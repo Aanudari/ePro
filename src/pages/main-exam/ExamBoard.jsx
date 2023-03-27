@@ -20,7 +20,7 @@ function ExamBoard({
     let arr = [];
     for (let i = 0; i < exams?.length; i++) {
       const el = exams[i];
-      if (el?.examSummary?.status == element) {
+      if (el?.examSummary?.status === element) {
         arr.push(el);
       }
     }
@@ -53,7 +53,7 @@ function ExamBoard({
   const [showAddition, setShowAddition] = useState(false);
   const handleSmallMenu = (value) => {
     // console.log(value);
-    if (smallMenuid == value) {
+    if (smallMenuid === value) {
       setSmallMenuid(0);
     } else {
       setSmallMenuid(value);
@@ -96,7 +96,7 @@ function ExamBoard({
               setDetector(0);
             }}
             className={`w-[150px] ${
-              detector == 0
+              detector === 0
                 ? "bg-teal-700 hover:!bg-teal-700 shadow"
                 : "bg-teal-500"
             } h-9  hover:bg-teal-600 active:bg-teal-700 hover:mt-[-2px]   flex items-center justify-center font-[500] uppercase  
@@ -109,7 +109,7 @@ function ExamBoard({
               setDetector(1);
             }}
             className={`w-[150px] ${
-              detector == 1
+              detector === 1
                 ? "bg-teal-700 hover:!bg-teal-700 shadow"
                 : "bg-teal-500"
             } h-9  hover:bg-teal-600 active:bg-teal-700 hover:mt-[-2px]   flex items-center justify-center font-[500] uppercase  
@@ -123,7 +123,7 @@ function ExamBoard({
               setDetector(2);
             }}
             className={`w-[150px] ${
-              detector == 2
+              detector === 2
                 ? "bg-teal-700 hover:!bg-teal-700 shadow"
                 : "bg-teal-500"
             } h-9  hover:bg-teal-600 active:bg-teal-700 hover:mt-[-2px]   flex items-center justify-center font-[500] uppercase  
@@ -137,7 +137,7 @@ function ExamBoard({
               setDetector(3);
             }}
             className={`w-[150px] ${
-              detector == 3
+              detector === 3
                 ? "bg-teal-700 hover:!bg-teal-700 shadow"
                 : "bg-teal-500"
             } h-9  hover:bg-teal-600 active:bg-teal-700 hover:mt-[-2px]   flex items-center justify-center font-[500] uppercase  
@@ -160,7 +160,7 @@ function ExamBoard({
       <div className="!h-[calc(100vh-156px)] w-full overflow-scroll mt-2 border-b pr-1">
         {exams &&
           final.map((certainItem, certainIndex) => {
-            if (certainIndex % 2 == 1) {
+            if (certainIndex % 2 === 1) {
               // console.log(certainItem);
               return certainItem.map((exam, index) => (
                 <div key={index} className="h-14 w-full flex mt-[2px] relative">
@@ -178,9 +178,9 @@ function ExamBoard({
                           }
                     }
                     className={`w-full h-14 flex gap-1 ${
-                      exam?.examSummary?.status == "Exam over"
+                      exam?.examSummary?.status === "Exam over"
                         ? "custom-btn btn-11 bg-gray-100 shadow-none hover:bg-gray-200 bg-opacity-50 "
-                        : exam?.examSummary?.status == "Ongoing"
+                        : exam?.examSummary?.status === "Ongoing"
                         ? "cellt "
                         : "custom-btn btn-11 bg-amber-200 shadow-none hover:bg-amber-200 bg-opacity-50 px-2"
                     }
@@ -201,7 +201,7 @@ function ExamBoard({
                       </span>
                       <span
                         className={`m-0 font-[500] ${
-                          exam?.examSummary?.status == "Ongoing" &&
+                          exam?.examSummary?.status === "Ongoing" &&
                           "text-gray-900 font-[700]"
                         }`}
                       >
@@ -212,12 +212,12 @@ function ExamBoard({
                       className="w-1/4 h-full flex justify-center items-center text-[11px]
                          uppercase font-[500]"
                     >
-                      {exam?.examSummary?.status == "Exam over" ? (
+                      {exam?.examSummary?.status === "Exam over" ? (
                         <div className="uppercase font-[500] h-full flex items-center">
                           <div className="h-[8px] w-[8px] bg-teal-500 rounded-full mr-2 mb-[2px]"></div>
                           Дууссан
                         </div>
-                      ) : exam?.examSummary?.status == "Ongoing" ? (
+                      ) : exam?.examSummary?.status === "Ongoing" ? (
                         <div className="px-2 py-1 rounded-md shadow bg-white">
                           <span className="!font-[700] text-red-500 text-[9px]">
                             <i className="bi bi-check2-circle mr-1 text-[12px]"></i>
@@ -240,7 +240,7 @@ function ExamBoard({
                       {exam?.duration} мин
                     </div>
                   </div>
-                  {exam?.examSummary?.status == "Ongoing" ? (
+                  {exam?.examSummary?.status === "Ongoing" ? (
                     <div
                       onClick={() => {
                         setShowReport(true);
@@ -261,7 +261,7 @@ function ExamBoard({
                         </div>
                       </div>
                     </div>
-                  ) : exam?.examSummary?.status == "Exam over" ? (
+                  ) : exam?.examSummary?.status === "Exam over" ? (
                     <div
                       onClick={() => {
                         setShowReport(true);

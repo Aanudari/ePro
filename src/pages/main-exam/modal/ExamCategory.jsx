@@ -88,7 +88,7 @@ function ExamCategory({
                   handleCategoryModal(category.id, category.departmentId);
                 }}
                 className={`w-full text-white mt-1 h-16  shadow-sm ${
-                  category.status == "A"
+                  category.status === "A"
                     ? "bg-teal-400 hover:bg-teal-500 cursor-pointer"
                     : "bg-gray-400"
                 } 
@@ -96,7 +96,7 @@ function ExamCategory({
               >
                 <div className="flex flex-col justify-center ">
                   <h6 className="font-[500] text-[12px] uppercase">
-                    {category.status == "O" && (
+                    {category.status === "O" && (
                       <i className="bi bi-clock-history mr-2 text-lg"></i>
                     )}
                     {category.departmentName}
@@ -109,7 +109,7 @@ function ExamCategory({
                         Эхлэх: {category.startDate}
                       </h6> */}
                       <h6 className=" flex items-center">
-                        {category.status == "A" && (
+                        {category.status === "A" && (
                           <i className="bi bi-hourglass-top text-lg mb-[-5px] mr-1"></i>
                         )}
                         <span className="mt-1 font-[500] text-[12px] uppercase">
@@ -117,7 +117,7 @@ function ExamCategory({
                         </span>
                       </h6>
                       <h6 className=" flex items-center">
-                        {category.status == "A" && (
+                        {category.status === "A" && (
                           <i className="bi bi-hourglass-bottom text-lg mb-[-5px] mr-1"></i>
                         )}
                         <span className="mt-1 font-[500] text-[12px] uppercase">

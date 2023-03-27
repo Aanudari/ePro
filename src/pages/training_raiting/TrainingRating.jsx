@@ -57,8 +57,8 @@ function TrainingRating() {
           setFilteredList(res.data.trRatingForm);
         }
         if (
-          res.data.resultMessage == "Unauthorized" ||
-          res.data.resultMessage == "Input string was not in a correct format."
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct format."
         ) {
           logout();
         }
@@ -142,11 +142,11 @@ function TrainingRating() {
   };
   const navigateIndex = (e) => {
     e.preventDefault();
-    if (name == null) {
+    if (name === null) {
       setcheckEmpty1(true);
-    } else if (description == null) {
+    } else if (description === null) {
       setcheckEmpty2(true);
-    } else if (tid == null) {
+    } else if (tid === null) {
       setcheckEmpty2(true);
     } else if (startDate === endDate || startDate > endDate) {
       notification.error("Эхлэх дуусах хугацаа алдаатай байна.");
@@ -164,7 +164,7 @@ function TrainingRating() {
         .then((res) => {
           if (res.data.isSuccess === false) {
           }
-          if (res.data.isSuccess == true) {
+          if (res.data.isSuccess === true) {
             notification.success(`${res.data.resultMessage}`);
             setTrigger(!trigger);
             hideModalCreate();
@@ -224,7 +224,12 @@ function TrainingRating() {
           centered
         >
           <Modal.Header closeButton>
-            <Modal.Title>Сургалтын үнэлгээ нэмэх</Modal.Title>
+            <Modal.Title>
+              {" "}
+              <p className="text-xl font-normal text-white text-center">
+                Сургалтын үнэлгээ нэмэх
+              </p>
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div className="max-w-screen-lg mx-auto">
@@ -350,7 +355,9 @@ function TrainingRating() {
           centered
         >
           <Modal.Header closeButton>
-            <span className="text-sm text-black">Сургалтын үнэлгээ устгах</span>
+            <p className="text-xl font-normal text-white text-center">
+              Сургалтын үнэлгээ устгах
+            </p>
           </Modal.Header>
           <Modal.Body>
             <div className="p-6 text-center">

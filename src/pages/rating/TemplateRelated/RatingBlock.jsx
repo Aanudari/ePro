@@ -56,6 +56,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
       .then((res) => {
         if (res.data.isSuccess) {
           setRecallList(!recallList);
+          setTrigger(!trigger);
         } else {
           toast.info(res.data.resultMessage, {
             position: "bottom-right",
@@ -63,6 +64,38 @@ function RatingBlock({ item, trigger, setTrigger }) {
         }
       })
       .catch((err) => {});
+  };
+  const [excelUrl, setExcelUrl] = useState("");
+  useEffect(() => {
+    axios({
+      method: "get",
+      headers: {
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/ReportDownload/reportDownloader/2/${item.ratingId}`,
+    })
+      .then((res) => {
+        if (res.data.resultMessage === "Unauthorized") {
+          logout();
+        } else {
+          setExcelUrl(res.data.excelFile);
+        }
+      })
+      .catch((err) => console.log(err));
+  }, []);
+  const removeUser = (certain) => {
+    const final = {
+      ratingId: "string",
+      ratingName: "string",
+      devices: [
+        {
+          department: "string",
+          unitId: "string",
+          deviceId: "string",
+        },
+      ],
+    };
+    console.log(certain);
   };
   return (
     <>
@@ -151,8 +184,18 @@ function RatingBlock({ item, trigger, setTrigger }) {
           )}
           <Offcanvas.Header closeButton>
             <Offcanvas.Title>
-              <div className="font-[500] text-white text-[16px] container-header-text">
-                {item.ratingName}:{" "}
+              <div className="w-full flex">
+                <a
+                  download={`${excelUrl}`}
+                  className={`font-[500]  mr-2 text-[19px] text-[#174B4B] ${
+                    excelUrl != null ? "cursor-pointer" : "cursor-not-allowed"
+                  }  hover:text-black`}
+                >
+                  <i className="bi bi-file-earmark-spreadsheet-fill "></i>
+                </a>
+                <div className="font-[500] text-white text-[16px] container-header-text">
+                  {item.ratingName}
+                </div>
               </div>
             </Offcanvas.Title>
           </Offcanvas.Header>
@@ -182,7 +225,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
                         ? "btn-25"
                         : "bg-gray-200"
                     } py-2 px-3 hover:shadow text-[13px] flex justify-between items-center text-gray-600 
-                w-full my-1 rounded relative cursor-pointer hover:text-white mt-1 `}
+                        w-full my-1 rounded relative cursor-pointer hover:text-white mt-1 `}
                   >
                     {user.adminStatus == "C" && user.userStatus == "Y" && (
                       <div
@@ -195,7 +238,6 @@ function RatingBlock({ item, trigger, setTrigger }) {
                     <div className="flex flex-col">
                       <span className="font-[400]">{user.deviceName}</span>
                       <span className="font-[400]">{user.unitName}</span>
-                      {/* <span className="font-[400]">{user.conversationId}</span> */}
                     </div>
                     <div>
                       {" "}
@@ -206,13 +248,34 @@ function RatingBlock({ item, trigger, setTrigger }) {
                       )}
                     </div>
                   </div>
+                  {/* {user.adminStatus == "N" ? (
+                    <div
+                      onClick={() => {
+                        removeUser(user);
+                        // setModalShow(true);
+                        // setConversationId(user.conversationId);
+                      }}
+                      className="w-[50px] relative h-14 rounded cursor-pointer hover:text-white ml-1 bg-rose-400 hover:bg-rose-500 text-rose-200 my-1 flex items-center justify-center"
+                    >
+                      <i className="bi bi-x-lg"></i>
+                      {user.unseenCommentCount !== "0" && (
+                        <div className="text-[11px] rounded-full top-[-10px] right-[-10px] bg-red-500 px-2 py-[2px] absolute">
+                          {user.unseenCommentCount}
+                        </div>
+                      )}
+                    </div>
+                  ) : ( */}
                   <div
                     onClick={() => {
                       setModalShow(true);
                       setConversationId(user.conversationId);
-                      // setRecallChild(!recallChild);
                     }}
-                    className="w-[50px] relative h-14 rounded cursor-pointer hover:text-white ml-1 bg-gray-400 hover:bg-gray-500 text-gray-200 my-1 flex items-center justify-center"
+                    className={`w-[50px] relative h-14 rounded cursor-pointer hover:text-white ml-1
+                     ${
+                       user.hasFile != "0"
+                         ? "bg-gray-400 hover:bg-gray-500"
+                         : "bg-emerald-500 hover:bg-emerald-600"
+                     } text-gray-200 my-1 flex items-center justify-center`}
                   >
                     <i className="bi bi-chat-dots"></i>
                     {user.unseenCommentCount !== "0" && (

@@ -146,10 +146,10 @@ function RatingUserShow() {
                 <h6>Статус: </h6>
                 {main?.userStatus === "N" ? (
                   <div className="w-full">
-                    <span className="mb-0 ml-1 md:ml-2 font-[400] px-3 py-2 bg-white rounded">
+                    <span className="mb-0 ml-1 md:ml-2 text-sm font-[500] px-3 py-2 bg-white rounded">
                       Батлаагүй
                     </span>
-                    <span className="ml-2">
+                    <span className="ml-2 text-[13px] font-[500]">
                       Та дэлгэцийн доор байрлах "Үнэлгээ зөвшөөрөх" товчийг дарж
                       үнэлгээгээ баталгаажуулна уу.
                     </span>
@@ -162,10 +162,28 @@ function RatingUserShow() {
               </div>
             </div>
           </div>
+
           <div className="pb-10">
             {categories?.map((category, index) => {
               return <UserRatingCategory category={category} key={index} />;
             })}
+          </div>
+          <div className="bg-[#ecf0f3] rounded-[20px] p-4 mt-4 shadow-md flex items-center mb-4">
+            <div className="mt-2 w-full flex">
+              <h6 className="m-0 flex items-center">
+                Тухайн үнэлгээнд ашиглагдсан file:{" "}
+              </h6>
+
+              <span className="mb-0 ml-1 md:ml-2 font-[400] px-3 py-2 bg-white rounded max-w-[calc(50%)] overflow-hidden">
+                <a
+                  target={"_blank"}
+                  href={`${main?.filePath}`}
+                  className="text-[13px]"
+                >
+                  {main?.filePath.slice(45, 100)}
+                </a>
+              </span>
+            </div>
           </div>
           {main?.userStatus == "N" && (
             <div

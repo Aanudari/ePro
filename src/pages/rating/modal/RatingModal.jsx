@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import bg from "../../../assets/bg.jpg";
 import SelectCategoryCell from "../TemplateRelated/SelectCategoryCell";
+import Loading from "../../../components/Loading";
+import { toast, ToastContainer } from "react-toastify";
 function RatingModal({
   showModal,
   setShowModal,
@@ -104,6 +106,44 @@ function RatingModal({
     });
     setChildren(temp);
   };
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [loading, setLoading] = useState(false);
+  // console.log(data.conversationId);
+  const handleSubmitFile = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    // console.log(TOKEN);
+
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_URL}/v1/RatingNew/addRatingFile?conversationId=${data.conversationId}`,
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `${TOKEN}`,
+      },
+    })
+      .then((res) => {
+        setLoading(false);
+        if (res.data.isSuccess == false) {
+          toast.error(res.data.resultMessage, {
+            position: "bottom-right",
+          });
+        } else {
+          setRecall(!recall);
+          setRecallList(!recallList);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const handleFileSelect = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+  // console.log(data);
   return (
     <div
       className={`fixed ${
@@ -112,10 +152,12 @@ function RatingModal({
         bg-black bg-opacity-50 flex justify-center items-center z-20 h-full
         `}
     >
+      <ToastContainer />
       <div
         style={{ background: `url(${bg})` }}
         className="shrink w-[calc(100%)] h-[calc(100%)] bg-white flex flex-col items-center "
       >
+        {loading && <Loading />}
         <div className="w-full min-h-[56px] bg-teal-600 flex justify-between items-center px-3  gap-2 relative">
           <div className="flex flex-col h-full items-start justify-center">
             <span className="font-[500] text-[13px] text-white m-0">
@@ -125,7 +167,7 @@ function RatingModal({
             </span>{" "}
             <span className="m-0">
               <i className="font-[500] text-[13px] text-white m-0">
-                Ажлийн байр : {user.unitName}
+                Ажлын байр : {user.unitName}
               </i>
             </span>{" "}
           </div>
@@ -161,6 +203,36 @@ function RatingModal({
                 />
               );
             })}
+            <div className="w-full ">
+              <div className="file-uploader">
+                <form onSubmit={handleSubmitFile}>
+                  <input
+                    type="file"
+                    onChange={handleFileSelect}
+                    className="mr-2 bg-teal-500 text-white font-[400] !border-none cursor-pointer hover:!bg-teal-400"
+                  />
+                  {selectedFile != null && (
+                    <input
+                      className="custom-btn btn-13 !bg-teal-500"
+                      type="submit"
+                      value="Upload File"
+                    />
+                  )}
+                </form>
+              </div>
+              <div className="w-full mb-2 text-white flex justify-center">
+                {data?.filePath != "" && (
+                  <a
+                    href={`${data?.filePath}`}
+                    target="_blank"
+                    className={`font-[500] text-[19px] text-white hover:text-black cursor-pointer select-none hover:border mt-2 transition-all p-2`}
+                  >
+                    <i className="bi bi-file-earmark-spreadsheet-fill "></i>
+                    {data?.filePath.slice(45, 100)}
+                  </a>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>

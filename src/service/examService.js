@@ -1,8 +1,8 @@
 import axios from "axios";
 export const logout = () => {
+  window.location.reload();
   localStorage.clear();
   sessionStorage.clear();
-  window.location.reload();
 };
 
 export const getCategoryPool = async () => {

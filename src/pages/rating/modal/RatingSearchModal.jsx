@@ -19,9 +19,7 @@ function RatingSearchModal({ setShowSearch, data }) {
     >
       <div className="shrink w-[calc(80%)] h-[calc(70%)] bg-white flex flex-col items-center rounded">
         <div className="w-full min-h-[50px] bg-teal-600 flex justify-between items-center px-3  gap-2 relative rounded-t">
-          <div className="flex h-full items-center gap-2">
-            {/* <span className="font-[500] text-[15px] text-white">Хайлт</span>{" "} */}
-          </div>
+          <div className="flex h-full items-center gap-2"></div>
           <button
             onClick={() => {
               setShowSearch(false);

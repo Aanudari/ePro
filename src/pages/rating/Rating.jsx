@@ -16,11 +16,6 @@ function Rating() {
       stats: 1,
       icon: "bi-plus-circle",
     },
-    {
-      title: "Сэтгэгдэл",
-      stats: 2,
-      icon: "bi-chat-left-quote",
-    },
   ];
   return (
     <RatingLayout>

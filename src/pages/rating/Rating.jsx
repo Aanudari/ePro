@@ -28,7 +28,9 @@ function Rating() {
                 onClick={() => {
                   setStats(item.stats);
                 }}
-                className={`bg-teal-700 hover:bg-teal-800 text-white text-[14px] rounded py-2 w-[120px] `}
+                className={`${
+                  stats == item.stats && stats == 1 ? "!bg-rose-600" : ""
+                } bg-teal-700 hover:bg-teal-800 text-white text-[14px] rounded py-2 w-[120px] `}
               >
                 <i className={`bi ${item.icon} mr-1`}></i>
                 <span className="font-[500]">{item.title}</span>

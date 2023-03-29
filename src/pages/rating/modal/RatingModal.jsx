@@ -143,7 +143,10 @@ function RatingModal({
   const handleFileSelect = (event) => {
     setSelectedFile(event.target.files[0]);
   };
-  // console.log(data);
+  const [sum, setSum] = useState([]);
+  const handleTotal = (value) => {
+    setSum((prev) => [...prev, value]);
+  };
   return (
     <div
       className={`fixed ${
@@ -159,17 +162,26 @@ function RatingModal({
       >
         {loading && <Loading />}
         <div className="w-full min-h-[56px] bg-teal-600 flex justify-between items-center px-3  gap-2 relative">
-          <div className="flex flex-col h-full items-start justify-center">
-            <span className="font-[500] text-[13px] text-white m-0">
-              <i className="font-[500] text-[13px] text-white m-0">
-                {user.deviceName}
-              </i>
-            </span>{" "}
-            <span className="m-0">
-              <i className="font-[500] text-[13px] text-white m-0">
-                Ажлын байр : {user.unitName}
-              </i>
-            </span>{" "}
+          <div className="flex h-[calc(80%)]">
+            <div className="flex flex-col h-full items-start justify-center">
+              <span className="font-[500] text-[13px] text-white m-0">
+                <i className="font-[500] text-[13px] text-white m-0">
+                  {user.deviceName}
+                </i>
+              </span>{" "}
+              <span className="m-0">
+                <i className="font-[500] text-[13px] text-white m-0">
+                  Ажлын байр : {user.unitName}
+                </i>
+              </span>{" "}
+            </div>
+            <div className="flex flex-col h-full items-start justify-end ml-2 border-l pl-3">
+              <span className="mb-[1px]">
+                <i className="font-[500] text-[13px] text-white m-0">
+                  Дундаж оноо : {100}%
+                </i>
+              </span>{" "}
+            </div>
           </div>
           <div className="flex h-full flex gap-5  py-[6px]">
             <button
@@ -200,6 +212,7 @@ function RatingModal({
                   category={category}
                   index={index}
                   handleSelect={handleSelect}
+                  handleTotal={handleTotal}
                 />
               );
             })}

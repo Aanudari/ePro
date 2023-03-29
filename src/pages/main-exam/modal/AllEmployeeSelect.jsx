@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { logout } from "../../../service/examService";
 import Accordion from "react-bootstrap/Accordion";
-import Button from "react-bootstrap/Button";
 
 function AllEmployeeSelect({ setShow, getEmployees, setShowSelect }) {
   const { activeMenu, TOKEN } = useStateContext();
@@ -121,7 +120,10 @@ function AllEmployeeSelect({ setShow, getEmployees, setShowSelect }) {
       for (let i = 0; i < tempoUnique.length; i++) {
         const element = tempoUnique[i];
         let data = {
-          department: element.departmentId,
+          department:
+            element.departmentId == undefined
+              ? element.department
+              : element.departmentId,
           unitId: element.unitId,
           deviceId: element.deviceId,
         };
@@ -138,7 +140,7 @@ function AllEmployeeSelect({ setShow, getEmployees, setShowSelect }) {
       setIndexDetect((prev) => [...prev, index]);
     }
   };
-
+  // console.log(chosen);
   return (
     <div
       className={`${

@@ -186,7 +186,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
             <Offcanvas.Title>
               <div className="w-full flex">
                 <a
-                  download={`${excelUrl}`}
+                  href={`${excelUrl}`}
                   className={`font-[500]  mr-2 text-[19px] text-[#174B4B] ${
                     excelUrl != null ? "cursor-pointer" : "cursor-not-allowed"
                   }  hover:text-black`}

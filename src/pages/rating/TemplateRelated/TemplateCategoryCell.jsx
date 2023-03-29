@@ -146,7 +146,7 @@ function TemplateCategoryCell({
             </div>
           )}
 
-          <div className="flex items-center ">
+          <div className="flex items-center text-[14px] font-[500]">
             {item.categoryPoint + " %"}{" "}
             <div
               className="bi bi-x ml-2 text-2xl shadow rounded p-1 hover:cursor-pointer hover:bg-teal-700"
@@ -160,9 +160,6 @@ function TemplateCategoryCell({
 
       {showSub && (
         <div className="min-h-[50px] bg-gray-200 rounded-b-lg p-2 mb-2">
-          <div className="flex align-end justify-end">
-            <i className="bi bi-folder-plus shadow rounded p-1 text-2xl mr-2 flex justify-end hover:cursor-pointer hover:bg-gray-300 "></i>
-          </div>
           {isEdit
             ? modified.map((element, i) => (
                 <TemplateSubCategoryCell

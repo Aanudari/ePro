@@ -376,7 +376,7 @@ function App() {
           <Route
             path="/rating"
             element={
-              <ProtectedRoute allowedRoles={[199, 196, 1, 4, 188]}>
+              <ProtectedRoute allowedRoles={[199, 196, 4, 188]}>
                 <Rating />
               </ProtectedRoute>
             }

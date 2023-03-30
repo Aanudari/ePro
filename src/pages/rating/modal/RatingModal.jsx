@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import bg from "../../../assets/bg.jpg";
 import SelectCategoryCell from "../TemplateRelated/SelectCategoryCell";
+import Loading from "../../../components/Loading";
+import { toast, ToastContainer } from "react-toastify";
 function RatingModal({
   showModal,
   setShowModal,
@@ -53,6 +55,7 @@ function RatingModal({
       let tempo = {
         subCategoryId: el.subCategoryId,
         score: el.subCatUserScore == "" ? "" : el.subCatUserScore,
+        comment: el.comment,
       };
       cat.push(tempo);
     }
@@ -64,7 +67,14 @@ function RatingModal({
     ratingId: ratingId,
     deviceId: deviceId,
     categoryList: children,
+    inputs: [
+      {
+        inputId: "",
+        inputValue: "",
+      },
+    ],
   };
+  // console.log(children);
   const handleSubmit = () => {
     // console.log(final);
     axios({
@@ -77,32 +87,81 @@ function RatingModal({
       data: final,
     })
       .then((res) => {
-        if (res.data.errorCode === 401) {
-          logout();
+        if (res.data.isSuccess == false) {
+          toast.error(res.data.resultMessage, {
+            position: "bottom-right",
+          });
         } else {
-          setTrigger(!trigger);
-          setRecall(!recall);
-          setRecallList(!recallList);
-          setShowModal(false);
+          if (res.data.errorCode == 401) {
+            logout();
+          } else {
+            setTrigger(!trigger);
+            setRecall(!recall);
+            setRecallList(!recallList);
+            setShowModal(false);
+          }
         }
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  const handleSelect = (cat, sub, value) => {
+  const handleSelect = (cat, sub, value, comment) => {
     let newChildren = children.length === 0 ? raw : children;
     let temp = newChildren.map((element, index) => {
       return element.categoryId === cat
         ? {
             ...element,
             subCategories: element.subCategories.map((el, i) => {
-              return el.subCategoryId === sub ? { ...el, score: value } : el;
+              return el.subCategoryId == sub
+                ? { ...el, score: value, comment: comment }
+                : el;
             }),
           }
         : element;
     });
     setChildren(temp);
+  };
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [loading, setLoading] = useState(false);
+  // console.log(data.conversationId);
+  const handleSubmitFile = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("file", selectedFile);
+    // console.log(TOKEN);
+
+    axios({
+      method: "post",
+      url: `${process.env.REACT_APP_URL}/v1/RatingNew/addRatingFile?conversationId=${data.conversationId}`,
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `${TOKEN}`,
+      },
+    })
+      .then((res) => {
+        setLoading(false);
+        if (res.data.isSuccess == false) {
+          toast.error(res.data.resultMessage, {
+            position: "bottom-right",
+          });
+        } else {
+          setRecall(!recall);
+          setRecallList(!recallList);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const handleFileSelect = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+  const [sum, setSum] = useState([]);
+  const handleTotal = (value) => {
+    setSum((prev) => [...prev, value]);
   };
   return (
     <div
@@ -112,22 +171,33 @@ function RatingModal({
         bg-black bg-opacity-50 flex justify-center items-center z-20 h-full
         `}
     >
+      <ToastContainer />
       <div
         style={{ background: `url(${bg})` }}
         className="shrink w-[calc(100%)] h-[calc(100%)] bg-white flex flex-col items-center "
       >
+        {loading && <Loading />}
         <div className="w-full min-h-[56px] bg-teal-600 flex justify-between items-center px-3  gap-2 relative">
-          <div className="flex flex-col h-full items-start justify-center">
-            <span className="font-[500] text-[13px] text-white m-0">
-              <i className="font-[500] text-[13px] text-white m-0">
-                {user.deviceName}
-              </i>
-            </span>{" "}
-            <span className="m-0">
-              <i className="font-[500] text-[13px] text-white m-0">
-                Ажлийн байр : {user.unitName}
-              </i>
-            </span>{" "}
+          <div className="flex h-[calc(80%)]">
+            <div className="flex flex-col h-full items-start justify-center">
+              <span className="font-[500] text-[13px] text-white m-0">
+                <i className="font-[500] text-[13px] text-white m-0">
+                  {user.deviceName}
+                </i>
+              </span>{" "}
+              <span className="m-0">
+                <i className="font-[500] text-[13px] text-white m-0">
+                  Ажлын байр : {user.unitName}
+                </i>
+              </span>{" "}
+            </div>
+            <div className="flex flex-col h-full items-start justify-end ml-2 border-l pl-3">
+              <span className="mb-[1px]">
+                <i className="font-[500] text-[13px] text-white m-0">
+                  Дундаж оноо : {100}%
+                </i>
+              </span>{" "}
+            </div>
           </div>
           <div className="flex h-full flex gap-5  py-[6px]">
             <button
@@ -158,9 +228,40 @@ function RatingModal({
                   category={category}
                   index={index}
                   handleSelect={handleSelect}
+                  handleTotal={handleTotal}
                 />
               );
             })}
+            <div className="w-full ">
+              <div className="file-uploader">
+                <form onSubmit={handleSubmitFile}>
+                  <input
+                    type="file"
+                    onChange={handleFileSelect}
+                    className="mr-2 bg-teal-500 text-white font-[400] !border-none cursor-pointer hover:!bg-teal-400"
+                  />
+                  {selectedFile != null && (
+                    <input
+                      className="custom-btn btn-13 !bg-teal-500"
+                      type="submit"
+                      value="Upload File"
+                    />
+                  )}
+                </form>
+              </div>
+              <div className="w-full mb-2 text-white flex justify-center">
+                {data?.filePath != "" && (
+                  <a
+                    href={`${data?.filePath}`}
+                    target="_blank"
+                    className={`font-[500] text-[19px] text-white hover:text-black cursor-pointer select-none hover:border mt-2 transition-all p-2`}
+                  >
+                    <i className="bi bi-file-earmark-spreadsheet-fill "></i>
+                    {data?.filePath.slice(45, 100)}
+                  </a>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>

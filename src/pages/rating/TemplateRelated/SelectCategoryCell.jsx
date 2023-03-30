@@ -1,6 +1,6 @@
 import SelectSubCategoryCell from "./SelectSubCategoryCell";
 import { useEffect, useState, useRef } from "react";
-function SelectCategoryCell({ category, index, handleSelect }) {
+function SelectCategoryCell({ category, index, handleSelect, handleTotal }) {
   const [constant, setConstant] = useState(0);
   const [score, setScore] = useState(0);
   const isInitialRender = useRef(true);
@@ -19,6 +19,9 @@ function SelectCategoryCell({ category, index, handleSelect }) {
       isInitialRender.current = false;
     }
   }, []);
+  useEffect(() => {
+    handleTotal(score);
+  }, [score]);
 
   // console.log(score);
   const [raw, setRaw] = useState([]);
@@ -48,6 +51,7 @@ function SelectCategoryCell({ category, index, handleSelect }) {
     }
   }, [raw]);
   // // console.log(initial);
+  // console.log(score);
   return (
     <div className="mb-2">
       <div className="w-full rounded-t-lg bg-teal-600 px-3 py-2 flex justify-between text-white ">

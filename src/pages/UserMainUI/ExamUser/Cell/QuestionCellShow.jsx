@@ -3,7 +3,7 @@ function QuestionCellShow({ data, correct, wrong }) {
   let tempo = [];
   for (let index = 0; index < data.answerList.length; index++) {
     const element = data.answerList[index];
-    element.isTrue == "1" && tempo.push(element.id);
+    element.isTrue === "1" && tempo.push(element.id);
   }
   return (
     <div

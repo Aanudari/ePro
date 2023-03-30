@@ -31,7 +31,7 @@ function QuestionCellAdminMain({ data }) {
           Зөв хариулсан :
         </span>
         <div className="w-[200px] h-full bg-gray-300 flex justify-end rounded shadow-sm">
-          {data.successRate != 0 ? (
+          {data.successRate !== 0 ? (
             <div
               style={{ width: `${data.successRate}%` }}
               className={`${

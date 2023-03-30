@@ -4,7 +4,7 @@ function ExamCard({ data }) {
   const { readyCheck, setReadyCheck, setExamID, examName, setExamName } =
     useStateContext();
   let status = parseInt(data.isExamTaken.score);
-  return data.isExamTaken.status == "C" ? (
+  return data.isExamTaken.status === "C" ? (
     <div className="shadow-md transition-all">
       <div
         className={`w-[250px] min-h-[320px] max-h-[320px] overflow-hidden bg-gray-100`}

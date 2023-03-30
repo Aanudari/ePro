@@ -6,7 +6,7 @@ import axios from "axios";
 function DocumentFinishedExam({ setShowDocument, id, exams }) {
   const { activeMenu, TOKEN } = useStateContext();
   let filtered = exams.filter((item) => {
-    return item.id == id;
+    return item.id === id;
   });
   const [data, setData] = useState();
   useEffect(() => {
@@ -62,7 +62,7 @@ function DocumentFinishedExam({ setShowDocument, id, exams }) {
                       className="text-[13px] font-[400] py-1 px-3 flex justify-between"
                     >
                       <span>
-                        {element.isTrue == "1" ? (
+                        {element.isTrue === "1" ? (
                           <i className="bi bi-check-circle mr-2 text-green-500"></i>
                         ) : (
                           <i className="bi bi-x-circle mr-2 text-red-500"></i>
@@ -114,7 +114,7 @@ function DocumentFinishedExam({ setShowDocument, id, exams }) {
                       className="text-[13px] font-[400] py-1 px-3 flex justify-between"
                     >
                       <span>
-                        {element.isTrue == "1" ? (
+                        {element.isTrue === "1" ? (
                           <i className="bi bi-check-circle mr-2 text-green-500"></i>
                         ) : (
                           <i className="bi bi-x-circle mr-2 text-red-500"></i>

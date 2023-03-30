@@ -108,7 +108,7 @@ function SearchModalQuestion({ show, setShow }) {
                           </h6>
                           {/* <div
                             className={`${
-                              item.qImgUrl != ""
+                              item.qImgUrl !== ""
                                 ? "border p-2 w-full mt-2 rounded flex justify-center bg-white"
                                 : "hidden"
                             }`}
@@ -135,7 +135,7 @@ function SearchModalQuestion({ show, setShow }) {
                       {item.answers.map((item, index) => (
                         <div key={index} className="mt-2">
                           <h6 className=" font-[400] pl-3 flex items-center">
-                            {item.isTrue == "1" ? (
+                            {item.isTrue === "1" ? (
                               <i className="bi bi-check-circle text-xl px-1 text-teal-500"></i>
                             ) : (
                               <i className="bi bi-circle text-xl px-1 text-gray-400"></i>

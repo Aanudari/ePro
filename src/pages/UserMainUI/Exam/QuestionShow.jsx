@@ -40,7 +40,7 @@ export default function QuestionShow({ data, indexQ }) {
     );
   }, [data]);
   // useEffect(()=> {
-  //     rightAnswer[1].includes(text.id) && text.isTrue == "1" ?
+  //     rightAnswer[1].includes(text.id) && text.isTrue === "1" ?
   //     setRightAnswerCount(rightAnswerCount + 1) : null
   // }, [])
   return (
@@ -64,10 +64,10 @@ export default function QuestionShow({ data, indexQ }) {
                 <li
                   key={index}
                   className={
-                    rightAnswer[1].includes(text.id) && text.isTrue == "0"
+                    rightAnswer[1].includes(text.id) && text.isTrue === "0"
                       ? "bg-red-500 rounded"
                       : // returnCss() :
-                      rightAnswer[1].includes(text.id) && text.isTrue == "1"
+                      rightAnswer[1].includes(text.id) && text.isTrue === "1"
                       ? "bg-green-500 rounded"
                       : null
                   }
@@ -82,9 +82,10 @@ export default function QuestionShow({ data, indexQ }) {
                   />
                   <label
                     className={
-                      rightAnswer[1].includes(text.id) && text.isTrue == "0"
+                      rightAnswer[1].includes(text.id) && text.isTrue === "0"
                         ? " text-white"
-                        : rightAnswer[1].includes(text.id) && text.isTrue == "1"
+                        : rightAnswer[1].includes(text.id) &&
+                          text.isTrue === "1"
                         ? "!text-white"
                         : null
                     }

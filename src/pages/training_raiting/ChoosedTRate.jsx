@@ -3,14 +3,11 @@ import Navigation from "../../components/Navigation";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-import { Modal } from "react-bootstrap";
-import Select from "react-select";
+
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
-import moment from "moment";
-import DatePicker from "react-datepicker";
+
 import { logout } from "../../service/examService";
-import getWindowDimensions from "../../components/SizeDetector";
 import QuestionCell from "./QuestionCell";
 function ChoosedTRate() {
   const location = useLocation();
@@ -60,8 +57,8 @@ function ChoosedTRate() {
           setTrate(res.data.trRatingForm);
         }
         if (
-          res.data.resultMessage == "Unauthorized" ||
-          res.data.resultMessage == "Input string was not in a correct format."
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct format."
         ) {
           logout();
         }
@@ -78,7 +75,7 @@ function ChoosedTRate() {
 
   const submit = (e) => {
     e.preventDefault();
-    if (question == null) {
+    if (question === null) {
       setcheckEmpty11(true);
     } else if (
       radioFields.length === 0 ||
@@ -106,7 +103,7 @@ function ChoosedTRate() {
       }).then((res) => {
         if (res.data.isSuccess === false) {
         }
-        if (res.data.isSuccess == true) {
+        if (res.data.isSuccess === true) {
           notification.success(`${res.data.resultMessage}`);
           setIsOpened(false);
           setRadioFields([]);
@@ -140,7 +137,7 @@ function ChoosedTRate() {
       }).then((res) => {
         if (res.data.isSuccess === false) {
         }
-        if (res.data.isSuccess == true) {
+        if (res.data.isSuccess === true) {
           notification.success(`${res.data.resultMessage}`);
           setIsOpened(false);
           setRadioFields([]);
@@ -206,111 +203,99 @@ function ChoosedTRate() {
                 className="bg-blue-600 border border-blue-600 shadow p-2 rounded text-white flex items-center focus:outline-none focus:shadow-outline"
               >
                 <span className="mx-2">Асуулт нэмэх</span>
-                <svg width="24" height="24" viewBox="0 0 16 16">
-                  <path
-                    d="M7 4 L11 8 L7 12"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinejoin="round"
-                    strokeLinecap="round"
-                  />
-                </svg>
               </button>
             </div>
           </div>
           <div className="mt-3 overflow-x-auto">
-            <div className="mt-3 overflow-x-auto">
-              {isOpened && (
-                <div className="p-4 mx-auto text-center ">
-                  <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 mb-6">
-                    <div className="mt-2 mb-0 space-y-4 rounded-lg p-8 shadow-2xl border-t-4 border-indigo-500 rounded shadow">
-                      <div className="space-y-4 grid grid-cols-1 gap-4  sm:grid-cols-1">
-                        <div>
-                          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                            Асуулт
-                          </label>
-                          <input
-                            className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                            onChange={(e) => {
-                              setQuestion(e.target.value);
-                              setcheckEmpty11(false);
-                            }}
-                            id={checkEmpty11 === true ? "border-red" : null}
-                          />
-                        </div>
-                        <div>
-                          <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
-                            {radioFields.map((form, index) => {
-                              return (
-                                <div key={index}>
-                                  <div>
-                                    <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                      Хариулт
-                                    </label>
-                                    <input
-                                      name="answer"
-                                      type="text"
-                                      className="px-3 py-2 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                                      onChange={(event) =>
-                                        handleRadioChange(event, index)
-                                      }
-                                      value={form.answer}
-                                    />
-                                  </div>
-
-                                  <div>
-                                    <button
-                                      onClick={() => removeRadioFields(index)}
-                                      className="mt-2 px-3 py-2 text-xs bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
-                                    >
-                                      <i className="bi bi-trash-fill" />
-                                    </button>
-                                  </div>
+            {isOpened && (
+              <div className="p-4 mx-auto text-center ">
+                <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 mb-6">
+                  <div className="mt-2 mb-0 space-y-4 rounded-lg p-8 shadow-2xl border-t-4 border-indigo-500 rounded shadow">
+                    <div className="space-y-4 grid grid-cols-1 gap-4  sm:grid-cols-1">
+                      <div>
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                          Асуулт
+                        </label>
+                        <input
+                          className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                          onChange={(e) => {
+                            setQuestion(e.target.value);
+                            setcheckEmpty11(false);
+                          }}
+                          id={checkEmpty11 === true ? "border-red" : null}
+                        />
+                      </div>
+                      <div>
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
+                          {radioFields.map((form, index) => {
+                            return (
+                              <div key={index}>
+                                <div>
+                                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                    Хариулт
+                                  </label>
+                                  <input
+                                    name="answer"
+                                    type="text"
+                                    className="px-3 py-2 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                                    onChange={(event) =>
+                                      handleRadioChange(event, index)
+                                    }
+                                    value={form.answer}
+                                  />
                                 </div>
-                              );
-                            })}
+
+                                <div>
+                                  <button
+                                    onClick={() => removeRadioFields(index)}
+                                    className="mt-2 px-3 py-2 text-xs bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+                                  >
+                                    <i className="bi bi-trash-fill" />
+                                  </button>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                        <div className="mt-4 text-right text-xs">
+                          <div className="inline-flex items-end">
+                            <button
+                              onClick={addRadioFields}
+                              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+                            >
+                              Хариулт нэмэх
+                            </button>
                           </div>
-                          <div className="mt-4 text-right text-xs">
-                            <div className="inline-flex items-end">
-                              <button
-                                onClick={addRadioFields}
-                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-                              >
-                                Хариулт нэмэх
-                              </button>
-                            </div>
-                            <div className="inline-flex items-end">
-                              <button
-                                onClick={submit}
-                                type="submit"
-                                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"
-                              >
-                                submit
-                              </button>
-                            </div>
+                          <div className="inline-flex items-end">
+                            <button
+                              onClick={submit}
+                              type="submit"
+                              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"
+                            >
+                              submit
+                            </button>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              )}
+              </div>
+            )}
 
-              {filtredData[0]?.trRatingQuestions.length === 0 ? (
-                <div className="mt-2 flex items-center px-4 mb-2 text-gray-800">
-                  <div className="flex items-center w-full">
-                    Асуулт үүсээгүй байна.
-                  </div>
+            {filtredData[0]?.trRatingQuestions.length === 0 ? (
+              <div className="mt-2 flex items-center px-4 mb-2 text-gray-800">
+                <div className="flex items-center w-full">
+                  Асуулт үүсээгүй байна.
                 </div>
-              ) : (
-                <QuestionCell
-                  q={filtredData[0]?.trRatingQuestions}
-                  setTrigger={setTrigger}
-                />
-              )}
-              <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between"></div>
-            </div>
+              </div>
+            ) : (
+              <QuestionCell
+                q={filtredData[0]?.trRatingQuestions}
+                setTrigger={setTrigger}
+              />
+            )}
+            {/* <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between"></div> */}
           </div>
         </div>
       </div>

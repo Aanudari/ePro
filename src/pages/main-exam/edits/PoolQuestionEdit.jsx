@@ -39,7 +39,7 @@ function PoolQuestionEdit({
     setNoti(false);
     let tempo = main.answers;
     let temp = tempo.map((el, i) => {
-      if (i == answerId) {
+      if (i === answerId) {
         return { ...el, answer: value };
       } else {
         return el;
@@ -50,7 +50,7 @@ function PoolQuestionEdit({
   const handleIsTrue = (value, answerId) => {
     let tempo = main.answers;
     let temp = tempo.map((el, i) => {
-      if (i == answerId) {
+      if (i === answerId) {
         return { ...el, answer: value, isTrue: "1" };
       } else {
         return { ...el, isTrue: "0" };
@@ -103,7 +103,7 @@ function PoolQuestionEdit({
     // e.preventDefault();
     for (let index = 0; index < main.answers.length; index++) {
       const element = main.answers[index];
-      if (element.answer == "") {
+      if (element.answer === "") {
         tri = true;
         toast.error("Хариултын утга оруулна уу !", {
           position: "bottom-right",
@@ -272,7 +272,7 @@ function PoolQuestionEdit({
             )}
           </button>
         ) : null}
-        {data.status == "NE" && !createExam ? (
+        {data.status === "NE" && !createExam ? (
           <button
             onClick={() => {
               getLockedQuestionExams(data.id);
@@ -284,7 +284,7 @@ function PoolQuestionEdit({
             <i className="bi bi-lock-fill text-xl"></i>
           </button>
         ) : null}
-        {data.status == "SE" && !createExam && edit ? (
+        {data.status === "SE" && !createExam && edit ? (
           <button
             onClick={() => {
               deleteQuestion(data.id);
@@ -302,7 +302,7 @@ function PoolQuestionEdit({
           className={`w-full shadow-md py-3 px-3 font-[400] ${
             edit
               ? "bg-gray-500 bg-opacity-90"
-              : data.status == "NE"
+              : data.status === "NE"
               ? "bg-gray-200"
               : null
           }  bg-gray-50 flex flex-col transition rounded-lg pt-10 `}
@@ -397,7 +397,7 @@ function PoolQuestionEdit({
                             }}
                             className="bi cursor-pointer hover:scale-105 transition-all active:text-red-500 bi-trash3 absolute right-[-10px] text-gray-600 child top-[12px]"
                           ></i>
-                          {item.isTrue == "1" ? (
+                          {item.isTrue === "1" ? (
                             <i
                               onClick={() => {
                                 handleIsTrue(item.answer, index, item.isTrue);
@@ -431,7 +431,7 @@ focus:border-b-[2px] focus:h-[42px] border-teal-500 px-2 text-[14px] w-[calc(92%
                 : data.answers.map((item, index) => (
                     <div key={index} className="">
                       <h6 className=" font-[400] pl-3 flex items-center">
-                        {item.isTrue == "1" ? (
+                        {item.isTrue === "1" ? (
                           <i className="bi bi-check-circle text-xl px-1 text-teal-500"></i>
                         ) : (
                           <i className="bi bi-circle text-xl px-1 text-gray-400"></i>

@@ -81,8 +81,9 @@ function EditTrainRate() {
   };
   const navigateIndex = (e) => {
     e.preventDefault();
-    console.log(dataEditTrate);
-    if (startDate == endDate || startDate > endDate) {
+
+    console.log(JSON.stringify(dataEditTrate));
+    if (startDate === endDate || startDate > endDate) {
       notification.invalidFileUpload("Эхлэх дуусах хугацаа алдаатай байна.");
     } else {
       axios({
@@ -113,13 +114,13 @@ function EditTrainRate() {
   }, []);
   const collector = (question, answer, id, answerId, questionType) => {
     setQuestion(question);
-    setAnswer(answer);
     setQuestionType(questionType);
+    setAnswer(answer);
     let single = raw.filter((item) => {
-      return item.questionId == id;
+      return item.questionId === id;
     });
     let tempo = single[0].trRatingAnswer.map((el) => {
-      if (el.answerId == answerId) {
+      if (el.answerId === answerId) {
         return {
           ...el,
           answer: answer,
@@ -138,7 +139,7 @@ function EditTrainRate() {
       },
     ];
     let final = raw.map((item) => {
-      if (item.questionId == id) {
+      if (item.questionId === id) {
         return arr[0];
       } else {
         return item;
@@ -146,7 +147,7 @@ function EditTrainRate() {
     });
     setRaw(final);
   };
-  console.log(trainrate);
+  console.log(raw);
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <Navigation />

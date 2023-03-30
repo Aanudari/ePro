@@ -110,7 +110,7 @@ export default function ImageUploader({ setImageUrl }) {
               {...dragProps}
               className=""
             >
-              {images.length == 0 && (
+              {images.length === 0 && (
                 <img
                   className="w-[100px]"
                   src="https://user-images.githubusercontent.com/6290720/91559755-9d6e8c00-e973-11ea-9bde-4b60c89f441a.png"

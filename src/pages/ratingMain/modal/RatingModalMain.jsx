@@ -47,7 +47,7 @@ function RatingModalMain({ setShowModal, deviceId }) {
           <h6 className="text-teal-500 mt-2 mb-3">
             Үнэлгээ хийх загвар сонгох:{" "}
           </h6>
-          {data == null ? (
+          {data === null ? (
             <div className="ml-2 text-teal-500 flex items-center">
               <i className="bi bi-exclamation text-2xl mb-[3px]"></i>
               <span className="font-[400] text-[14px] ">

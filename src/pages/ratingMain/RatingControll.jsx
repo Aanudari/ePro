@@ -51,7 +51,7 @@ function RatingControll() {
   for (let index = 0; index < unique.length; index++) {
     const element = unique[index];
     let filtered = data.filter((item, i) => {
-      return item.role == element.id;
+      return item.role === element.id;
     });
     users.push(filtered);
   }
@@ -84,7 +84,7 @@ function RatingControll() {
   const handleChangeOptions = (value) => {
     setIndex(value);
     let temp = unique.filter((item, index) => {
-      return index == value;
+      return index === value;
     });
     axios({
       method: "post",

@@ -21,7 +21,7 @@ function ExamModalMain({
   const [data, setData] = useState();
   const { TOKEN, activeMenu } = useStateContext();
   let chosen = exams.filter((item, index) => {
-    return item.id == id;
+    return item.id === id;
   });
   let deviceIds = [];
   const [trigger2, setTrigger2] = useState(false);
@@ -36,7 +36,7 @@ function ExamModalMain({
       url: `${process.env.REACT_APP_URL}/v1/User`,
     })
       .then((res) => {
-        if (res.data.errorCode == 401) {
+        if (res.data.errorCode === 401) {
           logout();
         } else {
           setUsers(res.data.result);
@@ -58,7 +58,7 @@ function ExamModalMain({
       url: `${process.env.REACT_APP_URL}/v1/ExamNew/variants?examId=${id}`,
     })
       .then((res) => {
-        if (res.data.errorCode == 401) {
+        if (res.data.errorCode === 401) {
           logout();
         } else {
           setData(res.data.variants);
@@ -87,7 +87,7 @@ function ExamModalMain({
 
   const handleFilter = () => {
     let filtered = questions?.filter((item, index) => {
-      return item.id == filteredQuestion;
+      return item.id === filteredQuestion;
     });
     setFiltered(filtered);
   };
@@ -97,7 +97,7 @@ function ExamModalMain({
   // console.log(filtered)
   const handleEditQuestion = (value, index) => {
     let arr = filtered[0].answerList.map((item, i) => {
-      return index == i ? { ...item, answer: value } : item;
+      return index === i ? { ...item, answer: value } : item;
     });
     let assigned = Object.assign(filtered[0], { answerList: arr });
     setFiltered([assigned]);
@@ -175,7 +175,7 @@ function ExamModalMain({
       url: `${process.env.REACT_APP_URL}/v1/Pool/Category`,
     })
       .then((res) => {
-        if (res.data.errorCode == 401) {
+        if (res.data.errorCode === 401) {
           logout();
         } else {
           setCategories(res.data.categoryList);
@@ -280,7 +280,7 @@ function ExamModalMain({
   };
   const handleCorrect = (value) => {
     let arr = filtered[0].answerList.map((item, i) => {
-      return item.id == value
+      return item.id === value
         ? { ...item, isTrue: "1" }
         : { ...item, isTrue: "0" };
     });
@@ -330,7 +330,7 @@ function ExamModalMain({
       url: `${process.env.REACT_APP_URL}/v1/Pool/Question/${value}`,
     })
       .then((res) => {
-        if (res.data.errorCode == 401) {
+        if (res.data.errorCode === 401) {
           logout();
         } else {
           setCategoryData(res.data.questionList);
@@ -353,7 +353,7 @@ function ExamModalMain({
         if (res.data.isSuccess === false) {
           alert(res.data.resultMessage);
         }
-        if (res.data.errorCode == 401) {
+        if (res.data.errorCode === 401) {
           logout();
         } else {
           setExamModal(false);
@@ -423,7 +423,7 @@ function ExamModalMain({
           className={`w-full min-h-[50px] bg-teal-800 flex justify-between px-3`}
         >
           <div className="flex gap-5 h-full items-center">
-            {examSummary == "Ongoing" && (
+            {examSummary === "Ongoing" && (
               <div className="text-white min-h-[50px] flex items-center font-[500] text-sm">
                 Статус :
                 <span className="text-green-500 font-[500] ml-2">
@@ -431,7 +431,7 @@ function ExamModalMain({
                 </span>
               </div>
             )}
-            {examSummary == "Not yet" && (
+            {examSummary === "Not yet" && (
               <div className="text-white min-h-[50px] flex items-center font-[500] text-sm">
                 Статус :
                 <span className="text-amber-400 font-[500] ml-2">
@@ -439,7 +439,7 @@ function ExamModalMain({
                 </span>
               </div>
             )}
-            {examSummary == "Exam over" && (
+            {examSummary === "Exam over" && (
               <div className="text-white min-h-[50px] flex items-center font-[500] text-sm">
                 Статус :
                 <span className="text-gray-400 font-[500] ml-2">
@@ -450,7 +450,7 @@ function ExamModalMain({
           </div>
 
           <div className="flex justify-end items-center min-h-[50px]  mr-3">
-            {examSummary == "Not yet" && (
+            {examSummary === "Not yet" && (
               <button
                 onClick={handleDeleteExam}
                 className="w-[20px] h-full mr-5"
@@ -477,7 +477,7 @@ function ExamModalMain({
             userTrigger={userTrigger}
             examSummary={examSummary}
           />
-        ) : examSummary == "Exam over" || examSummary == "Ongoing" ? (
+        ) : examSummary === "Exam over" || examSummary === "Ongoing" ? (
           <ExamEditHeader2
             examTri={examTri}
             setExamTri={setExamTri}
@@ -520,7 +520,7 @@ function ExamModalMain({
                   className={`mt-3 border-t-[5px] border-l border-r border-[#50a3a2] rounded-lg realtive bg-white`}
                 >
                   {" "}
-                  {examSummary == "Not yet" && (
+                  {examSummary === "Not yet" && (
                     <div className="h-10 w-full bg-[#50a3a2] text-white px-4 flex items-center font-[400] text-[14px] uppercase relative">
                       {question.categoryName}
                       <div className="absolute right-[10px]">
@@ -627,7 +627,7 @@ function ExamModalMain({
                             key={index}
                             className="mt-2 font-[400] pl-3 flex items-center"
                           >
-                            {answer.isTrue == "1" ? (
+                            {answer.isTrue === "1" ? (
                               <i
                                 onClick={() => {
                                   changeisTrue(question.id, answer.id);
@@ -648,7 +648,7 @@ function ExamModalMain({
                           </h6>
                         ))
                       )}
-                      {showButton && examSummary == "Exam over" && (
+                      {showButton && examSummary === "Exam over" && (
                         <div
                           className="glass rounded-t absolute h-full w-full top-0 left-0 flex items-center
                         justify-center !shadow-none"
@@ -687,7 +687,7 @@ function ExamModalMain({
                           </div>
                         </div>
                       )}
-                      {showButton && examSummary == "Not yet" && (
+                      {showButton && examSummary === "Not yet" && (
                         <div
                           className="glass rounded-t absolute h-full w-full top-0 left-0 flex items-center
                         justify-center !shadow-none"
@@ -717,7 +717,7 @@ function ExamModalMain({
                           </div>
                         </div>
                       )}
-                      {showButton && examSummary == "Ongoing" && (
+                      {showButton && examSummary === "Ongoing" && (
                         <div
                           className="glass rounded-t absolute h-full w-full top-0 left-0 flex items-center
                         justify-center !shadow-none"
@@ -758,7 +758,7 @@ function ExamModalMain({
             <div className="py-3"></div>
           </div>
         </div>
-        {examSummary == "Not yet" && (
+        {examSummary === "Not yet" && (
           <button
             onClick={() => {
               setSideQuestions(!sideQuestions);

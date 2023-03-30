@@ -30,7 +30,7 @@ function RatingModal({
       url: `${process.env.REACT_APP_URL}/v1/RatingNew/GetRatingDevice/${deviceId}/${ratingId}`,
     })
       .then((res) => {
-        if (res.data.isSuccess == true) {
+        if (res.data.isSuccess === true) {
           setData(res.data);
           setCategoryList(res.data.categoryList);
         }
@@ -109,7 +109,7 @@ function RatingModal({
   const handleSelect = (cat, sub, value, comment) => {
     let newChildren = children.length === 0 ? raw : children;
     let temp = newChildren.map((element, index) => {
-      return element.categoryId == cat
+      return element.categoryId === cat
         ? {
             ...element,
             subCategories: element.subCategories.map((el, i) => {

@@ -39,7 +39,7 @@ function Notification() {
                 setpageStatus("1");
               }}
               className={
-                pageStatus == "1"
+                pageStatus === "1"
                   ? "font-[500] border-b-[2px] border-red-400 pb-1 text-[18px] p-2 cursor-pointer "
                   : "font-[500] pb-1 text-[18px] p-2 cursor-pointer "
               }
@@ -51,7 +51,7 @@ function Notification() {
                 setpageStatus("2");
               }}
               className={
-                pageStatus == "2"
+                pageStatus === "2"
                   ? "font-[500] border-b-[2px] border-green-400 pb-1 text-[18px] p-2 cursor-pointer "
                   : "font-[500] pb-1 text-[18px] p-2 cursor-pointer "
               }
@@ -60,7 +60,7 @@ function Notification() {
             </span>
           </div>
           {/* Notification Cell */}
-          {pageStatus == "1" ? (
+          {pageStatus === "1" ? (
             <div className="mt-2 flex flex-col gap-2 relative">
               <NotiCell />
               <NotiCell />

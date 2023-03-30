@@ -8,13 +8,15 @@ import { notification } from "../../service/toast";
 import axios from "axios";
 import getWindowDimensions from "../../components/SizeDetector";
 import { Modal } from "react-bootstrap";
-
+import moment from "moment";
 const TrainingPlayer = () => {
   const location = useLocation();
   const { TOKEN } = useStateContext();
+  const today = new Date();
+  const format = "YYYYMMDDHHmmss";
   const navigate = useNavigate();
   const videoRef = useRef(null);
-  const trn = location.state.data;
+  const train = location.state.data;
   const [showTRate, setShowTRate] = useState(null);
   const hideModalTRate = () => setShowTRate(null);
   const [showGiveRate, setShowGiveRate] = useState(null);
@@ -22,6 +24,7 @@ const TrainingPlayer = () => {
   const [tRate, setTRate] = useState([]);
   const [q1, setQ1] = useState();
   const [q2, setQ2] = useState();
+
   useEffect(() => {
     axios({
       method: "get",
@@ -31,16 +34,17 @@ const TrainingPlayer = () => {
       url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-        } else if (res.data.isSuccess === true) {
-          console.log(res.data);
-          const findRate = res.data.trRatingForm.find((item) => {
-            return item.trainingId === trn.id;
+        if (res.data.isSuccess === true) {
+          const findRate = res.data.trRatingForm?.find((item) => {
+            return item.trainingId === train.id;
           });
-          setTRate(findRate);
+          if (findRate === false) {
+          } else {
+            setTRate(findRate);
+          }
         } else if (
-          res.data.resultMessage == "Unauthorized" ||
-          res.data.resultMessage == "Input string was not in a correct divat."
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct divat."
         ) {
           logout();
         }
@@ -53,16 +57,15 @@ const TrainingPlayer = () => {
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating/${trn.id}/1`,
+      url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating/${train.id}/1`,
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
         } else if (res.data.isSuccess === true) {
-          console.log(res.data);
           setQ1(res.data.trainingRatingForm.trRatingQuestions);
         } else if (
-          res.data.resultMessage == "Unauthorized" ||
-          res.data.resultMessage == "Input string was not in a correct divat."
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct divat."
         ) {
           logout();
         }
@@ -75,15 +78,15 @@ const TrainingPlayer = () => {
       headers: {
         Authorization: `${TOKEN}`,
       },
-      url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating/${trn.id}/2`,
+      url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating/${train.id}/2`,
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
         } else if (res.data.isSuccess === true) {
           setQ2(res.data.trainingRatingForm.trRatingQuestions);
         } else if (
-          res.data.resultMessage == "Unauthorized" ||
-          res.data.resultMessage == "Input string was not in a correct divat."
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct divat."
         ) {
           logout();
         }
@@ -96,8 +99,9 @@ const TrainingPlayer = () => {
       let currentTime = ref.currentTime;
       let duration = ref.duration;
       let progress = (currentTime / duration) * 100;
+
       if (progress === 100) {
-        if (trn.status === "Үзсэн") {
+        if (train.status === "Үзсэн") {
           setShowTRate(true);
         } else {
           axios({
@@ -109,7 +113,7 @@ const TrainingPlayer = () => {
             },
             url: `${process.env.REACT_APP_URL}/v1/Training/watch/end`,
             data: {
-              trainingId: `${trn.id}`,
+              trainingId: `${train.id}`,
             },
           })
             .then((res) => {
@@ -118,7 +122,7 @@ const TrainingPlayer = () => {
                 const timer = setTimeout(() => setShowTRate(true), 500);
                 return () => clearTimeout(timer);
               } else if (
-                res.data.resultMessage == "Unauthorized" ||
+                res.data.resultMessage === "Unauthorized" ||
                 res.data.resultMessage ==
                   "Input string was not in a correct divat."
               ) {
@@ -160,11 +164,11 @@ const TrainingPlayer = () => {
     }, {});
     const mergedArrayByKey = Object.values(result);
     const t_data = {
-      trainingId: `${trn.id}`,
+      trainingId: `${train.id}`,
       ratingId: `${tRate.id}`,
       trRateQuestion: mergedArrayByKey,
     };
-    if (mergedArrayByKey.length != tRate.trRatingQuestions.length) {
+    if (mergedArrayByKey.length !== tRate.trRatingQuestions.length) {
       notification.error("Хариулт дутуу байна.");
     } else {
       axios({
@@ -177,7 +181,7 @@ const TrainingPlayer = () => {
         url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating/rate`,
         data: JSON.stringify(t_data),
       }).then((res) => {
-        if (res.data.isSuccess == true) {
+        if (res.data.isSuccess === true) {
           notification.success(`${res.data.resultMessage}`);
           const timer = setTimeout(() => {
             hideModalGiveRate();
@@ -185,13 +189,100 @@ const TrainingPlayer = () => {
           }, 1500);
           return () => clearTimeout(timer);
         }
+        if (res.data.isSuccess === false) {
+          notification.error(`${res.data.resultMessage}`);
+          // navigate(0);
+        }
         if (res.data.resultMessage === "Unauthorized") {
           logout();
         }
       });
     }
   };
+  function timeSince(date) {
+    var seconds = Math.floor((new Date() - date) / 1000);
 
+    var interval = seconds / 31536000;
+
+    if (interval > 1) {
+      return Math.floor(interval) + " жилийн өмнө";
+    }
+    interval = seconds / 2592000;
+    if (interval > 1) {
+      return Math.floor(interval) + " сарын өмнө";
+    }
+    interval = seconds / 86400;
+    if (interval > 1) {
+      return Math.floor(interval) + " өдрийн өмнө";
+    }
+    interval = seconds / 3600;
+    if (interval > 1) {
+      return Math.floor(interval) + " цагийн өмнө";
+    }
+    interval = seconds / 60;
+    if (interval > 1) {
+      return Math.floor(interval) + " минутын өмнө";
+    }
+    return Math.floor(seconds) + " секундын өмнө";
+  }
+  function formatDate(date) {
+    const options = { weekday: "long", month: "long", day: "numeric" };
+    const formattedDate = date.toLocaleDateString("en-US", options);
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    return `📅 ${formattedDate}, 🕒 ${hours}:${minutes}`;
+  }
+  function formatDuration(duration) {
+    const hours = Math.floor(duration / 3600);
+    const minutes = Math.floor((duration - hours * 3600) / 60);
+    const seconds = duration - hours * 3600 - minutes * 60;
+
+    let result = "";
+    if (hours > 0) {
+      result += `${Math.round(hours)} цаг `;
+    }
+    if (minutes > 0) {
+      result += `${Math.round(minutes)} мин `;
+    }
+    if (seconds > 0) {
+      result += `${Math.round(seconds)} сек `;
+    }
+
+    return result;
+  }
+  const handleWatchEnd = () => {
+    axios({
+      method: "post",
+      headers: {
+        Authorization: `${TOKEN}`,
+        "Content-Type": "application/json",
+        accept: "text/plain",
+      },
+      url: `${process.env.REACT_APP_URL}/v1/Training/watch/end`,
+      data: {
+        trainingId: `${train.id}`,
+      },
+    })
+      .then((res) => {
+        if (res.data.isSuccess === true) {
+          // notification.success(`Сургалт эхэлсэн цаг бүртгэгдлээ.`);
+          const timer = setTimeout(
+            () =>
+              navigate("/user-training", {
+                state: { item: location.state.item },
+              }),
+            500
+          );
+          return () => clearTimeout(timer);
+        } else if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct divat."
+        ) {
+          logout();
+        }
+      })
+      .catch((err) => console.log(err));
+  };
   return (
     <UserLayout>
       <div>
@@ -244,20 +335,40 @@ const TrainingPlayer = () => {
           centered
         >
           <Modal.Header>
-            <Modal.Title>Сургалтанд үнэлгээ өгөх</Modal.Title>
+            <Modal.Title>
+              <p className="text-xl font-normal text-white text-center">
+                Сургалтанд үнэлгээ өгөх
+              </p>
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div className="w-full bg-white  mx-auto ">
-              <div className="relative block">
-                <div>
-                  <p className="mt-2 text-sm font-bold text-gray-900">
-                    {tRate?.name}
-                  </p>
-                  <p className="mt-2 hidden text-sm sm:block">
-                    {tRate?.description}
-                  </p>
-                </div>
+              <div className="bg-white dark:bg-gray-800 ">
+                <img
+                  className="object-cover h-48 w-full rounded-lg"
+                  src="https://cdn.dribbble.com/users/877246/screenshots/15655386/media/aaeec8419786cdfbc6de5d12452636d1.png?compress=1&resize=1000x750&vertical=top"
+                />
+                <div className="lg:flex lg:items-center lg:justify-between w-full mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 z-20">
+                  <div>
+                    <p className="block text-xl font-semibold">
+                      "{tRate?.name}"
+                    </p>
+                    <span className="block text-sm font-semibold text-blue-600">
+                      {tRate?.description}
+                    </span>
+                  </div>
 
+                  {/* <div className="lg:mt-0 lg:flex-shrink-0">
+                        <div className=" inline-flex rounded-md shadow">
+                          <button
+                            type="button"
+                            className="py-4 px-6  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+                          >
+                            Get started
+                          </button>
+                        </div>
+                      </div> */}
+                </div>
                 <div className="md:mt-0 md:col-span-2 border border-t-4 bg:gray-600  shadow-xl">
                   <div className="shadow overflow-hidden sm:rounded-md">
                     <div className="bg-gray-200 px-4">
@@ -347,90 +458,198 @@ const TrainingPlayer = () => {
           </Modal.Body>
         </Modal>
       </div>
-
       <div className="max-w-screen-xl ml-auto mr-auto">
-        <div className="mx-auto max-w-screen-2xl px-4 py-8 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div className="bg-blue-600 p-8 md:p-12 lg:px-16 lg:py-24">
-              <div className="mx-auto max-w-xl text-center">
-                <p className="text-sm font-bold text-white md:text-sm">
-                  {trn.name}
-                </p>
-                <p className="hidden text-white/90 sm:mt-4 sm:block">
-                  {trn.description}
-                </p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-1 lg:grid-cols-1">
-              {trn.fileUrl.slice(-4) === ".mp4" ? (
+        <div className="px-4 py-2">
+          <a
+            onClick={() => {
+              location.state.item === "1"
+                ? handleWatchEnd()
+                : navigate("/user-training", {
+                    state: { item: location.state.item },
+                  });
+            }}
+            className="text-sm font-bold text-gray-900 sm:text-sm cursor-pointer"
+          >
+            <i className="bi bi-backspace" />
+            <span className="mx-2">Буцах</span>
+          </a>
+          <div className="flex flex-col mx-auto md:flex-row mt-2">
+            <div className="w-full md:w-2/3">
+              {location.state.item === "1" ? (
+                <span className="rounded-md bg-gray-200 px-2.5 py-0.5 text-sm text-gray-600 font-bold mr-1">
+                  {timeSince(new Date(train.createdAt))}
+                </span>
+              ) : (
+                <span className="rounded-md bg-gray-200 px-2.5 py-0.5 text-sm text-gray-600 font-bold mr-1">
+                  Үргэлжлэх хугацаа {formatDuration(train.duration)}
+                </span>
+              )}
+              <span className="rounded-md bg-purple-200 px-2.5 py-0.5 text-sm text-purple-600 font-bold ">
+                {train.tCatName}
+              </span>
+              {location.state.item === "1" ? (
+                <div>
+                  {train.fileUrl.slice(-4) === ".png" ||
+                  train.fileUrl.slice(-4) === "jpeg" ||
+                  train.fileUrl.slice(-4) === ".jpg" ||
+                  train.fileUrl.slice(-4) === ".png" ||
+                  train.fileUrl.slice(-4) === ".gif" ? (
+                    <div className="flex justify-center">
+                      <img
+                        className="object-fill h-full mt-2 w-full mr-4 shadow-md rounded-lg"
+                        src={`http://` + `${train.fileUrl}`}
+                      />
+                    </div>
+                  ) : train.fileUrl.slice(-4) === ".mp3" ? (
+                    <div className="object-fill h-full mt-2 w-full mr-4 shadow-md rounded-lg">
+                      <audio controlsList="nodownload" controls>
+                        <source
+                          src={`http://` + `${train.fileUrl}`}
+                          type="audio/mpeg"
+                        />
+                      </audio>
+                    </div>
+                  ) : train.fileUrl.slice(-4) === "xlsx" ||
+                    train.fileUrl.slice(-4) === ".pdf" ||
+                    train.fileUrl.slice(-4) === "docx" ||
+                    train.fileUrl.slice(-4) === "pptx" ? (
+                    <div className="object-fill h-full mt-2 w-auto  mr-4 shadow-md rounded-lg cursor-pointer">
+                      <p
+                        className="p-4 text-sm leading-5"
+                        onClick={() => window.open(`http://${train.fileUrl}`)}
+                      >
+                        <span className="block font-medium text-gray-500 ">
+                          <i className="bi bi-file-earmark-arrow-down-fill" />
+                          Файлын нэр:
+                        </span>
+                        <span className="inline-block font-medium text-gray-500  ">
+                          {train.fileUrl?.slice(29)}
+                        </span>
+                      </p>
+                    </div>
+                  ) : (
+                    <div
+                      className="object-fill h-full mt-2 w-auto  mr-4 shadow-md rounded-lg cursor-pointer"
+                      onClick={() => window.open(`http://${train.fileUrl}`)}
+                    >
+                      <div className="flex justify-center">
+                        {train.fileUrl.slice(29)}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
                 <video
                   onTimeUpdate={onTimeUpdate}
-                  className="items-center mx-auto h-40 w-full object-cover sm:h-56 md:h-full rounded-xl"
                   ref={videoRef}
-                  // width="20%"
-                  // height="100%"
+                  className=" w-full shadow-md rounded-lg mt-2"
                   id="myVideo"
                   controls
                 >
-                  <source src={`http://` + `${trn.fileUrl}`} type="video/mp4" />
-                </video>
-              ) : trn.fileUrl.slice(-4) === ".png" ||
-                trn.fileUrl.slice(-4) === "jpeg" ||
-                trn.fileUrl.slice(-4) === ".jpg" ||
-                trn.fileUrl.slice(-4) === ".png" ||
-                trn.fileUrl.slice(-4) === ".gif" ? (
-                <div className="flex justify-center">
-                  <img
-                    className="items-center mx-auto h-40 w-full object-cover sm:h-56 md:h-full rounded-xl"
-                    src={`http://` + `${trn.fileUrl}`}
+                  <source
+                    src={`http://` + `${train.fileUrl}`}
+                    type="video/mp4"
                   />
-                </div>
-              ) : trn.fileUrl.slice(-4) === ".mp3" ? (
-                <div className="flex justify-center items-center mx-auto h-40 w-full object-cover sm:h-56 md:h-full ">
-                  <audio
-                    controlsList="nodownload"
-                    controls
-                    className="object-cover w-full  items-center mx-auto py-12 px-12 sm:px-2 lg:py-2 lg:px-2 z-10 rounded-2xl bg-indigo-200 "
-                  >
-                    <source
-                      src={`http://` + `${trn.fileUrl}`}
-                      type="audio/mpeg"
-                    />
-                  </audio>
-                </div>
-              ) : trn.fileUrl.slice(-4) === "xlsx" ||
-                trn.fileUrl.slice(-4) === ".pdf" ||
-                trn.fileUrl.slice(-4) === "docx" ||
-                trn.fileUrl.slice(-4) === "pptx" ? (
-                <p className="flex justify-center w-full  items-center mx-auto  text-sm ">
-                  <span className="text-sm  block  text-gray-500 ">
-                    <i className="bi bi-play-circle-fill font-bold">
-                      {" "}
-                      Файлын нэр:
-                    </i>
-                  </span>
-                  <span className="inline-block font-bold text-gray-500 ml-2">
-                    {trn.fileUrl.slice(29)}
-                  </span>
-                  <a
-                    className="text-blue-600 hover:text-black mx-2 text-sm"
-                    data-id={trn.fileUrl}
-                    onClick={() => window.open(`http://${trn.fileUrl}`)}
-                  >
-                    <i className="bi bi-download"></i>
-                  </a>
-                </p>
-              ) : (
-                <div className="rounded border-l-4 border-red-500 bg-red-50 p-4">
-                  <strong className="block font-medium text-red-700">
-                    Файл хавсаргаагүй байна.
-                  </strong>
-                </div>
+                </video>
               )}
+            </div>
+            <div className="w-full  md:w-1/3 ml-4 border border-t-4 rounded-lg shadow-sm">
+              <div className="p-4">
+                <a className="relative block">
+                  <img
+                    alt="profil"
+                    src="https://banner2.cleanpng.com/20180617/qjv/kisspng-computer-icons-course-teacher-education-school-cisco-5b265ef5104173.7669610515292413330666.jpg"
+                    className="mx-auto object-cover rounded-full h-10 w-10 "
+                  />
+                </a>
+                <div className="flex flex-col items-center ml-2 ">
+                  <span className="dark:text-white font-semibold">
+                    {train.teacher === "" ? "" : train.teacher}
+                  </span>
+                </div>
+
+                <div className="mt-2 text-black cursor-pointer">
+                  <p className="font-bold text-md">{train.name}</p>
+
+                  {train.description === "" ? (
+                    ""
+                  ) : (
+                    <p className="text-sm font-semibold">{train.description}</p>
+                  )}
+                </div>
+
+                <div className="border-t border-gray-200">
+                  <div className="px-2 py-2 bg-gray-50 sm:grid sm:grid-cols-3 sm:gap-4 ">
+                    <p className="text-sm font-medium text-gray-500">Байршил</p>
+                    <p className="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      📍 {train.location === "" ? " " : train.location}
+                    </p>
+                  </div>
+                  {/* <div className="px-2 py-2 bg-white sm:grid sm:grid-cols-3 sm:gap-4 ">
+                    <p className="text-sm font-medium text-gray-500">
+                      Эхлэх хугацаа
+                    </p>
+                    <p className="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      {train.startDate === "" ? " " : train.startDate}
+                    </p>
+                  </div> */}
+                  <div className="px-2 py-2 bg-gray-50 sm:grid sm:grid-cols-3 sm:gap-4 ">
+                    <p className="text-sm font-medium text-gray-500">
+                      Дуусах хугацаа
+                    </p>
+                    <p className="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                      {formatDate(new Date(train.endDate))}
+                    </p>
+                    {/* {moment(today).format(format) >=
+                    moment(train.endDate).format(format) ? (
+                      <p className="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                        Дуусах хугацаа: {train.endDate} (Хугацаа дууссан)
+                      </p>
+                    ) : (
+                      <p className="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                        Дуусах хугацаа: {train.endDate}
+                      </p>
+                    )} */}
+                  </div>
+                  {/* <div className="text-right">
+                    <div className="inline-flex items-end mt-2">
+                      <button
+                        onClick={() => {
+                          handleEdit();
+                        }}
+                        className="mr-2 group flex items-center justify-between rounded-lg border border-current px-2 py-1 text-indigo-600 transition-colors hover:bg-indigo-600 hover:text-white  focus:outline-none focus:ring active:bg-indigo-500"
+                        type="button"
+                      >
+                        {" "}
+                        <i className="bi bi-pencil-square mr-1" />
+                        <span className="font-bold text-xs">Засварлах</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          showModalDelete();
+                        }}
+                        className="group flex items-center justify-between rounded-lg border border-current px-2 py-1 text-red-600 transition-colors hover:bg-red-600 hover:text-white  focus:outline-none focus:ring active:bg-red-500"
+                      >
+                        <i className="bi bi-trash-fill mr-1" />
+                        <span className="font-bold text-xs"> Устгах</span>
+                      </button>
+                    </div>
+                  </div> */}
+                </div>
+              </div>
             </div>
           </div>
         </div>
+        {/* <div className="px-4 md:px-10 py-4 md:py-7">
+          <div className="grid grid-cols-1 gap-y-8 lg:grid-cols-2 lg:items-center ">
+            <div className="mx-auto "></div>
+
+            <div className=" text-sm">
+              <div className="p-2 border-t border-b text-xs text-gray-700"></div>
+            </div>
+          </div>
+        </div> */}
       </div>
       <ToastContainer />
     </UserLayout>

@@ -57,7 +57,7 @@ function UserCore() {
     nokori.push(value);
   };
   data?.map((exam) => {
-    if (exam.isExamTaken.status == "O") {
+    if (exam.isExamTaken.status === "O") {
       return gotYa(exam.id);
     }
   });
@@ -69,7 +69,7 @@ function UserCore() {
     let temp = [];
     for (let i = 0; i < data?.length; i++) {
       const el = data[i];
-      if (el.isExamTaken.status == element) {
+      if (el.isExamTaken.status === element) {
         temp.push(el);
       }
     }
@@ -87,8 +87,7 @@ function UserCore() {
                     onClick={() => {
                       setDetector(0);
                     }}
-                    href="#"
-                    className={`${detector == 0 && "active"}`}
+                    className={`${detector === 0 && "active"}`}
                   >
                     Бүгд
                   </a>
@@ -96,8 +95,7 @@ function UserCore() {
                     onClick={() => {
                       setDetector(1);
                     }}
-                    href="#"
-                    className={`${detector == 1 && "active"}`}
+                    className={`${detector === 1 && "active"}`}
                   >
                     Идэвхитэй
                   </a>
@@ -105,8 +103,7 @@ function UserCore() {
                     onClick={() => {
                       setDetector(2);
                     }}
-                    href="#"
-                    className={`${detector == 2 && "active"}`}
+                    className={`${detector === 2 && "active"}`}
                   >
                     Дууссан
                   </a>
@@ -114,8 +111,7 @@ function UserCore() {
                     onClick={() => {
                       setDetector(3);
                     }}
-                    className={`${detector == 3 && "active"}`}
-                    href="#"
+                    className={`${detector === 3 && "active"}`}
                   >
                     Бүртгэлгүй
                   </a>
@@ -123,8 +119,7 @@ function UserCore() {
                     onClick={() => {
                       setDetector(4);
                     }}
-                    className={`${detector == 4 && "active"}`}
-                    href="#"
+                    className={`${detector === 4 && "active"}`}
                   >
                     Эхлүүлсэн
                   </a>
@@ -160,7 +155,7 @@ function UserCore() {
                         </p>
                       </div> */}
                       <div className="card-footer">
-                        {item.isExamTaken.status == "A" ? (
+                        {item.isExamTaken.status === "A" ? (
                           <a
                             className="cursor-pointer"
                             onClick={() => {
@@ -172,7 +167,7 @@ function UserCore() {
                           >
                             Шалгалт өгөх
                           </a>
-                        ) : item.isExamTaken.status == "C" ? (
+                        ) : item.isExamTaken.status === "C" ? (
                           <div className="font-[500] text-[13.5px]">
                             <i className="bi bi-graph-up-arrow text mr-2"></i>:
                             <span
@@ -188,11 +183,11 @@ function UserCore() {
                               Шалгалтын дүн: {item.isExamTaken.score}%
                             </span>
                           </div>
-                        ) : item.isExamTaken.status == "O" ? (
+                        ) : item.isExamTaken.status === "O" ? (
                           <span className="font-[500] text-[14px]">
                             Шалгалт өгөөгүй!
                           </span>
-                        ) : item.isExamTaken.status == "P" ? (
+                        ) : item.isExamTaken.status === "P" ? (
                           <a
                             className="cursor-pointer"
                             onClick={() => {

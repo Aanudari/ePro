@@ -17,7 +17,7 @@ function AnswerCell({ data, handleAnswer, answer, index }) {
 
         <span
           className={`font-[500] text-[13px] ${
-            answer == data.id && "text-sky-600"
+            answer === data.id && "text-sky-600"
           }`}
         >
           {data.answer}

@@ -80,7 +80,7 @@ function RatingCategoryAdd({
       data: schema,
     })
       .then((res) => {
-        if (res.data.errorCode == 401) {
+        if (res.data.errorCode === 401) {
           logout();
         } else {
           setTrigger(!trigger);

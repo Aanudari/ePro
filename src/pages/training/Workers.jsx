@@ -1,7 +1,6 @@
 import { useStateContext } from "../../contexts/ContextProvider";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { logout } from "../../service/examService";
 function Workers({ setShow, getEmployees, reSetEmployee }) {
   const { activeMenu, TOKEN } = useStateContext();
@@ -36,7 +35,7 @@ function Workers({ setShow, getEmployees, reSetEmployee }) {
     let tempo = [];
     for (let i = 0; i < users.length; i++) {
       const el = users[i];
-      if (element == el.unitName) {
+      if (element === el.unitName) {
         tempo.push(el);
       }
     }

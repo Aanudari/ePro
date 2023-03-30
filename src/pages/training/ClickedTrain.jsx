@@ -136,7 +136,9 @@ function ClickedTrain() {
         >
           <Modal.Header closeButton>
             <Modal.Title>
-              <span className="text-sm text-black">Сургалт устгах</span>
+              <p className="text-xl font-normal text-white text-center">
+                Сургалт устгах
+              </p>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -312,17 +314,21 @@ function ClickedTrain() {
                   </div>
                   <div className="text-right">
                     <div className="inline-flex items-end mt-2">
-                      <button
-                        onClick={() => {
-                          handleEdit();
-                        }}
-                        className="mr-2 group flex items-center justify-between rounded-lg border border-current px-2 py-1 text-indigo-600 transition-colors hover:bg-indigo-600 hover:text-white  focus:outline-none focus:ring active:bg-indigo-500"
-                        type="button"
-                      >
-                        {" "}
-                        <i className="bi bi-pencil-square mr-1" />
-                        <span className="font-bold text-xs">Засварлах</span>
-                      </button>
+                      {moment(today).format(format) >=
+                      moment(train.endDate).format(format) ? (
+                        ""
+                      ) : (
+                        <button
+                          onClick={() => {
+                            handleEdit();
+                          }}
+                          className="mr-2 group flex items-center justify-between rounded-lg border border-current px-2 py-1 text-indigo-600 transition-colors hover:bg-indigo-600 hover:text-white  focus:outline-none focus:ring active:bg-indigo-500"
+                          type="button"
+                        >
+                          <i className="bi bi-pencil-square mr-1" />
+                          <span className="font-bold text-xs">Засварлах</span>
+                        </button>
+                      )}
                       <button
                         type="button"
                         onClick={() => {

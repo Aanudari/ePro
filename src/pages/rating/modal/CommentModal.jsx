@@ -129,7 +129,7 @@ function CommentModal({
                   className={`bubble ${comment.isYou === "1" ? "me" : "you"}`}
                 >
                   {comment.comment}
-                  {comment.commentImg != "" && (
+                  {comment.commentImg !== "" && (
                     <div
                       onClick={() => {
                         setShow(true);
@@ -200,7 +200,7 @@ function CommentModal({
                         onClick={onImageUpload}
                         {...dragProps}
                       >
-                        {imageList.length == 0 && (
+                        {imageList.length === 0 && (
                           <i className="bi bi-upload text-white"></i>
                         )}
                       </button>

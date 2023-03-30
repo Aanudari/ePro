@@ -59,7 +59,7 @@ function CreateErrorThanks() {
       url: `${process.env.REACT_APP_URL}/v1/ComplainReport/getListData/1`,
     })
       .then((res) => {
-        if (res.data.isSuccess == true) {
+        if (res.data.isSuccess === true) {
           setAlba(res.data.listData);
         }
         if (
@@ -81,7 +81,7 @@ function CreateErrorThanks() {
         url: `${process.env.REACT_APP_URL}/v1/ComplainReport/getListData/2?depId=${selectedAlba.id}`,
       })
         .then((res) => {
-          if (res.data.isSuccess == true) {
+          if (res.data.isSuccess === true) {
             setHeltes(res.data.listData);
           }
           if (
@@ -105,7 +105,7 @@ function CreateErrorThanks() {
         url: `${process.env.REACT_APP_URL}/v1/ComplainReport/getListData/3?depId=${selectedAlba.id}&divId=${selectedHeltes.id}`,
       })
         .then((res) => {
-          if (res.data.isSuccess == true) {
+          if (res.data.isSuccess === true) {
             setNegj(res.data.listData);
           }
           if (
@@ -129,7 +129,7 @@ function CreateErrorThanks() {
         url: `${process.env.REACT_APP_URL}/v1/ComplainReport/getListData/4?depId=${selectedAlba.id}&divId=${selectedHeltes.id}&unitId=${selectedNegj.id}`,
       })
         .then((res) => {
-          if (res.data.isSuccess == true) {
+          if (res.data.isSuccess === true) {
             setAjiltan(res.data.listData);
           }
           if (

@@ -26,7 +26,7 @@ function EditQuestionMain({ question, imgSide, setImgSide }) {
                     text-[13px]"
         >
           {item.answer}
-          {item.isTrue == "1" && (
+          {item.isTrue === "1" && (
             <i className="bi bi-check-circle text-green-500 text-xl !mb-0"></i>
           )}
         </div>

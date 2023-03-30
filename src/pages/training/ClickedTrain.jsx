@@ -51,37 +51,63 @@ function ClickedTrain() {
   const showModalDelete = () => {
     setShowDelete(true);
   };
-
-  const handleDelete = () => {
+  const [rates, setRates] = useState([]);
+  useEffect(() => {
     axios({
-      method: "delete",
+      method: "get",
       headers: {
         Authorization: `${TOKEN}`,
-        accept: "text/plain",
       },
-      url: `${process.env.REACT_APP_URL}/v1/Training/delete?trId=${train.id}`,
+      url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-        } else if (res.data.isSuccess === true) {
-          notification.success(`${res.data.resultMessage}`);
-          hideModalDelete();
-          if (location.state.item === "schedule") {
-            navigate("/training-schedule");
-          } else {
-            navigate("/online-training");
-          }
-        } else {
-          console.log(res.data.resultMessage);
-        }
-        if (
+        if (res.data.isSuccess === true) {
+          setRates(res.data.trRatingForm);
+        } else if (
           res.data.resultMessage === "Unauthorized" ||
-          res.data.resultMessage === "Input string was not in a correct format."
+          res.data.resultMessage === "Input string was not in a correct divat."
         ) {
           logout();
         }
       })
       .catch((err) => console.log(err));
+  }, []);
+  const handleDelete = () => {
+    const filteredForm = rates?.filter((item) => item.trainingId === train.id);
+    if (filteredForm.length != 0) {
+      axios({
+        method: "delete",
+        headers: {
+          Authorization: `${TOKEN}`,
+          accept: "text/plain",
+        },
+        url: `${process.env.REACT_APP_URL}/v1/Training/delete?trId=${train.id}`,
+      })
+        .then((res) => {
+          if (res.data.isSuccess === false) {
+          } else if (res.data.isSuccess === true) {
+            notification.success(`${res.data.resultMessage}`);
+            hideModalDelete();
+            if (location.state.item === "schedule") {
+              navigate("/training-schedule");
+            } else {
+              navigate("/online-training");
+            }
+          } else {
+            console.log(res.data.resultMessage);
+          }
+          if (
+            res.data.resultMessage === "Unauthorized" ||
+            res.data.resultMessage ===
+              "Input string was not in a correct format."
+          ) {
+            logout();
+          }
+        })
+        .catch((err) => console.log(err));
+    } else {
+      notification.error("Сургалт эхэлсэн тул устгах боломжгүй байна.");
+    }
   };
   function timeSince(date) {
     var seconds = Math.floor((new Date() - date) / 1000);
@@ -179,7 +205,11 @@ function ClickedTrain() {
             <span className="mx-2">Буцах</span>
           </a>
           <div className="flex flex-col mx-auto md:flex-row mt-2">
-            <div className="w-full md:w-2/3">
+            <div
+              className={
+                train.fileUrl === "" ? "w-full md:w-full" : "w-full md:w-2/3"
+              }
+            >
               {location.state.item === "schedule" ? (
                 <span className="rounded-md bg-gray-200 px-2.5 py-0.5 text-sm text-gray-600 font-bold mr-1">
                   {timeSince(new Date(train.createdAt))}
@@ -256,7 +286,14 @@ function ClickedTrain() {
                 </video>
               )}
             </div>
-            <div className="w-full  md:w-1/3 ml-4 border border-t-4 rounded-lg shadow-sm">
+
+            <div
+              className={
+                train.fileUrl === ""
+                  ? "w-full ml-4 border border-t-4 rounded-lg shadow-sm"
+                  : "w-full  md:w-1/3 ml-4 border border-t-4 rounded-lg shadow-sm"
+              }
+            >
               <div className="p-4">
                 <a className="relative block">
                   <img
@@ -283,7 +320,14 @@ function ClickedTrain() {
 
                 <div className="border-t border-gray-200">
                   <div className="px-2 py-2 bg-gray-50 sm:grid sm:grid-cols-3 sm:gap-4 ">
-                    <p className="text-sm font-medium text-gray-500">Байршил</p>
+                    {location.state.item === "schedule" ? (
+                      <p className="text-sm font-medium text-gray-500">
+                        Байршил
+                      </p>
+                    ) : (
+                      ""
+                    )}
+
                     <p className="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                       {train.location === "" ? " " : train.location}
                     </p>
@@ -293,7 +337,7 @@ function ClickedTrain() {
                       Эхлэх хугацаа
                     </p>
                     <p className="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      {train.startDate === "" ? " " : train.startDate}
+                      📅 {train.startDate === "" ? " " : train.startDate}
                     </p>
                   </div>
                   <div className="px-2 py-2 bg-gray-50 sm:grid sm:grid-cols-3 sm:gap-4 ">
@@ -304,20 +348,23 @@ function ClickedTrain() {
                     {moment(today).format(format) >=
                     moment(train.endDate).format(format) ? (
                       <p className="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                        Дуусах хугацаа: {train.endDate} (Хугацаа дууссан)
+                        📅 Дуусах хугацаа: {train.endDate} (Хугацаа дууссан)
                       </p>
                     ) : (
                       <p className="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                        Дуусах хугацаа: {train.endDate}
+                        📅 Дуусах хугацаа: {train.endDate}
                       </p>
                     )}
                   </div>
                   <div className="text-right">
-                    <div className="inline-flex items-end mt-2">
-                      {moment(today).format(format) >=
+                    {moment(today).format(format) <=
+                      moment(train.startDate).format(format) &&
+                    moment(today).format(format) >=
                       moment(train.endDate).format(format) ? (
-                        ""
-                      ) : (
+                      ""
+                    ) : (
+                      <div className="inline-flex items-end mt-2">
+                        {" "}
                         <button
                           onClick={() => {
                             handleEdit();
@@ -328,18 +375,18 @@ function ClickedTrain() {
                           <i className="bi bi-pencil-square mr-1" />
                           <span className="font-bold text-xs">Засварлах</span>
                         </button>
-                      )}
-                      <button
-                        type="button"
-                        onClick={() => {
-                          showModalDelete();
-                        }}
-                        className="group flex items-center justify-between rounded-lg border border-current px-2 py-1 text-red-600 transition-colors hover:bg-red-600 hover:text-white  focus:outline-none focus:ring active:bg-red-500"
-                      >
-                        <i className="bi bi-trash-fill mr-1" />
-                        <span className="font-bold text-xs"> Устгах</span>
-                      </button>
-                    </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            showModalDelete();
+                          }}
+                          className="group flex items-center justify-between rounded-lg border border-current px-2 py-1 text-red-600 transition-colors hover:bg-red-600 hover:text-white  focus:outline-none focus:ring active:bg-red-500"
+                        >
+                          <i className="bi bi-trash-fill mr-1" />
+                          <span className="font-bold text-xs"> Устгах</span>
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

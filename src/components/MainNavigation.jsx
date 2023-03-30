@@ -86,7 +86,7 @@ function MainNavigation() {
                     Сургалтын хуваарь
                   </a>
                 </li>
-                <li>
+                {/* <li>
                   <a
                     onClick={() => {
                       navigate("/training-files");
@@ -94,7 +94,7 @@ function MainNavigation() {
                   >
                     Сургалтын файлууд
                   </a>
-                </li>
+                </li> */}
                 <li>
                   <a
                     onClick={() => {

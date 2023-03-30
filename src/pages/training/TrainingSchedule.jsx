@@ -400,7 +400,14 @@ function TrainingSchedule() {
                     {data.teacher}
                     {/* {timeSinceD(duration)} */}
                   </p>
-                  <p className="text-sm font-bold">{data.name}</p>
+                  <p
+                    className="text-sm font-bold"
+                    onClick={() => {
+                      clickView(data);
+                    }}
+                  >
+                    {data.name}
+                  </p>
 
                   <div className="flex space-x-4 text-sm">
                     <a className="flex items-start text-gray-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
@@ -431,20 +438,35 @@ function TrainingSchedule() {
                         }
                       </p>
                     </a>
-                    {moment(today).format(format) >=
-                    moment(data.endDate).format(format) ? (
+                    {moment(today).format(format) <=
+                    moment(data.startDate).format(format) ? (
+                      <a className="flex items-start text-gray-500 transition-colors  group">
+                        <div className="mr-2">
+                          <i className="bi bi-balloon" />
+                        </div>
+                        <span className=" px-2 py-1 text-xs font-semibold text-gray-500 bg-gray-200 rounded-md">
+                          Pending
+                        </span>
+                      </a>
+                    ) : moment(today).format(format) >=
+                        moment(data.startDate).format(format) &&
+                      moment(today).format(format) <=
+                        moment(data.endDate).format(format) ? (
+                      <a className="flex items-start text-green-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
+                        <div className="mr-2">
+                          {" "}
+                          <i className="bi bi-calendar-check" />
+                        </div>
+
+                        <p className="font-semibold">Идэвхтэй</p>
+                      </a>
+                    ) : (
                       <a className="flex items-start text-red-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
                         <div className="mr-2">
                           <i className="bi bi-calendar2-x" />
                         </div>
-                        <p className="font-semibold">ИДЭВХГҮЙ</p>
-                      </a>
-                    ) : (
-                      <a className="flex items-start text-green-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
-                        <div className="mr-2">
-                          <i className="bi bi-calendar-check" />
-                        </div>
-                        <p className="font-semibold">ИДЭВХТЭЙ</p>
+
+                        <p className="font-semibold">Идэвхгүй</p>
                       </a>
                     )}
                   </div>

@@ -245,7 +245,7 @@ function EditTrainRate() {
                     timeIntervals={15}
                     selectsStart
                     startDate={date1}
-                    dateFormat="yyyy.MM.dd, HH:mm:ss"
+                    dateFormat="yyyy.MM.dd, HH:mm"
                   />
                 </div>
                 <div>
@@ -261,7 +261,7 @@ function EditTrainRate() {
                     timeIntervals={15}
                     selectsStart
                     startDate={date2}
-                    dateFormat="yyyy.MM.dd, HH:mm:ss"
+                    dateFormat="yyyy.MM.dd, HH:mm"
                   />
                 </div>
               </div>

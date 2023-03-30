@@ -586,7 +586,7 @@ function EditTraining() {
                   timeIntervals={15}
                   selectsStart
                   startDate={date1}
-                  dateFormat="yyyy.MM.dd, HH:mm:ss"
+                  dateFormat="yyyy.MM.dd, HH:mm"
                 />
               </div>
               <div className="relative w-full mb-3">
@@ -605,21 +605,25 @@ function EditTraining() {
                   dateFormat="yyyy.MM.dd, HH:mm"
                 />
               </div>
-              <div className="relative w-full mb-3">
-                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                  Байршил
-                </label>
-                <input
-                  type="text"
-                  className="px-3 py-2 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                  defaultValue={train.location}
-                  onChange={(e) => {
-                    setlocation(e.target.value);
-                    setcheckEmptylocation(false);
-                  }}
-                  id={checkEmptylocation === true ? "border-red" : null}
-                />
-              </div>
+              {locationn.state.item === "schedule" ? (
+                <div className="relative w-full mb-3">
+                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                    Байршил
+                  </label>
+                  <input
+                    type="text"
+                    className="px-3 py-2 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                    defaultValue={train.location}
+                    onChange={(e) => {
+                      setlocation(e.target.value);
+                      setcheckEmptylocation(false);
+                    }}
+                    id={checkEmptylocation === true ? "border-red" : null}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
           <div className="col-span-5 text-right">

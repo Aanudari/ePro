@@ -212,9 +212,11 @@ function CreateTraining() {
     sessionType: locationn.state.item === "schedule" ? `1` : `2`,
     startDate: `${startDate}`,
     endDate: `${endDate}`,
-    location: `${location}`,
+    location: locationn.state.item === "schedule" ? `${location}` : "",
     addTrainingDevs: emp,
   };
+  const today = new Date();
+
   const navigateIndex = (e) => {
     e.preventDefault();
     if (name.length === 0) {
@@ -229,10 +231,13 @@ function CreateTraining() {
       notification.error("Та Ажилтан сонгоно уу.");
     } else if (tCategory.length === 0) {
       setcheckEmptytCategory(true);
-    } else if (location.length === 0) {
-      setcheckEmptylocation(true);
-    } else if (startDate === endDate || startDate > endDate) {
-      notification.error("Эхлэх дуусах хугацаа алдаатай байна.");
+    } else if (startDate === endDate) {
+      notification.error("Эхлэх дуусах хугацаа ижил байна.");
+      setCheckEmptyDate(true);
+    } else if (startDate > endDate) {
+      notification.error(
+        "Сургалт эхлэх хугацаа дуусах хугацаа зөрүүтэй байна."
+      );
       setCheckEmptyDate(true);
     } else {
       axios({
@@ -501,20 +506,24 @@ function CreateTraining() {
                   className="px-3 py-2  text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
                 />
               </div>
-              <div className="relative w-full mb-3">
-                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                  Байршил
-                </label>
-                <input
-                  type="text"
-                  className="px-3 py-2  text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                  onChange={(e) => {
-                    setlocation(e.target.value);
-                    setcheckEmptylocation(false);
-                  }}
-                  id={checkEmptylocation === true ? "border-red" : null}
-                />
-              </div>
+              {locationn.state.item === "schedule" ? (
+                <div className="relative w-full mb-3">
+                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                    Байршил
+                  </label>
+                  <input
+                    type="text"
+                    className="px-3 py-2  text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                    onChange={(e) => {
+                      setlocation(e.target.value);
+                      setcheckEmptylocation(false);
+                    }}
+                    id={checkEmptylocation === true ? "border-red" : null}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
 

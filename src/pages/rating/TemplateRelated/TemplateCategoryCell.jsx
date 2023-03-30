@@ -13,16 +13,9 @@ function TemplateCategoryCell({
   templateId,
 }) {
   const [showSub, setShowSub] = useState(true);
-  const [showOption, setShowOption] = useState(false);
-  const [deleteCategory, setDeleteCategory] = useState(false); // Used only for rendering and useEffect triggering, study different ways it could wor.
   const { data, TOKEN } = useStateContext();
-  const [newComponents, setnewComponents] = useState({});
-  const [components, setComponents] = useState([]);
-  const [triggerComp, setTriggerComp] = useState(false);
   const [catName, setCatName] = useState(item.categoryName);
-  // console.log(catName);
   let copy = [];
-  // console.log(item.subCategories);
   for (let index = 0; index < item.subCategories.length; index++) {
     const element = item.subCategories[index];
     let tempo = {
@@ -44,7 +37,6 @@ function TemplateCategoryCell({
     categoryName: catName,
     subCategories: modified,
   };
-  // console.log(final);
   function handleDelete() {
     axios({
       method: "post",
@@ -63,9 +55,6 @@ function TemplateCategoryCell({
   }
   const handleSubCategory = (value, point, id) => {
     let tempo = modified.map((item, index) => {
-      // index === id
-      //   ?  { ...item, subcategoryName: value, subcategoryPoint: point }
-      //   : item;
       if (index == id) {
         return { ...item, subcategoryName: value, subcategoryPoint: point };
       } else {

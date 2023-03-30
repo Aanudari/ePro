@@ -405,6 +405,7 @@ function ExamModalMain({
       })
       .catch((err) => console.log(err));
   };
+
   return (
     <div
       className={`fixed ${
@@ -519,20 +520,17 @@ function ExamModalMain({
                   key={JSON.stringify(question)}
                   className={`mt-3 border-t-[5px] border-l border-r border-[#50a3a2] rounded-lg realtive bg-white`}
                 >
-                  {" "}
-                  {examSummary === "Not yet" && (
-                    <div className="h-10 w-full bg-[#50a3a2] text-white px-4 flex items-center font-[400] text-[14px] uppercase relative">
-                      {question.categoryName}
-                      <div className="absolute right-[10px]">
-                        <i
-                          onClick={() => {
-                            handleSubtract(question.id);
-                          }}
-                          className="bi cursor-pointer bi-dash-circle-dotted text-lg"
-                        ></i>
-                      </div>
+                  <div className="h-10 w-full bg-[#50a3a2] text-white px-4 flex items-center font-[400] text-[14px] uppercase relative">
+                    {question.categoryName}
+                    <div className="absolute right-[10px]">
+                      <i
+                        onClick={() => {
+                          handleSubtract(question.id);
+                        }}
+                        className="bi cursor-pointer bi-dash-circle-dotted text-lg"
+                      ></i>
                     </div>
-                  )}
+                  </div>
                   <div
                     className={`w-full py-3 px-3 font-[400] flex flex-col
                                     transition  rounded-lg

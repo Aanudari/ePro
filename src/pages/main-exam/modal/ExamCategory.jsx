@@ -99,10 +99,12 @@ function ExamCategory({
                     {category.status === "O" && (
                       <i className="bi bi-clock-history mr-2 text-lg"></i>
                     )}
-                    {category.departmentName}
+                    {category.departmentName == "Борлуулалт үйлчилгээний алба"
+                      ? "БҮА"
+                      : category.departmentName}
                   </h6>
                 </div>
-                <div className="flex justify-between w-[calc(70%)]">
+                <div className="flex justify-between w-[calc(90%)]">
                   <div className="flex items-center gap-20 w-[calc(70%)]">
                     <div className="flex justify-between items-start w-[200px] ">
                       {/* <h6 className="font-[500] text-[12px] uppercase">

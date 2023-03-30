@@ -6,7 +6,7 @@ import axios from "axios";
 import { useStateContext } from "../../../contexts/ContextProvider";
 import DeleteConfirm from "../../main-exam/modal/DeleteComfirm";
 import TemplateModal from "../modal/TemplateModal";
-import bg from "../../../assets/bg.jpg";
+import bg from "../../../assets/bg3.jpg";
 
 function Template() {
   const [temps, setTemps] = useState();
@@ -145,10 +145,7 @@ function Template() {
   const [showModal, setShowModal] = useState(false);
   const [templateId, setTemplateId] = useState();
   return (
-    <div
-      style={{ background: `url(${bg})` }}
-      className="p-2 w-full h-full border-[2px] border-rose-600"
-    >
+    <div style={{ background: `url(${bg})` }} className="p-2 w-full h-full">
       <ToastContainer />
       {showConfirm && (
         <DeleteConfirm
@@ -209,7 +206,7 @@ function Template() {
                   relative parent flex gap-2 "
                 >
                   <div
-                    className=" bg-teal-500 rounded px-3 py-2 shadow text-gray-200 hover:text-white w-[calc(85%-60px)]
+                    className=" bg-gray-600 px-3 py-2 hover:shadow text-gray-200 hover:text-white w-[calc(85%-60px)]
                 relative parent"
                   >
                     {collected.includes(element.templateId) ? (

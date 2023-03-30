@@ -32,7 +32,7 @@ function SelectSubCategoryCell({
     parseInt((element.subCatUserScore * 100) / element.subCatMaxScore)
   );
   const [subId, setSubId] = useState([]);
-
+  const [comment, setComment] = useState(element.comment);
   return (
     <div className="w-full rounded mt-2">
       <div className="w-full h-1 rounded-t bg-gray-300 relative">
@@ -55,7 +55,12 @@ function SelectSubCategoryCell({
             onChange={(e) => {
               setPointValue(e.target.value);
               setProgress((e.target.value * 100) / element.subCatMaxScore);
-              handleSelect(catIndex, element.subCategoryId, e.target.value);
+              handleSelect(
+                catIndex,
+                element.subCategoryId,
+                e.target.value,
+                comment
+              );
               collector(e.target.value, element.subCategoryId);
             }}
             value={pointValue}
@@ -84,16 +89,23 @@ function SelectSubCategoryCell({
           </div>
         )}
       </div>
-      {subId.includes(element.subCategoryId) && (
-        <div className="w-full  bg-white h-11 border border-b rounded-b-lg px-2 py-1 ">
-          <input
-            type="text"
-            className="w-full h-full text-[13px] font-[400] placeholder-gray-400 px-2 text-gray-500"
-            placeholder="Тайлбар бичих ..."
-            autoFocus
-          />
-        </div>
-      )}
+      <div className="w-full  bg-white h-11 border border-b rounded-b-lg px-2 py-1 ">
+        <input
+          value={comment}
+          onChange={(event) => {
+            setComment(event.target.value);
+            handleSelect(
+              catIndex,
+              element.subCategoryId,
+              pointValue,
+              event.target.value
+            );
+          }}
+          type="text"
+          className="w-full h-full text-[13px] font-[400] placeholder-gray-400 px-2 text-gray-500"
+          placeholder="Сэтгэгдэл бичих ..."
+        />
+      </div>
     </div>
   );
 }

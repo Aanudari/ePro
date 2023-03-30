@@ -55,6 +55,7 @@ function RatingModal({
       let tempo = {
         subCategoryId: el.subCategoryId,
         score: el.subCatUserScore == "" ? "" : el.subCatUserScore,
+        comment: el.comment,
       };
       cat.push(tempo);
     }
@@ -66,7 +67,14 @@ function RatingModal({
     ratingId: ratingId,
     deviceId: deviceId,
     categoryList: children,
+    inputs: [
+      {
+        inputId: "",
+        inputValue: "",
+      },
+    ],
   };
+  // console.log(children);
   const handleSubmit = () => {
     // console.log(final);
     axios({
@@ -79,27 +87,35 @@ function RatingModal({
       data: final,
     })
       .then((res) => {
-        if (res.data.errorCode === 401) {
-          logout();
+        if (res.data.isSuccess == false) {
+          toast.error(res.data.resultMessage, {
+            position: "bottom-right",
+          });
         } else {
-          setTrigger(!trigger);
-          setRecall(!recall);
-          setRecallList(!recallList);
-          setShowModal(false);
+          if (res.data.errorCode == 401) {
+            logout();
+          } else {
+            setTrigger(!trigger);
+            setRecall(!recall);
+            setRecallList(!recallList);
+            setShowModal(false);
+          }
         }
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  const handleSelect = (cat, sub, value) => {
+  const handleSelect = (cat, sub, value, comment) => {
     let newChildren = children.length === 0 ? raw : children;
     let temp = newChildren.map((element, index) => {
       return element.categoryId === cat
         ? {
             ...element,
             subCategories: element.subCategories.map((el, i) => {
-              return el.subCategoryId === sub ? { ...el, score: value } : el;
+              return el.subCategoryId == sub
+                ? { ...el, score: value, comment: comment }
+                : el;
             }),
           }
         : element;

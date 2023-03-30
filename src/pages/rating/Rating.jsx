@@ -29,7 +29,7 @@ function Rating() {
                   setStats(item.stats);
                 }}
                 className={`${
-                  stats == item.stats && stats == 1 ? "!bg-rose-600" : ""
+                  stats == item.stats ? "!bg-teal-900" : ""
                 } bg-teal-700 hover:bg-teal-800 text-white text-[14px] rounded py-2 w-[120px] `}
               >
                 <i className={`bi ${item.icon} mr-1`}></i>

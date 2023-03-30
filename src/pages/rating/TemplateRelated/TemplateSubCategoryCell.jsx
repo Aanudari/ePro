@@ -30,7 +30,6 @@ function TemplateSubCategoryCell({ element, index, handleSubCategory }) {
               <span>%</span>
             </div>
           </div>{" "}
-          <i className="bi bi-trash text-2xl text-red-200 rounded hover:bg-gray-200 shadow ml-2 hover:text-red-400"></i>
         </div>
       </div>
     </>

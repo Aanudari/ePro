@@ -24,40 +24,31 @@ function TemplateModal({ setShow, id, categoryName }) {
           logout();
         } else {
           setData(res.data.categories);
-          // setDataBuffer(res.data.categories);
-          // newDataBuffer = [...dataBuffer];
         }
       })
       .catch((err) => console.log(err));
   }, [trigger]);
 
   const [showModal, setShowModal] = useState(false);
-  // const [isChanged, setIsChanged] = useState(false);
-  // const [dataBuffer, setDataBuffer] = useState([]);
-  // console.log(data);
-  // let newDataBuffer = {};
-  // if (
-  //   dataBuffer === null ||
-  //   typeof dataBuffer[Symbol.iterator] !== "function"
-  // ) {
-  //   console.error("Error: ДАТАБУФФЕР ЧИНЬ ХООСОН БАЙНА");
-  //   newDataBuffer = [];
-  //   setDataBuffer([]); // Handle the error by setting newDataBuffer to an empty array, or another default value.
-  // } else {
-  //   newDataBuffer = [...dataBuffer];
-  // }
 
-  // let dataApi = []; // used in hadgalah api call
-
+  const extra = {
+    templateId: "string",
+    inputList: [
+      {
+        isEdit: true,
+        inputType: "string",
+        inputId: "string",
+        inputName: "string",
+      },
+    ],
+  };
   return (
     <>
       <div
         className={`fixed ${
-          activeMenu
-            ? " left-[250px] w-[calc(100%-250px)] h-[calc(100%-56px)]"
-            : "w-full h-full top-[56px] left-0"
+          activeMenu ? " left-[250px] w-[calc(100%-250px)] " : "w-full left-0"
         } 
-        bg-black top-[56px] bg-opacity-50 flex justify-center items-center z-20
+        bg-black h-[calc(100%-56px)] top-[56px] bg-opacity-50 flex justify-center items-center z-20
         `}
       >
         {showModal && (

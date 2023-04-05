@@ -9,7 +9,7 @@ function Login() {
   const adminRoles = ["199", "196"];
   const redirect = (data) => {
     if (adminRoles.includes(data.role_id)) {
-      navigate("/home");
+      navigate("/exam-dashboard");
     } else {
       navigate("/user-exam");
     }

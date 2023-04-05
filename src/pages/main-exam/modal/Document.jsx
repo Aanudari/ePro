@@ -4,7 +4,10 @@ import { logout } from "../../../service/examService";
 import axios from "axios";
 import ShowExamResult from "./ShowExamResult";
 import ShowExamResultDetail from "../ShowExamResultDetail";
+import { useNavigate } from "react-router-dom";
+import ExcelConfirm from "./ExcelConfirm";
 function Document({ setShowReport, id }) {
+  const navigate = useNavigate();
   const [data, setData] = useState();
   const [users, setUsers] = useState();
   const [names, setNames] = useState();
@@ -86,7 +89,7 @@ function Document({ setShowReport, id }) {
   }, [selected]);
   const [excelUrl, setExcelUrl] = useState("");
   // console.log(excelUrl);
-  useEffect(() => {
+  const handleExcel = () => {
     axios({
       method: "get",
       headers: {
@@ -99,15 +102,16 @@ function Document({ setShowReport, id }) {
           logout();
         } else {
           setExcelUrl(res.data.excelFile);
+          setEConfirm(true);
         }
       })
       .catch((err) => console.log(err));
-  }, [selected]);
-
+  };
   const [finalScore, setfinalScore] = useState();
   const { activeMenu } = useStateContext();
   const [result, setResult] = useState();
   const [uId, setUId] = useState();
+  const [eConfirm, setEConfirm] = useState(false);
   const handleResultCertain = (user) => {
     setUId(user.deviceId);
     axios({
@@ -174,19 +178,21 @@ function Document({ setShowReport, id }) {
             score={finalScore}
           />
         )}
+        {eConfirm && (
+          <ExcelConfirm setConfirm={setEConfirm} excelUrl={excelUrl} />
+        )}
         {showDetail && <ShowExamResultDetail setShow={setShowDetail} id={id} />}
         <div className="h-full">
           <h6 className="text-teal-600 text-[14px] flex justify-between mx-3 py-3">
-            {excelUrl !== "" && (
-              <a
-                href={`${excelUrl}`}
-                download
-                className="font-[500] cursor-pointer custom-btn btn-13 transition-all "
-              >
-                <i className="bi bi-filetype-xlsx  mr-2"></i>
-                Excel татах
-              </a>
-            )}
+            <a
+              onClick={() => {
+                handleExcel();
+              }}
+              className="font-[500] cursor-pointer custom-btn btn-13 transition-all "
+            >
+              <i className="bi bi-filetype-xlsx  mr-2"></i>
+              Excel татах
+            </a>
             <span
               onClick={() => {
                 setShowDetail(true);

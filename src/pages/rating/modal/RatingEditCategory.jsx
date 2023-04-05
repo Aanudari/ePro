@@ -3,23 +3,33 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { logout } from "../../../service/examService";
 import { toast, ToastContainer } from "react-toastify";
-function RatingCategoryAdd({
-  showModal,
-  setShowModal,
-  id,
-  trigger,
-  setTrigger,
-}) {
+function RatingCategoryAdd({ setIsEdit, id, trigger, setTrigger }) {
+  const raw = localStorage.getItem("category");
+  const data = JSON.parse(raw);
   const { activeMenu, TOKEN } = useStateContext();
   const [children, setChildren] = useState([]);
-  const [catName, setCatName] = useState("");
+  const [catName, setCatName] = useState(data.categoryName);
+  useEffect(() => {
+    let arr = [];
+    for (let index = 0; index < data.subCategories.length; index++) {
+      const element = data.subCategories[index];
+      let tempo = {
+        subcategoryName: element.subcategoryName,
+        subcategoryPoint: element.subcategoryPoint,
+      };
+      arr.push(tempo);
+    }
+    setChildren(arr);
+  }, []);
+
   const schema = {
-    isEdit: false,
+    isEdit: true,
     templateId: id,
-    categoryId: "",
+    categoryId: data.categoryId,
     categoryName: catName,
     subCategories: children,
   };
+  //   console.log(data.subCategories);
 
   const addChild = () => {
     setChildren([...children, { subcategoryName: "", subcategoryPoint: "20" }]);
@@ -66,7 +76,6 @@ function RatingCategoryAdd({
     }
     setCalculated(count2);
   };
-  // console.log(calculated);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -80,11 +89,14 @@ function RatingCategoryAdd({
       data: schema,
     })
       .then((res) => {
+        if (res.data.isSuccess == false) {
+          toast.error(res.data.resultMessage, { position: "bottom-right" });
+        }
         if (res.data.errorCode === 401) {
           logout();
         } else {
           setTrigger(!trigger);
-          setShowModal(false);
+          setIsEdit(false);
         }
       })
       .catch((err) => {
@@ -136,7 +148,6 @@ function RatingCategoryAdd({
           className="bg-gray-200 px-2 pt-2 pb-2 rounded flex flex-col mt-1 py-2 relative parent"
           key={index}
         >
-          <ToastContainer />
           <input
             type="text"
             className="p-2 font-[400] text-[14px] bg-white rounded px-2 text-gray-600 w-full"
@@ -185,6 +196,8 @@ function RatingCategoryAdd({
         bg-black bg-opacity-50 flex justify-center items-center z-20
         `}
     >
+      <ToastContainer />
+
       <div className="shrink w-[calc(75%)] h-[calc(80%)] bg-white flex flex-col rounded">
         <div className="w-full min-h-[50px] bg-teal-600 flex justify-between items-center px-3  gap-2 rounded-t">
           <div className="flex gap-2">
@@ -230,7 +243,7 @@ function RatingCategoryAdd({
 
             <button
               onClick={() => {
-                setShowModal(false);
+                setIsEdit(false);
               }}
               className="w-[20px] h-full mt-1"
             >

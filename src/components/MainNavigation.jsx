@@ -1,18 +1,35 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
+import { useState } from "react";
 function MainNavigation() {
   const navigate = useNavigate();
   const { activeMenu } = useStateContext();
+  const [selected, setSelected] = useState(0);
+  const location = useLocation();
+  const pathname = (pathname) => {
+    let accepted = [
+      "/training-files",
+      "/training-category",
+      "/online-training",
+      "/training-rating",
+      "/training-schedule",
+    ];
+    if (accepted.includes(pathname)) {
+      return true;
+    } else {
+      return false;
+    }
+  };
   return (
     <div className="relative width-nav">
       <div className="core fixed">
         <nav id="side-nav">
           <div
-            onClick={() => {
-              navigate("/home");
-            }}
+            // onClick={() => {
+            //   navigate("/home");
+            // }}
             className="h-14 bg-gray-700 shadow text-gray-100
-                    flex items-center text-2xl font-[700] cursor-pointer
+                    flex items-center text-2xl font-[700] cursor-pointer select-none
                     "
           >
             <span
@@ -24,7 +41,7 @@ function MainNavigation() {
             </span>
           </div>
           <ul className="h-full">
-            <li
+            {/* <li
               onClick={() => {
                 navigate("/dashboard");
               }}
@@ -34,12 +51,15 @@ function MainNavigation() {
                 <i className="bi bi-calendar-check absolute top-[17px] left-[17px]"></i>
                 <span>Хянах самбар</span>
               </a>
-            </li>
+            </li> */}
             <li
               onClick={() => {
+                setSelected(0);
                 navigate("/exam-dashboard");
               }}
-              className="relative cursor-pointer active:opacity-80 "
+              className={`relative cursor-pointer active:opacity-80 ${
+                selected == 0 && "bg-teal-500"
+              }`}
             >
               <a>
                 <i
@@ -48,28 +68,43 @@ function MainNavigation() {
                   }}
                   className="bi bi-clock absolute top-[17px] left-[17px] "
                 ></i>
-                <span>Шалгалт</span>
+                <span className="select-none">Шалгалт</span>
               </a>
             </li>
             <li
               onClick={() => {
+                setSelected(1);
                 navigate("/rating");
               }}
-              className="relative cursor-pointer active:opacity-80 "
+              className={`relative cursor-pointer active:opacity-80 ${
+                selected == 1 && "bg-teal-500"
+              }`}
             >
               <a>
-                <i className="bi bi-bar-chart-line absolute top-[17px] left-[17px]"></i>
-                <span>Үнэлгээ</span>
+                <i className="bi bi-bar-chart-line absolute top-[17px] left-[17px] select-none"></i>
+                <span className="select-none">Үнэлгээ</span>
               </a>
             </li>
-            <li>
-              <a>
-                <i className="bi bi-book absolute top-[17px] left-[17px]"></i>
+            <li
+              onClick={() => {
+                setSelected(2);
+                // navigate("/online-training");
+              }}
+              className={`cursor-pointer select-none ${
+                (selected == 2 && pathname(location.pathname) == true) ||
+                (location.pathname == "/training-schedule" && "bg-teal-500")
+              }`}
+            >
+              <a className={`cursor-pointer select-none `}>
+                <i
+                  className={`bi bi-book absolute top-[17px] left-[17px] `}
+                ></i>
                 <span>Сургалт</span>
               </a>
               <ul>
                 <li>
                   <a
+                    className="cursor-pointer select-none"
                     onClick={() => {
                       navigate("/online-training");
                     }}
@@ -79,6 +114,7 @@ function MainNavigation() {
                 </li>
                 <li>
                   <a
+                    className="cursor-pointer select-none"
                     onClick={() => {
                       navigate("/training-schedule");
                     }}
@@ -88,6 +124,7 @@ function MainNavigation() {
                 </li>
                 <li>
                   <a
+                    className="cursor-pointer select-none"
                     onClick={() => {
                       navigate("/training-files");
                     }}
@@ -97,6 +134,7 @@ function MainNavigation() {
                 </li>
                 <li>
                   <a
+                    className="cursor-pointer select-none"
                     onClick={() => {
                       navigate("/training-category");
                     }}
@@ -106,6 +144,7 @@ function MainNavigation() {
                 </li>
                 <li>
                   <a
+                    className="cursor-pointer select-none"
                     onClick={() => {
                       navigate("/training-rating");
                     }}
@@ -116,8 +155,16 @@ function MainNavigation() {
               </ul>
             </li>
 
-            <li>
+            <li
+              onClick={() => {
+                setSelected(3);
+              }}
+              className={`cursor-pointer select-none ${
+                selected == 3 && "bg-teal-500"
+              }`}
+            >
               <a
+                className="cursor-pointer select-none"
                 onClick={() => {
                   navigate("/error-thanks");
                 }}

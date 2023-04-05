@@ -397,7 +397,7 @@ html {
 }
 
 .custom-placeholder ::placeholder {
-  color: black !important;
+  color: silver !important;
   font-size: 14px;
   font-weight: 500;
 }

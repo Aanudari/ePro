@@ -49,9 +49,7 @@ bg-black bg-opacity-50 flex items-center justify-center z-20`}
         <div className="w-full h-12 bg-teal-500 flex justify-between px-4 items-center shadow">
           <div className="flex items-center">
             <div className=" flex justify-start px-4 py-2">
-              <span className="text-white font-[500] text-sm">
-                Нэр: {main?.examName}
-              </span>
+              {/* <span claz */}
             </div>
           </div>
           <div className="flex items-center">

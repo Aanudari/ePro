@@ -31,7 +31,6 @@ function SelectSubCategoryCell({
   const [progress, setProgress] = useState(
     parseInt((element.subCatUserScore * 100) / element.subCatMaxScore)
   );
-  const [subId, setSubId] = useState([]);
   const [comment, setComment] = useState(element.comment);
   return (
     <div className="w-full rounded mt-2">
@@ -69,25 +68,6 @@ function SelectSubCategoryCell({
             {options}
           </select>
         </div>
-        {subId.includes(element.subCategoryId) ? (
-          <div
-            onClick={() => {
-              setSubId([]);
-            }}
-            className="w-9 h-9 bg-rose-600 hover:bg-rose-500 rounded ml-1 flex items-center justify-center cursor-pointer"
-          >
-            <i className="bi bi-x-circle text-white"></i>
-          </div>
-        ) : (
-          <div
-            onClick={() => {
-              setSubId([element.subCategoryId]);
-            }}
-            className="w-9 h-9 bg-teal-600 hover:bg-teal-500 rounded ml-1 flex items-center justify-center cursor-pointer"
-          >
-            <i className="bi bi-chat-dots-fill text-white"></i>
-          </div>
-        )}
       </div>
       <div className="w-full  bg-white h-11 border border-b rounded-b-lg px-2 py-1 ">
         <input

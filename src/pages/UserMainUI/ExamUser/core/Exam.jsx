@@ -159,6 +159,7 @@ function Exam() {
             checker={item.id}
             key={i}
             data={item}
+            index={i}
           />
         ))}
       </div>

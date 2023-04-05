@@ -5,6 +5,7 @@ import { logout } from "../../../service/examService";
 import RatingCategoryAdd from "./RatingCategoryAdd";
 import bg from "../../../assets/bg3.jpg";
 import TemplateCategoryCell from "../TemplateRelated/TemplateCategoryCell";
+import RatingAddExtra from "./RatingAddExtra";
 function TemplateModal({ setShow, id, categoryName }) {
   const { activeMenu, TOKEN } = useStateContext();
   const [data, setData] = useState();
@@ -23,25 +24,16 @@ function TemplateModal({ setShow, id, categoryName }) {
         if (res.data.errorCode === 401) {
           logout();
         } else {
-          setData(res.data.categories);
+          setData(res.data);
         }
       })
       .catch((err) => console.log(err));
   }, [trigger]);
+  // console.log(data);
+  console.log(data);
 
   const [showModal, setShowModal] = useState(false);
-
-  const extra = {
-    templateId: "string",
-    inputList: [
-      {
-        isEdit: true,
-        inputType: "string",
-        inputId: "string",
-        inputName: "string",
-      },
-    ],
-  };
+  const [isExtra, setIsExtra] = useState(false);
   return (
     <>
       <div
@@ -60,6 +52,14 @@ function TemplateModal({ setShow, id, categoryName }) {
             trigger={trigger}
           />
         )}
+        {isExtra && (
+          <RatingAddExtra
+            id={id}
+            setIsExtra={setIsExtra}
+            setTrigger={setTrigger}
+            trigger={trigger}
+          />
+        )}
         <div
           style={{
             background: `url(${bg})`,
@@ -67,15 +67,26 @@ function TemplateModal({ setShow, id, categoryName }) {
           className="shrink w-[calc(100%)] h-[calc(100%)] bg-white flex flex-col items-center justify-center"
         >
           <div className="w-full min-h-[50px] bg-teal-600 flex justify-between items-center px-3  gap-2 relative">
-            <button
-              onClick={() => {
-                setShowModal(true);
-              }}
-              className="custom-btn min-w-[80px] md:min-w-[120px] lg:min-w-[180px] bg-teal-500 hover:bg-teal-400 active:bg-teal-600 h-10 text-[14px] flex items-center justify-center"
-            >
-              <i className="bi bi-plus-circle-dotted text-lg mr-2"></i>
-              Категори
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  setShowModal(true);
+                }}
+                className="custom-btn min-w-[80px] md:min-w-[120px] lg:min-w-[180px] bg-teal-500 hover:bg-teal-400 active:bg-teal-600 h-10 text-[14px] flex items-center justify-center"
+              >
+                <i className="bi bi-plus-circle-dotted text-lg mr-2"></i>
+                Ур чадварын жагсаалт
+              </button>
+              <button
+                onClick={() => {
+                  setIsExtra(true);
+                }}
+                className="custom-btn min-w-[80px] md:min-w-[120px] lg:min-w-[180px] bg-teal-500 hover:bg-teal-400 active:bg-teal-600 h-10 text-[14px] flex items-center justify-center"
+              >
+                <i className="bi bi-plus-circle-dotted text-lg mr-2"></i>
+                Нэмэлт мэдээлэл
+              </button>
+            </div>
 
             <div
               onClick={() => {
@@ -99,9 +110,30 @@ function TemplateModal({ setShow, id, categoryName }) {
           </div>
 
           <div className="w-full h-[calc(100vh-100px)]  overflow-scroll flex justify-center">
+            <div className="w-[300px] md:w-[600px]  lg:w-[900px] p-3">
+              {data?.inputs.length > 0 ? (
+                data?.inputs.map((item, index) => {
+                  return (
+                    <div
+                      style={{
+                        background: `url(/notfound.webp)`,
+                      }}
+                      className="w-full h-full"
+                      key={index}
+                    >
+                      {JSON.stringify(item)}
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="w-full bg-white h-full flex items-center justify-center">
+                  <img src="/notfound.webp" alt="" className="h-[calc(40%)]" />
+                </div>
+              )}
+            </div>
             <div className="  w-[300px] md:w-[600px]  lg:w-[900px] p-3">
-              {data?.length > 0 ? (
-                data.map((item, index) => {
+              {data?.categories.length > 0 ? (
+                data?.categories.map((item, index) => {
                   return (
                     <TemplateCategoryCell
                       key={JSON.stringify(item + index)}

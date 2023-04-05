@@ -67,12 +67,7 @@ function RatingModal({
     ratingId: ratingId,
     deviceId: deviceId,
     categoryList: children,
-    inputs: [
-      {
-        inputId: "",
-        inputValue: "",
-      },
-    ],
+    inputs: [],
   };
   // console.log(children);
   const handleSubmit = () => {
@@ -171,11 +166,11 @@ function RatingModal({
         bg-black bg-opacity-50 flex justify-center items-center z-20 h-full
         `}
     >
-      <ToastContainer />
       <div
         style={{ background: `url(${bg})` }}
         className="shrink w-[calc(100%)] h-[calc(100%)] bg-white flex flex-col items-center "
       >
+        <ToastContainer />
         {loading && <Loading />}
         <div className="w-full min-h-[56px] bg-teal-600 flex justify-between items-center px-3  gap-2 relative">
           <div className="flex h-[calc(80%)]">
@@ -200,15 +195,18 @@ function RatingModal({
             </div>
           </div>
           <div className="flex h-full flex gap-5  py-[6px]">
-            <button
-              onClick={() => {
-                handleSubmit();
-              }}
-              className=" custom-btn
+            {children.length > 0 && (
+              <button
+                onClick={() => {
+                  handleSubmit();
+                }}
+                className=" custom-btn
              btn-20 active:mt-[2px]"
-            >
-              Хадгалах
-            </button>
+              >
+                Хадгалах
+              </button>
+            )}
+
             <button
               onClick={() => {
                 setShowModal(false);

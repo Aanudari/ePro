@@ -1,10 +1,11 @@
 import TemplateSubCategoryCell from "./TemplateSubCategoryCell";
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useStateContext } from "../../../contexts/ContextProvider";
-import NewTemplateSubCategoryCell from "./NewTemplateSubCategoryCell";
-///v1/Training/category/delete
-
+import { toast } from "react-toastify";
+import { ToastContainer } from "react-bootstrap";
+import RatingEditCategory from "../modal/RatingEditCategory";
+import DeleteConfirm from "../../main-exam/modal/DeleteComfirm";
 function TemplateCategoryCell({
   item,
   index,
@@ -45,10 +46,13 @@ function TemplateCategoryCell({
         "Content-Type": "application/json",
         accept: "text/plain",
       },
-      url: `${process.env.REACT_APP_URL}/v1/RatingTemplateNew/getTemplateList/${item.categoryId}`, //${item.categoryId}
+      url: `${process.env.REACT_APP_URL}/v1/RatingTemplateNew/getTemplateList/${item.categoryId}`,
       data: data,
     })
       .then((res) => {
+        if (res.data.isSuccess == false) {
+          toast.error(res.data.resultMessage, { position: "bottom-right" });
+        }
         setTrigger(!trigger);
       })
       .catch((err) => console.log(err));
@@ -75,7 +79,6 @@ function TemplateCategoryCell({
       data: final,
     })
       .then((res) => {
-        console.log(res.data);
         setTrigger(!trigger);
         setIsEdit(false);
       })
@@ -83,65 +86,50 @@ function TemplateCategoryCell({
         console.log(err);
       });
   };
+  const [confirm, setConfirm] = useState(false);
   return (
     <div className="mt-1 justify-center flex-col">
+      <ToastContainer />
+      {confirm && (
+        <DeleteConfirm setConfirm={setConfirm} deleteCat={handleDelete} />
+      )}
+      {isEdit && (
+        <RatingEditCategory
+          setIsEdit={setIsEdit}
+          id={templateId}
+          trigger={trigger}
+          setTrigger={setTrigger}
+        />
+      )}
       <div className="flex justify-center">
         <div
           className="w-full rounded-t-lg bg-teal-600 px-3 py-2 flex justify-between text-white "
           // onClick={handleClick}
         >
-          {isEdit ? (
+          <button
+            onClick={() => {
+              setIsEdit(!isEdit);
+              localStorage.setItem("category", JSON.stringify(item));
+            }}
+            className="custom-btn btn-13"
+          >
+            Засах
+          </button>
+
+          <div className="text-[15px] h-full flex items-center font-[500] py-1 focus:bg-white-25 focus:bg-gray-500 focus:shadow focus:rounded hover:text-black-500 hover:bg-white-100">
+            {item.categoryName}
+          </div>
+          <div className="flex gap-4">
             <button
               onClick={() => {
-                handleSubmit();
+                setConfirm(true);
               }}
-              className="custom-btn btn-13"
+              className="custom-btn  bg-rose-500 hover:bg-rose-600"
             >
-              <i
-                className="bi bi-vector-pen text-md mr-2"
-                // onClick={addTheComponent}
-              ></i>
-              save
+              Устгах
             </button>
-          ) : (
-            <button
-              onClick={() => {
-                setIsEdit(!isEdit);
-              }}
-              className="custom-btn btn-13"
-            >
-              <i
-                className="bi bi-vector-pen text-md mr-2"
-                // onClick={addTheComponent}
-              ></i>
-              edit
-            </button>
-          )}
-
-          {isEdit ? (
-            <input
-              type="text"
-              value={catName}
-              onChange={(e) => {
-                setCatName(e.target.value);
-              }}
-              className={
-                "text-gray-600 text-[15px] px-2 rounded shadow-inner font-[400]"
-              }
-            />
-          ) : (
-            <div className="text-[15px] font-[500] py-1 focus:bg-white-25 focus:bg-gray-500 focus:shadow focus:rounded hover:text-black-500 hover:bg-white-100">
-              {item.categoryName}
-            </div>
-          )}
-
-          <div className="flex items-center text-[14px] font-[500]">
-            {item.categoryPoint + " %"}{" "}
-            <div
-              className="bi bi-x ml-2 text-2xl shadow rounded p-1 hover:cursor-pointer hover:bg-teal-700"
-              onClick={handleDelete}
-            >
-              {" "}
+            <div className="flex items-center text-[14px] font-[600]">
+              {`${item.categoryPoint} %`}{" "}
             </div>
           </div>
         </div>
@@ -149,23 +137,13 @@ function TemplateCategoryCell({
 
       {showSub && (
         <div className="min-h-[50px] bg-gray-200 rounded-b-lg p-2 mb-2">
-          {isEdit
-            ? modified.map((element, i) => (
-                <TemplateSubCategoryCell
-                  catId={item.categoryId}
-                  element={element}
-                  index={i}
-                  key={JSON.stringify(item + i)}
-                  handleSubCategory={handleSubCategory}
-                />
-              ))
-            : item?.subCategories?.map((element, i) => (
-                <TemplateSubCategoryCell
-                  catId={item.categoryId}
-                  element={element}
-                  key={JSON.stringify(item + i)}
-                />
-              ))}
+          {item?.subCategories?.map((element, i) => (
+            <TemplateSubCategoryCell
+              catId={item.categoryId}
+              element={element}
+              key={JSON.stringify(item + i)}
+            />
+          ))}
         </div>
       )}
     </div>

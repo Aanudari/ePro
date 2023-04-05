@@ -44,7 +44,7 @@ function ShowExamResult({ setShow, result, id, score }) {
       >
         <div className="w-full h-12 bg-teal-500 flex justify-between px-4 items-center shadow">
           <div className="flex items-center">
-            <div className=" flex justify-start px-4 py-2">
+            <div className=" flex justify-start px-4 py-1 items-center">
               <span className="text-white font-[500] text-sm">
                 {data && data.lastName[0]}. {data && data.firstName} /{" "}
                 {data && data.roleName}

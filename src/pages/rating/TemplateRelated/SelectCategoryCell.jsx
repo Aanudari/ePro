@@ -44,14 +44,11 @@ function SelectCategoryCell({ category, index, handleSelect, handleTotal }) {
         count += element.point;
       }
       let pre = count + constant;
-      // console.log(constant);
       setScore(pre);
     } else {
       isInitialRender.current = false;
     }
   }, [raw]);
-  // // console.log(initial);
-  // console.log(score);
   return (
     <div className="mb-2">
       <div className="w-full rounded-t-lg bg-teal-600 px-3 py-2 flex justify-between text-white ">

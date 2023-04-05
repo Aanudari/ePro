@@ -7,6 +7,7 @@ import RatingModal from "../modal/RatingModal";
 import CommentModal from "../modal/CommentModal";
 import { toast, ToastContainer } from "react-toastify";
 import DeleteConfirm from "../../main-exam/modal/DeleteComfirm";
+import ExcelConfirm from "../../main-exam/modal/ExcelConfirm";
 
 function RatingBlock({ item, trigger, setTrigger }) {
   const { TOKEN } = useStateContext();
@@ -97,6 +98,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
     };
     console.log(certain);
   };
+  const [comfirm, setComfirm] = useState(false);
   return (
     <>
       <div className="w-full relative flex parent gap-2">
@@ -108,7 +110,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
             setRatingId(item.ratingId);
             handleShow();
           }}
-          className="btn-20 min-h-[56px] bg-teal-500 hover:shadow text-gray-600 my-1
+          className=" min-h-[60px] bg-teal-500 hover:bg-teal-400 hover:shadow text-gray-600 my-1
          rounded relative cursor-pointer hover:text-white !w-[calc(94%)] transition-all "
         >
           <div className="py-2 px-3 w-full flex justify-between items-start ">
@@ -185,14 +187,20 @@ function RatingBlock({ item, trigger, setTrigger }) {
           <Offcanvas.Header closeButton>
             <Offcanvas.Title>
               <div className="w-full flex">
-                <a
-                  href={`${excelUrl}`}
+                {comfirm && (
+                  <ExcelConfirm setConfirm={setComfirm} excelUrl={excelUrl} />
+                )}
+                <button
+                  onClick={() => {
+                    setComfirm(true);
+                  }}
+                  // href={`${excelUrl}`}
                   className={`font-[500]  mr-2 text-[19px] text-[#174B4B] ${
                     excelUrl != null ? "cursor-pointer" : "cursor-not-allowed"
                   }  hover:text-black`}
                 >
                   <i className="bi bi-file-earmark-spreadsheet-fill "></i>
-                </a>
+                </button>
                 <div className="font-[500] text-white text-[16px] container-header-text">
                   {item.ratingName}
                 </div>
@@ -248,23 +256,6 @@ function RatingBlock({ item, trigger, setTrigger }) {
                       )}
                     </div>
                   </div>
-                  {/* {user.adminStatus == "N" ? (
-                    <div
-                      onClick={() => {
-                        removeUser(user);
-                        // setModalShow(true);
-                        // setConversationId(user.conversationId);
-                      }}
-                      className="w-[50px] relative h-14 rounded cursor-pointer hover:text-white ml-1 bg-rose-400 hover:bg-rose-500 text-rose-200 my-1 flex items-center justify-center"
-                    >
-                      <i className="bi bi-x-lg"></i>
-                      {user.unseenCommentCount !== "0" && (
-                        <div className="text-[11px] rounded-full top-[-10px] right-[-10px] bg-red-500 px-2 py-[2px] absolute">
-                          {user.unseenCommentCount}
-                        </div>
-                      )}
-                    </div>
-                  ) : ( */}
                   <div
                     onClick={() => {
                       setModalShow(true);

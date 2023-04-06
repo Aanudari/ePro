@@ -1,7 +1,7 @@
 import AnswerCell from "./AnswerCell";
 import { useState } from "react";
 import { useEffect } from "react";
-function QuestionCell({ data, collector, checker, setCount, count }) {
+function QuestionCell({ data, collector, checker, setCount, count, index }) {
   const [answer, setAnswer] = useState();
   const [tempo, setTempo] = useState([
     {
@@ -30,7 +30,9 @@ function QuestionCell({ data, collector, checker, setCount, count }) {
   return (
     <div className="p-3 my-3 rounded shadow-sm border bg-white">
       <p className=" flex justify-between">
-        <span className="font-[500] text-[15px]">{data.question}</span>
+        <span className="font-[500] text-[15px]">
+          {index + 1}. {data.question}
+        </span>
         <span className="font-[500] w-[80px] ml-2">
           {data.points + " "}
           оноо

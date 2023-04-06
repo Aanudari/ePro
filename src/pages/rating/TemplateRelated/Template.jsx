@@ -7,6 +7,7 @@ import { useStateContext } from "../../../contexts/ContextProvider";
 import DeleteConfirm from "../../main-exam/modal/DeleteComfirm";
 import TemplateModal from "../modal/TemplateModal";
 import bg from "../../../assets/bg3.jpg";
+import Loading from "../../../components/Loading";
 
 function Template() {
   const [temps, setTemps] = useState();
@@ -15,6 +16,7 @@ function Template() {
   const { TOKEN } = useStateContext();
   const [collected, setCollected] = useState([]);
   const [categoryName, setCategoryName] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const data = {
     isEdit: false,
@@ -28,12 +30,14 @@ function Template() {
   };
 
   useEffect(() => {
+    setLoading(true);
     tempAPI.getTemaplates().then((res) => {
       if (res.data.errCode === 401) {
         alert(res.data.resultMessage);
         logout();
       } else {
         setTemps(res.data.templates);
+        setLoading(false);
       }
     });
   }, [trigger]);
@@ -78,7 +82,6 @@ function Template() {
   };
 
   const handleEdittemplate = (e) => {
-    // e.preventDefault();
     axios({
       method: "post",
       headers: {
@@ -147,6 +150,7 @@ function Template() {
   return (
     <div style={{ background: `url(${bg})` }} className="p-2 w-full h-full">
       <ToastContainer />
+      {loading && <Loading />}
       {showConfirm && (
         <DeleteConfirm
           setConfirm={setShowConfirm}
@@ -206,7 +210,7 @@ function Template() {
                   relative parent flex gap-2 "
                 >
                   <div
-                    className=" bg-gray-600 px-3 py-2 hover:shadow text-gray-200 hover:text-white w-[calc(85%-60px)]
+                    className=" bg-teal-500 transition-all hover:bg-teal-600 px-3 py-2 hover:shadow text-gray-200 hover:text-white w-[calc(85%-60px)]
                 relative parent"
                   >
                     {collected.includes(element.templateId) ? (

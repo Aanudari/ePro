@@ -5,32 +5,14 @@ function TemplateSubCategoryCell({ element, index, handleSubCategory }) {
   const [point, setPoint] = useState(element.subcategoryPoint);
   return (
     <>
-      <div className=" mt-1 py-2 px-2 bg-white hover:bg-gray-100 hover:shadow hover:bg-gray flex justify-between items-center  rounded mt-[2px] ">
-        <textarea
-          className="text-[13px] font-[400] w-[calc(88%)] rounded p-2 bg-gray-100"
-          type="text"
-          value={value}
-          onChange={(e) => {
-            setValue(e.target.value);
-            handleSubCategory(e.target.value, point, index);
-          }}
-        />
+      <div className="select-none mt-1 py-2 px-2 bg-white hover:bg-gray-100 hover:shadow hover:bg-gray flex justify-between items-center  rounded mt-[2px] ">
+        <div className="text-[13px] font-[400] w-[calc(92%)] rounded p-2 bg-gray-100">
+          {value}
+        </div>
         <div className="h-full flex items-start">
-          <div className="flex bg-[#50a3a2] p-2 rounded text-white hover:bg-[#50a3a3] hover:shadow">
-            <div className="flex">
-              <input
-                type="number"
-                value={point}
-                onChange={(e) => {
-                  setPoint(e.target.value);
-                  handleSubCategory(value, e.target.value, index);
-                }}
-                className={"w-[30px] rounded glass px-2"}
-              />
-              <span>%</span>
-            </div>
-          </div>{" "}
-          <i className="bi bi-trash text-2xl text-red-200 rounded hover:bg-gray-200 shadow ml-2 hover:text-red-400"></i>
+          <div className="flex bg-[#50a3a2] p-2 rounded text-white hover:bg-[#50a3a3] hover:shadow font-[500]">
+            {`${point} %`}{" "}
+          </div>
         </div>
       </div>
     </>

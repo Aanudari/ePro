@@ -198,7 +198,26 @@ function TrainingRating() {
       state: { data: data },
     });
   };
-  const handleDownloadClick = () => {};
+  const handleDownloadClick = (data) => {
+    axios({
+      method: "get",
+      headers: {
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/ReportDownload/reportDownloader/3/${data.trainingId}`,
+    })
+      .then((res) => {
+        if (res.data.isSuccess === true) {
+          window.open(res.data.excelFile);
+        } else if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct format."
+        ) {
+          logout();
+        }
+      })
+      .catch((err) => console.log(err));
+  };
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <Navigation />
@@ -523,7 +542,9 @@ function TrainingRating() {
                         </div>
                       ) : (
                         <button
-                          onClick={handleDownloadClick}
+                          onClick={() => {
+                            handleDownloadClick(data);
+                          }}
                           className="items-center px-2 py-2 bg-green-700 hover:bg-green-800 text-white text-xs font-medium rounded-md"
                         >
                           Тайлан татах

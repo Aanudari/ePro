@@ -9,40 +9,22 @@ import { logout } from "../../service/examService";
 import getWindowDimensions from "../../components/SizeDetector";
 import axios from "axios";
 import moment from "moment";
+
 function ClickedTrain() {
   const location = useLocation();
-  const { TOKEN, activeMenu } = useStateContext();
+  const { TOKEN } = useStateContext();
   const train = location.state.data;
   const videoRef = useRef(null);
   const navigate = useNavigate();
   const { width } = getWindowDimensions();
   const today = new Date();
   const format = "YYYYMMDDHHmmss";
-  const options = [
-    { id: "1", value: "Тэнхим" },
-    { id: "2", value: "Онлайн" },
-  ];
-  function secondsToHms(d) {
-    d = Number(d);
-
-    var h = Math.floor(d / 3600);
-    var m = Math.floor((d % 3600) / 60);
-    var s = Math.floor((d % 3600) % 60);
-
-    return (
-      ("0" + h).slice(-2) +
-      ":" +
-      ("0" + m).slice(-2) +
-      ":" +
-      ("0" + s).slice(-2)
-    );
-  }
-
+  const [showDelete, setShowDelete] = useState(null);
+  const hideModalDelete = () => setShowDelete(null);
+  const [rates, setRates] = useState([]);
   const onTimeUpdate = () => {
     let ref = videoRef.current;
   };
-  const [showDelete, setShowDelete] = useState(null);
-  const hideModalDelete = () => setShowDelete(null);
   const handleEdit = () => {
     navigate("/edit-training", {
       state: { data: train, item: location.state.item },
@@ -51,7 +33,6 @@ function ClickedTrain() {
   const showModalDelete = () => {
     setShowDelete(true);
   };
-  const [rates, setRates] = useState([]);
   useEffect(() => {
     axios({
       method: "get",
@@ -72,42 +53,42 @@ function ClickedTrain() {
       })
       .catch((err) => console.log(err));
   }, []);
+  const filteredForm = rates?.filter((item) => item.trainingId === train.id);
+
   const handleDelete = () => {
-    const filteredForm = rates?.filter((item) => item.trainingId === train.id);
-    if (filteredForm.length != 0) {
-      axios({
-        method: "delete",
-        headers: {
-          Authorization: `${TOKEN}`,
-          accept: "text/plain",
-        },
-        url: `${process.env.REACT_APP_URL}/v1/Training/delete?trId=${train.id}`,
-      })
-        .then((res) => {
-          if (res.data.isSuccess === false) {
-          } else if (res.data.isSuccess === true) {
-            notification.success(`${res.data.resultMessage}`);
-            hideModalDelete();
-            if (location.state.item === "schedule") {
-              navigate("/training-schedule");
-            } else {
-              navigate("/online-training");
-            }
+    axios({
+      method: "delete",
+      headers: {
+        Authorization: `${TOKEN}`,
+        accept: "text/plain",
+      },
+      url: `${process.env.REACT_APP_URL}/v1/Training/delete?trId=${train.id}`,
+    })
+      .then((res) => {
+        if (res.data.isSuccess === false) {
+          notification.error(`${res.data.resultMessage}`);
+          const timer = setTimeout(() => hideModalDelete(), 2000);
+          return () => clearTimeout(timer);
+        } else if (res.data.isSuccess === true) {
+          notification.success(`${res.data.resultMessage}`);
+          hideModalDelete();
+          if (location.state.item === "schedule") {
+            navigate("/training-schedule");
           } else {
-            console.log(res.data.resultMessage);
+            navigate("/online-training");
           }
-          if (
-            res.data.resultMessage === "Unauthorized" ||
-            res.data.resultMessage ===
-              "Input string was not in a correct format."
-          ) {
-            logout();
-          }
-        })
-        .catch((err) => console.log(err));
-    } else {
-      notification.error("Сургалт эхэлсэн тул устгах боломжгүй байна.");
-    }
+        } else {
+          console.log(res.data.resultMessage);
+          hideModalDelete();
+        }
+        if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct format."
+        ) {
+          logout();
+        }
+      })
+      .catch((err) => console.log(err));
   };
   function timeSince(date) {
     var seconds = Math.floor((new Date() - date) / 1000);
@@ -134,6 +115,17 @@ function ClickedTrain() {
       return Math.floor(interval) + " минутын өмнө";
     }
     return Math.floor(seconds) + " секундын өмнө";
+  }
+  function formattedDate(date) {
+    const formatted = new Intl.DateTimeFormat("en-US", {
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    }).format(date);
+
+    return formatted;
   }
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
@@ -273,11 +265,13 @@ function ClickedTrain() {
                 </div>
               ) : (
                 <video
+                  controls
+                  controlsList="noplaybackrate"
+                  disablePictureInPicture
                   onTimeUpdate={onTimeUpdate}
                   ref={videoRef}
                   className=" w-full shadow-md rounded-lg mt-2"
                   id="myVideo"
-                  controls
                 >
                   <source
                     src={`http://` + `${train.fileUrl}`}
@@ -319,7 +313,7 @@ function ClickedTrain() {
                 </div>
 
                 <div className="border-t border-gray-200">
-                  <div className="px-2 py-2 bg-gray-50 sm:grid sm:grid-cols-3 sm:gap-4 ">
+                  <div className="px-2 py-2 sm:grid sm:grid-cols-3 sm:gap-4 ">
                     {location.state.item === "schedule" ? (
                       <p className="text-sm font-medium text-gray-500">
                         Байршил
@@ -328,43 +322,93 @@ function ClickedTrain() {
                       ""
                     )}
 
-                    <p className="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      {train.location === "" ? " " : train.location}
-                    </p>
-                  </div>
-                  <div className="px-2 py-2 bg-white sm:grid sm:grid-cols-3 sm:gap-4 ">
-                    <p className="text-sm font-medium text-gray-500">
-                      Эхлэх хугацаа
-                    </p>
-                    <p className="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      📅 {train.startDate === "" ? " " : train.startDate}
-                    </p>
-                  </div>
-                  <div className="px-2 py-2 bg-gray-50 sm:grid sm:grid-cols-3 sm:gap-4 ">
-                    <p className="text-sm font-medium text-gray-500">
-                      Дуусах хугацаа
-                    </p>
-
-                    {moment(today).format(format) >=
-                    moment(train.endDate).format(format) ? (
-                      <p className="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                        📅 Дуусах хугацаа: {train.endDate} (Хугацаа дууссан)
-                      </p>
+                    {train.location === "" ? (
+                      " "
                     ) : (
                       <p className="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                        📅 Дуусах хугацаа: {train.endDate}
+                        {train.location}{" "}
                       </p>
                     )}
                   </div>
-                  <div className="text-right">
-                    {moment(today).format(format) <=
-                      moment(train.startDate).format(format) &&
-                    moment(today).format(format) >=
+                  <div class="grid grid-flow-col gap-3">
+                    <div class=" col-span-1">
+                      <p className="text-sm font-medium text-gray-500">
+                        ⌛ Эхлэх хугацаа
+                      </p>
+                    </div>
+                    <div class="col-span-4">
+                      <p className="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                        {formattedDate(new Date(train.startDate))}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="grid grid-flow-col gap-3">
+                    <div class=" col-span-1">
+                      <p className="text-sm font-medium text-gray-500">
+                        ⌛ Дуусах хугацаа
+                      </p>
+                    </div>
+                    <div class="col-span-4">
+                      {moment(today).format(format) >=
                       moment(train.endDate).format(format) ? (
-                      ""
-                    ) : (
+                        <p className="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                          {formattedDate(new Date(train.endDate))}
+                          <span className="flex items-start text-red-600  ">
+                            <p className="font-semibold">Хугацаа дууссан</p>
+                          </span>
+                        </p>
+                      ) : (
+                        <p className="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                          {formattedDate(new Date(train.endDate))}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  {moment(today).format(format) >=
+                    moment(train.startDate).format(format) &&
+                  moment(today).format(format) <=
+                    moment(train.endDate).format(format) ? (
+                    <div className="flex space-x-4 text-sm">
+                      <a className="flex items-start text-green-800 ">
+                        <div className="mr-1">👀</div>
+                        <p className="font-semibold">Идэвхтэй</p>
+                      </a>
+                    </div>
+                  ) : moment(today).format(format) >=
+                    moment(train.endDate).format(format) ? (
+                    <div className="flex space-x-4 text-sm">
+                      <a className="flex items-start text-red-800 ">
+                        <div className="mr-1">⏰</div>
+                        <p className="font-semibold">Сургалт дууссан</p>
+                      </a>
+                      <div className="text-right">
+                        <div className="inline-flex items-end mt-2">
+                          <button
+                            onClick={() => {
+                              handleEdit();
+                            }}
+                            className="mr-2 group flex items-center justify-between rounded-lg border border-current px-2 py-1 text-indigo-600 transition-colors hover:bg-indigo-600 hover:text-white  focus:outline-none focus:ring active:bg-indigo-500"
+                            type="button"
+                          >
+                            <i className="bi bi-pencil-square mr-1" />
+                            <span className="font-bold text-xs">Засварлах</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              showModalDelete();
+                            }}
+                            className="group flex items-center justify-between rounded-lg border border-current px-2 py-1 text-red-600 transition-colors hover:bg-red-600 hover:text-white  focus:outline-none focus:ring active:bg-red-500"
+                          >
+                            <i className="bi bi-trash-fill mr-1" />
+                            <span className="font-bold text-xs"> Устгах</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-right">
                       <div className="inline-flex items-end mt-2">
-                        {" "}
                         <button
                           onClick={() => {
                             handleEdit();
@@ -386,8 +430,8 @@ function ClickedTrain() {
                           <span className="font-bold text-xs"> Устгах</span>
                         </button>
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

@@ -9,6 +9,7 @@ import axios from "axios";
 import getWindowDimensions from "../../components/SizeDetector";
 import { Modal } from "react-bootstrap";
 import moment from "moment";
+
 const TrainingPlayer = () => {
   const location = useLocation();
   const { TOKEN } = useStateContext();
@@ -541,6 +542,8 @@ const TrainingPlayer = () => {
                   className=" w-full shadow-md rounded-lg mt-2"
                   id="myVideo"
                   controls
+                  disablepictureinpicture
+                  controlsList="nodownload noplaybackrate"
                 >
                   <source
                     src={`http://` + `${train.fileUrl}`}

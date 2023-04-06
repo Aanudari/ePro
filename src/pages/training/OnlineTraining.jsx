@@ -11,6 +11,7 @@ import { logout } from "../../service/examService";
 import getWindowDimensions from "../../components/SizeDetector";
 import Pagination from "../../service/Pagination";
 import Dropdown from "react-bootstrap/Dropdown";
+
 function OnlineTraining() {
   const { width } = getWindowDimensions();
   const location = useLocation();
@@ -427,101 +428,110 @@ function OnlineTraining() {
                 >
                   <source src={`http://` + data.fileUrl} type="video/mp4" />
                 </video>
-                <div className="flex flex-col justify-center  p-1">
+                <div className="flex flex-col justify-center  p-2">
                   <p className="text-xs font-semibold text-gray-600">
                     {data.teacher} * {timeSince(new Date(data.createdAt))}
                   </p>
                   <p className="text-sm font-bold">{data.name}</p>
 
                   <div className="flex space-x-4 text-sm">
-                    <a className="flex items-start text-gray-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
+                    <p className="flex items-start text-gray-800 transition-colors duration-200  group">
                       <div className="mr-2">
                         <i className="bi bi-camera-video" />
                       </div>
                       <p className="font-semibold">
                         {formatDuration(data.duration)}
                       </p>
-                    </a>
-                    <a
-                      onClick={() => {
-                        navigateWatched(data);
-                      }}
-                      className="flex items-start text-gray-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group"
-                    >
-                      <div className="group  relative flex justify-center  mr-2">
-                        <i className="bi bi-eye" />
-                        <span className="absolute top-10 scale-0 transition-all rounded bg-gray-800 p-2 px-8 text-xs text-white group-hover:scale-100">
-                          ✨ Үзсэн.
-                        </span>
-                      </div>
-                      <p className="font-semibold">
-                        {
-                          data.trainingDevs.filter(
-                            (dev) => dev.status === "Үзсэн"
-                          ).length
-                        }
+                    </p>
+                    {moment(today).format(format) <
+                    moment(data.startDate).format(format) ? (
+                      <p className="flex items-start text-gray-500 ">
+                        <div className="mr-1">⌛</div>
+                        <p className="font-semibold">Pending...</p>
                       </p>
-                    </a>
-
-                    <a
-                      onClick={() => {
-                        navigateWatched(data);
-                      }}
-                      className="flex items-start text-gray-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group"
-                    >
-                      <div className="group  relative flex justify-center mr-2">
-                        <i className="bi bi-pause-circle-fill" />
-                        <span className="absolute top-10 scale-0 transition-all rounded bg-gray-800 p-2 px-8 text-xs text-white group-hover:scale-100">
-                          ✨ Үзэж байгаа.
-                        </span>
+                    ) : (
+                      <div className="flex space-x-4 text-sm">
+                        <a
+                          onClick={() => {
+                            navigateWatched(data);
+                          }}
+                          className="flex items-start text-gray-800 transition-colors duration-200  group"
+                        >
+                          <div className="group  relative flex justify-center  mr-2">
+                            <i className="bi bi-eye" />
+                            <span className="absolute top-10 scale-0 transition-all rounded bg-gray-800 p-2 px-8 text-xs text-white group-hover:scale-100">
+                              ✨ Үзсэн.
+                            </span>
+                          </div>
+                          <p className="font-semibold">
+                            {
+                              data.trainingDevs.filter(
+                                (dev) => dev.status === "Үзсэн"
+                              ).length
+                            }
+                          </p>
+                        </a>
+                        <a
+                          onClick={() => {
+                            navigateWatched(data);
+                          }}
+                          className="flex items-start text-gray-800 transition-colors duration-200  group"
+                        >
+                          <div className="group  relative flex justify-center mr-2">
+                            <i className="bi bi-pause-circle-fill" />
+                            <span className="absolute top-10 scale-0 transition-all rounded bg-gray-800 p-2 px-8 text-xs text-white group-hover:scale-100">
+                              ✨ Үзэж байгаа.
+                            </span>
+                          </div>
+                          <p className="font-semibold">
+                            {
+                              data.trainingDevs.filter(
+                                (dev) => dev.status === "Үзэж байгаа"
+                              ).length
+                            }
+                          </p>
+                        </a>
+                        {moment(today).format(format) >=
+                          moment(data.startDate).format(format) &&
+                        moment(today).format(format) <=
+                          moment(data.endDate).format(format) ? (
+                          <p className="flex items-start text-green-800 ">
+                            <div className="mr-1">👀</div>
+                            <p className="font-semibold">Идэвхтэй</p>
+                          </p>
+                        ) : moment(today).format(format) >=
+                          moment(data.endDate).format(format) ? (
+                          <p className="flex items-start text-red-800 ">
+                            <div className="mr-1">⏰</div>
+                            <p className="font-semibold">Сургалт дууссан</p>
+                          </p>
+                        ) : (
+                          ""
+                        )}
                       </div>
-                      <p className="font-semibold">
-                        {
-                          data.trainingDevs.filter(
-                            (dev) => dev.status === "Үзэж байгаа"
-                          ).length
-                        }
-                      </p>
-                    </a>
+                    )}
 
                     {filteredForm.length === 0 ? (
-                      <a className="flex items-start text-red-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
-                        <span className=" px-2 py-1 text-xs font-semibold text-red-500 bg-red-200 rounded-md">
-                          Үнэлгээ үүсээгүй
-                        </span>
-                      </a>
-                    ) : moment(today).format(format) <=
-                      moment(data.startDate).format(format) ? (
-                      <a className="flex items-start text-gray-500 transition-colors  group">
-                        <div className="mr-2">
-                          <i className="bi bi-balloon" />
-                        </div>
-                        <p className="font-semibold">Pending</p>
-                      </a>
-                    ) : moment(today).format(format) >=
-                        moment(data.startDate).format(format) &&
-                      moment(today).format(format) <=
-                        moment(data.endDate).format(format) ? (
-                      <a className="flex items-start text-green-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
-                        <div className="mr-2">
-                          <i className="bi bi-calendar-check" />
-                        </div>
-                        <p className="font-semibold">Идэвхтэй</p>
+                      <a
+                        onClick={() =>
+                          navigate("/training-rating", {
+                            state: { sTrain: data, item: "" },
+                          })
+                        }
+                        className="flex items-start text-red-600  "
+                      >
+                        <i className="bi bi-exclamation-lg" />
+                        <p className="font-semibold">Үнэлгээ үүсгэнэ үү.</p>
                       </a>
                     ) : (
-                      <a className="flex items-start text-red-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
-                        <div className="mr-2">
-                          <i className="bi bi-calendar2-x" />
-                        </div>
-                        <p className="font-semibold">Идэвхгүй</p>
-                      </a>
+                      ""
                     )}
                   </div>
                 </div>
               </div>
             );
           })}
-          {filteredList.length > 9 ? (
+          {/* {filteredList.length > 9 ? (
             <div className="mt-3">
               <Pagination
                 nPages={nPages}
@@ -531,7 +541,7 @@ function OnlineTraining() {
             </div>
           ) : (
             ""
-          )}
+          )} */}
         </div>
       </div>
 

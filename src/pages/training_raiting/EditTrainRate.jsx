@@ -81,8 +81,6 @@ function EditTrainRate() {
   };
   const navigateIndex = (e) => {
     e.preventDefault();
-
-    console.log(JSON.stringify(dataEditTrate));
     if (startDate === endDate || startDate > endDate) {
       notification.invalidFileUpload("Эхлэх дуусах хугацаа алдаатай байна.");
     } else {
@@ -99,10 +97,12 @@ function EditTrainRate() {
         .then((res) => {
           if (res.data.isSuccess === true) {
             notification.success(`${res.data.resultMessage}`);
-            const timer = setTimeout(() => navigate("/training-rating"), 1000);
+            const timer = setTimeout(() => navigate("/training-rating"), 2000);
             return () => clearTimeout(timer);
-          }
-          if (res.data.isSuccess === false) {
+          } else if (res.data.isSuccess === false) {
+            notification.error(`${res.data.resultMessage}`);
+            const timer = setTimeout(() => navigate("/training-rating"), 3000);
+            return () => clearTimeout(timer);
           }
         })
         .catch((err) => console.log(err));
@@ -147,7 +147,6 @@ function EditTrainRate() {
     });
     setRaw(final);
   };
-  console.log(raw);
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <Navigation />

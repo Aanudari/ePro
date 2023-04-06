@@ -62,13 +62,13 @@ function MainNavigation() {
                 <span>Үнэлгээ</span>
               </a>
             </li>
-            <li>
+            <li className="relative cursor-pointer active:opacity-80 ">
               <a>
                 <i className="bi bi-book absolute top-[17px] left-[17px]"></i>
                 <span>Сургалт</span>
               </a>
               <ul>
-                <li>
+                <li className="relative cursor-pointer active:opacity-80 ">
                   <a
                     onClick={() => {
                       navigate("/online-training");
@@ -77,7 +77,7 @@ function MainNavigation() {
                     Онлайн сургалт
                   </a>
                 </li>
-                <li>
+                <li className="relative cursor-pointer active:opacity-80 ">
                   <a
                     onClick={() => {
                       navigate("/training-schedule");
@@ -86,7 +86,7 @@ function MainNavigation() {
                     Сургалтын хуваарь
                   </a>
                 </li>
-                {/* <li>
+                <li className="relative cursor-pointer active:opacity-80">
                   <a
                     onClick={() => {
                       navigate("/training-files");
@@ -94,8 +94,8 @@ function MainNavigation() {
                   >
                     Сургалтын файлууд
                   </a>
-                </li> */}
-                <li>
+                </li>
+                <li className="relative cursor-pointer active:opacity-80 ">
                   <a
                     onClick={() => {
                       navigate("/training-category");
@@ -104,7 +104,7 @@ function MainNavigation() {
                     Сургалтын ангилал
                   </a>
                 </li>
-                <li>
+                <li className="relative cursor-pointer active:opacity-80 ">
                   <a
                     onClick={() => {
                       navigate("/training-rating");
@@ -116,7 +116,7 @@ function MainNavigation() {
               </ul>
             </li>
 
-            <li>
+            <li className="relative cursor-pointer active:opacity-80 ">
               <a
                 onClick={() => {
                   navigate("/error-thanks");

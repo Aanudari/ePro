@@ -330,7 +330,7 @@ function UserErrorThanks() {
               </tbody>
             </table>
           </div>
-          {currentRecords.length > 9 ? (
+          {/* {currentRecords.length > 9 ? (
             <div className="mt-3">
               <Pagination
                 nPages={nPages}
@@ -340,7 +340,7 @@ function UserErrorThanks() {
             </div>
           ) : (
             ""
-          )}
+          )} */}
         </div>
       </div>
 

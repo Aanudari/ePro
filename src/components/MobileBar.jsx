@@ -168,7 +168,7 @@ function MobileBar() {
                     Сургалтын хуваарь
                   </a>
                 </li>
-                {/* <li>
+                <li>
                   <a
                     onClick={() => {
                       navigate("/training-files");
@@ -176,7 +176,7 @@ function MobileBar() {
                   >
                     Сургалтын файлууд
                   </a>
-                </li> */}
+                </li>
                 <li>
                   <a
                     onClick={() => {

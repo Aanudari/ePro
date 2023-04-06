@@ -21,7 +21,6 @@ function Workers({ setShow, getEmployees, reSetEmployee }) {
       })
       .catch((err) => console.log(err));
   }, []);
-  // console.log(users);
   let pre = [];
   let roles = [];
   for (let index = 0; index < users?.length; index++) {
@@ -117,7 +116,10 @@ function Workers({ setShow, getEmployees, reSetEmployee }) {
       for (let i = 0; i < tempoUnique.length; i++) {
         const element = tempoUnique[i];
         let data = {
-          department: element.departmentId,
+          department:
+            element.departmentId == undefined
+              ? element.department
+              : element.departmentId,
           unitId: element.unitId,
           deviceId: element.deviceId,
         };

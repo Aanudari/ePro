@@ -22,7 +22,6 @@ function RatingAddExtra({ id, setIsExtra, trigger, setTrigger }) {
       data: extra,
     })
       .then((res) => {
-        console.log(res.data);
         if (res.data.isSuccess == false) {
           toast.error(res.data.resultMessage, { position: "bottom-right" });
         }
@@ -119,11 +118,11 @@ function RatingAddExtra({ id, setIsExtra, trigger, setTrigger }) {
           `}
     >
       <ToastContainer />
-      <div className="shrink w-[calc(75%)] h-[calc(80%)] bg-white flex flex-col rounded">
-        <div className="w-full min-h-[50px] bg-teal-600 flex justify-between items-center px-3  gap-2 rounded-t">
+      <div className="shrink w-[calc(55%)] h-[calc(60%)] bg-white flex flex-col rounded">
+        <div className="w-full min-h-[50px] bg-amber-600 flex justify-between items-center px-3  gap-2 rounded-t">
           <div className="flex gap-4 justify-between w-full px-2">
             <button
-              className="custom-btn h-10 bg-teal-500 hover:bg-teal-600 active:bg-teal-400 text-[13px] parent-2"
+              className="custom-btn h-10 bg-amber-500 hover:bg-amber-600 active:bg-amber-400 text-[13px] parent-2"
               onClick={addChild}
             >
               Нэмэх
@@ -134,7 +133,7 @@ function RatingAddExtra({ id, setIsExtra, trigger, setTrigger }) {
                   onClick={() => {
                     handleSubmit();
                   }}
-                  className="custom-btn btn-13"
+                  className="custom-btn bg-amber-500 hover:bg-amber-600 text-[14px]"
                 >
                   Хадгалах
                 </button>

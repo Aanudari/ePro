@@ -523,12 +523,14 @@ function ExamModalMain({
                   <div className="h-10 w-full bg-[#50a3a2] text-white px-4 flex items-center font-[400] text-[14px] uppercase relative">
                     {question.categoryName}
                     <div className="absolute right-[10px]">
-                      <i
-                        onClick={() => {
-                          handleSubtract(question.id);
-                        }}
-                        className="bi cursor-pointer bi-dash-circle-dotted text-lg"
-                      ></i>
+                      {examSummary === "Not yet" && (
+                        <i
+                          onClick={() => {
+                            handleSubtract(question.id);
+                          }}
+                          className="bi cursor-pointer bi-dash-circle-dotted text-lg"
+                        ></i>
+                      )}
                     </div>
                   </div>
                   <div

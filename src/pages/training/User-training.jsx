@@ -9,6 +9,7 @@ import { Modal } from "react-bootstrap";
 import { notification } from "../../service/toast";
 import moment from "moment";
 import Pagination from "../../service/Pagination";
+
 function UserTraining() {
   const { TOKEN, deviceId } = useStateContext();
   const navigate = useNavigate();
@@ -95,7 +96,7 @@ function UserTraining() {
         if (res.data.isSuccess === true) {
           setRates(res.data.trRatingForm);
         } else if (res.data.isSuccess === false) {
-          notification.error(`${res.data.resultMessage}`);
+          // notification.error(`${res.data.resultMessage}`);
         } else if (
           res.data.resultMessage === "Unauthorized" ||
           res.data.resultMessage === "Input string was not in a correct divat."
@@ -108,11 +109,16 @@ function UserTraining() {
   const clickView = (data) => {
     setChosedTrain(data);
     if (activeTab === "2") {
-      const filteredForm = rates?.filter((item) => item.trainingId === data.id);
-      if (filteredForm.length > 0) {
-        setShowReady(true);
+      if (chosedTrain?.status === "Үзсэн") {
+        navigate("/player", {
+          state: { data: chosedTrain, item: activeTab },
+        });
+      } else if (chosedTrain?.status === "Үзэж байгаа") {
+        navigate("/player", {
+          state: { data: chosedTrain, item: activeTab },
+        });
       } else {
-        notification.error("Сургалтанд харгалзах үнэлгээ үүсээгүй байна.");
+        setShowReady(true);
       }
     } else {
       navigate("/player", {
@@ -122,11 +128,11 @@ function UserTraining() {
   };
 
   const navigatePlayer = () => {
-    if (chosedTrain.status === "Үзсэн") {
+    if (chosedTrain?.status === "Үзсэн") {
       navigate("/player", {
         state: { data: chosedTrain, item: activeTab },
       });
-    } else if (chosedTrain.status === "Үзэж байгаа") {
+    } else if (chosedTrain?.status === "Үзэж байгаа") {
       navigate("/player", {
         state: { data: chosedTrain, item: activeTab },
       });
@@ -273,16 +279,7 @@ function UserTraining() {
 
       <div className="max-w-screen-xl ml-auto mr-auto">
         <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 ">
-          {userTrain.length === 0 ? (
-            <p className="flex items-center w-full font-semibold text-sm p-4">
-              Танд сургалт хувиарлагдаагүй байна.
-            </p>
-          ) : (
-            <p className="flex items-center w-full font-semibold text-sm p-4">
-              Танд дараах сургалтууд хувиарлагдсан байна.
-            </p>
-          )}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between mt-2">
             <div className="text-center text-left">
               <div className="relative">
                 <input
@@ -332,59 +329,68 @@ function UserTraining() {
                 const startDate = new Date(data.startDate);
                 const endDate = new Date(data.endDate);
                 const duration = endDate.getTime() - startDate.getTime();
-                return (
-                  <div className="mx-auto mt-4" key={JSON.stringify(data + i)}>
-                    <div className="flex cursor-pointer">
-                      <video
-                        className="object-fill h-32 w-64 mr-4 shadow-md rounded-lg"
-                        ref={videoRef}
-                        onClick={() => {
-                          clickView(data);
-                        }}
-                      >
-                        <source
-                          src={`http://` + `${data.fileUrl}`}
-                          type="video/mp4"
-                        />
-                      </video>
-                      <div className="flex flex-col justify-center  p-1">
-                        <p className="text-xs font-semibold text-gray-600">
-                          {data.teacher} * {timeSince(new Date(data.createdAt))}
-                        </p>
-                        <p className="text-sm font-bold">{data.name}</p>
+                const filteredForm = rates?.filter(
+                  (item) => item.trainingId === data.id
+                );
+                if (filteredForm.length != 0) {
+                  return (
+                    <div
+                      className="mx-auto mt-4"
+                      key={JSON.stringify(data + i)}
+                    >
+                      <div className="flex cursor-pointer">
+                        <video
+                          className="object-fill h-32 w-64 mr-4 shadow-md rounded-lg"
+                          ref={videoRef}
+                          onClick={() => {
+                            clickView(data);
+                          }}
+                        >
+                          <source
+                            src={`http://` + `${data.fileUrl}`}
+                            type="video/mp4"
+                          />
+                        </video>
+                        <div className="flex flex-col justify-center  p-1">
+                          <p className="text-xs font-semibold text-gray-600">
+                            {data.teacher} *{" "}
+                            {timeSince(new Date(data.createdAt))}
+                          </p>
+                          <p className="text-sm font-bold">{data.name}</p>
 
-                        <div className="flex space-x-4 text-sm">
-                          <a className="flex items-start text-gray-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
-                            <div className="mr-2">
-                              <i className="bi bi-camera-video" />
-                            </div>
-                            <p className="font-semibold">
-                              {formatDuration(data.duration)}
-                            </p>
-                          </a>
+                          <div className="flex space-x-4 text-sm">
+                            <a className="flex items-start text-gray-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
+                              <div className="mr-2">
+                                <i className="bi bi-camera-video" />
+                              </div>
+                              <p className="font-semibold">
+                                {formatDuration(data.duration)}
+                              </p>
+                            </a>
 
-                          {moment(today).format(format) >=
-                          moment(data.endDate).format(format) ? (
-                            <a className="flex items-start text-red-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
-                              <div className="mr-2">
-                                <i className="bi bi-calendar2-x" />
-                              </div>
-                              <p className="font-semibold">ИДЭВХГҮЙ</p>
-                            </a>
-                          ) : (
-                            <a className="flex items-start text-green-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
-                              <div className="mr-2">
-                                <i className="bi bi-calendar-check" />
-                              </div>
-                              <p className="font-semibold">ИДЭВХТЭЙ</p>
-                            </a>
-                          )}
+                            {moment(today).format(format) >=
+                            moment(data.endDate).format(format) ? (
+                              <a className="flex items-start text-red-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
+                                <div className="mr-2">
+                                  <i className="bi bi-calendar2-x" />
+                                </div>
+                                <p className="font-semibold">Идэвхгүй</p>
+                              </a>
+                            ) : (
+                              <a className="flex items-start text-green-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
+                                <div className="mr-2">
+                                  <i className="bi bi-calendar-check" />
+                                </div>
+                                <p className="font-semibold">Идэвхтэй</p>
+                              </a>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}{" "}
+                  );
+                }
+              })}
               {/* <div className="mt-3">
                 <Pagination
                   nPages={nPagesOfType2}
@@ -470,14 +476,14 @@ function UserTraining() {
                               <div className="mr-2">
                                 <i className="bi bi-calendar2-x" />
                               </div>
-                              <p className="font-semibold">ИДЭВХГҮЙ</p>
+                              <p className="font-semibold">Идэвхгүй</p>
                             </a>
                           ) : (
                             <a className="flex items-start text-green-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
                               <div className="mr-2">
                                 <i className="bi bi-calendar-check" />
                               </div>
-                              <p className="font-semibold">ИДЭВХТЭЙ</p>
+                              <p className="font-semibold">Идэвхтэй</p>
                             </a>
                           )}
                         </div>

@@ -6,7 +6,6 @@ import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import moment from "moment";
 import { logout } from "../../service/examService";
-import TrainingProgressCell from "./TrainingProgressCell";
 function RatingReport() {
   const location = useLocation();
   const { TOKEN } = useStateContext();
@@ -66,10 +65,11 @@ function RatingReport() {
     acc[questionType].push(obj);
     return acc;
   }, {});
-  const [isExpanded, setIsExpanded] = useState(false);
+
   const type1Arr = separatedArr["1"];
   const type2Arr = separatedArr["2"];
-  const [openQuestion, setOpenQuestion] = useState(null);
+  const [type1OpenQuestionIndex, setType1OpenQuestionIndex] = useState(null);
+  const [type2OpenQuestionIndex, setType2OpenQuestionIndex] = useState(null);
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <Navigation />
@@ -128,8 +128,8 @@ function RatingReport() {
               <div className="text-sm font-extrabold text-blue-600 md:text-sm">
                 {moment(today).format(format) >=
                 moment(selectedRate.expireDate).format(format)
-                  ? "Идвэхгүй"
-                  : "Идвэхтэй"}
+                  ? "Идэвхгүй"
+                  : "Идэвхтэй"}
               </div>
             </div>
           </div>
@@ -145,10 +145,9 @@ function RatingReport() {
                   <div
                     className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
                     onClick={() => {
-                      setOpenQuestion(
-                        q.question === openQuestion ? null : q.question
+                      setType1OpenQuestionIndex(
+                        i === type1OpenQuestionIndex ? null : i
                       );
-                      setIsExpanded(!isExpanded);
                     }}
                   >
                     <div className="flex items-center gap-2">
@@ -159,14 +158,13 @@ function RatingReport() {
                     {q.answerResults1?.length === 0 ? null : (
                       <a
                         onClick={() => {
-                          setOpenQuestion(
-                            q.question === openQuestion ? null : q.question
+                          setType1OpenQuestionIndex(
+                            i === type1OpenQuestionIndex ? null : i
                           );
-                          setIsExpanded(!isExpanded);
                         }}
                         className="inline-block rounded px-3 py-2 text-xs font-medium text-black hover:bg-indigo-200 ml-1"
                       >
-                        {isExpanded ? (
+                        {i === type1OpenQuestionIndex ? (
                           <i className="bi bi-chevron-down shrink-0 transition duration-300 group-open:-rotate-180 " />
                         ) : (
                           <i className="bi bi-chevron-right" />
@@ -175,7 +173,7 @@ function RatingReport() {
                     )}
                   </div>
                   <div className=" flex flex-col px-4">
-                    {openQuestion === q.question && (
+                    {i === type1OpenQuestionIndex && (
                       <div className="">
                         {q.answerResults1.map((a, ind) => (
                           <div
@@ -211,10 +209,9 @@ function RatingReport() {
                   <div
                     className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
                     onClick={() => {
-                      setOpenQuestion(
-                        q.question === openQuestion ? null : q.question
+                      setType2OpenQuestionIndex(
+                        i === type2OpenQuestionIndex ? null : i
                       );
-                      setIsExpanded(!isExpanded);
                     }}
                   >
                     <div className="flex items-center gap-2">
@@ -226,14 +223,13 @@ function RatingReport() {
                     {q.answerResults2?.length === 0 ? null : (
                       <a
                         onClick={() => {
-                          setOpenQuestion(
-                            q.question === openQuestion ? null : q.question
+                          setType2OpenQuestionIndex(
+                            i === type2OpenQuestionIndex ? null : i
                           );
-                          setIsExpanded(!isExpanded);
                         }}
                         className="inline-block rounded px-3 py-2 text-xs font-medium text-black hover:bg-indigo-200 ml-1"
                       >
-                        {isExpanded ? (
+                        {i === type2OpenQuestionIndex ? (
                           <i className="bi bi-chevron-down shrink-0 transition duration-300 group-open:-rotate-180 " />
                         ) : (
                           <i className="bi bi-chevron-right" />
@@ -242,7 +238,7 @@ function RatingReport() {
                     )}
                   </div>
                   <div className=" flex flex-col px-4">
-                    {openQuestion === q.question && (
+                    {i === type2OpenQuestionIndex && (
                       <div className="">
                         {q.answerResults2?.map((a, ind) => (
                           <div

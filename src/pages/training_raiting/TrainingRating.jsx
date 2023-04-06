@@ -198,6 +198,26 @@ function TrainingRating() {
       state: { data: data },
     });
   };
+  const handleDownloadClick = (data) => {
+    axios({
+      method: "get",
+      headers: {
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/ReportDownload/reportDownloader/3/${data.trainingId}`,
+    })
+      .then((res) => {
+        if (res.data.isSuccess === true) {
+          window.open(res.data.excelFile);
+        } else if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct format."
+        ) {
+          logout();
+        }
+      })
+      .catch((err) => console.log(err));
+  };
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <Navigation />
@@ -387,10 +407,7 @@ function TrainingRating() {
         <div className="px-4 md:px-10 py-4 md:py-7">
           <div className="flex items-center justify-between">
             <p className="focus:outline-none text-base sm:text-sm md:text-sm lg:text-sm font-bold leading-normal text-gray-800">
-              Сургалтын үнэлгээ{" "}
-              {filteredList.length > 0
-                ? `(${filteredList.length})`
-                : `(${tRate.length})`}
+              Сургалтын үнэлгээ
             </p>
           </div>
         </div>
@@ -415,22 +432,13 @@ function TrainingRating() {
               </button>
             </div>
           </div>
-          <div className="flex flex-col justify-center w-3/4 max-w-sm space-y-3 md:flex-row md:w-full md:space-x-3 md:space-y-0 md:justify-end sm:justify-end">
+          <div className="flex flex-col gap-4 mt-0 flex-row items-center">
             <button
               onClick={showModalCreate}
-              className="bg-green-600 border border-green-600 shadow p-2 rounded text-white flex items-center focus:outline-none focus:shadow-outline"
+              className="block rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring"
+              type="button"
             >
-              <span className="mx-2">Үнэлгээ нэмэх</span>
-              <svg width="24" height="24" viewBox="0 0 16 16">
-                <path
-                  d="M7 4 L11 8 L7 12"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinejoin="round"
-                  strokeLinecap="round"
-                />
-              </svg>
+              Үнэлгээ нэмэх
             </button>
           </div>
         </div>
@@ -503,33 +511,45 @@ function TrainingRating() {
                       ) : null}
                     </td>
                     <td className="px-5 py-3 text-sm  border-b ">
-                      <div className="flex items-center">
-                        <a
-                          className="text-blue-600 hover:text-black mx-2 text-lg"
-                          onClick={() => {
-                            navigateChoosedTRate(data);
-                          }}
-                        >
-                          <i className="bi bi-question-circle-fill"></i>
-                        </a>
+                      {moment(today).format(format) >=
+                      moment(data.expireDate).format(format) ? (
+                        <div className="flex items-center">
+                          <a
+                            className="text-blue-600 hover:text-black mx-2 text-lg"
+                            onClick={() => {
+                              navigateChoosedTRate(data);
+                            }}
+                          >
+                            <i className="bi bi-question-circle-fill"></i>
+                          </a>
 
-                        <a
-                          className="text-yellow-600 hover:text-black mx-2 text-lg"
+                          <a
+                            className="text-yellow-600 hover:text-black mx-2 text-lg"
+                            onClick={() => {
+                              handleEdit(data);
+                            }}
+                          >
+                            <i className="bi bi-pencil-square"></i>
+                          </a>
+                          <a
+                            onClick={() => {
+                              showModalDelete(data);
+                            }}
+                            className="text-rose-400 hover:text-black ml-2 text-lg"
+                          >
+                            <i className="bi bi-trash-fill"></i>
+                          </a>
+                        </div>
+                      ) : (
+                        <button
                           onClick={() => {
-                            handleEdit(data);
+                            handleDownloadClick(data);
                           }}
+                          className="items-center px-2 py-2 bg-green-700 hover:bg-green-800 text-white text-xs font-medium rounded-md"
                         >
-                          <i className="bi bi-pencil-square"></i>
-                        </a>
-                        <a
-                          onClick={() => {
-                            showModalDelete(data);
-                          }}
-                          className="text-rose-400 hover:text-black ml-2 text-lg"
-                        >
-                          <i className="bi bi-trash-fill"></i>
-                        </a>
-                      </div>
+                          Тайлан татах
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}

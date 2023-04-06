@@ -9,6 +9,7 @@ import axios from "axios";
 import getWindowDimensions from "../../components/SizeDetector";
 import { Modal } from "react-bootstrap";
 import moment from "moment";
+
 const TrainingPlayer = () => {
   const location = useLocation();
   const { TOKEN } = useStateContext();
@@ -102,7 +103,7 @@ const TrainingPlayer = () => {
 
       if (progress === 100) {
         if (train.status === "Үзсэн") {
-          setShowTRate(true);
+          setShowTRate(false);
         } else {
           axios({
             method: "post",
@@ -344,10 +345,6 @@ const TrainingPlayer = () => {
           <Modal.Body>
             <div className="w-full bg-white  mx-auto ">
               <div className="bg-white dark:bg-gray-800 ">
-                <img
-                  className="object-cover h-48 w-full rounded-lg"
-                  src="https://cdn.dribbble.com/users/877246/screenshots/15655386/media/aaeec8419786cdfbc6de5d12452636d1.png?compress=1&resize=1000x750&vertical=top"
-                />
                 <div className="lg:flex lg:items-center lg:justify-between w-full mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 z-20">
                   <div>
                     <p className="block text-xl font-semibold">
@@ -545,6 +542,8 @@ const TrainingPlayer = () => {
                   className=" w-full shadow-md rounded-lg mt-2"
                   id="myVideo"
                   controls
+                  disablepictureinpicture
+                  controlsList="nodownload noplaybackrate"
                 >
                   <source
                     src={`http://` + `${train.fileUrl}`}

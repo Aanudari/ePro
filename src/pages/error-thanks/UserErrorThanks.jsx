@@ -61,6 +61,15 @@ function UserErrorThanks() {
       })
       .catch((err) => console.log(err));
   }, []);
+  const [searchQuery, setSearchQuery] = useState("");
+  const handleSearch = (event) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+    const searchList = complain.filter((item) => {
+      return item.description.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+    });
+    setFilteredData(searchList);
+  };
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const currentRecords = filteredData.slice(
@@ -77,6 +86,26 @@ function UserErrorThanks() {
     <UserLayout>
       <div className="max-w-screen-xl ml-auto mr-auto">
         <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 ">
+          <div className="flex items-center justify-between mt-2">
+            <div className="text-center text-left">
+              <div className="relative">
+                <input
+                  value={searchQuery}
+                  onChange={handleSearch}
+                  className="h-10 px-6 py-2  rounded-lg border-2 border-gray-400 outline-none focus:border-indigo-500  pr-10 text-sm placeholder-gray-400 focus:z-10"
+                  placeholder="Сургалтын нэрээр хайх..."
+                  type="text"
+                />
+
+                <button
+                  type="submit"
+                  className="absolute inset-y-0 right-0 rounded-r-lg p-2 text-gray-600"
+                >
+                  <i className="bi bi-search" />
+                </button>
+              </div>
+            </div>
+          </div>
           <div className="mt-4">
             <ul className="flex flex-wrap -mb-px">
               {complainInfo.map((item) => (
@@ -301,7 +330,7 @@ function UserErrorThanks() {
               </tbody>
             </table>
           </div>
-          {currentRecords.length > 9 ? (
+          {/* {currentRecords.length > 9 ? (
             <div className="mt-3">
               <Pagination
                 nPages={nPages}
@@ -311,7 +340,7 @@ function UserErrorThanks() {
             </div>
           ) : (
             ""
-          )}
+          )} */}
         </div>
       </div>
 

@@ -12,6 +12,7 @@ import DatePicker from "react-datepicker";
 import { logout } from "../../service/examService";
 import getWindowDimensions from "../../components/SizeDetector";
 import Workers from "./Workers";
+
 function CreateTraining() {
   const { width } = getWindowDimensions();
   const { TOKEN } = useStateContext();
@@ -147,6 +148,8 @@ function CreateTraining() {
                   // height="100%"
                   id="myVideo"
                   controls
+                  disablePictureInPicture
+                  controlsList=" noplaybackrate"
                 >
                   <source src={`http://` + `${fileUrl}`} type="video/mp4" />
                 </video>
@@ -212,11 +215,15 @@ function CreateTraining() {
     sessionType: locationn.state.item === "schedule" ? `1` : `2`,
     startDate: `${startDate}`,
     endDate: `${endDate}`,
-    location: `${location}`,
+    location: locationn.state.item === "schedule" ? `${location}` : "",
     addTrainingDevs: emp,
   };
   const navigateIndex = (e) => {
     e.preventDefault();
+    const today = new Date();
+
+    const selectedDate = moment(today).add(24, "hours").toDate();
+
     if (name.length === 0) {
       setcheckEmptyname(true);
     } else if (description.length === 0) {
@@ -229,10 +236,17 @@ function CreateTraining() {
       notification.error("Та Ажилтан сонгоно уу.");
     } else if (tCategory.length === 0) {
       setcheckEmptytCategory(true);
-    } else if (location.length === 0) {
-      setcheckEmptylocation(true);
-    } else if (startDate === endDate || startDate > endDate) {
-      notification.error("Эхлэх дуусах хугацаа алдаатай байна.");
+    } else if (startDate <= moment(selectedDate).format(format)) {
+      notification.error(
+        "Сургалт эхлэх хугацааг 24 цагийн дараа байхаар сонгоно уу."
+      );
+    } else if (startDate > endDate) {
+      notification.error(
+        "Сургалт дуусах хугацаа эхлэх хугацаанаас бага байна."
+      );
+      setCheckEmptyDate(true);
+    } else if (startDate === endDate) {
+      notification.error("Эхлэх дуусах хугацаа тэнцүү байна.");
       setCheckEmptyDate(true);
     } else {
       axios({
@@ -418,22 +432,28 @@ function CreateTraining() {
             </div>
           </div>
           <div className="flex -mx-2">
-            <div className="w-1/3 sm:w-full px-2  ">
+            <div className="w-2/3 sm:w-full px-2  ">
               <div className="relative w-full mb-3">
+                <p className="text-xs font-semibold text-gray-600">
+                  Та{" "}
+                  {locationn.state.item === "schedule"
+                    ? "сургалтын хуваарийг"
+                    : "онлайн сургалтыг"}{" "}
+                  эхлүүлэх хугацаагаа 24 цагийн дараа байхаар тохируулна уу. 😊
+                </p>
                 <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                  startDate
+                  эхлэх хугацаа
                 </label>
+
                 <DatePicker
-                  className="px-3 py-2 text-gray-600 bg-white text-sm w-full rounded-lg border border-gray-200 outline-none focus:border-indigo-500"
+                  className="px-3 py-2 text-blueGray-600 bg-white text-sm w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
                   selected={date1}
                   onChange={(date) => {
                     setDate1(date);
-                    setCheckEmptyDate(false);
                   }}
-                  id={checkEmptyDate === true ? "border-red" : null}
                   showTimeSelect
                   timeFormat="HH:mm"
-                  timeIntervals={15}
+                  timeIntervals={30}
                   selectsStart
                   startDate={date1}
                   dateFormat="yyyy.MM.dd, HH:mm"
@@ -442,7 +462,7 @@ function CreateTraining() {
 
               <div className="relative w-full mb-3">
                 <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                  endDate
+                  дуусах хугацаа
                 </label>
                 <DatePicker
                   className="px-3 py-2 text-gray-600 bg-white text-sm w-full rounded-lg border border-gray-200 outline-none focus:border-indigo-500"
@@ -454,7 +474,7 @@ function CreateTraining() {
                   id={checkEmptyDate === true ? "border-red" : null}
                   showTimeSelect
                   timeFormat="HH:mm"
-                  timeIntervals={15}
+                  timeIntervals={30}
                   selectsStart
                   startDate={date2}
                   dateFormat="yyyy.MM.dd, HH:mm"
@@ -462,7 +482,6 @@ function CreateTraining() {
               </div>
             </div>
             <div className="w-1/3 sm:w-full px-2  ">
-              {" "}
               <div className="relative w-full mb-3">
                 <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                   Ангилал
@@ -484,8 +503,6 @@ function CreateTraining() {
                   getOptionValue={(option) => option.id}
                 />
               </div>
-            </div>
-            <div className="w-2/3 sm:w-full px-2 ">
               <div className="relative w-full mb-3">
                 {" "}
                 <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
@@ -501,20 +518,24 @@ function CreateTraining() {
                   className="px-3 py-2  text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
                 />
               </div>
-              <div className="relative w-full mb-3">
-                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                  Байршил
-                </label>
-                <input
-                  type="text"
-                  className="px-3 py-2  text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                  onChange={(e) => {
-                    setlocation(e.target.value);
-                    setcheckEmptylocation(false);
-                  }}
-                  id={checkEmptylocation === true ? "border-red" : null}
-                />
-              </div>
+              {locationn.state.item === "schedule" ? (
+                <div className="relative w-full mb-3">
+                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                    Байршил
+                  </label>
+                  <input
+                    type="text"
+                    className="px-3 py-2  text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                    onChange={(e) => {
+                      setlocation(e.target.value);
+                      setcheckEmptylocation(false);
+                    }}
+                    id={checkEmptylocation === true ? "border-red" : null}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
 

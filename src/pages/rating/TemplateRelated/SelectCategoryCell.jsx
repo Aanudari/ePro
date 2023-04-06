@@ -1,54 +1,22 @@
 import SelectSubCategoryCell from "./SelectSubCategoryCell";
 import { useEffect, useState, useRef } from "react";
 function SelectCategoryCell({ category, index, handleSelect, handleTotal }) {
-  const [constant, setConstant] = useState(0);
-  const [score, setScore] = useState(0);
-  const isInitialRender = useRef(true);
-  let initial = 0;
+  const [score, setScore] = useState(100);
+  let allCategories = [];
+  let preScore = 0;
   useEffect(() => {
-    if (isInitialRender.current) {
-      for (let index = 0; index < category.subCategories.length; index++) {
-        const element = category.subCategories[index];
-        initial += parseInt(
-          element.subCatUserScore == "" ? 0 : element.subCatUserScore
-        );
-      }
-      setConstant(initial);
-      setScore(initial);
-    } else {
-      isInitialRender.current = false;
+    for (let index = 0; index < category.subCategories.length; index++) {
+      const element = category.subCategories[index];
+      preScore +=
+        element.subCatUserScore == "" ? 0 : parseInt(element.subCatUserScore);
     }
+    setScore(preScore);
   }, []);
-  useEffect(() => {
-    handleTotal(score);
-  }, [score]);
-
-  // console.log(score);
-  const [raw, setRaw] = useState([]);
-  const collector = (point, id) => {
-    let tempo = {
-      point: parseInt(point),
-      id: parseInt(id),
-    };
-    let filtered = raw.filter((item) => {
-      return item.id != id;
-    });
-    setRaw(filtered);
-    setRaw((prev) => [...prev, tempo]);
+  console.log(score);
+  const collector = (value, id) => {
+    console.log(value);
+    console.log(id);
   };
-  useEffect(() => {
-    if (!isInitialRender.current) {
-      let count = 0;
-      for (let index = 0; index < raw.length; index++) {
-        const element = raw[index];
-        count += element.point;
-      }
-      let pre = count + constant;
-      setScore(pre);
-    } else {
-      isInitialRender.current = false;
-    }
-  }, [raw]);
   return (
     <div className="mb-2">
       <div className="w-full rounded-t-lg bg-teal-600 px-3 py-2 flex justify-between text-white ">

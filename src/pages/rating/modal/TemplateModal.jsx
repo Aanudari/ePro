@@ -6,6 +6,7 @@ import RatingCategoryAdd from "./RatingCategoryAdd";
 import bg from "../../../assets/bg3.jpg";
 import TemplateCategoryCell from "../TemplateRelated/TemplateCategoryCell";
 import RatingAddExtra from "./RatingAddExtra";
+import ExtraInput from "./ExtraInput";
 function TemplateModal({ setShow, id, categoryName }) {
   const { activeMenu, TOKEN } = useStateContext();
   const [data, setData] = useState();
@@ -29,8 +30,6 @@ function TemplateModal({ setShow, id, categoryName }) {
       })
       .catch((err) => console.log(err));
   }, [trigger]);
-  // console.log(data);
-  console.log(data);
 
   const [showModal, setShowModal] = useState(false);
   const [isExtra, setIsExtra] = useState(false);
@@ -81,7 +80,7 @@ function TemplateModal({ setShow, id, categoryName }) {
                 onClick={() => {
                   setIsExtra(true);
                 }}
-                className="custom-btn min-w-[80px] md:min-w-[120px] lg:min-w-[180px] bg-teal-500 hover:bg-teal-400 active:bg-teal-600 h-10 text-[14px] flex items-center justify-center"
+                className="custom-btn min-w-[80px] md:min-w-[120px] lg:min-w-[180px] bg-amber-500 hover:bg-amber-400 active:bg-amber-600 h-10 text-[14px] flex items-center justify-center"
               >
                 <i className="bi bi-plus-circle-dotted text-lg mr-2"></i>
                 Нэмэлт мэдээлэл
@@ -111,45 +110,43 @@ function TemplateModal({ setShow, id, categoryName }) {
 
           <div className="w-full h-[calc(100vh-100px)]  overflow-scroll flex justify-center">
             <div className="w-[300px] md:w-[600px]  lg:w-[900px] p-3">
-              {data?.inputs.length > 0 ? (
-                data?.inputs.map((item, index) => {
+              <div className="flex w-full flex-wrap items-center ">
+                {data?.inputs.map((item, index) => {
                   return (
-                    <div
-                      style={{
-                        background: `url(/notfound.webp)`,
-                      }}
-                      className="w-full h-full"
+                    <ExtraInput
                       key={index}
-                    >
-                      {JSON.stringify(item)}
-                    </div>
-                  );
-                })
-              ) : (
-                <div className="w-full bg-white h-full flex items-center justify-center">
-                  <img src="/notfound.webp" alt="" className="h-[calc(40%)]" />
-                </div>
-              )}
-            </div>
-            <div className="  w-[300px] md:w-[600px]  lg:w-[900px] p-3">
-              {data?.categories.length > 0 ? (
-                data?.categories.map((item, index) => {
-                  return (
-                    <TemplateCategoryCell
-                      key={JSON.stringify(item + index)}
                       item={item}
                       index={index}
-                      trigger={trigger}
                       setTrigger={setTrigger}
-                      templateId={id}
+                      trigger={trigger}
                     />
                   );
-                })
-              ) : (
-                <div className="w-full bg-white h-full flex items-center justify-center">
-                  <img src="/notfound.webp" alt="" className="h-[calc(40%)]" />
-                </div>
-              )}
+                })}
+              </div>
+              <div className="">
+                {data?.categories.length > 0 ? (
+                  data?.categories.map((item, index) => {
+                    return (
+                      <TemplateCategoryCell
+                        key={JSON.stringify(item + index)}
+                        item={item}
+                        index={index}
+                        trigger={trigger}
+                        setTrigger={setTrigger}
+                        templateId={id}
+                      />
+                    );
+                  })
+                ) : (
+                  <div className="w-full bg-white h-full flex items-center justify-center">
+                    <img
+                      src="/notfound.webp"
+                      alt=""
+                      className="h-[calc(40%)]"
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

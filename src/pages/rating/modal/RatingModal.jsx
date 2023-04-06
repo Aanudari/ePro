@@ -7,7 +7,6 @@ import SelectCategoryCell from "../TemplateRelated/SelectCategoryCell";
 import Loading from "../../../components/Loading";
 import { toast, ToastContainer } from "react-toastify";
 function RatingModal({
-  showModal,
   setShowModal,
   ratingId,
   deviceId,

@@ -13,7 +13,7 @@ import { logout } from "../../service/examService";
 import getWindowDimensions from "../../components/SizeDetector";
 function TrainingRating() {
   const location = useLocation();
-  const { TOKEN, activeMenu } = useStateContext();
+  const { TOKEN } = useStateContext();
   const navigate = useNavigate();
   const { width } = getWindowDimensions();
   const [trains, setTrains] = useState([]);
@@ -40,7 +40,7 @@ function TrainingRating() {
   const [checkEmpty3, setcheckEmpty3] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [tid, setTid] = useState();
-
+  // console.log(location.state.sTrain);
   useEffect(() => {
     axios({
       method: "get",
@@ -508,7 +508,9 @@ function TrainingRating() {
                         <span className="flex items-center px-2 py-1 text-xs font-semibold text-red-500 bg-red-200 rounded-md mt-2">
                           Асуулт үүсээгүй
                         </span>
-                      ) : null}
+                      ) : (
+                        ""
+                      )}
                     </td>
                     <td className="px-5 py-3 text-sm  border-b ">
                       <div className="flex items-center">
@@ -536,14 +538,18 @@ function TrainingRating() {
                         >
                           <i className="bi bi-trash-fill"></i>
                         </a>
-                        <button
-                          onClick={() => {
-                            handleDownloadClick(data);
-                          }}
-                          className="items-center px-2 py-2 bg-green-700 hover:bg-green-800 text-white text-xs font-medium rounded-md"
-                        >
-                          Тайлан татах
-                        </button>
+                        {data.trRatingQuestions.length === 0 ? (
+                          ""
+                        ) : (
+                          <button
+                            onClick={() => {
+                              handleDownloadClick(data);
+                            }}
+                            className="ml-2 items-center px-2 py-2 bg-green-700 hover:bg-green-800 text-white text-xs font-medium rounded-md"
+                          >
+                            Тайлан
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>

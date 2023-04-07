@@ -511,36 +511,31 @@ function TrainingRating() {
                       ) : null}
                     </td>
                     <td className="px-5 py-3 text-sm  border-b ">
-                      {moment(today).format(format) >=
-                      moment(data.expireDate).format(format) ? (
-                        <div className="flex items-center">
-                          <a
-                            className="text-blue-600 hover:text-black mx-2 text-lg"
-                            onClick={() => {
-                              navigateChoosedTRate(data);
-                            }}
-                          >
-                            <i className="bi bi-question-circle-fill"></i>
-                          </a>
-
-                          <a
-                            className="text-yellow-600 hover:text-black mx-2 text-lg"
-                            onClick={() => {
-                              handleEdit(data);
-                            }}
-                          >
-                            <i className="bi bi-pencil-square"></i>
-                          </a>
-                          <a
-                            onClick={() => {
-                              showModalDelete(data);
-                            }}
-                            className="text-rose-400 hover:text-black ml-2 text-lg"
-                          >
-                            <i className="bi bi-trash-fill"></i>
-                          </a>
-                        </div>
-                      ) : (
+                      <div className="flex items-center">
+                        <a
+                          className="text-blue-600 hover:text-black mx-2 text-lg"
+                          onClick={() => {
+                            navigateChoosedTRate(data);
+                          }}
+                        >
+                          <i className="bi bi-question-circle-fill"></i>
+                        </a>
+                        <a
+                          className="text-yellow-600 hover:text-black mx-2 text-lg"
+                          onClick={() => {
+                            handleEdit(data);
+                          }}
+                        >
+                          <i className="bi bi-pencil-square"></i>
+                        </a>
+                        <a
+                          onClick={() => {
+                            showModalDelete(data);
+                          }}
+                          className="text-rose-400 hover:text-black ml-2 text-lg"
+                        >
+                          <i className="bi bi-trash-fill"></i>
+                        </a>
                         <button
                           onClick={() => {
                             handleDownloadClick(data);
@@ -549,7 +544,7 @@ function TrainingRating() {
                         >
                           Тайлан татах
                         </button>
-                      )}
+                      </div>
                     </td>
                   </tr>
                 ))}

@@ -6,6 +6,7 @@ import bg from "../../../assets/bg.jpg";
 import SelectCategoryCell from "../TemplateRelated/SelectCategoryCell";
 import Loading from "../../../components/Loading";
 import { toast, ToastContainer } from "react-toastify";
+import RatingExtra from "./RatingExtra";
 function RatingModal({
   setShowModal,
   ratingId,
@@ -20,6 +21,7 @@ function RatingModal({
   const [data, setData] = useState();
   const [categoryList, setCategoryList] = useState();
   const [recall, setRecall] = useState(false);
+  const [ratingScore, setRatingScore] = useState(0);
   useEffect(() => {
     axios({
       method: "get",
@@ -61,14 +63,54 @@ function RatingModal({
     raw.push(temp);
   }
   const [children, setChildren] = useState([]);
+  const extras = [];
+  for (let index = 0; index < data?.inputs.length; index++) {
+    const element = data?.inputs[index];
+    extras.push({
+      inputId: element.inputId,
+      inputValue: element.inputValue,
+    });
+  }
+  const [finalExtra, setFinalExtra] = useState([]);
 
+  const handleExtras = (value, idOfObjects) => {
+    let modified =
+      finalExtra.length > 0
+        ? finalExtra.map((item, indexP) => {
+            return item.inputId == idOfObjects
+              ? { ...item, inputValue: value }
+              : item;
+          })
+        : extras.map((item, indexP) => {
+            return item.inputId == idOfObjects
+              ? { ...item, inputValue: value }
+              : item;
+          });
+    setFinalExtra(modified);
+  };
+  const handleExtraDate = (value, idOfItem) => {
+    let modified =
+      finalExtra.length > 0
+        ? finalExtra.map((item, indexP) => {
+            return item.inputId == idOfItem
+              ? { ...item, inputValue: value }
+              : item;
+          })
+        : extras.map((item, indexP) => {
+            return item.inputId == idOfItem
+              ? { ...item, inputValue: value }
+              : item;
+          });
+    setFinalExtra(modified);
+  };
+  // console.log(extras);
+  console.log(finalExtra);
   const final = {
     ratingId: ratingId,
     deviceId: deviceId,
     categoryList: children,
-    inputs: [],
+    inputs: finalExtra.length > 0 ? finalExtra : extras,
   };
-  // console.log(children);
   const handleSubmit = () => {
     // console.log(final);
     axios({
@@ -116,6 +158,7 @@ function RatingModal({
     });
     setChildren(temp);
   };
+  // console.log(children);
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
   // console.log(data.conversationId);
@@ -157,6 +200,34 @@ function RatingModal({
   const handleTotal = (value) => {
     setSum((prev) => [...prev, value]);
   };
+  const [finalScore, setFinalScore] = useState(0);
+  const [arr, setArr] = useState([]);
+  const collectCatScore = (value, categoryId) => {
+    const tempo = {
+      categoryId: categoryId,
+      point: value,
+    };
+    setArr((prev) => [...prev, tempo]);
+    // arrS.push(tempo);
+  };
+  useEffect(() => {
+    let copy = arr;
+    const uniquePoints = Object.values(
+      copy.reduce((result, item, index) => {
+        if (!result[item.categoryId] || result[item.categoryId].index < index) {
+          result[item.categoryId] = { point: item.point, index };
+        }
+        return result;
+      }, {})
+    );
+
+    const sumPoints = uniquePoints.reduce((sum, item) => sum + item.point, 0);
+    const avgPoints = sumPoints / uniquePoints.length;
+    const rounded = Math.round(avgPoints);
+    setFinalScore(rounded);
+  }, [arr]);
+
+  // console.log(categoryList.length);
   return (
     <div
       className={`fixed ${
@@ -188,13 +259,13 @@ function RatingModal({
             <div className="flex flex-col h-full items-start justify-end ml-2 border-l pl-3">
               <span className="mb-[1px]">
                 <i className="font-[500] text-[13px] text-white m-0">
-                  Дундаж оноо : {100}%
+                  Дундаж оноо : {finalScore}%
                 </i>
               </span>{" "}
             </div>
           </div>
           <div className="flex h-full flex gap-5  py-[6px]">
-            {children.length > 0 && (
+            {children.length > 0 ? (
               <button
                 onClick={() => {
                   handleSubmit();
@@ -204,7 +275,17 @@ function RatingModal({
               >
                 Хадгалах
               </button>
-            )}
+            ) : finalExtra.length > 0 ? (
+              <button
+                onClick={() => {
+                  handleSubmit();
+                }}
+                className=" custom-btn
+             btn-20 active:mt-[2px]"
+              >
+                Хадгалах
+              </button>
+            ) : null}
 
             <button
               onClick={() => {
@@ -217,6 +298,27 @@ function RatingModal({
           </div>
         </div>
         <div className="w-full h-full flex items-center flex-col overflow-scroll justify-center">
+          <div className="w-full h-[56px]">1</div>
+          {data?.inputs?.length > 0 && (
+            <div className="w-[900px] px-3 pt-5 !mt-[150px]">
+              <div className="flex w-full flex-wrap items-center ">
+                {data?.inputs.map((item, index) => {
+                  return (
+                    <RatingExtra
+                      key={index}
+                      item={item}
+                      index={index}
+                      setTrigger={setTrigger}
+                      trigger={trigger}
+                      handleExtras={handleExtras}
+                      handleExtraDate={handleExtraDate}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           <div className="w-[900px] px-3 pt-5 h-full">
             {categoryList?.map((category, index) => {
               return (
@@ -226,6 +328,8 @@ function RatingModal({
                   index={index}
                   handleSelect={handleSelect}
                   handleTotal={handleTotal}
+                  children={children}
+                  collectCatScore={collectCatScore}
                 />
               );
             })}

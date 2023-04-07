@@ -10,11 +10,22 @@ function CreateRatingModal({ setShowModal, trigger, setTrigger }) {
   const [showTemplates, setShowTemplates] = useState(false);
   const [collected, setCollected] = useState([]);
   const [ratingName, setRatingName] = useState("");
+  // extra input
+  const [jobId, setJobId] = useState("");
+  const [year, setYear] = useState("");
+  const [quarter, setQuarter] = useState("");
+  const [month, setMonth] = useState("");
   const data = {
     ratingName: ratingName,
     templateId: collected[0],
     devices: allEmployee,
+    jobId: jobId,
+    year: year,
+    quarter: quarter,
+    month: month,
   };
+  // console.log(data);
+
   const getEmployees = (employees) => {
     let arr = [];
     for (let index = 0; index < employees.length; index++) {
@@ -39,6 +50,7 @@ function CreateRatingModal({ setShowModal, trigger, setTrigger }) {
       data: data,
     })
       .then((res) => {
+        // console.log(res.data);
         if (res.data.isSuccess === false) {
           alert(res.data.resultMessage);
         }
@@ -73,9 +85,14 @@ function CreateRatingModal({ setShowModal, trigger, setTrigger }) {
           setShowTemplates={setShowTemplates}
         />
       )}
-      <div className="shrink w-[calc(70%)] h-[calc(70%)] bg-white flex flex-col items-center rounded">
+      <div className="shrink w-[calc(70%)] h-[calc(50%)] bg-white flex flex-col items-center rounded">
         <div className="w-full min-h-[50px] bg-teal-600 flex justify-between items-center px-3  gap-2 relative rounded-t">
           {collected !== [] &&
+          jobId !== "" &&
+          month !== "" &&
+          quarter !== "" &&
+          year !== "" &&
+          collected[0] !== undefined &&
           allEmployee !== undefined &&
           ratingName !== "" ? (
             <button
@@ -99,36 +116,8 @@ function CreateRatingModal({ setShowModal, trigger, setTrigger }) {
           </button>
         </div>
         <div className="h-full w-full rounded-b">
-          <div className="h-20 w-full flex items-center px-3 gap-2">
-            <button
-              onClick={() => {
-                setShowUsers(!showUsers);
-              }}
-              className={`custom-btn w-full text-[13px] ${
-                allEmployee?.length > 0 ? "bg-teal-500" : "bg-gray-500"
-              } `}
-            >
-              {allEmployee?.length > 0 && (
-                <i className="bi bi-check-circle text-white text-md mr-2"></i>
-              )}
-              Ажилтан сонгох
-            </button>
-            <button
-              onClick={() => {
-                setShowTemplates(!showTemplates);
-              }}
-              className={`custom-btn w-full text-[13px] ${
-                collected.length > 0 ? "bg-teal-500" : "bg-gray-500"
-              }  `}
-            >
-              {collected.length > 0 && (
-                <i className="bi bi-check-circle text-white text-md mr-2"></i>
-              )}
-              Загвар сонгох
-            </button>
-          </div>
-          <div className=" p-3">
-            <div className="group w-1/2">
+          <div className=" px-4 pt-3 mt-3">
+            <div className="group w-full">
               <input
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -148,6 +137,103 @@ function CreateRatingModal({ setShowModal, trigger, setTrigger }) {
                 <i className="bi bi-vector-pen"></i> Үнэлгээний нэр
               </label>
             </div>
+          </div>
+          <div className=" w-full flex items-center px-3 gap-2 flex-wrap">
+            <button
+              onClick={() => {
+                setShowUsers(!showUsers);
+              }}
+              className={`text-[14px] font-[500] text-white rounded w-[calc(49.4%)] h-10 text-[13px] ${
+                allEmployee?.length > 0 ? "bg-teal-500" : "bg-[#5CA2A1]"
+              } `}
+            >
+              {allEmployee?.length > 0 && (
+                <i className="bi bi-check-circle text-white text-md mr-2"></i>
+              )}
+              Ажилтан сонгох
+            </button>
+            <button
+              onClick={() => {
+                setShowTemplates(!showTemplates);
+              }}
+              className={`text-[14px] font-[500] text-white rounded w-[calc(49.4%)] h-10 text-[13px] ${
+                collected.length > 0 ? "bg-teal-500" : "bg-[#5CA2A1]"
+              }  `}
+            >
+              {collected.length > 0 && (
+                <i className="bi bi-check-circle text-white text-md mr-2"></i>
+              )}
+              Загвар сонгох
+            </button>
+
+            <select
+              onChange={(e) => {
+                setJobId(e.target.value);
+              }}
+              name=""
+              id=""
+              className="text-center w-full h-10 text-[14px] font-[500]"
+            >
+              <option value="0">Ажлын байр</option>
+              <option value="1">Level 1 Operator</option>
+              <option value="3">Level 2 Care</option>
+              <option value="4">Level 2 Complain</option>
+              <option value="5">Level 2 Online</option>
+              <option value="7">Level 2 Bank</option>
+              <option value="13">Branch staff</option>
+              <option value="16">Order operator</option>
+              <option value="20">Telesales operator</option>
+            </select>
+            <select
+              onChange={(e) => {
+                setYear(e.target.value);
+              }}
+              name=""
+              id=""
+              className="text-center w-full h-10 text-[14px] font-[500]"
+            >
+              <option value="0">Жил</option>
+              <option value="2022">2022</option>
+              <option value="2023">2023</option>
+              <option value="2024">2024</option>
+              <option value="2025">2025</option>
+            </select>
+            <select
+              onChange={(e) => {
+                setQuarter(e.target.value);
+              }}
+              name=""
+              id=""
+              className="text-center w-full h-10 text-[14px] font-[500]"
+            >
+              <option value="0">Улирал</option>
+              <option value="1р улирал">1-р улирал</option>
+              <option value="2р улирал">2-р улирал</option>
+              <option value="3р улирал">3-р улирал</option>
+              <option value="4р улирал">4-р улирал</option>
+            </select>
+            <select
+              onChange={(e) => {
+                setMonth(e.target.value);
+              }}
+              name=""
+              id=""
+              className="text-center w-full h-10 text-[14px] font-[500]"
+            >
+              <option value="0">Сар</option>
+              <option value="1-р сар">1-р сар</option>
+              <option value="2-р сар">2-р сар</option>
+              <option value="3-р сар">3-р сар</option>
+              <option value="4-р сар">4-р сар</option>
+              <option value="5-р сар">5-р сар</option>
+              <option value="6-р сар">6-р сар</option>
+              <option value="7-р сар">7-р сар</option>
+              <option value="8-р сар">8-р сар</option>
+              <option value="9-р сар">9-р сар</option>
+              <option value="10-р сар">10-р сар</option>
+              <option value="11-р сар">11-р сар</option>
+              <option value="12-р сар">12-р сар</option>
+            </select>
           </div>
         </div>
       </div>

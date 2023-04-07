@@ -1,12 +1,6 @@
 import { useState } from "react";
 
-function SelectSubCategoryCell({
-  i,
-  element,
-  handleSelect,
-  catIndex,
-  collector,
-}) {
+function SelectSubCategoryCell({ i, element, handleSelect, catIndex }) {
   const container = [
     {
       value: 0,
@@ -60,7 +54,6 @@ function SelectSubCategoryCell({
                 e.target.value,
                 comment
               );
-              collector(e.target.value, element.subCategoryId);
             }}
             value={pointValue}
             className="w-[80px] "

@@ -20,7 +20,7 @@ function Rating() {
   return (
     <RatingLayout>
       <div className="w-full h-[calc(100vh-56px)] flex flex-col bg-gray-50">
-        <div className="w-full min-h-[56px] px-3 flex gap-4 items-center justify-start bg-teal-500 shadow-lg ">
+        <div className="w-full min-h-[56px] flex items-center justify-start bg-teal-500 shadow-lg ">
           {header.map((item, index) => {
             return (
               <button
@@ -29,11 +29,13 @@ function Rating() {
                   setStats(item.stats);
                 }}
                 className={`${
-                  stats == item.stats ? "!bg-teal-900" : ""
-                } bg-teal-700 hover:bg-teal-800 text-white text-[14px] rounded py-2 w-[120px] `}
+                  stats == item.stats ? "!bg-teal-600" : ""
+                } bg-teal-500 shadow hover:bg-teal-600 h-full text-white text-[14px] py-2 w-[120px] `}
               >
                 <i className={`bi ${item.icon} mr-1`}></i>
-                <span className="font-[500]">{item.title}</span>
+                <span className="font-[500] uppercase text-[13px]">
+                  {item.title}
+                </span>
               </button>
             );
           })}

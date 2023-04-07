@@ -1,15 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { logout } from "../../../service/examService";
+import DatePicker from "react-datepicker";
 import DeleteConfirm from "../../main-exam/modal/DeleteComfirm";
 import { useStateContext } from "../../../contexts/ContextProvider";
-import Loading from "../../../components/Loading";
-function ExtraInput({ item, index, trigger, setTrigger, id }) {
+function RatingExtra({
+  item,
+  index,
+  trigger,
+  setTrigger,
+  handleExtras,
+  handleExtraDate,
+}) {
   const { TOKEN } = useStateContext();
   const [input, setInput] = useState(item.inputName);
+  const [inputValue, setInputValue] = useState(item.inputValue);
   const [value, setValue] = useState(new Date());
   const [confirm, setConfirm] = useState(false);
-  const [loading, setLoading] = useState(false);
   function addZero(i) {
     if (i < 10) {
       i = "0" + i;
@@ -24,74 +31,50 @@ function ExtraInput({ item, index, trigger, setTrigger, id }) {
     addZero(value.getHours()) +
     addZero(value.getMinutes()) +
     addZero(value.getSeconds());
-  const handleDelete = () => {
-    setLoading(true);
-    axios({
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${TOKEN}`,
-      },
-      url: `${process.env.REACT_APP_URL}/v1/RatingTemplateNew/deleteInputFromTemplate/${id}/${item.inputId}`,
-    })
-      .then((res) => {
-        if (res.data.errorCode === 401) {
-          logout();
-        } else {
-          setTrigger(!trigger);
-          setLoading(false);
-        }
-      })
-      .catch((err) => console.log(err));
-  };
+  const handleDelete = () => {};
   // console.log(item);
+  useEffect(() => {
+    handleExtraDate(datestring, item.inputId);
+  }, [value]);
   return (
     <div className={`w-[calc(49.5%)] bg-white rounded mb-1 mr-1 z-1`}>
       {confirm && (
         <DeleteConfirm setConfirm={setConfirm} deleteCat={handleDelete} />
       )}
-      {loading && <Loading />}
       {item.inputType == 1 ? (
         <div className="flex h-12 px-3 py-2 gap-2">
           <input
             className="bg-gray-100 h-full px-3 py-2 rounded w-full !placeholder-gray-500 text-[14px]"
             type="text"
+            value={inputValue}
             placeholder={`${input}`}
             onChange={(e) => {
               setInput(e.target.value);
+              setInputValue(e.target.value);
+              handleExtras(e.target.value, item.inputId);
             }}
-            disabled
           />
           <div className="h-full w-[50px] bg-gray-200 rounded flex items-center justify-center">
             <i className="bi bi-vector-pen text-lg text-teal-600"></i>
           </div>
-          <div
-            onClick={() => {
-              setConfirm(true);
-            }}
-            className="h-full w-[50px] bg-gray-200 rounded flex items-center justify-center parent"
-          >
-            <i className="bi bi-trash text-lg text-rose-600 hidden child cursor-pointer"></i>
-          </div>
         </div>
       ) : (
         <div className="h-12 px-3 py-2 flex gap-2 w-full">
-          <div
-            className="h-full w-full px-2 select-none flex items-center rounded bg-gray-200 text-[14px] 
-          truncate font-[400]"
-          >
-            {input}
+          <div className="h-full w-full select-none ">
+            <DatePicker
+              selected={value}
+              value={value}
+              onChange={(date) => setValue(date)}
+              className="form-control form-control-sm cursor-pointer"
+              showTimeSelect
+              timeFormat="HH:mm"
+              timeIntervals={15}
+              timeCaption="time"
+              dateFormat="yyyy-MM-dd h:mm aa"
+            />
           </div>
           <div className="h-full w-[50px] bg-gray-200 rounded flex items-center justify-center">
             <i className="bi bi-calendar-check-fill text-lg text-teal-600"></i>
-          </div>
-          <div
-            onClick={() => {
-              setConfirm(true);
-            }}
-            className="h-full w-[50px] bg-gray-200 rounded flex items-center justify-center parent"
-          >
-            <i className="bi bi-trash text-lg text-rose-600 hidden child cursor-pointer"></i>
           </div>
         </div>
       )}
@@ -99,4 +82,4 @@ function ExtraInput({ item, index, trigger, setTrigger, id }) {
   );
 }
 
-export default ExtraInput;
+export default RatingExtra;

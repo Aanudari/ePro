@@ -7,12 +7,14 @@ import bg from "../../../assets/bg3.jpg";
 import TemplateCategoryCell from "../TemplateRelated/TemplateCategoryCell";
 import RatingAddExtra from "./RatingAddExtra";
 import ExtraInput from "./ExtraInput";
+import Loading from "../../../components/Loading";
 function TemplateModal({ setShow, id, categoryName }) {
   const { activeMenu, TOKEN } = useStateContext();
   const [data, setData] = useState();
   const [trigger, setTrigger] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
+    setLoading(true);
     axios({
       method: "get",
       headers: {
@@ -26,6 +28,7 @@ function TemplateModal({ setShow, id, categoryName }) {
           logout();
         } else {
           setData(res.data);
+          setLoading(false);
         }
       })
       .catch((err) => console.log(err));
@@ -42,6 +45,7 @@ function TemplateModal({ setShow, id, categoryName }) {
         bg-black h-[calc(100%-56px)] top-[56px] bg-opacity-50 flex justify-center items-center z-20
         `}
       >
+        {loading && <Loading />}
         {showModal && (
           <RatingCategoryAdd
             id={id}
@@ -114,11 +118,12 @@ function TemplateModal({ setShow, id, categoryName }) {
                 {data?.inputs.map((item, index) => {
                   return (
                     <ExtraInput
-                      key={index}
+                      key={JSON.stringify(item) + index}
                       item={item}
                       index={index}
                       setTrigger={setTrigger}
                       trigger={trigger}
+                      id={id}
                     />
                   );
                 })}

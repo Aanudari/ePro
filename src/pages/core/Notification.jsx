@@ -60,6 +60,7 @@ function Notification() {
             </span>
           </div>
           {/* Notification Cell */}
+
           {pageStatus === "1" ? (
             <div className="mt-2 flex flex-col gap-2 relative">
               <NotiCell />

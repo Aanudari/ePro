@@ -1,18 +1,7 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { logout } from "../../../service/examService";
 import DatePicker from "react-datepicker";
 import DeleteConfirm from "../../main-exam/modal/DeleteComfirm";
-import { useStateContext } from "../../../contexts/ContextProvider";
-function RatingExtra({
-  item,
-  index,
-  trigger,
-  setTrigger,
-  handleExtras,
-  handleExtraDate,
-}) {
-  const { TOKEN } = useStateContext();
+function RatingExtra({ item, handleExtras, handleExtraDate }) {
   const [input, setInput] = useState(item.inputName);
   const [inputValue, setInputValue] = useState(item.inputValue);
   const [value, setValue] = useState(new Date());

@@ -5,9 +5,7 @@ import axios from "axios";
 import { useStateContext } from "../../../contexts/ContextProvider";
 import { logout } from "../../../service/examService";
 import UserRatingCategory from "./Cells/UserRatingCategory";
-import useWindowDimensions from "../../../components/SizeDetector";
 import Modal from "react-bootstrap/Modal";
-import ModalSuccess from "./modal/ModalSuccess";
 import { toast, ToastContainer } from "react-toastify";
 
 function RatingUserShow() {
@@ -18,7 +16,6 @@ function RatingUserShow() {
   const ratedBy = location?.state?.ratedBy;
   const conversationId = location?.state?.conversationId;
   const { TOKEN } = useStateContext();
-  const { width } = useWindowDimensions();
   const [categories, setCategories] = useState();
   const [trigger, setTrigger] = useState(false);
   const [show, setShow] = useState(false);
@@ -35,9 +32,7 @@ function RatingUserShow() {
       .then((res) => {
         setMain(res.data);
         if (res.data.isSuccess == true) {
-          // console.log(res.data);
           setCategories(res.data.categoryList);
-          //   console.log(res.data);
         }
         if (res.data.resultMessage === "Unauthorized") {
           logout();
@@ -45,32 +40,26 @@ function RatingUserShow() {
       })
       .catch((err) => console.log(err));
   }, [reload]);
-  //   console.log(categories);
   const [chatWindow, setchatWindow] = useState(false);
   const [comments, setComments] = useState();
   const [modalImg, setModalImg] = useState();
-  //   console.log(categories);
   useEffect(() => {
-    setTimeout(() => {
-      axios({
-        method: "get",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${TOKEN}`,
-        },
-        url: `${process.env.REACT_APP_URL}/v1/RatingNew/GetComments/${conversationId}`,
+    axios({
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/RatingNew/GetComments/${conversationId}`,
+    })
+      .then((res) => {
+        if (res.data.errorCode == 401) {
+          logout();
+        } else {
+          setComments(res.data.commentList);
+        }
       })
-        .then((res) => {
-          setTrigger(!trigger);
-          if (res.data.errorCode == 401) {
-            logout();
-          } else {
-            setComments(res.data.commentList);
-          }
-          // console.log(res.data);
-        })
-        .catch((err) => console.log(err));
-    }, 5000);
+      .catch((err) => console.log(err));
   }, [trigger]);
   useEffect(() => {
     const scrollable = scrollableRef.current;
@@ -78,14 +67,7 @@ function RatingUserShow() {
       scrollable.scrollTop = scrollable.scrollHeight;
     }
   });
-  const [success, setSuccess] = useState(false);
   const [value, setValue] = useState("");
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setSuccess(false);
-    }, 3000);
-    return () => clearTimeout(timer);
-  }, [success]);
   const submitComment = () => {
     axios({
       method: "post",
@@ -98,38 +80,9 @@ function RatingUserShow() {
       // data: images,
     })
       .then((res) => {
-        // console.log(images[0]);
-        // console.log(res.data);
         setTrigger(!trigger);
         setValue("");
         // setImages([]);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const handleAgreement = () => {
-    axios({
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: TOKEN,
-        accept: "text/plain",
-      },
-      url: `${process.env.REACT_APP_URL}/v1/RatingNew/confirmRating/${conversationId}`,
-      // data: images,
-    })
-      .then((res) => {
-        setReload(!reload);
-        // console.log(res.data);
-        if (res.data.isSuccess == true) {
-          setSuccess(true);
-        } else {
-          toast.info(JSON.stringify(res.data.resultMessage), {
-            position: "bottom-right",
-          });
-        }
       })
       .catch((err) => {
         console.log(err);
@@ -143,15 +96,11 @@ function RatingUserShow() {
           <div className="bg-[#ecf0f3] rounded-[20px] p-4 mt-4 shadow-md">
             <div className="flex justify-between">
               <div className="mt-2 w-full flex">
-                <h6>Статус: </h6>
+                <h6 className="mb-0 mt-[2px] ">Үнэлгээ: </h6>
                 {main?.userStatus === "N" ? (
                   <div className="w-full">
-                    <span className="mb-0 ml-1 md:ml-2 text-sm font-[500] px-3 py-2 bg-white rounded">
-                      Батлаагүй
-                    </span>
-                    <span className="ml-2 text-[13px] font-[500]">
-                      Та дэлгэцийн доор байрлах "Үнэлгээ зөвшөөрөх" товчийг дарж
-                      үнэлгээгээ баталгаажуулна уу.
+                    <span className="mb-0 ml-1 md:ml-2 text-sm font-[500] px-3 py-2 bg-white rounded mb-0">
+                      {main.totalUserScore}%
                     </span>
                   </div>
                 ) : (
@@ -199,8 +148,6 @@ function RatingUserShow() {
               <div className="absolute shadow  bottom-0 right-0 border-white border-[2px] bg-green-600 rounded-full w-4 h-4 md:w-5 md:h-5"></div>
             </div>
           )}
-          {success && <ModalSuccess />}
-
           {chatWindow && (
             <div className="w-full md:w-[300px] fixed bottom-0 right-0 md:right-10 shadow h-[360px] rounded-t bg-white">
               <div className="h-14 bg-blue-700 rounded-t shadow w-full flex justify-between items-center px-3">
@@ -220,7 +167,6 @@ function RatingUserShow() {
                 ref={scrollableRef}
               >
                 {comments?.map((comment, index) => {
-                  // console.log(comment);
                   return (
                     <div
                       key={index}
@@ -291,18 +237,14 @@ function RatingUserShow() {
 export default RatingUserShow;
 
 function ImageModal(props) {
-  const { activeMenu } = useStateContext();
   return (
     <Modal
       {...props}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
-      // style={{minHeight: "400px"}}
     >
-      {/* <Modal.Body style={{ background: "none" }}> */}
       <img src={`http://${props.img}`} alt="" />
-      {/* </Modal.Body> */}
     </Modal>
   );
 }

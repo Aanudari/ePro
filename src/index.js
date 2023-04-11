@@ -7,6 +7,7 @@ import "./styles/table.scss";
 import "./styles/button.scss";
 import "./styles/userui.scss";
 import "./styles/usermain.scss";
+import "./styles/folder.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ContextProvider } from "./contexts/ContextProvider";
 import ContextWrapper from "./contexts/ContextWrapper";

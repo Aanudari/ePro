@@ -64,7 +64,7 @@ function ExcelSearchModal({ setShowSearch, trigger, setTrigger }) {
       });
   };
   const [selectType, setSelectType] = useState("0");
-  console.log(allEmployee);
+  // console.log(allEmployee);
   return (
     <div
       className={`fixed ${

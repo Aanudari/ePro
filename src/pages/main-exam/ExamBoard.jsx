@@ -90,7 +90,7 @@ function ExamBoard({
         />
       )}
       <div className="flex">
-        <div className="flex w-full mb-2">
+        <div className="flex w-full mb-2 select-none">
           <div
             onClick={() => {
               setDetector(0);

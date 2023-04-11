@@ -206,7 +206,6 @@ function RatingModal({
       },
     })
       .then((res) => {
-        console.log(res.data);
         setLoading(false);
         if (res.data.isSuccess == false) {
           toast.error(res.data.resultMessage, {

@@ -6,7 +6,7 @@ import axios from "axios";
 import { useStateContext } from "../../../contexts/ContextProvider";
 import DeleteConfirm from "../../main-exam/modal/DeleteComfirm";
 import TemplateModal from "../modal/TemplateModal";
-import bg from "../../../assets/bg3.jpg";
+import bg from "../../../assets/bg.jpg";
 import Loading from "../../../components/Loading";
 
 function Template() {

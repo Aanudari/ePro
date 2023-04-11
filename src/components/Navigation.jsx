@@ -57,8 +57,8 @@ function Navigation() {
       <div
         className={
           activeMenu
-            ? "h-14 transition w-full md:w-[calc(100%-250px)] bg-gray-700 fixed top-0 flex justify-between md:px-4 shadow-sm"
-            : " shadow-sm h-14 bg-gray-700 fixed top-0 flex w-full justify-between md:px-4"
+            ? "h-14 transition w-full md:w-[calc(100%-250px)] bg-gray-800 fixed top-0 flex justify-between md:px-4 shadow-sm"
+            : " shadow-sm h-14 bg-gray-800 fixed top-0 flex w-full justify-between md:px-4"
         }
       >
         <div className="flex items-center md:gap-4">
@@ -113,11 +113,10 @@ function Navigation() {
               />
             </form>
           </div>
-          {showCount && <Countdown count={count} setCount={setCount} />}
         </div>
         <div className="w-[260px] flex justify-center rounded-md cursor-pointer m-2 call-call">
           {/* Notification */}
-
+          {/* 
           <button
             onClick={() => {
               navigate("/notification");
@@ -126,7 +125,7 @@ function Navigation() {
             className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
           >
             <i className="bi bi-bell text-white"></i>
-          </button>
+          </button> */}
           <Menu as="div" className="relative ml-3 h-full">
             <div className="h-full w-full">
               <Menu.Button className="flex h-full rounded-full !bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">

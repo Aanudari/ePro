@@ -83,7 +83,7 @@ function RatingBoard({ showModal, setShowModal, data, setTrigger, trigger }) {
                             setQuarterName(quarter.quarter);
                           }}
                           key={ind}
-                          className={`body-folder2  active:border`}
+                          className={`body-folder2`}
                         >
                           <div className="folder2">
                             <div className="paper one"></div>

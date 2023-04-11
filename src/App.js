@@ -60,6 +60,7 @@ import RatingUser from "./pages/UserMainUI/Rating/RatingUser";
 import UserHome from "./pages/UserMainUI/UserHome";
 import RatingUserShow from "./pages/UserMainUI/Rating/RatingUserShow";
 import useWindowDimensions from "./components/SizeDetector";
+import Test from "./pages/test";
 function App() {
   const { activeMenu, showTop, roleId, TOKEN } = useStateContext();
   const { width } = getWindowDimensions();
@@ -392,6 +393,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[199, , 1, 4, 188]}>
                 <RatingUserShow />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/test"
+            element={
+              <ProtectedRoute allowedRoles={[199, , 1, 4, 188]}>
+                <Test />
               </ProtectedRoute>
             }
           />

@@ -7,6 +7,7 @@ import { logout } from "../../../service/examService";
 import RatingSearchModal from "../modal/RatingSearchModal";
 import bg from "../../../assets/bg.jpg";
 import Loading from "../../../components/Loading";
+import ExcelSearchModal from "../modal/ExcelSearchModal";
 function RatingMain() {
   const [showModal, setShowModal] = useState(false);
   const { TOKEN } = useStateContext();
@@ -25,7 +26,7 @@ function RatingMain() {
     })
       .then((res) => {
         if (res.data.isSuccess === true) {
-          setData(res.data.ratings);
+          setData(res.data.ratingYear);
           setLoading(false);
         }
         if (res.data.resultMessage === "Unauthorized") {
@@ -54,7 +55,8 @@ function RatingMain() {
         setShowSearch={setShowSearch}
       />
       {showSearch && (
-        <RatingSearchModal data={data} setShowSearch={setShowSearch} />
+        // <ExcelSar  />
+        <ExcelSearchModal data={data} setShowSearch={setShowSearch} />
       )}
     </div>
   );

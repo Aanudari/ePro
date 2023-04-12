@@ -26,6 +26,7 @@ function RatingUser() {
       })
       .catch((err) => console.log(err));
   }, [trigger]);
+  console.log(data);
   return (
     <UserLayout>
       <main className="main">

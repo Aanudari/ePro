@@ -4,7 +4,13 @@ import axios from "axios";
 import { logout } from "../../../service/examService";
 import Accordion from "react-bootstrap/Accordion";
 
-function CertainEmployeeSelect({ setShow, getEmployees, setShowSelect }) {
+function CertainEmployeeSelect({
+  setShow,
+  getEmployees,
+  setShowSelect,
+  setEmployeeName,
+  employeeName,
+}) {
   const { activeMenu, TOKEN } = useStateContext();
   const [users, setUsers] = useState();
   useEffect(() => {
@@ -108,7 +114,7 @@ function CertainEmployeeSelect({ setShow, getEmployees, setShowSelect }) {
                 <button
                   onClick={() => {
                     setShowSelect(false);
-                    getEmployees(chosen);
+                    getEmployees(chosen, employeeName);
                   }}
                   className={"custom-btn btn-13"}
                 >
@@ -145,6 +151,9 @@ function CertainEmployeeSelect({ setShow, getEmployees, setShowSelect }) {
                             item.unitId,
                             item.deviceId,
                             ind
+                          );
+                          setEmployeeName(
+                            item.lastName[0] + ". " + item.firstName
                           );
                         }}
                         key={index}

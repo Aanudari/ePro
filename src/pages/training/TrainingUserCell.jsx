@@ -6,6 +6,7 @@ import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import { logout } from "../../service/examService";
 import moment from "moment";
+import TrainingProgressCell from "./TrainingProgressCell";
 function TrainingUserCell() {
   const location = useLocation();
   const { TOKEN, activeMenu } = useStateContext();
@@ -28,6 +29,8 @@ function TrainingUserCell() {
     });
     setFilteredList(filtered);
   };
+  const uzeegui = filteredList?.filter((item) => item.status === "Үзээгүй");
+  const uzsen = filteredList?.filter((item) => item.status === "Үзсэн");
   return (
     <div className="w-full min-h-[calc(100%-56px)]">
       <Navigation />
@@ -59,7 +62,29 @@ function TrainingUserCell() {
             </p>
           )}
         </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="flex flex-col rounded-lg border border-gray-100 px-2 py-2 text-center">
+            <div className="order-last text-sm font-medium text-gray-600">
+              Үзсэн
+            </div>
 
+            <div className="text-sm font-extrabold text-blue-600 md:text-sm">
+              <i className="bi bi-eye mr-1" />
+              {uzsen.length}
+            </div>
+          </div>
+
+          <div className="flex flex-col rounded-lg border border-gray-100 px-2 py-2 text-center">
+            <div className="order-last text-sm font-medium text-gray-600">
+              Үзээгүй
+            </div>
+
+            <div className="text-sm font-extrabold text-blue-600 md:text-sm">
+              <i className="bi bi-eye-slash mr-1" />
+              {uzeegui.length}
+            </div>
+          </div>
+        </div>
         <div className="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10">
           <div className="sm:flex items-center justify-between">
             <div className="flex items-center sm:justify-between sm:gap-4">

@@ -10,6 +10,7 @@ import { ToastContainer } from "react-toastify";
 import { logout } from "../../service/examService";
 import getWindowDimensions from "../../components/SizeDetector";
 import Pagination from "../../service/Pagination";
+import Dropdown from "react-bootstrap/Dropdown";
 
 function OnlineTraining() {
   const { width } = getWindowDimensions();
@@ -28,6 +29,8 @@ function OnlineTraining() {
   const [recordsPerPage] = useState(10);
   const nPages = Math.ceil(filteredList?.length / recordsPerPage);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [selectedYear, setSelectedYear] = useState("");
+  const [rates, setRates] = useState([]);
   const handlePrevSlide = () => {
     setCurrentSlide(currentSlide - 1);
   };
@@ -84,24 +87,42 @@ function OnlineTraining() {
       })
       .catch((err) => console.log(err));
   }, [trigger]);
+  useEffect(() => {
+    axios({
+      method: "get",
+      headers: {
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating`,
+    })
+      .then((res) => {
+        if (res.data.isSuccess === true) {
+          setRates(res.data.trRatingForm);
+        } else if (
+          res.data.resultMessage === "Unauthorized" ||
+          res.data.resultMessage === "Input string was not in a correct divat."
+        ) {
+          logout();
+        }
+      })
+      .catch((err) => console.log(err));
+  }, [trigger]);
   const today = new Date();
   const format = "YYYYMMDDHHmmss";
-  function secondsToHms(d) {
-    d = Number(d);
-
-    var h = Math.floor(d / 3600);
-    var m = Math.floor((d % 3600) / 60);
-    var s = Math.floor((d % 3600) % 60);
-
-    return (
-      ("0" + h).slice(-2) +
-      ":" +
-      ("0" + m).slice(-2) +
-      ":" +
-      ("0" + s).slice(-2)
-    );
-  }
-
+  const years = trains.map((item) => new Date(item.createdAt).getFullYear());
+  const uniqueYears = [...new Set(years)];
+  const filterByYear = (filteredData) => {
+    if (!selectedYear) {
+      return filteredData;
+    }
+    const filteredTrains = filteredData.filter((item) => {
+      if (selectedYear === new Date(item.createdAt).getFullYear()) {
+        return item;
+      }
+      // (item) => new Date(item.createdAt).getFullYear() === selectedYear
+    });
+    return filteredTrains;
+  };
   const showModalDelete = (e) => {
     setShowDelete(true);
     setId(e.id);
@@ -141,6 +162,9 @@ function OnlineTraining() {
       state: { data: data },
     });
   };
+  const handleYearChange = (y) => {
+    setSelectedYear(y);
+  };
   const handleEdit = (data) => {
     navigate("/edit-training", {
       state: { data: data },
@@ -172,6 +196,10 @@ function OnlineTraining() {
     var filteredData = filterByCategory(trains);
     setFilteredList(filteredData);
   }, [selectedCategory]);
+  useEffect(() => {
+    var filteredData = filterByYear(trains);
+    setFilteredList(filteredData);
+  }, [selectedYear]);
   const navigateCreate = () => {
     navigate("/create-training", {
       state: { item: "" },
@@ -221,6 +249,7 @@ function OnlineTraining() {
     }
     return Math.floor(seconds) + " секундын өмнө";
   }
+
   return (
     <div className="w-full min-h-[calc(100%-56px)] ">
       <div>
@@ -296,27 +325,51 @@ function OnlineTraining() {
             </button>
           </div>
         </div>
-        <div className="flex items-center justify-between">
-          <div className="text-center text-left">
-            <div className="relative">
-              <input
-                value={searchQuery}
-                onChange={handleSearch}
-                className="h-10 px-6 py-2  rounded-lg border-2 border-gray-400 outline-none focus:border-indigo-500  pr-10 text-sm placeholder-gray-400 focus:z-10"
-                placeholder="Сургалтын нэрээр хайх..."
-                type="text"
-              />
+        <div className="flex flex-col gap-2 sm:mt-0 sm:flex-row sm:items-center">
+          <div className="relative">
+            <input
+              value={searchQuery}
+              onChange={handleSearch}
+              className="h-10 px-6 py-2  rounded-lg border-2 border-gray-400 outline-none focus:border-indigo-500  pr-10 text-sm placeholder-gray-400 focus:z-10"
+              placeholder="Сургалтын нэрээр хайх..."
+              type="text"
+            />
 
-              <button
-                type="submit"
-                className="absolute inset-y-0 right-0 rounded-r-lg p-2 text-gray-600"
-              >
-                <i className="bi bi-search" />
-              </button>
-            </div>
+            <button
+              type="submit"
+              className="absolute inset-y-0 right-0 rounded-r-lg p-2 text-gray-600"
+            >
+              <i className="bi bi-search" />
+            </button>
           </div>
+          <Dropdown
+            alignstart="true"
+            className="d-inline mx-2"
+            autoClose="outside"
+          >
+            <Dropdown.Toggle variant="secondary" className="mt-2" size="sm">
+              Оноор ялгах
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item onClick={() => handleYearChange()} value="All">
+                <p className="block items-center font-bold rounded-lg text-sm text-gray-600 hover:border-gray-300 hover:text-blue-600">
+                  Бүгд
+                </p>
+              </Dropdown.Item>
+              {uniqueYears.map((year) => (
+                <Dropdown.Item
+                  onClick={() => handleYearChange(year)}
+                  key={year}
+                  value={year}
+                >
+                  <p className="block items-center font-bold rounded-lg text-sm text-gray-600 hover:border-gray-300 hover:text-blue-600">
+                    {year}
+                  </p>
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
-
         <div className="relative mt-4">
           <div className="overflow-hidden">
             <div
@@ -359,6 +412,11 @@ function OnlineTraining() {
           {filteredList?.map((data, index) => {
             const videoRef = createRef();
             videoRefs[index] = videoRef;
+
+            const filteredForm = rates?.filter(
+              (item) => item.trainingId === data.id
+            );
+
             return (
               <div key={index} className="flex cursor-pointer">
                 <video
@@ -368,89 +426,112 @@ function OnlineTraining() {
                     clickView(data);
                   }}
                 >
-                  <source
-                    src={`http://` + `${data.fileUrl}`}
-                    type="video/mp4"
-                  />
+                  <source src={`http://` + data.fileUrl} type="video/mp4" />
                 </video>
-                <div className="flex flex-col justify-center  p-1">
+                <div className="flex flex-col justify-center  p-2">
                   <p className="text-xs font-semibold text-gray-600">
                     {data.teacher} * {timeSince(new Date(data.createdAt))}
                   </p>
                   <p className="text-sm font-bold">{data.name}</p>
 
                   <div className="flex space-x-4 text-sm">
-                    <a className="flex items-start text-gray-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
+                    <p className="flex items-start text-gray-800 transition-colors duration-200  group">
                       <div className="mr-2">
                         <i className="bi bi-camera-video" />
                       </div>
                       <p className="font-semibold">
                         {formatDuration(data.duration)}
                       </p>
-                    </a>
-                    <a
-                      onClick={() => {
-                        navigateWatched(data);
-                      }}
-                      className="flex items-start text-gray-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group"
-                    >
-                      <div className="group  relative flex justify-center  mr-2">
-                        <i className="bi bi-eye" />
-                        <span className="absolute top-10 scale-0 transition-all rounded bg-gray-800 p-2 px-8 text-xs text-white group-hover:scale-100">
-                          ✨ Үзсэн.
-                        </span>
-                      </div>
-                      <p className="font-semibold">
-                        {
-                          data.trainingDevs.filter(
-                            (dev) => dev.status === "Үзсэн"
-                          ).length
-                        }
+                    </p>
+                    {moment(today).format(format) <
+                    moment(data.startDate).format(format) ? (
+                      <p className="flex items-start text-gray-500 ">
+                        <div className="mr-1">⌛</div>
+                        <p className="font-semibold">Pending...</p>
                       </p>
-                    </a>
+                    ) : (
+                      <div className="flex space-x-4 text-sm">
+                        <a
+                          onClick={() => {
+                            navigateWatched(data);
+                          }}
+                          className="flex items-start text-gray-800 transition-colors duration-200  group"
+                        >
+                          <div className="group  relative flex justify-center  mr-2">
+                            <i className="bi bi-eye" />
+                            <span className="absolute top-10 scale-0 transition-all rounded bg-gray-800 p-2 px-8 text-xs text-white group-hover:scale-100">
+                              ✨ Үзсэн.
+                            </span>
+                          </div>
+                          <p className="font-semibold">
+                            {
+                              data.trainingDevs.filter(
+                                (dev) => dev.status === "Үзсэн"
+                              ).length
+                            }
+                          </p>
+                        </a>
+                        <a
+                          onClick={() => {
+                            navigateWatched(data);
+                          }}
+                          className="flex items-start text-gray-800 transition-colors duration-200  group"
+                        >
+                          <div className="group  relative flex justify-center mr-2">
+                            <i className="bi bi-pause-circle-fill" />
+                            <span className="absolute top-10 scale-0 transition-all rounded bg-gray-800 p-2 px-8 text-xs text-white group-hover:scale-100">
+                              ✨ Үзэж байгаа.
+                            </span>
+                          </div>
+                          <p className="font-semibold">
+                            {
+                              data.trainingDevs.filter(
+                                (dev) => dev.status === "Үзэж байгаа"
+                              ).length
+                            }
+                          </p>
+                        </a>
+                        {moment(today).format(format) >=
+                          moment(data.startDate).format(format) &&
+                        moment(today).format(format) <=
+                          moment(data.endDate).format(format) ? (
+                          <p className="flex items-start text-green-800 ">
+                            <div className="mr-1">👀</div>
+                            <p className="font-semibold">Идэвхтэй</p>
+                          </p>
+                        ) : moment(today).format(format) >=
+                          moment(data.endDate).format(format) ? (
+                          <p className="flex items-start text-red-800 ">
+                            <div className="mr-1">⏰</div>
+                            <p className="font-semibold">Сургалт дууссан</p>
+                          </p>
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    )}
 
-                    <a
-                      onClick={() => {
-                        navigateWatched(data);
-                      }}
-                      className="flex items-start text-gray-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group"
-                    >
-                      <div className="group  relative flex justify-center mr-2">
-                        <i className="bi bi-pause-circle-fill" />
-                        <span className="absolute top-10 scale-0 transition-all rounded bg-gray-800 p-2 px-8 text-xs text-white group-hover:scale-100">
-                          ✨ Үзэж байгаа.
-                        </span>
-                      </div>
-                      <p className="font-semibold">
-                        {
-                          data.trainingDevs.filter(
-                            (dev) => dev.status === "Үзэж байгаа"
-                          ).length
+                    {filteredForm.length === 0 ? (
+                      <a
+                        onClick={() =>
+                          navigate("/training-rating", {
+                            state: { sTrain: data, item: "" },
+                          })
                         }
-                      </p>
-                    </a>
-                    {moment(today).format(format) >=
-                    moment(data.endDate).format(format) ? (
-                      <a className="flex items-start text-red-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
-                        <div className="mr-2">
-                          <i className="bi bi-calendar2-x" />
-                        </div>
-                        <p className="font-semibold">ИДЭВХГҮЙ</p>
+                        className="flex items-start text-red-600  "
+                      >
+                        <i className="bi bi-exclamation-lg" />
+                        <p className="font-semibold">Үнэлгээ үүсгэнэ үү.</p>
                       </a>
                     ) : (
-                      <a className="flex items-start text-green-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
-                        <div className="mr-2">
-                          <i className="bi bi-calendar-check" />
-                        </div>
-                        <p className="font-semibold">ИДЭВХТЭЙ</p>
-                      </a>
+                      ""
                     )}
                   </div>
                 </div>
               </div>
             );
           })}
-          {filteredList.length > 9 ? (
+          {/* {filteredList.length > 9 ? (
             <div className="mt-3">
               <Pagination
                 nPages={nPages}
@@ -460,7 +541,7 @@ function OnlineTraining() {
             </div>
           ) : (
             ""
-          )}
+          )} */}
         </div>
       </div>
 

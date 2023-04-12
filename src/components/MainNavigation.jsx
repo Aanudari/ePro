@@ -109,7 +109,7 @@ function MainNavigation() {
                 <span>Сургалт</span>
               </a>
               <ul>
-                <li>
+                <li className="relative cursor-pointer active:opacity-80 ">
                   <a
                     className="cursor-pointer select-none"
                     onClick={() => {
@@ -119,7 +119,7 @@ function MainNavigation() {
                     Онлайн сургалт
                   </a>
                 </li>
-                <li>
+                <li className="relative cursor-pointer active:opacity-80 ">
                   <a
                     className="cursor-pointer select-none"
                     onClick={() => {
@@ -129,7 +129,7 @@ function MainNavigation() {
                     Сургалтын хуваарь
                   </a>
                 </li>
-                <li>
+                <li className="relative cursor-pointer active:opacity-80">
                   <a
                     className="cursor-pointer select-none"
                     onClick={() => {
@@ -139,7 +139,7 @@ function MainNavigation() {
                     Сургалтын файлууд
                   </a>
                 </li>
-                <li>
+                <li className="relative cursor-pointer active:opacity-80 ">
                   <a
                     className="cursor-pointer select-none"
                     onClick={() => {
@@ -149,7 +149,7 @@ function MainNavigation() {
                     Сургалтын ангилал
                   </a>
                 </li>
-                <li>
+                <li className="relative cursor-pointer active:opacity-80 ">
                   <a
                     className="cursor-pointer select-none"
                     onClick={() => {

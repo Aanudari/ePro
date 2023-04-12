@@ -12,7 +12,7 @@ import getWindowDimensions from "../../components/SizeDetector";
 import Pagination from "../../service/Pagination";
 import Dropdown from "react-bootstrap/Dropdown";
 import * as XLSX from "xlsx";
-
+import moment from "moment";
 function ErrorThanks() {
   const { width } = getWindowDimensions();
   const { TOKEN } = useStateContext();
@@ -82,7 +82,6 @@ function ErrorThanks() {
   useEffect(() => {
     localStorage.setItem("activeTab", activeTab);
   }, [activeTab]);
-
   useEffect(() => {
     const filteredData = complain.filter(
       (item) => item.complain === activeTab.toString()
@@ -300,17 +299,56 @@ function ErrorThanks() {
       setSelectedIds([]);
     }
   };
+  function sheet_set_range_style(sheet, range, style) {
+    const rangeObj = XLSX.utils.decode_range(range);
+    for (let r = rangeObj.s.r; r <= rangeObj.e.r; r++) {
+      for (let c = rangeObj.s.c; c <= rangeObj.e.c; c++) {
+        const cell = sheet[XLSX.utils.encode_cell({ r, c })] || {};
+        cell.s = cell.s || {};
+        Object.assign(cell.s, style);
+      }
+    }
+  }
+  const today = new Date();
+  const format = "YYYYMMdivHHmmss";
+
   const handleDownloadClick = () => {
-    const worksheet = XLSX.utils.table_to_sheet(
-      document.getElementById("table")
-    );
+    const table = document.getElementById("table");
+
+    // Create worksheet from table
+    const worksheet = XLSX.utils.table_to_sheet(table);
+
+    // Hide columns by removing their cell data
+    sheet_set_range_style(worksheet, "A1:A999", { hidden: true });
+
+    // Auto-number rows
+    XLSX.utils.sheet_add_aoa(worksheet, [[""]], {
+      origin: -1,
+      startCol: 0,
+      endCol: 1,
+    }); // adds a blank row at the end of the table
+    XLSX.utils.sheet_add_aoa(
+      worksheet,
+      [
+        ["#"],
+        ...Array.from(table.rows)
+          .slice(1)
+          .map((row, index) => [index + 1]),
+      ],
+      { origin: 0, startCol: 0, endCol: 1 }
+    ); // adds the auto-numbering column at the beginning of the table
+
+    // Create workbook and download
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
     const fileBuffer = XLSX.write(workbook, {
       bookType: "xlsx",
       type: "array",
     });
-    const fileName = "filtered_data.xlsx";
+    const fileName =
+      `${complainInfo.find((item) => item.id === activeTab).category}` +
+      `${moment(today).format(format)}` +
+      `.xlsx`;
     const blob = new Blob([fileBuffer], { type: "application/octet-stream" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
@@ -320,6 +358,7 @@ function ErrorThanks() {
     link.click();
     document.body.removeChild(link);
   };
+
   const niitAldaa = filteredData?.filter((item) => {
     if (item.complain === activeTab) return item;
   });
@@ -941,7 +980,7 @@ function ErrorThanks() {
               </tbody>
             </table>
           </div>
-          {filteredData.length > 9 ? (
+          {/* {filteredData.length > 9 ? (
             <div className="mt-3">
               <Pagination
                 nPages={nPages}
@@ -951,7 +990,7 @@ function ErrorThanks() {
             </div>
           ) : (
             ""
-          )}
+          )} */}
         </div>
       </div>
       <ToastContainer />

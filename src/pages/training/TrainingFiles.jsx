@@ -20,9 +20,10 @@ function TrainingFiles() {
   const hideModalCreate = () => setShowCreate(null);
   const [showDelete, setShowDelete] = useState(null);
   const hideModalDelete = () => setShowDelete(null);
-  const [filteredList, setFilteredList] = useState(files);
+  const [filteredList, setFilteredList] = useState([]);
   const [trigger, setTrigger] = useState(false);
   const [id, setId] = useState();
+  const [selectedIds, setSelectedIds] = useState([]);
   useEffect(() => {
     axios({
       method: "get",
@@ -35,6 +36,7 @@ function TrainingFiles() {
         if (res.data.isSuccess === false) {
         } else if (res.data.isSuccess === true) {
           setFiles(res.data.fileNames);
+          setFilteredList(res.data.fileNames);
         } else if (
           res.data.resultMessage === "Unauthorized" ||
           res.data.resultMessage === "Input string was not in a correct format."
@@ -48,33 +50,36 @@ function TrainingFiles() {
     setShowDelete(true);
     setId(e.currentTarget.dataset.id);
   };
-  const handleDelete = () => {
-    axios({
-      method: "delete",
-      headers: {
-        Authorization: `${TOKEN}`,
-        accept: "text/plain",
-      },
-      url: `${process.env.REACT_APP_URL}/v1/TrainingFile/${id}`,
-    })
-      .then((res) => {
-        if (res.data.isSuccess === false) {
-        }
-        if (res.data.isSuccess === true) {
-          notification.success(`${res.data.resultMessage}`);
-          hideModalDelete();
-          setTrigger(!trigger);
-        } else {
-          console.log(res.data.resultMessage);
-        }
-        if (
-          res.data.resultMessage === "Unauthorized" ||
-          res.data.resultMessage === "Input string was not in a correct format."
-        ) {
-          logout();
-        }
+  const deleteSelectedItems = () => {
+    for (const id of selectedIds) {
+      axios({
+        method: "delete",
+        headers: {
+          Authorization: `${TOKEN}`,
+          accept: "text/plain",
+        },
+        url: `${process.env.REACT_APP_URL}/v1/TrainingFile/${id}`,
       })
-      .catch((err) => console.log(err));
+        .then((res) => {
+          if (res.data.isSuccess === false) {
+          }
+          if (res.data.isSuccess === true) {
+            notification.success(`${res.data.resultMessage}`);
+            hideModalDelete();
+            setTrigger(!trigger);
+          } else {
+            console.log(res.data.resultMessage);
+          }
+          if (
+            res.data.resultMessage === "Unauthorized" ||
+            res.data.resultMessage ===
+              "Input string was not in a correct format."
+          ) {
+            logout();
+          }
+        })
+        .catch((err) => console.log(err));
+    }
   };
   const [selectedFile, setSelectedFile] = useState(false);
   const handleFileSelect = (event) => {
@@ -123,99 +128,71 @@ function TrainingFiles() {
     });
     setFilteredList(searchList);
   };
+  const handleCheckboxChange = (itemId) => {
+    if (selectedIds.includes(itemId)) {
+      setSelectedIds(selectedIds.filter((id) => id !== itemId));
+    } else {
+      setSelectedIds([...selectedIds, itemId]);
+    }
+  };
+  const handleSelectAll = (event) => {
+    const isChecked = event.target.checked;
+    if (isChecked) {
+      setSelectedIds(filteredList.map((item) => item.id));
+    } else {
+      setSelectedIds([]);
+    }
+  };
   return (
     <div className="w-full min-h-[calc(100%-56px)]">
-      <div>
-        <Modal
-          show={showCreate}
-          onHide={hideModalCreate}
-          size="ml"
-          backdrop="static"
-          keyboard={false}
-          aria-labelledby="contained-modal-title-vcenter"
-          dialogClassName="modal-100w"
-          centered
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Файл нэмэх</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <div className="p-6 text-center">
-              <div className="mb-5 text-sm font-normal text-gray-500 dark:text-gray-400">
-                <label className="mb-5 text-sm font-normal text-gray-500 dark:text-gray-400">
-                  Файлаа оруулна уу 📁
-                </label>
-                <input
-                  className="block w-full text-sm-100 font-normal text-black dark:text-gray-400 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                  type="file"
-                  onChange={handleFileSelect}
-                />
-              </div>
+      <Modal
+        show={showDelete}
+        onHide={hideModalDelete}
+        size="ml"
+        backdrop="static"
+        style={
+          width < 768
+            ? {
+                width: "calc(100%)",
+                left: "0",
+              }
+            : {
+                width: "calc(100% - 250px)",
+                left: "250px",
+              }
+        }
+        keyboard={false}
+        aria-labelledby="contained-modal-title-vcenter"
+        dialogClassName="modal-100w"
+        centered
+      >
+        <Modal.Header closeButton>
+          <span className="text-sm text-black">Бүртгэл устгах</span>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="p-6 text-center">
+            <p className="mb-5  font-normal text-gray-500 dark:text-gray-400">
+              Та сонгосон {selectedIds?.length} файлыг устгахдаа итгэлтэй байна
+              уу?
+            </p>
+            <button
+              type="button"
+              onClick={deleteSelectedItems}
+              className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
+            >
+              Тийм
+            </button>
 
-              <button
-                type="button"
-                onClick={handleCreate}
-                className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
-              >
-                ✔️ Yes, I'm sure
-              </button>
-              <button
-                onClick={hideModalCreate}
-                type="button"
-                className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-              >
-                ❌ No, cancel
-              </button>
-            </div>
-          </Modal.Body>
-        </Modal>
-        <Modal
-          show={showDelete}
-          onHide={hideModalDelete}
-          size="ml"
-          backdrop="static"
-          style={
-            width < 768
-              ? {
-                  width: "calc(100%)",
-                  left: "0",
-                }
-              : {
-                  width: "calc(100% - 250px)",
-                  left: "250px",
-                }
-          }
-          keyboard={false}
-          aria-labelledby="contained-modal-title-vcenter"
-          dialogClassName="modal-100w"
-          centered
-        >
-          <Modal.Header closeButton>
-            <span className="text-sm text-black">Файл устгах</span>
-          </Modal.Header>
-          <Modal.Body>
-            <div className="p-6 text-center">
-              <p className="mb-5 text-sm font-normal text-gray-500 dark:text-gray-400">
-                Та файлыг устгахдаа игэлтэй байна уу?
-              </p>
-              <button
-                type="button"
-                onClick={handleDelete}
-                className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
-              >
-                Тийм
-              </button>
-              <button
-                onClick={hideModalDelete}
-                type="button"
-                className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-              >
-                Үгүй
-              </button>
-            </div>
-          </Modal.Body>
-        </Modal>
-      </div>
+            <button
+              onClick={hideModalDelete}
+              type="button"
+              className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+            >
+              Үгүй
+            </button>
+          </div>
+        </Modal.Body>
+      </Modal>
       <Navigation />
       <div className="sm:px-6 w-full">
         <div className="px-4 md:px-10 py-4 md:py-7">
@@ -249,39 +226,50 @@ function TrainingFiles() {
               </button>
             </div>
           </div>
-          <div className="flex flex-col justify-center w-3/4 max-w-sm space-y-3 md:flex-row md:w-full md:space-x-3 md:space-y-0 md:justify-end sm:justify-end">
+
+          <div className="flex flex-col gap-2 sm:mt-0 sm:flex-row sm:items-center">
             <button
-              onClick={showModalCreate}
-              className="bg-blue-600 border border-blue-600 shadow p-2 rounded text-white flex items-center focus:outline-none focus:shadow-outline"
+              onClick={showModalDelete}
+              className="mt-2 items-center px-2 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md"
             >
-              <span className="mx-2"> Файл нэмэх</span>
-              <svg width="24" height="24" viewBox="0 0 16 16">
-                <path
-                  d="M7 4 L11 8 L7 12"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinejoin="round"
-                  strokeLinecap="round"
-                />
-              </svg>
+              <i className="bi bi-trash mr-1" />
+              Устгах
             </button>
           </div>
         </div>
         <div className="mt-3 overflow-x-auto">
-          <table className="items-center w-full bg-transparent border-collapse ">
+          <table
+            id="table"
+            className="items-center w-full bg-transparent border-collapse "
+          >
             <thead>
               <tr className="text-sm text-left  bg-gray-200 border-b">
-                <th className="px-4 py-3 font-bold">no </th>
-                <th className="px-4 py-3 font-bold">fileName </th>
-                <th className="px-4 py-3 font-bold">createdAt </th>
-                <th className="px-4 py-3 font-bold">Action </th>
+                <th className="px-2 py-2 font-bold">
+                  <input
+                    type="checkbox"
+                    onChange={handleSelectAll}
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                    checked={selectedIds.length === filteredList.length}
+                  />
+                </th>
+                <th className="px-4 py-3 font-bold">№ </th>
+                <th className="px-4 py-3 font-bold">Файлын нэр</th>
+                <th className="px-4 py-3 font-bold">Үүсгэсэн хугацаа </th>
+                <th className="px-4 py-3 font-bold"> </th>
               </tr>
             </thead>
             <tbody className="bg-white text-sm">
               {filteredList > 0
                 ? filteredList.map((data, i) => (
                     <tr key={i}>
+                      <td className="px-1 py-1 border">
+                        <input
+                          type="checkbox"
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                          onChange={() => handleCheckboxChange(data.id)}
+                          checked={selectedIds.includes(data.id)}
+                        />
+                      </td>
                       <td className="px-1 py-1 border">{i + 1}</td>
                       <td className="px-1 py-1 border">{data.fileName}</td>
                       <td className="px-1 py-1 border">{data.createdAt}</td>
@@ -292,19 +280,20 @@ function TrainingFiles() {
                           onClick={() => window.open(`http://${data.filePath}`)}
                         >
                           <i className="bi bi-download"></i>
-                        </a>
-                        <a
-                          data-id={data.id}
-                          onClick={showModalDelete}
-                          className="text-rose-400 hover:text-black ml-2 text-sm"
-                        >
-                          <i className="bi bi-trash-fill"></i>
                         </a>
                       </td>
                     </tr>
                   ))
                 : files?.map((data, i) => (
                     <tr key={i}>
+                      <td className="px-1 py-1 border">
+                        <input
+                          type="checkbox"
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                          onChange={() => handleCheckboxChange(data.id)}
+                          checked={selectedIds.includes(data.id)}
+                        />
+                      </td>
                       <td className="px-1 py-1 border">{i + 1}</td>
                       <td className="px-1 py-1 border">{data.fileName}</td>
                       <td className="px-1 py-1 border">{data.createdAt}</td>
@@ -315,13 +304,6 @@ function TrainingFiles() {
                           onClick={() => window.open(`http://${data.filePath}`)}
                         >
                           <i className="bi bi-download"></i>
-                        </a>
-                        <a
-                          data-id={data.id}
-                          onClick={showModalDelete}
-                          className="text-rose-400 hover:text-black ml-2 text-sm"
-                        >
-                          <i className="bi bi-trash-fill"></i>
                         </a>
                       </td>
                     </tr>

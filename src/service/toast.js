@@ -16,7 +16,7 @@ function success(message) {
   toast(message, {
     position: "top-right",
     icon: "✔️",
-    autoClose: 2000,
+    autoClose: 5000,
     hideProgressBar: true,
     closeOnClick: false,
     pauseOnHover: false,
@@ -30,7 +30,7 @@ function error(message) {
   toast(message, {
     position: "top-right",
     icon: "❗",
-    autoClose: 2000,
+    autoClose: 5000,
     hideProgressBar: true,
     closeOnClick: false,
     pauseOnHover: false,

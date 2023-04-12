@@ -140,14 +140,15 @@ function EditTraining() {
     })
       .then((res) => {
         if (res.data.isSuccess === false) {
-          if (
-            res.data.resultMessage ===
-            "Сургалт эхэлсэн тул засвар хийх боломжгүй байна."
-          ) {
-            notification.error(`${res.data.resultMessage}`);
-            const timer = setTimeout(() => navigate("/online-training"), 2000);
-            return () => clearTimeout(timer);
-          }
+          notification.error(`${res.data.resultMessage}`);
+          const timer = setTimeout(
+            () =>
+              navigate("/clicked-train", {
+                state: { data: train, item: locationn.state.item },
+              }),
+            2000
+          );
+          return () => clearTimeout(timer);
         }
         if (res.data.isSuccess === true) {
           notification.success(`${res.data.resultMessage}`);
@@ -195,6 +196,8 @@ function EditTraining() {
                   // height="100%"
                   id="myVideo"
                   controls
+                  disablePictureInPicture
+                  controlsList=" noplaybackrate"
                 >
                   <source src={`http://` + `${fileUrl}`} type="video/mp4" />
                 </video>
@@ -334,19 +337,16 @@ function EditTraining() {
             notification.success(`${res.data.resultMessage}`);
             const timer = setTimeout(() => navigate("/online-training"), 1000);
             return () => clearTimeout(timer);
-          }
-          if (res.data.isSuccess === false) {
-            if (
-              res.data.resultMessage ===
-              "Сургалт эхэлсэн тул засвар хийх боломжгүй байна."
-            ) {
-              notification.error(`${res.data.resultMessage}`);
-              const timer = setTimeout(
-                () => navigate("/online-training"),
-                2000
-              );
-              return () => clearTimeout(timer);
-            }
+          } else if (res.data.isSuccess === false) {
+            notification.error(`${res.data.resultMessage}`);
+            const timer = setTimeout(
+              () =>
+                navigate("/clicked-train", {
+                  state: { data: train, item: locationn.state.item },
+                }),
+              2000
+            );
+            return () => clearTimeout(timer);
           }
         })
         .catch((err) => console.log(err));
@@ -443,6 +443,8 @@ function EditTraining() {
                             // height="100%"
                             id="myVideo"
                             controls
+                            disablePictureInPicture
+                            controlsList=" noplaybackrate"
                           >
                             <source
                               src={`http://` + `${train.fileUrl}`}
@@ -574,8 +576,15 @@ function EditTraining() {
             </div>
             <div className="w-1/3 sm:w-full px-2  ">
               <div className="relative w-full mb-3">
+                <p className="text-xs font-semibold text-gray-600">
+                  Та{" "}
+                  {locationn.state.item === "schedule"
+                    ? "сургалтын хуваарийг"
+                    : "онлайн сургалтыг"}{" "}
+                  эхлүүлэх хугацаагаа 24 цагийн дараа байхаар тохируулна уу. 😊
+                </p>
                 <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                  startDate
+                  Эхлэх хугацаа
                 </label>
                 <DatePicker
                   className="px-3 py-2 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
@@ -583,15 +592,15 @@ function EditTraining() {
                   onChange={(date) => setDate1(date)}
                   showTimeSelect
                   timeFormat="HH:mm"
-                  timeIntervals={15}
+                  timeIntervals={30}
                   selectsStart
                   startDate={date1}
-                  dateFormat="yyyy.MM.dd, HH:mm:ss"
+                  dateFormat="yyyy.MM.dd, HH:mm"
                 />
               </div>
               <div className="relative w-full mb-3">
                 <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                  endDate
+                  Дуусах хугацаа
                 </label>
                 <DatePicker
                   className="px-3 py-2 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
@@ -599,27 +608,31 @@ function EditTraining() {
                   onChange={(date) => setDate2(date)}
                   showTimeSelect
                   timeFormat="HH:mm"
-                  timeIntervals={15}
+                  timeIntervals={30}
                   selectsStart
                   startDate={date2}
                   dateFormat="yyyy.MM.dd, HH:mm"
                 />
               </div>
-              <div className="relative w-full mb-3">
-                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                  Байршил
-                </label>
-                <input
-                  type="text"
-                  className="px-3 py-2 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                  defaultValue={train.location}
-                  onChange={(e) => {
-                    setlocation(e.target.value);
-                    setcheckEmptylocation(false);
-                  }}
-                  id={checkEmptylocation === true ? "border-red" : null}
-                />
-              </div>
+              {locationn.state.item === "schedule" ? (
+                <div className="relative w-full mb-3">
+                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                    Байршил
+                  </label>
+                  <input
+                    type="text"
+                    className="px-3 py-2 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                    defaultValue={train.location}
+                    onChange={(e) => {
+                      setlocation(e.target.value);
+                      setcheckEmptylocation(false);
+                    }}
+                    id={checkEmptylocation === true ? "border-red" : null}
+                  />
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
           <div className="col-span-5 text-right">

@@ -6,7 +6,8 @@ import Select from "react-select";
 import { ToastContainer } from "react-toastify";
 import { logout } from "../../service/examService";
 function TrainingProgressCell({ data }) {
-  const { TOKEN } = useStateContext();
+  const [uzeegui, setUzeegui] = useState([]);
+  const [uzsen, setUzsen] = useState([]);
   function ProgressBar({ percentage, startAt = 0 }) {
     return (
       <>
@@ -23,10 +24,6 @@ function TrainingProgressCell({ data }) {
       </>
     );
   }
-
-  let nowatch = data?.filter((item, index) => {
-    return item.answeredNumber !== "";
-  });
 
   return (
     <div className="block m-auto">

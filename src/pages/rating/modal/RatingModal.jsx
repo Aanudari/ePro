@@ -97,7 +97,9 @@ function RatingModal({
               : item;
           })
         : extras.map((item, indexP) => {
-            return item.inputId == idOfItem ? { ...item, inputValue: 1 } : item;
+            return item.inputId == idOfItem
+              ? { ...item, inputValue: value }
+              : item;
           });
     setFinalExtra(modified);
   };

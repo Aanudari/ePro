@@ -17,6 +17,7 @@ function RatingUser() {
       url: `${process.env.REACT_APP_URL}/v1/RatingNew/getListRating`,
     })
       .then((res) => {
+        console.log(res.data);
         if (res.data.isSuccess === true) {
           setData(res.data.ratings);
         }
@@ -26,7 +27,6 @@ function RatingUser() {
       })
       .catch((err) => console.log(err));
   }, [trigger]);
-  console.log(data);
   return (
     <UserLayout>
       <main className="main">

@@ -1,4 +1,4 @@
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState, Fragment, useEffect, useRef } from "react";
 import { useStateContext } from "../contexts/ContextProvider";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -29,13 +29,15 @@ function Navigation() {
   };
   const navigate = useNavigate();
   const [data, setData] = useState();
+  const { TOKEN } = useStateContext();
   useEffect(() => {
     axios({
       method: "get",
       headers: {
         "Content-Type": "application/json",
+        Authorization: TOKEN,
       },
-      url: `${process.env.REACT_APP_URL}/v1/User/${deviceId}`,
+      url: `${process.env.REACT_APP_URL}/v1/User`,
     })
       .then((res) => setData(res.data.result))
       .catch((err) => console.log(err));
@@ -43,14 +45,19 @@ function Navigation() {
   const handleSubmit = () => {
     navigate("/search-result");
   };
-  const [count, setCount] = useState(5);
-  const [showCount, setShowCount] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  let logoutTimer = setTimeout(() => {
-    localStorage.removeItem("loginTime");
-    logout();
-  }, 1800000);
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const filteredObjects = data?.filter((object) => {
+    const regex = new RegExp(searchQuery, "gi");
+    return object.username.match(regex) || object.firstName.match(regex);
+  });
   const mainUser = JSON.parse(localStorage.getItem("user"));
+  const [showUsers, setShowUsers] = useState(false);
+  const inputRef = useRef(null);
   return (
     <div className="relative cus-index bg-[rgb(32, 73, 90)] ">
       <div className="h-14"></div>
@@ -102,30 +109,53 @@ function Navigation() {
           </div>
           {/* search */}
           <div className="flex nav">
-            <form action="" onSubmit={handleSubmit}>
+            <form
+              onFocus={() => {
+                setShowUsers(true);
+              }}
+              onSubmit={handleSubmit}
+              className="relative"
+            >
               <input
-                onChange={(e) => {
-                  setInputValue(e.target.value);
-                }}
+                ref={inputRef}
                 type="text"
-                placeholder="Хайх"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                placeholder="Search by username or first name..."
                 className="custom-input-2 h-10"
+                tabIndex="0"
+                onBlur={() => {
+                  setShowUsers(false);
+                }}
               />
+              {showUsers && (
+                <div className="h-[200px] transition-all overflow-hidden w-full bg-gray-50 absolute bottom-[-199px] shadow rounded-b ">
+                  {filteredObjects?.map((user, index) => {
+                    return (
+                      <div
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                        }}
+                        key={index}
+                        onClick={() => {
+                          inputRef.current.blur();
+                          navigate("/user-profile", { state: user });
+                          setShowUsers(false);
+                          setSearchQuery("");
+                        }}
+                        className="cursor-pointer h-10 border-b bg-gray-50 hover:bg-gray-200 text-[13px] px-3 flex items-center justify-between"
+                      >
+                        <span className="font-[600]">{user.firstName}</span>
+                        <span className="font-[600]">{user.roleName}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </form>
           </div>
         </div>
         <div className="w-[260px] flex justify-center rounded-md cursor-pointer m-2 call-call">
-          {/* Notification */}
-          {/* 
-          <button
-            onClick={() => {
-              navigate("/notification");
-            }}
-            type="button"
-            className="rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
-          >
-            <i className="bi bi-bell text-white"></i>
-          </button> */}
           <Menu as="div" className="relative ml-3 h-full">
             <div className="h-full w-full">
               <Menu.Button className="flex h-full rounded-full !bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">

@@ -1,9 +1,10 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 function MainNavigation() {
   const navigate = useNavigate();
-  const { activeMenu } = useStateContext();
+  const { TOKEN } = useStateContext();
   const [selected, setSelected] = useState(0);
   const location = useLocation();
   const pathname = (pathname) => {
@@ -20,14 +21,12 @@ function MainNavigation() {
       return false;
     }
   };
+
   return (
     <div className="relative width-nav">
       <div className="core fixed">
         <nav id="side-nav">
           <div
-            // onClick={() => {
-            //   navigate("/home");
-            // }}
             className="h-14 bg-gray-800 shadow text-white
                     flex text-2xl font-[700] cursor-pointer select-none
                     "
@@ -37,7 +36,7 @@ function MainNavigation() {
                         items-center
                         font-bold ml-12 text-teal-500"
             >
-              <span className="text-3xl  mr-1 text-white bl-grad rounded-full px-[14px] py-1">
+              <span className="text-4xl text-teal-300 mr-1 rounded-full py-1">
                 E
               </span>
 
@@ -48,17 +47,6 @@ function MainNavigation() {
             </span>
           </div>
           <ul className="h-full">
-            {/* <li
-              onClick={() => {
-                navigate("/dashboard");
-              }}
-              className="cursor-pointer active:opacity-80"
-            >
-              <a>
-                <i className="bi bi-calendar-check absolute top-[17px] left-[17px]"></i>
-                <span>Хянах самбар</span>
-              </a>
-            </li> */}
             <li
               onClick={() => {
                 setSelected(0);

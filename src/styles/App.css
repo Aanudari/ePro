@@ -1,8 +1,3 @@
-@font-face {
-  font-family: "tahoma";
-  src: local("tahoma"), url("../fonts/TahomaRegularfont.ttf");
-  /* font-weight: bold; */
-}
 .tahoma {
   font-family: "tahoma";
 }
@@ -475,8 +470,4 @@ html {
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
   border-bottom: 10px solid #f4ce2e;
-}
-.bl-grad {
-  background-color: #20bf55;
-  background-image: linear-gradient(315deg, #20bf55 0%, #01baef 74%);
 }

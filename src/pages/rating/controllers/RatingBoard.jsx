@@ -5,8 +5,8 @@ import { useEffect } from "react";
 function RatingBoard({ showModal, setShowModal, data, setTrigger, trigger }) {
   const [expandKey, setExpandKey] = useState(0);
   const [selectedYear, setSelectedYear] = useState("2023");
-  const [selectedQuarter, setSelectedQuarter] = useState();
-  const [quarterName, setQuarterName] = useState();
+  const [selectedQuarter, setSelectedQuarter] = useState("");
+  const [quarterName, setQuarterName] = useState("");
   const recalldata = (param) => {
     setSelectedQuarter(param);
   };
@@ -22,9 +22,36 @@ function RatingBoard({ showModal, setShowModal, data, setTrigger, trigger }) {
           setShowModal={setShowModal}
         />
       )}
-      <div className="w-full h-[calc(100vh-160px)] overflow-scroll py-2 flex flex-col gap-2">
+      <div className="w-full h-[calc(100vh-160px)] overflow-scroll py-2 flex flex-col gap-2 select-none">
         <div className="w-full p-2 rounded bg-teal-500 flex items-center justify-end relative gap-2">
-          <span className="absolute left-10 text-white text-[15px] font-[500]">
+          <span className="absolute left-10 text-white text-[15px] font-[500] flex items-center select-none">
+            {selectedQuarter != "" && quarterName != "" ? (
+              <button
+                className="bg-white w-6 rounded-full active:scale-105  text-gray-800 text-[13px] mr-2"
+                onClick={() => {
+                  setSelectedQuarter("");
+                  setQuarterName("");
+                }}
+              >
+                <img
+                  className="w-6"
+                  src="data:image/png;base64,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"
+                />
+              </button>
+            ) : (
+              <button
+                className="bg-white w-6 rounded-full active:scale-105  text-gray-800 text-[13px] mr-2"
+                onClick={() => {
+                  setSelectedQuarter("");
+                  setQuarterName("");
+                }}
+              >
+                <img
+                  className="w-6"
+                  src="data:image/png;base64,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"
+                />
+              </button>
+            )}
             / {selectedYear} / {quarterName}
           </span>
           {data?.map((item, index) => {
@@ -33,8 +60,8 @@ function RatingBoard({ showModal, setShowModal, data, setTrigger, trigger }) {
                 key={index}
                 onClick={() => {
                   setSelectedYear(item.year);
-                  setSelectedQuarter();
-                  setQuarterName();
+                  setSelectedQuarter("");
+                  setQuarterName("");
                 }}
                 className={`rounded ${
                   item.year == selectedYear

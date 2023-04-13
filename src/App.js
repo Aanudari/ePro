@@ -54,6 +54,7 @@ import RatingUser from "./pages/UserMainUI/Rating/RatingUser";
 import UserHome from "./pages/UserMainUI/UserHome";
 import RatingUserShow from "./pages/UserMainUI/Rating/RatingUserShow";
 import Test from "./pages/test";
+import UserProfile from "./pages/core/UserProfile";
 function App() {
   const { activeMenu, showTop, roleId, TOKEN } = useStateContext();
   const { width } = getWindowDimensions();
@@ -262,6 +263,14 @@ function App() {
             element={
               <ProtectedRoute allowedRoles={[10]}>
                 <Rating />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/user-profile"
+            element={
+              <ProtectedRoute allowedRoles={[10]}>
+                <UserProfile />
               </ProtectedRoute>
             }
           />

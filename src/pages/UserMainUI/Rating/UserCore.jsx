@@ -33,25 +33,6 @@ function UserCore() {
       })
       .catch((err) => console.log(err));
   }, []);
-  // useEffect(() => {
-  //   axios({
-  //     method: "post",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `${TOKEN}`,
-  //     },
-  //     url: `${process.env.REACT_APP_URL}/v1/Rating/${deviceId}`,
-  //     data: {
-  //       startDate: "",
-  //       endDate: "",
-  //     },
-  //   })
-  //     .then((res) => {
-  //       setRating(res.data.ratings);
-  //     })
-  //     .catch((err) => console.log(err));
-  // }, []);
-  // const [nokori, setNokori] = useState([]);
   let nokori = [];
   const gotYa = (value) => {
     nokori.push(value);
@@ -84,12 +65,12 @@ function UserCore() {
           <div className="responsive-wrapper">
             <div className="content">
               <div className="content-panel">
-                <div className="vertical-tabs">
+                <div className="vertical-tabs select-none">
                   <a
                     onClick={() => {
                       setDetector(0);
                     }}
-                    className={`${detector === 0 && "active"}`}
+                    className={`${detector === 0 && "active"} cursor-pointer`}
                   >
                     Бүгд
                   </a>
@@ -97,7 +78,7 @@ function UserCore() {
                     onClick={() => {
                       setDetector(1);
                     }}
-                    className={`${detector === 1 && "active"}`}
+                    className={`${detector === 1 && "active"} cursor-pointer`}
                   >
                     Идэвхитэй
                   </a>
@@ -105,7 +86,7 @@ function UserCore() {
                     onClick={() => {
                       setDetector(2);
                     }}
-                    className={`${detector === 2 && "active"}`}
+                    className={`${detector === 2 && "active"} cursor-pointer`}
                   >
                     Дууссан
                   </a>
@@ -113,7 +94,7 @@ function UserCore() {
                     onClick={() => {
                       setDetector(3);
                     }}
-                    className={`${detector === 3 && "active"}`}
+                    className={`${detector === 3 && "active"} cursor-pointer`}
                   >
                     Бүртгэлгүй
                   </a>
@@ -121,7 +102,7 @@ function UserCore() {
                     onClick={() => {
                       setDetector(4);
                     }}
-                    className={`${detector === 4 && "active"}`}
+                    className={`${detector === 4 && "active"} cursor-pointer`}
                   >
                     Эхлүүлсэн
                   </a>
@@ -129,100 +110,106 @@ function UserCore() {
               </div>
               <div className="content-main">
                 <div className="card-grid">
-                  {tempo[detector]?.map((item, index) => {
-                    const now = new Date();
-                    const examExpirationDate = new Date(item.expireDate);
-                    const timeDiffMs =
-                      examExpirationDate.getTime() - now.getTime();
-                    const timeDiffDays = Math.floor(
-                      timeDiffMs / (1000 * 60 * 60 * 24)
-                    );
-                    const timeDiffHours = Math.floor(
-                      (timeDiffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-                    );
-                    return (
-                      <article
-                        key={index}
-                        className="card !border-none hover:!shadow-lg select-none"
-                      >
-                        <div className="card-header !border-none">
-                          <div className="overflow-hidden w-[250px] h-[40px] flex justify-start">
-                            <span>
-                              <img src="https://feweek.co.uk/wp-content/uploads/2020/12/exams-covid-summer-plans-feat-1000x525.jpg" />
-                            </span>
-                            <h3 className="text-[12px] font-[600] uppercase">
-                              {item.name}
-                            </h3>
+                  {tempo[detector]?.length > 0 ? (
+                    tempo[detector]?.map((item, index) => {
+                      const now = new Date();
+                      const examExpirationDate = new Date(item.expireDate);
+                      const timeDiffMs =
+                        examExpirationDate.getTime() - now.getTime();
+                      const timeDiffDays = Math.floor(
+                        timeDiffMs / (1000 * 60 * 60 * 24)
+                      );
+                      const timeDiffHours = Math.floor(
+                        (timeDiffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+                      );
+                      return (
+                        <article
+                          key={index}
+                          className="card !border-none hover:!shadow-lg select-none"
+                        >
+                          <div className="card-header !border-none">
+                            <div className="overflow-hidden w-[250px] h-[40px] flex justify-start">
+                              <span>
+                                <img src="https://feweek.co.uk/wp-content/uploads/2020/12/exams-covid-summer-plans-feat-1000x525.jpg" />
+                              </span>
+                              <h3 className="text-[12px] font-[600] uppercase">
+                                {item.name}
+                              </h3>
+                            </div>
                           </div>
-                        </div>
-                        {item.isExamTaken.status === "A" ? (
-                          <div className="w-full h-6 px-3 bg-[#F7F7F7] flex items-end font-[500] justify-end text-[13px] text-gray-500">
-                            {/* {item.expireDate} */}
-                            <span className="text-[13px] text-gray-500 font-[500] mr-1">
-                              Дуусах:
-                            </span>
-                            {timeDiffDays > 0 && timeDiffDays + "хоног"}
-                            <span className="text-[13px] text-gray-500 font-[500] ml-1">
-                              {timeDiffHours}цаг
-                            </span>
-                          </div>
-                        ) : (
-                          <div className="w-full h-6 px-3 bg-[#F7F7F7] flex items-end font-[500] justify-end text-[13px] text-gray-500">
-                            {item.expireDate}
-                          </div>
-                        )}
-
-                        <div className="card-footer !m-0 !border-none">
                           {item.isExamTaken.status === "A" ? (
-                            <a
-                              className="cursor-pointer text-[13px]"
-                              onClick={() => {
-                                setReadyCheck(!readyCheck);
-                                setExamID(item.id);
-                                setExamName(item.name);
-                                sessionStorage.setItem("exam_id", item.id);
-                              }}
-                            >
-                              Шалгалт өгөх
-                            </a>
-                          ) : item.isExamTaken.status === "C" ? (
-                            <div className="font-[500] text-[13px] !border-none">
-                              <i className="bi bi-graph-up-arrow text mr-2"></i>
-                              :
-                              <span
-                                className={`font-[500] !border-none text-[13px] ml-2 ${
-                                  item.isExamTaken.score > 80
-                                    ? "!text-green-600"
-                                    : item.isExamTaken.score < 80 &&
-                                      item.isExamTaken.score > 50
-                                    ? "!text-orange-500"
-                                    : "!text-red-500"
-                                } `}
-                              >
-                                Шалгалтын дүн: {item.isExamTaken.score}%
+                            <div className="w-full h-6 px-3 bg-[#F7F7F7] flex items-end font-[500] justify-end text-[13px] text-gray-500">
+                              {/* {item.expireDate} */}
+                              <span className="text-[13px] text-gray-500 font-[500] mr-1">
+                                Дуусах:
+                              </span>
+                              {timeDiffDays > 0 && timeDiffDays + "хоног"}
+                              <span className="text-[13px] text-gray-500 font-[500] ml-1">
+                                {timeDiffHours}цаг
                               </span>
                             </div>
-                          ) : item.isExamTaken.status === "O" ? (
-                            <span className="font-[500] text-[13px]">
-                              Шалгалт өгөөгүй!
-                            </span>
-                          ) : item.isExamTaken.status === "P" ? (
-                            <a
-                              className="cursor-pointer text-[13px]"
-                              onClick={() => {
-                                setExamID(item.id);
-                                setExamName(item.name);
-                                sessionStorage.setItem("exam_id", item.id);
-                                navigate("/exam", { state: examID });
-                              }}
-                            >
-                              Үргэлжлүүлэх !
-                            </a>
-                          ) : null}
-                        </div>
-                      </article>
-                    );
-                  })}
+                          ) : (
+                            <div className="w-full h-6 px-3 bg-[#F7F7F7] flex items-end font-[500] justify-end text-[13px] text-gray-500">
+                              {item.expireDate}
+                            </div>
+                          )}
+
+                          <div className="card-footer !m-0 !border-none">
+                            {item.isExamTaken.status === "A" ? (
+                              <a
+                                className="cursor-pointer text-[13px]"
+                                onClick={() => {
+                                  setReadyCheck(!readyCheck);
+                                  setExamID(item.id);
+                                  setExamName(item.name);
+                                  sessionStorage.setItem("exam_id", item.id);
+                                }}
+                              >
+                                Шалгалт өгөх
+                              </a>
+                            ) : item.isExamTaken.status === "C" ? (
+                              <div className="font-[500] text-[13px] !border-none">
+                                <i className="bi bi-graph-up-arrow text mr-2"></i>
+                                :
+                                <span
+                                  className={`font-[500] !border-none text-[13px] ml-2 ${
+                                    item.isExamTaken.score > 80
+                                      ? "!text-green-600"
+                                      : item.isExamTaken.score < 80 &&
+                                        item.isExamTaken.score > 50
+                                      ? "!text-orange-500"
+                                      : "!text-red-500"
+                                  } `}
+                                >
+                                  Шалгалтын дүн: {item.isExamTaken.score}%
+                                </span>
+                              </div>
+                            ) : item.isExamTaken.status === "O" ? (
+                              <span className="font-[500] text-[13px]">
+                                Шалгалт өгөөгүй!
+                              </span>
+                            ) : item.isExamTaken.status === "P" ? (
+                              <a
+                                className="cursor-pointer text-[13px]"
+                                onClick={() => {
+                                  setExamID(item.id);
+                                  setExamName(item.name);
+                                  sessionStorage.setItem("exam_id", item.id);
+                                  navigate("/exam", { state: examID });
+                                }}
+                              >
+                                Үргэлжлүүлэх !
+                              </a>
+                            ) : null}
+                          </div>
+                        </article>
+                      );
+                    })
+                  ) : (
+                    <div className="w-[300px] md:!w-[500px] h-full bg-red-100">
+                      <img src="notfound.webp" alt="" />{" "}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

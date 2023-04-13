@@ -12,7 +12,7 @@ function SearhModal({
   const { activeMenu } = useStateContext();
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredData = exams.filter((item) =>
+  const filteredData = exams?.filter((item) =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
   return (
@@ -64,7 +64,7 @@ function SearhModal({
             </div>
           </div>
           <div className="h-[calc(65%)] w-full bg-gray-50 border rounded shadow-inner overflow-scroll px-2 py-2">
-            {filteredData.length > 0 ? (
+            {filteredData?.length > 0 ? (
               filteredData.map((exam, index) => (
                 <div key={index} className="h-14 w-full flex  mt-[2px]">
                   <div

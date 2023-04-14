@@ -220,7 +220,6 @@ function PoolQuestionEdit({
   };
   // console.log(list);
   const [show, setShow] = useState(false);
-  console.log(show);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   return (
@@ -245,7 +244,7 @@ function PoolQuestionEdit({
               }}
               className=" bg-black bg-opacity-50 w-full h-full absolute"
             ></div>
-            <div className="w-[300px] !h-[calc(100vh-56px)] bg-white z-10">
+            <div className="w-[300px] !h-[calc(100vh-56px)] bg-white z-10 shrink">
               <div
                 onClick={() => {
                   setShow(false);
@@ -269,25 +268,6 @@ function PoolQuestionEdit({
             </div>
           </div>
         )}
-        {/* <Offcanvas
-          style={{ width: "300px", zIndex: "100000" }}
-          placement="end"
-          show={show}
-          onHide={handleClose}
-          responsive="lg"
-        >
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title>
-              <div className="text-white font-[500] text-[15px] text-container">
-                {data.question}
-              </div>
-            </Offcanvas.Title>
-          </Offcanvas.Header>
-          <Offcanvas.Body>
-            
-            })}
-          </Offcanvas.Body>
-        </Offcanvas> */}
         {confirm && (
           <DeleteConfirm setConfirm={setConfirm} deleteCat={actualDelete} />
         )}
@@ -335,23 +315,23 @@ function PoolQuestionEdit({
           }}
           className={`w-full shadow-md py-3 px-3 font-[400] ${
             edit
-              ? "bg-gray-500 bg-opacity-90"
+              ? "!bg-gray-100 "
               : data.status === "NE"
               ? "bg-gray-200"
-              : null
+              : "cursor-pointer"
           }  bg-gray-50 flex flex-col transition rounded-lg pt-10 `}
         >
           <div className="flex justify-between gap-2">
             <div className=" w-full flex items-start">
               <span className="font-[500] mt-[2px]">{indexed + 1}.</span>
               {edit ? (
-                <input
+                <textarea
                   defaultValue={data.question}
                   onChange={(e) => {
                     setQuestion(e.target.value);
                   }}
                   type="text"
-                  className="outline-none rounded-md ml-2 h-[40px] focus:border-b-[2px] focus:h-[42px] border-teal-500 px-2 text-[16px] w-[calc(90%)] font-[400]"
+                  className="outline-none rounded-md ml-2 focus:border-b-[2px] focus:h-[42px] border-teal-500 px-2 text-[16px] w-[calc(90%)] font-[400]"
                   autoCorrect="false"
                   spellCheck={false}
                   autoFocus

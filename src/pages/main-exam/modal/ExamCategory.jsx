@@ -52,7 +52,7 @@ function ExamCategory({
   // console.log(categories);
   return (
     <div
-      className={`absolute top-[56px] z-20 core-bg-g h-[calc(100%-59px)] mb-2 h-full flex  px-3 
+      className={`absolute top-[56px] z-20 core-bg-g h-[calc(100%-65px)] mb-2 h-full flex  px-3 
         py-3 gap-2  ${
           activeMenu ? "w-[calc(100%-14px)] left-[7px]" : "w-full left-0"
         } `}

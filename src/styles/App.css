@@ -471,3 +471,8 @@ html {
   border-right: 10px solid transparent;
   border-bottom: 10px solid #f4ce2e;
 }
+
+.placeholder-cus::placeholder {
+  color: #999999 !important;
+  font-weight: 600 !important;
+}

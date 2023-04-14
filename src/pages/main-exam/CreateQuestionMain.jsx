@@ -64,9 +64,10 @@ function CreateQuestionMain({
     <div className="w-full h-screen flex justify-center items-center  pb-20">
       <div className="w-5/6 h-full bg-white px-5 pt-4 overflow-scroll pb-20">
         <div className="group w-full">
-          <input
+          <textarea
+            placeholder="Асуулт"
             className={
-              "custom-validation !w-full !border-b-[2px] !border-[#50a3a2] font-[400]"
+              "custom-validation placeholder-cus bg-gray-50 rounded px-3 py-2 !w-full !border-b-[2px] !border-[#50a3a2] font-[400] placeholder-gray-600 "
             }
             type="text"
             onChange={(e) => {
@@ -76,7 +77,6 @@ function CreateQuestionMain({
           />
           <span className="highlight"></span>
           <span className="bar"></span>
-          <label className="">Асуулт </label>
         </div>
         <div className="flex border pt-4 px-3 rounded mb-4">
           <div className="h-full ">

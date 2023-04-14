@@ -22,7 +22,6 @@ function CategoryModal({
   const [data, setData] = useState();
 
   const [trigger, setTrigger] = useState(false);
-  // console.log(data);
   useEffect(() => {
     axios({
       method: "get",
@@ -155,36 +154,7 @@ function CategoryModal({
   useEffect(() => {
     collector();
   }, [finalArr, checked, question, answers, point]);
-
-  const deleteQuestion = (id) => {
-    axios({
-      method: "delete",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: TOKEN,
-      },
-      url: `${process.env.REACT_APP_URL}/v1/Pool/question/${id}`,
-    })
-      .then((res) => {
-        if (res.data.isSuccess === false) {
-          alert(res.data.resultMessage);
-        }
-        setTrigger(!trigger);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
   const [answerContainer, setAnswerContainer] = useState([]);
-  const editQuestion = (prop) => {
-    if (answerContainer.includes(prop)) {
-      setAnswerContainer([prop]);
-    } else {
-      setAnswerContainer((prev) => [prop]);
-    }
-    setAnswers(true);
-    // console.log("edit question !" + prop)
-  };
   const [examState, setExamState] = useState(true);
   const handleExamHalf = () => {
     setExamState(!examState);
@@ -204,10 +174,6 @@ function CategoryModal({
       {examState ? (
         <div className="w-screen h-[calc(100vh-56px)] flex justify-center items-center gap-2 ">
           <div
-            // style={{
-            //   background:
-            //     "url(https://img.freepik.com/free-photo/abstract-grunge-decorative-relief-navy-blue-stucco-wall-texture-wide-angle-rough-colored-background_1258-28311.jpg?w=2000)",
-            // }}
             style={{
               background: `url(${bg})`,
               backgroundSize: "cover",
@@ -229,8 +195,7 @@ function CategoryModal({
                     Буцах
                   </button>
                 ) : (
-                  // <i className="bi bi-plus-circle text-white text-2xl font-[500]"></i>
-                  <button className="custom-btn btn-13 w-[150px] mt-2">
+                  <button className="custom-btn btn-13 w-[180px] mt-2">
                     Асуулт нэмэх
                   </button>
                 )}
@@ -250,10 +215,6 @@ function CategoryModal({
             </div>
             {addAnswer ? (
               <div className="w-full h-full ">
-                {/* CREATE QUESTION !!!
-                            CREATE QUESTION !!!
-                            CREATE QUESTION !!!
-                            CREATE QUESTION !!! */}
                 <CreateQuestionMain
                   question={question}
                   handleSchema={handleSchema}
@@ -322,11 +283,6 @@ function CategoryModal({
           </div>
         </div>
       ) : (
-        // page !!!
-        // page !!!
-        // page !!!
-        // page !!!
-        // page !!!
         <div className="w-[calc(85%)] shrink h-[600px] bg-white flex flex-col ">
           <div className="w-full min-h-[50px] bg-gray-700 flex justify-between px-3 ">
             <button

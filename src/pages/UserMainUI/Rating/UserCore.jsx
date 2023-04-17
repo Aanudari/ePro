@@ -56,8 +56,6 @@ function UserCore() {
     }
     tempo.push(temp);
   }
-  // console.log(data);
-
   return (
     <UserLayout>
       <div className="w-full">
@@ -142,18 +140,20 @@ function UserCore() {
                           </div>
                           {item.isExamTaken.status === "A" ? (
                             <div className="w-full h-6 px-3 bg-[#F7F7F7] flex items-end font-[500] justify-end text-[13px] text-gray-500">
-                              {/* {item.expireDate} */}
-                              <span className="text-[13px] text-gray-500 font-[500] mr-1">
+                              Дуусах: {item.expireDate}
+                              {/* <span className="text-[13px] text-gray-500 font-[500] mr-1">
                                 Дуусах:
                               </span>
                               {timeDiffDays > 0 && timeDiffDays + "хоног"}
                               <span className="text-[13px] text-gray-500 font-[500] ml-1">
                                 {timeDiffHours}цаг
-                              </span>
+                              </span> */}
                             </div>
+                          ) : item.isExamTaken.status === "P" ? (
+                            <div className="w-full h-6 px-3 bg-[#F7F7F7] flex items-end font-[500] justify-end text-[13px] text-gray-500"></div>
                           ) : (
                             <div className="w-full h-6 px-3 bg-[#F7F7F7] flex items-end font-[500] justify-end text-[13px] text-gray-500">
-                              {item.expireDate}
+                              Өгсөн:{item?.finishedDate}
                             </div>
                           )}
 

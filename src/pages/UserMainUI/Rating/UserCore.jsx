@@ -56,6 +56,7 @@ function UserCore() {
     }
     tempo.push(temp);
   }
+  console.log(data);
   return (
     <UserLayout>
       <div className="w-full">
@@ -153,7 +154,7 @@ function UserCore() {
                             <div className="w-full h-6 px-3 bg-[#F7F7F7] flex items-end font-[500] justify-end text-[13px] text-gray-500"></div>
                           ) : (
                             <div className="w-full h-6 px-3 bg-[#F7F7F7] flex items-end font-[500] justify-end text-[13px] text-gray-500">
-                              Өгсөн:{item?.finishedDate}
+                              Өгсөн: {item?.isExamTaken.endAt}
                             </div>
                           )}
 

@@ -358,7 +358,7 @@ function NotiModal({
         </div>
         <span className="font-[400] text-center">
           Нийт {length}-н асуулттай шалгалт үүснэ. "OK" товчийг дарснаар асуулт
-          сонгох цэсээс гархийг анхаарна уу.
+          сонгох цэсээс гарахыг анхаарна уу.
         </span>
         <div className="flex justify-end">
           <button

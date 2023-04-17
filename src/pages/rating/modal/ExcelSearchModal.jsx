@@ -238,7 +238,7 @@ function ExcelSearchModal({ setShowSearch, trigger, setTrigger }) {
               id=""
             >
               <option value="0">Сонгох</option>
-              <option value="1">Ажилтанаар</option>
+              <option value="1">Ажилтнаар</option>
               <option value="2">Загвараар</option>
             </select>
             {selectType == "0" ? (

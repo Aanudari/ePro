@@ -56,7 +56,7 @@ function UserCore() {
     }
     tempo.push(temp);
   }
-  console.log(data);
+  // console.log(data);
   return (
     <UserLayout>
       <div className="w-full">
@@ -151,6 +151,8 @@ function UserCore() {
                               </span> */}
                             </div>
                           ) : item.isExamTaken.status === "P" ? (
+                            <div className="w-full h-6 px-3 bg-[#F7F7F7] flex items-end font-[500] justify-end text-[13px] text-gray-500"></div>
+                          ) : item.isExamTaken.status === "O" ? (
                             <div className="w-full h-6 px-3 bg-[#F7F7F7] flex items-end font-[500] justify-end text-[13px] text-gray-500"></div>
                           ) : (
                             <div className="w-full h-6 px-3 bg-[#F7F7F7] flex items-end font-[500] justify-end text-[13px] text-gray-500">

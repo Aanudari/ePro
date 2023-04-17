@@ -4,7 +4,7 @@ function QuestionCellAdminMain({ data }) {
     <div className={`p-4 my-4 rounded shadow-sm border bg-gray-100`}>
       <div className=" flex justify-between">
         <span className="font-[500] text-[15px]">{data.questionName}</span>
-        <span className="font-[500] ml-2 flex items-center text-gray-500 bg-gray-300 px-3 rounded text-[14px]">
+        <span className="font-[500] min-w-[100px] h-6 ml-2 flex items-center text-gray-500 bg-gray-300 px-3 rounded text-[14px]">
           Нийт :
           <div className=" top-2 py-1  mr-2  font-[500] ml-2">
             {data.totalTry + " "}

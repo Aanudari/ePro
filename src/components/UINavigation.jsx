@@ -82,12 +82,12 @@ export default function UINavigation() {
               <i className="ph-lightning-bold"></i>
               <span>Upgrade now</span>
             </a> */}
-              <a className="icon-button">
+              {/* <a className="icon-button">
                 <i className="bi bi-gear-wide"></i>
               </a>
               <a className="icon-button">
                 <i className="bi bi-bell-fill"></i>
-              </a>
+              </a> */}
               <a
                 onClick={() => {
                   setShow(!show);
@@ -122,18 +122,27 @@ export default function UINavigation() {
           </a>
           {showMenu && (
             <div
-              className="absolute w-[150px] h-[200px] bg-white rounded shadow-md top-[60px] right-0 flex md:hidden flex-col items-start
+              className="absolute w-[150px] h-[220px] bg-white rounded shadow-md top-[60px] right-0 flex md:hidden flex-col items-start
             p-4 gap-2 
             "
             >
               <a
-                className="cursor-pointer active:border-b"
+                className="cursor-pointer"
                 onClick={() => {
-                  navigate("/user-main");
+                  navigate("/user-exam");
                 }}
               >
                 {" "}
-                Home{" "}
+                Шалгалт{" "}
+              </a>
+              <a
+                className="cursor-pointer"
+                onClick={() => {
+                  navigate("/user-rating");
+                }}
+              >
+                {" "}
+                Үнэлгээ{" "}
               </a>
               <a
                 className="cursor-pointer active:border-b"

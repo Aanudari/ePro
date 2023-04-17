@@ -293,7 +293,7 @@ function RatingModal({
             </div>
           </div>
           <div className="flex h-full flex gap-5  py-[6px]">
-            {children.length > 0 ? (
+            {children.length > 0 && (
               <button
                 onClick={() => {
                   handleSubmit();
@@ -303,17 +303,7 @@ function RatingModal({
               >
                 Хадгалах
               </button>
-            ) : finalExtra.length > 0 ? (
-              <button
-                onClick={() => {
-                  handleSubmit();
-                }}
-                className=" custom-btn
-             btn-20 active:mt-[2px]"
-              >
-                Хадгалах
-              </button>
-            ) : null}
+            )}
 
             <button
               onClick={() => {

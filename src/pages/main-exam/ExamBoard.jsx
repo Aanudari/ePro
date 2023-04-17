@@ -151,7 +151,7 @@ function ExamBoard({
           onClick={() => {
             setShow(true);
           }}
-          className="w-1/4 h-9 p-0 custom-btn btn-13 h-full border-[1px]  transition-all !border-teal-500 rounded cursor-pointer flex justify-center items-center text-teal-700 text-[11px] uppercase font-bold mr-2"
+          className="w-1/5 !h-9 p-0 custom-btn btn-13 h-full border-[1px]  transition-all !border-teal-500 rounded cursor-pointer flex justify-center items-center text-teal-700 text-[11px] uppercase font-bold mr-2"
         >
           <i className="bi bi-vector-pen text-lg text-md mr-2 "></i>
           Шалгалт үүсгэх
@@ -256,7 +256,7 @@ function ExamBoard({
                       </div>
                       <div className="h-full min-w-[50px] border-l flex justify-center items-center">
                         {/* <i className="bi bi-check2-circle text-[20px]"></i> */}
-                        <div className=" font-[500] text-[12px] w-[20px] flex justify-center">
+                        <div className=" font-[500] text-[12px] w-[30px] flex justify-center">
                           {exam?.examSummary?.avgScore}%
                         </div>
                       </div>
@@ -278,7 +278,7 @@ function ExamBoard({
                       <div className="h-full min-w-[50px] border-l flex justify-center items-center">
                         {/* <i className="bi bi-file-earmark-bar-graph text-[16px]"></i>
                          */}
-                        <div className=" font-[500] text-[12px] w-[20px] flex justify-center">
+                        <div className=" font-[500] text-[12px] w-[30 px] flex justify-center">
                           {exam?.examSummary?.avgScore}%
                         </div>
                       </div>

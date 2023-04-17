@@ -106,7 +106,7 @@ function AddCategoryMenu({ setShowAddCategory, trigger, setTrigger }) {
         `}
     >
       <ToastContainer />
-      <div className="shrink w-[calc(85%)] h-[calc(80%)] bg-white flex flex-col rounded-lg">
+      <div className="shrink w-[calc(75%)] h-[calc(70%)] bg-white flex flex-col rounded-lg">
         <div className="w-full min-h-[50px] bg-teal-700 flex justify-between items-center px-3 rounded-t shadow">
           <h5 className="text-white m-0 text-[17px]">Категори нэмэх</h5>
           <button
@@ -175,8 +175,8 @@ function AddCategoryMenu({ setShowAddCategory, trigger, setTrigger }) {
         {name !== "" && (
           <div
             onClick={submitCategory}
-            className="min-h-[50px] bg-gray-700 flex justify-center 
-                    cursor-pointer hover:bg-gray-600 items-center text-white font-[500]"
+            className="min-h-[50px] bg-teal-700 flex justify-center 
+                    cursor-pointer hover:bg-teal-600 items-center text-white font-[500]"
           >
             Категори үүсгэх
           </div>

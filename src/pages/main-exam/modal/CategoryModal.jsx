@@ -180,7 +180,7 @@ function CategoryModal({
             }}
             className="w-[calc(100%)] shrink h-[calc(100vh-56px)] bg-white flex flex-col "
           >
-            <div className="w-full min-h-[60px] flex items-center justify-between px-3 glass shadow">
+            <div className="w-full min-h-[60px] flex items-center justify-between px-3 shadow">
               <div
                 onClick={() => {
                   setAddAnswer(!addAnswer);
@@ -191,11 +191,11 @@ function CategoryModal({
                 className="w-[20px] h-full "
               >
                 {addAnswer ? (
-                  <button className="custom-btn btn-13 w-[150px] mt-2">
+                  <button className="custom-btn btn-20 w-[150px] mt-2">
                     Буцах
                   </button>
                 ) : (
-                  <button className="custom-btn btn-13 w-[180px] mt-2">
+                  <button className="custom-btn btn-20 w-[180px] mt-2">
                     Асуулт нэмэх
                   </button>
                 )}
@@ -243,9 +243,9 @@ function CategoryModal({
                       />
                     ))
                   ) : (
-                    <div className="font-[400]">
-                      Асуултын сан хоосон байна. Та "+" icon дээр дарж шинэ
-                      асуулт үүсгэх боломжтой.{" "}
+                    <div className="font-[400] text-white">
+                      Асуултын сан хоосон байна. Та "Асуулт нэмэх" товч дээр
+                      дарж шинэ асуулт үүсгэх боломжтой.{" "}
                     </div>
                   )}
                 </div>

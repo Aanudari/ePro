@@ -219,14 +219,15 @@ function ClickedTrain() {
                   train.fileUrl.slice(-4) === ".jpg" ||
                   train.fileUrl.slice(-4) === ".png" ||
                   train.fileUrl.slice(-4) === ".gif" ? (
-                    <div className="flex justify-center">
+                    <div className="flex justify-center h-auto">
                       <img
-                        className="object-fill h-full mt-2 w-full mr-4 shadow-md rounded-lg"
+                        className="object-fit h-80  mt-2 shadow-md rounded-lg"
                         src={`http://` + `${train.fileUrl}`}
+                        s
                       />
                     </div>
                   ) : train.fileUrl.slice(-4) === ".mp3" ? (
-                    <div className="object-fill h-full mt-2 w-full mr-4 shadow-md rounded-lg">
+                    <div className="object-fit h-full mt-2 w-full mr-4 shadow-md rounded-lg">
                       <audio controlsList="nodownload" controls>
                         <source
                           src={`http://` + `${train.fileUrl}`}

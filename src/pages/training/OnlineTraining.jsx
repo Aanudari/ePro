@@ -416,7 +416,6 @@ function OnlineTraining() {
             const filteredForm = rates?.filter(
               (item) => item.trainingId === data.id
             );
-
             return (
               <div key={index} className="flex cursor-pointer">
                 <video
@@ -511,7 +510,7 @@ function OnlineTraining() {
                       </div>
                     )}
 
-                    {filteredForm.length === 0 ? (
+                    {filteredForm?.length < 0 ? (
                       <a
                         onClick={() =>
                           navigate("/training-rating", {

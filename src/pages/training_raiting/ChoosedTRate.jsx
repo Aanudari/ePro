@@ -284,11 +284,7 @@ function ChoosedTRate() {
             )}
 
             {filtredData[0]?.trRatingQuestions.length === 0 ? (
-              <div className="mt-2 flex items-center px-4 mb-2 text-gray-800">
-                <div className="flex items-center w-full">
-                  Асуулт үүсээгүй байна.
-                </div>
-              </div>
+              ""
             ) : (
               <QuestionCell
                 q={filtredData[0]?.trRatingQuestions}

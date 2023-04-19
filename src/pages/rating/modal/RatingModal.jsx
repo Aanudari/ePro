@@ -155,7 +155,6 @@ function RatingModal({
     });
     setChildren(temp);
   };
-  // console.log(children);
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(false);
   // console.log(data.conversationId);

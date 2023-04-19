@@ -3,6 +3,10 @@ import { useState } from "react";
 function SelectSubCategoryCell({ i, element, handleSelect, catIndex }) {
   const container = [
     {
+      value: "Сонгох",
+      point: "Сонгох",
+    },
+    {
       value: 0,
       point: 0,
     },
@@ -26,6 +30,7 @@ function SelectSubCategoryCell({ i, element, handleSelect, catIndex }) {
     parseInt((element.subCatUserScore * 100) / element.subCatMaxScore)
   );
   const [comment, setComment] = useState(element.comment);
+  // console.log(element.subCatUserScore);
   return (
     <div className="w-full rounded mt-2">
       <div className="w-full h-1 rounded-t bg-gray-300 relative">
@@ -39,7 +44,7 @@ function SelectSubCategoryCell({ i, element, handleSelect, catIndex }) {
         ></div>
       </div>
       <div className="border py-1 px-2 flex justify-between items-center bg-white rounded-b">
-        <div className="text-[13px] font-[400] w-[calc(90%)] ">
+        <div className="text-[14px] font-[400] w-[calc(90%)] p-2">
           {element.subCategoryName}
         </div>
 
@@ -56,7 +61,7 @@ function SelectSubCategoryCell({ i, element, handleSelect, catIndex }) {
               );
             }}
             value={pointValue}
-            className="w-[80px] "
+            className="w-[100px]"
           >
             {options}
           </select>
@@ -75,7 +80,7 @@ function SelectSubCategoryCell({ i, element, handleSelect, catIndex }) {
             );
           }}
           type="text"
-          className="w-full h-full text-[13px] font-[400] placeholder-gray-400 px-2 text-gray-500"
+          className="w-full h-full text-[14px] font-[400] placeholder-gray-400 px-2 text-gray-500"
           placeholder="Сэтгэгдэл бичих ..."
         />
       </div>

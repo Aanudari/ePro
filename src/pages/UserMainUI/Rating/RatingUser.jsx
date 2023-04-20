@@ -32,7 +32,8 @@ function RatingUser() {
         <div className="responsive-wrapper">
           <div className="content py-2">
             <div className="content-main">
-              <div className="card-grid">
+              <div className="">
+                {/* <div className="card-grid"> */}
                 {data?.length > 0 ? (
                   data?.map((element, index) => {
                     return (
@@ -47,7 +48,9 @@ function RatingUser() {
                                   {itemX.ratingMonth.map((el, indexX) => {
                                     return (
                                       <div key={indexX}>
-                                        {/* <div>{el.month}</div> */}
+                                        <div className="p-2 shadow-sm w-fit rounded mb-2 mt-2 bg-gray-100 !text-gray-500">
+                                          {el.month}
+                                        </div>
                                         <div>
                                           {el.ratings.map((item, indexY) => {
                                             return (
@@ -70,8 +73,10 @@ function RatingUser() {
                     );
                   })
                 ) : (
-                  <div className="w-[300px] md:w-[500px]">
-                    <img src="notfound.webp" alt="" />
+                  <div className="w-full flex justify-center">
+                    <div className="w-[300px] md:w-[500px] ">
+                      <img src="notfound.webp" alt="" />
+                    </div>
                   </div>
                 )}
               </div>

@@ -6,7 +6,7 @@ function RatingBlockUser({ item }) {
   // console.log(item);
   return (
     <article className="card !border-none select-none ">
-      <div className="card-header">
+      <div className="card-header !border-none">
         <div className="overflow-hidden min-w-[250px] h-[60px] flex justify-start">
           <span>
             <img src="https://feweek.co.uk/wp-content/uploads/2020/12/exams-covid-summer-plans-feat-1000x525.jpg" />
@@ -27,7 +27,7 @@ function RatingBlockUser({ item }) {
 
       <div className="card-footer !flex !justify-between !border-none">
         <a className="!text-[14px] cursor-auto">
-          Үнэлгээ хийсэн: {item.createdBy}
+          Үнэлгээ үүсгэсэн: {item.createdBy}
         </a>
         <a
           onClick={() => {

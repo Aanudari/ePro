@@ -12,6 +12,8 @@ function TemplateCategoryCell({
   trigger,
   setTrigger,
   templateId,
+  reload,
+  setReload,
 }) {
   const [showSub, setShowSub] = useState(true);
   const { data, TOKEN } = useStateContext();
@@ -57,35 +59,7 @@ function TemplateCategoryCell({
       })
       .catch((err) => console.log(err));
   }
-  const handleSubCategory = (value, point, id) => {
-    let tempo = modified.map((item, index) => {
-      if (index == id) {
-        return { ...item, subcategoryName: value, subcategoryPoint: point };
-      } else {
-        return item;
-      }
-    });
-    setModified(tempo);
-  };
-  const handleSubmit = () => {
-    axios({
-      method: "post",
-      headers: {
-        Authorization: `${TOKEN}`,
-        "Content-Type": "application/json",
-        accept: "text/json",
-      },
-      url: `${process.env.REACT_APP_URL}/v1/RatingTemplateNew/category`,
-      data: final,
-    })
-      .then((res) => {
-        setTrigger(!trigger);
-        setIsEdit(false);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+
   const [confirm, setConfirm] = useState(false);
   return (
     <div className="mt-1 justify-center flex-col">
@@ -99,6 +73,8 @@ function TemplateCategoryCell({
           id={templateId}
           trigger={trigger}
           setTrigger={setTrigger}
+          reload={reload}
+          setReload={setReload}
         />
       )}
       <div className="flex justify-center">
@@ -141,7 +117,7 @@ function TemplateCategoryCell({
             <TemplateSubCategoryCell
               catId={item.categoryId}
               element={element}
-              key={JSON.stringify(item + i)}
+              key={i}
             />
           ))}
         </div>

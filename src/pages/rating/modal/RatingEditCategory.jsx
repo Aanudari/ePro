@@ -3,7 +3,14 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { logout } from "../../../service/examService";
 import { toast, ToastContainer } from "react-toastify";
-function RatingCategoryAdd({ setIsEdit, id, trigger, setTrigger }) {
+function RatingCategoryAdd({
+  setIsEdit,
+  id,
+  trigger,
+  setTrigger,
+  reload,
+  setReload,
+}) {
   const raw = localStorage.getItem("category");
   const data = JSON.parse(raw);
   const { activeMenu, TOKEN } = useStateContext();
@@ -95,6 +102,7 @@ function RatingCategoryAdd({ setIsEdit, id, trigger, setTrigger }) {
         if (res.data.errorCode === 401) {
           logout();
         } else {
+          setReload(!reload);
           setTrigger(!trigger);
           setIsEdit(false);
         }
@@ -145,10 +153,10 @@ function RatingCategoryAdd({ setIsEdit, id, trigger, setTrigger }) {
     return children.map((child, index) => {
       return (
         <div
-          className="bg-gray-200 px-2 pt-2 pb-2 rounded flex flex-col mt-1 py-2 relative parent"
+          className="bg-gray-200 px-2 pt-2 pb-2 mx-2 rounded flex flex-col mt-1 py-2 relative parent"
           key={index}
         >
-          <input
+          <textarea
             type="text"
             className="p-2 font-[400] text-[14px] bg-white rounded px-2 text-gray-600 w-full"
             placeholder="Enter value"
@@ -178,7 +186,7 @@ function RatingCategoryAdd({ setIsEdit, id, trigger, setTrigger }) {
                 removeChild(index);
                 setTotal(total - parseInt(child.subcategoryPoint));
               }}
-              className="bi bi-trash3-fill text-xl text-red-500 child hidden absolute right-[10px] bottom-[10px]"
+              className="bi bi-trash3-fill text-xl text-red-500 child hidden absolute right-[10%] bottom-[10px]"
             ></i>
             {/* </button> */}
           </div>
@@ -198,8 +206,8 @@ function RatingCategoryAdd({ setIsEdit, id, trigger, setTrigger }) {
     >
       <ToastContainer />
 
-      <div className="shrink w-[calc(75%)] h-[calc(80%)] bg-white flex flex-col rounded">
-        <div className="w-full min-h-[50px] bg-teal-600 flex justify-between items-center px-3  gap-2 rounded-t">
+      <div className="shrink w-[calc(85%)] h-[calc(80%)] bg-white flex flex-col rounded">
+        <div className="w-full min-h-[50px] bg-teal-600 flex justify-between items-center px gap-2 rounded-t">
           <div className="flex gap-2">
             {calculated != 100 && (
               <button
@@ -231,7 +239,7 @@ function RatingCategoryAdd({ setIsEdit, id, trigger, setTrigger }) {
               <span className="m-0 font-[500]">/100</span>
             </div>
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-4 mr-4">
             {calculated == 100 && (
               <button
                 onClick={handleSubmit}
@@ -265,10 +273,10 @@ function RatingCategoryAdd({ setIsEdit, id, trigger, setTrigger }) {
             />
           </div>
         </div>
-        <div className="h-full w-full rounded-b-lg p-3">
+        <div className="h-full w-full rounded-b-lg">
           {" "}
           <form
-            className="h-[400px]  relative overflow-scroll"
+            className="h-[410px]  relative overflow-scroll rounded-b"
             onSubmit={handleSubmit}
           >
             {renderChildren()}

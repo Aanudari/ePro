@@ -6,7 +6,7 @@ import { useStateContext } from "../../../contexts/ContextProvider";
 import RatingBlockUser from "./Cells/RatingBlockUser";
 function RatingUser() {
   const [trigger, setTrigger] = useState(false);
-  const [data, setData] = useState();
+  const [data, setData] = useState([]);
   const { TOKEN } = useStateContext();
   useEffect(() => {
     axios({
@@ -17,9 +17,8 @@ function RatingUser() {
       url: `${process.env.REACT_APP_URL}/v1/RatingNew/getListRating`,
     })
       .then((res) => {
-        console.log(res.data);
         if (res.data.isSuccess === true) {
-          setData(res.data.ratings);
+          setData(res.data.ratingYear);
         }
         if (res.data.resultMessage === "Unauthorized") {
           logout();
@@ -27,32 +26,54 @@ function RatingUser() {
       })
       .catch((err) => console.log(err));
   }, [trigger]);
-  // console.log(data);
   return (
     <UserLayout>
       <main className="main">
         <div className="responsive-wrapper">
-          <div className="main-header">
-            <h1 className="text-[#404089] !text-[22px]">Үнэлгээ</h1>
-            <div className="search">
-              <input type="text" placeholder="Search" />
-              <button type="submit">
-                <i className="ph-magnifying-glass-bold"></i>
-              </button>
-            </div>
-          </div>
-          <div className="horizontal-tabs">
-            <a className="cursor-pointer">Нийт</a>
-            <a className="cursor-pointer">Мессеж</a>
-            <a className="cursor-pointer">Password</a>
-            <a className="cursor-pointer">API</a>
-          </div>
           <div className="content py-2">
             <div className="content-main">
               <div className="card-grid">
-                {data?.map((item, index) => {
-                  return <RatingBlockUser key={index} item={item} />;
-                })}
+                {data?.length > 0 ? (
+                  data?.map((element, index) => {
+                    return (
+                      <div key={index}>
+                        {/* <div>{element.year}</div> */}
+                        <div>
+                          {element.ratingQuarter.map((itemX, ind) => {
+                            return (
+                              <div key={ind}>
+                                {/* <div>{itemX.quarter}</div> */}
+                                <div>
+                                  {itemX.ratingMonth.map((el, indexX) => {
+                                    return (
+                                      <div key={indexX}>
+                                        {/* <div>{el.month}</div> */}
+                                        <div>
+                                          {el.ratings.map((item, indexY) => {
+                                            return (
+                                              <RatingBlockUser
+                                                key={indexY}
+                                                item={item}
+                                              />
+                                            );
+                                          })}
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <div className="w-[300px] md:w-[500px]">
+                    <img src="notfound.webp" alt="" />
+                  </div>
+                )}
               </div>
             </div>
           </div>

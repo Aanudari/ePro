@@ -1,10 +1,15 @@
 import { useState } from "react";
-import DatePicker from "react-datepicker";
+import axios from "axios";
+import { logout } from "../../../service/examService";
 import DeleteConfirm from "../../main-exam/modal/DeleteComfirm";
-function ExtraInput({ item, index, trigger, setTrigger }) {
+import { useStateContext } from "../../../contexts/ContextProvider";
+import Loading from "../../../components/Loading";
+function ExtraInput({ item, index, trigger, setTrigger, id }) {
+  const { TOKEN } = useStateContext();
   const [input, setInput] = useState(item.inputName);
   const [value, setValue] = useState(new Date());
   const [confirm, setConfirm] = useState(false);
+  const [loading, setLoading] = useState(false);
   function addZero(i) {
     if (i < 10) {
       i = "0" + i;
@@ -20,13 +25,32 @@ function ExtraInput({ item, index, trigger, setTrigger }) {
     addZero(value.getMinutes()) +
     addZero(value.getSeconds());
   const handleDelete = () => {
-    console.log("delete");
+    setLoading(true);
+    axios({
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/RatingTemplateNew/deleteInputFromTemplate/${id}/${item.inputId}`,
+    })
+      .then((res) => {
+        if (res.data.errorCode === 401) {
+          logout();
+        } else {
+          setTrigger(!trigger);
+          setLoading(false);
+        }
+      })
+      .catch((err) => console.log(err));
   };
+  // console.log(item);
   return (
     <div className={`w-[calc(49.5%)] bg-white rounded mb-1 mr-1 z-1`}>
       {confirm && (
         <DeleteConfirm setConfirm={setConfirm} deleteCat={handleDelete} />
       )}
+      {loading && <Loading />}
       {item.inputType == 1 ? (
         <div className="flex h-12 px-3 py-2 gap-2">
           <input

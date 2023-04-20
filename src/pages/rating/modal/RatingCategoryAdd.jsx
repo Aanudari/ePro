@@ -137,7 +137,7 @@ function RatingCategoryAdd({
           key={index}
         >
           <ToastContainer />
-          <input
+          <textarea
             type="text"
             className="p-2 font-[400] text-[14px] bg-white rounded px-2 text-gray-600 w-full"
             placeholder="Enter value"

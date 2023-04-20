@@ -2,19 +2,19 @@ function AnswerCellMain({ index, handleChecked, checked, handleValues }) {
   return (
     <div className="w-full relative pl-10">
       <div className="group !w-full pr-4">
-        <input
+        <textarea
+          placeholder={`Хариулт ${index + 1}`}
           onChange={(e) => {
             handleValues(e.target.value, index);
           }}
           className={
-            "custom-validation !w-[calc(70%)] !border-b-[2px] !border-[#50a3a2] font-[400]"
+            "custom-validation !w-[calc(100%)] bg-gray-50 rounded !border-b-[2px] py-2 px-3 !border-[#50a3a2] font-[400] placeholder-cus placeholder-gray-400"
           }
           type="text"
           required
         />
         <span className="highlight"></span>
         <span className="bar"></span>
-        <label className="">Хариулт {index + 1}</label>
       </div>
       <div
         onClick={() => {

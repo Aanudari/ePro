@@ -90,17 +90,17 @@ function ExamBoard({
         />
       )}
       <div className="flex">
-        <div className="flex w-full mb-2">
+        <div className="flex w-full mb-2 select-none">
           <div
             onClick={() => {
               setDetector(0);
             }}
             className={`w-[150px] ${
               detector === 0
-                ? "bg-teal-700 hover:!bg-teal-700 shadow"
+                ? "bg-teal-700 custom-btn hover:!bg-teal-700 shadow"
                 : "bg-teal-500"
-            } h-9  hover:bg-teal-600 active:bg-teal-700 hover:mt-[-2px]   flex items-center justify-center font-[500] uppercase  
-          text-white text-[11px] cursor-pointer transition-all`}
+            } h-9  hover:bg-teal-600 active:bg-teal-700 hover:mt-[-2px]  custom-btn flex items-center justify-center font-[500] uppercase  
+          text-white text-[11px] !font-[700] cursor-pointer transition-all`}
           >
             Бүгд
           </div>
@@ -112,8 +112,8 @@ function ExamBoard({
               detector === 1
                 ? "bg-teal-700 hover:!bg-teal-700 shadow"
                 : "bg-teal-500"
-            } h-9  hover:bg-teal-600 active:bg-teal-700 hover:mt-[-2px]   flex items-center justify-center font-[500] uppercase  
-          text-white text-[11px] cursor-pointer transition-all ml-1`}
+            } h-9  hover:bg-teal-600 active:bg-teal-700 hover:mt-[-2px]  custom-btn flex items-center justify-center font-[500] uppercase  
+          text-white text-[11px] !font-[700] cursor-pointer transition-all ml-1`}
           >
             Идэвхитэй
             <i className="bi bi-check2-circle ml-1"></i>
@@ -126,8 +126,8 @@ function ExamBoard({
               detector === 2
                 ? "bg-teal-700 hover:!bg-teal-700 shadow"
                 : "bg-teal-500"
-            } h-9  hover:bg-teal-600 active:bg-teal-700 hover:mt-[-2px]   flex items-center justify-center font-[500] uppercase  
-          text-white text-[11px] cursor-pointer transition-all ml-1`}
+            } h-9  hover:bg-teal-600 active:bg-teal-700 hover:mt-[-2px]  custom-btn flex items-center justify-center font-[500] uppercase  
+          text-white text-[11px] !font-[700] cursor-pointer transition-all ml-1`}
           >
             Дууссан
             <i className="bi bi-hourglass-bottom ml-2"></i>
@@ -140,8 +140,8 @@ function ExamBoard({
               detector === 3
                 ? "bg-teal-700 hover:!bg-teal-700 shadow"
                 : "bg-teal-500"
-            } h-9  hover:bg-teal-600 active:bg-teal-700 hover:mt-[-2px]   flex items-center justify-center font-[500] uppercase  
-          text-white text-[11px] cursor-pointer transition-all ml-1`}
+            } h-9  hover:bg-teal-600 active:bg-teal-700 hover:mt-[-2px]  custom-btn flex items-center justify-center font-[500] uppercase  
+          text-white text-[11px] !font-[700] cursor-pointer transition-all ml-1`}
           >
             Эхлээгүй
             <i className="bi bi-alarm-fill ml-2"></i>
@@ -151,14 +151,14 @@ function ExamBoard({
           onClick={() => {
             setShow(true);
           }}
-          className="w-1/4 h-9 p-0 custom-btn btn-13 h-full border-[1px]  transition-all !border-teal-500 rounded cursor-pointer flex justify-center items-center text-teal-700 text-[11px] uppercase font-bold mr-2"
+          className="w-1/5 !h-9 p-0 custom-btn btn-13 h-full border-[1px]  transition-all !border-teal-500 rounded cursor-pointer flex justify-center items-center text-teal-700 text-[11px] uppercase font-bold mr-2"
         >
           <i className="bi bi-vector-pen text-lg text-md mr-2 "></i>
           Шалгалт үүсгэх
         </div>
       </div>
       <div className="!h-[calc(100vh-156px)] w-full overflow-scroll mt-2 border-b pr-1">
-        {exams &&
+        {final?.length > 0 ? (
           final.map((certainItem, certainIndex) => {
             if (certainIndex % 2 === 1) {
               // console.log(certainItem);
@@ -256,7 +256,7 @@ function ExamBoard({
                       </div>
                       <div className="h-full min-w-[50px] border-l flex justify-center items-center">
                         {/* <i className="bi bi-check2-circle text-[20px]"></i> */}
-                        <div className=" font-[500] text-[12px] w-[20px] flex justify-center">
+                        <div className=" font-[500] text-[12px] w-[30px] flex justify-center">
                           {exam?.examSummary?.avgScore}%
                         </div>
                       </div>
@@ -278,7 +278,7 @@ function ExamBoard({
                       <div className="h-full min-w-[50px] border-l flex justify-center items-center">
                         {/* <i className="bi bi-file-earmark-bar-graph text-[16px]"></i>
                          */}
-                        <div className=" font-[500] text-[12px] w-[20px] flex justify-center">
+                        <div className=" font-[500] text-[12px] w-[30 px] flex justify-center">
                           {exam?.examSummary?.avgScore}%
                         </div>
                       </div>
@@ -354,7 +354,12 @@ function ExamBoard({
                 </div>
               );
             }
-          })}
+          })
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <img src="notfound.webp" alt="" />
+          </div>
+        )}
       </div>
     </div>
   );

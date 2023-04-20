@@ -3,15 +3,18 @@ import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
 import { logout } from "../../../service/examService";
+import Loading from "../../../components/Loading";
 
 function RatingAddExtra({ id, setIsExtra, trigger, setTrigger }) {
   const { activeMenu, TOKEN } = useStateContext();
   const [children, setChildren] = useState([]);
+  const [loading, setLoading] = useState(false);
   const extra = {
     templateId: id,
     inputList: children,
   };
   const handleSubmit = () => {
+    setLoading(true);
     axios({
       method: "post",
       headers: {
@@ -30,6 +33,7 @@ function RatingAddExtra({ id, setIsExtra, trigger, setTrigger }) {
         } else {
           setTrigger(!trigger);
           setIsExtra(false);
+          setLoading(false);
         }
       })
       .catch((err) => {
@@ -117,6 +121,7 @@ function RatingAddExtra({ id, setIsExtra, trigger, setTrigger }) {
           bg-black bg-opacity-50 flex justify-center items-center z-20
           `}
     >
+      {loading && <Loading />}
       <ToastContainer />
       <div className="shrink w-[calc(55%)] h-[calc(60%)] bg-white flex flex-col rounded">
         <div className="w-full min-h-[50px] bg-amber-600 flex justify-between items-center px-3  gap-2 rounded-t">

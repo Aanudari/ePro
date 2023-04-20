@@ -10,14 +10,12 @@ function CommentModal({
   conversationId,
   recallChild,
   setRecallChild,
+  name,
 }) {
   const { activeMenu, TOKEN } = useStateContext();
   const [comments, setComments] = useState();
   const [trigger, setTrigger] = useState(false);
   const [show, setShow] = useState(false);
-  // console.log(modalShow);
-  // console.log(conversationId);
-
   const scrollableRef = useRef(null);
 
   useEffect(() => {
@@ -26,30 +24,27 @@ function CommentModal({
       scrollable.scrollTop = scrollable.scrollHeight;
     }
   });
+  let count = 0;
   useEffect(() => {
-    setTimeout(() => {
-      axios({
-        method: "get",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${TOKEN}`,
-        },
-        url: `${process.env.REACT_APP_URL}/v1/RatingNew/GetComments/${conversationId}`,
+    axios({
+      method: "get",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${TOKEN}`,
+      },
+      url: `${process.env.REACT_APP_URL}/v1/RatingNew/GetComments/${conversationId}`,
+    })
+      .then((res) => {
+        if (res.data.errorCode == 401) {
+          logout();
+        } else {
+          setComments(res.data.commentList);
+          setRecallChild(!recallChild);
+        }
       })
-        .then((res) => {
-          setTrigger(!trigger);
-          if (res.data.errorCode == 401) {
-            logout();
-          } else {
-            setComments(res.data.commentList);
-            setRecallChild(!recallChild);
-          }
-        })
-        .catch((err) => console.log(err));
-    }, 5000);
+      .catch((err) => console.log(err));
   }, [trigger]);
   const [value, setValue] = useState("");
-  // console.log(comments);
   const submitComment = () => {
     axios({
       method: "post",
@@ -62,8 +57,6 @@ function CommentModal({
       data: images,
     })
       .then((res) => {
-        // console.log(images[0]);
-        // console.log(res.data);
         setTrigger(!trigger);
         setValue("");
         setImages([]);
@@ -72,24 +65,20 @@ function CommentModal({
         console.log(err);
       });
   };
-  // console.log(comments);
   const [images, setImages] = useState([]);
   const [modalImg, setModalImg] = useState();
   const maxNumber = 69;
-  // console.log(images);
   const onChange = (imageList, addUpdateIndex) => {
-    // data for submit
-    // console.log(imageList, addUpdateIndex);
     setImages(imageList);
   };
   return (
     <div
       className={`fixed ${
         activeMenu
-          ? " left-[250px] w-[calc(100%-250px)] h-[calc(100%-56px)]"
-          : "w-full h-full top-[56px] left-0"
+          ? " left-[250px] w-[calc(100%-250px)] h-[calc(100%)]"
+          : "w-full h-full left-0"
       } 
-      bg-black top-[56px] bg-opacity-50 flex justify-center items-center z-20
+      bg-black bg-opacity-50 flex justify-end items-center z-20
       `}
     >
       <div
@@ -98,62 +87,75 @@ function CommentModal({
         }}
         className="w-full h-full relative "
       ></div>
-      <div className="w-[calc(60%)] h-[calc(60%)] bg-white flex flex-col items-center rounded-[22px] absolute ">
+      <div className="w-[calc(399px)] shrink h-[calc(100%)] bg-white flex flex-col items-center rounded-[22px] absolute ">
         <ImageModal img={modalImg} show={show} onHide={() => setShow(false)} />
 
         <div
           onBlur={() => {
             setModalShow(false);
           }}
-          className="w-full min-h-[50px] bg-[#52b5a5] flex justify-end items-center px-3  gap-2 relative rounded-t-[20px]"
+          className="w-full min-h-[50px] bg-teal-500 flex justify-end items-center px-3  gap-2 relative"
         >
-          <button
-            onClick={() => {
-              setModalShow(false);
-            }}
-            className="w-[20px] h-full "
-          >
-            <i className="bi bi-x-lg text-white text-2xl font-[500]"></i>
-          </button>
+          <div className="w-full flex justify-between">
+            <div className="select-none font-[400] mt-1 text-white italic">
+              {name}
+            </div>
+            <button
+              onClick={() => {
+                setModalShow(false);
+              }}
+              className="w-[20px] h-full "
+            >
+              <i className="bi bi-x-lg text-white text-2xl font-[500]"></i>
+            </button>
+          </div>
         </div>
-        <div className="h-full w-full rounded-b-[20px] flex flex-col">
+        <div className="h-full w-full  flex flex-col">
           <div
-            className=" w-full h-full bg-white p-4 overflow-scroll scrollable "
+            className=" w-full h-[calc(100vh-125px)] bg-white px-4 pt-4 overflow-scroll scrollable "
             ref={scrollableRef}
           >
-            {comments?.map((comment, index) => {
-              // console.log(comment);
-              return (
-                <div
-                  key={index}
-                  className={`bubble ${comment.isYou === "1" ? "me" : "you"}`}
-                >
-                  {comment.comment}
-                  {comment.commentImg !== "" && (
-                    <div
-                      onClick={() => {
-                        setShow(true);
-                        setModalImg(comment.commentImg);
-                      }}
-                      className="mt-2 rounded bg-white"
-                    >
-                      <img
-                        className="w-[400px] rounded border cursor-pointer hover:shadow"
-                        src={`http://${comment.commentImg}`}
-                        alt=""
-                      />
+            {comments?.length > 0 ? (
+              comments?.map((comment, index) => {
+                return (
+                  <div
+                    key={index}
+                    className={`bubble ${comment.isYou === "1" ? "me" : "you"}`}
+                  >
+                    <div className="text-[14px]">{comment.comment}</div>
+                    {comment.commentImg !== "" && (
+                      <div
+                        onClick={() => {
+                          setShow(true);
+                          setModalImg(comment.commentImg);
+                        }}
+                        className="mt-2 rounded bg-white"
+                      >
+                        <img
+                          className="w-[400px] rounded border cursor-pointer hover:shadow"
+                          src={`http://${comment.commentImg}`}
+                          alt=""
+                        />
+                      </div>
+                    )}
+                    <div className="text-[11px] border-b border-teal-400 font-[400] px-2 py-1 rounded text-teal-400 select-none">
+                      {comment.createdDate}
                     </div>
-                  )}
-                </div>
-              );
-            })}
+                  </div>
+                );
+              })
+            ) : (
+              <div className=" w-full flex justify-center">
+                <img className="w-[400px]" src={`notfound.webp`} alt="" />
+              </div>
+            )}
             <ImageModal
               img={modalImg}
               show={show}
               onHide={() => setShow(false)}
             />
           </div>
-          <div className=" w-full min-h-[60px] bg-gray-200 rounded-b-[20px] px-3 py-[10px] flex gap-2">
+          <div className=" w-full min-h-[60px] bg-teal-500 px-3 py-[10px] flex gap-2">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -175,7 +177,7 @@ function CommentModal({
                 {/* Илгээх */}
               </button>
             </form>
-            <div className="rounded bg-gray-400 p-1 top-[4px]  right-[calc(1%)] ml-2 flex items-center justify-center h-full">
+            <div className="rounded bg-gray-600 p-1 top-[4px]  right-[calc(1%)] ml-2 flex items-center justify-center h-full">
               <div className="">
                 <ImageUploading
                   multiple

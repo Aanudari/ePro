@@ -141,6 +141,7 @@ function PoolQuestionEdit({
   const [imgSide, setImgSide] = useState(false);
   const [confirm, setConfirm] = useState(false);
   const [questionId, setQuestionId] = useState();
+  const { activeMenu } = useStateContext();
   const deleteQuestion = (val) => {
     setQuestionId(val);
     setConfirm(true);
@@ -212,13 +213,13 @@ function PoolQuestionEdit({
           logout();
         } else {
           setList(res.data.examinfos);
+          setShow(!show);
         }
       })
       .catch((err) => console.log(err));
   };
   // console.log(list);
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   return (
@@ -227,33 +228,46 @@ function PoolQuestionEdit({
       <div
         className={`border-t-[6px] border-l-[2px] border-r-[2px] border-[#50a3a2] rounded-lg relative bg-[#50a3a2]`}
       >
-        <Offcanvas
-          style={{ width: "300px" }}
-          placement="end"
-          show={show}
-          onHide={handleClose}
-          responsive="lg"
-        >
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title>
-              <div className="text-white font-[500] text-[15px] text-container">
-                {data.question}
+        {show && (
+          <div
+            className={`fixed  h-[calc(100vh-56px)] ${
+              activeMenu
+                ? "top-[56px] w-[calc(100%-250px)] left-[250px]  "
+                : "top-[56px]  left-0 "
+            } 
+                flex justify-end items-center  z-20
+                `}
+          >
+            <div
+              onClick={() => {
+                setShow(false);
+              }}
+              className=" bg-black bg-opacity-50 w-full h-full absolute"
+            ></div>
+            <div className="w-[300px] !h-[calc(100vh-56px)] bg-white z-10 shrink">
+              <div
+                onClick={() => {
+                  setShow(false);
+                }}
+                className="h-[60px] w-full bg-teal-600 flex items-center justify-end px-4 select-none cursor-pointer"
+              >
+                X
               </div>
-            </Offcanvas.Title>
-          </Offcanvas.Header>
-          <Offcanvas.Body>
-            {list?.map((item, index) => {
-              return (
-                <div
-                  key={index}
-                  className="text-white text-sm px-3 rounded py-2 bg-teal-500 font-[400] mt-2 w-full"
-                >
-                  {item.examName}
-                </div>
-              );
-            })}
-          </Offcanvas.Body>
-        </Offcanvas>
+              <div className="pl-2 pr-5">
+                {list?.map((item, index) => {
+                  return (
+                    <div
+                      key={index}
+                      className="text-white text-sm px-3 rounded py-2 bg-teal-500 font-[400] mt-2 w-full"
+                    >
+                      {item.examName}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
         {confirm && (
           <DeleteConfirm setConfirm={setConfirm} deleteCat={actualDelete} />
         )}
@@ -301,23 +315,23 @@ function PoolQuestionEdit({
           }}
           className={`w-full shadow-md py-3 px-3 font-[400] ${
             edit
-              ? "bg-gray-500 bg-opacity-90"
+              ? "!bg-gray-100 "
               : data.status === "NE"
               ? "bg-gray-200"
-              : null
+              : "cursor-pointer"
           }  bg-gray-50 flex flex-col transition rounded-lg pt-10 `}
         >
           <div className="flex justify-between gap-2">
             <div className=" w-full flex items-start">
               <span className="font-[500] mt-[2px]">{indexed + 1}.</span>
               {edit ? (
-                <input
+                <textarea
                   defaultValue={data.question}
                   onChange={(e) => {
                     setQuestion(e.target.value);
                   }}
                   type="text"
-                  className="outline-none rounded-md ml-2 h-[40px] focus:border-b-[2px] focus:h-[42px] border-teal-500 px-2 text-[16px] w-[calc(90%)] font-[400]"
+                  className="outline-none rounded-md ml-2 focus:border-b-[2px] focus:h-[42px] border-teal-500 px-2 text-[16px] w-[calc(90%)] font-[400]"
                   autoCorrect="false"
                   spellCheck={false}
                   autoFocus

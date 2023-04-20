@@ -84,24 +84,11 @@ function RatingBlock({ item, trigger, setTrigger }) {
       })
       .catch((err) => console.log(err));
   }, []);
-  const removeUser = (certain) => {
-    const final = {
-      ratingId: "string",
-      ratingName: "string",
-      devices: [
-        {
-          department: "string",
-          unitId: "string",
-          deviceId: "string",
-        },
-      ],
-    };
-    console.log(certain);
-  };
   const [comfirm, setComfirm] = useState(false);
+  const [name, setName] = useState("");
   return (
     <>
-      <div className="w-full relative flex parent gap-2">
+      <div className="w-full relative flex parent hover:bg-gray-100">
         {confirm && (
           <DeleteConfirm deleteCat={handleDelete} setConfirm={setConfirm} />
         )}
@@ -110,57 +97,181 @@ function RatingBlock({ item, trigger, setTrigger }) {
             setRatingId(item.ratingId);
             handleShow();
           }}
-          className=" min-h-[60px] bg-teal-500 hover:bg-teal-400 hover:shadow text-gray-600 my-1
-         rounded relative cursor-pointer hover:text-white !w-[calc(94%)] transition-all "
+          className="w-full pl-5"
         >
-          <div className="py-2 px-3 w-full flex justify-between items-start ">
-            <div className="font-[500] uppercase  h-full items-center w-[calc(70%)] container-header-text2">
-              {item.ratingName}
-              <span className="absolute px-2 text-[11px] rounded bottom-2 left-5 bg-gray-500 text-white font-[500]">
-                {item.createdBy}
-              </span>
-            </div>
-            <div className="font-[500] top-[15px] right-[calc(10%)] w-[70px] flex h-[40px] items-center justify-between">
-              {score === Infinity ? 0 : Math.round(score)}%
-              {score === 100 ? (
-                <div
-                  className="transition-all z-10 rounded-full py-[5px] px-[9px] 
-                  bg-emerald-500  cursor-pointer"
-                >
-                  <i className="bi bi-check-lg text-xl text-white mb-[2px]"></i>
-                </div>
-              ) : (
-                <div
-                  className="transition-all z-10 rounded-full py-[5px] px-[9px] 
-                  bg-gray-500  cursor-pointer"
-                >
-                  <i className="bi bi-arrow-repeat text-lg text-white mb-[2px]"></i>
-                </div>
-              )}
-            </div>
-            <ToastContainer />
-
-            <div className="w-[70px] font-[500] flex flex-col items-end">
-              <div className="font-[500] ">
-                Үнэлсэн: {item.adminInfo.ratedUser}
+          <ul className="folder-content !mb-0 !p-0">
+            <li className="folder-item js_folder-item  cursor-pointer">
+              <div className="folder-item__icon">
+                {item.adminInfo.totalUser == item.adminInfo.ratedUser ? (
+                  <svg
+                    width="50"
+                    height="70"
+                    viewBox="0 0 50 70"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M33 0H5a5 5 0 00-5 5v60a5 5 0 005 5h40a5 5 0 005-5V17L33 0z"
+                      fill="#36A95E"
+                    />
+                    <path
+                      d="M50 29L35 16l15 .867V29z"
+                      fill="url(#paint0_linear)"
+                      opacity=".1"
+                    />
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M33 0l17 17H38a5 5 0 01-5-5V0z"
+                      fill="#A0D0B3"
+                    />
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M12 60V39h25v21H12zm14-3h8v-3h-8v3zm-3-3v3h-8v-3h8zm3-3h8v-3h-8v3zm-3-3v3h-8v-3h8zm3-3h8v-3h-8v3zm-3-3v3h-8v-3h8z"
+                      fill="#fff"
+                      fillOpacity=".75"
+                    />
+                    <defs>
+                      <linearGradient
+                        id="paint0_linear"
+                        x1="42.5"
+                        y1="16"
+                        x2="42.5"
+                        y2="29"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop />
+                        <stop offset="1" stopOpacity="0" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                ) : item.adminInfo.ratedUser == "0" ? (
+                  <svg
+                    width="50"
+                    height="70"
+                    viewBox="0 0 50 70"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M33 0H5a5 5 0 00-5 5v60a5 5 0 005 5h40a5 5 0 005-5V17L33 0z"
+                      fill="#E8B52C"
+                    />
+                    <path
+                      d="M50 29L35 16l15 .867V29z"
+                      fill="url(#paint0_linear)"
+                      opacity=".1"
+                    />
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M33 0l17 17H38a5 5 0 01-5-5V0z"
+                      fill="#EEDA86"
+                    />
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M34 39H13v21h24V39h-3zM16 54.75h18v-10.5H16v10.5z"
+                      fill="#fff"
+                      fillOpacity=".75"
+                    />
+                    <defs>
+                      <linearGradient
+                        id="paint0_linear"
+                        x1="42.5"
+                        y1="16"
+                        x2="42.5"
+                        y2="29"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop />
+                        <stop offset="1" stopOpacity="0" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                ) : (
+                  <svg
+                    width="50"
+                    height="70"
+                    viewBox="0 0 50 70"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M33 0H5a5 5 0 00-5 5v60a5 5 0 005 5h40a5 5 0 005-5V17L33 0z"
+                      fill="#5085E8"
+                    />
+                    <path
+                      d="M50 29L35 16l15 .867V29z"
+                      fill="url(#paint0_linear)"
+                      opacity=".1"
+                    />
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M33 0l17 17H38a5 5 0 01-5-5V0z"
+                      fill="#A4BEF6"
+                    />
+                    <path
+                      fill="#fff"
+                      fillOpacity=".75"
+                      d="M13 39h24v3H13zM13 57h17v3H13zM13 51h24v3H13zM13 45h24v3H13z"
+                    />
+                    <defs>
+                      <linearGradient
+                        id="paint0_linear"
+                        x1="42.5"
+                        y1="16"
+                        x2="42.5"
+                        y2="29"
+                        gradientUnits="userSpaceOnUse"
+                      >
+                        <stop />
+                        <stop offset="1" stopOpacity="0" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                )}
               </div>
-              <div className="font-[500] ">
-                Нийт: {item.adminInfo.totalUser}
+              <div className="folder-item__details">
+                <div className="folder-item__details__name">
+                  {item.ratingName}
+                </div>
+                <div className="folder-item__details__date">
+                  {item.createdDate}
+                </div>
               </div>
-            </div>
-          </div>
+              <div className="folder-item__size flex">
+                <div>
+                  <div className="folder-item__size mt-[-5px]">
+                    {item.adminInfo.ratedUser}/{item.adminInfo.totalUser}
+                  </div>
+                  <div className="text-[13px] text-[#BEBDBF] mt-[10px]">
+                    {item.adminInfo.avgScore == ""
+                      ? 0
+                      : item.adminInfo.avgScore}
+                    %
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
         </div>
         <div
           onClick={() => {
             setConfirm(true);
           }}
-          className="child transition-all z-10 rounded-full py-[5px] px-[9px] 
-                  bg-gray-300  active:bg-gray-400 cursor-pointer
-                  w-[50px] h-[50px] mt-[12px] p-[10px] relative"
+          className="child absolute left-0 hidden top-[25px] left-[10px] cursor-pointer mr-2  flex items-center"
         >
-          <i className="bi bi-trash3-fill text-xl text-white mb-[2px] absolute top-[10px] left-[15px]"></i>
+          <i className="bi bi-trash-fill text-xl hover:text-red-500"></i>
         </div>
-
         <Offcanvas placement="end" show={show} onHide={handleClose}>
           {showModal && (
             <RatingModal
@@ -182,6 +293,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
               conversationId={conversationId}
               recallChild={recallChild}
               setRecallChild={setRecallChild}
+              name={name}
             />
           )}
           <Offcanvas.Header closeButton>
@@ -260,6 +372,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
                     onClick={() => {
                       setModalShow(true);
                       setConversationId(user.conversationId);
+                      setName(user.deviceName);
                     }}
                     className={`w-[50px] relative h-14 rounded cursor-pointer hover:text-white ml-1
                      ${

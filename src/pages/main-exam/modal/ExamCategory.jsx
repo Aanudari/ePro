@@ -52,9 +52,9 @@ function ExamCategory({
   // console.log(categories);
   return (
     <div
-      className={`absolute top-[56px] z-top z-20 shadow bg core-bg-g h-[calc(100%-68px)] mb-2 h-full flex  px-3 
+      className={`fixed top-[56px] z-20 core-bg-g h-[calc(100%-56px)] mb-2 h-full flex  px-3 
         py-3 gap-2  ${
-          activeMenu ? "w-[calc(100%-14px)] left-[7px]" : "w-full left-0"
+          activeMenu ? "w-[calc(100%-250px)] left-[250px]" : "w-full left-0"
         } `}
     >
       {confirm && (
@@ -74,11 +74,14 @@ function ExamCategory({
         onClick={() => {
           setShowAddCategory(!showAddCategory);
         }}
-        className="px-3 py-2 text-white uppercare bg-teal-300 hover:shadow-white h-12 mt-1"
+        className="h-12 mt-1"
       >
-        <i className="bi bi-plus-circle"></i>
+        <img
+          className="w-12 hover:scale-105  transition-all"
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAYAAADimHc4AAAACXBIWXMAAAsTAAALEwEAmpwYAAAFVElEQVR4nO1dS28cRRBuAoLABQEJEiAeJ0Bcc3Gy3bsgzPuNEn4CESAC4nHOlQOghMchIDhw9MGEqbJNCJI1CMQNEvBjq9eLcUxyWCDYh0hwsAfVzAbBwXh3Z3p6erc+qaSVdm1N19dd1V1VXaOUQCAQCAQCgUAgEFQIe5dOXG9a8IAmPGQI3jcWv9QWfjAW24bwvLH4VyrZ53b3u5P8W034orHR/dpO7/Y9jmCw52x0lWnhE8bC0VSZBJvGYpJLsv9xWhMeqbfg8bEzE1f6Hme1kBzeUWtG2lg8ZgjWcyt8e0LWDcEnNRs9diCZuFSNKhrLszu1xee1xZ+cK31rYbP13IN2+go1UmaG8DVt4ZxHxf9H+Fl0M3qFn00NM3jZawvLvhVutiKCYFVb2K+GDY3FmdsMAfhWsOmZCPys1o5uUcMA3Yye7G4Tk6CEYL3ewmdUqGDHxttJ74q0ueVYcE763oXJ6wzBtxVQXlKMwNdjc59fq0LAvsXjN3ZPpMkwibawYFqf3qyqjEYzulMTnvGtLONKCFf2Lc7coaqIMYKbDMHP3pVkncsve+fxVlU1m58uUf/KScpZCTBfGZ+Q7nYcOtz4QieXuHouTfBNJXZH2sJ7LmdbXFECMoGjvpW/3/VyjytNACZ1wqe9hRc0wdqoE6AJ//DilA1h5HpwJgACMhLgePnxnRIGZgIhgIUjvSXG88vb78eBEMCJpVLSnYbw9bIGZQIiIBN4uYQIJ54VAnCLVQDnONXqjADO4ZY7ozCwFZDGiw660X5yeIePBHocHAGwpJLkksL1X2/hPaUPxgZIQLYK6oUTYAg/FgKwJwK0hQ8LVT5vr8o49ZqhWQGwXuiWNCsX9DAQGygBmRl6pDgCPCbX40AJ0BbfLIwAnzneOFACjIXviysRL6JKedQIINxoNKNduQng+nwfiou7khdFPccgOtCE47kJSC9HCAHJQKugOfVC/hWQ3UyRFWAH8gPv5CeAr/wIAcmAJuhEbgI04Y9CQGdQZ3w6/woYMPkiThjTJE1+Aiz8LgR0BjNBFn8tgID0KqisADuID4A/hYALwRMgJij2aoLECSdenbBsQzuet6FyEEu8HsQkFNHxG4qQYFzHczBOwtGJ33C0nd4tCRnsnwDCDb66lZuAjARJSZr+D2HfFaL8lADCIwNuw0Y2JamLTMpzpykhAPsioE7wcGEESGEW9mt+1gq/K2AIPxIThL2S8IEqGrUW3C0EYK/mxzgpT0/bRYoTTv7f/GDLSXk6gxvcCQG4HQHPKleQK0q4nfNddd6+oE7wqpwDcKvZf0iVcU21zM6HcSgHMYIlpxf0/o1ac+ohIQDd3QfoBdzaUVYAXiRgUpUN7qvJjSpG3gQRnvfWS07bqUddh6rjKvsAgs0awVPKJ1xfX4qrTcDbyjd438vtu0aNAG3xq7vmJi5XVcB4++TVxuIpp7PNVkgI5yrTtG/U2lZqgtXKNvbmpqbc3HSIZ/6KXpi6XVUZZmHmBq4IGz7lw3zlWxdfBNtHl47ZlCzscPUKXqNCQmN29jJD+IbPkhaTf9Zv8ja7MrudgftMBPoCB93CA2oYwH01y4odmWJkMhh732/owvNrq5JtpF16VLNscLkGdxfkNvDGv8L/2dvXLbxUWjy/Ol3X8SAnMvwpHlucww3ayRYBvYR7svdH4m8lzPY1fpVhWrnsqnohVDSWZ3eyDeYoI/fb4Qrj3Eon3OBCWWPxLS4XHCkzkxeNZrSrbqfu44sO2uK7muCLbtCv3b29mb3ONvvMNUun+FoQ/zb9G8LxwkrEBQKBQCAQCAQCgUAVg78BSL2jrANg4eQAAAAASUVORK5CYII="
+        ></img>
       </button>
-      <div className="w-full h-full overflow-scroll pr-2">
+      <div className="w-full  h-[calc(100%-56px)] overflow-scroll !py-5 pr-2">
         {categories?.length > 0 ? (
           categories.map((category, index) => (
             <div key={index} className="relative parent ">

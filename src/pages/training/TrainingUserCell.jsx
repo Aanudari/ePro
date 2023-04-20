@@ -14,7 +14,6 @@ function TrainingUserCell() {
   const navigate = useNavigate();
   const [filteredList, setFilteredList] = useState(selectedTrain?.trainingDevs);
   const [searchQuery, setSearchQuery] = useState("");
-
   const handleSearch = (event) => {
     const query = event.target.value;
     setSearchQuery(query);

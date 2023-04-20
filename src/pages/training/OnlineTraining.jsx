@@ -510,7 +510,7 @@ function OnlineTraining() {
                       </div>
                     )}
 
-                    {filteredForm?.length < 0 ? (
+                    {filteredForm?.length === 0 || filteredForm?.length < 0 ? (
                       <a
                         onClick={() =>
                           navigate("/training-rating", {

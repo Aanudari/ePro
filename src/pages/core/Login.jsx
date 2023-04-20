@@ -5,14 +5,7 @@ import { useStateContext } from "../../contexts/ContextProvider";
 
 function Login() {
   const { setUser, setisAuthenticated } = useStateContext();
-  const navigate = useNavigate();
-  const adminRoles = ["199", "196"];
   const redirect = (data) => {
-    if (adminRoles.includes(data.role_id)) {
-      navigate("/exam-dashboard");
-    } else {
-      navigate("/user-exam");
-    }
     setUser(data);
   };
 

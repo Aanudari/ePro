@@ -108,14 +108,15 @@ function UserTraining() {
   }, []);
   const clickView = (data) => {
     setChosedTrain(data);
+    console.log(data?.status);
     if (activeTab === "2") {
-      if (chosedTrain?.status === "Үзсэн") {
+      if (data?.status === "Үзсэн") {
         navigate("/player", {
-          state: { data: chosedTrain, item: activeTab },
+          state: { data: data, item: activeTab },
         });
-      } else if (chosedTrain?.status === "Үзэж байгаа") {
+      } else if (data?.status === "Үзэж байгаа") {
         navigate("/player", {
-          state: { data: chosedTrain, item: activeTab },
+          state: { data: data, item: activeTab },
         });
       } else {
         setShowReady(true);

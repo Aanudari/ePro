@@ -109,21 +109,50 @@ function UserTraining() {
   const clickView = (data) => {
     setChosedTrain(data);
     if (activeTab === "2") {
-      if (chosedTrain?.status === "Үзсэн") {
+      if (data?.status === "Үзсэн") {
         navigate("/player", {
-          state: { data: chosedTrain, item: activeTab },
+          state: { data: data, item: activeTab },
         });
-      } else if (chosedTrain?.status === "Үзэж байгаа") {
+      } else if (data?.status === "Үзэж байгаа") {
         navigate("/player", {
-          state: { data: chosedTrain, item: activeTab },
+          state: { data: data, item: activeTab },
         });
       } else {
         setShowReady(true);
       }
     } else {
-      navigate("/player", {
-        state: { data: data, item: activeTab },
-      });
+      axios({
+        method: "post",
+        headers: {
+          Authorization: `${TOKEN}`,
+          "Content-Type": "application/json",
+          accept: "text/plain",
+        },
+        url: `${process.env.REACT_APP_URL}/v1/Training/watch/start`,
+        data: {
+          trainingId: `${data.id}`,
+        },
+      })
+        .then((res) => {
+          if (res.data.isSuccess === true) {
+            // notification.success(`Сургалт эхэлсэн цаг бүртгэгдлээ.`);
+            const timer = setTimeout(
+              () =>
+                navigate("/player", {
+                  state: { data: data, item: activeTab },
+                }),
+              1000
+            );
+            return () => clearTimeout(timer);
+          } else if (
+            res.data.resultMessage === "Unauthorized" ||
+            res.data.resultMessage ===
+              "Input string was not in a correct divat."
+          ) {
+            logout();
+          }
+        })
+        .catch((err) => console.log(err));
     }
   };
 

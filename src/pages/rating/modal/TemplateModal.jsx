@@ -13,6 +13,9 @@ function TemplateModal({ setShow, id, categoryName }) {
   const [data, setData] = useState();
   const [trigger, setTrigger] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [reload, setReload] = useState(false);
+  const [category, setCategory] = useState([]);
+
   useEffect(() => {
     setLoading(true);
     axios({
@@ -28,12 +31,12 @@ function TemplateModal({ setShow, id, categoryName }) {
           logout();
         } else {
           setData(res.data);
+          setCategory(res.data.categories);
           setLoading(false);
         }
       })
       .catch((err) => console.log(err));
-  }, [trigger]);
-
+  }, [trigger, reload]);
   const [showModal, setShowModal] = useState(false);
   const [isExtra, setIsExtra] = useState(false);
   return (
@@ -129,16 +132,18 @@ function TemplateModal({ setShow, id, categoryName }) {
                 })}
               </div>
               <div className="">
-                {data?.categories.length > 0 ? (
-                  data?.categories.map((item, index) => {
+                {category?.length > 0 ? (
+                  category?.map((item, index) => {
                     return (
                       <TemplateCategoryCell
-                        key={JSON.stringify(item + index)}
+                        key={index}
                         item={item}
                         index={index}
                         trigger={trigger}
                         setTrigger={setTrigger}
                         templateId={id}
+                        setReload={setReload}
+                        reload={reload}
                       />
                     );
                   })

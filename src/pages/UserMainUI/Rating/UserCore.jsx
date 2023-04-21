@@ -56,7 +56,7 @@ function UserCore() {
     }
     tempo.push(temp);
   }
-  // console.log(data);
+  console.log(JSON.stringify(data && data[0]));
   return (
     <UserLayout>
       <div className="w-full">

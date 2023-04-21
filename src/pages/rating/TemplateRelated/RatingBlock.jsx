@@ -67,7 +67,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
       .catch((err) => {});
   };
   const [excelUrl, setExcelUrl] = useState("");
-  useEffect(() => {
+  const handleExcel = () => {
     axios({
       method: "get",
       headers: {
@@ -78,16 +78,24 @@ function RatingBlock({ item, trigger, setTrigger }) {
       .then((res) => {
         if (res.data.resultMessage === "Unauthorized") {
           logout();
+        } else if (res.data.isSuccess == false) {
+          toast.error(res.data.resultMessage, {
+            position: "top-right",
+          });
         } else {
           setExcelUrl(res.data.excelFile);
+          setComfirm(true);
         }
       })
       .catch((err) => console.log(err));
-  }, []);
+  };
+
   const [comfirm, setComfirm] = useState(false);
   const [name, setName] = useState("");
   return (
     <>
+      <ToastContainer />
+
       <div className="w-full relative flex parent hover:bg-gray-100">
         {confirm && (
           <DeleteConfirm deleteCat={handleDelete} setConfirm={setConfirm} />
@@ -304,7 +312,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
                 )}
                 <button
                   onClick={() => {
-                    setComfirm(true);
+                    handleExcel();
                   }}
                   // href={`${excelUrl}`}
                   className={`font-[500]  mr-2 text-[19px] text-[#174B4B] ${

@@ -163,6 +163,7 @@ function TrainingRating() {
       })
         .then((res) => {
           if (res.data.isSuccess === false) {
+            notification.error(`${res.data.resultMessage}`);
           }
           if (res.data.isSuccess === true) {
             notification.success(`${res.data.resultMessage}`);
@@ -214,6 +215,8 @@ function TrainingRating() {
           res.data.resultMessage === "Input string was not in a correct format."
         ) {
           logout();
+        } else if (res.data.isSuccess === false) {
+          notification.error(res.data.resultMessage);
         }
       })
       .catch((err) => console.log(err));

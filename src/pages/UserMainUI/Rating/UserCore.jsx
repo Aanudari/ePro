@@ -42,9 +42,24 @@ function UserCore() {
       return gotYa(exam.id);
     }
   });
+
   const [detector, setDetector] = useState(0);
   let indexed = ["A", "C", "O", "P"];
   let tempo = [data];
+
+  const groupedExams = tempo[detector]?.reduce((acc, exam) => {
+    const month = exam.month;
+    if (!acc[month]) {
+      acc[month] = {
+        month: month,
+        exams: [],
+      };
+    }
+    acc[month].exams.push(exam);
+    return acc;
+  }, {});
+  const [reduced, setReduced] = useState(groupedExams);
+  console.log(reduced);
   for (let index = 0; index < indexed?.length; index++) {
     const element = indexed[index];
     let temp = [];
@@ -56,7 +71,20 @@ function UserCore() {
     }
     tempo.push(temp);
   }
-  console.log(JSON.stringify(data && data[0]));
+  useEffect(() => {
+    const groupedExams = tempo[detector]?.reduce((acc, exam) => {
+      const month = exam.month;
+      if (!acc[month]) {
+        acc[month] = {
+          month: month,
+          exams: [],
+        };
+      }
+      acc[month].exams.push(exam);
+      return acc;
+    }, {});
+    setReduced(groupedExams);
+  }, [detector]);
   return (
     <UserLayout>
       <div className="w-full">

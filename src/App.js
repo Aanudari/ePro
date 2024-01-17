@@ -289,7 +289,12 @@ function App() {
           <Route
             path="/user-exam"
             element={
-              <ProtectedRoute allowedRoles={[1, 3, 4, 5, 7, 13, 16, 20]}>
+              <ProtectedRoute
+                allowedRoles={[
+                  1, 3, 4, 5, 7, 13, 16, 20, 22, 23, 24, 25, 26, 27, 28, 30, 31,
+                  32, 33,
+                ]}
+              >
                 <UserCore />
               </ProtectedRoute>
             }
@@ -297,7 +302,12 @@ function App() {
           <Route
             path="/user-main"
             element={
-              <ProtectedRoute allowedRoles={[1, 3, 4, 5, 7, 13, 16, 20]}>
+              <ProtectedRoute
+                allowedRoles={[
+                  1, 3, 4, 5, 7, 13, 16, 20, 22, 23, 24, 25, 26, 27, 28, 30, 31,
+                  32, 33,
+                ]}
+              >
                 <UserHome />
               </ProtectedRoute>
             }
@@ -305,7 +315,12 @@ function App() {
           <Route
             path="/exam"
             element={
-              <ProtectedRoute allowedRoles={[1, 3, 4, 5, 7, 13, 16, 20]}>
+              <ProtectedRoute
+                allowedRoles={[
+                  1, 3, 4, 5, 7, 13, 16, 20, 22, 23, 24, 25, 26, 27, 28, 30, 31,
+                  32, 33,
+                ]}
+              >
                 <Exam />
               </ProtectedRoute>
             }
@@ -313,7 +328,12 @@ function App() {
           <Route
             path="/exam-result"
             element={
-              <ProtectedRoute allowedRoles={[1, 3, 4, 5, 7, 13, 16, 20]}>
+              <ProtectedRoute
+                allowedRoles={[
+                  1, 3, 4, 5, 7, 13, 16, 20, 22, 23, 24, 25, 26, 27, 28, 30, 31,
+                  32, 33,
+                ]}
+              >
                 <ExamShow />
               </ProtectedRoute>
             }
@@ -321,7 +341,12 @@ function App() {
           <Route
             path="/user-rating"
             element={
-              <ProtectedRoute allowedRoles={[1, 3, 4, 5, 7, 13, 16, 20]}>
+              <ProtectedRoute
+                allowedRoles={[
+                  1, 3, 4, 5, 7, 13, 16, 20, 22, 23, 24, 25, 26, 27, 28, 30, 31,
+                  32, 33,
+                ]}
+              >
                 <RatingUser />
               </ProtectedRoute>
             }
@@ -329,7 +354,12 @@ function App() {
           <Route
             path="/user-rating-detail"
             element={
-              <ProtectedRoute allowedRoles={[1, 3, 4, 5, 7, 13, 16, 20]}>
+              <ProtectedRoute
+                allowedRoles={[
+                  1, 3, 4, 5, 7, 13, 16, 20, 22, 23, 24, 25, 26, 27, 28, 30, 31,
+                  32, 33,
+                ]}
+              >
                 <RatingUserShow />
               </ProtectedRoute>
             }
@@ -337,7 +367,12 @@ function App() {
           <Route
             path="/test"
             element={
-              <ProtectedRoute allowedRoles={[1, 3, 4, 5, 7, 13, 16, 20]}>
+              <ProtectedRoute
+                allowedRoles={[
+                  1, 3, 4, 5, 7, 13, 16, 20, 22, 23, 24, 25, 26, 27, 28, 30, 31,
+                  32, 33,
+                ]}
+              >
                 <Test />
               </ProtectedRoute>
             }
@@ -345,7 +380,12 @@ function App() {
           <Route
             path="/user-error-thanks"
             element={
-              <ProtectedRoute allowedRoles={[1, 3, 4, 5, 7, 13, 16, 20]}>
+              <ProtectedRoute
+                allowedRoles={[
+                  1, 3, 4, 5, 7, 13, 16, 20, 22, 23, 24, 25, 26, 27, 28, 30, 31,
+                  32, 33,
+                ]}
+              >
                 <UserErrorThanks />
               </ProtectedRoute>
             }
@@ -353,7 +393,12 @@ function App() {
           <Route
             path="/user-training"
             element={
-              <ProtectedRoute allowedRoles={[1, 3, 4, 5, 7, 13, 16, 20]}>
+              <ProtectedRoute
+                allowedRoles={[
+                  1, 3, 4, 5, 7, 13, 16, 20, 22, 23, 24, 25, 26, 27, 28, 30, 31,
+                  32, 33,
+                ]}
+              >
                 <UserTraining />
               </ProtectedRoute>
             }
@@ -361,7 +406,12 @@ function App() {
           <Route
             path="/player"
             element={
-              <ProtectedRoute allowedRoles={[1, 3, 4, 5, 7, 13, 16, 20]}>
+              <ProtectedRoute
+                allowedRoles={[
+                  1, 3, 4, 5, 7, 13, 16, 20, 22, 23, 24, 25, 26, 27, 28, 30, 31,
+                  32, 33,
+                ]}
+              >
                 <TrainingPlayer />
               </ProtectedRoute>
             }

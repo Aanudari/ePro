@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 function RatingBoard({ showModal, setShowModal, data, setTrigger, trigger }) {
   const [expandKey, setExpandKey] = useState(0);
-  const [selectedYear, setSelectedYear] = useState("2023");
+  const [selectedYear, setSelectedYear] = useState("2024");
   const [selectedQuarter, setSelectedQuarter] = useState("");
   const [quarterName, setQuarterName] = useState("");
   const recalldata = (param) => {

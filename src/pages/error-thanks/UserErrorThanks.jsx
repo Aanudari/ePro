@@ -13,6 +13,7 @@ function UserErrorThanks() {
   const [complain, setComplain] = useState([]);
   const [activeTab, setActiveTab] = useState("1");
   const [filteredData, setFilteredData] = useState([]);
+  // hi odmunkh
   useEffect(() => {
     axios({
       method: "get",
@@ -74,7 +75,7 @@ function UserErrorThanks() {
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const currentRecords = filteredData.slice(
     indexOfFirstRecord,
-    indexOfLastRecord
+    indexOfLastRecord,
   );
   const nPages = Math.ceil(filteredData.length / recordsPerPage);
   useEffect(() => {
@@ -188,18 +189,19 @@ function UserErrorThanks() {
                           new Date(item.createdAt).getMonth() === 3
                             ? "1-р улирал"
                             : new Date(item.createdAt).getMonth() === 4 ||
-                              new Date(item.createdAt).getMonth() === 5 ||
-                              new Date(item.createdAt).getMonth() === 6
-                            ? "2-р улирал"
-                            : new Date(item.createdAt).getMonth() === 7 ||
-                              new Date(item.createdAt).getMonth() === 8 ||
-                              new Date(item.createdAt).getMonth() === 9
-                            ? "3-р улирал"
-                            : new Date(item.createdAt).getMonth() === 10 ||
-                              new Date(item.createdAt).getMonth() === 11 ||
-                              new Date(item.createdAt).getMonth() === 12
-                            ? "4-р улирал"
-                            : ""}
+                                new Date(item.createdAt).getMonth() === 5 ||
+                                new Date(item.createdAt).getMonth() === 6
+                              ? "2-р улирал"
+                              : new Date(item.createdAt).getMonth() === 7 ||
+                                  new Date(item.createdAt).getMonth() === 8 ||
+                                  new Date(item.createdAt).getMonth() === 9
+                                ? "3-р улирал"
+                                : new Date(item.createdAt).getMonth() === 10 ||
+                                    new Date(item.createdAt).getMonth() ===
+                                      11 ||
+                                    new Date(item.createdAt).getMonth() === 12
+                                  ? "4-р улирал"
+                                  : ""}
                         </td>
                         <td className="px-1 py-1 border">
                           {new Date(item.createdAt).toLocaleString("en-US", {
@@ -247,18 +249,19 @@ function UserErrorThanks() {
                           new Date(item.createdAt).getMonth() === 3
                             ? "1-р улирал"
                             : new Date(item.createdAt).getMonth() === 4 ||
-                              new Date(item.createdAt).getMonth() === 5 ||
-                              new Date(item.createdAt).getMonth() === 6
-                            ? "2-р улирал"
-                            : new Date(item.createdAt).getMonth() === 7 ||
-                              new Date(item.createdAt).getMonth() === 8 ||
-                              new Date(item.createdAt).getMonth() === 9
-                            ? "3-р улирал"
-                            : new Date(item.createdAt).getMonth() === 10 ||
-                              new Date(item.createdAt).getMonth() === 11 ||
-                              new Date(item.createdAt).getMonth() === 12
-                            ? "4-р улирал"
-                            : ""}
+                                new Date(item.createdAt).getMonth() === 5 ||
+                                new Date(item.createdAt).getMonth() === 6
+                              ? "2-р улирал"
+                              : new Date(item.createdAt).getMonth() === 7 ||
+                                  new Date(item.createdAt).getMonth() === 8 ||
+                                  new Date(item.createdAt).getMonth() === 9
+                                ? "3-р улирал"
+                                : new Date(item.createdAt).getMonth() === 10 ||
+                                    new Date(item.createdAt).getMonth() ===
+                                      11 ||
+                                    new Date(item.createdAt).getMonth() === 12
+                                  ? "4-р улирал"
+                                  : ""}
                         </td>
                         <td className="px-1 py-1 border">
                           {new Date(item.createdAt).toLocaleString("en-US", {
@@ -298,18 +301,19 @@ function UserErrorThanks() {
                           new Date(item.createdAt).getMonth() === 3
                             ? "1-р улирал"
                             : new Date(item.createdAt).getMonth() === 4 ||
-                              new Date(item.createdAt).getMonth() === 5 ||
-                              new Date(item.createdAt).getMonth() === 6
-                            ? "2-р улирал"
-                            : new Date(item.createdAt).getMonth() === 7 ||
-                              new Date(item.createdAt).getMonth() === 8 ||
-                              new Date(item.createdAt).getMonth() === 9
-                            ? "3-р улирал"
-                            : new Date(item.createdAt).getMonth() === 10 ||
-                              new Date(item.createdAt).getMonth() === 11 ||
-                              new Date(item.createdAt).getMonth() === 12
-                            ? "4-р улирал"
-                            : ""}
+                                new Date(item.createdAt).getMonth() === 5 ||
+                                new Date(item.createdAt).getMonth() === 6
+                              ? "2-р улирал"
+                              : new Date(item.createdAt).getMonth() === 7 ||
+                                  new Date(item.createdAt).getMonth() === 8 ||
+                                  new Date(item.createdAt).getMonth() === 9
+                                ? "3-р улирал"
+                                : new Date(item.createdAt).getMonth() === 10 ||
+                                    new Date(item.createdAt).getMonth() ===
+                                      11 ||
+                                    new Date(item.createdAt).getMonth() === 12
+                                  ? "4-р улирал"
+                                  : ""}
                         </td>
                         <td className="px-1 py-1 border">
                           {new Date(item.createdAt).toLocaleString("en-US", {
@@ -325,7 +329,7 @@ function UserErrorThanks() {
                         <td className="px-1 py-1 border">{item.rule}</td>
                         <td className="px-1 py-1 border">{item.too}</td>
                       </tr>
-                    ))
+                    )),
                 )}
               </tbody>
             </table>

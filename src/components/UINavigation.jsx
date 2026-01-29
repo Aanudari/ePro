@@ -76,6 +76,15 @@ export default function UINavigation() {
                 {" "}
                 Бүртгэл{" "}
               </a>
+              <a
+                className="cursor-pointer"
+                onClick={() => {
+                  navigate("/task-req");
+                }}
+              >
+                {" "}
+                Нөхцөл{" "}
+              </a>
             </nav>
             <div className="header-navigation-actions relative">
               {/* <a  className="button">
@@ -162,6 +171,16 @@ export default function UINavigation() {
                 {" "}
                 Бүртгэл{" "}
               </a>
+              <a
+                className="cursor-pointer active:border-b"
+                onClick={() => {
+                  navigate("/task-req");
+                }}
+              >
+                {" "}
+                Нөхцөл{" "}
+              </a>
+
               <a className="cursor-pointer active:border-b"> Мэдэгдэл </a>
               <a
                 className="cursor-pointer active:border-b"

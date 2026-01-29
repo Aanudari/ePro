@@ -3,6 +3,8 @@ import { Navigate } from "react-router-dom";
 import { logout } from "../service/examService";
 export const ProtectedRoute = ({ children, allowedRoles }) => {
   const { user, roleId } = useStateContext();
+  console.log("roleId:", roleId);
+  console.log("allowedRoles:", allowedRoles);
   if (!user) {
     return <Navigate to="/" />;
   }

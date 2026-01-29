@@ -36,6 +36,8 @@ import ExamDash from "./pages/main-exam/examDashboard";
 import "react-toastify/dist/ReactToastify.css";
 import EditTraining from "./pages/training/Edit-training";
 import UserTraining from "./pages/training/User-training";
+import TaskReq from "./pages/taskReq/taskReq";
+
 import ClickedTrain from "./pages/training/ClickedTrain";
 import TrainingPlayer from "./pages/training/TrainingPlayer";
 import UserCore from "./pages/UserMainUI/Rating/UserCore";
@@ -292,7 +294,7 @@ function App() {
               <ProtectedRoute
                 allowedRoles={[
                   1, 3, 4, 5, 7, 13, 16, 20, 22, 23, 24, 25, 26, 27, 28, 30, 31,
-                  32, 33,
+                  32, 33, 2,8,9,10,34,11,36,37,38,40,42,43,44,21,15
                 ]}
               >
                 <UserCore />
@@ -403,13 +405,29 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+                    <Route
+            path="/task-req"
+            element={
+              <ProtectedRoute
+                allowedRoles={[
+                  2,8,9,10,34,22,11,24,36,37,38,40,42,43,44,21,15
+                ]}
+              >
+                {<TaskReq/>}
+                {/*<UserTraining />
+*/}
+             </ProtectedRoute>
+            }
+          />
+
           <Route
             path="/player"
             element={
               <ProtectedRoute
                 allowedRoles={[
                   1, 3, 4, 5, 7, 13, 16, 20, 22, 23, 24, 25, 26, 27, 28, 30, 31,
-                  32, 33,
+                  32, 33, 2,8,9,10,34,11,36,37,38,40,42,43,44,21,
                 ]}
               >
                 <TrainingPlayer />

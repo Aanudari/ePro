@@ -4,27 +4,78 @@ import axios from "axios";
 import { logout } from "../../../service/examService";
 import Accordion from "react-bootstrap/Accordion";
 
-function AllEmployeeSelect({ setShow, getEmployees, setShowSelect }) {
+function AllEmployeeSelectReq({ setShow, getEmployees, setShowSelect }) {
   const { activeMenu, TOKEN } = useStateContext();
   const [users, setUsers] = useState();
 
+  console.log("token?", TOKEN);
   useEffect(() => {
     axios({
       method: "get",
       headers: {
+        "Content-Type": "application/json",
         Authorization: `${TOKEN}`,
       },
-      url: `${process.env.REACT_APP_URL}/v1/User`,
+      url: `${process.env.REACT_APP_URL}/v1/TaskRequirement/GetAllReqUsers`,
     })
       .then((res) => {
-        // console.log(res.data);
-        console.log(res);
-        setUsers(res.data.result);
+        console.log(res.data);
+        // console.log(res);
+        const users = res.data.reqUserList.map((item) => ({
+          username: item.user_name ?? null,
+          role: item.role ?? null,
+          workerStatus: null,
+          organizationUnitId: item.organization_unit_id ?? null,
+          workerLevel: item.worker_level ?? null,
+          departmentId: item.department_id ?? null,
+          departmentName: item.department_name ?? null,
+          divisionId: item.division_id ?? null,
+          divisionName: item.division_name ?? null,
+          unitId: item.organization_unit_id ?? null,
+          unitName: item.unit_name ?? null,
+          jobId: item.job_id ?? null,
+          jobName: item.job_name ?? null,
+          deviceId: item.device_id ?? null,
+          firstName: item.first_name ?? null,
+          lastName: item.last_name ?? null,
+          roleId: null,
+          roleName: item.role_name ?? null,
+          ratingCount: 0,
+        }));
+        setUsers(users);
+        users
+          .filter((e) =>
+            [
+              9691, 9696, 11466, 11467, 11464, 11468, 11465, 11267, 11266, 9693,
+              11262, 11265, 11268, 11269, 11263, 11264, 11463,
+            ].includes(e.deviceId),
+          )
+          .forEach((e) => {
+            collector(e.departmentId, e.unitId, e.deviceId, e.jobId, 0);
+          });
         if (res.data.resultMessage === "Unauthorized") {
           logout();
         }
       })
       .catch((err) => console.log(err));
+
+    // axios({
+    //   method: "get",
+    //   headers: {
+    //     Authorization: `2b7fb161-c651-4909-a2d4-11952d00770e`,
+    //     // Authorization: `${TOKEN}`,
+    //   },
+    //   url: `${process.env.REACT_APP_URL}/v1/User`,
+    // })
+    //   .then((res) => {
+    //     // console.log(res.data);
+    //     console.log(res);
+    //     setUsers(res.data.result);
+    //     if (res.data.resultMessage === "Unauthorized") {
+    //       logout();
+    //     }
+    //   })
+    //   .catch((err) => console.log(err));
   }, []);
   // console.log(users);
   let pre = [];
@@ -65,12 +116,14 @@ function AllEmployeeSelect({ setShow, getEmployees, setShowSelect }) {
       setIndexDetect(tempo);
     }
   }, [chosenPre, currentIndex]);
-  const collector = (dep, unit, dev, ind) => {
+  const collector = (dep, unit, dev, job, ind) => {
     let data = {
       department: dep,
       unitId: unit,
       deviceId: dev,
+      jobId: job,
     };
+    console.log(data);
     if (chosenPre.includes(dev)) {
       let filtered = chosenPre.filter((item, index) => {
         return item !== dev;
@@ -142,46 +195,22 @@ function AllEmployeeSelect({ setShow, getEmployees, setShowSelect }) {
       setIndexDetect((prev) => [...prev, index]);
     }
   };
+
+  useEffect(() => {
+    getEmployees(chosen);
+  }, [chosen]);
   // console.log(chosen);
+  console.log(main);
   return (
-    <div
-      className={`${
-        activeMenu ? " left-[250px] w-[calc(100%-250px)]" : "left-0 w-full"
-      } 
-    top-[56px] fixed  h-[calc(100%-56px)] 
-    bg-black bg-opacity-50 flex items-center justify-center z-20`}
-    >
+    <div className={"w-full"}>
       <div className="bg-gray-200 appear-smooth w-full h-[calc(100%)] relative">
-        <div className="w-full h-14 bg-teal-600 flex justify-between px-4 items-center shadow-sm">
+        <div className="w-full h-14 bg-gradient-to-r from-cyan-500 to-blue-500 flex justify-between px-4 items-center shadow-sm">
           <div className="flex items-center">
             <div className=" flex justify-between items-center px-4 py-2">
               <span className="text-white font-[500] text-sm mr-2">
                 Сонгох : {chosen.length}/{users?.length}
               </span>
-              {chosen.length > 0 && (
-                // <span
-
-                //   className="text-white font-[500] text-sm border-[2px] rounded  px-2 py-2 ml-2"
-                // >
-                <button
-                  onClick={() => {
-                    setShowSelect(false);
-                    getEmployees(chosen);
-                  }}
-                  className={"custom-btn btn-13"}
-                >
-                  Хадгалах
-                </button>
-              )}
             </div>
-          </div>
-          <div className="">
-            <i
-              onClick={() => {
-                setShowSelect(false);
-              }}
-              className="bi bi-x-lg text-xl cursor-pointer hover:scale-105"
-            ></i>
           </div>
         </div>
         <div className="w-full h-full overflow-scroll px-4 pt-3">
@@ -215,7 +244,7 @@ function AllEmployeeSelect({ setShow, getEmployees, setShowSelect }) {
                             item.departmentId,
                             item.unitId,
                             item.deviceId,
-                            ind
+                            ind,
                           );
                         }}
                         key={index}
@@ -244,4 +273,4 @@ function AllEmployeeSelect({ setShow, getEmployees, setShowSelect }) {
   );
 }
 
-export default AllEmployeeSelect;
+export default AllEmployeeSelectReq;

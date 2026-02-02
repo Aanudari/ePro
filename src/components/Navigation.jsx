@@ -109,47 +109,38 @@ function Navigation() {
           </div>
           {/* search */}
           <div className="flex nav">
-            <form
-              onFocus={() => {
-                setShowUsers(true);
-              }}
-              onSubmit={handleSubmit}
-              className="relative"
-            >
+            <form onSubmit={handleSubmit} className="relative w-full">
               <input
                 ref={inputRef}
                 type="text"
                 value={searchQuery}
                 onChange={handleSearchChange}
-                placeholder="Search by username or first name..."
-                className="custom-input-2 h-10"
+                placeholder="Нэрээр хайлт хийх"
+                className="custom-input-2 h-10 w-full"
                 tabIndex="0"
-                onBlur={() => {
-                  setShowUsers(false);
-                }}
+                onFocus={() => setShowUsers(true)}
+                onBlur={() => setShowUsers(false)}
               />
-              {showUsers && (
-                <div className="h-[200px] transition-all overflow-hidden w-full bg-gray-50 absolute bottom-[-199px] shadow rounded-b ">
-                  {filteredObjects?.map((user, index) => {
-                    return (
-                      <div
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                        }}
-                        key={index}
-                        onClick={() => {
-                          inputRef.current.blur();
-                          navigate("/user-profile", { state: user });
-                          setShowUsers(false);
-                          setSearchQuery("");
-                        }}
-                        className="cursor-pointer h-10 border-b bg-gray-50 hover:bg-gray-200 text-[13px] px-3 flex items-center justify-between"
-                      >
-                        <span className="font-[600]">{user.firstName}</span>
-                        <span className="font-[600]">{user.roleName}</span>
-                      </div>
-                    );
-                  })}
+
+              {/* Dropdown always fits input width */}
+              {showUsers && filteredObjects?.length > 0 && (
+                <div className="absolute top-full left-0 w-full max-h-48 overflow-auto bg-gray-50 shadow rounded-b z-50">
+                  {filteredObjects.map((user, index) => (
+                    <div
+                      key={index}
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => {
+                        inputRef.current.blur();
+                        navigate("/user-profile", { state: user });
+                        setShowUsers(false);
+                        setSearchQuery("");
+                      }}
+                      className="cursor-pointer h-10 border-b bg-gray-50 hover:bg-gray-200 text-[13px] px-3 flex items-center justify-between"
+                    >
+                      <span className="font-[600]">{user.firstName}</span>
+                      <span className="font-[600]">{user.roleName}</span>
+                    </div>
+                  ))}
                 </div>
               )}
             </form>
@@ -188,7 +179,7 @@ function Navigation() {
                       }}
                       className={classNames(
                         active ? "bg-gray-100" : "",
-                        "block px-4 py-2 text-sm text-gray-700 text-end"
+                        "block px-4 py-2 text-sm text-gray-700 text-end",
                       )}
                     >
                       Гарах

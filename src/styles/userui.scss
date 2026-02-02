@@ -84,7 +84,7 @@ body {
     text-decoration: none;
     color: var(--c-text-action);
     font-weight: 500;
-    font-size: 15px;
+    font-size: 14px;
     transition: 0.15s ease;
     & + * {
       margin-left: 1.5rem;
@@ -383,7 +383,9 @@ body {
 
 .card {
   background-color: var(--c-background-primary);
-  box-shadow: 0 3px 3px 0 rgba(#000, 0.05), 0 5px 15px 0 rgba(#000, 0.05);
+  box-shadow:
+    0 3px 3px 0 rgba(#000, 0.05),
+    0 5px 15px 0 rgba(#000, 0.05);
   border-radius: 8px;
   overflow: hidden;
   display: flex;
@@ -535,9 +537,13 @@ $purple: #4b70e2;
 $transition: 1.25s;
 
 .inset-shadow {
-  box-shadow: inset 2px 2px 4px $neu-2, inset -2px -2px 4px $white;
+  box-shadow:
+    inset 2px 2px 4px $neu-2,
+    inset -2px -2px 4px $white;
   transition: 0.25s ease;
 }
 .inset-shadow:hover {
-  box-shadow: inset 4px 4px 4px $neu-2, inset -4px -4px 4px $white;
+  box-shadow:
+    inset 4px 4px 4px $neu-2,
+    inset -4px -4px 4px $white;
 }

@@ -30,7 +30,7 @@ a {
   width: 100px;
   height: 50px;
   border: none;
-  font-size: 15px;
+  font-size: 14px;
   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
   -webkit-appearance: button;
   appearance: button;
@@ -74,7 +74,7 @@ a {
 
 .nav input::placeholder {
   color: gray;
-  font-size: 15px;
+  font-size: 12px;
 }
 .celly {
   background-color: #bd3a73;

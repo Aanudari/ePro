@@ -67,7 +67,7 @@ body :-ms-input-placeholder {
   text-align: center;
 }
 .container h1 {
-  font-size: 40px;
+  font-size: 36px;
   transition-duration: 1s;
   transition-timing-function: ease-in-out;
   font-weight: 200;
@@ -91,7 +91,7 @@ body :-ms-input-placeholder {
   margin: 0 auto 10px auto;
   display: block;
   text-align: center;
-  font-size: 18px;
+  font-size: 16px;
   color: white;
   -webkit-transition-duration: 0.25s;
   transition-duration: 0.25s;
@@ -119,7 +119,7 @@ input:focus :active {
   border-radius: 3px;
   width: 250px;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 16px;
   transition-duration: 0.25s;
 }
 .form button:hover {
@@ -358,7 +358,7 @@ select {
 #navbarSupportedContent ul li a {
   color: rgba(255, 255, 255, 0.6);
   text-decoration: none;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   display: block;
   padding: 20px 20px;
@@ -570,11 +570,8 @@ select {
 
   color: rgb(255 255 255 / var(--_i, 0));
   background:
-    /* Gradient #1 */ linear-gradient(
-        90deg,
-        #fff 50%,
-        rgb(var(--c)) 0
-      )
+    /* Gradient #1 */
+    linear-gradient(90deg, #fff 50%, rgb(var(--c)) 0)
       calc(100% - var(--_i, 0) * 100%) / 200%,
     /* Gradient #2 */ linear-gradient(rgb(var(--c)) 0 0) 0% 100% /
       calc(var(--_i, 0) * 100%) no-repeat,
@@ -582,7 +579,9 @@ select {
   -webkit-background-clip: text, padding-box, padding-box;
   background-clip: text, padding-box, padding-box;
   --_t: calc(var(--_i, 0) * 0.5s);
-  transition: var(--_t), color calc(0.2s - var(--_t)) var(--_t),
+  transition:
+    var(--_t),
+    color calc(0.2s - var(--_t)) var(--_t),
     background-color calc(0.2s - var(--_t)) var(--_t);
 }
 .hover:hover {

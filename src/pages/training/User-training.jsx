@@ -264,6 +264,7 @@ function UserTraining() {
 
   return (
     <UserLayout>
+      {/* MODAL */}
       <div>
         <Modal
           show={showReady}
@@ -305,230 +306,114 @@ function UserTraining() {
           </Modal.Body>
         </Modal>
       </div>
+      <div className="max-w-screen-2xl mx-auto px-8 lg:px-16 p-4">
+        {/* SEARCH */}
+        <div className="flex mb-4">
+          <div className="relative w-full max-w-md">
+            <input
+              value={searchQuery}
+              onChange={handleSearch}
+              className="w-full h-10 pl-4 pr-10 rounded-lg border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Сургалтын нэрээр хайх..."
+              type="text"
+            />
 
-      <div className="max-w-screen-xl ml-auto mr-auto">
-        <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 ">
-          <div className="flex items-center justify-between mt-2">
-            <div className="text-center text-left">
-              <div className="relative">
-                <input
-                  value={searchQuery}
-                  onChange={handleSearch}
-                  className="h-10 px-6 py-2  rounded-lg border-2 border-gray-400 outline-none focus:border-indigo-500  pr-10 text-sm placeholder-gray-400 focus:z-10"
-                  placeholder="Сургалтын нэрээр хайх..."
-                  type="text"
-                />
-
-                <button
-                  type="submit"
-                  className="absolute inset-y-0 right-0 rounded-r-lg p-2 text-gray-600"
-                >
-                  <i className="bi bi-search" />
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-4">
-            <ul className="flex flex-wrap -mb-px">
-              {options.map((item) => (
-                <li
-                  key={item.id}
-                  onClick={() => setActiveTab(item.id)}
-                  className="mr-2"
-                >
-                  <p
-                    className={
-                      activeTab === `${item.id}`
-                        ? "inline-block p-2 font-bold text-purple-600 border-b-2 border-purple-600 rounded-t-lg active "
-                        : "inline-block p-2 font-bold border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 "
-                    }
-                  >
-                    {item.value}
-                  </p>
-                </li>
-              ))}
-            </ul>
+            <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600">
+              <i className="bi bi-search" />
+            </button>
           </div>
         </div>
-        <div className="overflow-x-auto p-2">
-          {activeTab === "2" ? (
-            <div>
-              {currentRecords2.map((data, i) => {
-                const startDate = new Date(data.startDate);
-                const endDate = new Date(data.endDate);
-                const duration = endDate.getTime() - startDate.getTime();
-                const filteredForm = rates?.filter(
-                  (item) => item.trainingId === data.id,
-                );
-                if (filteredForm.length != 0) {
-                  return (
-                    <div
-                      className="mx-auto mt-4"
-                      key={JSON.stringify(data + i)}
-                    >
-                      <div className="flex cursor-pointer">
-                        <video
-                          className="object-fill h-32 w-64 mr-4 shadow-md rounded-lg"
-                          ref={videoRef}
-                          onClick={() => {
-                            clickView(data);
-                          }}
-                        >
-                          <source
-                            src={`http://` + `${data.fileUrl}`}
-                            type="video/mp4"
-                          />
-                        </video>
-                        <div className="flex flex-col justify-center  p-1">
-                          <p className="text-xs font-semibold text-gray-600">
-                            {data.teacher} *{" "}
-                            {timeSince(new Date(data.createdAt))}
-                          </p>
-                          <p className="text-sm font-bold">{data.name}</p>
+        {/* TABS */}
 
-                          <div className="flex space-x-4 text-sm">
-                            <a className="flex items-start text-gray-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
-                              <div className="mr-2">
-                                <i className="bi bi-camera-video" />
-                              </div>
-                              <p className="font-semibold">
-                                {formatDuration(data.duration)}
-                              </p>
-                            </a>
+        <div className="flex border-b border-gray-200 mb-4">
+          {options.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`px-4 py-2 -mb-px font-semibold rounded-t-lg ${
+                activeTab === tab.id
+                  ? "text-indigo-600 border-b-2 border-indigo-600"
+                  : "text-gray-500 hover:text-gray-700 border-b-2 border-transparent"
+              }`}
+            >
+              {tab.value}
+            </button>
+          ))}
+        </div>
+        {/* CARD */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-2">
+          {(activeTab === "2" ? currentRecords2 : currentRecords1).map(
+            (data, i) => {
+              // Check file type
+              const isImage = [".png", ".jpeg", ".jpg", ".gif"].some((ext) =>
+                data.fileUrl.toLowerCase().endsWith(ext),
+              );
+              const isAudio = data.fileUrl.endsWith(".mp3");
+              const isVideo = data.fileUrl.endsWith(".mp4");
+              const isFile = [".xlsx", ".pdf", ".docx", ".pptx"].some((ext) =>
+                data.fileUrl.toLowerCase().endsWith(ext),
+              );
 
-                            {moment(today).format(format) >=
-                            moment(data.endDate).format(format) ? (
-                              <a className="flex items-start text-red-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
-                                <div className="mr-2">
-                                  <i className="bi bi-calendar2-x" />
-                                </div>
-                                <p className="font-semibold">Идэвхгүй</p>
-                              </a>
-                            ) : (
-                              <a className="flex items-start text-green-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
-                                <div className="mr-2">
-                                  <i className="bi bi-calendar-check" />
-                                </div>
-                                <p className="font-semibold">Идэвхтэй</p>
-                              </a>
-                            )}
-                          </div>
-                        </div>
-                      </div>
+              const isActive = new Date() < new Date(data.endDate);
+
+              return (
+                <div
+                  key={i}
+                  onClick={() => clickView(data)}
+                  className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition cursor-pointer overflow-hidden flex flex-col"
+                >
+                  {/* MEDIA */}
+                  <div className="h-40 bg-gray-100 flex items-center justify-center overflow-hidden">
+                    {isImage && (
+                      <img
+                        src={`http://${data.fileUrl}`}
+                        className="w-full h-full object-cover"
+                      />
+                    )}
+                    {isVideo && (
+                      <video className="w-full h-full object-cover">
+                        <source
+                          src={`http://${data.fileUrl}`}
+                          type="video/mp4"
+                        />
+                      </video>
+                    )}
+                    {isAudio && (
+                      <i className="bi bi-music-note-beamed text-4xl text-gray-400" />
+                    )}
+                    {isFile && (
+                      <i className="bi bi-file-earmark-text text-4xl text-gray-400" />
+                    )}
+                  </div>
+
+                  {/* TEXT CONTENT */}
+                  <div className="p-4 flex flex-col justify-between flex-1">
+                    <div>
+                      <p className="text-xs text-gray-500 font-medium">
+                        {data.teacher} · {timeSince(new Date(data.createdAt))}
+                      </p>
+                      <p className="text-sm font-semibold text-gray-900">
+                        {data.name}
+                      </p>
                     </div>
-                  );
-                }
-              })}
-              {/* <div className="mt-3">
-                <Pagination
-                  nPages={nPagesOfType2}
-                  currentPage={currentPage}
-                  setCurrentPage={setCurrentPage}
-                />
-              </div>{" "} */}
-            </div>
-          ) : (
-            <div>
-              {currentRecords1.map((data, i) => {
-                return (
-                  <div className="mx-auto mt-4 " key={i}>
-                    <div className="p-2 flex cursor-pointer border-t border-b text-xs text-gray-700">
-                      <div
-                        onClick={() => {
-                          clickView(data);
-                        }}
+
+                    <div className="flex justify-between items-center text-xs mt-2 text-gray-600">
+                      <span className="flex items-center gap-1">
+                        <i className="bi bi-clock" />
+                        {formatDuration(data.duration)}
+                      </span>
+                      <span
+                        className={`font-semibold ${
+                          isActive ? "text-green-600" : "text-red-600"
+                        }`}
                       >
-                        {data.fileUrl.slice(-4) === ".png" ||
-                        data.fileUrl.slice(-4) === "jpeg" ||
-                        data.fileUrl.slice(-4) === ".jpg" ||
-                        data.fileUrl.slice(-4) === ".png" ||
-                        data.fileUrl.slice(-4) === ".gif" ? (
-                          <div className="flex justify-center">
-                            <img
-                              className="object-fill h-32 w-full mr-4 shadow-md rounded-lg"
-                              src={`http://` + `${data.fileUrl}`}
-                            />
-                          </div>
-                        ) : data.fileUrl.slice(-4) === ".mp3" ? (
-                          <div className="object-fill h-32 w-full mr-4 shadow-md rounded-lg">
-                            <audio controlsList="nodownload" controls>
-                              <source
-                                src={`http://` + `${data.fileUrl}`}
-                                type="audio/mpeg"
-                              />
-                            </audio>
-                          </div>
-                        ) : data.fileUrl.slice(-4) === "xlsx" ||
-                          data.fileUrl.slice(-4) === ".pdf" ||
-                          data.fileUrl.slice(-4) === "docx" ||
-                          data.fileUrl.slice(-4) === "pptx" ? (
-                          <div className="object-fill h-32 w-auto  mr-4 shadow-md rounded-lg">
-                            <p className="p-4 text-sm leading-5  ">
-                              <span className="block font-medium text-gray-500 ">
-                                <i className="bi bi-file-earmark-arrow-down-fill" />{" "}
-                                Файлын нэр:
-                              </span>
-                              <span className="inline-block font-medium text-gray-500  ">
-                                {data.fileUrl?.slice(29)}
-                              </span>
-                            </p>
-                          </div>
-                        ) : (
-                          <div className="object-fill h-32 w-auto  mr-4 shadow-md rounded-lg">
-                            <div className="flex justify-center">
-                              {data.fileUrl.slice(29)}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="flex flex-col justify-center  p-1">
-                        <p className="text-xs font-semibold text-gray-600">
-                          {data.teacher}
-                          {/* {timeSinceD(duration)} */}
-                        </p>
-                        <p className="text-sm font-bold">{data.name}</p>
-
-                        <div className="flex space-x-4 text-sm">
-                          <a className="flex items-start text-gray-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
-                            <div className="mr-2">
-                              <i className="bi bi-card-text" />
-                            </div>
-                            <p className="font-semibold">
-                              {timeSince(new Date(data.createdAt))}
-                            </p>
-                          </a>
-                          {moment(today).format(format) >=
-                          moment(data.endDate).format(format) ? (
-                            <a className="flex items-start text-red-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
-                              <div className="mr-2">
-                                <i className="bi bi-calendar2-x" />
-                              </div>
-                              <p className="font-semibold">Идэвхгүй</p>
-                            </a>
-                          ) : (
-                            <a className="flex items-start text-green-800 transition-colors duration-200 hover:text-deep-purple-accent-700 group">
-                              <div className="mr-2">
-                                <i className="bi bi-calendar-check" />
-                              </div>
-                              <p className="font-semibold">Идэвхтэй</p>
-                            </a>
-                          )}
-                        </div>
-                      </div>
+                        {isActive ? "Идэвхтэй" : "Идэвхгүй"}
+                      </span>
                     </div>
                   </div>
-                );
-              })}
-              {/* <div className="mt-3">
-                <Pagination
-                  nPages={nPagesOfType1}
-                  currentPage={currentPage}
-                  setCurrentPage={setCurrentPage}
-                />
-              </div> */}
-            </div>
+                </div>
+              );
+            },
           )}
         </div>
       </div>

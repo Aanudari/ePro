@@ -236,229 +236,224 @@ function TrainingCategory() {
   };
 
   return (
-    <div className="w-full min-h-[calc(100%-56px)]">
-      <div>
-        //create
-        <Modal
-          show={showCreate}
-          onHide={hideModalCreate}
-          size="ml"
-          backdrop="static"
-          style={
-            width < 768
-              ? {
-                  width: "calc(100%)",
-                  left: "0",
-                }
-              : {
-                  width: "calc(100% - 250px)",
-                  left: "250px",
-                }
-          }
-          keyboard={false}
-          aria-labelledby="contained-modal-title-vcenter"
-          dialogClassName="modal-100w"
-          centered
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Ангилал нэмэх</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <div className="max-w-screen-lg mx-auto">
-              <div className="md:col-span-1">
-                <label className="block mb-2 text-sm font-medium text-gray-900 ">
-                  Ангиллын нэр
-                </label>
-                <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                  <input
-                    type="text"
-                    className="outline-none  w-full rounded bg-gray-50 h-10 block p-2"
-                    onChange={(e) => {
-                      setName(e.target.value);
-                      setcheckEmpty1(false);
-                    }}
-                    id={checkEmpty1 === true ? "border-red" : null}
-                  />
-                </div>
-              </div>
-
-              <div className="md:col-span-1">
-                <label className="block mb-2 text-sm font-medium text-gray-900">
-                  Эхлэх хугацаа
-                </label>
-                <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                  <DatePicker
-                    className="outline-none text-center text-sm  outline-none  focus:ring-0 bg-transparent"
-                    selected={date1}
-                    onChange={(date) => setDate1(date)}
-                    selectsStart
-                    startDate={date1}
-                    dateFormat="yyyy, MM сарын dd"
-                  />
-                </div>
-              </div>
-              <div className="md:col-span-1">
-                <label className="block mb-2 text-sm font-medium text-gray-900">
-                  Дуусах хугацаа
-                </label>
-                <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                  <DatePicker
-                    className="outline-none text-center text-sm  outline-none  focus:ring-0 bg-transparent"
-                    selected={date2}
-                    onChange={(date) => setDate2(date)}
-                    selectsStart
-                    startDate={date2}
-                    dateFormat="yyyy, MM сарын dd"
-                  />
-                </div>
-              </div>
-              <div className="md:col-span-1">
-                <label className="block mb-2 text-sm font-medium text-gray-900">
-                  Алба
-                </label>
-                <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1 ">
-                  <Select
-                    className="outline-none  w-full rounded bg-gray-50"
-                    options={department}
-                    defaultValue={selectedOptiondepartment}
-                    onChange={(item) => {
-                      handleOrg(item);
-                      setcheckEmpty2(false);
-                    }}
-                    id={checkEmpty2 === true ? "border-red" : null}
-                    noOptionsMessage={({ inputValue }) =>
-                      !inputValue && "Сонголт хоосон байна"
-                    }
-                    getOptionLabel={(option) => option.name}
-                    getOptionValue={(option) => option.id}
-                  />
-                </div>
-              </div>
-
-              <div className="col-span-1 text-right mt-4">
-                <div className="inline-flex items-end">
-                  <button
-                    onClick={navigateIndex}
-                    className="flex bg-green-600 border border-green-600 shadow px-4 py-2 rounded text-white focus:outline-none focus:shadow-outline"
-                  >
-                    Үүсгэх
-                  </button>
-                </div>
+    <div className="w-full min-h-[calc(100%-56px)] ">
+      <Modal
+        show={showCreate}
+        onHide={hideModalCreate}
+        size="ml"
+        backdrop="static"
+        style={
+          width < 768
+            ? {
+                width: "calc(100%)",
+                left: "0",
+              }
+            : {
+                width: "calc(100% - 250px)",
+                left: "250px",
+              }
+        }
+        keyboard={false}
+        aria-labelledby="contained-modal-title-vcenter"
+        dialogClassName="modal-100w"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Ангилал нэмэх</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="max-w-screen-lg mx-auto">
+            <div className="md:col-span-1">
+              <label className="block mb-2 text-sm font-medium text-gray-900 ">
+                Ангиллын нэр
+              </label>
+              <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
+                <input
+                  type="text"
+                  className="outline-none  w-full rounded bg-gray-50 h-10 block p-2"
+                  onChange={(e) => {
+                    setName(e.target.value);
+                    setcheckEmpty1(false);
+                  }}
+                  id={checkEmpty1 === true ? "border-red" : null}
+                />
               </div>
             </div>
-          </Modal.Body>
-        </Modal>
-        //delete
-        <Modal
-          show={showDelete}
-          onHide={hideModalDelete}
-          size="ml"
-          backdrop="static"
-          style={
-            width < 768
-              ? {
-                  width: "calc(100%)",
-                  left: "0",
-                }
-              : {
-                  width: "calc(100% - 250px)",
-                  left: "250px",
-                }
-          }
-          keyboard={false}
-          aria-labelledby="contained-modal-title-vcenter"
-          dialogClassName="modal-100w"
-          centered
-        >
-          <Modal.Header closeButton>
-            <span className="text-sm text-black">Бүртгэл устгах</span>
-          </Modal.Header>
-          <Modal.Body>
-            <div className="p-6 text-center">
-              <p className="mb-5  font-normal text-gray-500 dark:text-gray-400">
-                Та сонгосон {selectedIds?.length} ангиллыг устгахдаа итгэлтэй
-                байна уу?
-              </p>
-              <button
-                type="button"
-                onClick={deleteSelectedItems}
-                className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
-              >
-                Тийм
-              </button>
 
-              <button
-                onClick={hideModalDelete}
-                type="button"
-                className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-              >
-                Үгүй
-              </button>
-            </div>
-          </Modal.Body>
-        </Modal>
-        //edit
-        <Modal
-          show={showEdit}
-          onHide={hideModalEdit}
-          size="ml"
-          backdrop="static"
-          style={
-            width < 768
-              ? {
-                  width: "calc(100%)",
-                  left: "0",
-                }
-              : {
-                  width: "calc(100% - 250px)",
-                  left: "250px",
-                }
-          }
-          keyboard={false}
-          aria-labelledby="contained-modal-title-vcenter"
-          dialogClassName="modal-100w"
-          centered
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Ангилал засах</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <div className="max-w-screen-lg mx-auto">
-              <div className="md:col-span-1">
-                <label className="block mb-2 text-sm font-medium text-gray-900">
-                  name
-                </label>
-                <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                  <input
-                    type="text"
-                    className="outline-none  w-full rounded bg-gray-50 h-10 block p-2"
-                    defaultValue={editData.name}
-                    onChange={(e) => {
-                      setNameEdit(e.target.value);
-                    }}
-                  />
-                </div>
-              </div>
-
-              <div className="col-span-1 text-right mt-4">
-                <div className="inline-flex items-end">
-                  <button
-                    onClick={navigateIndexEdit}
-                    className="flex bg-green-600 border border-green-600 shadow px-4 py-2 rounded text-white focus:outline-none focus:shadow-outline"
-                  >
-                    Хадгалах
-                  </button>
-                </div>
+            <div className="md:col-span-1">
+              <label className="block mb-2 text-sm font-medium text-gray-900">
+                Эхлэх хугацаа
+              </label>
+              <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
+                <DatePicker
+                  className="outline-none text-center text-sm  outline-none  focus:ring-0 bg-transparent"
+                  selected={date1}
+                  onChange={(date) => setDate1(date)}
+                  selectsStart
+                  startDate={date1}
+                  dateFormat="yyyy, MM сарын dd"
+                />
               </div>
             </div>
-          </Modal.Body>
-        </Modal>
-      </div>
+            <div className="md:col-span-1">
+              <label className="block mb-2 text-sm font-medium text-gray-900">
+                Дуусах хугацаа
+              </label>
+              <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
+                <DatePicker
+                  className="outline-none text-center text-sm  outline-none  focus:ring-0 bg-transparent"
+                  selected={date2}
+                  onChange={(date) => setDate2(date)}
+                  selectsStart
+                  startDate={date2}
+                  dateFormat="yyyy, MM сарын dd"
+                />
+              </div>
+            </div>
+            <div className="md:col-span-1">
+              <label className="block mb-2 text-sm font-medium text-gray-900">
+                Алба
+              </label>
+              <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1 ">
+                <Select
+                  className="outline-none  w-full rounded bg-gray-50"
+                  options={department}
+                  defaultValue={selectedOptiondepartment}
+                  onChange={(item) => {
+                    handleOrg(item);
+                    setcheckEmpty2(false);
+                  }}
+                  id={checkEmpty2 === true ? "border-red" : null}
+                  noOptionsMessage={({ inputValue }) =>
+                    !inputValue && "Сонголт хоосон байна"
+                  }
+                  getOptionLabel={(option) => option.name}
+                  getOptionValue={(option) => option.id}
+                />
+              </div>
+            </div>
+
+            <div className="col-span-1 text-right mt-4">
+              <div className="inline-flex items-end">
+                <button
+                  onClick={navigateIndex}
+                  className="flex bg-green-600 border border-green-600 shadow px-4 py-2 rounded  focus:outline-none focus:shadow-outline"
+                >
+                  Үүсгэх
+                </button>
+              </div>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
+      <Modal
+        show={showDelete}
+        onHide={hideModalDelete}
+        size="ml"
+        backdrop="static"
+        style={
+          width < 768
+            ? {
+                width: "calc(100%)",
+                left: "0",
+              }
+            : {
+                width: "calc(100% - 250px)",
+                left: "250px",
+              }
+        }
+        keyboard={false}
+        aria-labelledby="contained-modal-title-vcenter"
+        dialogClassName="modal-100w"
+        centered
+      >
+        <Modal.Header closeButton>
+          <span className="text-sm text-black">Бүртгэл устгах</span>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="p-6 text-center">
+            <p className="mb-5  font-normal text-gray-500 dark:text-gray-400">
+              Та сонгосон {selectedIds?.length} ангиллыг устгахдаа итгэлтэй
+              байна уу?
+            </p>
+            <button
+              type="button"
+              onClick={deleteSelectedItems}
+              className=" bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
+            >
+              Тийм
+            </button>
+
+            <button
+              onClick={hideModalDelete}
+              type="button"
+              className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover: dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+            >
+              Үгүй
+            </button>
+          </div>
+        </Modal.Body>
+      </Modal>
+      <Modal
+        show={showEdit}
+        onHide={hideModalEdit}
+        size="ml"
+        backdrop="static"
+        style={
+          width < 768
+            ? {
+                width: "calc(100%)",
+                left: "0",
+              }
+            : {
+                width: "calc(100% - 250px)",
+                left: "250px",
+              }
+        }
+        keyboard={false}
+        aria-labelledby="contained-modal-title-vcenter"
+        dialogClassName="modal-100w"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Ангилал засах</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="max-w-screen-lg mx-auto">
+            <div className="md:col-span-1">
+              <label className="block mb-2 text-sm font-medium text-gray-900">
+                name
+              </label>
+              <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
+                <input
+                  type="text"
+                  className="outline-none  w-full rounded bg-gray-50 h-10 block p-2"
+                  defaultValue={editData.name}
+                  onChange={(e) => {
+                    setNameEdit(e.target.value);
+                  }}
+                />
+              </div>
+            </div>
+
+            <div className="col-span-1 text-right mt-4">
+              <div className="inline-flex items-end">
+                <button
+                  onClick={navigateIndexEdit}
+                  className="flex bg-green-600 border border-green-600 shadow px-4 py-2 rounded  focus:outline-none focus:shadow-outline"
+                >
+                  Хадгалах
+                </button>
+              </div>
+            </div>
+          </div>
+        </Modal.Body>
+      </Modal>
       <Navigation />
-      <div className="sm:px-6 w-full">
-        <div className="px-4 md:px-10 py-4 md:py-7">
-          <div className="flex items-center justify-between">
-            <p className="focus:outline-none text-base sm:text-sm md:text-sm lg:text-sm font-bold leading-normal text-gray-800">
+      <div className="px-4 py-4">
+        <div className="flex items-center justify-between">
+          <div className="text-center text-left">
+            <p className="font-bold text-md text-gray-900">
               Сургалтын ангилал{" "}
               {filteredList?.length > 0
                 ? `(${filteredList?.length})`
@@ -466,7 +461,6 @@ function TrainingCategory() {
             </p>
           </div>
         </div>
-
         <div className="sm:flex items-center justify-between">
           <div className="flex items-center sm:justify-between sm:gap-4">
             <div className="relative hidden sm:block">
@@ -490,14 +484,14 @@ function TrainingCategory() {
           <div className="flex flex-col gap-2 sm:mt-0 sm:flex-row sm:items-center">
             <button
               onClick={showModalCreate}
-              className="mt-2 items-center px-2 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-md"
+              className="mt-2 items-center px-2 py-2 bg-blue-600 hover:bg-blue-700  text-sm font-medium rounded-md"
             >
               <i className="bi bi-trash mr-1" />
               Ангилал нэмэх
             </button>
             <button
               onClick={showModalDelete}
-              className="mt-2 items-center px-2 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md"
+              className="mt-2 items-center px-2 py-2 bg-red-600 hover:bg-red-700  text-sm font-medium rounded-md"
             >
               <i className="bi bi-trash mr-1" />
               Устгах

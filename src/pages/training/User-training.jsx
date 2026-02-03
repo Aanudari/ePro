@@ -32,10 +32,10 @@ function UserTraining() {
   ];
 
   const filteredDataOfType2 = filteredData.filter(
-    (data) => data.sessionType === "2"
+    (data) => data.sessionType === "2",
   );
   const filteredDataOfType1 = filteredData.filter(
-    (data) => data.sessionType === "1"
+    (data) => data.sessionType === "1",
   );
   const nPagesOfType2 = Math.ceil(filteredDataOfType2.length / recordsPerPage);
   const nPagesOfType1 = Math.ceil(filteredDataOfType1.length / recordsPerPage);
@@ -43,11 +43,11 @@ function UserTraining() {
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const currentRecords2 = filteredDataOfType2.slice(
     indexOfFirstRecord,
-    indexOfLastRecord
+    indexOfLastRecord,
   );
   const currentRecords1 = filteredDataOfType1.slice(
     indexOfFirstRecord,
-    indexOfLastRecord
+    indexOfLastRecord,
   );
   useEffect(() => {
     if (currentTab) {
@@ -141,7 +141,7 @@ function UserTraining() {
                 navigate("/player", {
                   state: { data: data, item: activeTab },
                 }),
-              1000
+              1000,
             );
             return () => clearTimeout(timer);
           } else if (
@@ -186,7 +186,7 @@ function UserTraining() {
                 navigate("/player", {
                   state: { data: chosedTrain, item: activeTab },
                 }),
-              1000
+              1000,
             );
             return () => clearTimeout(timer);
           } else if (
@@ -231,7 +231,7 @@ function UserTraining() {
   }
   useEffect(() => {
     const filteredData = userTrain.filter(
-      (item) => item.sessionType === activeTab
+      (item) => item.sessionType === activeTab,
     );
     setFilteredData(filteredData);
   }, [activeTab]);
@@ -359,7 +359,7 @@ function UserTraining() {
                 const endDate = new Date(data.endDate);
                 const duration = endDate.getTime() - startDate.getTime();
                 const filteredForm = rates?.filter(
-                  (item) => item.trainingId === data.id
+                  (item) => item.trainingId === data.id,
                 );
                 if (filteredForm.length != 0) {
                   return (

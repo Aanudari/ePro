@@ -343,118 +343,68 @@ const TrainingPlayer = () => {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <div className="w-full bg-white  mx-auto ">
-              <div className="bg-white dark:bg-gray-800 ">
-                <div className="lg:flex lg:items-center lg:justify-between w-full mx-auto py-12 px-4 sm:px-6 lg:py-16 lg:px-8 z-20">
-                  <div>
-                    <p className="block text-xl font-semibold">
-                      "{tRate?.name}"
-                    </p>
-                    <span className="block text-sm font-semibold text-blue-600">
-                      {tRate?.description}
-                    </span>
-                  </div>
+            <div className="w-full max-w-3xl mx-auto p-6">
+              {/* HEADER */}
+              <div className="border-b pb-4 mb-4">
+                <p className="text-2xl font-bold text-gray-800">
+                  {tRate?.name}
+                </p>
+                <span className="text-sm text-gray-500">
+                  {tRate?.description}
+                </span>
+              </div>
 
-                  {/* <div className="lg:mt-0 lg:flex-shrink-0">
-                        <div className=" inline-flex rounded-md shadow">
-                          <button
-                            type="button"
-                            className="py-4 px-6  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
+              <div className="mb-6">
+                <div className="border rounded-b-lg divide-y">
+                  {q1?.map((question, qi) => (
+                    <div
+                      key={question?.questionId}
+                      className="px-4 py-4 transition"
+                    >
+                      <p className="bg-indigo-600 text-white px-4 py-2 rounded-t-lg font-semibold">
+                        {qi + 1}. {question?.question}
+                      </p>
+
+                      <div className="space-y-2 ">
+                        {question?.trRatingAnswer?.map((answer, ai) => (
+                          <label
+                            key={ai}
+                            className="flex items-center gap-2 cursor-pointer text-gray-700"
                           >
-                            Get started
-                          </button>
-                        </div>
-                      </div> */}
-                </div>
-                <div className="md:mt-0 md:col-span-2 border border-t-4 bg:gray-600  shadow-xl">
-                  <div className="shadow overflow-hidden sm:rounded-md">
-                    <div className="bg-gray-200 px-4">
-                      <p>Section 1</p>
-                    </div>
-                    {q1?.map((question, i) => {
-                      return (
-                        <div
-                          key={question?.questionId}
-                          className="px-4 py-3 bg-white space-y-3 sm:p-3"
-                        >
-                          <p className="text-base font-medium text-gray-900">
-                            {i + 1}. {question?.question}
-                          </p>
-
-                          {question?.trRatingAnswer?.map((answer, i) => {
-                            return (
-                              <div key={i} className="space-y-2">
-                                <div className="flex items-start">
-                                  <div className="flex items-center h-5">
-                                    <label className="font-medium text-gray-700">
-                                      <input
-                                        className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded mr-2"
-                                        type="radio"
-                                        name={question?.questionId}
-                                        onChange={(e) =>
-                                          setAnswers1((prevData) => ({
-                                            ...prevData,
-                                            [question?.questionId]: answer,
-                                          }))
-                                        }
-                                      />
-                                      {answer.answer}
-                                    </label>
-                                  </div>
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      );
-                    })}
-                    <div className="bg-gray-200 px-4">
-                      <p>Section 2</p>
-                    </div>
-                    {q2?.map((question, i) => {
-                      return (
-                        <div
-                          key={question?.questionId}
-                          className="px-4 py-3 bg-white space-y-3 sm:p-3"
-                        >
-                          <p className="text-base font-medium text-gray-900">
-                            {i + 1}. {question?.question}
-                          </p>
-                          <div className="space-y-2">
                             <input
-                              type="text"
-                              className="px-4 py-2 text-blueGray-600 bg-white text-sm w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500 placeholder-gray-400"
+                              type="radio"
                               name={question?.questionId}
-                              onChange={(e) =>
-                                setAnswers2((prevData) => ({
-                                  ...prevData,
-                                  [question?.questionId]: e.target.value,
+                              className="h-4 w-4 text-indigo-600 focus:ring-indigo-500"
+                              onChange={() =>
+                                setAnswers1((prev) => ({
+                                  ...prev,
+                                  [question?.questionId]: answer,
                                 }))
                               }
-                              placeholder="Хариулт"
                             />
-                          </div>
-                        </div>
-                      );
-                    })}
-                    <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                      <button
-                        className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        type="button"
-                        onClick={(e) => {
-                          hanldeSubmit(e);
-                        }}
-                      >
-                        Submit
-                      </button>
+                            {answer.answer}
+                          </label>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
+              </div>
+
+              {/* SUBMIT */}
+              <div className="flex justify-end">
+                <button
+                  onClick={hanldeSubmit}
+                  className="px-6 py-2 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition shadow"
+                >
+                  Submit
+                </button>
               </div>
             </div>
           </Modal.Body>
         </Modal>
       </div>
+      {/* USER TRAINING SHOW SECTION */}
       <div className="max-w-screen-xl ml-auto mr-auto">
         <div className="px-4 py-2">
           <a
@@ -470,185 +420,97 @@ const TrainingPlayer = () => {
             <i className="bi bi-backspace" />
             <span className="mx-2">Буцах</span>
           </a>
-          <div className="flex flex-col mx-auto md:flex-row mt-2">
+          <div className="flex flex-col md:flex-row gap-4 mt-4">
+            {/* LEFT – MEDIA */}
             <div className="w-full md:w-2/3">
-              {location.state.item === "1" ? (
-                <span className="rounded-md bg-gray-200 px-2.5 py-0.5 text-sm text-gray-600 font-bold mr-1">
-                  {timeSince(new Date(train.createdAt))}
-                </span>
-              ) : (
-                <span className="rounded-md bg-gray-200 px-2.5 py-0.5 text-sm text-gray-600 font-bold mr-1">
-                  Үргэлжлэх хугацаа {formatDuration(train.duration)}
-                </span>
-              )}
-              <span className="rounded-md bg-purple-200 px-2.5 py-0.5 text-sm text-purple-600 font-bold ">
-                {train.tCatName}
-              </span>
-              {location.state.item === "1" ? (
-                <div>
-                  {train.fileUrl.slice(-4) === ".png" ||
-                  train.fileUrl.slice(-4) === "jpeg" ||
-                  train.fileUrl.slice(-4) === ".jpg" ||
-                  train.fileUrl.slice(-4) === ".png" ||
-                  train.fileUrl.slice(-4) === ".gif" ? (
-                    <div className="flex justify-center">
-                      <img
-                        className="object-fill h-full mt-2 w-full mr-4 shadow-md rounded-lg"
-                        src={`http://` + `${train.fileUrl}`}
-                      />
-                    </div>
-                  ) : train.fileUrl.slice(-4) === ".mp3" ? (
-                    <div className="object-fill h-full mt-2 w-full mr-4 shadow-md rounded-lg">
-                      <audio controlsList="nodownload" controls>
-                        <source
-                          src={`http://` + `${train.fileUrl}`}
-                          type="audio/mpeg"
-                        />
-                      </audio>
-                    </div>
-                  ) : train.fileUrl.slice(-4) === "xlsx" ||
-                    train.fileUrl.slice(-4) === ".pdf" ||
-                    train.fileUrl.slice(-4) === "docx" ||
-                    train.fileUrl.slice(-4) === "pptx" ? (
-                    <div className="object-fill h-full mt-2 w-auto  mr-4 shadow-md rounded-lg cursor-pointer">
-                      <p
-                        className="p-4 text-sm leading-5"
-                        onClick={() => window.open(`http://${train.fileUrl}`)}
-                      >
-                        <span className="block font-medium text-gray-500 ">
-                          <i className="bi bi-file-earmark-arrow-down-fill" />
-                          Файлын нэр:
-                        </span>
-                        <span className="inline-block font-medium text-gray-500  ">
-                          {train.fileUrl?.slice(29)}
-                        </span>
-                      </p>
-                    </div>
-                  ) : (
-                    <div
-                      className="object-fill h-full mt-2 w-auto  mr-4 shadow-md rounded-lg cursor-pointer"
-                      onClick={() => window.open(`http://${train.fileUrl}`)}
-                    >
-                      <div className="flex justify-center">
-                        {train.fileUrl.slice(29)}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <video
-                  onTimeUpdate={onTimeUpdate}
-                  ref={videoRef}
-                  className=" w-full shadow-md rounded-lg mt-2"
-                  id="myVideo"
-                  controls
-                  disablepictureinpicture
-                  controlsList="nodownload noplaybackrate"
-                >
-                  <source
-                    src={`http://` + `${train.fileUrl}`}
-                    type="video/mp4"
-                  />
-                </video>
-              )}
-            </div>
-            <div className="w-full  md:w-1/3 ml-4 border border-t-4 rounded-lg shadow-sm">
-              <div className="p-4">
-                <a className="relative block">
-                  <img
-                    alt="profil"
-                    src="https://banner2.cleanpng.com/20180617/qjv/kisspng-computer-icons-course-teacher-education-school-cisco-5b265ef5104173.7669610515292413330666.jpg"
-                    className="mx-auto object-cover rounded-full h-10 w-10 "
-                  />
-                </a>
-                <div className="flex flex-col items-center ml-2 ">
-                  <span className="font-semibold">
-                    {train.teacher === "" ? "" : train.teacher}
+              <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-3">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="rounded bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600">
+                    {location.state.item === "1"
+                      ? timeSince(new Date(train.createdAt))
+                      : `Үргэлжлэх ${formatDuration(train.duration)}`}
+                  </span>
+                  <span className="rounded bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-600">
+                    {train.tCatName}
                   </span>
                 </div>
 
-                <div className="mt-2 text-black cursor-pointer">
-                  <p className="font-bold text-md">{train.name}</p>
+                {location.state.item === "1" ? (
+                  <div>
+                    {[".png", "jpeg", ".jpg", ".gif"].some((ext) =>
+                      train.fileUrl.toLowerCase().endsWith(ext),
+                    ) ? (
+                      <div className="w-full aspect-[2/1] overflow-hidden rounded-md bg-gray-50 flex items-center justify-center">
+                        <img
+                          src={`http://${train.fileUrl}`}
+                          className="max-h-full object-contain"
+                        />
+                      </div>
+                    ) : train.fileUrl.endsWith(".mp3") ? (
+                      <audio className="w-full mt-2" controls>
+                        <source src={`http://${train.fileUrl}`} />
+                      </audio>
+                    ) : (
+                      <div
+                        onClick={() => window.open(`http://${train.fileUrl}`)}
+                        className="mt-2 p-4 border border-dashed rounded-md text-sm text-gray-600 cursor-pointer hover:bg-gray-50 text-center"
+                      >
+                        {train.fileUrl.slice(29)}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="w-full aspect-[2/1] overflow-hidden rounded-md bg-gray-50">
+                    <video
+                      ref={videoRef}
+                      onTimeUpdate={onTimeUpdate}
+                      className="w-full h-full object-contain"
+                      controls
+                      disablePictureInPicture
+                      controlsList="nodownload noplaybackrate"
+                    >
+                      <source
+                        src={`http://${train.fileUrl}`}
+                        type="video/mp4"
+                      />
+                    </video>
+                  </div>
+                )}
+              </div>
+            </div>
 
-                  {train.description === "" ? (
-                    ""
-                  ) : (
-                    <p className="text-sm font-semibold">{train.description}</p>
-                  )}
+            {/* RIGHT – INFO */}
+            <div className="w-full md:w-1/3">
+              <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-4 h-full flex flex-col">
+                <div className="flex items-center gap-3 mb-3">
+                  <i className="bi bi-person-circle text-3xl text-gray-400"></i>
+                  <p className="font-medium text-gray-800">
+                    {train.teacher || "-"}
+                  </p>
                 </div>
 
-                <div className="border-t border-gray-200">
-                  <div className="px-2 py-2 bg-gray-50 sm:grid sm:grid-cols-3 sm:gap-4 ">
-                    <p className="text-sm font-medium text-gray-500">Байршил</p>
-                    <p className="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      📍 {train.location === "" ? " " : train.location}
-                    </p>
+                <p className="font-semibold text-gray-900">{train.name}</p>
+
+                {train.description && (
+                  <p className="text-sm text-gray-600 mt-1">
+                    {train.description}
+                  </p>
+                )}
+
+                <div className="mt-4 border-t pt-3 space-y-2 text-sm text-gray-700">
+                  <div className="flex justify-between">
+                    <span>Байршил</span>
+                    <span>{train.location || "-"}</span>
                   </div>
-                  {/* <div className="px-2 py-2 bg-white sm:grid sm:grid-cols-3 sm:gap-4 ">
-                    <p className="text-sm font-medium text-gray-500">
-                      Эхлэх хугацаа
-                    </p>
-                    <p className="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      {train.startDate === "" ? " " : train.startDate}
-                    </p>
-                  </div> */}
-                  <div className="px-2 py-2 bg-gray-50 sm:grid sm:grid-cols-3 sm:gap-4 ">
-                    <p className="text-sm font-medium text-gray-500">
-                      Дуусах хугацаа
-                    </p>
-                    <p className="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                      {formatDate(new Date(train.endDate))}
-                    </p>
-                    {/* {moment(today).format(format) >=
-                    moment(train.endDate).format(format) ? (
-                      <p className="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                        Дуусах хугацаа: {train.endDate} (Хугацаа дууссан)
-                      </p>
-                    ) : (
-                      <p className="text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                        Дуусах хугацаа: {train.endDate}
-                      </p>
-                    )} */}
+                  <div className="flex justify-between">
+                    <span>Дуусах</span>
+                    <span>{formatDate(new Date(train.endDate))}</span>
                   </div>
-                  {/* <div className="text-right">
-                    <div className="inline-flex items-end mt-2">
-                      <button
-                        onClick={() => {
-                          handleEdit();
-                        }}
-                        className="mr-2 group flex items-center justify-between rounded-lg border border-current px-2 py-1 text-indigo-600 transition-colors hover:bg-indigo-600 hover:text-white  focus:outline-none focus:ring active:bg-indigo-500"
-                        type="button"
-                      >
-                        {" "}
-                        <i className="bi bi-pencil-square mr-1" />
-                        <span className="font-bold text-xs">Засварлах</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          showModalDelete();
-                        }}
-                        className="group flex items-center justify-between rounded-lg border border-current px-2 py-1 text-red-600 transition-colors hover:bg-red-600 hover:text-white  focus:outline-none focus:ring active:bg-red-500"
-                      >
-                        <i className="bi bi-trash-fill mr-1" />
-                        <span className="font-bold text-xs"> Устгах</span>
-                      </button>
-                    </div>
-                  </div> */}
                 </div>
               </div>
             </div>
           </div>
         </div>
-        {/* <div className="px-4 md:px-10 py-4 md:py-7">
-          <div className="grid grid-cols-1 gap-y-8 lg:grid-cols-2 lg:items-center ">
-            <div className="mx-auto "></div>
-
-            <div className=" text-sm">
-              <div className="p-2 border-t border-b text-xs text-gray-700"></div>
-            </div>
-          </div>
-        </div> */}
       </div>
       <ToastContainer />
     </UserLayout>

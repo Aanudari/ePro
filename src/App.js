@@ -294,7 +294,8 @@ function App() {
               <ProtectedRoute
                 allowedRoles={[
                   1, 3, 4, 5, 7, 13, 16, 20, 22, 23, 24, 25, 26, 27, 28, 30, 31,
-                  32, 33, 2,8,9,10,34,11,36,37,38,40,42,43,44,21,15
+                  32, 33, 2, 8, 9, 10, 34, 11, 36, 37, 38, 40, 42, 43, 44, 21,
+                  15,
                 ]}
               >
                 <UserCore />
@@ -405,29 +406,28 @@ function App() {
               </ProtectedRoute>
             }
           />
-
-                    <Route
+          <Route
             path="/task-req"
             element={
               <ProtectedRoute
                 allowedRoles={[
-                  2,8,9,10,34,22,11,24,36,37,38,40,42,43,44,21,15
+                  2, 8, 9, 10, 34, 22, 11, 24, 36, 37, 38, 40, 42, 43, 44, 21,
+                  15,
                 ]}
               >
-                {<TaskReq/>}
+                {<TaskReq />}
                 {/*<UserTraining />
-*/}
-             </ProtectedRoute>
+                 */}
+              </ProtectedRoute>
             }
           />
-
           <Route
             path="/player"
             element={
               <ProtectedRoute
                 allowedRoles={[
                   1, 3, 4, 5, 7, 13, 16, 20, 22, 23, 24, 25, 26, 27, 28, 30, 31,
-                  32, 33, 2,8,9,10,34,11,36,37,38,40,42,43,44,21,
+                  32, 33, 2, 8, 9, 10, 34, 11, 36, 37, 38, 40, 42, 43, 44, 21,
                 ]}
               >
                 <TrainingPlayer />

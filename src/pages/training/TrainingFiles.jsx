@@ -178,7 +178,7 @@ function TrainingFiles() {
             <button
               type="button"
               onClick={deleteSelectedItems}
-              className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
+              className=" bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
             >
               Тийм
             </button>
@@ -186,7 +186,7 @@ function TrainingFiles() {
             <button
               onClick={hideModalDelete}
               type="button"
-              className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+              className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover: dark:hover:bg-gray-600 dark:focus:ring-gray-600"
             >
               Үгүй
             </button>
@@ -194,18 +194,17 @@ function TrainingFiles() {
         </Modal.Body>
       </Modal>
       <Navigation />
-      <div className="sm:px-6 w-full">
-        <div className="px-4 md:px-10 py-4 md:py-7">
-          <div className="flex items-center justify-between">
-            <p className="focus:outline-none text-base sm:text-sm md:text-sm lg:text-sm font-bold leading-normal text-gray-800">
-              Сургалтын файлууд{" "}
+      <div className="px-4 py-4">
+        <div className="flex items-center justify-between">
+          <div className="text-center text-left">
+            <p className="font-bold text-md text-gray-900">
+              Сургалтын файлууд
               {filteredList?.length > 0
                 ? `(${filteredList?.length})`
                 : `(${files.length})`}
             </p>
           </div>
         </div>
-
         <div className="sm:flex items-center justify-between p-2">
           <div className="flex items-center sm:justify-between sm:gap-4">
             <div className="relative hidden sm:block">
@@ -230,7 +229,7 @@ function TrainingFiles() {
           <div className="flex flex-col gap-2 sm:mt-0 sm:flex-row sm:items-center">
             <button
               onClick={showModalDelete}
-              className="mt-2 items-center px-2 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md"
+              className="mt-2 items-center px-2 py-2 bg-red-600 hover:bg-red-700  text-sm font-medium rounded-md"
             >
               <i className="bi bi-trash mr-1" />
               Устгах

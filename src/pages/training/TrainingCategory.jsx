@@ -462,38 +462,32 @@ function TrainingCategory() {
           </div>
         </div>
         <div className="sm:flex items-center justify-between">
-          <div className="flex items-center sm:justify-between sm:gap-4">
-            <div className="relative hidden sm:block">
-              <input
-                value={searchQuery}
-                onChange={handleSearch}
-                type="text"
-                name="search"
-                className="w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500 flex-1 py-2 px-4 bg-white  text-gray-700 placeholder-gray-400 shadow-sm text-base"
-                placeholder="Ангиллын нэр"
-              />
+          <div className="relative w-full max-w-md">
+            <input
+              value={searchQuery}
+              onChange={handleSearch}
+              className="w-full h-10 pl-4 pr-10 rounded-lg border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Нэрээр хайх..."
+              type="text"
+            />
 
-              <button
-                type="button"
-                className="absolute top-1/2 right-1 -translate-y-1/2 rounded-md bg-gray-50 p-2 text-gray-600 transition hover:text-gray-700"
-              >
-                <i className="bi bi-search" />
-              </button>
-            </div>
+            <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600">
+              <i className="bi bi-search" />
+            </button>
           </div>
           <div className="flex flex-col gap-2 sm:mt-0 sm:flex-row sm:items-center">
             <button
               onClick={showModalCreate}
-              className="mt-2 items-center px-2 py-2 bg-blue-600 hover:bg-blue-700  text-sm font-medium rounded-md"
+              className="mt-2 items-center px-2 py-2 bg-blue-600 hover:bg-blue-700  text-sm font-medium rounded-md text-white"
             >
-              <i className="bi bi-trash mr-1" />
+              <i className="bi bi-trash mr-1 text-white" />
               Ангилал нэмэх
             </button>
             <button
               onClick={showModalDelete}
-              className="mt-2 items-center px-2 py-2 bg-red-600 hover:bg-red-700  text-sm font-medium rounded-md"
+              className="mt-2 items-center px-2 py-2 bg-red-600 hover:bg-red-700  text-sm font-medium rounded-md text-white"
             >
-              <i className="bi bi-trash mr-1" />
+              <i className="bi bi-trash mr-1 text-white" />
               Устгах
             </button>
           </div>

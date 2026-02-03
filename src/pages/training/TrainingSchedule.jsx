@@ -43,7 +43,7 @@ function TrainingSchedule() {
       .then((res) => {
         if (res.data.isSuccess === true) {
           const filteredTrains = res.data.trainingList?.filter(
-            (train) => train.sessionType === "1"
+            (train) => train.sessionType === "1",
           );
           setTrains(filteredTrains);
           setFilteredList(filteredTrains);
@@ -123,7 +123,7 @@ function TrainingSchedule() {
       return filteredData;
     }
     const filteredTrains = filteredData.filter(
-      (tr) => tr.tCatName === selectedCategory
+      (tr) => tr.tCatName === selectedCategory,
     );
     return filteredTrains;
   };
@@ -289,8 +289,50 @@ function TrainingSchedule() {
           <div className="text-center text-left">
             <p className="font-bold text-md text-gray-900">Сургалтын хуваарь</p>
           </div>
+        </div>
+        <div className="sm:flex items-center justify-between">
+          <div className="relative w-full max-w-md">
+            <input
+              value={searchQuery}
+              onChange={handleSearch}
+              className="w-full h-10 pl-4 pr-10 rounded-lg border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Нэрээр хайх..."
+              type="text"
+            />
+
+            <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600">
+              <i className="bi bi-search" />
+            </button>
+          </div>
 
           <div className="flex flex-col gap-4 mt-0 flex-row items-center">
+            <Dropdown
+              alignstart="true"
+              className="d-inline"
+              autoClose="outside"
+            >
+              <Dropdown.Toggle variant="secondary" size="sm">
+                Оноор ялгах
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={() => handleYearChange()} value="All">
+                  <p className="block items-center font-bold rounded-lg text-sm text-gray-600 hover:border-gray-300 hover:text-blue-600">
+                    Бүгд
+                  </p>
+                </Dropdown.Item>
+                {uniqueYears.map((year) => (
+                  <Dropdown.Item
+                    onClick={() => handleYearChange(year)}
+                    key={year}
+                    value={year}
+                  >
+                    <p className="block items-center font-bold rounded-lg text-sm text-gray-600 hover:border-gray-300 hover:text-blue-600">
+                      {year}
+                    </p>
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
             <button
               onClick={() => {
                 navigateCreate();
@@ -301,51 +343,6 @@ function TrainingSchedule() {
               Сургалтын хуваарь нэмэх
             </button>
           </div>
-        </div>
-        <div className="flex flex-col gap-2 sm:mt-0 sm:flex-row sm:items-center">
-          <div className="relative">
-            <input
-              value={searchQuery}
-              onChange={handleSearch}
-              className="h-10 px-6 py-2  rounded-lg border-2 border-gray-400 outline-none focus:border-indigo-500  pr-10 text-sm placeholder-gray-400 focus:z-10"
-              placeholder="Хайх..."
-              type="text"
-            />
-
-            <button
-              type="submit"
-              className="absolute inset-y-0 right-0 rounded-r-lg p-2 text-gray-600"
-            >
-              <i className="bi bi-search" />
-            </button>
-          </div>
-          <Dropdown
-            alignstart="true"
-            className="d-inline mx-2"
-            autoClose="outside"
-          >
-            <Dropdown.Toggle variant="secondary" className="mt-2" size="sm">
-              Оноор ялгах
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item onClick={() => handleYearChange()} value="All">
-                <p className="block items-center font-bold rounded-lg text-sm text-gray-600 hover:border-gray-300 hover:text-blue-600">
-                  Бүгд
-                </p>
-              </Dropdown.Item>
-              {uniqueYears.map((year) => (
-                <Dropdown.Item
-                  onClick={() => handleYearChange(year)}
-                  key={year}
-                  value={year}
-                >
-                  <p className="block items-center font-bold rounded-lg text-sm text-gray-600 hover:border-gray-300 hover:text-blue-600">
-                    {year}
-                  </p>
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
         </div>
         <div className="relative mt-4">
           <div className="overflow-hidden">
@@ -491,7 +488,7 @@ function TrainingSchedule() {
                           <p className="font-semibold">
                             {
                               data.trainingDevs.filter(
-                                (dev) => dev.status === "Үзсэн"
+                                (dev) => dev.status === "Үзсэн",
                               ).length
                             }
                           </p>

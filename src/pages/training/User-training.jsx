@@ -306,23 +306,23 @@ function UserTraining() {
           </Modal.Body>
         </Modal>
       </div>
-      <div className="max-w-screen-2xl mx-auto px-8 lg:px-16 p-4">
+      <div className="max-w-screen-xl mx-auto p-5 sm:p-10 md:p-16">
         {/* SEARCH */}
-        <div className="flex mb-4">
-          <div className="relative w-full max-w-md">
-            <input
-              value={searchQuery}
-              onChange={handleSearch}
-              className="w-full h-10 pl-4 pr-10 rounded-lg border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="Сургалтын нэрээр хайх..."
-              type="text"
-            />
 
-            <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600">
-              <i className="bi bi-search" />
-            </button>
-          </div>
+        <div className="relative w-full max-w-md">
+          <input
+            value={searchQuery}
+            onChange={handleSearch}
+            className="w-full h-10 pl-4 pr-10 rounded-lg border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+            placeholder="Нэрээр хайх..."
+            type="text"
+          />
+
+          <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600">
+            <i className="bi bi-search" />
+          </button>
         </div>
+
         {/* TABS */}
 
         <div className="flex border-b border-gray-200 mb-4">
@@ -340,83 +340,91 @@ function UserTraining() {
             </button>
           ))}
         </div>
-        {/* CARD */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-2">
-          {(activeTab === "2" ? currentRecords2 : currentRecords1).map(
-            (data, i) => {
-              // Check file type
-              const isImage = [".png", ".jpeg", ".jpg", ".gif"].some((ext) =>
-                data.fileUrl.toLowerCase().endsWith(ext),
-              );
-              const isAudio = data.fileUrl.endsWith(".mp3");
-              const isVideo = data.fileUrl.endsWith(".mp4");
-              const isFile = [".xlsx", ".pdf", ".docx", ".pptx"].some((ext) =>
-                data.fileUrl.toLowerCase().endsWith(ext),
-              );
 
-              const isActive = new Date() < new Date(data.endDate);
+        {(activeTab === "2" ? currentRecords2 : currentRecords1).map(
+          (data, i) => {
+            // Check file type
+            const isImage = [".png", ".jpeg", ".jpg", ".gif"].some((ext) =>
+              data.fileUrl.toLowerCase().endsWith(ext),
+            );
+            const isAudio = data.fileUrl.endsWith(".mp3");
+            const isVideo = data.fileUrl.endsWith(".mp4");
+            const isFile = [".xlsx", ".pdf", ".docx", ".pptx"].some((ext) =>
+              data.fileUrl.toLowerCase().endsWith(ext),
+            );
 
-              return (
-                <div
-                  key={i}
-                  onClick={() => clickView(data)}
-                  className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition cursor-pointer overflow-hidden flex flex-col"
-                >
-                  {/* MEDIA */}
-                  <div className="h-40 bg-gray-100 flex items-center justify-center overflow-hidden">
-                    {isImage && (
-                      <img
-                        src={`http://${data.fileUrl}`}
-                        className="w-full h-full object-cover"
-                      />
-                    )}
-                    {isVideo && (
-                      <video className="w-full h-full object-cover">
-                        <source
+            const isActive = new Date() < new Date(data.endDate);
+
+            return (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
+                <div className="rounded overflow-hidden shadow-lg flex flex-col">
+                  <div
+                    key={i}
+                    onClick={() => clickView(data)}
+                    className="relative"
+                  >
+                    <a>
+                      {isImage && (
+                        <img
                           src={`http://${data.fileUrl}`}
-                          type="video/mp4"
+                          className="w-full"
                         />
-                      </video>
-                    )}
-                    {isAudio && (
-                      <i className="bi bi-music-note-beamed text-4xl text-gray-400" />
-                    )}
-                    {isFile && (
-                      <i className="bi bi-file-earmark-text text-4xl text-gray-400" />
-                    )}
-                  </div>
-
-                  {/* TEXT CONTENT */}
-                  <div className="p-4 flex flex-col justify-between flex-1">
-                    <div>
-                      <p className="text-xs text-gray-500 font-medium">
+                      )}
+                      {isVideo && (
+                        <video className="w-full">
+                          <source
+                            src={`http://${data.fileUrl}`}
+                            type="video/mp4"
+                          />
+                        </video>
+                      )}
+                      {isAudio && (
+                        <i className="bi bi-music-note-beamed text-4xl text-gray-400" />
+                      )}
+                      {isFile && (
+                        <i className="bi bi-file-earmark-text text-4xl text-gray-400" />
+                      )}
+                    </a>
+                    <a>
+                      <div className="text-xs absolute top-0 right-0 bg-indigo-600 px-4 py-2 text-white mt-3 mr-3 hover:text-indigo-600 transition duration-500 ease-in-out">
                         {data.teacher} · {timeSince(new Date(data.createdAt))}
-                      </p>
-                      <p className="text-sm font-semibold text-gray-900">
-                        {data.name}
-                      </p>
-                    </div>
-
-                    <div className="flex justify-between items-center text-xs mt-2 text-gray-600">
-                      <span className="flex items-center gap-1">
-                        <i className="bi bi-clock" />
+                      </div>
+                    </a>
+                  </div>
+                  <div className="px-6 py-4 mb-auto">
+                    {/* TRAIN NAME */}
+                    <a className="font-medium text-lg inline-block hover:text-indigo-600 transition duration-500 ease-in-out inline-block mb-2">
+                      {data.name}
+                    </a>
+                    {/* TRAIN DESC */}
+                    <p className="text-gray-500 text-sm">{data.description}</p>
+                  </div>
+                  <div className="px-6 py-3 flex flex-row items-center justify-between bg-gray-100">
+                    <span className="py-1 text-xs font-regular text-gray-900 mr-1 flex flex-row items-center">
+                      <i className="bi bi-clock-history"></i>
+                      <span className="ml-1">
+                        {" "}
                         {formatDuration(data.duration)}
                       </span>
+                    </span>
+
+                    <span className="py-1 text-xs font-regular text-gray-900 mr-1 flex flex-row items-center">
                       <span
                         className={`font-semibold ${
-                          isActive ? "text-green-600" : "text-red-600"
+                          isActive ? "text-green-600 ml-1" : "text-red-600 ml-1"
                         }`}
                       >
                         {isActive ? "Идэвхтэй" : "Идэвхгүй"}
                       </span>
-                    </div>
+                    </span>
                   </div>
                 </div>
-              );
-            },
-          )}
-        </div>
+              </div>
+            );
+          },
+        )}
       </div>
+
       <ToastContainer />
     </UserLayout>
   );

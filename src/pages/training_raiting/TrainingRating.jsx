@@ -249,7 +249,7 @@ function TrainingRating() {
           <Modal.Header closeButton>
             <Modal.Title>
               {" "}
-              <p className="text-xl font-normal  text-center">
+              <p className="text-xl font-normal  text-center ">
                 Сургалтын үнэлгээ нэмэх
               </p>
             </Modal.Title>
@@ -257,7 +257,7 @@ function TrainingRating() {
           <Modal.Body>
             <div className="max-w-screen-lg mx-auto">
               <div className="md:col-span-1">
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:">
+                <label className="block mb-2 text-sm font-medium text-gray-900">
                   Нэр
                 </label>
                 <input
@@ -412,31 +412,25 @@ function TrainingRating() {
             <p className="font-bold text-md text-gray-900">Сургалтын үнэлгээ</p>
           </div>
         </div>
-
         <div className="sm:flex items-center justify-between">
-          <div className="flex items-center sm:justify-between sm:gap-4">
-            <div className="relative hidden sm:block">
-              <input
-                value={searchQuery}
-                onChange={handleSearch}
-                type="text"
-                name="search"
-                className="w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500 flex-1 py-2 px-4 bg-white  text-gray-700 placeholder-gray-400 shadow-sm text-base"
-                placeholder="Үнэлгээний нэр"
-              />
+          <div className="relative w-full max-w-md">
+            <input
+              value={searchQuery}
+              onChange={handleSearch}
+              className="w-full h-10 pl-4 pr-10 rounded-lg border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Нэрээр хайх..."
+              type="text"
+            />
 
-              <button
-                type="button"
-                className="absolute top-1/2 right-1 -translate-y-1/2 rounded-md bg-gray-50 p-2 text-gray-600 transition hover:text-gray-700"
-              >
-                <i className="bi bi-search" />
-              </button>
-            </div>
+            <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600">
+              <i className="bi bi-search" />
+            </button>
           </div>
+
           <div className="flex flex-col gap-4 mt-0 flex-row items-center">
             <button
               onClick={showModalCreate}
-              className="block rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium  transition hover:bg-indigo-700 focus:outline-none focus:ring"
+              className="block rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white  transition hover:bg-indigo-700 focus:outline-none focus:ring"
               type="button"
             >
               Үнэлгээ нэмэх
@@ -449,11 +443,11 @@ function TrainingRating() {
             <thead>
               <tr className="text-sm text-left  bg-gray-200 border-b">
                 <th className="px-2 py-2 font-bold"> №</th>
-                <th className="px-2 py-2 font-bold"> Нэр</th>
+                <th className="px-2 py-2 font-bold"> Үнэлгээний нэр</th>
 
-                <th className="px-2 py-2 font-bold"> Сургалт</th>
-                <th className="px-2 py-2 font-bold"> Статус</th>
-                <th className="px-2 py-2 font-bold"> Action</th>
+                <th className="px-2 py-2 font-bold"> Сургалтын нэр</th>
+                <th className="px-2 py-2 font-bold"> Төлөв</th>
+                <th className="px-2 py-2 font-bold"> Үйлдэл</th>
               </tr>
             </thead>
             <tbody className="bg-white text-sm">
@@ -535,7 +529,7 @@ function TrainingRating() {
                           onClick={() => {
                             handleDownloadClick(data);
                           }}
-                          className="ml-2 items-center px-2 py-2 bg-green-700 hover:bg-green-800  text-xs font-medium rounded-md"
+                          className="ml-2 items-center px-2 py-2 bg-green-600 hover:bg-cyan-800 text-white  text-xs font-medium rounded-md"
                         >
                           Тайлан
                         </button>

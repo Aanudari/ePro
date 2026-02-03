@@ -271,7 +271,7 @@ export default function MainNavigation() {
                     {item.children.map((child, cidx) => (
                       <li
                         key={cidx}
-                        className={`px-2 py-2 rounded cursor-pointer hover:bg-gray-700 transition-colors ${
+                        className={`px-2 py-2 cursor-pointer hover:bg-gray-700 transition-colors ${
                           location.pathname === child.path ? "bg-teal-400" : ""
                         }`}
                         onClick={() => navigate(child.path)}

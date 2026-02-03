@@ -75,37 +75,31 @@ function CreateTraining() {
     setsessionType(item.id);
   };
   const handleFileSelect = (event) => {
-    // if (event.target.files[0].name.slice(-4) === ".mp4") {
-    const data = new FormData();
-    const imagedata = event.target.files[0];
-    data.append("file", imagedata);
-    axios({
-      mode: "no-cors",
-      method: "post",
-      url: `${process.env.REACT_APP_URL}/v1/TrainingFile/fileadd`,
-      data,
-      headers: {
-        Authorization: `${TOKEN}`,
-        "Content-Type": "multipart/form-data",
-      },
-    })
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file); // backend expects "file"
+
+    axios
+      .post(`${process.env.REACT_APP_URL}/v1/TrainingFile/fileadd`, formData, {
+        headers: { Authorization: TOKEN },
+      })
       .then((res) => {
-        if (res.data.isSuccess === true) {
+        if (res.data.isSuccess) {
+          // Амжилттай upload бол fileId, fileUrl-г хадгалах
           setfileUrl(res.data.path);
           setId(res.data.id);
           setRoll(1);
+          notification.success("Файл амжилттай upload боллоо.");
         } else {
-          notification.error(`${res.data.resultMessage}`);
-        }
-        if (res.data.resultMessage === "Unauthorized") {
-          logout();
+          notification.error(res.data.resultMessage);
         }
       })
-      .catch((err) => console.log(err));
-    // }
-    // else {
-    //   notification.error("Video хавсаргана уу.");
-    // }
+      .catch((err) => {
+        console.error(err);
+        notification.error("Файл upload амжилтгүй боллоо.");
+      });
   };
   const handleProgress = () => {
     const video = videoRef.current;
@@ -128,82 +122,72 @@ function CreateTraining() {
       .catch((err) => console.log(err));
   };
   function Diceroll() {
+    const ext = fileUrl?.slice(-4).toLowerCase();
+
     return (
-      <>
-        <div>
-          {roll === 0 ? (
-            <input
-              type="file"
-              onChange={handleFileSelect}
-              className="px-3 py-2  text-blueGray-600 bg-white text-sm w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-            />
-          ) : (
-            <div className="text-center w-full mx-auto py-2 px-2 sm:px-6 lg:py-16 lg:px-8 z-20">
-              {fileUrl.slice(-4) === ".mp4" ? (
+      <div className="w-full flex justify-center">
+        {roll === 0 ? (
+          <input
+            type="file"
+            onChange={handleFileSelect}
+            className="px-3 py-2 text-blueGray-600 bg-white text-sm w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+          />
+        ) : (
+          <div className="w-full max-w-md mx-auto border rounded-lg shadow-sm p-3 text-center">
+            {/* PREVIEW */}
+            {ext === ".mp4" && (
+              <div
+                className="relative w-full"
+                style={{ paddingTop: "177.77%" }}
+              >
+                {" "}
+                {/* 9:16 */}
                 <video
-                  className="items-center w-1/2 mx-auto py-12 px-12 sm:px-2 lg:py-2 lg:px-2 z-10"
+                  className="absolute top-0 left-0 w-full h-full object-contain rounded"
                   onLoadedMetadata={handleProgress}
                   ref={videoRef}
-                  // width="20%"
-                  // height="100%"
-                  id="myVideo"
                   controls
                   disablePictureInPicture
-                  controlsList=" noplaybackrate"
+                  controlsList="noplaybackrate"
                 >
-                  <source src={`http://` + `${fileUrl}`} type="video/mp4" />
+                  <source src={`http://${fileUrl}`} type="video/mp4" />
                 </video>
-              ) : fileUrl.slice(-4) === ".png" ||
-                fileUrl.slice(-4) === "jpeg" ||
-                fileUrl.slice(-4) === ".jpg" ||
-                fileUrl.slice(-4) === ".png" ||
-                fileUrl.slice(-4) === ".gif" ? (
-                <div className="flex justify-center">
-                  <img
-                    className="h-64 rounded-xl"
-                    src={`http://` + `${fileUrl}`}
-                  />
-                </div>
-              ) : fileUrl.slice(-4) === ".mp3" ? (
-                <div className="flex justify-center">
-                  <audio controlsList="nodownload" controls>
-                    <source src={`http://` + `${fileUrl}`} type="audio/mpeg" />
-                  </audio>
-                </div>
-              ) : fileUrl.slice(-4) === "xlsx" ||
-                fileUrl.slice(-4) === ".pdf" ||
-                fileUrl.slice(-4) === "docx" ||
-                fileUrl.slice(-4) === "pptx" ? (
-                <p className="mt-4 text-sm leading-5">
-                  <span className="block font-medium text-gray-500 ">
-                    <i className="bi bi-play-circle-fill" /> Файлын нэр:
-                  </span>
-                  <span className="inline-block font-medium text-gray-500  ">
-                    {fileUrl?.slice(29)}
-                  </span>
-                </p>
-              ) : (
-                <div className="text-black text-sm border-2 border-blue-500  rounded-md ">
-                  <div className="flex justify-center">{fileUrl.slice(29)}</div>
-                </div>
-              )}
-              <div className="lg:mt-0 lg:flex-shrink-0">
-                <div className="mt-2 inline-flex rounded-md shadow">
-                  <button
-                    onClick={() => handleDelete()}
-                    type="button"
-                    className="py-2 px-2 text-xs bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
-                  >
-                    Устгах
-                  </button>
-                </div>
               </div>
-            </div>
-          )}
-        </div>
-      </>
+            )}
+
+            {[".png", ".jpg", "jpeg", ".gif"].includes(ext) && (
+              <img
+                className="w-full object-contain rounded"
+                style={{ maxHeight: "60vh" }}
+                src={`http://${fileUrl}`}
+                alt=""
+              />
+            )}
+
+            {ext === ".mp3" && (
+              <audio className="w-full mt-2" controls>
+                <source src={`http://${fileUrl}`} type="audio/mpeg" />
+              </audio>
+            )}
+
+            {["xlsx", ".pdf", "docx", "pptx"].includes(ext) && (
+              <p className="text-xs text-gray-600 mt-2 truncate">
+                {fileUrl?.slice(29)}
+              </p>
+            )}
+
+            <button
+              onClick={handleDelete}
+              className="mt-3 w-full py-2 text-xs bg-red-500 hover:bg-red-600 text-white rounded-lg"
+            >
+              Устгах
+            </button>
+          </div>
+        )}
+      </div>
     );
   }
+
   const dataFULL = {
     name: `${name}`,
     description: `${description}`,
@@ -238,11 +222,11 @@ function CreateTraining() {
       setcheckEmptytCategory(true);
     } else if (startDate <= moment(selectedDate).format(format)) {
       notification.error(
-        "Сургалт эхлэх хугацааг 24 цагийн дараа байхаар сонгоно уу."
+        "Сургалт эхлэх хугацааг 24 цагийн дараа байхаар сонгоно уу.",
       );
     } else if (startDate > endDate) {
       notification.error(
-        "Сургалт дуусах хугацаа эхлэх хугацаанаас бага байна."
+        "Сургалт дуусах хугацаа эхлэх хугацаанаас бага байна.",
       );
       setCheckEmptyDate(true);
     } else if (startDate === endDate) {
@@ -403,14 +387,14 @@ function CreateTraining() {
               ></textarea>
             </div>
             <div className="relative w-full mb-3">
-              {" "}
               <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                 Файл хавсаргах
               </label>
-              <div>
+              <div className="w-full flex justify-center">
                 <Diceroll />
               </div>
             </div>
+
             <div className="relative w-full mb-3">
               <button
                 onClick={() => {
@@ -488,7 +472,7 @@ function CreateTraining() {
                 </label>
 
                 <Select
-                  className="text-sm  w-full rounded-lg  outline-none focus:border-indigo-500"
+                  className="text-sm  w-full rounded-lg  outline-none focus:border-indigo-500 тэе6"
                   options={category}
                   defaultValue={selectedOptioncategory}
                   onChange={(item) => {

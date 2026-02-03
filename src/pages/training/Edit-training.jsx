@@ -146,7 +146,7 @@ function EditTraining() {
               navigate("/clicked-train", {
                 state: { data: train, item: locationn.state.item },
               }),
-            2000
+            2000,
           );
           return () => clearTimeout(timer);
         }
@@ -174,86 +174,76 @@ function EditTraining() {
     setEmp(tempo);
   };
   function Diceroll() {
+    const ext = fileUrl?.slice(-4).toLowerCase();
+
     return (
-      <>
-        <div>
-          {chosedDelete === 1 ? (
-            <div>
-              <input
-                type="file"
-                onChange={handleFileSelectAnother}
-                className="px-3 py-2 text-blueGray-600 bg-white text-sm w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-              />
-            </div>
-          ) : chosedDelete === 2 ? (
-            <div className="text-center w-full mx-auto py-2 px-2 sm:px-6 lg:py-16 lg:px-8 z-20">
-              {id && fileUrl.slice(-4) === ".mp4" ? (
+      <div className="w-full flex justify-center">
+        {chosedDelete === 1 ? (
+          <input
+            type="file"
+            onChange={handleFileSelectAnother}
+            className="px-3 py-2 text-blueGray-600 bg-white text-sm w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+          />
+        ) : chosedDelete === 2 && id ? (
+          <div className="w-full max-w-md mx-auto border rounded-lg shadow-sm p-3 text-center">
+            {/* VIDEO */}
+            {ext === ".mp4" && (
+              <div
+                className="relative w-full"
+                style={{ paddingTop: "177.77%" }}
+              >
+                {" "}
+                {/* 9:16 ratio */}
                 <video
-                  className="items-center w-1/2 mx-auto py-12 px-12 sm:px-2 lg:py-2 lg:px-2 z-10"
+                  className="absolute top-0 left-0 w-full h-full object-contain rounded"
                   onLoadedMetadata={handleProgress}
                   ref={videoRef}
-                  // width="20%"
-                  // height="100%"
-                  id="myVideo"
                   controls
                   disablePictureInPicture
-                  controlsList=" noplaybackrate"
+                  controlsList="noplaybackrate"
                 >
-                  <source src={`http://` + `${fileUrl}`} type="video/mp4" />
+                  <source src={`http://${fileUrl}`} type="video/mp4" />
                 </video>
-              ) : fileUrl.slice(-4) === ".png" ||
-                fileUrl.slice(-4) === "jpeg" ||
-                fileUrl.slice(-4) === ".jpg" ||
-                fileUrl.slice(-4) === ".png" ||
-                fileUrl.slice(-4) === ".gif" ? (
-                <div className="flex justify-center">
-                  <img
-                    className="h-64 rounded-xl"
-                    src={`http://` + `${fileUrl}`}
-                  />
-                </div>
-              ) : fileUrl.slice(-4) === ".mp3" ? (
-                <div className="flex justify-center">
-                  <audio controlsList="nodownload" controls>
-                    <source src={`http://` + `${fileUrl}`} type="audio/mpeg" />
-                  </audio>
-                </div>
-              ) : fileUrl.slice(-4) === "xlsx" ||
-                fileUrl.slice(-4) === ".pdf" ||
-                fileUrl.slice(-4) === "docx" ||
-                fileUrl.slice(-4) === "pptx" ? (
-                <p className="mt-4 text-sm leading-5">
-                  <span className="block font-medium text-gray-500 ">
-                    <i className="bi bi-play-circle-fill" /> Файлын нэр:
-                  </span>
-                  <span className="inline-block font-medium text-gray-500  ">
-                    {fileUrl?.slice(29)}
-                  </span>
-                </p>
-              ) : (
-                <div className="text-black text-sm border-2 border-blue-500  rounded-md ">
-                  <div className="flex justify-center">{fileUrl.slice(29)}</div>
-                </div>
-              )}
-              <div className="lg:mt-0 lg:flex-shrink-0">
-                <div className="mt-2 inline-flex rounded-md shadow">
-                  <button
-                    onClick={() => handleDelete()}
-                    type="button"
-                    className="py-2 px-2  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
-                  >
-                    Устгах
-                  </button>
-                </div>
               </div>
-            </div>
-          ) : (
-            ""
-          )}
-        </div>
-      </>
+            )}
+
+            {/* IMAGE */}
+            {[".png", ".jpg", "jpeg", ".gif"].includes(ext) && (
+              <img
+                className="w-full object-contain rounded"
+                style={{ maxHeight: "60vh" }}
+                src={`http://${fileUrl}`}
+                alt=""
+              />
+            )}
+
+            {/* AUDIO */}
+            {ext === ".mp3" && (
+              <audio className="w-full mt-2" controls>
+                <source src={`http://${fileUrl}`} type="audio/mpeg" />
+              </audio>
+            )}
+
+            {/* DOCUMENT */}
+            {["xlsx", ".pdf", "docx", "pptx"].includes(ext) && (
+              <p className="text-xs text-gray-600 mt-2 truncate">
+                {fileUrl?.slice(29)}
+              </p>
+            )}
+
+            {/* DELETE BUTTON */}
+            <button
+              onClick={handleDelete}
+              className="mt-3 w-full py-2 text-xs bg-red-500 hover:bg-red-600 text-white rounded-lg"
+            >
+              Устгах
+            </button>
+          </div>
+        ) : null}
+      </div>
     );
   }
+
   const dataFULL = {
     id: `${train.id}`,
     name: `${name}` === "" ? train.name : `${name}`,
@@ -262,14 +252,14 @@ function EditTraining() {
       `${id}` === "" && chosedDelete === 0
         ? train.fileId
         : (`${id}` === "" && chosedDelete === 1) || 2
-        ? `${id}`
-        : `${id}`,
+          ? `${id}`
+          : `${id}`,
     fileUrl:
       `${fileUrl}` === "" && chosedDelete === 0
         ? train.fileUrl
         : (`${fileUrl}` === "" && chosedDelete === 1) || 2
-        ? `${fileUrl}`
-        : `${fileUrl} `,
+          ? `${fileUrl}`
+          : `${fileUrl} `,
     duration: duration === "" ? train.duration : `${duration}`,
     teacher: `${teacher}` === "" ? train.teacher : `${teacher}`,
     tCategory: `${tCategory}` === "" ? train.tCategory : `${tCategory}`,
@@ -344,7 +334,7 @@ function EditTraining() {
                 navigate("/clicked-train", {
                   state: { data: train, item: locationn.state.item },
                 }),
-              2000
+              2000,
             );
             return () => clearTimeout(timer);
           }
@@ -420,95 +410,80 @@ function EditTraining() {
               <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
                 Файл
               </label>
-              <div>
+              <div className="relative w-full mb-3">
                 {chosedDelete === 0 ? (
-                  <div>
-                    {" "}
-                    {train.fileId === "" ? (
-                      <div>
-                        <input
-                          type="file"
-                          onChange={handleFileSelect}
-                          className="px-3 py-2 text-blueGray-600 bg-white text-sm w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                        />
-                      </div>
-                    ) : (
-                      <div className="text-center w-full mx-auto py-2 px-2 sm:px-6 lg:py-16 lg:px-8 z-20">
-                        {train.fileUrl.slice(-4) === ".mp4" ? (
+                  train.fileId === "" ? (
+                    <input
+                      type="file"
+                      onChange={handleFileSelect}
+                      className="px-3 py-2 text-blueGray-600 bg-white text-sm w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                    />
+                  ) : (
+                    <div className="w-full max-w-md mx-auto text-center">
+                      {train.fileUrl.slice(-4) === ".mp4" ? (
+                        // 9:16 ratio video
+                        <div
+                          className="relative w-full max-w-sm mx-auto"
+                          style={{ paddingTop: "177.77%" }}
+                        >
                           <video
-                            className="items-center w-1/2 mx-auto py-12 px-12 sm:px-2 lg:py-2 lg:px-2 z-10"
+                            className="absolute top-0 left-0 w-full h-full object-contain rounded-lg"
                             onLoadedMetadata={handleProgress}
                             ref={videoRef}
-                            // width="20%"
-                            // height="100%"
                             id="myVideo"
                             controls
                             disablePictureInPicture
-                            controlsList=" noplaybackrate"
+                            controlsList="noplaybackrate"
                           >
                             <source
-                              src={`http://` + `${train.fileUrl}`}
+                              src={`http://${fileUrl}`}
                               type="video/mp4"
                             />
                           </video>
-                        ) : train.fileUrl.slice(-4) === ".png" ||
-                          train.fileUrl.slice(-4) === "jpeg" ||
-                          train.fileUrl.slice(-4) === ".jpg" ||
-                          train.fileUrl.slice(-4) === ".png" ||
-                          train.fileUrl.slice(-4) === ".gif" ? (
+                        </div>
+                      ) : [".png", ".jpg", "jpeg", ".gif"].includes(
+                          train.fileUrl.slice(-4).toLowerCase(),
+                        ) ? (
+                        <img
+                          className="w-full max-h-[60vh] object-contain rounded-lg"
+                          src={`http://${train.fileUrl}`}
+                          alt=""
+                        />
+                      ) : train.fileUrl.slice(-4) === ".mp3" ? (
+                        <audio className="w-full mt-2" controls>
+                          <source
+                            src={`http://${train.fileUrl}`}
+                            type="audio/mpeg"
+                          />
+                        </audio>
+                      ) : ["xlsx", ".pdf", "docx", "pptx"].includes(
+                          train.fileUrl.slice(-4).toLowerCase(),
+                        ) ? (
+                        <p className="mt-4 text-sm leading-5 truncate">
+                          {train.fileUrl?.slice(29)}
+                        </p>
+                      ) : (
+                        <div className="text-black text-sm border-2 border-blue-500 rounded-md">
                           <div className="flex justify-center">
-                            <img
-                              className="h-64 rounded-xl"
-                              src={`http://` + `${train.fileUrl}`}
-                            />
-                          </div>
-                        ) : train.fileUrl.slice(-4) === ".mp3" ? (
-                          <div className="flex justify-center">
-                            <audio controlsList="nodownload" controls>
-                              <source
-                                src={`http://` + `${train.fileUrl}`}
-                                type="audio/mpeg"
-                              />
-                            </audio>
-                          </div>
-                        ) : train.fileUrl.slice(-4) === "xlsx" ||
-                          train.fileUrl.slice(-4) === ".pdf" ||
-                          train.fileUrl.slice(-4) === "docx" ||
-                          train.fileUrl.slice(-4) === "pptx" ? (
-                          <p className="mt-4 text-sm leading-5">
-                            <span className="block font-medium text-gray-500 ">
-                              <i className="bi bi-play-circle-fill" /> Файлын
-                              нэр:
-                            </span>
-                            <span className="inline-block font-medium text-gray-500  ">
-                              {train.fileUrl?.slice(29)}
-                            </span>
-                          </p>
-                        ) : (
-                          <div className="text-black text-sm border-2 border-blue-500  rounded-md ">
-                            <div className="flex justify-center">
-                              {train.fileUrl.slice(29)}
-                            </div>
-                          </div>
-                        )}
-                        <div className="lg:mt-0 lg:flex-shrink-0">
-                          <div className="mt-2 inline-flex rounded-md shadow">
-                            <button
-                              onClick={() => handleDeleteSelected()}
-                              type="button"
-                              className="py-2 px-2 text-xs bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
-                            >
-                              Устгах
-                            </button>
+                            {train.fileUrl.slice(29)}
                           </div>
                         </div>
+                      )}
+
+                      {/* DELETE BUTTON */}
+                      <div className="mt-2 inline-flex rounded-md shadow">
+                        <button
+                          onClick={() => handleDeleteSelected()}
+                          type="button"
+                          className="py-2 px-2 text-xs bg-indigo-600 hover:bg-indigo-700 text-white w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                          Устгах
+                        </button>
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  )
                 ) : (
-                  <div>
-                    <Diceroll />
-                  </div>
+                  <Diceroll />
                 )}
               </div>
             </div>

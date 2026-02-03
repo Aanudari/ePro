@@ -203,64 +203,34 @@ function ClickedTrain() {
               }
             >
               {location.state.item === "schedule" ? (
-                <span className="rounded-md bg-gray-200 px-2.5 py-0.5 text-sm text-gray-600 font-bold mr-1">
-                  {timeSince(new Date(train.createdAt))}
-                </span>
-              ) : (
-                ""
-              )}
-              <span className="rounded-md bg-purple-200 px-2.5 py-0.5 text-sm text-purple-600 font-bold ">
-                {train.tCatName}
-              </span>
-              {location.state.item === "schedule" ? (
                 <div>
-                  {train.fileUrl.slice(-4) === ".png" ||
-                  train.fileUrl.slice(-4) === "jpeg" ||
-                  train.fileUrl.slice(-4) === ".jpg" ||
-                  train.fileUrl.slice(-4) === ".png" ||
-                  train.fileUrl.slice(-4) === ".gif" ? (
-                    <div className="flex justify-center h-auto">
-                      <img
-                        className="object-fit h-80  mt-2 shadow-md rounded-lg"
-                        src={`http://` + `${train.fileUrl}`}
-                        s
+                  {train.fileUrl.match(/\.(png|jpe?g|gif)$/i) ? (
+                    <img
+                      className="w-full max-h-[60vh] object-contain mx-auto shadow-md rounded-lg mt-2"
+                      src={`http://${train.fileUrl}`}
+                    />
+                  ) : train.fileUrl.match(/\.mp3$/i) ? (
+                    <audio className="w-full mt-2" controls>
+                      <source
+                        src={`http://${train.fileUrl}`}
+                        type="audio/mpeg"
                       />
-                    </div>
-                  ) : train.fileUrl.slice(-4) === ".mp3" ? (
-                    <div className="object-fit h-full mt-2 w-full mr-4 shadow-md rounded-lg">
-                      <audio controlsList="nodownload" controls>
-                        <source
-                          src={`http://` + `${train.fileUrl}`}
-                          type="audio/mpeg"
-                        />
-                      </audio>
-                    </div>
-                  ) : train.fileUrl.slice(-4) === "xlsx" ||
-                    train.fileUrl.slice(-4) === ".pdf" ||
-                    train.fileUrl.slice(-4) === "docx" ||
-                    train.fileUrl.slice(-4) === "pptx" ? (
-                    <div className="object-fill h-full mt-2 w-auto  mr-4 shadow-md rounded-lg cursor-pointer">
-                      <p
-                        className="p-4 text-sm leading-5"
-                        onClick={() => window.open(`http://${train.fileUrl}`)}
-                      >
-                        <span className="block font-medium text-gray-500 ">
-                          <i className="bi bi-file-earmark-arrow-down-fill" />
-                          Файлын нэр:
-                        </span>
-                        <span className="inline-block font-medium text-gray-500  ">
-                          {train.fileUrl?.slice(29)}
-                        </span>
+                    </audio>
+                  ) : train.fileUrl.match(/\.(xlsx|pdf|docx|pptx)$/i) ? (
+                    <div
+                      className="max-w-md mx-auto mt-2 p-3 border rounded shadow cursor-pointer"
+                      onClick={() => window.open(`http://${train.fileUrl}`)}
+                    >
+                      <p className="text-xs text-gray-600 truncate">
+                        {train.fileUrl?.slice(29)}
                       </p>
                     </div>
                   ) : (
                     <div
-                      className="object-fill h-full mt-2 w-auto  mr-4 shadow-md rounded-lg cursor-pointer"
+                      className="max-w-md mx-auto mt-2 p-3 border rounded shadow cursor-pointer"
                       onClick={() => window.open(`http://${train.fileUrl}`)}
                     >
-                      <div className="flex justify-center">
-                        {train.fileUrl.slice(29)}
-                      </div>
+                      {train.fileUrl.slice(29)}
                     </div>
                   )}
                 </div>
@@ -269,15 +239,10 @@ function ClickedTrain() {
                   controls
                   controlsList="noplaybackrate"
                   disablePictureInPicture
-                  onTimeUpdate={onTimeUpdate}
                   ref={videoRef}
-                  className=" w-full shadow-md rounded-lg mt-2"
-                  id="myVideo"
+                  className="w-full max-h-[60vh] object-contain mx-auto shadow-md rounded-lg mt-2"
                 >
-                  <source
-                    src={`http://` + `${train.fileUrl}`}
-                    type="video/mp4"
-                  />
+                  <source src={`http://${train.fileUrl}`} type="video/mp4" />
                 </video>
               )}
             </div>
@@ -290,15 +255,14 @@ function ClickedTrain() {
               }
             >
               <div className="p-4">
-                <a className="relative block">
-                  <img
-                    alt="profil"
-                    src="https://banner2.cleanpng.com/20180617/qjv/kisspng-computer-icons-course-teacher-education-school-cisco-5b265ef5104173.7669610515292413330666.jpg"
-                    className="mx-auto object-cover rounded-full h-10 w-10 "
-                  />
-                </a>
+                <div className="flex justify-center">
+                  <div className="flex justify-center">
+                    <i className="bi bi-person-circle text-3xl text-gray-500"></i>
+                  </div>
+                </div>
+
                 <div className="flex flex-col items-center ml-2 ">
-                  <span className="dark:text-white font-semibold">
+                  <span className=" font-semibold">
                     {train.teacher === "" ? "" : train.teacher}
                   </span>
                 </div>

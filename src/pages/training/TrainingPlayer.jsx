@@ -272,7 +272,7 @@ const TrainingPlayer = () => {
               navigate("/user-training", {
                 state: { item: location.state.item },
               }),
-            500
+            500,
           );
           return () => clearTimeout(timer);
         } else if (
@@ -562,7 +562,7 @@ const TrainingPlayer = () => {
                   />
                 </a>
                 <div className="flex flex-col items-center ml-2 ">
-                  <span className="dark:text-white font-semibold">
+                  <span className="font-semibold">
                     {train.teacher === "" ? "" : train.teacher}
                   </span>
                 </div>

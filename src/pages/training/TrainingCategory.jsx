@@ -266,7 +266,7 @@ function TrainingCategory() {
           <Modal.Body>
             <div className="max-w-screen-lg mx-auto">
               <div className="md:col-span-1">
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label className="block mb-2 text-sm font-medium text-gray-900 ">
                   Ангиллын нэр
                 </label>
                 <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
@@ -283,7 +283,7 @@ function TrainingCategory() {
               </div>
 
               <div className="md:col-span-1">
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label className="block mb-2 text-sm font-medium text-gray-900">
                   Эхлэх хугацаа
                 </label>
                 <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
@@ -298,7 +298,7 @@ function TrainingCategory() {
                 </div>
               </div>
               <div className="md:col-span-1">
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label className="block mb-2 text-sm font-medium text-gray-900">
                   Дуусах хугацаа
                 </label>
                 <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
@@ -313,7 +313,7 @@ function TrainingCategory() {
                 </div>
               </div>
               <div className="md:col-span-1">
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label className="block mb-2 text-sm font-medium text-gray-900">
                   Алба
                 </label>
                 <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1 ">
@@ -425,7 +425,7 @@ function TrainingCategory() {
           <Modal.Body>
             <div className="max-w-screen-lg mx-auto">
               <div className="md:col-span-1">
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label className="block mb-2 text-sm font-medium text-gray-900">
                   name
                 </label>
                 <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">

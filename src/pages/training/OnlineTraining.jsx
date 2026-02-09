@@ -31,6 +31,8 @@ function OnlineTraining() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [selectedYear, setSelectedYear] = useState("");
   const [rates, setRates] = useState([]);
+  const icons = ["🚀", "🔥", "✨", "🎯", "📚", "💡", "⚡", "🧠", "🎓", "📊"];
+
   const handlePrevSlide = () => {
     setCurrentSlide(currentSlide - 1);
   };
@@ -249,295 +251,229 @@ function OnlineTraining() {
     }
     return Math.floor(seconds) + " секундын өмнө";
   }
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
+  // Гадна click-д хаах
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   return (
-    <div className="w-full min-h-[calc(100%-56px)] ">
-      <div>
-        {/* Устгах */}
-        <Modal
-          show={showDelete}
-          onHide={hideModalDelete}
-          size="ml"
-          backdrop="static"
-          style={
-            width < 768
-              ? {
-                  width: "calc(100%)",
-                  left: "0",
-                }
-              : {
-                  width: "calc(100% - 250px)",
-                  left: "250px",
-                }
-          }
-          keyboard={false}
-          aria-labelledby="contained-modal-title-vcenter"
-          dialogClassName="modal-100w"
-          centered
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>
-              <p className="text-xl font-normal text-white text-center">
-                Сургалт устгах
-              </p>
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <div className="p-6 text-center">
-              <p className="mb-5 text-sm font-normal text-gray-500 ">
-                Та сургалтыг устгахдаа итгэлтэй байна уу?
-              </p>
-              <button
-                type="button"
-                onClick={handleDelete}
-                className="text-white text-sm bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300  font-medium rounded-lg  inline-flex items-center px-5 py-2.5 text-center mr-2"
-              >
-                Тийм
-              </button>
-              <button
-                onClick={hideModalDelete}
-                type="button"
-                className="text-gray-500 text-sm bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200  font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 "
-              >
-                Үгүй
-              </button>
-            </div>
-          </Modal.Body>
-        </Modal>
-      </div>
-      <Navigation />
-
-      <div className="px-4 py-4">
-        <div className="flex items-center justify-between">
-          <div className="text-center text-left">
-            <p className="font-bold text-md text-gray-900">Онлайн сургалт</p>
+    <div className="w-full min-h-[calc(100vh-56px)] ">
+      {/* Устгах */}
+      <Modal
+        show={showDelete}
+        onHide={hideModalDelete}
+        size="ml"
+        backdrop="static"
+        style={
+          width < 768
+            ? {
+                width: "calc(100%)",
+                left: "0",
+              }
+            : {
+                width: "calc(100% - 250px)",
+                left: "250px",
+              }
+        }
+        keyboard={false}
+        aria-labelledby="contained-modal-title-vcenter"
+        dialogClassName="modal-100w"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <p className="text-xl font-normal text-white text-center">
+              Сургалт устгах
+            </p>
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="p-6 text-center">
+            <p className="mb-5 text-sm font-normal text-gray-500 ">
+              Та сургалтыг устгахдаа итгэлтэй байна уу?
+            </p>
+            <button
+              type="button"
+              onClick={handleDelete}
+              className="text-white text-sm bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300  font-medium rounded-lg  inline-flex items-center px-5 py-2.5 text-center mr-2"
+            >
+              Тийм
+            </button>
+            <button
+              onClick={hideModalDelete}
+              type="button"
+              className="text-gray-500 text-sm bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200  font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 "
+            >
+              Үгүй
+            </button>
           </div>
-        </div>
-        <div className="sm:flex items-center justify-between">
-          <div className="relative w-full max-w-md">
+        </Modal.Body>
+      </Modal>
+
+      <Navigation />
+      <div className="px-6 py-6 space-y-6">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="relative w-full max-w-sm">
             <input
               value={searchQuery}
               onChange={handleSearch}
-              className="w-full h-10 pl-4 pr-10 rounded-lg border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full h-10 pl-4 pr-10 rounded-md border border-slate-300 text-sm placeholder-slate-400
+      focus:outline-none focus:ring-2 focus:ring-indigo-500"
               placeholder="Нэрээр хайх..."
               type="text"
             />
-
-            <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600">
-              <i className="bi bi-search" />
-            </button>
+            <i className="bi bi-search absolute right-3 top-1/2 -translate-y-1/2 text-slate-500" />
           </div>
 
-          <div className="flex flex-col gap-4 mt-0 flex-row items-center">
-            <Dropdown
-              alignstart="true"
-              className="d-inline mx-2"
-              autoClose="outside"
-            >
-              <Dropdown.Toggle variant="secondary" size="sm">
+          <div className="flex items-center gap-3">
+            {/* Custom dropdown */}
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={() => setOpen(!open)}
+                className="flex items-center gap-2 rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-300 transition"
+              >
                 Оноор ялгах
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={() => handleYearChange()} value="All">
-                  <p className="block items-center font-bold rounded-lg text-sm text-gray-600 hover:border-gray-300 hover:text-blue-600">
-                    Бүгд
-                  </p>
-                </Dropdown.Item>
-                {uniqueYears.map((year) => (
-                  <Dropdown.Item
-                    onClick={() => handleYearChange(year)}
-                    key={year}
-                    value={year}
+                <i
+                  className={`bi ${open ? "bi-chevron-up" : "bi-chevron-down"}`}
+                />
+              </button>
+
+              {open && (
+                <div className="absolute mt-1 w-40 bg-white rounded-md shadow-lg z-50">
+                  <div
+                    onClick={() => {
+                      handleYearChange("All");
+                      setOpen(false);
+                    }}
+                    className="px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 cursor-pointer"
                   >
-                    <p className="block items-center font-bold rounded-lg text-sm text-gray-600 hover:border-gray-300 hover:text-blue-600">
+                    Бүгд
+                  </div>
+                  {uniqueYears.map((year) => (
+                    <div
+                      key={year}
+                      onClick={() => {
+                        handleYearChange(year);
+                        setOpen(false);
+                      }}
+                      className="px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 cursor-pointer"
+                    >
                       {year}
-                    </p>
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Button */}
             <button
-              onClick={() => {
-                navigateCreate();
-              }}
-              className="block rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring"
-              type="button"
+              onClick={navigateCreate}
+              className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition"
             >
-              Сургалт нэмэх
+              + Сургалт
             </button>
           </div>
         </div>
-        <div className="relative mt-4">
-          <div className="overflow-hidden">
-            <div
-              className="flex transition-transform duration-150 ease-in-out"
-              style={{ width: sliderWidth, transform: sliderTransform }}
-            >
-              {category.map((item, index) => (
-                <button
-                  key={index}
-                  onClick={() => handleCategoryChange(item.name)}
-                  className="relative rounded-full px-2 py-2 ml-1 bg-white border border-2 border-gray-200 font-bold text-sm text-black focus:!bg-gray-700 hover:!bg-gray-200 hover:text-white focus:!text-white"
-                >
-                  <div className="whitespace-nowrap text-sm">
-                    🚀 {item.name}
-                  </div>
-                  <div className="absolute duration-150 inset-0 w-full h-full transition-all scale-0 group-hover:scale-100 group-hover:bg-white/30 rounded-2xl pointer-events-none"></div>
-                </button>
-              ))}
-            </div>
-          </div>
+
+        <div className="relative">
+          {category.map((item, index) => {
+            const icon = icons[index % icons.length]; // давтагдаж болно
+
+            return (
+              <button
+                key={index}
+                onClick={() => handleCategoryChange(item.name)}
+                className="flex-shrink-0 whitespace-nowrap rounded-full border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium
+      hover:bg-indigo-50 hover:text-indigo-700 transition"
+              >
+                {icon} {item.name}
+              </button>
+            );
+          })}
+
           <button
             onClick={handlePrevSlide}
-            className={`absolute inset-y-0 left-0 z-10 flex items-center justify-center w-10 h-10 rounded-full ${
-              currentSlide === 0 ? "hidden" : ""
-            } bg-gray-500 text-white`}
+            className={`absolute left-0 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white shadow
+    ${currentSlide === 0 && "hidden"}`}
           >
             <i className="bi bi-chevron-left" />
           </button>
+
           <button
             onClick={handleNextSlide}
-            className={`absolute inset-y-0 right-0 z-10 flex items-center justify-center w-10 h-10 rounded-full ${
-              currentSlide === category.length - 1 ? "hidden" : ""
-            } bg-gray-500 text-white`}
+            className={`absolute right-0 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white shadow
+    ${currentSlide === category.length - 1 && "hidden"}`}
           >
             <i className="bi bi-chevron-right" />
           </button>
         </div>
 
-        <div className="mx-auto mt-4">
-          {filteredList?.map((data, index) => {
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-3">
+          {filteredList.map((data, index) => {
             const videoRef = createRef();
             videoRefs[index] = videoRef;
 
             const filteredForm = rates?.filter(
               (item) => item.trainingId === data.id,
             );
+
             return (
-              <div key={index} className="flex cursor-pointer">
+              <div
+                key={index}
+                onClick={() => clickView(data)}
+                className="bg-white rounded-lg shadow hover:shadow-lg transition p-3 cursor-pointer flex gap-3"
+              >
                 <video
-                  className="object-fill h-32 w-64 mr-4 shadow-md rounded-lg"
+                  className="h-28 w-44 rounded-md object-cover"
                   ref={videoRef}
-                  onClick={() => {
-                    clickView(data);
-                  }}
                 >
-                  <source src={`http://` + data.fileUrl} type="video/mp4" />
+                  <source src={`http://${data.fileUrl}`} type="video/mp4" />
                 </video>
-                <div className="flex flex-col justify-center  p-2">
-                  <p className="text-xs font-semibold text-gray-600">
-                    {data.teacher} * {timeSince(new Date(data.createdAt))}
-                  </p>
-                  <p className="text-sm font-bold">{data.name}</p>
 
-                  <div className="flex space-x-4 text-sm">
-                    <p className="flex items-start text-gray-800 transition-colors duration-200  group">
-                      <div className="mr-2">
-                        <i className="bi bi-camera-video" />
-                      </div>
-                      <p className="font-semibold">
-                        {formatDuration(data.duration)}
-                      </p>
+                <div className="flex flex-col justify-between text-sm">
+                  <div>
+                    <p className="text-xs text-slate-500">
+                      {data.teacher} • {timeSince(new Date(data.createdAt))}
                     </p>
-                    {moment(today).format(format) <
-                    moment(data.startDate).format(format) ? (
-                      <p className="flex items-start text-gray-500 ">
-                        <div className="mr-1">⌛</div>
-                        <p className="font-semibold">Pending...</p>
-                      </p>
-                    ) : (
-                      <div className="flex space-x-4 text-sm">
-                        <a
-                          onClick={() => {
-                            navigateWatched(data);
-                          }}
-                          className="flex items-start text-gray-800 transition-colors duration-200  group"
-                        >
-                          <div className="group  relative flex justify-center  mr-2">
-                            <i className="bi bi-eye" />
-                            <span className="absolute top-10 scale-0 transition-all rounded bg-gray-800 p-2 px-8 text-xs text-white group-hover:scale-100">
-                              ✨ Үзсэн.
-                            </span>
-                          </div>
-                          <p className="font-semibold">
-                            {
-                              data.trainingDevs.filter(
-                                (dev) => dev.status === "Үзсэн",
-                              ).length
-                            }
-                          </p>
-                        </a>
-                        <a
-                          onClick={() => {
-                            navigateWatched(data);
-                          }}
-                          className="flex items-start text-gray-800 transition-colors duration-200  group"
-                        >
-                          <div className="group  relative flex justify-center mr-2">
-                            <i className="bi bi-pause-circle-fill" />
-                            <span className="absolute top-10 scale-0 transition-all rounded bg-gray-800 p-2 px-8 text-xs text-white group-hover:scale-100">
-                              ✨ Үзэж байгаа.
-                            </span>
-                          </div>
-                          <p className="font-semibold">
-                            {
-                              data.trainingDevs.filter(
-                                (dev) => dev.status === "Үзэж байгаа",
-                              ).length
-                            }
-                          </p>
-                        </a>
-                        {moment(today).format(format) >=
-                          moment(data.startDate).format(format) &&
-                        moment(today).format(format) <=
-                          moment(data.endDate).format(format) ? (
-                          <p className="flex items-start text-green-800 ">
-                            <div className="mr-1">👀</div>
-                            <p className="font-semibold">Идэвхтэй</p>
-                          </p>
-                        ) : moment(today).format(format) >=
-                          moment(data.endDate).format(format) ? (
-                          <p className="flex items-start text-red-800 ">
-                            <div className="mr-1">⏰</div>
-                            <p className="font-semibold">Сургалт дууссан</p>
-                          </p>
-                        ) : (
-                          ""
-                        )}
-                      </div>
-                    )}
+                    <p className="font-semibold text-slate-800">{data.name}</p>
+                  </div>
 
-                    {filteredForm?.length === 0 || filteredForm?.length < 0 ? (
-                      <a
-                        onClick={() =>
-                          navigate("/training-rating", {
-                            state: { sTrain: data, item: "" },
-                          })
-                        }
-                        className="flex items-start text-red-600  "
-                      >
-                        <i className="bi bi-exclamation-lg" />
-                        <p className="font-semibold">Үнэлгээ үүсгэнэ үү.</p>
-                      </a>
-                    ) : (
-                      ""
-                    )}
+                  <div className="flex items-center gap-4 text-xs mt-2">
+                    <span className="flex items-center gap-1">
+                      <i className="bi bi-camera-video" />
+                      {formatDuration(data.duration)}
+                    </span>
+
+                    <span className="flex items-center gap-1">
+                      <i className="bi bi-eye" />
+                      {
+                        data.trainingDevs.filter(
+                          (dev) => dev.status === "Үзсэн",
+                        ).length
+                      }
+                    </span>
+
+                    <span className="flex items-center gap-1">
+                      <i className="bi bi-pause-circle" />
+                      {
+                        data.trainingDevs.filter(
+                          (dev) => dev.status === "Үзэж байгаа",
+                        ).length
+                      }
+                    </span>
                   </div>
                 </div>
               </div>
             );
           })}
-          {/* {filteredList.length > 9 ? (
-            <div className="mt-3">
-              <Pagination
-                nPages={nPages}
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-              />
-            </div>
-          ) : (
-            ""
-          )} */}
         </div>
       </div>
 

@@ -36,12 +36,15 @@ function OnlineTraining() {
   const handlePrevSlide = () => {
     setCurrentSlide(currentSlide - 1);
   };
+
   const handleNextSlide = () => {
     setCurrentSlide(currentSlide + 1);
   };
+
   const sliderWidth = `${category.length}px`;
   const sliderTransform = `translateX(-${currentSlide * 70}px)`;
   const videoRefs = [];
+
   useEffect(() => {
     axios({
       method: "get",
@@ -52,12 +55,12 @@ function OnlineTraining() {
     })
       .then((res) => {
         if (res.data.isSuccess === true) {
-          const filteredTrains = res.data.trainingList?.filter(
-            (train) => train.sessionType === "2",
-          );
+          const filteredTrains = res.data.trainingList || [];
+
           setTrains(filteredTrains);
           setFilteredList(filteredTrains);
         }
+
         if (
           res.data.resultMessage === "Unauthorized" ||
           res.data.resultMessage === "Input string was not in a correct format."
@@ -67,6 +70,7 @@ function OnlineTraining() {
       })
       .catch((err) => console.log(err));
   }, [trigger]);
+
   useEffect(() => {
     axios({
       method: "get",
@@ -80,6 +84,7 @@ function OnlineTraining() {
         if (res.data.isSuccess === true) {
           setCategory(res.data.trainingCatList);
         }
+
         if (
           res.data.resultMessage === "Unauthorized" ||
           res.data.resultMessage === "Input string was not in a correct format."
@@ -89,6 +94,7 @@ function OnlineTraining() {
       })
       .catch((err) => console.log(err));
   }, [trigger]);
+
   useEffect(() => {
     axios({
       method: "get",
@@ -109,31 +115,35 @@ function OnlineTraining() {
       })
       .catch((err) => console.log(err));
   }, [trigger]);
+
   const today = new Date();
   const format = "YYYYMMDDHHmmss";
   const years = trains.map((item) => new Date(item.createdAt).getFullYear());
   const uniqueYears = [...new Set(years)];
+
   const filterByYear = (filteredData) => {
-    if (!selectedYear) {
+    if (!selectedYear || selectedYear === "All") {
       return filteredData;
     }
+
     const filteredTrains = filteredData.filter((item) => {
-      if (selectedYear === new Date(item.createdAt).getFullYear()) {
-        return item;
-      }
-      // (item) => new Date(item.createdAt).getFullYear() === selectedYear
+      return Number(selectedYear) === new Date(item.createdAt).getFullYear();
     });
+
     return filteredTrains;
   };
+
   const showModalDelete = (e) => {
     setShowDelete(true);
     setId(e.id);
   };
+
   const clickView = (data) => {
     navigate("/clicked-train", {
       state: { data: data, item: "" },
     });
   };
+
   const handleDelete = () => {
     axios({
       method: "delete",
@@ -150,6 +160,7 @@ function OnlineTraining() {
           hideModalDelete();
           setTrigger(!trigger);
         }
+
         if (
           res.data.resultMessage === "Unauthorized" ||
           res.data.resultMessage === "Input string was not in a correct format."
@@ -159,114 +170,143 @@ function OnlineTraining() {
       })
       .catch((err) => console.log(err));
   };
+
   const navigateWatched = (data) => {
     navigate("/train-users", {
       state: { data: data },
     });
   };
+
   const handleYearChange = (y) => {
     setSelectedYear(y);
   };
+
   const handleEdit = (data) => {
     navigate("/edit-training", {
       state: { data: data },
     });
   };
+
   const [selectedCategory, setSelectedCategory] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+
   const handleSearch = (event) => {
     const query = event.target.value;
     setSearchQuery(query);
+
     const searchList = trains.filter((item) => {
-      return item.name.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+      return item.name?.toLowerCase().indexOf(query.toLowerCase()) !== -1;
     });
+
     setFilteredList(searchList);
   };
+
   const filterByCategory = (filteredData) => {
     if (!selectedCategory) {
       return filteredData;
     }
+
     const filteredTrains = filteredData.filter(
       (tr) => tr.tCatName === selectedCategory,
     );
+
     return filteredTrains;
   };
+
   const handleCategoryChange = (name) => {
     setSelectedCategory(name);
   };
+
   useEffect(() => {
     var filteredData = filterByCategory(trains);
     setFilteredList(filteredData);
   }, [selectedCategory]);
+
   useEffect(() => {
     var filteredData = filterByYear(trains);
     setFilteredList(filteredData);
   }, [selectedYear]);
+
   const navigateCreate = () => {
     navigate("/create-training", {
       state: { item: "" },
     });
   };
+
   function formatDuration(duration) {
     const hours = Math.floor(duration / 3600);
     const minutes = Math.floor((duration - hours * 3600) / 60);
     const seconds = duration - hours * 3600 - minutes * 60;
 
     let result = "";
+
     if (hours > 0) {
       result += `${Math.round(hours)} цаг `;
     }
+
     if (minutes > 0) {
       result += `${Math.round(minutes)} мин `;
     }
+
     if (seconds > 0) {
       result += `${Math.round(seconds)} сек `;
     }
 
     return result;
   }
+
   function timeSince(date) {
     var seconds = Math.floor((new Date() - date) / 1000);
-
     var interval = seconds / 31536000;
 
     if (interval > 1) {
       return Math.floor(interval) + " жилийн өмнө";
     }
+
     interval = seconds / 2592000;
+
     if (interval > 1) {
       return Math.floor(interval) + " сарын өмнө";
     }
+
     interval = seconds / 86400;
+
     if (interval > 1) {
       return Math.floor(interval) + " өдрийн өмнө";
     }
+
     interval = seconds / 3600;
+
     if (interval > 1) {
       return Math.floor(interval) + " цагийн өмнө";
     }
+
     interval = seconds / 60;
+
     if (interval > 1) {
       return Math.floor(interval) + " минутын өмнө";
     }
+
     return Math.floor(seconds) + " секундын өмнө";
   }
+
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  // Гадна click-д хаах
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setOpen(false);
       }
     };
+
     document.addEventListener("mousedown", handleClickOutside);
+
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
   return (
-    <div className="w-full min-h-[calc(100vh-56px)] ">
-      {/* Устгах */}
+    <div className="w-full min-h-[calc(100vh-56px)] bg-slate-50">
       <Modal
         show={showDelete}
         onHide={hideModalDelete}
@@ -290,27 +330,34 @@ function OnlineTraining() {
       >
         <Modal.Header closeButton>
           <Modal.Title>
-            <p className="text-xl font-normal text-white text-center">
+            <p className="text-xl font-semibold text-center text-slate-800">
               Сургалт устгах
             </p>
           </Modal.Title>
         </Modal.Header>
+
         <Modal.Body>
           <div className="p-6 text-center">
-            <p className="mb-5 text-sm font-normal text-gray-500 ">
+            <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 text-red-600 bg-red-100 rounded-full">
+              <i className="text-xl bi bi-trash" />
+            </div>
+
+            <p className="mb-5 text-sm font-normal text-gray-500">
               Та сургалтыг устгахдаа итгэлтэй байна уу?
             </p>
+
             <button
               type="button"
               onClick={handleDelete}
-              className="text-white text-sm bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300  font-medium rounded-lg  inline-flex items-center px-5 py-2.5 text-center mr-2"
+              className="inline-flex items-center px-5 py-2.5 mr-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700"
             >
               Тийм
             </button>
+
             <button
               onClick={hideModalDelete}
               type="button"
-              className="text-gray-500 text-sm bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200  font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 "
+              className="px-5 py-2.5 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-lg hover:bg-gray-100"
             >
               Үгүй
             </button>
@@ -319,104 +366,113 @@ function OnlineTraining() {
       </Modal>
 
       <Navigation />
-      <div className="px-6 py-6 space-y-6">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="relative w-full max-w-sm">
-            <input
-              value={searchQuery}
-              onChange={handleSearch}
-              className="w-full h-10 pl-4 pr-10 rounded-md border border-slate-300 text-sm placeholder-slate-400
-      focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              placeholder="Нэрээр хайх..."
-              type="text"
-            />
-            <i className="bi bi-search absolute right-3 top-1/2 -translate-y-1/2 text-slate-500" />
-          </div>
 
-          <div className="flex items-center gap-3">
-            {/* Custom dropdown */}
-            <div className="relative" ref={dropdownRef}>
-              <button
-                onClick={() => setOpen(!open)}
-                className="flex items-center gap-2 rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-300 transition"
-              >
-                Оноор ялгах
-                <i
-                  className={`bi ${open ? "bi-chevron-up" : "bi-chevron-down"}`}
-                />
-              </button>
-
-              {open && (
-                <div className="absolute mt-1 w-40 bg-white rounded-md shadow-lg z-50">
-                  <div
-                    onClick={() => {
-                      handleYearChange("All");
-                      setOpen(false);
-                    }}
-                    className="px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 cursor-pointer"
-                  >
-                    Бүгд
-                  </div>
-                  {uniqueYears.map((year) => (
-                    <div
-                      key={year}
-                      onClick={() => {
-                        handleYearChange(year);
-                        setOpen(false);
-                      }}
-                      className="px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 cursor-pointer"
-                    >
-                      {year}
-                    </div>
-                  ))}
-                </div>
-              )}
+      <div className="px-4 py-5 space-y-5 sm:px-6">
+        <div className="p-4 bg-white border shadow-sm rounded-2xl border-slate-100">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <h1 className="text-xl font-semibold text-slate-900">
+                Онлайн сургалт
+              </h1>
+              <p className="mt-1 text-sm text-slate-500">
+                Нийт {filteredList?.length || 0} сургалт
+              </p>
             </div>
 
-            {/* Button */}
+            <div className="flex flex-col w-full gap-3 sm:flex-row lg:w-auto">
+              <div className="relative w-full sm:w-72">
+                <input
+                  value={searchQuery}
+                  onChange={handleSearch}
+                  className="w-full pl-4 pr-10 text-sm border h-11 rounded-xl border-slate-200 bg-slate-50 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  placeholder="Нэрээр хайх..."
+                  type="text"
+                />
+                <i className="absolute -translate-y-1/2 bi bi-search right-3 top-1/2 text-slate-500" />
+              </div>
+
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  onClick={() => setOpen(!open)}
+                  className="flex items-center justify-between w-full gap-2 px-4 py-2.5 text-sm font-medium text-gray-800 transition bg-slate-100 rounded-xl hover:bg-slate-200 sm:w-40"
+                >
+                  Оноор ялгах
+                  <i
+                    className={`bi ${
+                      open ? "bi-chevron-up" : "bi-chevron-down"
+                    }`}
+                  />
+                </button>
+
+                {open && (
+                  <div className="absolute right-0 z-50 w-40 mt-2 overflow-hidden bg-white border shadow-lg rounded-xl border-slate-100">
+                    <div
+                      onClick={() => {
+                        handleYearChange("All");
+                        setOpen(false);
+                      }}
+                      className="px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-indigo-50 hover:text-indigo-700"
+                    >
+                      Бүгд
+                    </div>
+
+                    {uniqueYears.map((year) => (
+                      <div
+                        key={year}
+                        onClick={() => {
+                          handleYearChange(year);
+                          setOpen(false);
+                        }}
+                        className="px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-indigo-50 hover:text-indigo-700"
+                      >
+                        {year}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <button
+                onClick={navigateCreate}
+                className="px-4 py-2.5 text-sm font-medium text-white transition bg-indigo-600 rounded-xl hover:bg-indigo-700"
+              >
+                + Сургалт
+              </button>
+            </div>
+          </div>
+
+          <div className="flex gap-2 pt-4 mt-4 overflow-x-auto border-t border-slate-100">
             <button
-              onClick={navigateCreate}
-              className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition"
+              onClick={() => handleCategoryChange("")}
+              className={`flex-shrink-0 whitespace-nowrap rounded-full border px-4 py-2 text-sm font-medium transition ${
+                selectedCategory === ""
+                  ? "border-indigo-600 bg-indigo-600 text-white"
+                  : "border-slate-200 bg-white text-slate-600 hover:bg-indigo-50 hover:text-indigo-700"
+              }`}
             >
-              + Сургалт
+              Бүгд
             </button>
+            {category.map((item, index) => {
+              const icon = icons[index % icons.length];
+
+              return (
+                <button
+                  key={index}
+                  onClick={() => handleCategoryChange(item.name)}
+                  className={`flex-shrink-0 whitespace-nowrap rounded-full border px-4 py-2 text-sm font-medium transition ${
+                    selectedCategory === item.name
+                      ? "border-indigo-600 bg-indigo-600 text-white"
+                      : "border-slate-200 bg-white text-slate-600 hover:bg-indigo-50 hover:text-indigo-700"
+                  }`}
+                >
+                  {icon} {item.name}
+                </button>
+              );
+            })}
           </div>
         </div>
 
-        <div className="relative">
-          {category.map((item, index) => {
-            const icon = icons[index % icons.length]; // давтагдаж болно
-
-            return (
-              <button
-                key={index}
-                onClick={() => handleCategoryChange(item.name)}
-                className="flex-shrink-0 whitespace-nowrap rounded-full border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium
-      hover:bg-indigo-50 hover:text-indigo-700 transition"
-              >
-                {icon} {item.name}
-              </button>
-            );
-          })}
-
-          <button
-            onClick={handlePrevSlide}
-            className={`absolute left-0 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white shadow
-    ${currentSlide === 0 && "hidden"}`}
-          >
-            <i className="bi bi-chevron-left" />
-          </button>
-
-          <button
-            onClick={handleNextSlide}
-            className={`absolute right-0 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white shadow
-    ${currentSlide === category.length - 1 && "hidden"}`}
-          >
-            <i className="bi bi-chevron-right" />
-          </button>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
           {filteredList.map((data, index) => {
             const videoRef = createRef();
             videoRefs[index] = videoRef;
@@ -429,46 +485,54 @@ function OnlineTraining() {
               <div
                 key={index}
                 onClick={() => clickView(data)}
-                className="bg-white rounded-lg shadow hover:shadow-lg transition p-3 cursor-pointer flex gap-3"
+                className="overflow-hidden transition bg-white border shadow-sm cursor-pointer rounded-2xl border-slate-100 hover:-translate-y-0.5 hover:shadow-md"
               >
-                <video
-                  className="h-28 w-44 rounded-md object-cover"
-                  ref={videoRef}
-                >
-                  <source src={`http://${data.fileUrl}`} type="video/mp4" />
-                </video>
-
-                <div className="flex flex-col justify-between text-sm">
-                  <div>
-                    <p className="text-xs text-slate-500">
-                      {data.teacher} • {timeSince(new Date(data.createdAt))}
-                    </p>
-                    <p className="font-semibold text-slate-800">{data.name}</p>
+                <div className="flex flex-col sm:flex-row">
+                  <div className="relative w-full overflow-hidden bg-black aspect-video sm:w-56 sm:min-w-56">
+                    <video
+                      className="object-contain w-full h-full"
+                      ref={videoRef}
+                      preload="metadata"
+                    >
+                      <source src={`http://${data.fileUrl}`} type="video/mp4" />
+                    </video>
                   </div>
 
-                  <div className="flex items-center gap-4 text-xs mt-2">
-                    <span className="flex items-center gap-1">
-                      <i className="bi bi-camera-video" />
-                      {formatDuration(data.duration)}
-                    </span>
+                  <div className="flex flex-col justify-between flex-1 p-4 text-sm">
+                    <div>
+                      <p className="mb-1 text-xs text-slate-500">
+                        {data.teacher} • {timeSince(new Date(data.createdAt))}
+                      </p>
 
-                    <span className="flex items-center gap-1">
-                      <i className="bi bi-eye" />
-                      {
-                        data.trainingDevs.filter(
-                          (dev) => dev.status === "Үзсэн",
-                        ).length
-                      }
-                    </span>
+                      <p className="font-semibold leading-5 text-slate-800 line-clamp-2">
+                        {data.name}
+                      </p>
+                    </div>
 
-                    <span className="flex items-center gap-1">
-                      <i className="bi bi-pause-circle" />
-                      {
-                        data.trainingDevs.filter(
-                          (dev) => dev.status === "Үзэж байгаа",
-                        ).length
-                      }
-                    </span>
+                    <div className="flex flex-wrap items-center gap-3 mt-4 text-xs text-slate-600">
+                      <span className="flex items-center gap-1 px-2 py-1 rounded-lg bg-slate-50">
+                        <i className="bi bi-camera-video" />
+                        {formatDuration(data.duration)}
+                      </span>
+
+                      <span className="flex items-center gap-1 px-2 py-1 rounded-lg bg-slate-50">
+                        <i className="bi bi-eye" />
+                        {
+                          data.trainingDevs.filter(
+                            (dev) => dev.status === "Үзсэн",
+                          ).length
+                        }
+                      </span>
+
+                      <span className="flex items-center gap-1 px-2 py-1 rounded-lg bg-slate-50">
+                        <i className="bi bi-pause-circle" />
+                        {
+                          data.trainingDevs.filter(
+                            (dev) => dev.status === "Үзэж байгаа",
+                          ).length
+                        }
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>

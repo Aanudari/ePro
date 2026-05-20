@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navigation from "../../components/Navigation";
 import { useStateContext } from "../../contexts/ContextProvider";
-import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import { Modal } from "react-bootstrap";
@@ -9,41 +8,44 @@ import { logout } from "../../service/examService";
 import Select from "react-select";
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
-
 import getWindowDimensions from "../../components/SizeDetector";
 import moment from "moment";
+
 function TrainingCategory() {
   const { width } = getWindowDimensions();
-  const location = useLocation();
-  const { TOKEN, activeMenu } = useStateContext();
-  const navigate = useNavigate();
+  const { TOKEN } = useStateContext();
+
   const [checkEmpty1, setcheckEmpty1] = useState(false);
   const [checkEmpty2, setcheckEmpty2] = useState(false);
+
   const [category, setCategory] = useState([]);
+  const [department, setDepartment] = useState([]);
+
   const [showCreate, setShowCreate] = useState(null);
-  const showModalCreate = () => setShowCreate(true);
-  const hideModalCreate = () => setShowCreate(null);
   const [showDelete, setShowDelete] = useState(null);
-  const [selectedIds, setSelectedIds] = useState([]);
-  const hideModalDelete = () => setShowDelete(null);
-  const [id, setId] = useState();
   const [showEdit, setShowEdit] = useState(null);
-  const hideModalEdit = () => setShowEdit(null);
-  const [editData, setEditData] = useState([]);
-  const [department, setDepartment] = useState();
-  const [selectedOptiondepartment, setSelectedOptiondepartment] =
-    useState(null);
+
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [editData, setEditData] = useState({});
+
   const [name, setName] = useState("");
   const [nameEdit, setNameEdit] = useState("");
   const [departmentID, setDepartmentID] = useState("");
+
   const format = "YYYYMMDDHHmmss";
   const [date1, setDate1] = useState(new Date());
   const [date2, setDate2] = useState(new Date());
+
   const startDate = moment(date1).format(format);
   const endDate = moment(date2).format(format);
+
   const [filteredList, setFilteredList] = useState([]);
   const [trigger, setTrigger] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const hideModalCreate = () => setShowCreate(null);
+  const hideModalDelete = () => setShowDelete(null);
+  const hideModalEdit = () => setShowEdit(null);
 
   useEffect(() => {
     axios({
@@ -54,11 +56,10 @@ function TrainingCategory() {
       url: `${process.env.REACT_APP_URL}/v1/User/department`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-        }
         if (res.data.isSuccess === true) {
-          setDepartment(res.data.departments);
+          setDepartment(res.data.departments || []);
         }
+
         if (
           res.data.resultMessage === "Unauthorized" ||
           res.data.resultMessage === "Input string was not in a correct format."
@@ -68,6 +69,7 @@ function TrainingCategory() {
       })
       .catch((err) => console.log(err));
   }, [trigger]);
+
   useEffect(() => {
     axios({
       method: "get",
@@ -77,12 +79,12 @@ function TrainingCategory() {
       url: `${process.env.REACT_APP_URL}/v1/Training/category`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-        }
         if (res.data.isSuccess === true) {
-          setCategory(res.data.trainingCatList);
-          setFilteredList(res.data.trainingCatList);
+          setCategory(res.data.trainingCatList || []);
+          setFilteredList(res.data.trainingCatList || []);
+          setSelectedIds([]);
         }
+
         if (
           res.data.resultMessage === "Unauthorized" ||
           res.data.resultMessage === "Input string was not in a correct format."
@@ -92,17 +94,17 @@ function TrainingCategory() {
       })
       .catch((err) => console.log(err));
   }, [trigger]);
+
   const handleOrg = (item) => {
     setDepartmentID(item.id);
   };
-  const showModalDelete = (e) => {
-    setShowDelete(true);
-    setId(e.currentTarget.dataset.id);
-  };
-  const handleEdit = (e) => {
+
+  const handleEdit = (data) => {
     setShowEdit(true);
-    setEditData(e);
+    setEditData(data);
+    setNameEdit(data.name);
   };
+
   const handleCheckboxChange = (itemId) => {
     if (selectedIds.includes(itemId)) {
       setSelectedIds(selectedIds.filter((id) => id !== itemId));
@@ -110,8 +112,10 @@ function TrainingCategory() {
       setSelectedIds([...selectedIds, itemId]);
     }
   };
+
   const handleSelectAll = (event) => {
     const isChecked = event.target.checked;
+
     if (isChecked) {
       setSelectedIds(filteredList.map((item) => item.id));
     } else {
@@ -120,86 +124,106 @@ function TrainingCategory() {
   };
 
   const deleteSelectedItems = () => {
-    for (const id of selectedIds) {
-      axios({
-        method: "delete",
-        headers: {
-          Authorization: `${TOKEN}`,
-          accept: "text/plain",
-        },
-        url: `${process.env.REACT_APP_URL}/v1/Training/category/delete?catId=${id}`,
-      })
-        .then((res) => {
-          if (res.data.isSuccess === true) {
-            notification.success(`${res.data.resultMessage}`);
-            hideModalDelete();
-            window.location.reload();
-          } else {
-            console.log(res.data.resultMessage);
-          }
-          if (
+    if (selectedIds.length === 0) {
+      notification.error("Устгах ангилал сонгоно уу.");
+      hideModalDelete();
+      return;
+    }
+
+    Promise.all(
+      selectedIds.map((id) =>
+        axios({
+          method: "delete",
+          headers: {
+            Authorization: `${TOKEN}`,
+            accept: "text/plain",
+          },
+          url: `${process.env.REACT_APP_URL}/v1/Training/category/delete?catId=${id}`,
+        }),
+      ),
+    )
+      .then((responses) => {
+        const unauthorized = responses.find(
+          (res) =>
             res.data.resultMessage === "Unauthorized" ||
             res.data.resultMessage ===
-              "Input string was not in a correct format."
-          ) {
-            logout();
-          }
-        })
-        .catch((err) => console.log(err));
-    }
+              "Input string was not in a correct format.",
+        );
+
+        if (unauthorized) {
+          logout();
+          return;
+        }
+
+        notification.success("Сонгосон ангилал амжилттай устлаа.");
+        hideModalDelete();
+        setSelectedIds([]);
+        setTrigger(!trigger);
+      })
+      .catch((err) => console.log(err));
   };
+
   const data = {
     name: `${name}`,
     startDate: `${startDate}`,
     endDate: `${endDate}`,
     department: `${departmentID}`,
   };
+
   const navigateIndex = (e) => {
     e.preventDefault();
+
     if (name.length === 0) {
       setcheckEmpty1(true);
+      return;
     }
+
     if (departmentID.length === 0) {
       setcheckEmpty2(true);
-    } else {
-      axios({
-        method: "post",
-        headers: {
-          Authorization: `${TOKEN}`,
-          "Content-Type": "application/json",
-          accept: "text/plain",
-        },
-        url: `${process.env.REACT_APP_URL}/v1/Training/category/add`,
-        data: JSON.stringify(data),
-      })
-        .then((res) => {
-          if (res.data.isSuccess === false) {
-            //
-          }
-          if (res.data.isSuccess === true) {
-            notification.success(`${res.data.resultMessage}`);
-            hideModalCreate();
-            setTrigger(!trigger);
-          }
-          if (res.data.resultMessage === "Unauthorized") {
-            logout();
-          }
-        })
-        .catch((err) => console.log(err));
+      return;
     }
+
+    axios({
+      method: "post",
+      headers: {
+        Authorization: `${TOKEN}`,
+        "Content-Type": "application/json",
+        accept: "text/plain",
+      },
+      url: `${process.env.REACT_APP_URL}/v1/Training/category/add`,
+      data: JSON.stringify(data),
+    })
+      .then((res) => {
+        if (res.data.isSuccess === true) {
+          notification.success(`${res.data.resultMessage}`);
+          hideModalCreate();
+          setName("");
+          setDepartmentID("");
+          setTrigger(!trigger);
+        }
+
+        if (res.data.isSuccess === false) {
+          notification.error(`${res.data.resultMessage}`);
+        }
+
+        if (res.data.resultMessage === "Unauthorized") {
+          logout();
+        }
+      })
+      .catch((err) => console.log(err));
   };
-  const startDateEdit = moment(editData.startDate).format(format);
-  const endDateEdit = moment(editData.endDate).format(format);
+
   const editDataSet = {
     id: `${editData.id}`,
-    name: `${nameEdit}` === "" ? editData.name : `${nameEdit}`,
-    startDate: `${startDateEdit}`,
-    endDate: `${endDateEdit}`,
+    name: nameEdit === "" ? editData.name : `${nameEdit}`,
+    startDate: `${moment(editData.startDate).format(format)}`,
+    endDate: `${moment(editData.endDate).format(format)}`,
     department: `${editData.department}`,
   };
 
   const navigateIndexEdit = (e) => {
     e.preventDefault();
+
     axios({
       method: "put",
       headers: {
@@ -211,14 +235,17 @@ function TrainingCategory() {
       data: JSON.stringify(editDataSet),
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-        }
-        console.log(res.data);
         if (res.data.isSuccess === true) {
           notification.success(`${res.data.resultMessage}`);
-          hideModalCreate();
+          hideModalEdit();
+          setNameEdit("");
           setTrigger(!trigger);
         }
+
+        if (res.data.isSuccess === false) {
+          notification.error(`${res.data.resultMessage}`);
+        }
+
         if (res.data.resultMessage === "Unauthorized") {
           logout();
         }
@@ -229,14 +256,17 @@ function TrainingCategory() {
   const handleSearch = (event) => {
     const query = event.target.value;
     setSearchQuery(query);
+
     const searchList = category?.filter((item) => {
-      return item.name.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+      return item.name?.toLowerCase().includes(query.toLowerCase());
     });
+
     setFilteredList(searchList);
+    setSelectedIds([]);
   };
 
   return (
-    <div className="w-full min-h-[calc(100%-56px)] ">
+    <div className="min-h-[calc(100vh-56px)] w-full bg-slate-50">
       <Modal
         show={showCreate}
         onHide={hideModalCreate}
@@ -244,108 +274,108 @@ function TrainingCategory() {
         backdrop="static"
         style={
           width < 768
-            ? {
-                width: "calc(100%)",
-                left: "0",
-              }
-            : {
-                width: "calc(100% - 250px)",
-                left: "250px",
-              }
+            ? { width: "calc(100%)", left: "0" }
+            : { width: "calc(100% - 250px)", left: "250px" }
         }
         keyboard={false}
-        aria-labelledby="contained-modal-title-vcenter"
         dialogClassName="modal-100w"
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>Ангилал нэмэх</Modal.Title>
+          <Modal.Title>
+            <p className="text-xl font-semibold text-slate-800">
+              Ангилал нэмэх
+            </p>
+          </Modal.Title>
         </Modal.Header>
+
         <Modal.Body>
-          <div className="max-w-screen-lg mx-auto">
-            <div className="md:col-span-1">
-              <label className="block mb-2 text-sm font-medium text-gray-900 ">
+          <div className="space-y-4">
+            <div>
+              <label className="block mb-2 text-sm font-medium text-slate-700">
                 Ангиллын нэр
               </label>
-              <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                <input
-                  type="text"
-                  className="outline-none  w-full rounded bg-gray-50 h-10 block p-2"
-                  onChange={(e) => {
-                    setName(e.target.value);
-                    setcheckEmpty1(false);
-                  }}
-                  id={checkEmpty1 === true ? "border-red" : null}
-                />
-              </div>
+              <input
+                type="text"
+                value={name}
+                className={`h-11 w-full rounded-xl border bg-slate-50 px-3 text-sm outline-none focus:border-indigo-500 ${
+                  checkEmpty1 ? "border-red-400" : "border-slate-200"
+                }`}
+                placeholder="Ангиллын нэр оруулах"
+                onChange={(e) => {
+                  setName(e.target.value);
+                  setcheckEmpty1(false);
+                }}
+              />
+              {checkEmpty1 && (
+                <p className="mt-1 text-xs text-red-500">
+                  Ангиллын нэр оруулна уу.
+                </p>
+              )}
             </div>
 
-            <div className="md:col-span-1">
-              <label className="block mb-2 text-sm font-medium text-gray-900">
+            <div>
+              <label className="block mb-2 text-sm font-medium text-slate-700">
                 Эхлэх хугацаа
               </label>
-              <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                <DatePicker
-                  className="outline-none text-center text-sm  outline-none  focus:ring-0 bg-transparent"
-                  selected={date1}
-                  onChange={(date) => setDate1(date)}
-                  selectsStart
-                  startDate={date1}
-                  dateFormat="yyyy, MM сарын dd"
-                />
-              </div>
-            </div>
-            <div className="md:col-span-1">
-              <label className="block mb-2 text-sm font-medium text-gray-900">
-                Дуусах хугацаа
-              </label>
-              <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                <DatePicker
-                  className="outline-none text-center text-sm  outline-none  focus:ring-0 bg-transparent"
-                  selected={date2}
-                  onChange={(date) => setDate2(date)}
-                  selectsStart
-                  startDate={date2}
-                  dateFormat="yyyy, MM сарын dd"
-                />
-              </div>
-            </div>
-            <div className="md:col-span-1">
-              <label className="block mb-2 text-sm font-medium text-gray-900">
-                Алба
-              </label>
-              <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1 ">
-                <Select
-                  className="outline-none  w-full rounded bg-gray-50"
-                  options={department}
-                  defaultValue={selectedOptiondepartment}
-                  onChange={(item) => {
-                    handleOrg(item);
-                    setcheckEmpty2(false);
-                  }}
-                  id={checkEmpty2 === true ? "border-red" : null}
-                  noOptionsMessage={({ inputValue }) =>
-                    !inputValue && "Сонголт хоосон байна"
-                  }
-                  getOptionLabel={(option) => option.name}
-                  getOptionValue={(option) => option.id}
-                />
-              </div>
+              <DatePicker
+                className="w-full px-3 text-sm border outline-none h-11 rounded-xl border-slate-200 bg-slate-50 focus:border-indigo-500"
+                selected={date1}
+                onChange={(date) => setDate1(date)}
+                selectsStart
+                startDate={date1}
+                dateFormat="yyyy, MM сарын dd"
+              />
             </div>
 
-            <div className="col-span-1 text-right mt-4">
-              <div className="inline-flex items-end">
-                <button
-                  onClick={navigateIndex}
-                  className="flex bg-green-600 border border-green-600 shadow px-4 py-2 rounded  focus:outline-none focus:shadow-outline"
-                >
-                  Үүсгэх
-                </button>
-              </div>
+            <div>
+              <label className="block mb-2 text-sm font-medium text-slate-700">
+                Дуусах хугацаа
+              </label>
+              <DatePicker
+                className="w-full px-3 text-sm border outline-none h-11 rounded-xl border-slate-200 bg-slate-50 focus:border-indigo-500"
+                selected={date2}
+                onChange={(date) => setDate2(date)}
+                selectsStart
+                startDate={date2}
+                dateFormat="yyyy, MM сарын dd"
+              />
+            </div>
+
+            <div>
+              <label className="block mb-2 text-sm font-medium text-slate-700">
+                Алба
+              </label>
+              <Select
+                className="text-sm"
+                options={department}
+                onChange={(item) => {
+                  handleOrg(item);
+                  setcheckEmpty2(false);
+                }}
+                noOptionsMessage={({ inputValue }) =>
+                  !inputValue && "Сонголт хоосон байна"
+                }
+                getOptionLabel={(option) => option.name}
+                getOptionValue={(option) => option.id}
+              />
+              {checkEmpty2 && (
+                <p className="mt-1 text-xs text-red-500">Алба сонгоно уу.</p>
+              )}
+            </div>
+
+            <div className="flex justify-end pt-2">
+              <button
+                onClick={navigateIndex}
+                className="rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-indigo-700"
+              >
+                Үүсгэх
+              </button>
             </div>
           </div>
         </Modal.Body>
       </Modal>
+
       <Modal
         show={showDelete}
         onHide={hideModalDelete}
@@ -353,33 +383,36 @@ function TrainingCategory() {
         backdrop="static"
         style={
           width < 768
-            ? {
-                width: "calc(100%)",
-                left: "0",
-              }
-            : {
-                width: "calc(100% - 250px)",
-                left: "250px",
-              }
+            ? { width: "calc(100%)", left: "0" }
+            : { width: "calc(100% - 250px)", left: "250px" }
         }
         keyboard={false}
-        aria-labelledby="contained-modal-title-vcenter"
         dialogClassName="modal-100w"
         centered
       >
         <Modal.Header closeButton>
-          <span className="text-sm text-black">Бүртгэл устгах</span>
+          <Modal.Title>
+            <p className="text-xl font-semibold text-slate-800">
+              Ангилал устгах
+            </p>
+          </Modal.Title>
         </Modal.Header>
+
         <Modal.Body>
           <div className="p-6 text-center">
-            <p className="mb-5  font-normal text-gray-500 dark:text-gray-400">
+            <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 text-red-600 bg-red-100 rounded-full">
+              <i className="text-xl bi bi-trash" />
+            </div>
+
+            <p className="mb-5 text-sm text-gray-500">
               Та сонгосон {selectedIds?.length} ангиллыг устгахдаа итгэлтэй
               байна уу?
             </p>
+
             <button
               type="button"
               onClick={deleteSelectedItems}
-              className=" bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
+              className="mr-2 inline-flex items-center rounded-lg bg-red-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-red-700"
             >
               Тийм
             </button>
@@ -387,13 +420,14 @@ function TrainingCategory() {
             <button
               onClick={hideModalDelete}
               type="button"
-              className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover: dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+              className="rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-900"
             >
               Үгүй
             </button>
           </div>
         </Modal.Body>
       </Modal>
+
       <Modal
         show={showEdit}
         onHide={hideModalEdit}
@@ -401,194 +435,183 @@ function TrainingCategory() {
         backdrop="static"
         style={
           width < 768
-            ? {
-                width: "calc(100%)",
-                left: "0",
-              }
-            : {
-                width: "calc(100% - 250px)",
-                left: "250px",
-              }
+            ? { width: "calc(100%)", left: "0" }
+            : { width: "calc(100% - 250px)", left: "250px" }
         }
         keyboard={false}
-        aria-labelledby="contained-modal-title-vcenter"
         dialogClassName="modal-100w"
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title>Ангилал засах</Modal.Title>
+          <Modal.Title>
+            <p className="text-xl font-semibold text-slate-800">
+              Ангилал засах
+            </p>
+          </Modal.Title>
         </Modal.Header>
+
         <Modal.Body>
-          <div className="max-w-screen-lg mx-auto">
-            <div className="md:col-span-1">
-              <label className="block mb-2 text-sm font-medium text-gray-900">
-                name
+          <div className="space-y-4">
+            <div>
+              <label className="block mb-2 text-sm font-medium text-slate-700">
+                Ангиллын нэр
               </label>
-              <div className="h-10 bg-gray-50 flex border border-gray-200 rounded items-center mt-1">
-                <input
-                  type="text"
-                  className="outline-none  w-full rounded bg-gray-50 h-10 block p-2"
-                  defaultValue={editData.name}
-                  onChange={(e) => {
-                    setNameEdit(e.target.value);
-                  }}
-                />
-              </div>
+              <input
+                type="text"
+                className="w-full px-3 text-sm border outline-none h-11 rounded-xl border-slate-200 bg-slate-50 focus:border-indigo-500"
+                value={nameEdit}
+                onChange={(e) => setNameEdit(e.target.value)}
+              />
             </div>
 
-            <div className="col-span-1 text-right mt-4">
-              <div className="inline-flex items-end">
-                <button
-                  onClick={navigateIndexEdit}
-                  className="flex bg-green-600 border border-green-600 shadow px-4 py-2 rounded  focus:outline-none focus:shadow-outline"
-                >
-                  Хадгалах
-                </button>
-              </div>
+            <div className="flex justify-end pt-2">
+              <button
+                onClick={navigateIndexEdit}
+                className="rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-indigo-700"
+              >
+                Хадгалах
+              </button>
             </div>
           </div>
         </Modal.Body>
       </Modal>
+
       <Navigation />
-      <div className="px-4 py-4">
-        <div className="flex items-center justify-between">
-          <div className="text-center text-left">
-            <p className="font-bold text-md text-gray-900">
-              Сургалтын ангилал{" "}
-              {filteredList?.length > 0
-                ? `(${filteredList?.length})`
-                : `(${category.length})`}
-            </p>
+
+      <div className="px-4 py-5 sm:px-6 lg:px-8">
+        <div className="p-4 mb-5 bg-white border shadow-sm rounded-2xl border-slate-100">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <h1 className="text-xl font-semibold text-slate-900">
+                Сургалтын ангилал
+              </h1>
+              <p className="mt-1 text-sm text-slate-500">
+                Нийт {filteredList?.length || 0} ангилал
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <button
+                onClick={() => setShowCreate(true)}
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-indigo-700"
+              >
+                <i className="bi bi-plus-lg" />
+                Ангилал нэмэх
+              </button>
+
+              <button
+                onClick={() => setShowDelete(true)}
+                disabled={selectedIds.length === 0}
+                className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition ${
+                  selectedIds.length === 0
+                    ? "cursor-not-allowed bg-slate-100 text-slate-400"
+                    : "bg-red-600 text-white hover:bg-red-700"
+                }`}
+              >
+                <i className="bi bi-trash" />
+                Устгах {selectedIds.length > 0 ? `(${selectedIds.length})` : ""}
+              </button>
+            </div>
           </div>
-        </div>
-        <div className="sm:flex items-center justify-between">
-          <div className="relative w-full max-w-md">
+
+          <div className="relative mt-4">
             <input
               value={searchQuery}
               onChange={handleSearch}
-              className="w-full h-10 pl-4 pr-10 rounded-lg border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="Нэрээр хайх..."
+              className="w-full pl-4 pr-10 text-sm border outline-none h-11 rounded-xl border-slate-200 bg-slate-50 placeholder-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+              placeholder="Ангиллын нэрээр хайх..."
               type="text"
             />
-
-            <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600">
-              <i className="bi bi-search" />
-            </button>
-          </div>
-          <div className="flex flex-col gap-2 sm:mt-0 sm:flex-row sm:items-center">
-            <button
-              onClick={showModalCreate}
-              className="mt-2 items-center px-2 py-2 bg-blue-600 hover:bg-blue-700  text-sm font-medium rounded-md text-white"
-            >
-              <i className="bi bi-trash mr-1 text-white" />
-              Ангилал нэмэх
-            </button>
-            <button
-              onClick={showModalDelete}
-              className="mt-2 items-center px-2 py-2 bg-red-600 hover:bg-red-700  text-sm font-medium rounded-md text-white"
-            >
-              <i className="bi bi-trash mr-1 text-white" />
-              Устгах
-            </button>
+            <i className="absolute -translate-y-1/2 bi bi-search right-3 top-1/2 text-slate-500" />
           </div>
         </div>
-        <div className="mt-3 overflow-x-auto">
-          <table className="items-center w-full bg-transparent border-collapse ">
-            <thead>
-              <tr className="text-sm text-left  bg-gray-200 border-b">
-                <th className="px-2 py-2 font-bold">
-                  <input
-                    type="checkbox"
-                    onChange={handleSelectAll}
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                    checked={selectedIds.length === filteredList.length}
-                  />
-                </th>
-                <th className="px-4 py-3 font-bold">№ </th>
-                <th className="px-4 py-3 font-bold">Эхлэх хугацаа </th>
-                <th className="px-4 py-3 font-bold">Дуусах хугацаа </th>
-                <th className="px-4 py-3 font-bold">Ангиллын нэр </th>
-                <th className="px-4 py-3 font-bold"> </th>
-              </tr>
-            </thead>
 
-            <tbody className="bg-white text-sm">
-              {filteredList > 0
-                ? filteredList.map((data, i) => (
-                    <tr key={i}>
-                      <td className="px-1 py-1 border">
+        <div className="overflow-hidden bg-white border shadow-sm rounded-2xl border-slate-100">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[760px] border-collapse">
+              <thead>
+                <tr className="text-xs text-left uppercase border-b bg-slate-50 text-slate-500">
+                  <th className="w-12 px-4 py-3">
+                    <input
+                      type="checkbox"
+                      onChange={handleSelectAll}
+                      className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                      checked={
+                        filteredList.length > 0 &&
+                        selectedIds.length === filteredList.length
+                      }
+                    />
+                  </th>
+                  <th className="w-16 px-4 py-3 font-semibold">№</th>
+                  <th className="px-4 py-3 font-semibold">Эхлэх хугацаа</th>
+                  <th className="px-4 py-3 font-semibold">Дуусах хугацаа</th>
+                  <th className="px-4 py-3 font-semibold">Ангиллын нэр</th>
+                  <th className="w-24 px-4 py-3 font-semibold text-center">
+                    Үйлдэл
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody className="text-sm divide-y divide-slate-100">
+                {filteredList.length === 0 ? (
+                  <tr>
+                    <td colSpan="6" className="px-4 py-12 text-center">
+                      <div className="flex items-center justify-center w-12 h-12 mx-auto mb-3 rounded-full bg-slate-100 text-slate-500">
+                        <i className="text-xl bi bi-folder2-open" />
+                      </div>
+                      <p className="font-medium text-slate-700">
+                        Ангилал олдсонгүй
+                      </p>
+                      <p className="mt-1 text-sm text-slate-400">
+                        Хайлт эсвэл жагсаалтаа дахин шалгана уу.
+                      </p>
+                    </td>
+                  </tr>
+                ) : (
+                  filteredList.map((data, i) => (
+                    <tr key={data.id || i} className="hover:bg-slate-50">
+                      <td className="px-4 py-3">
                         <input
                           type="checkbox"
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                          className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                           onChange={() => handleCheckboxChange(data.id)}
                           checked={selectedIds.includes(data.id)}
                         />
                       </td>
-                      <td className="px-1 py-1 border">{i + 1}</td>
-                      <td className="px-1 py-1 border">{data.startDate}</td>
-                      <td className="px-1 py-1 border">{data.endDate}</td>
-                      <td className="px-1 py-1 border">{data.name}</td>
-                      <td className="px-1 py-1 border">
-                        <a
-                          className="text-yellow-600 hover:text-black mx-2 text-sm"
-                          data-id={data}
-                          onClick={() => {
-                            handleEdit(data);
-                          }}
+
+                      <td className="px-4 py-3 text-slate-500">{i + 1}</td>
+
+                      <td className="px-4 py-3 text-slate-600">
+                        {moment(data.startDate).format("YYYY.MM.DD")}
+                      </td>
+
+                      <td className="px-4 py-3 text-slate-600">
+                        {moment(data.endDate).format("YYYY.MM.DD")}
+                      </td>
+
+                      <td className="px-4 py-3">
+                        <p className="font-medium text-slate-800">
+                          {data.name}
+                        </p>
+                      </td>
+
+                      <td className="px-4 py-3 text-center">
+                        <button
+                          className="inline-flex items-center justify-center rounded-lg h-9 w-9 text-amber-600 hover:bg-amber-50 hover:text-amber-700"
+                          onClick={() => handleEdit(data)}
                         >
-                          <i className="bi bi-pencil-square"></i>
-                        </a>
-                        {/* <a
-                            data-id={data.id}
-                            onClick={showModalDelete}
-                            className="text-rose-400 hover:text-black ml-2 text-sm"
-                          >
-                            <i className="bi bi-trash-fill"></i>
-                          </a> */}
+                          <i className="text-lg bi bi-pencil-square" />
+                        </button>
                       </td>
                     </tr>
                   ))
-                : category.map((data, i) => (
-                    <tr key={i}>
-                      <td className="px-1 py-1 border">
-                        <input
-                          type="checkbox"
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                          onChange={() => handleCheckboxChange(data.id)}
-                          checked={selectedIds.includes(data.id)}
-                        />
-                      </td>
-                      <td className="px-1 py-1 border">{i + 1}</td>
-                      <td className="px-1 py-1 border">{data.startDate}</td>
-                      <td className="px-1 py-1 border">{data.endDate}</td>
-                      <td className="px-1 py-1 border">{data.name}</td>
-                      {/* <td className="px-1 py-1 border">{data.createdAt}</td> */}
-                      <td className="px-1 py-1 border">
-                        <a
-                          className="text-yellow-600 hover:text-black mx-2 text-sm"
-                          data-id={data}
-                          onClick={() => {
-                            handleEdit(data);
-                          }}
-                        >
-                          <i className="bi bi-pencil-square"></i>
-                        </a>
-                        {/* <a
-                            data-id={data.id}
-                            onClick={showModalDelete}
-                            className="text-rose-400 hover:text-black ml-2 text-sm"
-                          >
-                            <i className="bi bi-trash-fill"></i>
-                          </a> */}
-                      </td>
-                    </tr>
-                  ))}
-            </tbody>
-          </table>
-
-          <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between"></div>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
+
       <ToastContainer />
     </div>
   );

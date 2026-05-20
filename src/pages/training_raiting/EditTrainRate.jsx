@@ -3,45 +3,34 @@ import Navigation from "../../components/Navigation";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-import { Modal } from "react-bootstrap";
 import Select from "react-select";
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import { logout } from "../../service/examService";
-import getWindowDimensions from "../../components/SizeDetector";
+
 function EditTrainRate() {
   const location = useLocation();
   const { TOKEN } = useStateContext();
   const navigate = useNavigate();
-  const { width } = getWindowDimensions();
-  const [trains, setTrains] = useState([]);
-  const [trateName, settrateName] = useState("");
-  const [trateDesc, settrateDesc] = useState("");
+
   const trainrate = location.state.data;
   const format = "YYYYMMDDHHmmss";
+
+  const [trains, setTrains] = useState([]);
+  const [trateName, settrateName] = useState(trainrate.name || "");
+  const [trateDesc, settrateDesc] = useState(trainrate.description || "");
   const [date1, setDate1] = useState(new Date(trainrate.beginDate));
   const [date2, setDate2] = useState(new Date(trainrate.expireDate));
+
+  const [tID, setTID] = useState(trainrate.trainingId || "");
+  const [tNAME, setTNAME] = useState(trainrate.trainingName || "");
+  const [raw, setRaw] = useState(trainrate?.trRatingQuestions || []);
+
   const startDate = moment(date1).format(format);
   const endDate = moment(date2).format(format);
-  const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
-  const [questionType, setQuestionType] = useState("");
-  const [tID, setTID] = useState("");
-  const [tNAME, setTNAME] = useState("");
-  const [checkName, setCheckName] = useState(false);
-  const [checkDesc, setCheckDesc] = useState(false);
-  const [checkQuest, setCheckQuest] = useState(false);
-  const [checkAns, setCheckAns] = useState(false);
-  const [checkTrain, setCheckTrain] = useState(false);
-  const [raw, setRaw] = useState([]);
 
-  const handleTrainId = (item) => {
-    console.log(item);
-    setTID(item.id);
-    setTNAME(item.name);
-  };
   useEffect(() => {
     axios({
       method: "get",
@@ -51,12 +40,10 @@ function EditTrainRate() {
       url: `${process.env.REACT_APP_URL}/v1/Training`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-        }
         if (res.data.isSuccess === true) {
-          setTrains(res.data.trainingList);
+          setTrains(res.data.trainingList || []);
         }
-        // console.log(trains);
+
         if (
           res.data.resultMessage === "Unauthorized" ||
           res.data.resultMessage === "Input string was not in a correct format."
@@ -67,163 +54,281 @@ function EditTrainRate() {
       .catch((err) => console.log(err));
   }, []);
 
+  const handleTrainId = (item) => {
+    setTID(item.id);
+    setTNAME(item.name);
+  };
+
+  const updateQuestion = (questionId, value) => {
+    const updated = raw.map((item) => {
+      if (item.questionId === questionId) {
+        return {
+          ...item,
+          question: value,
+        };
+      }
+
+      return item;
+    });
+
+    setRaw(updated);
+  };
+
+  const updateAnswer = (questionId, answerId, field, value) => {
+    const updated = raw.map((item) => {
+      if (item.questionId === questionId) {
+        return {
+          ...item,
+          trRatingAnswer: item.trRatingAnswer.map((ans) => {
+            if (ans.answerId === answerId) {
+              return {
+                ...ans,
+                [field]: value,
+              };
+            }
+
+            return ans;
+          }),
+        };
+      }
+
+      return item;
+    });
+
+    setRaw(updated);
+  };
+
   const dataEditTrate = {
     id: `${trainrate.id}`,
-    name: `${trateName}` === "" ? trainrate.name : `${trateName}`,
-    description: `${trateDesc}` === "" ? trainrate.description : `${trateDesc}`,
-    trainingId: `${tID}` === "" ? trainrate.trainingId : `${tID}`,
-    trainingName: `${tNAME}` === "" ? trainrate.trainingName : `${tNAME}`,
-    beginDate: `${startDate}` === "" ? trainrate.beginDate : `${startDate}`,
-    expireDate: `${endDate}` === "" ? trainrate.expireDate : `${endDate}`,
+    name: `${trateName}`,
+    description: `${trateDesc}`,
+    trainingId: `${tID}`,
+    trainingName: `${tNAME}`,
+    beginDate: `${startDate}`,
+    expireDate: `${endDate}`,
     createdBy: `${trainrate.createdBy}`,
     createdAt: `${trainrate.createdAt}`,
     trRatingQuestions: raw,
   };
+
   const navigateIndex = (e) => {
     e.preventDefault();
-    if (startDate === endDate || startDate > endDate) {
-      notification.invalidFileUpload("Эхлэх дуусах хугацаа алдаатай байна.");
-    } else {
-      axios({
-        method: "put",
-        headers: {
-          Authorization: `${TOKEN}`,
-          "Content-Type": "application/json",
-          accept: "text/plain",
-        },
-        url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating/edit`,
-        data: JSON.stringify(dataEditTrate),
-      })
-        .then((res) => {
-          if (res.data.isSuccess === true) {
-            notification.success(`${res.data.resultMessage}`);
-            const timer = setTimeout(() => navigate("/training-rating"), 2000);
-            return () => clearTimeout(timer);
-          } else if (res.data.isSuccess === false) {
-            notification.error(`${res.data.resultMessage}`);
-            const timer = setTimeout(() => navigate("/training-rating"), 3000);
-            return () => clearTimeout(timer);
-          }
-        })
-        .catch((err) => console.log(err));
+
+    if (!trateName.trim()) {
+      notification.error("Үнэлгээний нэр оруулна уу.");
+      return;
     }
+
+    if (!trateDesc.trim()) {
+      notification.error("Үнэлгээний тайлбар оруулна уу.");
+      return;
+    }
+
+    if (!tID) {
+      notification.error("Сургалт сонгоно уу.");
+      return;
+    }
+
+    if (startDate === endDate || startDate > endDate) {
+      notification.error("Эхлэх дуусах хугацаа алдаатай байна.");
+      return;
+    }
+
+    axios({
+      method: "put",
+      headers: {
+        Authorization: `${TOKEN}`,
+        "Content-Type": "application/json",
+        accept: "text/plain",
+      },
+      url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating/edit`,
+      data: JSON.stringify(dataEditTrate),
+    })
+      .then((res) => {
+        if (res.data.isSuccess === true) {
+          notification.success(`${res.data.resultMessage}`);
+          setTimeout(() => navigate("/training-rating"), 600);
+        } else if (res.data.isSuccess === false) {
+          notification.error(`${res.data.resultMessage}`);
+        }
+
+        if (res.data.resultMessage === "Unauthorized") {
+          logout();
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
-  useEffect(() => {
-    setRaw(trainrate?.trRatingQuestions);
-  }, []);
-  const collector = (question, answer, id, answerId, questionType) => {
-    setQuestion(question);
-    setQuestionType(questionType);
-    setAnswer(answer);
-    let single = raw.filter((item) => {
-      return item.questionId === id;
-    });
-    let tempo = single[0].trRatingAnswer.map((el) => {
-      if (el.answerId === answerId) {
-        return {
-          ...el,
-          answer: answer,
-          points: "",
-        };
-      } else {
-        return el;
-      }
-    });
-    let arr = [
-      {
-        questionId: `${id}`,
-        question: `${question}`,
-        questionType: `${questionType}`,
-        trRatingAnswer: tempo,
-      },
-    ];
-    let final = raw.map((item) => {
-      if (item.questionId === id) {
-        return arr[0];
-      } else {
-        return item;
-      }
-    });
-    setRaw(final);
-  };
   return (
-    <div className="w-full min-h-[calc(100%-56px)] ">
+    <div className="min-h-[calc(100vh-56px)] w-full bg-slate-50">
       <Navigation />
 
-      <div className="w-full">
-        <div className="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 lg:px-8">
+      <div className="px-4 py-5 sm:px-6 lg:px-8">
+        <div className="p-4 mb-5 bg-white border shadow-sm rounded-2xl border-slate-100">
           <button
             onClick={() => navigate("/training-rating")}
-            className="bg-white border border-white p-2 rounded text-gray-700 flex items-center focus:outline-none focus:shadow-outline mb-2"
+            className="inline-flex items-center gap-2 mb-3 text-sm font-medium text-slate-600 hover:text-indigo-600"
           >
-            <svg width="24" height="24" viewBox="0 0 16 16">
-              <path
-                d="M9 4 L5 8 L9 12"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinejoin="round"
-                strokeLinecap="round"
-              />
-            </svg>
-            <span className="mx-2">Буцах</span>
+            <i className="bi bi-arrow-left" />
+            Буцах
           </button>
-          <p className="text-sm font-bold text-gray-900 sm:text-sm">
-            Сургалтын үнэлгээ засварлах
-          </p>
+
+          <div>
+            <h1 className="text-xl font-semibold text-slate-900">
+              Сургалтын үнэлгээ засварлах
+            </h1>
+            <p className="mt-1 text-sm text-slate-500">
+              Үнэлгээний мэдээлэл болон асуулт, хариултуудыг засна.
+            </p>
+          </div>
         </div>
 
-        <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 mb-6">
-          <div className="rounded-lg bg-white p-8 shadow-lg lg:col-span-3 lg:p-12">
-            <div className="space-y-4">
-              <div>
-                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                  Үнэлгээний нэр
-                </label>
-                <input
-                  type="text"
-                  defaultValue={trainrate.name}
-                  onChange={(e) => {
-                    settrateName(e.target.value);
-                    setCheckName(false);
-                  }}
-                  id={checkName === true ? "border-red" : null}
-                  className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                />
-              </div>
-              <div>
-                <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                  Үнэлгээний тайлбар
-                </label>
-                <textarea
-                  className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                  rows="4"
-                  defaultValue={trainrate.description}
-                  onChange={(e) => {
-                    settrateDesc(e.target.value);
-                    setCheckDesc(false);
-                  }}
-                  id={checkDesc === true ? "border-red" : null}
-                ></textarea>
-              </div>
-              <div className="grid grid-cols-1 gap-4  sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 lg:grid-cols-[1fr_360px]">
+          <div className="space-y-3">
+            <div className="p-4 bg-white border shadow-sm rounded-2xl border-slate-100">
+              <h2 className="mb-4 text-base font-semibold text-slate-900">
+                Үндсэн мэдээлэл
+              </h2>
+
+              <div className="space-y-4">
                 <div>
-                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
+                  <label className="block mb-2 text-xs font-bold uppercase text-slate-600">
+                    Үнэлгээний нэр
+                  </label>
+                  <input
+                    type="text"
+                    value={trateName}
+                    onChange={(e) => settrateName(e.target.value)}
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-indigo-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block mb-2 text-xs font-bold uppercase text-slate-600">
+                    Үнэлгээний тайлбар
+                  </label>
+                  <textarea
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-indigo-500"
+                    rows="4"
+                    value={trateDesc}
+                    onChange={(e) => settrateDesc(e.target.value)}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="p-4 bg-white border shadow-sm rounded-2xl border-slate-100">
+              <h2 className="mb-4 text-base font-semibold text-slate-900">
+                Асуулт, хариулт
+              </h2>
+
+              {raw.length === 0 ? (
+                <div className="py-10 text-center">
+                  <div className="flex items-center justify-center w-12 h-12 mx-auto mb-3 rounded-full bg-slate-100 text-slate-500">
+                    <i className="text-xl bi bi-question-circle" />
+                  </div>
+                  <p className="font-medium text-slate-700">
+                    Асуулт байхгүй байна
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {raw.map((quest, index) => (
+                    <div
+                      key={quest.questionId || index}
+                      className="p-4 border rounded-2xl border-slate-100 bg-slate-50"
+                    >
+                      <div>
+                        <label className="block mb-2 text-xs font-bold uppercase text-slate-600">
+                          Асуулт {index + 1}
+                        </label>
+                        <input
+                          type="text"
+                          value={quest.question}
+                          onChange={(e) =>
+                            updateQuestion(quest.questionId, e.target.value)
+                          }
+                          className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-indigo-500"
+                        />
+                      </div>
+
+                      {quest.trRatingAnswer?.length > 0 ? (
+                        <div className="grid grid-cols-1 gap-3 mt-4 md:grid-cols-2">
+                          {quest.trRatingAnswer.map((ans, i) => (
+                            <div
+                              key={ans.answerId || i}
+                              className="p-3 bg-white border rounded-xl border-slate-100"
+                            >
+                              <label className="block mb-2 text-xs font-bold uppercase text-slate-600">
+                                Хариулт {i + 1}
+                              </label>
+
+                              <input
+                                type="text"
+                                value={ans.answer}
+                                onChange={(e) =>
+                                  updateAnswer(
+                                    quest.questionId,
+                                    ans.answerId,
+                                    "answer",
+                                    e.target.value,
+                                  )
+                                }
+                                className="w-full px-3 py-2 mb-3 text-sm border rounded-lg outline-none border-slate-200 bg-slate-50 text-slate-700 focus:border-indigo-500"
+                              />
+
+                              <label className="block mb-2 text-xs font-bold uppercase text-slate-600">
+                                Оноо
+                              </label>
+
+                              <input
+                                type="text"
+                                value={ans.points || ""}
+                                onChange={(e) =>
+                                  updateAnswer(
+                                    quest.questionId,
+                                    ans.answerId,
+                                    "points",
+                                    e.target.value,
+                                  )
+                                }
+                                className="w-full px-3 py-2 text-sm border rounded-lg outline-none border-slate-200 bg-slate-50 text-slate-700 focus:border-indigo-500"
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="px-3 py-2 mt-3 text-xs font-medium rounded-xl bg-amber-50 text-amber-700">
+                          Нээлттэй асуулт
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <div className="p-4 bg-white border shadow-sm rounded-2xl border-slate-100">
+              <h2 className="mb-4 text-base font-semibold text-slate-900">
+                Тохиргоо
+              </h2>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block mb-2 text-xs font-bold uppercase text-slate-600">
                     Сургалт
                   </label>
+
                   <Select
-                    className="px-2 py-2 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                    className="text-sm"
                     options={trains}
                     defaultValue={{
                       id: trainrate.trainingId,
                       name: trainrate.trainingName,
                     }}
-                    onChange={(item) => {
-                      handleTrainId(item);
-                      setCheckTrain(false);
-                    }}
-                    id={checkTrain === true ? "border-red" : null}
+                    onChange={handleTrainId}
                     noOptionsMessage={({ inputValue }) =>
                       !inputValue && "Сонголт хоосон байна"
                     }
@@ -231,12 +336,13 @@ function EditTrainRate() {
                     getOptionValue={(option) => option.id}
                   />
                 </div>
+
                 <div>
-                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                    startDate
+                  <label className="block mb-2 text-xs font-bold uppercase text-slate-600">
+                    Эхлэх хугацаа
                   </label>
                   <DatePicker
-                    className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-indigo-500"
                     selected={date1}
                     onChange={(date) => setDate1(date)}
                     showTimeSelect
@@ -247,12 +353,13 @@ function EditTrainRate() {
                     dateFormat="yyyy.MM.dd, HH:mm"
                   />
                 </div>
+
                 <div>
-                  <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                    endDate
+                  <label className="block mb-2 text-xs font-bold uppercase text-slate-600">
+                    Дуусах хугацаа
                   </label>
                   <DatePicker
-                    className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-indigo-500"
                     selected={date2}
                     onChange={(date) => setDate2(date)}
                     showTimeSelect
@@ -264,97 +371,18 @@ function EditTrainRate() {
                   />
                 </div>
               </div>
-
-              {raw.map((quest, index) => (
-                <div key={index} className="space-y-4">
-                  <div>
-                    <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                      Асуулт
-                    </label>
-                    <input
-                      type="text"
-                      defaultValue={quest.question}
-                      onChange={(e) => {
-                        // setQuestion(e.target.value);
-                        collector(
-                          e.target.value,
-                          answer,
-                          quest.questionId,
-                          quest.questionType
-                        );
-                        //    setcheckEmptyname(false);
-                      }}
-                      //  id={checkEmptyname === true ? "border-red" : null}
-                      className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                    />
-                  </div>
-                  {quest.trRatingAnswer?.map((ans, i) => (
-                    <div
-                      key={i}
-                      className="grid grid-cols-1 gap-4  sm:grid-cols-3"
-                    >
-                      <div>
-                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                          Хариулт
-                        </label>
-                        <input
-                          type="text"
-                          defaultValue={ans.answer}
-                          onChange={(e) => {
-                            // setAnswer(e.target.value);
-                            collector(
-                              question,
-                              e.target.value,
-                              quest.questionId,
-                              ans.answerId
-                            );
-                            //    setcheckEmptyname(false);
-                          }}
-                          //  id={checkEmptyname === true ? "border-red" : null}
-                          className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                        />
-                      </div>
-                      <div>
-                        <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2">
-                          Оноо
-                        </label>
-                        <input
-                          type="text"
-                          defaultValue={ans.points}
-                          onChange={(e) => {
-                            // setPoints(e.target.value);
-                            collector(
-                              question,
-                              answer,
-                              e.target.value,
-                              quest.questionId,
-                              ans.answerId
-                            );
-                            //    setcheckEmptyname(false);
-                          }}
-                          //  id={checkEmptyname === true ? "border-red" : null}
-                          className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                        />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ))}
-
-              <div className="mt-4 text-right">
-                <div className="inline-flex items-end">
-                  <button
-                    onClick={navigateIndex}
-                    className="flex bg-green-600 border border-green-600 shadow px-4 py-2 rounded text-white focus:outline-none focus:shadow-outline"
-                  >
-                    Хадгалах
-                  </button>
-                </div>
-              </div>
             </div>
+
+            <button
+              onClick={navigateIndex}
+              className="w-full px-4 py-3 text-sm font-semibold text-white transition bg-indigo-600 shadow-sm rounded-xl hover:bg-indigo-700"
+            >
+              Хадгалах
+            </button>
           </div>
         </div>
       </div>
+
       <ToastContainer />
     </div>
   );

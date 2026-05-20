@@ -1,29 +1,28 @@
 import React, { useEffect, useState } from "react";
 import Navigation from "../../components/Navigation";
 import { useStateContext } from "../../contexts/ContextProvider";
-import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { Modal } from "react-bootstrap";
 import { logout } from "../../service/examService";
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
-
 import getWindowDimensions from "../../components/SizeDetector";
+
 const FormData = require("form-data");
+
 function TrainingFiles() {
   const { width } = getWindowDimensions();
-  const { TOKEN, activeMenu } = useStateContext();
-  const navigate = useNavigate();
+  const { TOKEN } = useStateContext();
+
   const [files, setFiles] = useState([]);
-  const [showCreate, setShowCreate] = useState(null);
-  const showModalCreate = () => setShowCreate(true);
-  const hideModalCreate = () => setShowCreate(null);
-  const [showDelete, setShowDelete] = useState(null);
-  const hideModalDelete = () => setShowDelete(null);
   const [filteredList, setFilteredList] = useState([]);
+  const [showDelete, setShowDelete] = useState(null);
   const [trigger, setTrigger] = useState(false);
-  const [id, setId] = useState();
   const [selectedIds, setSelectedIds] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const hideModalDelete = () => setShowDelete(null);
+
   useEffect(() => {
     axios({
       method: "get",
@@ -33,11 +32,13 @@ function TrainingFiles() {
       url: `${process.env.REACT_APP_URL}/v1/TrainingFile/filelist`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-        } else if (res.data.isSuccess === true) {
-          setFiles(res.data.fileNames);
-          setFilteredList(res.data.fileNames);
-        } else if (
+        if (res.data.isSuccess === true) {
+          setFiles(res.data.fileNames || []);
+          setFilteredList(res.data.fileNames || []);
+          setSelectedIds([]);
+        }
+
+        if (
           res.data.resultMessage === "Unauthorized" ||
           res.data.resultMessage === "Input string was not in a correct format."
         ) {
@@ -46,88 +47,19 @@ function TrainingFiles() {
       })
       .catch((err) => console.log(err));
   }, [trigger]);
-  const showModalDelete = (e) => {
-    setShowDelete(true);
-    setId(e.currentTarget.dataset.id);
-  };
-  const deleteSelectedItems = () => {
-    for (const id of selectedIds) {
-      axios({
-        method: "delete",
-        headers: {
-          Authorization: `${TOKEN}`,
-          accept: "text/plain",
-        },
-        url: `${process.env.REACT_APP_URL}/v1/TrainingFile/${id}`,
-      })
-        .then((res) => {
-          if (res.data.isSuccess === false) {
-          }
-          if (res.data.isSuccess === true) {
-            notification.success(`${res.data.resultMessage}`);
-            hideModalDelete();
-            setTrigger(!trigger);
-          } else {
-            console.log(res.data.resultMessage);
-          }
-          if (
-            res.data.resultMessage === "Unauthorized" ||
-            res.data.resultMessage ===
-              "Input string was not in a correct format."
-          ) {
-            logout();
-          }
-        })
-        .catch((err) => console.log(err));
-    }
-  };
-  const [selectedFile, setSelectedFile] = useState(false);
-  const handleFileSelect = (event) => {
-    setSelectedFile(event.target.files[0]);
-  };
-  const handleCreate = async (event) => {
-    event.preventDefault();
-    const data = new FormData();
-    data.append("file", selectedFile);
-    axios({
-      method: "post",
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `${TOKEN}`,
-      },
-      url: `${process.env.REACT_APP_URL}/v1/TrainingFile/fileadd`,
-      data,
-    })
-      .then((res) => {
-        if (res.data.isSuccess === false) {
-        }
-        if (res.data.isSuccess === true) {
-          notification.success(`${res.data.resultMessage}`);
-          setTrigger(!trigger);
-          hideModalCreate();
-        }
-        if (res.data.resultMessage === "Unauthorized") {
-          logout();
-        }
-        if (
-          res.data.resultMessage === "File мэдээлэл оруулахад алдаа гарлаа."
-        ) {
-          notification.invalidFileUpload("File бүртгэгдсэн байна.");
-        } else {
-          console.log(res.data.resultMessage);
-        }
-      })
-      .catch((err) => console.log(err));
-  };
-  const [searchQuery, setSearchQuery] = useState("");
+
   const handleSearch = (event) => {
     const query = event.target.value;
     setSearchQuery(query);
+
     const searchList = files.filter((item) => {
-      return item.fileName.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+      return item.fileName?.toLowerCase().includes(query.toLowerCase());
     });
+
     setFilteredList(searchList);
+    setSelectedIds([]);
   };
+
   const handleCheckboxChange = (itemId) => {
     if (selectedIds.includes(itemId)) {
       setSelectedIds(selectedIds.filter((id) => id !== itemId));
@@ -135,16 +67,73 @@ function TrainingFiles() {
       setSelectedIds([...selectedIds, itemId]);
     }
   };
+
   const handleSelectAll = (event) => {
     const isChecked = event.target.checked;
+
     if (isChecked) {
       setSelectedIds(filteredList.map((item) => item.id));
     } else {
       setSelectedIds([]);
     }
   };
+
+  const deleteSelectedItems = () => {
+    if (selectedIds.length === 0) {
+      notification.error("Устгах файл сонгоно уу.");
+      hideModalDelete();
+      return;
+    }
+
+    Promise.all(
+      selectedIds.map((id) =>
+        axios({
+          method: "delete",
+          headers: {
+            Authorization: `${TOKEN}`,
+            accept: "text/plain",
+          },
+          url: `${process.env.REACT_APP_URL}/v1/TrainingFile/${id}`,
+        }),
+      ),
+    )
+      .then((responses) => {
+        const unauthorized = responses.find(
+          (res) =>
+            res.data.resultMessage === "Unauthorized" ||
+            res.data.resultMessage ===
+              "Input string was not in a correct format.",
+        );
+
+        if (unauthorized) {
+          logout();
+          return;
+        }
+
+        notification.success("Сонгосон файлууд амжилттай устлаа.");
+        hideModalDelete();
+        setSelectedIds([]);
+        setTrigger(!trigger);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const getFileIcon = (fileName) => {
+    const ext = fileName?.split(".").pop()?.toLowerCase();
+
+    if (["png", "jpg", "jpeg", "gif"].includes(ext)) return "bi-file-image";
+    if (["mp4", "mov", "avi"].includes(ext)) return "bi-file-play";
+    if (["mp3", "wav"].includes(ext)) return "bi-file-music";
+    if (["pdf"].includes(ext)) return "bi-file-pdf";
+    if (["xlsx", "xls"].includes(ext)) return "bi-file-spreadsheet";
+    if (["docx", "doc"].includes(ext)) return "bi-file-word";
+    if (["pptx", "ppt"].includes(ext)) return "bi-file-ppt";
+
+    return "bi-file-earmark";
+  };
+
   return (
-    <div className="w-full min-h-[calc(100%-56px)]">
+    <div className="min-h-[calc(100vh-56px)] w-full bg-slate-50">
       <Modal
         show={showDelete}
         onHide={hideModalDelete}
@@ -152,14 +141,8 @@ function TrainingFiles() {
         backdrop="static"
         style={
           width < 768
-            ? {
-                width: "calc(100%)",
-                left: "0",
-              }
-            : {
-                width: "calc(100% - 250px)",
-                left: "250px",
-              }
+            ? { width: "calc(100%)", left: "0" }
+            : { width: "calc(100% - 250px)", left: "250px" }
         }
         keyboard={false}
         aria-labelledby="contained-modal-title-vcenter"
@@ -167,18 +150,26 @@ function TrainingFiles() {
         centered
       >
         <Modal.Header closeButton>
-          <span className="text-sm text-black">Бүртгэл устгах</span>
+          <Modal.Title>
+            <p className="text-xl font-semibold text-slate-800">Файл устгах</p>
+          </Modal.Title>
         </Modal.Header>
+
         <Modal.Body>
-          <div className="p-6 text-center">
-            <p className="mb-5  font-normal text-gray-500 dark:text-gray-400">
+          <div className="p-4 text-center">
+            <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 text-red-600 bg-red-100 rounded-full">
+              <i className="text-xl bi bi-trash" />
+            </div>
+
+            <p className="mb-5 text-sm text-gray-500">
               Та сонгосон {selectedIds?.length} файлыг устгахдаа итгэлтэй байна
               уу?
             </p>
+
             <button
               type="button"
               onClick={deleteSelectedItems}
-              className=" bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
+              className="mr-2 inline-flex items-center rounded-lg bg-red-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-red-700"
             >
               Тийм
             </button>
@@ -186,126 +177,149 @@ function TrainingFiles() {
             <button
               onClick={hideModalDelete}
               type="button"
-              className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover: dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+              className="rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-900"
             >
               Үгүй
             </button>
           </div>
         </Modal.Body>
       </Modal>
+
       <Navigation />
-      <div className="px-4 py-4">
-        <div className="flex items-center justify-between">
-          <div className="text-center text-left">
-            <p className="font-bold text-md text-gray-900">
-              Сургалтын файлууд
-              {filteredList?.length > 0
-                ? `(${filteredList?.length})`
-                : `(${files.length})`}
-            </p>
+
+      <div className="px-4 py-5 sm:px-6 lg:px-8">
+        <div className="p-4 mb-3 bg-white border shadow-sm rounded-2xl border-slate-100">
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <h1 className="text-xl font-semibold text-slate-900">
+                Сургалтын файлууд
+              </h1>
+              <p className="mt-1 text-sm text-slate-500">
+                Нийт {filteredList?.length || 0} файл
+              </p>
+            </div>
+
+            <button
+              onClick={() => setShowDelete(true)}
+              disabled={selectedIds.length === 0}
+              className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition ${
+                selectedIds.length === 0
+                  ? "cursor-not-allowed bg-slate-100 text-slate-400"
+                  : "bg-red-600 text-white hover:bg-red-700"
+              }`}
+            >
+              <i className="bi bi-trash" />
+              Устгах {selectedIds.length > 0 ? `(${selectedIds.length})` : ""}
+            </button>
           </div>
-        </div>
-        <div className="sm:flex items-center justify-between">
-          <div className="relative w-full max-w-md">
+
+          <div className="relative mt-2">
             <input
               value={searchQuery}
               onChange={handleSearch}
-              className="w-full h-10 pl-4 pr-10 rounded-lg border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
-              placeholder="Нэрээр хайх..."
+              className="w-full pl-4 pr-10 text-sm border outline-none h-11 rounded-xl border-slate-200 bg-slate-50 placeholder-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+              placeholder="Файлын нэрээр хайх..."
               type="text"
             />
 
-            <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600">
-              <i className="bi bi-search" />
-            </button>
-          </div>
-          <div className="flex flex-col gap-2 sm:mt-0 sm:flex-row sm:items-center">
-            <button
-              onClick={showModalDelete}
-              className="mt-2 items-center px-2 py-2 bg-red-600 hover:bg-red-700  text-sm font-medium rounded-md text-white"
-            >
-              <i className="bi bi-trash mr-1 text-white" />
-              Устгах
-            </button>
+            <i className="absolute -translate-y-1/2 bi bi-search right-3 top-1/2 text-slate-500" />
           </div>
         </div>
-        <div className="mt-3 overflow-x-auto">
-          <table
-            id="table"
-            className="items-center w-full bg-transparent border-collapse "
-          >
-            <thead>
-              <tr className="text-sm text-left  bg-gray-200 border-b">
-                <th className="px-2 py-2 font-bold">
-                  <input
-                    type="checkbox"
-                    onChange={handleSelectAll}
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                    checked={selectedIds.length === filteredList.length}
-                  />
-                </th>
-                <th className="px-4 py-3 font-bold">№ </th>
-                <th className="px-4 py-3 font-bold">Файлын нэр</th>
-                <th className="px-4 py-3 font-bold">Үүсгэсэн хугацаа </th>
-                <th className="px-4 py-3 font-bold"> </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white text-sm">
-              {filteredList > 0
-                ? filteredList.map((data, i) => (
-                    <tr key={i}>
-                      <td className="px-1 py-1 border">
+
+        <div className="overflow-hidden bg-white border shadow-sm rounded-2xl border-slate-100">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[720px] border-collapse">
+              <thead>
+                <tr className="text-xs text-left uppercase border-b bg-slate-50 text-slate-500">
+                  <th className="w-12 px-4 py-3">
+                    <input
+                      type="checkbox"
+                      onChange={handleSelectAll}
+                      className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                      checked={
+                        filteredList.length > 0 &&
+                        selectedIds.length === filteredList.length
+                      }
+                    />
+                  </th>
+                  <th className="w-16 px-4 py-3 font-semibold">№</th>
+                  <th className="px-4 py-3 font-semibold">Файлын нэр</th>
+                  <th className="px-4 py-3 font-semibold">Үүсгэсэн хугацаа</th>
+                  <th className="w-24 px-4 py-3 font-semibold text-center">
+                    Үйлдэл
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody className="text-sm divide-y divide-slate-100">
+                {filteredList.length === 0 ? (
+                  <tr>
+                    <td colSpan="5" className="px-4 py-12 text-center">
+                      <div className="flex items-center justify-center w-12 h-12 mx-auto mb-3 rounded-full bg-slate-100 text-slate-500">
+                        <i className="text-xl bi bi-folder2-open" />
+                      </div>
+                      <p className="font-medium text-slate-700">
+                        Файл олдсонгүй
+                      </p>
+                      <p className="mt-1 text-sm text-slate-400">
+                        Хайлт эсвэл жагсаалтаа дахин шалгана уу.
+                      </p>
+                    </td>
+                  </tr>
+                ) : (
+                  filteredList.map((data, i) => (
+                    <tr key={data.id || i} className="hover:bg-slate-50">
+                      <td className="px-4 py-3">
                         <input
                           type="checkbox"
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                          className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                           onChange={() => handleCheckboxChange(data.id)}
                           checked={selectedIds.includes(data.id)}
                         />
                       </td>
-                      <td className="px-1 py-1 border">{i + 1}</td>
-                      <td className="px-1 py-1 border">{data.fileName}</td>
-                      <td className="px-1 py-1 border">{data.createdAt}</td>
-                      <td className="px-1 py-1 border">
-                        <a
-                          className="text-blue-600 hover:text-black mx-2 text-sm"
-                          data-id={data.filePath}
+
+                      <td className="px-4 py-3 text-slate-500">{i + 1}</td>
+
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center justify-center w-10 h-10 text-indigo-600 shrink-0 rounded-xl bg-indigo-50">
+                            <i
+                              className={`bi ${getFileIcon(data.fileName)} text-lg`}
+                            />
+                          </div>
+
+                          <div>
+                            <p className="max-w-[420px] truncate font-medium text-slate-800">
+                              {data.fileName}
+                            </p>
+                            <p className="max-w-[420px] truncate text-xs text-slate-400">
+                              {data.filePath}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+
+                      <td className="px-4 py-3 text-slate-600">
+                        {data.createdAt}
+                      </td>
+
+                      <td className="px-4 py-3 text-center">
+                        <button
+                          className="inline-flex items-center justify-center text-indigo-600 rounded-lg h-9 w-9 hover:bg-indigo-50 hover:text-indigo-800"
                           onClick={() => window.open(`http://${data.filePath}`)}
                         >
-                          <i className="bi bi-download"></i>
-                        </a>
+                          <i className="text-lg bi bi-download" />
+                        </button>
                       </td>
                     </tr>
                   ))
-                : files?.map((data, i) => (
-                    <tr key={i}>
-                      <td className="px-1 py-1 border">
-                        <input
-                          type="checkbox"
-                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                          onChange={() => handleCheckboxChange(data.id)}
-                          checked={selectedIds.includes(data.id)}
-                        />
-                      </td>
-                      <td className="px-1 py-1 border">{i + 1}</td>
-                      <td className="px-1 py-1 border">{data.fileName}</td>
-                      <td className="px-1 py-1 border">{data.createdAt}</td>
-                      <td className="px-1 py-1 border">
-                        <a
-                          className="text-blue-600 hover:text-black mx-2 text-sm"
-                          data-id={data.filePath}
-                          onClick={() => window.open(`http://${data.filePath}`)}
-                        >
-                          <i className="bi bi-download"></i>
-                        </a>
-                      </td>
-                    </tr>
-                  ))}
-            </tbody>
-          </table>
-
-          <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between"></div>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
+
       <ToastContainer />
     </div>
   );

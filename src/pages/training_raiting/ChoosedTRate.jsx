@@ -1,47 +1,56 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import Navigation from "../../components/Navigation";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-
 import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
-
 import { logout } from "../../service/examService";
 import QuestionCell from "./QuestionCell";
+
 function ChoosedTRate() {
   const location = useLocation();
-  const { TOKEN, activeMenu } = useStateContext();
+  const { TOKEN } = useStateContext();
   const navigate = useNavigate();
+
   const chtrate = location.state.data;
   const id = chtrate.id;
+
   const [trigger, setTrigger] = useState(false);
   const [isOpened, setIsOpened] = useState(false);
-  function createQ() {
-    setIsOpened((wasOpened) => !wasOpened);
-    setRadioFields([]);
-  }
   const [question, setQuestion] = useState("");
   const [radioFields, setRadioFields] = useState([{ answer: "", points: "" }]);
   const [checkEmpty11, setcheckEmpty11] = useState(false);
+  const [trate, setTrate] = useState([]);
+
+  const createQ = () => {
+    setIsOpened((wasOpened) => !wasOpened);
+    setQuestion("");
+    setRadioFields([{ answer: "", points: "" }]);
+    setcheckEmpty11(false);
+  };
+
   const handleRadioChange = (event, index) => {
     let data = [...radioFields];
     data[index][event.target.name] = event.target.value;
     setRadioFields(data);
   };
+
   const addRadioFields = () => {
-    let object = {
-      answer: "",
-      points: "",
-    };
-    setRadioFields([...radioFields, object]);
+    setRadioFields([...radioFields, { answer: "", points: "" }]);
   };
+
   const removeRadioFields = (index) => {
+    if (radioFields.length === 1) {
+      setRadioFields([{ answer: "", points: "" }]);
+      return;
+    }
+
     let data = [...radioFields];
     data.splice(index, 1);
     setRadioFields(data);
   };
-  const [trate, setTrate] = useState([]);
+
   useEffect(() => {
     axios({
       method: "get",
@@ -51,11 +60,10 @@ function ChoosedTRate() {
       url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating`,
     })
       .then((res) => {
-        if (res.data.isSuccess === false) {
-        }
         if (res.data.isSuccess === true) {
-          setTrate(res.data.trRatingForm);
+          setTrate(res.data.trRatingForm || []);
         }
+
         if (
           res.data.resultMessage === "Unauthorized" ||
           res.data.resultMessage === "Input string was not in a correct format."
@@ -65,236 +73,233 @@ function ChoosedTRate() {
       })
       .catch((err) => console.log(err));
   }, [trigger]);
-  const filtredData = [];
-  trate.filter((item) => {
-    if (item.id === chtrate.id) {
-      filtredData.push(item);
-      return;
-    }
-  });
+
+  const filteredData = useMemo(() => {
+    return trate.find((item) => item.id === chtrate.id);
+  }, [trate, chtrate.id]);
+
+  const questions = filteredData?.trRatingQuestions || [];
 
   const submit = (e) => {
     e.preventDefault();
-    if (question === null) {
+
+    if (!question.trim()) {
       setcheckEmpty11(true);
-    } else if (
-      radioFields.length === 0 ||
-      radioFields[0].answer.length === 0 ||
-      radioFields[0].answer.length === 0
-    ) {
-      axios({
-        method: "post",
-        headers: {
-          Authorization: `${TOKEN}`,
-          "Content-Type": "application/json",
-          accept: "text/plain",
-        },
-        url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating/addquestion`,
-        data: {
-          ratingId: `${id}`,
-          questions: [
-            {
-              questionType: `2`,
-              questionName: question,
-              trRatingAnswer: [],
-            },
-          ],
-        },
-      }).then((res) => {
-        if (res.data.isSuccess === false) {
-        }
-        if (res.data.isSuccess === true) {
-          notification.success(`${res.data.resultMessage}`);
-          setIsOpened(false);
-          setRadioFields([]);
-          setTrigger(!trigger);
-        }
-        if (res.data.resultMessage === "Unauthorized") {
-          logout();
-        }
-      });
-    } else if (radioFields.length === 1) {
-      notification.error("Нэг хариулттай асуулт үүсгэх боломжгүй.");
-    } else if (radioFields.length >= 2) {
-      axios({
-        method: "post",
-        headers: {
-          Authorization: `${TOKEN}`,
-          "Content-Type": "application/json",
-          accept: "text/plain",
-        },
-        url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating/addquestion`,
-        data: {
-          ratingId: `${id}`,
-          questions: [
-            {
-              questionType: `1`,
-              questionName: question,
-              trRatingAnswer: radioFields,
-            },
-          ],
-        },
-      }).then((res) => {
-        if (res.data.isSuccess === false) {
-        }
-        if (res.data.isSuccess === true) {
-          notification.success(`${res.data.resultMessage}`);
-          setIsOpened(false);
-          setRadioFields([]);
-          setTrigger(!trigger);
-        }
-        if (res.data.resultMessage === "Unauthorized") {
-          logout();
-        }
-      });
+      return;
     }
+
+    const validAnswers = radioFields.filter(
+      (item) => item.answer && item.answer.trim() !== "",
+    );
+
+    if (validAnswers.length === 1) {
+      notification.error("Нэг хариулттай асуулт үүсгэх боломжгүй.");
+      return;
+    }
+
+    const questionType = validAnswers.length >= 2 ? "1" : "2";
+
+    axios({
+      method: "post",
+      headers: {
+        Authorization: `${TOKEN}`,
+        "Content-Type": "application/json",
+        accept: "text/plain",
+      },
+      url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating/addquestion`,
+      data: {
+        ratingId: `${id}`,
+        questions: [
+          {
+            questionType: questionType,
+            questionName: question,
+            trRatingAnswer: questionType === "1" ? validAnswers : [],
+          },
+        ],
+      },
+    })
+      .then((res) => {
+        if (res.data.isSuccess === true) {
+          notification.success(`${res.data.resultMessage}`);
+          setIsOpened(false);
+          setQuestion("");
+          setRadioFields([{ answer: "", points: "" }]);
+          setTrigger(!trigger);
+        }
+
+        if (res.data.isSuccess === false) {
+          notification.error(`${res.data.resultMessage}`);
+        }
+
+        if (res.data.resultMessage === "Unauthorized") {
+          logout();
+        }
+      })
+      .catch((err) => console.log(err));
   };
+
   return (
-    <div className="w-full min-h-[calc(100%-56px)] ">
+    <div className="min-h-[calc(100vh-56px)] w-full bg-slate-50">
       <Navigation />
-      <div className="sm:px-6 w-full">
-        <div className="px-4 md:px-10 py-4 md:py-7">
+
+      <div className="px-4 py-5 sm:px-6 lg:px-8">
+        <div className="p-4 mb-5 bg-white border shadow-sm rounded-2xl border-slate-100">
           <button
             onClick={() => navigate("/training-rating")}
-            className="bg-white border border-white p-2 rounded text-gray-700 flex items-center focus:outline-none focus:shadow-outline mb-2"
+            className="inline-flex items-center gap-2 mb-3 text-sm font-medium text-slate-600 hover:text-indigo-600"
           >
-            <svg width="24" height="24" viewBox="0 0 16 16">
-              <path
-                d="M9 4 L5 8 L9 12"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinejoin="round"
-                strokeLinecap="round"
-              />
-            </svg>
-            <span className="mx-2">Буцах</span>
+            <i className="bi bi-arrow-left" />
+            Буцах
           </button>
-          <div className="flex items-center justify-between">
-            <p className="focus:outline-none text-base sm:text-sm md:text-sm lg:text-sm font-bold leading-normal text-gray-800">
-              Үнэлгээний асуултууд
-            </p>
+
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <h1 className="text-xl font-semibold text-slate-900">
+                Үнэлгээний асуултууд
+              </h1>
+              <p className="mt-1 text-sm text-slate-500">
+                {chtrate.name} • Нийт {questions.length} асуулт
+              </p>
+            </div>
+
+            <button
+              onClick={createQ}
+              className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-white transition ${
+                isOpened
+                  ? "bg-slate-600 hover:bg-slate-700"
+                  : "bg-indigo-600 hover:bg-indigo-700"
+              }`}
+            >
+              <i className={`bi ${isOpened ? "bi-x-lg" : "bi-plus-lg"}`} />
+              {isOpened ? "Болих" : "Асуулт нэмэх"}
+            </button>
           </div>
         </div>
 
-        <div className="bg-white py-4 md:py-7 px-4 md:px-8 xl:px-10">
-          <div className="sm:flex items-center justify-between">
-            <div className="flex items-center sm:justify-between sm:gap-4">
-              {/* <div className="relative hidden sm:block">
+        {isOpened && (
+          <div className="p-4 mb-5 bg-white border shadow-sm rounded-2xl border-slate-100">
+            <h2 className="mb-4 text-base font-semibold text-slate-900">
+              Шинэ асуулт
+            </h2>
+
+            <div className="space-y-4">
+              <div>
+                <label className="block mb-2 text-sm font-medium text-slate-700">
+                  Асуулт
+                </label>
+
                 <input
-                  value={searchQuery}
-                  onChange={handleSearch}
-                  type="text"
-                  name="search"
-                  className="w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500 flex-1 py-2 px-4 bg-white  text-gray-700 placeholder-gray-400 shadow-sm text-base"
-                  placeholder="Асуулт"
+                  value={question}
+                  className={`w-full rounded-xl border bg-slate-50 px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-indigo-500 ${
+                    checkEmpty11 ? "border-red-400" : "border-slate-200"
+                  }`}
+                  placeholder="Асуултаа оруулна уу"
+                  onChange={(e) => {
+                    setQuestion(e.target.value);
+                    setcheckEmpty11(false);
+                  }}
                 />
-                <button
-                  type="button"
-                  className="absolute top-1/2 right-1 -translate-y-1/2 rounded-md bg-gray-50 p-2 text-gray-600 transition hover:text-gray-700"
-                >
-                  <i className="bi bi-search" />
-                </button>
-              </div> */}
-            </div>
-            <div className="flex flex-col justify-center w-3/4 max-w-sm space-y-3 md:flex-row md:w-full md:space-x-3 md:space-y-0 md:justify-end sm:justify-end">
-              <button
-                onClick={createQ}
-                className="bg-blue-600 border border-blue-600 shadow p-2 rounded text-white flex items-center focus:outline-none focus:shadow-outline"
-              >
-                <span className="mx-2">Асуулт нэмэх</span>
-              </button>
-            </div>
-          </div>
-          <div className="mt-3 overflow-x-auto">
-            {isOpened && (
-              <div className="p-4 mx-auto text-center ">
-                <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8 mb-6">
-                  <div className="mt-2 mb-0 space-y-4 rounded-lg p-8 shadow-2xl border-t-4 border-indigo-500 rounded shadow">
-                    <div className="space-y-4 grid grid-cols-1 gap-4  sm:grid-cols-1">
-                      <div>
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                          Асуулт
-                        </label>
-                        <input
-                          className="px-3 py-3 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                          onChange={(e) => {
-                            setQuestion(e.target.value);
-                            setcheckEmpty11(false);
-                          }}
-                          id={checkEmpty11 === true ? "border-red" : null}
-                        />
-                      </div>
-                      <div>
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
-                          {radioFields.map((form, index) => {
-                            return (
-                              <div key={index}>
-                                <div>
-                                  <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Хариулт
-                                  </label>
-                                  <input
-                                    name="answer"
-                                    type="text"
-                                    className="px-3 py-2 text-blueGray-600 bg-white text-sm  w-full rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                                    onChange={(event) =>
-                                      handleRadioChange(event, index)
-                                    }
-                                    value={form.answer}
-                                  />
-                                </div>
 
-                                <div>
-                                  <button
-                                    onClick={() => removeRadioFields(index)}
-                                    className="mt-2 px-3 py-2 text-xs bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg "
-                                  >
-                                    <i className="bi bi-trash-fill" />
-                                  </button>
-                                </div>
-                              </div>
-                            );
-                          })}
-                        </div>
-                        <div className="mt-4 text-right text-xs">
-                          <div className="inline-flex items-end">
-                            <button
-                              onClick={addRadioFields}
-                              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
-                            >
-                              Хариулт нэмэх
-                            </button>
-                          </div>
-                          <div className="inline-flex items-end">
-                            <button
-                              onClick={submit}
-                              type="submit"
-                              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"
-                            >
-                              submit
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                {checkEmpty11 && (
+                  <p className="mt-1 text-xs text-red-500">
+                    Асуулт оруулна уу.
+                  </p>
+                )}
               </div>
-            )}
 
-            {filtredData[0]?.trRatingQuestions.length === 0 ? (
-              ""
-            ) : (
-              <QuestionCell
-                q={filtredData[0]?.trRatingQuestions}
-                setTrigger={setTrigger}
-              />
-            )}
-            {/* <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between"></div> */}
+              <div>
+                <div className="flex items-center justify-between mb-3">
+                  <label className="block text-sm font-medium text-slate-700">
+                    Хариултууд
+                  </label>
+
+                  <button
+                    onClick={addRadioFields}
+                    type="button"
+                    className="px-3 py-2 text-xs font-medium text-indigo-700 rounded-lg bg-indigo-50 hover:bg-indigo-100"
+                  >
+                    + Хариулт нэмэх
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
+                  {radioFields.map((form, index) => (
+                    <div
+                      key={index}
+                      className="p-3 border rounded-xl border-slate-100 bg-slate-50"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <p className="text-xs font-semibold text-slate-500">
+                          Хариулт {index + 1}
+                        </p>
+
+                        <button
+                          onClick={() => removeRadioFields(index)}
+                          type="button"
+                          className="flex items-center justify-center text-red-500 rounded-lg h-7 w-7 hover:bg-red-50"
+                        >
+                          <i className="bi bi-trash-fill" />
+                        </button>
+                      </div>
+
+                      <input
+                        name="answer"
+                        type="text"
+                        className="w-full px-3 py-2 text-sm bg-white border rounded-lg outline-none border-slate-200 text-slate-700 focus:border-indigo-500"
+                        placeholder="Хариулт"
+                        onChange={(event) => handleRadioChange(event, index)}
+                        value={form.answer}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                <p className="mt-2 text-xs text-slate-400">
+                  Хариулт хоосон үлдээвэл нээлттэй асуулт хэлбэрээр үүснэ.
+                </p>
+              </div>
+
+              <div className="flex justify-end gap-2">
+                <button
+                  onClick={createQ}
+                  type="button"
+                  className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-600 hover:bg-slate-50"
+                >
+                  Болих
+                </button>
+
+                <button
+                  onClick={submit}
+                  type="submit"
+                  className="rounded-xl bg-green-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-green-700"
+                >
+                  Хадгалах
+                </button>
+              </div>
+            </div>
           </div>
+        )}
+
+        <div className="p-4 bg-white border shadow-sm rounded-2xl border-slate-100">
+          {questions.length === 0 ? (
+            <div className="text-center py-14">
+              <div className="flex items-center justify-center w-12 h-12 mx-auto mb-3 rounded-full bg-slate-100 text-slate-500">
+                <i className="text-xl bi bi-question-circle" />
+              </div>
+
+              <p className="font-medium text-slate-700">
+                Асуулт үүсээгүй байна
+              </p>
+              <p className="mt-1 text-sm text-slate-400">
+                “Асуулт нэмэх” товчоор шинэ асуулт үүсгэнэ үү.
+              </p>
+            </div>
+          ) : (
+            <QuestionCell q={questions} setTrigger={setTrigger} />
+          )}
         </div>
       </div>
+
       <ToastContainer />
     </div>
   );

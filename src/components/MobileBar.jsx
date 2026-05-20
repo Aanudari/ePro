@@ -1,239 +1,173 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useStateContext } from "../contexts/ContextProvider";
 
+const menuItems = [
+  {
+    title: "Хянах самбар",
+    path: "/dashboard",
+    icon: "bi bi-calendar-check",
+  },
+  {
+    title: "Шалгалт",
+    icon: "bi bi-clock",
+    children: [
+      { title: "Шалгалтын форм", path: "/exam-form" },
+      { title: "Шалгалт өгөх", path: "/take-exam" },
+      { title: "Шалгалтын дүн харах", path: "/exam-result" },
+    ],
+  },
+  {
+    title: "Үнэлгээ",
+    icon: "bi bi-bar-chart-line",
+    children: [
+      { title: "Level 1", path: "/level-one" },
+      { title: "Telesales", path: "/telesales" },
+      { title: "Online", path: "/online" },
+      { title: "Branch", path: "/branch" },
+      { title: "Installer", path: "/installer" },
+      { title: "Care", path: "/care" },
+      { title: "Bank", path: "/bank" },
+    ],
+  },
+  {
+    title: "Сургалт",
+    icon: "bi bi-book",
+    children: [
+      { title: "Онлайн сургалт", path: "/online-training" },
+      { title: "Сургалтын хуваарь", path: "/training-schedule" },
+      { title: "Сургалтын файлууд", path: "/training-files" },
+      { title: "Сургалтын ангилал", path: "/training-category" },
+      { title: "Сургалтын үнэлгээ", path: "/training-rating" },
+    ],
+  },
+  {
+    title: "Calendar",
+    path: "/calendar",
+    icon: "bi bi-calendar-check",
+  },
+  {
+    title: "Алдаа / талархал",
+    path: "/error-thanks",
+    icon: "bi bi-bookmark-plus",
+  },
+];
+
 function MobileBar() {
   const navigate = useNavigate();
-  const { roleId, mobileBar, setMobileBar } = useStateContext();
-  let location = useLocation();
-  let path = location.pathname;
+  const location = useLocation();
+  const { setMobileBar } = useStateContext();
+
+  const [openMenu, setOpenMenu] = useState(null);
+
+  const goTo = (path) => {
+    navigate(path);
+    setMobileBar(false);
+  };
+
+  const isActive = (item) => {
+    if (item.path === location.pathname) return true;
+
+    return item.children?.some((child) => child.path === location.pathname);
+  };
+
   return (
-    <div className="relative">
-      <div className="core fixed top-[54px] left-0 expanded-menu">
-        <nav id="side-nav">
-          <div
-            onClick={() => {
-              navigate("/home");
-            }}
-            className="h-14 bg-gray-700 shadow text-gray-100
-                flex items-center text-2xl font-[700] cursor-pointer 
-                "
+    <>
+      {/* Backdrop */}
+      <div
+        onClick={() => setMobileBar(false)}
+        className="fixed inset-0 z-40 bg-black/50 md:hidden"
+      />
+
+      {/* Sidebar */}
+      <aside className="fixed top-0 left-0 z-50 h-screen w-[82%] max-w-[320px] bg-gray-800 text-white shadow-xl md:hidden">
+        {/* Header */}
+        <div className="flex items-center justify-between px-4 border-b border-gray-700 h-14">
+          <button
+            type="button"
+            onClick={() => goTo("/home")}
+            className="text-xl font-bold tracking-wide"
           >
-            <span
-              className="hover:scale-105 transition w-full h-full flex
-                    items-center
-                    font-bold ml-12"
-            >
-              E-PRO
-            </span>
-          </div>
-          <ul className="h-full">
-            <li>
-              <a
-                onClick={() => {
-                  navigate("/dashboard");
-                }}
-              >
-                <i className="bi bi-calendar-check absolute top-[17px] left-[17px]"></i>
-                <span>Хянах самбар</span>
-              </a>
-            </li>
-            <li>
-              <a className="relative">
-                <i className="bi bi-clock absolute top-[17px] left-[17px]"></i>
-                <span>Шалгалт</span>
-              </a>
-              <ul>
-                <li>
-                  <a
+            E-PRO
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setMobileBar(false)}
+            className="flex items-center justify-center rounded-lg h-9 w-9 hover:bg-gray-700"
+          >
+            <i className="text-lg bi bi-x-lg" />
+          </button>
+        </div>
+
+        {/* Menu */}
+        <nav className="h-[calc(100vh-56px)] overflow-y-auto px-3 py-4">
+          <ul className="space-y-1">
+            {menuItems.map((item) => {
+              const active = isActive(item);
+              const opened = openMenu === item.title;
+
+              return (
+                <li key={item.title}>
+                  <button
+                    type="button"
                     onClick={() => {
-                      navigate("/exam-form");
+                      if (item.children) {
+                        setOpenMenu(opened ? null : item.title);
+                      } else {
+                        goTo(item.path);
+                      }
                     }}
+                    className={`flex w-full items-center justify-between rounded-xl px-3 py-3 text-left transition ${
+                      active
+                        ? "bg-teal-500 text-white"
+                        : "text-gray-200 hover:bg-gray-700"
+                    }`}
                   >
-                    Шалгалтын форм{" "}
-                  </a>
+                    <span className="flex items-center gap-3">
+                      <i className={`${item.icon} text-lg`} />
+                      <span className="text-sm font-medium">{item.title}</span>
+                    </span>
+
+                    {item.children && (
+                      <i
+                        className={`bi bi-chevron-right text-sm transition-transform ${
+                          opened ? "rotate-90" : ""
+                        }`}
+                      />
+                    )}
+                  </button>
+
+                  {item.children && opened && (
+                    <ul className="pl-3 mt-1 ml-5 space-y-1 border-l border-gray-700">
+                      {item.children.map((child) => {
+                        const childActive = location.pathname === child.path;
+
+                        return (
+                          <li key={child.path}>
+                            <button
+                              type="button"
+                              onClick={() => goTo(child.path)}
+                              className={`w-full rounded-lg px-3 py-2 text-left text-sm transition ${
+                                childActive
+                                  ? "bg-teal-400 text-white"
+                                  : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                              }`}
+                            >
+                              {child.title}
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
                 </li>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/take-exam");
-                    }}
-                  >
-                    Шалгалт өгөх
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/exam-result");
-                    }}
-                  >
-                    Шалгалтын дүн харах
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <a>
-                <i className="bi bi-bar-chart-line absolute top-[17px] left-[17px]"></i>
-                <span>Үнэлгээ</span>
-              </a>
-              <ul>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/level-one");
-                    }}
-                  >
-                    level 1
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/telesales");
-                    }}
-                  >
-                    Telesales
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/online");
-                    }}
-                  >
-                    Online
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/branch");
-                    }}
-                  >
-                    Branch
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/installer");
-                    }}
-                  >
-                    Installer
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/care");
-                    }}
-                  >
-                    Care
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/bank");
-                    }}
-                  >
-                    Bank
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <a>
-                <i className="bi bi-book absolute top-[17px] left-[17px]"></i>
-                <span>Сургалт</span>
-              </a>
-              <ul>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/online-training");
-                    }}
-                  >
-                    Онлайн сургалт
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/training-schedule");
-                    }}
-                  >
-                    Сургалтын хуваарь
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/training-files");
-                    }}
-                  >
-                    Сургалтын файлууд
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/training-category");
-                    }}
-                  >
-                    Сургалтын ангилал
-                  </a>
-                </li>
-                <li>
-                  <a
-                    onClick={() => {
-                      navigate("/training-rating");
-                    }}
-                  >
-                    Сургалтын үнэлгээ
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <a
-                onClick={() => {
-                  navigate("/calendar");
-                }}
-              >
-                <i className="bi bi-calendar-check absolute top-[17px] left-[17px]"></i>
-                <span>Calendar</span>
-              </a>
-            </li>
-            <li>
-              <a
-                onClick={() => {
-                  navigate("/error-thanks");
-                }}
-              >
-                <i className="bi bi-bookmark-plus absolute top-[17px] left-[17px]"></i>
-                <span>Алдаа / талархал</span>
-              </a>
-            </li>
-            <li>
-              <a
-                onClick={() => {
-                  setMobileBar(false);
-                }}
-              >
-                <i className="bi bi-x-lg absolute top-[17px] left-[17px] text-black"></i>
-                <span className="text-black">Хаах</span>
-              </a>
-            </li>
+              );
+            })}
           </ul>
-          <a id="toggle">
-            <i className="fa fa-chevron-circle-left"></i>
-          </a>
         </nav>
-      </div>
-    </div>
+      </aside>
+    </>
   );
 }
 

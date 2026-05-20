@@ -1,70 +1,88 @@
-@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+@import url("https://fonts.googleapis.com/css?family=Open+Sans");
+
+$primary: #50a3a2;
+$primary-hover: #499a99;
+$dark: rgb(32, 73, 90);
+$accent: #3ed8b5;
+$sidebar-width: 16rem;
+
+/* =========================
+   CORE
+========================= */
 
 *,
-*:before,
-*:after {
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
 .core {
   color: #444246;
-  // background:  linear-gradient(to bottom, #dd879f 0%,#4e337e 100%);
-  // background-color: #4e337e;
-  background: #50a3a2;
-  // background: linear-gradient(top left, #0056ff 0%, blue 100%);
-  // background: linear-gradient(to bottom right, #50a3a2 0%, #0056ff 100%);
+  background: $primary;
   font-family: "Open Sans", sans-serif;
   -webkit-font-smoothing: antialiased;
-  z-index: 10010001000100010;
+  z-index: 1000;
 }
+
 .core-index {
-  z-index: 10010001000100010;
+  z-index: 1000;
 }
+
 .core-bg {
-  background: rgb(32, 73, 90) !important;
-  // #20495A
+  background: $dark !important;
 }
+
 .core-bg-g {
-  background: #50a3a2 !important;
+  background: $primary !important;
 }
+
 .core-bg-b {
   background: #23b499 !important;
 }
+
 .bg-core {
   background: linear-gradient(to bottom, #dd879f 0%, #4e337e 100%);
 }
+
 .core a {
-  font-weight: bold !important;
+  font-weight: 700 !important;
   color: white !important;
 }
+
 a {
-  font-weight: 500 !important;
+  font-weight: 500;
 }
 
+/* =========================
+   OLD SIDE NAV SUPPORT
+   width = 16rem буюу Tailwind w-64-тэй тааруулсан
+========================= */
+
 #side-nav {
-  width: 250px;
+  width: $sidebar-width;
+  min-width: $sidebar-width;
   min-height: 100vh;
   background: rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 15px 2px rgba(0, 0, 0, 0.1);
-  // transition: width 0.5s ease-out;
-  // animation: animate-width 1.2s 1 ease-in-out;
 
   &.width {
-    width: 48px;
+    width: 3rem;
+    min-width: 3rem;
+
     ul {
       li a span {
         opacity: 0;
         right: 0;
-        font-weight: bold;
+        font-weight: 700;
       }
 
       .selected ul {
         position: absolute;
         right: -8rem;
-        width: 8rem;
+        left: auto;
         top: 0;
         display: none;
-        left: auto;
+        width: 8rem;
         animation: none;
       }
 
@@ -74,13 +92,12 @@ a {
     }
   }
 
-  //Parent
-  & > ul > li {
+  > ul > li {
     display: block;
     min-height: 48px;
-    font-weight: bold;
-    font-size: 0.76em;
     position: relative;
+    font-weight: 700;
+    font-size: 0.76em;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 
     &:hover,
@@ -89,7 +106,7 @@ a {
     }
 
     &:hover > a {
-      color: #3ed8b5 !important;
+      color: $accent !important;
       transition: color 0.2s;
     }
 
@@ -99,12 +116,12 @@ a {
 
     &.selected ul {
       display: block;
-      left: 0;
       position: relative;
-      width: 100%;
+      left: 0;
       top: 0;
+      width: 100%;
       overflow: hidden;
-      animation: animate-height 1.2s 1 ease-in-out;
+      animation: animate-height 0.3s ease-in-out;
     }
 
     .fa {
@@ -113,83 +130,286 @@ a {
     }
 
     a {
-      height: inherit;
       display: block;
+      height: inherit;
+      cursor: pointer;
     }
 
     span {
       position: absolute;
-      right: 0;
-      font-weight: bold !important;
-      height: inherit;
-      padding: 17px 0 0 0;
       left: 48px;
+      right: 0;
+      height: inherit;
+      padding: 17px 0 0;
       overflow: hidden;
       opacity: 1;
-      transition: opacity 0.5s;
+      font-weight: 700 !important;
+      transition: opacity 0.3s;
     }
   }
 }
 
-// Child
+/* Child menu */
 #side-nav ul li ul {
-  position: absolute;
-  right: -18rem;
-  background: rgba(0, 0, 0, 0.5);
-  width: 18rem !important;
-  top: 0;
+  position: relative;
+  right: auto;
+  top: auto;
   display: none;
+  width: 100% !important;
+  background: rgba(0, 0, 0, 0.25);
+
   li {
-    display: inline;
+    display: block;
+
     a {
       display: block;
-      padding: 1em;
-      font: bold !important;
+      padding: 0.85rem 1rem 0.85rem 3rem;
+      font-weight: 700 !important;
+
       &:hover {
-        color: #3ed8b5 !important;
+        color: $accent !important;
         transition: color 0.2s;
       }
     }
   }
 }
-.cus-btn {
-  background-color: #50a3a2;
-  color: white;
-  padding: 10px;
-  border-radius: 5px;
-  width: 100%;
-  font-weight: 500;
-}
-.cus-btn:hover {
-  background-color: #499a99;
-}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.cus-btn,
 .cus-btn2 {
-  background-color: #50a3a2;
-  color: white;
-  padding: 10px;
   width: 100%;
+  padding: 10px;
+  background-color: $primary;
+  color: white;
   font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
 }
+
+.cus-btn {
+  border-radius: 5px;
+}
+
+.cus-btn:hover,
 .cus-btn2:hover {
-  background-color: #499a99;
+  background-color: $primary-hover;
 }
 
 #toggle {
   display: block;
   padding: 16px;
+  cursor: pointer;
 
   &:hover .fa {
-    color: #3ed8b5;
+    color: $accent;
   }
+}
+
+/* =========================
+   FORM INPUTS
+========================= */
+
+.container-po {
+  display: block;
+  background: #fff;
+  font-family: "Roboto", sans-serif;
+}
+
+.group,
+.group2 {
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.group input,
+.group2 input {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  border: none;
+  border-bottom: 1px solid #757575;
+  background: transparent;
+  color: #111827;
+  font-size: 16px;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.group input {
+  padding: 10px 10px 10px 5px;
+}
+
+.group2 input {
+  padding: 5px;
+}
+
+.group label,
+.group2 label {
+  position: absolute;
+  left: 5px;
+  top: 10px;
+  pointer-events: none;
+  color: #999;
+  font-size: 16px;
+  font-weight: normal;
+  transition: 0.2s ease all;
+}
+
+.group input:focus ~ label,
+.group input:valid ~ label,
+.group2 input:focus ~ label,
+.group2 input:valid ~ label {
+  top: -20px;
+}
+
+.bar {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 300px;
+}
+
+.bar::before,
+.bar::after {
+  content: "";
+  position: absolute;
+  bottom: 1px;
+  width: 0;
+  height: 2px;
+  background: $primary;
+  transition: 0.2s ease all;
+}
+
+.bar::before {
+  left: 50%;
+}
+
+.bar::after {
+  right: 50%;
+}
+
+.group input:focus ~ .bar::before,
+.group input:focus ~ .bar::after {
+  width: 50%;
+}
+
+.highlight {
+  position: absolute;
+  top: 25%;
+  left: 0;
+  width: 100px;
+  height: 60%;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.group input:focus ~ .highlight {
+  animation: inputHighlighter 0.3s ease;
+}
+
+/* =========================
+   CUSTOM SELECT
+   global select биш .select select болгосон
+========================= */
+
+.select {
+  position: relative;
+  display: flex;
+  width: 100%;
+  max-width: 20em;
+  height: 3em;
+  line-height: 3;
+  overflow: hidden;
+  border-radius: 0.25em;
+  background: #5c6664;
+  color: #23b499;
+
+  select {
+    flex: 1;
+    appearance: none;
+    outline: 0;
+    border: 0 !important;
+    box-shadow: none;
+    background: $primary !important;
+    color: #fff !important;
+    padding: 0 0.5em;
+    cursor: pointer;
+    font-size: 1em;
+    font-family: "Open Sans", sans-serif;
+
+    &::-ms-expand {
+      display: none;
+    }
+
+    option {
+      height: 50px !important;
+    }
+  }
+
+  &::after {
+    content: "\25BC";
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0 1em;
+    background: $dark;
+    cursor: pointer;
+    pointer-events: none;
+    transition: 0.25s all ease;
+  }
+}
+
+.select2 {
+  color: red !important;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+.from-left {
+  animation: from-left 0.5s;
+}
+
+.from-left2 {
+  animation: from-left2 0.5s;
+}
+
+.from-left3 {
+  animation: from-left3 0.5s;
+}
+
+.from-left4 {
+  animation: from-left4 0.5s;
+}
+
+.to-left {
+  width: 0;
+  animation: to-left 0.5s;
+}
+
+.appear-smooth {
+  animation: appear-smooth 0.5s;
+}
+
+.appear-smooth-height {
+  animation: appear-smooth-height 0.8s;
 }
 
 @keyframes animate-width {
   0%,
   40% {
-    width: 48px;
+    width: 3rem;
   }
+
   100% {
-    width: 275px;
+    width: $sidebar-width;
   }
 }
 
@@ -198,251 +418,17 @@ a {
   40% {
     height: 0;
   }
+
   100% {
     height: 100%;
   }
 }
 
-@keyframes rotate {
-}
-
-.container-po {
-  font-family: "Roboto";
-  display: block;
-  background: #fff;
-}
-/* form starting stylings ------------------------------- */
-.group {
-  position: relative;
-  margin-bottom: 30px;
-}
-.group input {
-  font-size: 16px;
-  padding: 10px 10px 10px 5px;
-  display: block;
-  width: 300px;
-  border: none;
-  border-bottom: 1px solid #757575;
-}
-.group input:focus {
-  outline: none;
-}
-
-/* LABEL ======================================= */
-.group label {
-  color: #999;
-  font-size: 16px;
-  font-weight: normal;
-  position: absolute;
-  pointer-events: none;
-  left: 5px;
-  top: 10px;
-  transition: 0.2s ease all;
-  -moz-transition: 0.2s ease all;
-  -webkit-transition: 0.2s ease all;
-}
-
-/* active state */
-.group input:focus ~ label,
-input:valid ~ label {
-  top: -20px;
-  // font-size:12px;
-  // color:#50a3a2;
-}
-
-.group2 {
-  position: relative;
-  margin-bottom: 30px;
-}
-.group2 input {
-  font-size: 16px;
-  // padding:10px 10px 10px 5px;
-  padding: 5px;
-  display: block;
-  width: 100%;
-  border: none;
-  border-bottom: 1px solid #757575;
-}
-.group2 input:focus {
-  outline: none;
-}
-
-/* LABEL ======================================= */
-.group2 label {
-  color: #999;
-  font-size: 16px;
-  font-weight: normal;
-  position: absolute;
-  pointer-events: none;
-  left: 5px;
-  top: 10px;
-  transition: 0.2s ease all;
-  -moz-transition: 0.2s ease all;
-  -webkit-transition: 0.2s ease all;
-}
-
-/* active state */
-.group2 input:focus ~ label,
-input:valid ~ label {
-  top: -20px;
-  // font-size:12px;
-  // color:#50a3a2;
-}
-
-/* BOTTOM BARS ================================= */
-.bar {
-  position: relative;
-  display: block;
-  width: 300px;
-}
-.bar:before,
-.bar:after {
-  content: "";
-  height: 2px;
-  width: 0;
-  bottom: 1px;
-  position: absolute;
-  background: #50a3a2;
-  transition: 0.2s ease all;
-  -moz-transition: 0.2s ease all;
-  -webkit-transition: 0.2s ease all;
-}
-.bar:before {
-  left: 50%;
-}
-.bar:after {
-  right: 50%;
-}
-
-/* active state */
-.group input:focus ~ .bar:before,
-input:focus ~ .bar:after {
-  width: 50%;
-}
-
-/* HIGHLIGHTER ================================== */
-.highlight {
-  position: absolute;
-  height: 60%;
-  width: 100px;
-  top: 25%;
-  left: 0;
-  pointer-events: none;
-  opacity: 0.5;
-}
-
-/* active state */
-.group input:focus ~ .highlight {
-  -webkit-animation: inputHighlighter 0.3s ease;
-  -moz-animation: inputHighlighter 0.3s ease;
-  animation: inputHighlighter 0.3s ease;
-}
-
-/* ANIMATIONS ================ */
-@-webkit-keyframes inputHighlighter {
-  from {
-    background: #50a3a2;
-  }
-  to {
-    width: 0;
-    background: transparent;
-  }
-}
-@-moz-keyframes inputHighlighter {
-  from {
-    background: #50a3a2;
-  }
-  to {
-    width: 0;
-    background: transparent;
-  }
-}
-@keyframes inputHighlighter {
-  from {
-    background: #50a3a2;
-  }
-  to {
-    width: 0;
-    background: transparent;
-  }
-}
-
-select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -ms-appearance: none;
-  appearance: none;
-  outline: 0;
-  box-shadow: none;
-  border: 0 !important;
-  background: #50a3a2 !important;
-  background-image: none;
-  flex: 1;
-  padding: 0 0.5em;
-  color: #fff !important;
-  cursor: pointer;
-  font-size: 1em;
-  font-family: "Open Sans", sans-serif;
-}
-select::-ms-expand {
-  display: none;
-}
-.select {
-  position: relative;
-  display: flex;
-  width: 20em;
-  height: 3em;
-  line-height: 3;
-  background: #5c6664;
-  overflow: hidden;
-  border-radius: 0.25em;
-}
-.select::after {
-  content: "\25BC";
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 0 1em;
-  background: rgb(32, 73, 90);
-  cursor: pointer;
-  pointer-events: none;
-  transition: 0.25s all ease;
-}
-.select {
-  color: #23b499;
-}
-.select2 {
-  color: red !important;
-}
-.select option {
-  height: 50px !important;
-}
-
-.from-left {
-  animation: from-left;
-  animation-duration: 0.5s;
-}
-.from-left2 {
-  animation: from-left2;
-  animation-duration: 0.5s;
-}
-.from-left3 {
-  animation: from-left3;
-  animation-duration: 0.5s;
-}
-.from-left4 {
-  animation: from-left4;
-  animation-duration: 0.5s;
-}
-.to-left {
-  animation: to-left;
-  animation-duration: 0.5s;
-  width: 0;
-}
 @keyframes to-left {
   from {
     width: 600px;
   }
+
   to {
     width: 1px;
   }
@@ -452,38 +438,40 @@ select::-ms-expand {
   from {
     width: 0;
   }
+
   to {
     width: 450px;
   }
 }
+
 @keyframes from-left2 {
   from {
     width: 0;
   }
+
   to {
     width: 600px;
   }
 }
+
 @keyframes from-left3 {
   from {
     width: 0;
   }
+
   to {
     width: 80%;
   }
 }
+
 @keyframes from-left4 {
   from {
     width: 0;
   }
+
   to {
     width: 20%;
   }
-}
-
-.appear-smooth {
-  animation: appear-smooth;
-  animation-duration: 0.5s;
 }
 
 @keyframes appear-smooth {
@@ -493,18 +481,29 @@ select::-ms-expand {
   }
 }
 
-.appear-smooth-height {
-  animation: appear-smooth-height;
-  animation-duration: 0.8s;
-}
-
 @keyframes appear-smooth-height {
   from {
     height: 10px;
   }
 }
+
+@keyframes inputHighlighter {
+  from {
+    background: $primary;
+  }
+
+  to {
+    width: 0;
+    background: transparent;
+  }
+}
+
+/* =========================
+   MISC
+========================= */
+
 .accordion-button:focus {
-  box-shadow: 2px solid white !important;
+  box-shadow: none !important;
 }
 
 .custom-heightt {

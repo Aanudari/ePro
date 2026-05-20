@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import Navigation from "../../components/Navigation";
 import { useStateContext } from "../../contexts/ContextProvider";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Modal } from "react-bootstrap";
 import Select from "react-select";
@@ -9,259 +9,277 @@ import { notification } from "../../service/toast";
 import { ToastContainer } from "react-toastify";
 import { logout } from "../../service/examService";
 import getWindowDimensions from "../../components/SizeDetector";
-import Pagination from "../../service/Pagination";
 import Dropdown from "react-bootstrap/Dropdown";
 import * as XLSX from "xlsx";
 import moment from "moment";
+
+const API_URL = process.env.REACT_APP_URL;
+
+const UNAUTHORIZED_MESSAGES = [
+  "Unauthorized",
+  "Input string was not in a correct format.",
+];
+
+const modalWidthStyle = (width) =>
+  width < 768
+    ? {
+        width: "calc(100%)",
+        left: "0",
+      }
+    : {
+        width: "calc(100% - 250px)",
+        left: "250px",
+      };
+
+const getSeason = (dateValue) => {
+  const month = new Date(dateValue).getMonth() + 1;
+
+  if (month >= 1 && month <= 3) return "1-р улирал";
+  if (month >= 4 && month <= 6) return "2-р улирал";
+  if (month >= 7 && month <= 9) return "3-р улирал";
+  if (month >= 10 && month <= 12) return "4-р улирал";
+
+  return "";
+};
+
+const getDateLabel = (dateValue) =>
+  new Date(dateValue).toLocaleString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
+
+const renderPendingText = (value) =>
+  value === "" ? (
+    <span className="inline-flex items-center rounded-full bg-yellow-50 px-2 py-0.5 text-xs font-medium text-yellow-700 ring-1 ring-inset ring-yellow-200">
+      pending
+    </span>
+  ) : (
+    value
+  );
+
+const PageButton = ({ children, className = "", ...props }) => (
+  <button
+    {...props}
+    className={`inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium shadow-sm transition-all duration-200 focus:outline-none focus:ring-4 disabled:cursor-not-allowed disabled:opacity-60 ${className}`}
+  >
+    {children}
+  </button>
+);
+
+const TableCheckBox = ({ checked, onChange }) => (
+  <input
+    type="checkbox"
+    onChange={onChange}
+    checked={checked}
+    className="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 rounded focus:ring-2 focus:ring-indigo-500"
+  />
+);
+
+const CountBadge = ({ children, active = true }) => (
+  <span
+    className={`ml-2 inline-flex min-w-[24px] items-center justify-center rounded-full px-2 py-0.5 text-xs font-medium ${
+      active ? "bg-indigo-600 text-white" : "bg-gray-100 text-gray-600"
+    }`}
+  >
+    {children}
+  </span>
+);
+
+const FilterDropdown = ({ title, variant, children }) => (
+  <Dropdown alignstart="true" className="d-inline" autoClose="outside">
+    <Dropdown.Toggle
+      variant={variant}
+      className="px-3 py-2 text-sm font-medium rounded-lg shadow-sm"
+      size="sm"
+    >
+      {title}
+    </Dropdown.Toggle>
+    <Dropdown.Menu className="p-2 mt-2 border-0 shadow-xl rounded-xl">
+      {children}
+    </Dropdown.Menu>
+  </Dropdown>
+);
+
+const FilterItem = ({ children, onClick, value }) => (
+  <Dropdown.Item
+    onClick={onClick}
+    value={value}
+    className="px-3 py-2 rounded-lg"
+  >
+    <p className="items-center block mb-0 text-sm font-medium text-gray-600 rounded-lg hover:text-indigo-600">
+      {children}
+    </p>
+  </Dropdown.Item>
+);
+
 function ErrorThanks() {
   const { width } = getWindowDimensions();
   const { TOKEN } = useStateContext();
   const navigate = useNavigate();
+
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage] = useState(10);
   const [complainInfo, setComplainInfo] = useState([]);
   const [complain, setComplain] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+
   const [selectedOption, setSelectedOption] = useState(null);
   const [showCreate, setShowCreate] = useState(null);
-  const showModalCreate = () => setShowCreate(true);
-  const hideModalCreate = () => setShowCreate(null);
   const [showDelete, setShowDelete] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [trigger, setTrigger] = useState(false);
 
   const [activeTab, setActiveTab] = useState("1");
   const [selectedIds, setSelectedIds] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
-  useEffect(() => {
-    axios({
-      method: "get",
-      headers: {
-        Authorization: `${TOKEN}`,
-      },
-      url: `${process.env.REACT_APP_URL}/v1/Complain/complainInfo`,
-    })
-      .then((res) => {
-        if (res.data.isSuccess === false) {
-        }
-        if (res.data.isSuccess === true) {
-          setComplainInfo(res.data.complainInfos);
-        }
-        if (
-          res.data.resultMessage === "Unauthorized" ||
-          res.data.resultMessage === "Input string was not in a correct format."
-        ) {
-          logout();
-        }
-      })
-      .catch((err) => console.log(err));
-  }, [trigger]);
-  useEffect(() => {
-    axios({
-      method: "get",
-      headers: {
-        Authorization: `${TOKEN}`,
-      },
-      url: `${process.env.REACT_APP_URL}/v1/Complain`,
-    })
-      .then((res) => {
-        if (res.data.isSuccess === false) {
-        }
-        if (res.data.isSuccess === true) {
-          setComplain(res.data.complains);
-          setFilteredData(res.data.complains);
-        }
-        if (
-          res.data.resultMessage === "Unauthorized" ||
-          res.data.resultMessage === "Input string was not in a correct format."
-        ) {
-          logout();
-        }
-      })
-      .catch((err) => console.log(err));
-  }, [trigger]);
-  useEffect(() => {
-    localStorage.setItem("activeTab", activeTab);
-  }, [activeTab]);
-  useEffect(() => {
-    const filteredData = complain.filter(
-      (item) => item.complain === activeTab.toString()
-    );
-    setFilteredData(filteredData);
-  }, [activeTab]);
-  const nPages = Math.ceil(filteredData.length / recordsPerPage);
-  const showModalDelete = (e) => {
-    setShowDelete(true);
-  };
-  const hideModalDelete = () => setShowDelete(null);
+
   const [selectedYear, setSelectedYear] = useState("");
   const [selectedSeason, setSelectedSeason] = useState("");
   const [selectedDivision, setSelectedDivision] = useState("");
+
+  const showModalCreate = () => setShowCreate(true);
+  const hideModalCreate = () => setShowCreate(null);
+  const showModalDelete = () => setShowDelete(true);
+  const hideModalDelete = () => setShowDelete(null);
+
+  const handleUnauthorized = (message) => {
+    if (UNAUTHORIZED_MESSAGES.includes(message)) logout();
+  };
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      headers: {
+        Authorization: `${TOKEN}`,
+      },
+      url: `${API_URL}/v1/Complain/complainInfo`,
+    })
+      .then((res) => {
+        if (res.data.isSuccess === true) {
+          setComplainInfo(res.data.complainInfos);
+        }
+
+        handleUnauthorized(res.data.resultMessage);
+      })
+      .catch((err) => console.log(err));
+  }, [trigger]);
+
+  useEffect(() => {
+    axios({
+      method: "get",
+      headers: {
+        Authorization: `${TOKEN}`,
+      },
+      url: `${API_URL}/v1/Complain`,
+    })
+      .then((res) => {
+        if (res.data.isSuccess === true) {
+          setComplain(res.data.complains);
+        }
+
+        handleUnauthorized(res.data.resultMessage);
+      })
+      .catch((err) => console.log(err));
+  }, [trigger]);
+
+  useEffect(() => {
+    localStorage.setItem("activeTab", activeTab);
+  }, [activeTab]);
+
   const years = complain.map((item) => new Date(item.createdAt).getFullYear());
   const uniqueYears = [...new Set(years)];
-  const seasons = complain.map((item) => {
-    if (
-      new Date(item.createdAt).getMonth() === 1 ||
-      new Date(item.createdAt).getMonth() === 2 ||
-      new Date(item.createdAt).getMonth() === 3
-    ) {
-      return "1-р улирал";
-    }
-    if (
-      new Date(item.createdAt).getMonth() === 4 ||
-      new Date(item.createdAt).getMonth() === 5 ||
-      new Date(item.createdAt).getMonth() === 6
-    ) {
-      return "2-р улирал";
-    }
-    if (
-      new Date(item.createdAt).getMonth() === 7 ||
-      new Date(item.createdAt).getMonth() === 8 ||
-      new Date(item.createdAt).getMonth() === 9
-    ) {
-      return "3-р улирал";
-    }
-    if (
-      new Date(item.createdAt).getMonth() === 10 ||
-      new Date(item.createdAt).getMonth() === 11 ||
-      new Date(item.createdAt).getMonth() === 12
-    ) {
-      return "4-р улирал";
-    }
-  });
+
+  const seasons = complain.map((item) => getSeason(item.createdAt));
   const uniqueSeasons = [...new Set(seasons)];
+
   const divisionNames = complain.map((item) => item.divisionName);
   const uniqueDivisionNames = [...new Set(divisionNames)];
-  const indexOfLastRecord = currentPage * recordsPerPage;
-  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = filteredData.slice(
-    indexOfFirstRecord,
-    indexOfLastRecord
-  );
+
   const handleCreate = () => {
     if (selectedOption === null) {
       notification.error(`Сонголт хоосон байна!`);
-    } else {
-      navigate("/create-error-thanks", {
-        state: { type: selectedOption },
-      });
+      return;
     }
+
+    navigate("/create-error-thanks", {
+      state: { type: selectedOption },
+    });
   };
+
   const handleEdit = (tab) => {
     navigate("/edit-error-thanks", {
       state: { data: tab },
     });
   };
-  const filterByCategory = (filteredData) => {
-    if (!activeTab) {
-      return filteredData;
+
+  useEffect(() => {
+    let data = [...complain];
+
+    if (activeTab) {
+      data = data.filter((item) => `${item.complain}` === `${activeTab}`);
     }
-    const filteredComplains = filteredData.filter(
-      (tr) => tr.complain === activeTab
-    );
-    return filteredComplains;
-  };
-  const filterByYear = (filteredData) => {
-    if (!selectedYear) {
-      return filteredData;
+
+    if (selectedYear) {
+      data = data.filter(
+        (item) =>
+          Number(selectedYear) === new Date(item.createdAt).getFullYear(),
+      );
     }
-    const filteredComplains = filteredData.filter((item) => {
-      if (selectedYear === new Date(item.createdAt).getFullYear()) {
-        return item;
-      }
-      // (item) => new Date(item.createdAt).getFullYear() === selectedYear
-    });
-    return filteredComplains;
-  };
-  const filterBySeason = (filteredData) => {
-    if (!selectedSeason) {
-      return filteredData;
+
+    if (selectedSeason) {
+      data = data.filter(
+        (item) => selectedSeason === getSeason(item.createdAt),
+      );
     }
-    const filteredComplains = filteredData.filter((item) => {
-      if (selectedSeason === "1-р улирал") {
-        return (
-          new Date(item.createdAt).getMonth() === 1 ||
-          new Date(item.createdAt).getMonth() === 2 ||
-          new Date(item.createdAt).getMonth() === 3
-        );
-      }
-      if (selectedSeason === "2-р улирал") {
-        return (
-          new Date(item.createdAt).getMonth() === 4 ||
-          new Date(item.createdAt).getMonth() === 5 ||
-          new Date(item.createdAt).getMonth() === 6
-        );
-      }
-      if (selectedSeason === "3-р улирал") {
-        return (
-          new Date(item.createdAt).getMonth() === 7 ||
-          new Date(item.createdAt).getMonth() === 8 ||
-          new Date(item.createdAt).getMonth() === 9
-        );
-      }
-      if (selectedSeason === "4-р улирал") {
-        return (
-          new Date(item.createdAt).getMonth() === 10 ||
-          new Date(item.createdAt).getMonth() === 11 ||
-          new Date(item.createdAt).getMonth() === 12
-        );
-      }
-      // (item) => new Date(item.createdAt).getFullYear() === selectedSeason
-    });
-    return filteredComplains;
-  };
-  const filterByDivision = (filteredData) => {
-    if (!selectedDivision) {
-      return filteredData;
+
+    if (selectedDivision) {
+      data = data.filter((item) => item.divisionName === selectedDivision);
     }
-    const filteredComplains = filteredData.filter((item) => {
-      if (item.divisionName === selectedDivision) {
-        return item;
-      }
-    });
-    return filteredComplains;
-  };
+
+    if (searchQuery) {
+      data = data.filter((item) =>
+        item.firstName?.toLowerCase().includes(searchQuery.toLowerCase()),
+      );
+    }
+
+    setFilteredData(data);
+  }, [
+    complain,
+    activeTab,
+    selectedYear,
+    selectedSeason,
+    selectedDivision,
+    searchQuery,
+  ]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeTab, selectedYear, selectedSeason, selectedDivision, searchQuery]);
 
   const handleSearch = (event) => {
-    const query = event.target.value;
-    setSearchQuery(query);
-    const searchList = complain.filter((item) => {
-      return item.firstName.toLowerCase().indexOf(query.toLowerCase()) !== -1;
-    });
-    setFilteredData(searchList);
+    setSearchQuery(event.target.value);
   };
-  const handleYearChange = (y) => {
-    setSelectedYear(y);
+
+  const handleYearChange = (year = "") => {
+    setSelectedYear(year);
   };
-  const handleSeasonChange = (s) => {
-    setSelectedSeason(s);
+
+  const handleSeasonChange = (season = "") => {
+    setSelectedSeason(season);
   };
-  const handleDivisionChange = (d) => {
-    setSelectedDivision(d);
+
+  const handleDivisionChange = (division = "") => {
+    setSelectedDivision(division);
   };
-  useEffect(() => {
-    var filteredData = filterByCategory(complain);
-    setFilteredData(filteredData);
-  }, [activeTab]);
-  useEffect(() => {
-    var filteredData = filterByYear(complain);
-    setFilteredData(filteredData);
-  }, [selectedYear]);
-  useEffect(() => {
-    var filteredData = filterBySeason(complain);
-    setFilteredData(filteredData);
-  }, [selectedSeason]);
-  useEffect(() => {
-    var filteredData = filterByDivision(complain);
-    setFilteredData(filteredData);
-  }, [selectedDivision]);
 
   const handleCheckboxChange = (itemId) => {
     if (selectedIds.includes(itemId)) {
       setSelectedIds(selectedIds.filter((id) => id !== itemId));
-    } else {
-      setSelectedIds([...selectedIds, itemId]);
+      return;
     }
+
+    setSelectedIds([...selectedIds, itemId]);
   };
+
   const deleteSelectedItems = () => {
     for (const id of selectedIds) {
       axios({
@@ -270,37 +288,32 @@ function ErrorThanks() {
           Authorization: `${TOKEN}`,
           accept: "text/plain",
         },
-        url: `${process.env.REACT_APP_URL}/v1/Complain/delete?id=${id}`,
+        url: `${API_URL}/v1/Complain/delete?id=${id}`,
       })
         .then((res) => {
           if (res.data.isSuccess === true) {
             notification.success(`${res.data.resultMessage}`);
-            setTrigger(!trigger);
+            setTrigger((prev) => !prev);
+            setSelectedIds([]);
             hideModalDelete();
           } else {
             console.log(res.data.resultMessage);
           }
-          if (
-            res.data.resultMessage === "Unauthorized" ||
-            res.data.resultMessage ===
-              "Input string was not in a correct format."
-          ) {
-            logout();
-          }
+
+          handleUnauthorized(res.data.resultMessage);
         })
         .catch((err) => console.log(err));
     }
   };
+
   const handleSelectAll = (event) => {
     const isChecked = event.target.checked;
-    if (isChecked) {
-      setSelectedIds(filteredData.map((item) => item.id));
-    } else {
-      setSelectedIds([]);
-    }
+    setSelectedIds(isChecked ? filteredData.map((item) => item.id) : []);
   };
+
   function sheet_set_range_style(sheet, range, style) {
     const rangeObj = XLSX.utils.decode_range(range);
+
     for (let r = rangeObj.s.r; r <= rangeObj.e.r; r++) {
       for (let c = rangeObj.s.c; c <= rangeObj.e.c; c++) {
         const cell = sheet[XLSX.utils.encode_cell({ r, c })] || {};
@@ -309,24 +322,19 @@ function ErrorThanks() {
       }
     }
   }
-  const today = new Date();
-  const format = "YYYYMMdivHHmmss";
 
   const handleDownloadClick = () => {
     const table = document.getElementById("table");
-
-    // Create worksheet from table
     const worksheet = XLSX.utils.table_to_sheet(table);
 
-    // Hide columns by removing their cell data
     sheet_set_range_style(worksheet, "A1:A999", { hidden: true });
 
-    // Auto-number rows
     XLSX.utils.sheet_add_aoa(worksheet, [[""]], {
       origin: -1,
       startCol: 0,
       endCol: 1,
-    }); // adds a blank row at the end of the table
+    });
+
     XLSX.utils.sheet_add_aoa(
       worksheet,
       [
@@ -335,23 +343,28 @@ function ErrorThanks() {
           .slice(1)
           .map((row, index) => [index + 1]),
       ],
-      { origin: 0, startCol: 0, endCol: 1 }
-    ); // adds the auto-numbering column at the beginning of the table
+      { origin: 0, startCol: 0, endCol: 1 },
+    );
 
-    // Create workbook and download
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
     const fileBuffer = XLSX.write(workbook, {
       bookType: "xlsx",
       type: "array",
     });
+
+    const today = new Date();
+    const format = "YYYYMMdivHHmmss";
     const fileName =
-      `${complainInfo.find((item) => item.id === activeTab).category}` +
+      `${complainInfo.find((item) => `${item.id}` === `${activeTab}`)?.category || "report"}` +
       `${moment(today).format(format)}` +
       `.xlsx`;
+
     const blob = new Blob([fileBuffer], { type: "application/octet-stream" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
+
     link.href = url;
     link.download = fileName;
     document.body.appendChild(link);
@@ -360,42 +373,237 @@ function ErrorThanks() {
   };
 
   const niitAldaa = filteredData?.filter((item) => {
-    if (item.complain === activeTab) return item;
+    if (`${item.complain}` === `${activeTab}`) return item;
+    return null;
   });
+
   const too = niitAldaa
     .map((item) => parseInt(item.too))
     .reduce((acc, val) => acc + val, 0);
 
+  const isAllSelected =
+    filteredData.length > 0 && selectedIds.length === filteredData.length;
+
+  const activeCategory = complainInfo.find(
+    (item) => `${item.id}` === `${activeTab}`,
+  );
+
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  const currentRecords = filteredData.slice(
+    indexOfFirstRecord,
+    indexOfLastRecord,
+  );
+
+  const commonHeaderColumns = [
+    "Он",
+    "Улирал",
+    "Огноо",
+    "Харьяалагдах хэлтэс",
+    "Ажлын байр",
+    "Ажилтны нэр",
+  ];
+
+  const renderHeaderCell = (label, index) => (
+    <th
+      key={`${label}-${index}`}
+      className="px-3 py-2 font-semibold whitespace-nowrap"
+    >
+      {label}
+    </th>
+  );
+
+  const renderCountHeaderCell = (label) => (
+    <th className="px-3 py-2 font-semibold whitespace-nowrap">
+      {label}
+      <CountBadge>{too}</CountBadge>
+    </th>
+  );
+
+  const renderTableHead = () => {
+    let extraColumns = [];
+
+    if (activeTab === "1") {
+      extraColumns = [
+        "Гомдлын төрөл",
+        "Холбогдох дугаар",
+        "Гомдлын дэлгэрэнгүй",
+        "Шийдвэрлэсэн эсэх",
+        "Шийдвэрлэсэн хариу",
+      ];
+    } else if (activeTab === "2") {
+      extraColumns = [
+        "Гомдлын төрөл",
+        "Холбогдох дугаар",
+        "Гомдлын дэлгэрэнгүй",
+        "Шийдвэрлэсэн эсэх",
+      ];
+    } else {
+      extraColumns = ["Төрөл", "Дэлгэрэнгүй", "Бүртгэгдсэн суваг"];
+    }
+
+    return (
+      <tr className="text-xs tracking-wide text-left text-gray-500 uppercase border-b border-gray-200 bg-gray-50">
+        <th className="px-3 py-2 font-semibold">
+          <TableCheckBox checked={isAllSelected} onChange={handleSelectAll} />
+        </th>
+
+        {commonHeaderColumns.map(renderHeaderCell)}
+        {extraColumns.map(renderHeaderCell)}
+        {activeTab === "1" || activeTab === "2"
+          ? renderCountHeaderCell("Алдаа")
+          : renderCountHeaderCell("Тоогоор")}
+        <th className="px-3 py-2 font-semibold"></th>
+      </tr>
+    );
+  };
+
+  const renderCommonCells = (item) => (
+    <>
+      <td className="px-3 py-2 text-gray-700 whitespace-nowrap">
+        {new Date(item.createdAt).getFullYear()}
+      </td>
+      <td className="px-3 py-2 text-gray-700 whitespace-nowrap">
+        {getSeason(item.createdAt)}
+      </td>
+      <td className="px-3 py-2 text-gray-700 whitespace-nowrap">
+        {getDateLabel(item.createdAt)}
+      </td>
+      <td className="px-3 py-2 font-medium text-gray-900 whitespace-nowrap">
+        {item.divisionName}
+      </td>
+      <td className="px-3 py-2 text-gray-700 whitespace-nowrap">
+        {item.unitName}
+      </td>
+      <td className="px-3 py-2 font-medium text-gray-900 whitespace-nowrap">
+        {item.firstName}
+      </td>
+    </>
+  );
+
+  const renderEditCell = (item) => (
+    <td className="px-3 py-2 text-right whitespace-nowrap">
+      <button
+        data-id={item}
+        onClick={() => handleEdit(item)}
+        className="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium text-gray-700 uppercase transition bg-gray-100 rounded-lg hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring-4 focus:ring-indigo-100"
+      >
+        Edit
+      </button>
+    </td>
+  );
+
+  const renderTableRow = (item, index) => {
+    if (`${activeTab}` !== `${item.complain}`) return null;
+
+    return (
+      <tr
+        key={item.id || JSON.stringify(item + index)}
+        className="transition bg-white border-b border-gray-100 hover:bg-indigo-50/40"
+      >
+        <td className="px-3 py-2">
+          <TableCheckBox
+            checked={selectedIds.includes(item.id)}
+            onChange={() => handleCheckboxChange(item.id)}
+          />
+        </td>
+
+        {renderCommonCells(item)}
+
+        {`${item.complain}` === "1" && (
+          <>
+            <td className="px-3 py-2 text-gray-700 whitespace-nowrap">
+              {item.complainType}
+            </td>
+            <td className="px-3 py-2 text-gray-700 whitespace-nowrap">
+              {item.phoneNo}
+            </td>
+            <td className="min-w-[240px] px-3 py-2 text-gray-700">
+              {item.description}
+            </td>
+            <td className="px-3 py-2 text-gray-700 whitespace-nowrap">
+              {renderPendingText(item.isSolved)}
+            </td>
+            <td className="min-w-[200px] px-3 py-2 text-gray-700">
+              {renderPendingText(item.solvedDescription)}
+            </td>
+            <td className="px-3 py-2 font-semibold text-gray-900 whitespace-nowrap">
+              {item.too}
+            </td>
+          </>
+        )}
+
+        {`${item.complain}` === "2" && (
+          <>
+            <td className="px-3 py-2 text-gray-700 whitespace-nowrap">
+              {item.complainType}
+            </td>
+            <td className="px-3 py-2 text-gray-700 whitespace-nowrap">
+              {item.phoneNo}
+            </td>
+            <td className="min-w-[240px] px-3 py-2 text-gray-700">
+              {item.description}
+            </td>
+            <td className="px-3 py-2 text-gray-700 whitespace-nowrap">
+              {renderPendingText(item.isSolved)}
+            </td>
+            <td className="px-3 py-2 font-semibold text-gray-900 whitespace-nowrap">
+              {item.too}
+            </td>
+          </>
+        )}
+
+        {`${item.complain}` !== "1" && `${item.complain}` !== "2" && (
+          <>
+            <td className="px-3 py-2 text-gray-700 whitespace-nowrap">
+              {item.complainType}
+            </td>
+            <td className="min-w-[240px] px-3 py-2 text-gray-700">
+              {item.description}
+            </td>
+            <td className="px-3 py-2 text-gray-700 whitespace-nowrap">
+              {item.rule}
+            </td>
+            <td className="px-3 py-2 font-semibold text-gray-900 whitespace-nowrap">
+              {item.too}
+            </td>
+          </>
+        )}
+
+        {renderEditCell(item)}
+      </tr>
+    );
+  };
+
   return (
-    <div className="w-full min-h-[calc(100%-56px)] ">
+    <div className="min-h-[calc(100%-56px)] w-full overflow-x-hidden bg-slate-50 md:w-[calc(100vw-250px)]">
       <div>
         <Modal
           show={showCreate}
           onHide={hideModalCreate}
           size="ml"
-          // backdrop="static"
-          style={
-            width < 768
-              ? {
-                  width: "calc(100%)",
-                  left: "0",
-                }
-              : {
-                  width: "calc(100% - 250px)",
-                  left: "250px",
-                }
-          }
+          style={modalWidthStyle(width)}
           keyboard={false}
           aria-labelledby="contained-modal-title-vcenter"
           dialogClassName="modal-100w"
           centered
         >
-          <Modal.Header closeButton>
-            <Modal.Title>Бүртгэл нэмэх</Modal.Title>
+          <Modal.Header closeButton className="pb-0 border-0">
+            <Modal.Title className="text-base font-semibold text-gray-900">
+              Бүртгэл нэмэх
+            </Modal.Title>
           </Modal.Header>
+
           <Modal.Body>
-            <div className="mt-2">
-              <div className="px-5 pb-5">
+            <div className="p-4 rounded-2xl bg-slate-50">
+              <div className="mb-4">
+                <p className="mb-1 text-sm font-semibold text-gray-900">
+                  Бүртгэлийн төрөл
+                </p>
+                <p className="mb-3 text-xs text-gray-500">
+                  Бүртгэл үүсгэх төрлөө сонгоно уу.
+                </p>
+
                 <Select
                   classname="text-black text-sm-center"
                   options={complainInfo}
@@ -409,577 +617,287 @@ function ErrorThanks() {
                   getOptionLabel={(option) => option.category}
                   getOptionValue={(option) => option.id}
                 />
-                <p></p>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-bold">
-                    Бүртгэл үүсгэх төрлөө сонгоно уу. ✍
-                  </span>
-                  <button
-                    type="button"
-                    onClick={handleCreate}
-                    className="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm inline-flex items-center px-3 py-2 text-center ml-4"
-                  >
-                    Next
-                  </button>
-                </div>
+              </div>
+
+              <div className="flex justify-end gap-2">
+                <PageButton
+                  type="button"
+                  onClick={hideModalCreate}
+                  className="text-gray-700 bg-white ring-1 ring-gray-200 hover:bg-gray-50 focus:ring-gray-100"
+                >
+                  Болих
+                </PageButton>
+                <PageButton
+                  type="button"
+                  onClick={handleCreate}
+                  className="text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-100"
+                >
+                  Next
+                </PageButton>
               </div>
             </div>
           </Modal.Body>
         </Modal>
+
         <Modal
           show={showDelete}
           onHide={hideModalDelete}
           size="ml"
           backdrop="static"
-          style={
-            width < 768
-              ? {
-                  width: "calc(100%)",
-                  left: "0",
-                }
-              : {
-                  width: "calc(100% - 250px)",
-                  left: "250px",
-                }
-          }
+          style={modalWidthStyle(width)}
           keyboard={false}
           aria-labelledby="contained-modal-title-vcenter"
           dialogClassName="modal-100w"
           centered
         >
-          <Modal.Header closeButton>
-            <span className="text-sm text-black">Бүртгэл устгах</span>
+          <Modal.Header closeButton className="pb-0 border-0">
+            <Modal.Title className="text-base font-semibold text-gray-900">
+              Бүртгэл устгах
+            </Modal.Title>
           </Modal.Header>
-          <Modal.Body>
-            <div className="p-6 text-center">
-              <p className="mb-5  font-normal text-gray-500 dark:text-gray-400">
-                Та сонгосон {selectedIds?.length} бүртгэлийг устгахдаа итгэлтэй
-                байна уу?
-              </p>
-              <button
-                type="button"
-                onClick={deleteSelectedItems}
-                className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
-              >
-                Тийм
-              </button>
 
-              <button
-                onClick={hideModalDelete}
-                type="button"
-                className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-              >
-                Үгүй
-              </button>
+          <Modal.Body>
+            <div className="p-5 text-center rounded-2xl bg-red-50 ring-1 ring-red-100">
+              <div className="flex items-center justify-center w-12 h-12 mx-auto mb-4 text-red-600 bg-red-100 rounded-full">
+                <i className="text-xl bi bi-trash" />
+              </div>
+
+              <p className="mb-5 text-sm font-medium text-gray-600">
+                Та сонгосон <b>{selectedIds?.length}</b> бүртгэлийг устгахдаа
+                итгэлтэй байна уу?
+              </p>
+
+              <div className="flex justify-center gap-2">
+                <PageButton
+                  type="button"
+                  onClick={deleteSelectedItems}
+                  className="text-white bg-red-600 hover:bg-red-700 focus:ring-red-100"
+                >
+                  Тийм
+                </PageButton>
+
+                <PageButton
+                  onClick={hideModalDelete}
+                  type="button"
+                  className="text-gray-700 bg-white ring-1 ring-gray-200 hover:bg-gray-50 focus:ring-gray-100"
+                >
+                  Үгүй
+                </PageButton>
+              </div>
             </div>
           </Modal.Body>
         </Modal>
       </div>
+
       <Navigation />
 
-      <div className="px-4 py-4">
-        <div className="sm:flex sm:items-center sm:justify-between">
-          <div className="text-center sm:text-left">
-            <p className="font-bold text-md text-gray-900">Алдаа талархал</p>
-          </div>
+      <div className="max-w-full px-4 py-4 sm:px-5 lg:px-6">
+        <div className="mb-3 overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-fuchsia-600 p-[1px] shadow-sm shadow-indigo-100">
+          <div className="p-4 rounded-2xl bg-white/95">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <div className="inline-flex items-center gap-2 px-3 py-1 mb-2 text-xs font-medium text-indigo-700 rounded-full bg-indigo-50 ring-1 ring-indigo-100">
+                  <i className="bi bi-clipboard-check" />
+                  Алдаа талархал
+                </div>
 
-          <div className="flex flex-col gap-4 sm:mt-0 sm:flex-row sm:items-center">
-            <button
-              onClick={showModalCreate}
-              className="block rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring"
-              type="button"
-            >
-              Бүртгэл нэмэх
-            </button>
-          </div>
-        </div>
-        <div className="sm:flex sm:items-center sm:justify-between">
-          <div className="text-center sm:text-left">
-            <div className="relative">
-              <input
-                value={searchQuery}
-                onChange={handleSearch}
-                className="h-10 px-6 py-2  rounded-lg border-2 border-gray-400 outline-none focus:border-indigo-500  pr-10 text-sm placeholder-gray-400 focus:z-10"
-                placeholder="Ажилтны нэрээр хайх..."
-                type="text"
-              />
+                <h1 className="mb-1 text-lg font-semibold tracking-tight text-gray-900 sm:text-xl">
+                  Алдаа, гомдол, талархлын бүртгэл
+                </h1>
 
-              <button
-                type="submit"
-                className="absolute inset-y-0 right-0 rounded-r-lg p-2 text-gray-600"
-              >
-                <i className="bi bi-search" />
-              </button>
+                <p className="mb-0 text-sm text-gray-500">
+                  {activeCategory?.category
+                    ? `${activeCategory.category} төрөл сонгогдсон.`
+                    : "Бүртгэлүүдээ шүүж, засаж, татаж авах боломжтой."}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center">
+                <div className="px-3 py-2 rounded-xl bg-slate-50 ring-1 ring-gray-100">
+                  <p className="mb-1 text-xs font-medium text-gray-400 uppercase">
+                    Нийт мөр
+                  </p>
+                  <p className="mb-0 text-lg font-semibold text-gray-900">
+                    {filteredData.length}
+                  </p>
+                </div>
+
+                <div className="px-3 py-2 rounded-xl bg-indigo-50 ring-1 ring-indigo-100">
+                  <p className="mb-1 text-xs font-medium text-indigo-400 uppercase">
+                    Нийт тоо
+                  </p>
+                  <p className="mb-0 text-lg font-semibold text-indigo-700">
+                    {too}
+                  </p>
+                </div>
+
+                <PageButton
+                  onClick={showModalCreate}
+                  type="button"
+                  className="col-span-2 bg-indigo-600 text-white hover:-translate-y-0.5 hover:bg-indigo-700 focus:ring-indigo-100 sm:col-span-1"
+                >
+                  <i className="bi bi-plus-lg" />
+                  Бүртгэл нэмэх
+                </PageButton>
+              </div>
             </div>
           </div>
         </div>
-        <div className="text-sm font-medium text-center text-gray-500 border-b border-gray-200 ">
-          <div className="mt-4">
-            <ul className="flex flex-wrap -mb-px">
-              {complainInfo.map((item, custom) => (
-                <li
-                  key={JSON.stringify(item + custom)}
-                  onClick={() => setActiveTab(item.id)}
-                  className="mr-2"
-                >
-                  <p
-                    className={
-                      activeTab === `${item.id}`
-                        ? "inline-block p-2 font-bold text-purple-600 border-b-2 border-purple-600 rounded-t-lg active "
-                        : "inline-block p-2 font-bold border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 "
-                    }
-                  >
-                    {item.category}
 
-                    {activeTab === `${item.id}` ? (
-                      <span className="px-2 py-1 text-xs rounded text-white  bg-purple-600 font-medium ml-2">
-                        {" "}
-                        {niitAldaa.length}
-                      </span>
-                    ) : (
-                      ""
-                    )}
-                  </p>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <div className="sm:flex sm:items-center sm:justify-between">
-          <div className="text-center sm:text-left">
-            <Dropdown
-              alignstart="true"
-              className="d-inline mx-2"
-              autoClose="outside"
-            >
-              <Dropdown.Toggle variant="primary" className="mt-2" size="sm">
-                Оноор ялгах
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={() => handleYearChange()} value="All">
-                  <p className="block items-center font-bold rounded-lg text-sm text-gray-600 hover:border-gray-300 hover:text-blue-600">
-                    Бүгд
-                  </p>
-                </Dropdown.Item>
+        <div className="p-3 mb-3 bg-white shadow-sm rounded-2xl ring-1 ring-gray-100">
+          <div className="flex flex-col min-w-0 gap-3 xl:flex-row xl:items-center xl:justify-between">
+            <div className="relative w-full min-w-0 xl:max-w-md">
+              <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400 pointer-events-none">
+                <i className="bi bi-search" />
+              </span>
+              <input
+                value={searchQuery}
+                onChange={handleSearch}
+                className="w-full py-2 pr-4 text-sm font-medium text-gray-800 transition border border-gray-200 outline-none h-11 rounded-xl bg-slate-50 pl-11 placeholder:text-gray-400 focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-50"
+                placeholder="Ажилтны нэрээр хайх..."
+                type="text"
+              />
+            </div>
+
+            <div className="flex flex-wrap items-center min-w-0 gap-2">
+              <FilterDropdown title="Оноор ялгах" variant="primary">
+                <FilterItem onClick={() => handleYearChange()} value="All">
+                  Бүгд
+                </FilterItem>
                 {uniqueYears.map((year) => (
-                  <Dropdown.Item
+                  <FilterItem
                     onClick={() => handleYearChange(year)}
                     key={year}
                     value={year}
                   >
-                    <p className="block items-center font-bold rounded-lg text-sm text-gray-600 hover:border-gray-300 hover:text-blue-600">
-                      {year}
-                    </p>
-                  </Dropdown.Item>
+                    {year}
+                  </FilterItem>
                 ))}
-              </Dropdown.Menu>
-            </Dropdown>
-            <Dropdown
-              alignstart="true"
-              className="d-inline mx-2"
-              autoClose="outside"
-            >
-              <Dropdown.Toggle variant="success" className="mt-2" size="sm">
-                Улиралаар ялгах
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={() => handleSeasonChange()} value="All">
-                  <p className="block items-center font-bold rounded-lg text-sm text-gray-600 hover:border-gray-300 hover:text-blue-600">
-                    Бүгд
-                  </p>
-                </Dropdown.Item>
+              </FilterDropdown>
+
+              <FilterDropdown title="Улиралаар ялгах" variant="success">
+                <FilterItem onClick={() => handleSeasonChange()} value="All">
+                  Бүгд
+                </FilterItem>
                 {uniqueSeasons.map((season, indexD) => (
-                  <Dropdown.Item
+                  <FilterItem
                     onClick={() => handleSeasonChange(season)}
                     key={JSON.stringify(season + indexD)}
                     value={season}
                   >
-                    <p className="block items-center font-bold rounded-lg text-sm text-gray-600 hover:border-gray-300 hover:text-blue-600">
-                      {season}
-                    </p>
-                  </Dropdown.Item>
+                    {season}
+                  </FilterItem>
                 ))}
-              </Dropdown.Menu>
-            </Dropdown>
-            <Dropdown
-              alignstart="true"
-              className="d-inline mx-2"
-              autoClose="outside"
-            >
-              <Dropdown.Toggle variant="warning" className="mt-2" size="sm">
-                Хэлтэсээр ялгах
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => handleDivisionChange()}
-                  value="All"
-                >
-                  <p className="block items-center font-bold rounded-lg text-sm text-gray-600 hover:border-gray-300 hover:text-blue-600">
-                    Бүгд
-                  </p>
-                </Dropdown.Item>
-                {uniqueDivisionNames.map((divisionNames, indexF) => (
-                  <Dropdown.Item
-                    onClick={() => handleDivisionChange(divisionNames)}
-                    key={JSON.stringify(divisionNames + indexF)}
-                    value={divisionNames}
-                  >
-                    <p className="block items-center font-bold rounded-lg text-sm text-gray-600 hover:border-gray-300 hover:text-blue-600">
-                      {divisionNames}
-                    </p>
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
+              </FilterDropdown>
 
-          <div className="flex flex-col gap-2 sm:mt-0 sm:flex-row sm:items-center">
-            <button
-              onClick={showModalDelete}
-              className="mt-2 items-center px-2 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md"
-            >
-              <i className="bi bi-trash mr-1" />
-              Delete
-            </button>
-            <button
-              onClick={handleDownloadClick}
-              className="mt-2 items-center px-2 py-2 bg-green-700 hover:bg-green-800 text-white text-sm font-medium rounded-md"
-            >
-              <i className="bi bi-file-excel mr-1 " />
-              Download
-            </button>
+              <FilterDropdown title="Хэлтэсээр ялгах" variant="warning">
+                <FilterItem onClick={() => handleDivisionChange()} value="All">
+                  Бүгд
+                </FilterItem>
+                {uniqueDivisionNames.map((divisionName, indexF) => (
+                  <FilterItem
+                    onClick={() => handleDivisionChange(divisionName)}
+                    key={JSON.stringify(divisionName + indexF)}
+                    value={divisionName}
+                  >
+                    {divisionName}
+                  </FilterItem>
+                ))}
+              </FilterDropdown>
+
+              <div className="hidden w-px h-8 bg-gray-200 sm:block" />
+
+              <PageButton
+                onClick={showModalDelete}
+                disabled={selectedIds.length === 0}
+                className="text-white bg-red-600 hover:bg-red-700 focus:ring-red-100"
+              >
+                <i className="bi bi-trash" />
+                Delete
+              </PageButton>
+
+              <PageButton
+                onClick={handleDownloadClick}
+                className="text-white bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-100"
+              >
+                <i className="bi bi-file-earmark-excel" />
+                Download
+              </PageButton>
+            </div>
           </div>
         </div>
-        <div className="overflow-x-auto">
-          <div className="mt-4 bg-gray-100 flex items-center justify-center bg-gray-100 font-sans">
-            <table id="table" className=" min-w-full break-words shadow-sm">
-              <thead className="bg-gray-600  uppercase text-xs leading-normal">
-                {activeTab === "1" ? (
-                  <tr className=" text-left text-white border-b">
-                    <th className="px-2 py-2 font-bold">
-                      <input
-                        type="checkbox"
-                        onChange={handleSelectAll}
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                        checked={selectedIds.length === filteredData.length}
-                      />
-                    </th>
-                    <th className="px-2 py-2 font-bold">Он</th>
-                    <th className="px-2 py-2 font-bold">Улирал </th>
-                    <th className="px-2 py-2 font-bold">Огноо </th>
-                    <th className="px-2 py-2 font-bold">Харьяалагдах хэлтэс</th>
 
-                    <th className="px-2 py-2 font-bold">Ажлын байр </th>
-                    <th className="px-2 py-2 font-bold">Ажилтны нэр </th>
-                    <th className="px-2 py-2 font-bold">Гомдлын төрөл</th>
-                    <th className="px-2 py-2 font-bold">Холбогдох дугаар </th>
-                    <th className="px-2 py-2 font-bold">Гомдлын дэлгэрэнгүй</th>
-                    <th className="px-2 py-2 font-bold">Шийдвэрлэсэн эсэх</th>
-                    <th className="px-2 py-2 font-bold">Шийдвэрлэсэн хариу</th>
-                    <th className="px-2 py-2 font-bold">
-                      Алдаа
-                      <span className="px-2 py-1 text-xs rounded text-white  bg-purple-600 font-medium ml-2">
-                        {too}
-                      </span>
-                    </th>
-                    <th className="px-2 py-2 font-bold"></th>
-                  </tr>
-                ) : activeTab === "2" ? (
-                  <tr className="text-xs text-left text-white border-b">
-                    <th className="px-2 py-2 font-bold">
-                      <input
-                        type="checkbox"
-                        onChange={handleSelectAll}
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                        checked={selectedIds.length === filteredData.length}
-                      />
-                    </th>
-                    <th className="px-2 py-2 font-bold">Он</th>
-                    <th className="px-2 py-2 font-bold">Улирал </th>
-                    <th className="px-2 py-2 font-bold">Огноо </th>
-                    <th className="px-2 py-2 font-bold">Харьяалагдах хэлтэс</th>
+        <div className="px-3 pt-3 mb-3 bg-white shadow-sm rounded-2xl ring-1 ring-gray-100">
+          <div className="flex flex-wrap gap-2 pb-3 border-b border-gray-100">
+            {complainInfo.map((item, custom) => {
+              const isActive = `${activeTab}` === `${item.id}`;
 
-                    <th className="px-2 py-2 font-bold">Ажлын байр </th>
-                    <th className="px-2 py-2 font-bold">Ажилтны нэр </th>
-                    <th className="px-2 py-2 font-bold">Гомдлын төрөл</th>
-                    <th className="px-2 py-2 font-bold">Холбогдох дугаар </th>
-                    <th className="px-2 py-2 font-bold">Гомдлын дэлгэрэнгүй</th>
-                    <th className="px-2 py-2 font-bold">Шийдвэрлэсэн эсэх</th>
-                    <th className="px-2 py-2 font-bold">
-                      Алдаа
-                      <span className="px-2 py-1 text-xs rounded text-white  bg-purple-600 font-medium ml-2">
-                        {too}
-                      </span>
-                    </th>
-                    <th className="px-2 py-2 font-bold"></th>
-                  </tr>
+              return (
+                <button
+                  key={JSON.stringify(item + custom)}
+                  onClick={() => setActiveTab(`${item.id}`)}
+                  className={`inline-flex items-center rounded-xl px-3 py-2 text-sm font-medium transition-all duration-200 ${
+                    isActive
+                      ? "bg-indigo-600 text-white shadow-sm shadow-indigo-100"
+                      : "bg-slate-50 text-gray-600 hover:bg-indigo-50 hover:text-indigo-700"
+                  }`}
+                >
+                  {item.category}
+                  {isActive ? (
+                    <span className="ml-2 inline-flex min-w-[24px] items-center justify-center rounded-full bg-white/20 px-2 py-0.5 text-xs font-medium text-white">
+                      {niitAldaa.length}
+                    </span>
+                  ) : (
+                    ""
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="max-w-full overflow-hidden bg-white shadow-sm rounded-2xl ring-1 ring-gray-100">
+          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+            <div>
+              <p className="mb-1 text-sm font-semibold text-gray-900">
+                Бүртгэлийн жагсаалт
+              </p>
+              <p className="mb-0 text-xs text-gray-500">
+                Сонгосон: {selectedIds.length} · Харагдаж буй:{" "}
+                {currentRecords.length}
+              </p>
+            </div>
+          </div>
+
+          <div className="w-full overflow-x-auto">
+            <table id="table" className="break-words border-collapse min-w-max">
+              <thead>{renderTableHead()}</thead>
+
+              <tbody className="text-sm divide-y divide-gray-100">
+                {currentRecords.length > 0 ? (
+                  currentRecords.map(renderTableRow)
                 ) : (
-                  <tr className="text-xs text-left text-white border-b">
-                    <th className="px-2 py-2 font-bold">
-                      <input
-                        type="checkbox"
-                        onChange={handleSelectAll}
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                        checked={selectedIds.length === filteredData.length}
-                      />
-                    </th>
-                    <th className="px-2 py-2 font-bold">Он </th>
-                    <th className="px-2 py-2 font-bold">Улирал </th>
-                    <th className="px-2 py-2 font-bold">Огноо </th>
-                    <th className="px-2 py-2 font-bold">Харьяалагдах хэлтэс</th>
-
-                    <th className="px-2 py-2 font-bold">Ажлын байр </th>
-                    <th className="px-2 py-2 font-bold">Ажилтны нэр </th>
-                    <th className="px-2 py-2 font-bold">Төрөл</th>
-                    <th className="px-2 py-2 font-bold">Дэлгэрэнгүй </th>
-                    <th className="px-2 py-2 font-bold">Бүртгэгдсэн суваг</th>
-                    <th className="px-2 py-2 font-bold">
-                      Тоогоор
-                      <span className="px-2 py-1 text-xs rounded text-white  bg-purple-600 font-medium ml-2">
-                        {too}
-                      </span>
-                    </th>
-                    <th className="px-2 py-2 font-bold"></th>
+                  <tr>
+                    <td colSpan="20" className="px-6 text-center py-14">
+                      <div className="flex flex-col items-center max-w-sm mx-auto">
+                        <div className="flex items-center justify-center mb-4 text-gray-400 rounded-full h-14 w-14 bg-slate-100">
+                          <i className="text-2xl bi bi-inbox" />
+                        </div>
+                        <p className="mb-1 text-base font-semibold text-gray-900">
+                          Мэдээлэл олдсонгүй
+                        </p>
+                        <p className="mb-0 text-sm text-gray-500">
+                          Хайлт эсвэл filter тохиргоогоо өөрчлөөд дахин шалгана
+                          уу.
+                        </p>
+                      </div>
+                    </td>
                   </tr>
-                )}
-              </thead>
-              <tbody className="bg-white text-xs">
-                {currentRecords.map(
-                  (item, i) =>
-                    activeTab === `${item.complain}` &&
-                    (item.complain === "1" ? (
-                      <tr
-                        key={JSON.stringify(item + i)}
-                        className="border-b border-gray-200 hover:bg-gray-200"
-                      >
-                        <td className="px-1 py-1 border">
-                          <input
-                            type="checkbox"
-                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                            onChange={() => handleCheckboxChange(item.id)}
-                            checked={selectedIds.includes(item.id)}
-                          />
-                        </td>
-                        <td className="px-1 py-1 border">
-                          {new Date(item.createdAt).getFullYear()}
-                        </td>
-                        <td className="px-1 py-1 border">
-                          {new Date(item.createdAt).getMonth() === 1 ||
-                          new Date(item.createdAt).getMonth() === 2 ||
-                          new Date(item.createdAt).getMonth() === 3
-                            ? "1-р улирал"
-                            : new Date(item.createdAt).getMonth() === 4 ||
-                              new Date(item.createdAt).getMonth() === 5 ||
-                              new Date(item.createdAt).getMonth() === 6
-                            ? "2-р улирал"
-                            : new Date(item.createdAt).getMonth() === 7 ||
-                              new Date(item.createdAt).getMonth() === 8 ||
-                              new Date(item.createdAt).getMonth() === 9
-                            ? "3-р улирал"
-                            : new Date(item.createdAt).getMonth() === 10 ||
-                              new Date(item.createdAt).getMonth() === 11 ||
-                              new Date(item.createdAt).getMonth() === 12
-                            ? "4-р улирал"
-                            : ""}
-                        </td>
-                        <td className="px-1 py-1 border">
-                          {new Date(item.createdAt).toLocaleString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                          })}
-                        </td>
-                        <td className="px-1 py-1 border">
-                          {item.divisionName}
-                        </td>
-                        <td className="px-1 py-1 border">{item.unitName}</td>
-                        <td className="px-1 py-1 border">{item.firstName}</td>
-                        <td className="px-1 py-1 border">
-                          {item.complainType}
-                        </td>
-                        <td className="px-1 py-1 border">{item.phoneNo}</td>
-                        <td className="px-1 py-1 border">{item.description}</td>
-                        <td className="px-1 py-1 border ">
-                          {item.isSolved === "" ? (
-                            <span className="px-2 py-2  text-xs text-yellow-600 ">
-                              pending
-                            </span>
-                          ) : (
-                            item.isSolved
-                          )}
-                        </td>
-                        <td className="px-1 py-1 border">
-                          {item.solvedDescription === "" ? (
-                            <span className="px-2 py-2  text-xs  text-yellow-600 ">
-                              pending
-                            </span>
-                          ) : (
-                            item.solvedDescription
-                          )}
-                        </td>
-                        <td className="px-1 py-1 border">{item.too}</td>
-                        <td className="px-1 py-1 border">
-                          <button
-                            data-id={item}
-                            onClick={() => {
-                              handleEdit(item);
-                            }}
-                            className="px-2 py-2 bg-gray-200 uppercase focus:outline-none focus:text-indigo-600 text-xs w-full hover:bg-indigo-700 rounded-md cursor-pointer hover:text-white"
-                          >
-                            Edit
-                          </button>
-                        </td>
-                      </tr>
-                    ) : item.complain === "2" ? (
-                      <tr
-                        key={JSON.stringify(item + i)}
-                        className="border-b border-gray-200 hover:bg-gray-100"
-                      >
-                        <td className="px-1 py-1 border">
-                          <input
-                            type="checkbox"
-                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                            onChange={() => handleCheckboxChange(item.id)}
-                            checked={selectedIds.includes(item.id)}
-                          />
-                        </td>
-                        <td className="px-1 py-1 border">
-                          {new Date(item.createdAt).getFullYear()}
-                        </td>
-                        <td className="px-1 py-1 border">
-                          {new Date(item.createdAt).getMonth() === 1 ||
-                          new Date(item.createdAt).getMonth() === 2 ||
-                          new Date(item.createdAt).getMonth() === 3
-                            ? "1-р улирал"
-                            : new Date(item.createdAt).getMonth() === 4 ||
-                              new Date(item.createdAt).getMonth() === 5 ||
-                              new Date(item.createdAt).getMonth() === 6
-                            ? "2-р улирал"
-                            : new Date(item.createdAt).getMonth() === 7 ||
-                              new Date(item.createdAt).getMonth() === 8 ||
-                              new Date(item.createdAt).getMonth() === 9
-                            ? "3-р улирал"
-                            : new Date(item.createdAt).getMonth() === 10 ||
-                              new Date(item.createdAt).getMonth() === 11 ||
-                              new Date(item.createdAt).getMonth() === 12
-                            ? "4-р улирал"
-                            : ""}
-                        </td>
-                        <td className="px-1 py-1 border">
-                          {new Date(item.createdAt).toLocaleString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                          })}
-                        </td>
-                        <td className="px-1 py-1 border">
-                          {item.divisionName}
-                        </td>
-                        <td className="px-1 py-1 border">{item.unitName}</td>
-                        <td className="px-1 py-1 border">{item.firstName}</td>
-                        <td className="px-1 py-1 border">
-                          {item.complainType}
-                        </td>
-                        <td className="px-1 py-1 border">{item.phoneNo}</td>
-                        <td className="px-1 py-1 border">{item.description}</td>
-                        <td className="px-1 py-1 border ">
-                          {item.isSolved === "" ? (
-                            <span className="px-2 py-2  text-xs text-yellow-600 ">
-                              pending
-                            </span>
-                          ) : (
-                            item.isSolved
-                          )}
-                        </td>
-                        {/* <td className="px-1 py-1 border">
-                            {item.solvedDescription === "" ? (
-                              <span className="px-2 py-2  text-xs  text-yellow-600 ">
-                                pending
-                              </span>
-                            ) : (
-                              item.solvedDescription
-                            )}
-                          </td> */}
-                        <td className="px-1 py-1 border">{item.too}</td>
-                        <td className="px-1 py-1 border">
-                          <button
-                            data-id={item}
-                            onClick={() => {
-                              handleEdit(item);
-                            }}
-                            className="px-2 py-2 bg-gray-200 uppercase focus:outline-none focus:text-indigo-600 text-xs w-full hover:bg-indigo-700 rounded-md cursor-pointer hover:text-white"
-                          >
-                            Edit
-                          </button>
-                        </td>
-                      </tr>
-                    ) : (
-                      <tr
-                        key={item.id}
-                        className="border-b border-gray-200 hover:bg-gray-100"
-                      >
-                        <td className="px-1 py-1 border">
-                          <input
-                            type="checkbox"
-                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                            onChange={() => handleCheckboxChange(item.id)}
-                            checked={selectedIds.includes(item.id)}
-                          />
-                        </td>
-                        <td className="px-1 py-1 border">
-                          {new Date(item.createdAt).getFullYear()}
-                        </td>
-                        <td className="px-1 py-1 border">
-                          {new Date(item.createdAt).getMonth() === 1 ||
-                          new Date(item.createdAt).getMonth() === 2 ||
-                          new Date(item.createdAt).getMonth() === 3
-                            ? "1-р улирал"
-                            : new Date(item.createdAt).getMonth() === 4 ||
-                              new Date(item.createdAt).getMonth() === 5 ||
-                              new Date(item.createdAt).getMonth() === 6
-                            ? "2-р улирал"
-                            : new Date(item.createdAt).getMonth() === 7 ||
-                              new Date(item.createdAt).getMonth() === 8 ||
-                              new Date(item.createdAt).getMonth() === 9
-                            ? "3-р улирал"
-                            : new Date(item.createdAt).getMonth() === 10 ||
-                              new Date(item.createdAt).getMonth() === 11 ||
-                              new Date(item.createdAt).getMonth() === 12
-                            ? "4-р улирал"
-                            : ""}
-                        </td>
-                        <td className="px-1 py-1 border">
-                          {new Date(item.createdAt).toLocaleString("en-US", {
-                            month: "short",
-                            day: "numeric",
-                          })}
-                        </td>
-                        <td className="px-1 py-1 border">
-                          {item.divisionName}
-                        </td>
-                        <td className="px-1 py-1 border">{item.unitName}</td>
-                        <td className="px-1 py-1 border">{item.firstName}</td>
-                        <td className="px-1 py-1 border">
-                          {item.complainType}
-                        </td>
-                        <td className="px-1 py-1 border">{item.description}</td>
-                        <td className="px-1 py-1 border">{item.rule}</td>
-                        <td className="px-1 py-1 border">{item.too}</td>
-                        <td className="px-1 py-1 border">
-                          <button
-                            data-id={item}
-                            onClick={() => {
-                              handleEdit(item);
-                            }}
-                            className="px-2 py-2 bg-gray-200 uppercase focus:outline-none focus:text-indigo-600 text-xs w-full hover:bg-indigo-700 rounded-md cursor-pointer hover:text-white"
-                          >
-                            Edit
-                          </button>
-                        </td>
-                      </tr>
-                    ))
                 )}
               </tbody>
             </table>
           </div>
+
           {/* {filteredData.length > 9 ? (
             <div className="mt-3">
               <Pagination
@@ -993,6 +911,7 @@ function ErrorThanks() {
           )} */}
         </div>
       </div>
+
       <ToastContainer />
     </div>
   );

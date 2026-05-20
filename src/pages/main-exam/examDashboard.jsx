@@ -97,11 +97,11 @@ function ExamDash() {
   }
   const [showSearch, setShowSearch] = useState(false);
   return (
-    <div className="w-full min-h-screen bg-teal-500 relative">
+    <div className="relative w-full min-h-screen bg-teal-500">
       {loading && <Loading />}
       <Navigation />
       <div className="w-full px-2 py-1 flex h-[calc(100%-64px)] items-end justify-center">
-        <div className="w-full h-full flex flex-col justify-between">
+        <div className="flex flex-col justify-between w-full h-full">
           {showCategoryMenu && (
             <ExamCategory
               categories={categories && categories}

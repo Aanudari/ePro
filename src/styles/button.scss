@@ -1,102 +1,95 @@
-.cus-buttons .raise:hover,
-.raise:focus {
-  box-shadow: 0 0.5em 0.5em -0.4em var(--hover);
-  transform: translateY(-0.25em);
-}
-$colors: (
-  raise: #50a3a2,
-);
-@each $button, $color in $colors {
-  .#{$button} {
-    --color: #{$color};
-    --hover: #{adjust-hue($color, 45deg)};
+$primary: #50a3a2;
+$dark: rgb(32, 73, 90);
+
+.cus-buttons,
+.cus-buttons2 {
+  .raise,
+  .raise2 {
+    --color: #{$primary};
+    --hover: #{adjust-hue($primary, 45deg)};
+
+    font: inherit;
+    line-height: 1;
+    margin: 0.5em;
+    padding: 1em 2em;
+    border: 2px solid var(--color);
+    border-radius: 10px;
+    cursor: pointer;
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease,
+      border-color 0.25s ease,
+      color 0.25s ease,
+      background-color 0.25s ease;
   }
 }
 
-.cus-buttons .raise {
-  color: var(--color);
-  transition: 0.25s;
+/* Button 1 */
+.cus-buttons {
+  .raise {
+    background: transparent;
+    color: var(--color);
 
-  &:hover,
-  &:focus {
-    border-color: #50a3a2;
-    color: #50a3a2;
+    &:hover,
+    &:focus {
+      border-color: $primary;
+      color: $primary;
+      box-shadow: 0 0.5em 0.5em -0.4em var(--hover);
+      transform: translateY(-0.25em);
+      outline: none;
+    }
   }
 }
 
-.cus-buttons .raise {
-  background: none;
-  border: 2px solid;
-  font: inherit;
-  line-height: 1;
-  margin: 0.5em;
-  padding: 1em 2em;
+/* Button 2 */
+.cus-buttons2 {
+  .raise2 {
+    background: $dark;
+    color: white;
+    border-color: $dark;
+
+    &:hover,
+    &:focus {
+      background: $primary;
+      border-color: $primary;
+      color: white;
+      box-shadow: 0 0.5em 0.5em -0.4em var(--hover);
+      transform: translateY(-0.25em);
+      outline: none;
+    }
+  }
 }
 
 #done {
-  background-color: #50a3a2;
-  color: white;
-}
-
-// here button 2
-
-.cus-buttons2 .raise2:hover,
-.raise:focus {
-  box-shadow: 0 0.5em 0.5em -0.4em var(--hover);
-  transform: translateY(-0.25em);
-}
-$colors: (
-  raise: #50a3a2,
-);
-@each $button, $color in $colors {
-  .#{$button} {
-    --color: #{$color};
-    --hover: #{adjust-hue($color, 45deg)};
-  }
-}
-
-.cus-buttons2 .raise2 {
-  color: var(--color);
-  transition: 0.25s;
-
-  &:hover,
-  &:focus {
-    border-color: #50a3a2;
-    color: #50a3a2;
-  }
-}
-
-.cus-buttons2 .raise2 {
-  background: rgb(32, 73, 90);
-}
-
-#done {
-  background-color: #50a3a2;
+  background-color: $primary;
   color: white;
 }
 
 .drop-down {
-  animation: dropdown;
-  animation-duration: 0.5s;
+  animation: dropdown 0.5s ease;
 }
 
 @keyframes dropdown {
   from {
     top: -1000px;
   }
+
   to {
     top: 56px;
   }
 }
 
 .shrink {
-  animation: shrink;
-  animation-duration: 0.5s;
+  animation: shrink 0.5s ease;
 }
 
 @keyframes shrink {
   from {
     height: 0;
+  }
+
+  to {
+    height: 100%;
   }
 }
 

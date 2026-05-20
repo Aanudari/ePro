@@ -1,112 +1,98 @@
+/* =========================
+   GLOBAL RESET
+========================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Open Sans", sans-serif;
+  background-color: #f1f5f9;
+}
+
+/* =========================
+   TYPOGRAPHY
+========================= */
+
 .tahoma {
-  font-family: "tahoma";
+  font-family: "Tahoma", sans-serif;
 }
 
-table,
-th,
-td {
-  border: 1px solid black;
-}
-.c-card img {
-  transition: transform 0.3s ease-in-out;
-}
-.c-card:hover img {
-  transform: scale(1.05);
-}
-
-.box {
-  overflow: hidden;
-}
-.custom-index-2 {
-  z-index: 1010101010101010101010101011010101010101010101010101010110;
-}
 a {
   text-decoration: none !important;
 }
 
-.box select {
-  background-color: #0563af;
-  color: white;
-  width: 100px;
-  height: 50px;
-  border: none;
-  font-size: 14px;
-  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
-  -webkit-appearance: button;
-  appearance: button;
-  outline: none;
-  border-radius: 0;
+/* =========================
+   TABLE
+========================= */
+
+.custom-table,
+.custom-table th,
+.custom-table td {
+  border: 1px solid black;
+  border-collapse: collapse;
 }
 
-.cellx {
-  background-color: #f4511e;
-  border: none;
-  color: white;
-  margin: 4px 2px;
-  opacity: 0.6;
-  transition: 0.3s;
-  z-index: 1;
-  cursor: pointer;
+/* =========================
+   IMAGE CARD
+========================= */
+
+.c-card img {
+  transition: transform 0.3s ease-in-out;
 }
 
-.cellx:hover {
-  opacity: 1;
+.c-card:hover img {
+  transform: scale(1.05);
 }
 
-.cellt {
-  background-color: teal;
-  /* border: none !important; */
-  color: white;
-  opacity: 0.9;
-  transition: 0.3s;
-  cursor: pointer;
-  z-index: 0 !important;
-  border-radius: 5px;
-}
+/* =========================
+   COMMON UTILITIES
+========================= */
 
-.cellt:hover {
-  opacity: 1;
-}
-
-.cus-index {
-  z-index: 1000;
-}
-
-.nav input::placeholder {
-  color: gray;
-  font-size: 12px;
-}
-.celly {
-  background-color: #bd3a73;
-  border: none;
-  color: white;
-  margin: 4px 2px;
-  opacity: 0.9;
-  transition: 0.3s;
-  cursor: pointer;
-  z-index: 1;
-}
-
-.celly:hover {
-  opacity: 1;
+.box {
+  overflow: hidden;
 }
 
 .borderx {
   border: 1px solid silver;
 }
+
 .borderx:hover {
-  /* background-color: white; */
   border: 0.5px solid silver;
   opacity: 0.9;
   box-shadow: 0 0 2px silver;
 }
 
-.certain-item:hover {
-  background-color: f0f8ff;
-  box-shadow: 0 0 2px silver;
-}
 .no-underlinex {
   text-decoration: none;
+}
+
+.text-container {
+  width: 200px !important;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* =========================
+   Z INDEX
+========================= */
+
+.cus-index {
+  z-index: 1000;
 }
 
 .top-z {
@@ -118,40 +104,6 @@ a {
   z-index: 100100;
 }
 
-.side-commend {
-  animation-name: appear;
-  animation-duration: 0.4s;
-}
-
-@keyframes appear {
-  from {
-    right: -1000px;
-  }
-  to {
-    right: 0px;
-  }
-}
-
-.cellu {
-  background-color: #55b2d3;
-  border: none;
-  color: white;
-  margin: 4px 2px;
-  opacity: 0.8;
-  transition: 0.3s;
-  cursor: pointer;
-  z-index: 1;
-  height: 90px;
-}
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-.cellu:hover {
-  opacity: 1;
-}
-
 .front-eth {
   z-index: 100100100;
 }
@@ -160,259 +112,83 @@ input::-webkit-inner-spin-button {
   z-index: 10010010;
 }
 
-.glass {
-  background: rgba(255, 255, 255, 0.25);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(10.5px);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-}
-.glass3 {
-  /* From https://css.glass */
-  background: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
+/* =========================
+   NAVIGATION
+========================= */
 
-.linear {
-  background-image: linear-gradient(
-    to right top,
-    #051937,
-    #004d7a,
-    #008793,
-    #00bf72,
-    #a8eb12
-  );
-}
-
-.shadow-cus-l {
-  text-shadow: -1px 2px 2px silver;
-}
-
-.appearPoolMenu {
-  animation: appearMenu;
-  animation-duration: 0.3s;
-}
-.disappearPoolMenu {
-  animation: disappearMenu;
-  animation-duration: 0.5s;
-  transition: all;
-  transform: translateX(5);
-}
-
-@keyframes appearMenu {
-  from {
-    right: -600px;
-  }
-  to {
-    right: 0;
-  }
-}
-@keyframes disappearMenu {
-  from {
-    right: 0;
-  }
-  to {
-    right: -200px;
-  }
-}
-.clearfix {
-  *zoom: 1;
-} /* For IE 6/7 */
-.clearfix:before,
-.clearfix:after {
-  content: "";
-  display: table;
-}
-.clearfix:after {
-  clear: both;
-}
-
-/* ---------- LIVE-CHAT ---------- */
-
-#live-chat {
-  bottom: 0;
+.nav input::placeholder {
+  color: gray;
   font-size: 12px;
-  right: 24px;
-  position: fixed;
-  width: 300px;
 }
 
-#live-chat header {
-  background: #293239;
-  border-radius: 5px 5px 0 0;
-  color: #fff;
+/* =========================
+   BUTTONS / CELLS
+========================= */
+
+.cellx,
+.celly,
+.cellu,
+.cellt {
+  border: none;
+  color: white;
   cursor: pointer;
-  padding: 16px 24px;
+  transition: 0.3s;
 }
 
-#live-chat h4:before {
-  background: #1a8a34;
-  border-radius: 50%;
-  content: "";
-  display: inline-block;
-  height: 8px;
-  margin: 0 8px 0 0;
-  width: 8px;
+.cellx {
+  background-color: #f4511e;
+  opacity: 0.6;
 }
 
-#live-chat h4 {
-  font-size: 12px;
+.cellx:hover {
+  opacity: 1;
 }
 
-#live-chat h5 {
-  font-size: 10px;
+.celly {
+  background-color: #bd3a73;
+  opacity: 0.9;
 }
 
-#live-chat form {
-  padding: 24px;
+.celly:hover {
+  opacity: 1;
 }
 
-#live-chat input[type="text"] {
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  padding: 8px;
-  outline: none;
-  width: 234px;
+.cellu {
+  background-color: #55b2d3;
+  opacity: 0.8;
+  height: 90px;
 }
 
-.chat-message-counter {
-  background: #e62727;
-  border: 1px solid #fff;
-  border-radius: 50%;
-  display: none;
-  font-size: 12px;
-  font-weight: bold;
-  height: 28px;
-  left: 0;
-  line-height: 28px;
-  margin: -15px 0 0 -15px;
-  position: absolute;
-  text-align: center;
-  top: 0;
-  width: 28px;
+.cellu:hover {
+  opacity: 1;
 }
 
-.chat-close {
-  background: #1b2126;
-  border-radius: 50%;
-  color: #fff;
-  display: block;
-  float: right;
-  font-size: 10px;
-  height: 16px;
-  line-height: 16px;
-  margin: 2px 0 0 0;
-  text-align: center;
-  width: 16px;
+.cellt {
+  background-color: teal;
+  opacity: 0.9;
+  border-radius: 5px;
 }
 
-.chat {
-  background: #fff;
+.cellt:hover {
+  opacity: 1;
 }
 
-.chat-history {
-  height: 252px;
-  padding: 8px 24px;
-  overflow-y: scroll;
-}
+/* =========================
+   CUSTOM SELECT
+========================= */
 
-.chat-message {
-  margin: 16px 0;
-}
-
-.chat-message img {
-  border-radius: 50%;
-  float: left;
-}
-
-.chat-message-content {
-  margin-left: 56px;
-}
-
-.chat-time {
-  float: right;
-  font-size: 10px;
-}
-
-.chat-feedback {
-  font-style: italic;
-  margin: 0 0 0 80px;
-}
-
-.to-left {
-  animation: to-left;
-  animation-duration: 0.5s;
-}
-
-@keyframes to-left {
-  from {
-    width: 300px;
-  }
-}
-
-.accordion-button:focus {
-  box-shadow: none !important;
-}
-.accordion-button {
-  background-color: rgb(236, 236, 236) !important;
-}
-.accordion-button:hover {
-  box-shadow: 0 0 5px silver !important;
-}
-
-.offcanvas-header {
-  background-color: #009797 !important;
-  height: 56px !important;
-}
-
-.offcanvas-body {
-  background-color: white;
-}
-
-.cus-height {
-  height: 100px !important;
-}
-.modal-header {
-  background-color: #009797 !important;
-  border-radius: 0 !important;
-  border: none !important;
-}
-
-.modal-footer {
-  background-color: #009797 !important;
-  border-radius: 0 !important;
-  border: none !important;
-}
-html {
-  overflow-y: scroll !important;
-  overflow-y: overlay !important;
-}
-
-.custom-placeholder ::placeholder {
-  color: silver !important;
+.box select {
+  background-color: #0563af;
+  color: white;
+  width: 100px;
+  height: 50px;
+  border: none;
   font-size: 14px;
-  font-weight: 500;
-}
-.modal-body {
-  background-color: none !important;
-  border: none !important;
-}
-.modal-content {
-  border: none !important;
-}
-
-.offcanvas {
-  z-index: 9898989898 !important;
-}
-
-.text-container {
-  width: 200px !important;
-  white-space: nowrap; /* Prevent line breaks */
-  overflow: hidden; /* Hide overflow */
-  text-overflow: ellipsis; /* Show ellipsis */
+  border-radius: 0;
+  outline: none;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+  appearance: button;
+  -webkit-appearance: button;
 }
 
 .disabled-select {
@@ -425,10 +201,94 @@ html {
   cursor: not-allowed !important;
 }
 
+/* =========================
+   GLASS EFFECTS
+========================= */
+
+.glass {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(10.5px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.glass3 {
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* =========================
+   BACKGROUNDS
+========================= */
+
+.linear {
+  background-image: linear-gradient(
+    to right top,
+    #051937,
+    #004d7a,
+    #008793,
+    #00bf72,
+    #a8eb12
+  );
+}
+
+/* =========================
+   SHADOWS
+========================= */
+
+.shadow-cus-l {
+  text-shadow: -1px 2px 2px silver;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+.side-commend {
+  animation: appear 0.4s;
+}
+
+@keyframes appear {
+  from {
+    right: -1000px;
+  }
+  to {
+    right: 0;
+  }
+}
+
+.appearPoolMenu {
+  animation: appearMenu 0.3s;
+}
+
+.disappearPoolMenu {
+  animation: disappearMenu 0.5s;
+}
+
+@keyframes appearMenu {
+  from {
+    right: -600px;
+  }
+  to {
+    right: 0;
+  }
+}
+
+@keyframes disappearMenu {
+  from {
+    right: 0;
+  }
+  to {
+    right: -200px;
+  }
+}
+
 .fill {
-  animation: fill;
-  animation-duration: 0.5s;
-  animation-fill-mode: forwards;
+  animation: fill 0.5s forwards;
 }
 
 @keyframes fill {
@@ -440,20 +300,115 @@ html {
   }
 }
 
-.parent-2 {
-  position: relative;
+.to-left {
+  animation: to-left 0.5s;
 }
 
-.child-2 {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
+@keyframes to-left {
+  from {
+    width: 300px;
+  }
 }
 
-.parent-2:hover .child-2 {
-  display: block;
+/* =========================
+   INPUT
+========================= */
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
+
+.custom-placeholder ::placeholder {
+  color: silver !important;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.placeholder-cus::placeholder {
+  color: #999999 !important;
+  font-weight: 600 !important;
+}
+
+/* =========================
+   ACCORDION
+========================= */
+
+.accordion-button {
+  background-color: rgb(236, 236, 236) !important;
+}
+
+.accordion-button:focus {
+  box-shadow: none !important;
+}
+
+.accordion-button:hover {
+  box-shadow: 0 0 5px silver !important;
+}
+
+/* =========================
+   MODAL / OFFCANVAS
+========================= */
+
+.offcanvas {
+  z-index: 9999 !important;
+}
+
+.offcanvas-header {
+  background-color: #009797 !important;
+  height: 56px !important;
+}
+
+.offcanvas-body {
+  background-color: white;
+}
+
+.modal-header,
+.modal-footer {
+  background-color: #009797 !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+.modal-content,
+.modal-body {
+  border: none !important;
+}
+
+/* =========================
+   CHAT
+========================= */
+
+#live-chat {
+  position: fixed;
+  right: 24px;
+  bottom: 0;
+  width: 300px;
+  font-size: 12px;
+}
+
+#live-chat header {
+  background: #293239;
+  border-radius: 5px 5px 0 0;
+  color: #fff;
+  cursor: pointer;
+  padding: 16px 24px;
+}
+
+.chat {
+  background: #fff;
+}
+
+.chat-history {
+  height: 252px;
+  overflow-y: auto;
+  padding: 8px 24px;
+}
+
+/* =========================
+   TRIANGLES
+========================= */
 
 .triangle {
   width: 0;
@@ -463,6 +418,7 @@ html {
   border-right: 7px solid transparent;
   border-bottom: 10px solid #ffff00;
 }
+
 .triangle-amber {
   width: 0;
   height: 0;
@@ -472,7 +428,11 @@ html {
   border-bottom: 10px solid #f4ce2e;
 }
 
-.placeholder-cus::placeholder {
-  color: #999999 !important;
-  font-weight: 600 !important;
+/* =========================
+   HOVER ITEMS
+========================= */
+
+.certain-item:hover {
+  background-color: #f0f8ff;
+  box-shadow: 0 0 2px silver;
 }

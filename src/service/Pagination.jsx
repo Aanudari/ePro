@@ -6,33 +6,49 @@ const Pagination = ({ nPages, currentPage, setCurrentPage }) => {
   const nextPage = () => {
     if (currentPage !== nPages) setCurrentPage(currentPage + 1);
   };
+
   const prevPage = () => {
     if (currentPage !== 1) setCurrentPage(currentPage - 1);
   };
+
   return (
     <div>
-      <ul className="pagination justify-content-center text-xs  ">
+      <ul className="text-xs pagination justify-content-center">
         <li className="page-item">
-          <a className="page-link text-gray-600" onClick={prevPage}>
+          <button
+            type="button"
+            className="text-gray-600 page-link"
+            onClick={prevPage}
+          >
             Өмнөх
-          </a>
+          </button>
         </li>
+
         {pageNumbers.map((pgNumber) => (
           <li
             key={pgNumber}
             className={`page-item text-gray-600 ${
               currentPage === pgNumber ? "active" : ""
-            } `}
+            }`}
           >
-            <a onClick={() => setCurrentPage(pgNumber)} className="page-link ">
+            <button
+              type="button"
+              onClick={() => setCurrentPage(pgNumber)}
+              className="page-link"
+            >
               {pgNumber}
-            </a>
+            </button>
           </li>
         ))}
+
         <li className="page-item">
-          <a className="page-link text-gray-600" onClick={nextPage}>
+          <button
+            type="button"
+            className="text-gray-600 page-link"
+            onClick={nextPage}
+          >
             Дараах
-          </a>
+          </button>
         </li>
       </ul>
     </div>

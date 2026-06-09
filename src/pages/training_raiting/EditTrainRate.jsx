@@ -52,7 +52,7 @@ function EditTrainRate() {
         }
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [TOKEN]);
 
   const handleTrainId = (item) => {
     setTID(item.id);

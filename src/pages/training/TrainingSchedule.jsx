@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, useMemo } from "react";
 import Navigation from "../../components/Navigation";
 import { useStateContext } from "../../contexts/ContextProvider";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Modal } from "react-bootstrap";
 import moment from "moment";
@@ -12,7 +12,7 @@ import getWindowDimensions from "../../components/SizeDetector";
 
 function TrainingSchedule() {
   const { width } = getWindowDimensions();
-  const location = useLocation();
+
   const { TOKEN } = useStateContext();
   const navigate = useNavigate();
 
@@ -61,7 +61,7 @@ function TrainingSchedule() {
         }
       })
       .catch((err) => console.log(err));
-  }, [trigger]);
+  }, [trigger, TOKEN]);
 
   useEffect(() => {
     axios({
@@ -85,7 +85,7 @@ function TrainingSchedule() {
         }
       })
       .catch((err) => console.log(err));
-  }, [trigger]);
+  }, [trigger, TOKEN]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -367,6 +367,7 @@ function TrainingSchedule() {
 
             <div className="relative" ref={dropdownRef}>
               <button
+                type="button"
                 onClick={() => setOpen(!open)}
                 className="flex items-center justify-between w-full px-4 text-sm font-medium transition h-11 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200"
               >
@@ -419,7 +420,7 @@ function TrainingSchedule() {
 
             {category.map((item, index) => (
               <button
-                key={index}
+                key={item.id || item.name || index}
                 onClick={() => setSelectedCategory(item.name)}
                 className={`shrink-0 whitespace-nowrap rounded-full border px-4 py-2 text-sm font-medium transition ${
                   selectedCategory === item.name
@@ -454,7 +455,7 @@ function TrainingSchedule() {
 
               return (
                 <div
-                  key={index}
+                  key={data.id || index}
                   onClick={() => clickView(data)}
                   className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md cursor-pointer"
                 >

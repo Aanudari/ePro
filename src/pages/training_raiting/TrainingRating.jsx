@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navigation from "../../components/Navigation";
 import { useStateContext } from "../../contexts/ContextProvider";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Modal } from "react-bootstrap";
 import Select from "react-select";
@@ -13,7 +13,6 @@ import { logout } from "../../service/examService";
 import getWindowDimensions from "../../components/SizeDetector";
 
 function TrainingRating() {
-  const location = useLocation();
   const { TOKEN } = useStateContext();
   const navigate = useNavigate();
   const { width } = getWindowDimensions();
@@ -72,7 +71,7 @@ function TrainingRating() {
         }
       })
       .catch((err) => console.log(err));
-  }, [trigger]);
+  }, [trigger, TOKEN]);
 
   useEffect(() => {
     axios({
@@ -95,7 +94,7 @@ function TrainingRating() {
         }
       })
       .catch((err) => console.log(err));
-  }, [trigger]);
+  }, [trigger, TOKEN]);
 
   const navigateChoosedTRate = (data) => {
     navigate("/chosed-trate", {
@@ -551,6 +550,7 @@ function TrainingRating() {
                       <td className="px-4 py-3">
                         <div className="flex items-center justify-center gap-1">
                           <button
+                            type="button"
                             className="inline-flex items-center justify-center text-blue-600 rounded-lg h-9 w-9 hover:bg-blue-50"
                             onClick={() => navigateChoosedTRate(data)}
                           >
@@ -558,6 +558,7 @@ function TrainingRating() {
                           </button>
 
                           <button
+                            type="button"
                             className="inline-flex items-center justify-center rounded-lg h-9 w-9 text-amber-600 hover:bg-amber-50"
                             onClick={() => handleEdit(data)}
                           >
@@ -565,6 +566,7 @@ function TrainingRating() {
                           </button>
 
                           <button
+                            type="button"
                             onClick={() => showModalDelete(data)}
                             className="inline-flex items-center justify-center text-red-500 rounded-lg h-9 w-9 hover:bg-red-50"
                           >
@@ -573,6 +575,7 @@ function TrainingRating() {
 
                           {data.trRatingQuestions?.length !== 0 && (
                             <button
+                              type="button"
                               onClick={() => handleDownloadClick(data)}
                               className="px-3 py-2 ml-1 text-xs font-medium text-white bg-green-600 rounded-lg hover:bg-green-700"
                             >

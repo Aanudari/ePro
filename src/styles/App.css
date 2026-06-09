@@ -364,18 +364,25 @@ input::-webkit-inner-spin-button {
   background-color: white;
 }
 
-.modal-header,
-.modal-footer {
-  background-color: #009797 !important;
+.show-file-modal .modal-header {
+  background: #2563eb !important;
   border: none !important;
-  border-radius: 0 !important;
+  color: white !important;
+  padding: 12px 18px !important;
 }
 
-.modal-content,
-.modal-body {
-  border: none !important;
+.show-file-modal .modal-title {
+  color: white !important;
 }
 
+.show-file-modal .btn-close {
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+
+.show-file-modal .btn-close:hover {
+  opacity: 1;
+}
 /* =========================
    CHAT
 ========================= */

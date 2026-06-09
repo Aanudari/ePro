@@ -1,5 +1,5 @@
 import UserLayout from "../../components/UserLayout";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
@@ -7,11 +7,9 @@ import { ToastContainer } from "react-toastify";
 import { logout } from "../../service/examService";
 import { Modal } from "react-bootstrap";
 import { notification } from "../../service/toast";
-import moment from "moment";
-import Pagination from "../../service/Pagination";
 
 function UserTraining() {
-  const { TOKEN, deviceId } = useStateContext();
+  const { TOKEN } = useStateContext();
   const navigate = useNavigate();
   const location = useLocation();
   const currentTab = location.state?.item;
@@ -21,11 +19,10 @@ function UserTraining() {
   const [recordsPerPage] = useState(3);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredData, setFilteredData] = useState([]);
-  const videoRef = useRef(null);
   const [showReady, setShowReady] = useState(null);
   const hideModalReady = () => setShowReady(null);
   const [chosedTrain, setChosedTrain] = useState();
-  const [rates, setRates] = useState([]);
+
   const options = [
     { id: "2", value: "Онлайн сургалт" },
     { id: "1", value: "Сургалтын хуваарь" },
@@ -37,8 +34,7 @@ function UserTraining() {
   const filteredDataOfType1 = filteredData.filter(
     (data) => data.sessionType === "1",
   );
-  const nPagesOfType2 = Math.ceil(filteredDataOfType2.length / recordsPerPage);
-  const nPagesOfType1 = Math.ceil(filteredDataOfType1.length / recordsPerPage);
+
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   const currentRecords2 = filteredDataOfType2.slice(
@@ -54,6 +50,7 @@ function UserTraining() {
       setActiveTab(currentTab);
     }
   }, [currentTab]);
+
   useEffect(() => {
     axios({
       method: "get",
@@ -64,9 +61,10 @@ function UserTraining() {
     })
       .then((res) => {
         if (res.data.isSuccess === true) {
-          setUserTrain(res.data.trainingList);
-          setFilteredData(res.data.trainingList);
+          setUserTrain(res.data.trainingList || []);
+          setFilteredData(res.data.trainingList || []);
         }
+
         if (
           res.data.resultMessage === "Unauthorized" ||
           res.data.resultMessage === "Input string was not in a correct format."
@@ -75,7 +73,8 @@ function UserTraining() {
         }
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [TOKEN]);
+
   // const indexOfLastRecord = currentPage * recordsPerPage;
   // const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
   // const currentRecords = filteredData.slice(
@@ -93,19 +92,16 @@ function UserTraining() {
       url: `${process.env.REACT_APP_URL}/v1/TrainingRating/rating`,
     })
       .then((res) => {
-        if (res.data.isSuccess === true) {
-          setRates(res.data.trRatingForm);
-        } else if (res.data.isSuccess === false) {
-          // notification.error(`${res.data.resultMessage}`);
-        } else if (
+        if (
           res.data.resultMessage === "Unauthorized" ||
-          res.data.resultMessage === "Input string was not in a correct divat."
+          res.data.resultMessage === "Input string was not in a correct format."
         ) {
           logout();
         }
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [TOKEN]);
+
   const clickView = (data) => {
     setChosedTrain(data);
     if (activeTab === "2") {
@@ -208,9 +204,7 @@ function UserTraining() {
     });
     setFilteredData(searchList);
   };
-  const today = new Date();
-  const format = "YYYYMMDDHHmmss";
-  const nowdateTime = moment(today).format(format);
+
   function formatDuration(duration) {
     const hours = Math.floor(duration / 3600);
     const minutes = Math.floor((duration - hours * 3600) / 60);
@@ -229,12 +223,13 @@ function UserTraining() {
 
     return result;
   }
+
   useEffect(() => {
-    const filteredData = userTrain.filter(
-      (item) => item.sessionType === activeTab,
-    );
-    setFilteredData(filteredData);
-  }, [activeTab]);
+    const filtered = userTrain.filter((item) => item.sessionType === activeTab);
+    setFilteredData(filtered);
+    setCurrentPage(1);
+  }, [activeTab, userTrain]);
+
   function timeSince(date) {
     var seconds = Math.floor((new Date() - date) / 1000);
 
@@ -278,7 +273,7 @@ function UserTraining() {
         >
           <Modal.Header closeButton>
             <Modal.Title>
-              <p className="text-xl font-normal text-white text-center">
+              <p className="text-xl font-normal text-center text-white">
                 Сургалт үзэх
               </p>
             </Modal.Title>
@@ -306,28 +301,32 @@ function UserTraining() {
           </Modal.Body>
         </Modal>
       </div>
-      <div className="max-w-screen-xl mx-auto p-5 sm:p-10 md:p-16">
+      <div className="max-w-screen-xl p-5 mx-auto sm:p-10 md:p-16">
         {/* SEARCH */}
 
         <div className="relative w-full max-w-md">
           <input
             value={searchQuery}
             onChange={handleSearch}
-            className="w-full h-10 pl-4 pr-10 rounded-lg border border-gray-300 text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+            className="w-full h-10 pl-4 pr-10 text-sm placeholder-gray-400 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
             placeholder="Нэрээр хайх..."
             type="text"
           />
 
-          <button className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600">
+          <button
+            type="button"
+            className="absolute text-gray-600 transform -translate-y-1/2 right-2 top-1/2"
+          >
             <i className="bi bi-search" />
           </button>
         </div>
 
         {/* TABS */}
 
-        <div className="flex border-b border-gray-200 mb-4">
+        <div className="flex mb-4 border-b border-gray-200">
           {options.map((tab) => (
             <button
+              type="button"
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`px-4 py-2 -mb-px font-semibold rounded-t-lg ${
@@ -356,18 +355,19 @@ function UserTraining() {
             const isActive = new Date() < new Date(data.endDate);
 
             return (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
-                <div className="rounded overflow-hidden shadow-lg flex flex-col">
+              <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 md:grid-cols-3">
+                <div className="flex flex-col overflow-hidden rounded shadow-lg">
                   <div
                     key={i}
                     onClick={() => clickView(data)}
                     className="relative"
                   >
-                    <a>
+                    <div>
                       {isImage && (
                         <img
                           src={`http://${data.fileUrl}`}
                           className="w-full"
+                          alt={data.name || "training-image"}
                         />
                       )}
                       {isVideo && (
@@ -379,28 +379,28 @@ function UserTraining() {
                         </video>
                       )}
                       {isAudio && (
-                        <i className="bi bi-music-note-beamed text-4xl text-gray-400" />
+                        <i className="text-4xl text-gray-400 bi bi-music-note-beamed" />
                       )}
                       {isFile && (
-                        <i className="bi bi-file-earmark-text text-4xl text-gray-400" />
+                        <i className="text-4xl text-gray-400 bi bi-file-earmark-text" />
                       )}
-                    </a>
-                    <a>
-                      <div className="text-xs absolute top-0 right-0 bg-indigo-600 px-4 py-2 text-white mt-3 mr-3 hover:text-indigo-600 transition duration-500 ease-in-out">
+                    </div>
+                    <div>
+                      <div className="absolute top-0 right-0 px-4 py-2 mt-3 mr-3 text-xs text-white transition duration-500 ease-in-out bg-indigo-600 hover:text-indigo-600">
                         {data.teacher} · {timeSince(new Date(data.createdAt))}
                       </div>
-                    </a>
+                    </div>
                   </div>
                   <div className="px-6 py-4 mb-auto">
                     {/* TRAIN NAME */}
-                    <a className="font-medium text-lg inline-block hover:text-indigo-600 transition duration-500 ease-in-out inline-block mb-2">
+                    <div className="mb-2 text-lg font-medium transition duration-500 ease-in-out hover:text-indigo-600">
                       {data.name}
-                    </a>
+                    </div>
                     {/* TRAIN DESC */}
-                    <p className="text-gray-500 text-sm">{data.description}</p>
+                    <p className="text-sm text-gray-500">{data.description}</p>
                   </div>
-                  <div className="px-6 py-3 flex flex-row items-center justify-between bg-gray-100">
-                    <span className="py-1 text-xs font-regular text-gray-900 mr-1 flex flex-row items-center">
+                  <div className="flex flex-row items-center justify-between px-6 py-3 bg-gray-100">
+                    <span className="flex flex-row items-center py-1 mr-1 text-xs text-gray-900 font-regular">
                       <i className="bi bi-clock-history"></i>
                       <span className="ml-1">
                         {" "}
@@ -408,7 +408,7 @@ function UserTraining() {
                       </span>
                     </span>
 
-                    <span className="py-1 text-xs font-regular text-gray-900 mr-1 flex flex-row items-center">
+                    <span className="flex flex-row items-center py-1 mr-1 text-xs text-gray-900 font-regular">
                       <span
                         className={`font-semibold ${
                           isActive ? "text-green-600 ml-1" : "text-red-600 ml-1"

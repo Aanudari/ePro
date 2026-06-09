@@ -72,7 +72,7 @@ function ChoosedTRate() {
         }
       })
       .catch((err) => console.log(err));
-  }, [trigger]);
+  }, [trigger, TOKEN]);
 
   const filteredData = useMemo(() => {
     return trate.find((item) => item.id === chtrate.id);

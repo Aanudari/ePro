@@ -73,7 +73,7 @@ function CreateTraining() {
         }
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [TOKEN]);
 
   const handleTrainingCategoryId = (item) => {
     settCategory(item.id);

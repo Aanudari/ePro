@@ -1,5 +1,7 @@
 import axios from "axios";
+
 const token = localStorage.getItem("token");
+
 const instance = axios.create({
   baseURL: process.env.REACT_APP_URL,
   headers: {
@@ -7,7 +9,8 @@ const instance = axios.create({
     Authorization: token,
   },
 });
-export default {
+
+const templateAPI = {
   getTemaplates: () =>
     instance({
       method: "GET",
@@ -19,6 +22,7 @@ export default {
         },
       ],
     }),
+
   getTemaplateInside: (id) =>
     instance({
       method: "GET",
@@ -31,3 +35,5 @@ export default {
       ],
     }),
 };
+
+export default templateAPI;

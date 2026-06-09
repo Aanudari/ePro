@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
-import { Modal, Tab, Tabs } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import axios from "axios";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { logout } from "../../service/examService";
 import ShowVersion from "./showVersion";
 import InsertVersion from "./insertVersion";
-import { ToastContainer } from "react-toastify";
 import { toast } from "react-toastify";
-import TaskReq from "./taskReq";
 
 function ShowFile({
   isOpen,
@@ -17,128 +15,154 @@ function ShowFile({
   taskId,
   onClose,
 }) {
-  const [key, setKey] = useState("home");
-  const [secondSelectedFile, setSecondSelectedFile] = useState(null);
-  const deviceIds =
+  const { TOKEN } = useStateContext();
+
+  const [allUsers, setAllUsers] = useState([]);
+  const [approveList, setApproveList] = useState([]);
+  const [historyList, setHistoryList] = useState([]);
+
+  const [currentFile, setCurrentFile] = useState(selectedFile);
+  const [currentHistoryId, setCurrentHistoryId] = useState("0");
+  const [currentTitle, setCurrentTitle] = useState("Үндсэн нөхцөл");
+
+  const [showInsertVersion, setShowInsertVersion] = useState(false);
+  const [showVersion, setShowVersion] = useState(false);
+
+  const mainUser = JSON.parse(localStorage.getItem("user"));
+  const currentUserId = mainUser?.device_id?.toString();
+
+  const mainDeviceIds =
     typeof showEmployee === "string" ? showEmployee.split(",") : [];
-  const [allUsers, setallUsers] = useState([]);
-  const { activeMenu, TOKEN } = useStateContext();
-  const [reqUsers, setreqUsers] = useState(null);
-  const [showInsertVersion, setshowInsertVersion] = useState(false);
-  const [showVersion, setshowVersion] = useState(false);
-  const [approveList, setapproveList] = useState(null);
-  const [approvingTaskId, setApprovingTaskId] = useState(true);
+
+  const activeVersion = historyList.find(
+    (v) => v.hs_id?.toString() === currentHistoryId?.toString(),
+  );
+
+  const activeTaggedIds =
+    currentHistoryId === "0"
+      ? mainDeviceIds
+      : activeVersion?.hs_tagged?.split(",") || [];
+
+  const approvedCount =
+    approveList?.filter((e) => e.is_approved === "1")?.length || 0;
+
+  const totalApproveCount = activeTaggedIds.length || 0;
 
   const isButtonDisabled =
     approveList == null ||
-    approveList?.find(
-      (e) => e.user_id == JSON.parse(localStorage.getItem("user"))["device_id"],
-    )?.is_approved === "1";
-
-  /* ================= USERS ================= */
+    approveList?.find((e) => e.user_id?.toString() === currentUserId)
+      ?.is_approved === "1";
 
   useEffect(() => {
     if (!TOKEN) return;
-    axios({
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${TOKEN}`,
-      },
-      url: `${process.env.REACT_APP_URL}/v1/TaskRequirement/GetAllReqUsers`,
-    })
+
+    axios
+      .get(`${process.env.REACT_APP_URL}/v1/TaskRequirement/GetAllReqUsers`, {
+        headers: { Authorization: TOKEN },
+      })
       .then((res) => {
-        if (res.data.isSuccess === true) {
-          setallUsers(res.data.reqUserList);
-        }
-        if (
-          res.data.resultMessage === "Unauthorized" ||
-          res.data.resultMessage === "Input string was not in a correct format."
-        ) {
-          logout();
-        }
+        if (res.data.isSuccess) setAllUsers(res.data.reqUserList || []);
+        else logout();
       })
       .catch((err) => console.log(err));
   }, [TOKEN]);
 
-  // /* ================= APPROVE LIST ================= */
-  const fetchApproveList = () => {
-    axios({
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: TOKEN,
-      },
-      url: `${process.env.REACT_APP_URL}/v1/TaskRequirement/ApproveList`,
-      data: {
-        tsMainId: taskId,
-        tsHistoryId: "0",
-      },
-    })
+  function fetchHistoryList() {
+    if (!TOKEN || !taskId) return;
+
+    axios
+      .post(
+        `${process.env.REACT_APP_URL}/v1/TaskRequirement/HistoryList`,
+        {
+          tsMainId: taskId,
+          tsHistoryId: "0",
+        },
+        { headers: { Authorization: TOKEN } },
+      )
       .then((res) => {
-        if (res.data.isSuccess === false) {
-          // alert(res.data.resultMessage);
+        const list = res.data?.taskVersionReqs || [];
+        setHistoryList(list);
+
+        if (res.data.isSuccess && list.length > 0) {
+          const latest = [...list].sort(
+            (a, b) => Number(b.hs_version || 0) - Number(a.hs_version || 0),
+          )[0];
+
+          setCurrentFile(latest.hs_file);
+          setCurrentHistoryId(latest.hs_id?.toString());
+          setCurrentTitle(`Version ${latest.hs_version}`);
         } else {
-          setapproveList(res.data.taskApproveReqs);
-          // alert(res.data.resultMessage);
+          setCurrentFile(selectedFile);
+          setCurrentHistoryId("0");
+          setCurrentTitle("Үндсэн нөхцөл");
         }
-        // setCategoryModal(false);
-        // setShowCategoryMenu(false);
-        // setTriggerCat(triggerCat);
+      })
+      .catch((err) => {
+        console.log(err);
+        setCurrentFile(selectedFile);
+        setCurrentHistoryId("0");
+        setCurrentTitle("Үндсэн нөхцөл");
+      });
+  }
+
+  function fetchApproveList() {
+    if (!TOKEN || !taskId) return;
+
+    axios
+      .post(
+        `${process.env.REACT_APP_URL}/v1/TaskRequirement/ApproveList`,
+        {
+          tsMainId: taskId,
+          tsHistoryId: currentHistoryId || "0",
+        },
+        { headers: { Authorization: TOKEN } },
+      )
+      .then((res) => {
+        if (res.data.isSuccess) setApproveList(res.data.taskApproveReqs || []);
+        else setApproveList([]);
       })
       .catch((err) => console.log(err));
-  };
+  }
+
+  useEffect(() => {
+    if (isOpen) fetchHistoryList();
+  }, [isOpen, taskId, TOKEN, selectedFile]);
+
   useEffect(() => {
     fetchApproveList();
-  }, [taskId]);
-  function addVersionClick(taskId) {
-    setshowInsertVersion(true);
-    onClose();
-  }
-  function showVersionClick(taskId) {
-    setshowVersion(true);
-    onClose();
-  }
+  }, [TOKEN, taskId, currentHistoryId]);
 
-  /* ================= APPROVE ================= */
-
-  // API function
-  function ApprovedAPI(taskId) {
-    if (approvingTaskId === taskId) alert("sjsj");
-    // Already approving
-
-    setApprovingTaskId(taskId); // тухайн task-г approve-д зориулж lock
-
-    axios({
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: TOKEN,
-      },
-      url: `${process.env.REACT_APP_URL}/v1/TaskRequirement/Approved`,
-      data: {
-        tsMainId: taskId,
-        HsId: "0",
-        isApproved: "1",
-      },
-    })
+  function ApprovedAPI() {
+    axios
+      .post(
+        `${process.env.REACT_APP_URL}/v1/TaskRequirement/Approved`,
+        {
+          tsMainId: taskId,
+          hsId: currentHistoryId || "0",
+          isApproved: "1",
+        },
+        { headers: { Authorization: TOKEN } },
+      )
       .then((res) => {
         if (!res.data.isSuccess) {
           toast.error(res.data?.resultMessage || "Алдаа");
         } else {
           toast.success(res.data?.resultMessage || "Амжилттай зөвшөөрлөө");
           fetchApproveList();
-          setApprovingTaskId(false);
         }
       })
-      .catch(() => {
-        toast.error("Сервертэй холбогдож чадсангүй");
-      });
+      .catch(() => toast.error("Сервертэй холбогдож чадсангүй"));
   }
 
-  useEffect(() => {
-    console.log({ approvingTaskId });
-  }, [approvingTaskId]);
+  function addVersionClick() {
+    setShowInsertVersion(true);
+    onClose();
+  }
+
+  function showVersionClick() {
+    setShowVersion(true);
+    onClose();
+  }
 
   return (
     <>
@@ -147,136 +171,196 @@ function ShowFile({
         onHide={onClose}
         centered
         size="xl"
-        dialogClassName="rounded-xl overflow-hidden"
+        dialogClassName="rounded-2xl overflow-hidden"
       >
-        {/* HEADER */}
         <Modal.Header
           closeButton
-          className="bg-gradient-to-r  from-cyan-500 to-blue-600 text-white"
+          className="text-white border-0 bg-gradient-to-r from-cyan-500 to-blue-600"
         >
-          <Modal.Title className="text-lg font-semibold">
-            {taskName}
-          </Modal.Title>
+          <div>
+            <Modal.Title className="text-lg font-bold">{taskName}</Modal.Title>
+            <p className="m-0 mt-1 text-xs text-blue-50">
+              {currentTitle} • {approvedCount}/{totalApproveCount} зөвшөөрсөн
+            </p>
+          </div>
         </Modal.Header>
 
-        {/* BODY */}
-        <Modal.Body className="bg-white space-y-6">
-          {/* USERS + ACTIONS */}
-          <div className="grid grid-cols-12 gap-6">
-            {/* USERS */}
-            <div className="col-span-9 p-4">
-              <h3 className="text-base font-semibold mb-3 text-gray-700">
-                👥 Хамаарах хүмүүс
-              </h3>
+        <Modal.Body className="p-0 bg-slate-50">
+          <div className="p-4 space-y-4">
+            <div className="grid grid-cols-12 gap-4">
+              <div className="col-span-12 p-4 bg-white border border-gray-100 shadow-sm lg:col-span-8 rounded-2xl">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="text-sm font-bold text-gray-700">
+                    👥 Хамаарах хүмүүс
+                  </h3>
+
+                  <span className="px-2 py-1 text-xs font-semibold text-gray-600 bg-gray-100 rounded-full">
+                    {activeTaggedIds.length} хүн
+                  </span>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  {allUsers
+                    .filter((u) =>
+                      activeTaggedIds.includes(u.device_id.toString()),
+                    )
+                    .map((u) => {
+                      const isActive =
+                        approveList?.find(
+                          (e) =>
+                            e.user_id?.toString() === u.device_id.toString(),
+                        )?.is_approved === "1";
+
+                      return (
+                        <span
+                          key={u.device_id}
+                          className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold border ${
+                            isActive
+                              ? "bg-emerald-50 text-emerald-700 border-emerald-100"
+                              : "bg-blue-50 text-blue-700 border-blue-100"
+                          }`}
+                        >
+                          <span
+                            className={`w-2 h-2 rounded-full ${
+                              isActive ? "bg-emerald-500" : "bg-blue-500"
+                            }`}
+                          ></span>
+                          {u.last_name?.[0]}. {u.first_name}
+                        </span>
+                      );
+                    })}
+                </div>
+              </div>
+
+              <div className="col-span-12 p-4 bg-white border border-gray-100 shadow-sm lg:col-span-4 rounded-2xl">
+                <h3 className="mb-3 text-sm font-bold text-gray-700">
+                  ⚙️ Үйлдлүүд
+                </h3>
+
+                <div className="grid grid-cols-1 gap-2">
+                  <button
+                    onClick={addVersionClick}
+                    className="w-full px-4 py-2 text-sm font-semibold text-white transition-all shadow-sm rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700"
+                  >
+                    ＋ Хувилбар нэмэх
+                  </button>
+
+                  {/* <button
+                    onClick={showVersionClick}
+                    className="w-full px-4 py-2 text-sm font-semibold text-blue-700 transition-all border border-blue-100 bg-blue-50 rounded-xl hover:bg-blue-100"
+                  >
+                    🕘 Бүх хувилбар харах
+                  </button> */}
+                </div>
+              </div>
+            </div>
+
+            <div className="p-4 bg-white border border-gray-100 shadow-sm rounded-2xl">
+              <div className="flex flex-col gap-3 mb-3 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <h5 className="m-0 text-sm font-bold text-gray-700">
+                    📄 Одоо харж байгаа файл
+                  </h5>
+                  <p className="m-0 mt-1 text-xs text-gray-500">
+                    {currentTitle}
+                  </p>
+                </div>
+
+                {historyList.length > 0 && (
+                  <span className="px-3 py-1 text-xs font-semibold text-gray-600 bg-gray-100 rounded-full">
+                    Нийт {historyList.length} хувилбар
+                  </span>
+                )}
+              </div>
 
               <div className="flex flex-wrap gap-2">
-                {allUsers
-                  .filter((u) => deviceIds.includes(u.device_id.toString()))
-                  .map((u) => {
-                    const isActive =
-                      approveList?.find(
-                        (e) => e.user_id == u.device_id.toString(),
-                      )?.is_approved === "1";
+                <button
+                  type="button"
+                  onClick={() => {
+                    setCurrentFile(selectedFile);
+                    setCurrentHistoryId("0");
+                    setCurrentTitle("Үндсэн нөхцөл");
+                  }}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition ${
+                    currentHistoryId === "0"
+                      ? "bg-blue-600 text-white border-blue-600"
+                      : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
+                  }`}
+                >
+                  Үндсэн нөхцөл
+                </button>
 
-                    return (
-                      <span
-                        key={u.device_id}
-                        className={
-                          "inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium shadow-sm" +
-                          (isActive
-                            ? " bg-green-100 text-green-700"
-                            : " bg-blue-50 text-blue-700")
-                        }
-                      >
-                        <span
-                          className={
-                            "w-2 h-2 rounded-full" +
-                            (isActive ? " bg-green-500" : " bg-blue-500")
-                          }
-                        ></span>
-                        {u.last_name?.[0]}. {u.first_name}
-                      </span>
-                    );
-                  })}
+                {[...historyList]
+                  .sort(
+                    (a, b) =>
+                      Number(b.hs_version || 0) - Number(a.hs_version || 0),
+                  )
+                  .map((v) => (
+                    <button
+                      key={v.hs_id}
+                      type="button"
+                      onClick={() => {
+                        setCurrentFile(v.hs_file);
+                        setCurrentHistoryId(v.hs_id?.toString());
+                        setCurrentTitle(`Version ${v.hs_version}`);
+                      }}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition ${
+                        currentHistoryId === v.hs_id?.toString()
+                          ? "bg-blue-600 text-white border-blue-600"
+                          : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
+                      }`}
+                    >
+                      Version {v.hs_version}
+                    </button>
+                  ))}
               </div>
             </div>
 
-            {/* ACTIONS */}
-            <div className="col-span-3   p-4">
-              <h3 className="text-base font-semibold mb-3 text-gray-700">
-                ⚙️ Үйлдлүүд
-              </h3>
+            <div className="overflow-hidden bg-white border border-gray-100 shadow-sm rounded-2xl">
+              {currentFile ? (
+                <iframe
+                  src={currentFile}
+                  title="PDF Viewer"
+                  className="w-full h-[620px] border-0"
+                />
+              ) : (
+                <div className="py-20 font-semibold text-center text-red-500">
+                  📂 Файл олдсонгүй
+                </div>
+              )}
+            </div>
 
-              <div className="flex flex-col gap-3">
-                <button
-                  onClick={() => showVersionClick(taskId)}
-                  className="w-full py-2 rounded-xl text-sm font-medium text-white
-              bg-gradient-to-r from-cyan-500 to-blue-600
-              hover:from-cyan-600 hover:to-blue-700
-              transition-all shadow"
-                >
-                  Хувилбар харах
-                </button>
-
-                <button
-                  onClick={() => addVersionClick(taskId)}
-                  className="w-full py-2 rounded-xl text-sm font-medium text-white
-              bg-gradient-to-r from-green-500 to-emerald-600
-              hover:from-green-600 hover:to-emerald-700
-              transition-all shadow"
-                >
-                  Хувилбар нэмэх
-                </button>
-              </div>
+            <div className="sticky bottom-0 p-3 bg-white border border-gray-100 shadow-sm rounded-2xl">
+              <button
+                type="button"
+                onClick={ApprovedAPI}
+                disabled={isButtonDisabled}
+                className={`w-full py-3 rounded-xl text-white text-base font-bold shadow-sm transition-all ${
+                  isButtonDisabled
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-emerald-500 hover:bg-emerald-600"
+                }`}
+              >
+                {isButtonDisabled ? "Зөвшөөрсөн" : "Зөвшөөрөх"}
+              </button>
             </div>
           </div>
-          {/* FILE VIEWER */}
-          <div className="  p-4">
-            {selectedFile ? (
-              <iframe
-                src={selectedFile}
-                title="PDF Viewer"
-                className="w-full h-[600px] rounded-lg border"
-              />
-            ) : (
-              <div className="text-center text-red-500 font-semibold py-20">
-                📂 Файл олдсонгүй
-              </div>
-            )}
-          </div>
-          <button
-            type="button"
-            onClick={() => ApprovedAPI(taskId)}
-            disabled={isButtonDisabled} // зөвхөн энэ task-д disable
-            className={`
-    w-full py-3 rounded-xl text-white text-lg font-semibold shadow-lg transition-all
-    ${
-      isButtonDisabled
-        ? "bg-gray-400 cursor-not-allowed"
-        : "bg-emerald-500 hover:bg-emerald-600"
-    }
-  `}
-          >
-            Зөвшөөрөх
-          </button>
         </Modal.Body>
-
-        {/* FOOTER */}
-        {/* <Modal.Footer className=""></Modal.Footer> */}
       </Modal>
-      {/* MODALS */}
+
       {showInsertVersion && (
         <InsertVersion
           show={showInsertVersion}
           task_id={taskId}
-          onClose={() => setshowInsertVersion(false)}
+          onClose={() => setShowInsertVersion(false)}
         />
       )}
+
       {showVersion && (
         <ShowVersion
           show={showVersion}
           task_id={taskId}
-          onClose={() => setshowVersion(false)}
+          onClose={() => setShowVersion(false)}
         />
       )}
     </>

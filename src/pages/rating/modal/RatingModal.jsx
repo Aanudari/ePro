@@ -36,7 +36,7 @@ function RatingModal({
           setData(res.data);
           setCategoryList(res.data.categoryList);
         }
-        if (res.data.resultMessage === "Unauthorized") {
+        if (res.data.resultMessage == "Unauthorized") {
           logout();
         }
       })
@@ -131,7 +131,7 @@ function RatingModal({
             setTrigger(!trigger);
             setRecall(!recall);
             setRecallList(!recallList);
-            setShowModal(false);
+            // setShowModal(false);
           }
         }
       })
@@ -140,9 +140,9 @@ function RatingModal({
       });
   };
   const handleSelect = (cat, sub, value, comment) => {
-    let newChildren = children.length === 0 ? raw : children;
+    let newChildren = children.length == 0 ? raw : children;
     let temp = newChildren.map((element, index) => {
-      return element.categoryId === cat
+      return element.categoryId == cat
         ? {
             ...element,
             subCategories: element.subCategories.map((el, i) => {
@@ -246,7 +246,7 @@ function RatingModal({
           result[item.categoryId] = { point: item.point, index };
         }
         return result;
-      }, {})
+      }, {}),
     );
 
     const sumPoints = uniquePoints.reduce((sum, item) => sum + item.point, 0);
@@ -271,7 +271,7 @@ function RatingModal({
         {loading && <Loading />}
         <div className="w-full min-h-[56px] bg-teal-600 flex justify-between items-center px-3  gap-2 relative">
           <div className="flex h-[calc(80%)]">
-            <div className="flex flex-col h-full items-start justify-center">
+            <div className="flex flex-col items-start justify-center h-full">
               <span className="font-[500] text-[13px] text-white m-0">
                 <i className="font-[500] text-[13px] text-white m-0">
                   {user.deviceName}
@@ -283,7 +283,7 @@ function RatingModal({
                 </i>
               </span>{" "}
             </div>
-            <div className="flex flex-col h-full items-start justify-end ml-2 border-l pl-3">
+            <div className="flex flex-col items-start justify-end h-full pl-3 ml-2 border-l">
               <span className="mb-[1px]">
                 <i className="font-[500] text-[13px] text-white m-0">
                   Дундаж оноо : {finalScore}%
@@ -314,11 +314,11 @@ function RatingModal({
             </button>
           </div>
         </div>
-        <div className="w-full h-full flex items-center flex-col overflow-scroll justify-center">
+        <div className="flex flex-col items-center justify-center w-full h-full overflow-scroll">
           <div className="w-full h-[56px]">1</div>
           {data?.inputs?.length > 0 && (
             <div className="w-[900px] px-3 pt-5 !mt-[150px]">
-              <div className="flex w-full flex-wrap items-center ">
+              <div className="flex flex-wrap items-center w-full ">
                 {data?.inputs.map((item, index) => {
                   return (
                     <RatingExtra
@@ -367,7 +367,7 @@ function RatingModal({
                       />
                     )}
                   </form>
-                  <div className="w-full mb-2 text-white flex justify-start items-center">
+                  <div className="flex items-center justify-start w-full mb-2 text-white">
                     <span className="mb-0 mt-2 font-[500]">file 1 :</span>
                     {data?.filePath != "" && (
                       <a
@@ -396,7 +396,7 @@ function RatingModal({
                       />
                     )}
                   </form>
-                  <div className="w-full mb-2 text-white flex justify-start items-center ">
+                  <div className="flex items-center justify-start w-full mb-2 text-white ">
                     <span className="mb-0 mt-2 font-[500]">file 2 :</span>
                     {data?.filePath2 != "" && (
                       <>

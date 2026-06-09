@@ -40,6 +40,11 @@ function CreateRatingModal({ setShowModal, trigger, setTrigger }) {
     setAllEmployee(arr);
   };
   const submitData = () => {
+    if (!isFormValid) {
+      alert("Бүх талбарыг бөглөнө үү");
+      return;
+    }
+
     axios({
       method: "post",
       headers: {
@@ -47,13 +52,14 @@ function CreateRatingModal({ setShowModal, trigger, setTrigger }) {
         Authorization: TOKEN,
       },
       url: `${process.env.REACT_APP_URL}/v1/RatingNew/addRating`,
-      data: data,
+      data,
     })
       .then((res) => {
-        // console.log(res.data);
         if (res.data.isSuccess === false) {
           alert(res.data.resultMessage);
+          return;
         }
+
         setShowModal(false);
         setTrigger(!trigger);
       })
@@ -61,7 +67,18 @@ function CreateRatingModal({ setShowModal, trigger, setTrigger }) {
         console.log(err);
       });
   };
-
+  const isFormValid =
+    ratingName.trim() !== "" &&
+    collected.length > 0 &&
+    allEmployee?.length > 0 &&
+    jobId !== "" &&
+    jobId !== "0" &&
+    year !== "" &&
+    year !== "0" &&
+    quarter !== "" &&
+    quarter !== "0" &&
+    month !== "" &&
+    month !== "0";
   return (
     <div
       className={`fixed ${
@@ -87,14 +104,7 @@ function CreateRatingModal({ setShowModal, trigger, setTrigger }) {
       )}
       <div className="shrink w-[calc(70%)] h-[calc(50%)] bg-white flex flex-col items-center rounded">
         <div className="w-full min-h-[50px] bg-teal-600 flex justify-between items-center px-3  gap-2 relative rounded-t">
-          {collected !== [] &&
-          jobId !== "" &&
-          month !== "" &&
-          quarter !== "" &&
-          year !== "" &&
-          collected[0] !== undefined &&
-          allEmployee !== undefined &&
-          ratingName !== "" ? (
+          {isFormValid ? (
             <button
               onClick={submitData}
               className="custom-btn bg-teal-500 hover:bg-teal-400 text-[14px]"
@@ -115,9 +125,9 @@ function CreateRatingModal({ setShowModal, trigger, setTrigger }) {
             <i className="bi bi-x-lg text-white text-2xl font-[500]"></i>
           </button>
         </div>
-        <div className="h-full w-full rounded-b">
-          <div className=" px-4 pt-3 mt-3">
-            <div className="group w-full">
+        <div className="w-full h-full rounded-b">
+          <div className="px-4 pt-3 mt-3 ">
+            <div className="w-full group">
               <input
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -138,7 +148,7 @@ function CreateRatingModal({ setShowModal, trigger, setTrigger }) {
               </label>
             </div>
           </div>
-          <div className=" w-full flex items-center px-3 gap-2 flex-wrap">
+          <div className="flex flex-wrap items-center w-full gap-2 px-3 ">
             <button
               onClick={() => {
                 setShowUsers(!showUsers);
@@ -148,7 +158,7 @@ function CreateRatingModal({ setShowModal, trigger, setTrigger }) {
               } `}
             >
               {allEmployee?.length > 0 && (
-                <i className="bi bi-check-circle text-white text-md mr-2"></i>
+                <i className="mr-2 text-white bi bi-check-circle text-md"></i>
               )}
               Ажилтан сонгох
             </button>
@@ -161,12 +171,13 @@ function CreateRatingModal({ setShowModal, trigger, setTrigger }) {
               }  `}
             >
               {collected.length > 0 && (
-                <i className="bi bi-check-circle text-white text-md mr-2"></i>
+                <i className="mr-2 text-white bi bi-check-circle text-md"></i>
               )}
               Загвар сонгох
             </button>
 
             <select
+              value={jobId}
               onChange={(e) => {
                 setJobId(e.target.value);
               }}
@@ -185,6 +196,7 @@ function CreateRatingModal({ setShowModal, trigger, setTrigger }) {
               <option value="20">Telesales operator</option>
             </select>
             <select
+              value={year}
               onChange={(e) => {
                 setYear(e.target.value);
               }}
@@ -201,6 +213,7 @@ function CreateRatingModal({ setShowModal, trigger, setTrigger }) {
               <option value="2027">2027</option>
             </select>
             <select
+              value={quarter}
               onChange={(e) => {
                 setQuarter(e.target.value);
               }}
@@ -215,6 +228,7 @@ function CreateRatingModal({ setShowModal, trigger, setTrigger }) {
               <option value="4р улирал">4-р улирал</option>
             </select>
             <select
+              value={month}
               onChange={(e) => {
                 setMonth(e.target.value);
               }}

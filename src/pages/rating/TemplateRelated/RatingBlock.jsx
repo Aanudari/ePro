@@ -96,7 +96,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
     <>
       <ToastContainer />
 
-      <div className="w-full relative flex parent hover:bg-gray-100">
+      <div className="relative flex w-full parent hover:bg-gray-100">
         {confirm && (
           <DeleteConfirm deleteCat={handleDelete} setConfirm={setConfirm} />
         )}
@@ -108,7 +108,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
           className="w-full pl-5"
         >
           <ul className="folder-content !mb-0 !p-0">
-            <li className="folder-item js_folder-item  cursor-pointer">
+            <li className="cursor-pointer folder-item js_folder-item">
               <div className="folder-item__icon">
                 {item.adminInfo.totalUser == item.adminInfo.ratedUser ? (
                   <svg
@@ -256,7 +256,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
                   {item.createdDate}
                 </div>
               </div>
-              <div className="folder-item__size flex">
+              <div className="flex folder-item__size">
                 <div>
                   <div className="folder-item__size mt-[-5px]">
                     {item.adminInfo.ratedUser}/{item.adminInfo.totalUser}
@@ -264,7 +264,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
                   <div className="text-[13px] text-[#BEBDBF] mt-[10px]">
                     {item.adminInfo.avgScore == ""
                       ? 0
-                      : item.adminInfo.avgScore}
+                      : Math.round(Number(item.adminInfo.avgScore))}
                     %
                   </div>
                 </div>
@@ -278,8 +278,9 @@ function RatingBlock({ item, trigger, setTrigger }) {
           }}
           className="child absolute left-0 hidden top-[25px] left-[10px] cursor-pointer mr-2  flex items-center"
         >
-          <i className="bi bi-trash-fill text-xl hover:text-red-500"></i>
+          <i className="text-xl bi bi-trash-fill hover:text-red-500"></i>
         </div>
+
         <Offcanvas placement="end" show={show} onHide={handleClose}>
           {showModal && (
             <RatingModal
@@ -306,7 +307,7 @@ function RatingBlock({ item, trigger, setTrigger }) {
           )}
           <Offcanvas.Header closeButton>
             <Offcanvas.Title>
-              <div className="w-full flex">
+              <div className="flex w-full">
                 {comfirm && (
                   <ExcelConfirm setConfirm={setComfirm} excelUrl={excelUrl} />
                 )}
@@ -348,10 +349,10 @@ function RatingBlock({ item, trigger, setTrigger }) {
                       user.adminStatus == "C" && user.userStatus == "Y"
                         ? "btn-20 "
                         : user.adminStatus == "C" && user.userStatus == "N"
-                        ? "btn-20 "
-                        : user.adminStatus == "P"
-                        ? "btn-25"
-                        : "bg-gray-200"
+                          ? "btn-20 "
+                          : user.adminStatus == "P"
+                            ? "btn-25"
+                            : "bg-gray-200"
                     } py-2 px-3 hover:shadow text-[13px] flex justify-between items-center text-gray-600 
                         w-full my-1 rounded relative cursor-pointer hover:text-white mt-1 `}
                   >
@@ -371,7 +372,9 @@ function RatingBlock({ item, trigger, setTrigger }) {
                       {" "}
                       {user.adminStatus !== "P" && (
                         <span className="font-[400]">
-                          {user.score == "" ? "" : user.score + "%"}
+                          {user.score == ""
+                            ? ""
+                            : Math.round(Number(user.score)) + "%"}
                         </span>
                       )}
                     </div>

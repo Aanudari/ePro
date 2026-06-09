@@ -40,6 +40,7 @@ function CommentModal({
         } else {
           setComments(res.data.commentList);
           setRecallChild(!recallChild);
+          console.log(comments);
         }
       })
       .catch((err) => console.log(err));
@@ -85,7 +86,7 @@ function CommentModal({
         onClick={() => {
           setModalShow(false);
         }}
-        className="w-full h-full relative "
+        className="relative w-full h-full "
       ></div>
       <div className="w-[calc(399px)] shrink h-[calc(100%)] bg-white flex flex-col items-center rounded-[22px] absolute ">
         <ImageModal img={modalImg} show={show} onHide={() => setShow(false)} />
@@ -96,7 +97,7 @@ function CommentModal({
           }}
           className="w-full min-h-[50px] bg-teal-500 flex justify-end items-center px-3  gap-2 relative"
         >
-          <div className="w-full flex justify-between">
+          <div className="flex justify-between w-full">
             <div className="select-none font-[400] mt-1 text-white italic">
               {name}
             </div>
@@ -110,7 +111,7 @@ function CommentModal({
             </button>
           </div>
         </div>
-        <div className="h-full w-full  flex flex-col">
+        <div className="flex flex-col w-full h-full">
           <div
             className=" w-full h-[calc(100vh-125px)] bg-white px-4 pt-4 overflow-scroll scrollable "
             ref={scrollableRef}
@@ -129,7 +130,7 @@ function CommentModal({
                           setShow(true);
                           setModalImg(comment.commentImg);
                         }}
-                        className="mt-2 rounded bg-white"
+                        className="mt-2 bg-white rounded"
                       >
                         <img
                           className="w-[400px] rounded border cursor-pointer hover:shadow"
@@ -145,7 +146,7 @@ function CommentModal({
                 );
               })
             ) : (
-              <div className=" w-full flex justify-center">
+              <div className="flex justify-center w-full ">
                 <img className="w-[400px]" src={`notfound.webp`} alt="" />
               </div>
             )}
@@ -161,7 +162,7 @@ function CommentModal({
                 e.preventDefault();
                 submitComment();
               }}
-              className="h-full w-full relative flex"
+              className="relative flex w-full h-full"
               action=""
             >
               <input
@@ -203,25 +204,25 @@ function CommentModal({
                         {...dragProps}
                       >
                         {imageList.length === 0 && (
-                          <i className="bi bi-upload text-white"></i>
+                          <i className="text-white bi bi-upload"></i>
                         )}
                       </button>
                       &nbsp;
                       {imageList.map((image, index) => (
                         <div key={index} className="image-item">
                           <img src={image["data_url"]} alt="" width="100" />
-                          <div className="image-item__btn-wrapper flex">
+                          <div className="flex image-item__btn-wrapper">
                             <button
                               onClick={() => onImageUpdate(index)}
                               className="px-2 py-1 rounded-full bg-emerald-500"
                             >
-                              <i className="bi bi-arrow-counterclockwise text-white"></i>
+                              <i className="text-white bi bi-arrow-counterclockwise"></i>
                             </button>
                             <button
                               className="px-2 py-1 rounded-full bg-rose-500"
                               onClick={() => onImageRemove(index)}
                             >
-                              <i className="bi bi-trash3-fill text-white"></i>
+                              <i className="text-white bi bi-trash3-fill"></i>
                             </button>
                           </div>
                         </div>

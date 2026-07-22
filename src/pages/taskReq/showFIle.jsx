@@ -156,7 +156,7 @@ function ShowFile({
 
   function addVersionClick() {
     setShowInsertVersion(true);
-    onClose();
+    // onClose();
   }
 
   function showVersionClick() {
